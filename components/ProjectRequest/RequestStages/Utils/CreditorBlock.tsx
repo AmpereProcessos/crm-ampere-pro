@@ -3,14 +3,16 @@ import TextareaInput from '@/components/Inputs/TextareaInput'
 import TextInput from '@/components/Inputs/TextInput'
 import { formatToPhone } from '@/utils/methods'
 import { useCreditors } from '@/utils/queries/utils'
-import { TProject } from '@/utils/schemas/project.schema'
+import { TChangesControl, TProject } from '@/utils/schemas/project.schema'
 import React from 'react'
 
 type CreditorBlockProps = {
   infoHolder: TProject
   setInfoHolder: React.Dispatch<React.SetStateAction<TProject>>
+  changes?: TChangesControl
+  setChanges?: React.Dispatch<React.SetStateAction<TChangesControl>>
 }
-function CreditorBlock({ infoHolder, setInfoHolder }: CreditorBlockProps) {
+function CreditorBlock({ infoHolder, setInfoHolder, changes, setChanges }: CreditorBlockProps) {
   const { data: creditors } = useCreditors()
   return (
     <div className="flex w-full flex-col gap-2 rounded-md border border-blue-800">
@@ -28,17 +30,19 @@ function CreditorBlock({ infoHolder, setInfoHolder }: CreditorBlockProps) {
               selectedItemLabel="NÃO DEFINIDO"
               options={creditors?.map((c) => ({ id: c._id, value: c.valor, label: c.valor })) || []}
               value={infoHolder.pagamento.credito.credor || null}
-              handleChange={(value) =>
+              handleChange={(value) => {
                 setInfoHolder((prev) => ({
                   ...prev,
                   pagamento: { ...prev.pagamento, credito: { ...prev.pagamento.credito, credor: value } },
                 }))
-              }
+                if (!!setChanges) setChanges((prev) => ({ ...prev, project: { ...prev.project, 'pagamento.credito.credor': value } }))
+              }}
               onReset={() => {
                 setInfoHolder((prev) => ({
                   ...prev,
                   pagamento: { ...prev.pagamento, credito: { ...prev.pagamento.credito, credor: null } },
                 }))
+                if (!!setChanges) setChanges((prev) => ({ ...prev, project: { ...prev.project, 'pagamento.credito.credor': null } }))
               }}
               width="100%"
             />
@@ -48,9 +52,10 @@ function CreditorBlock({ infoHolder, setInfoHolder }: CreditorBlockProps) {
               label="NOME DO GERENTE/RESPONSÁVEL"
               value={infoHolder.pagamento.credito.nomeResponsavel || ''}
               placeholder="Preencha aqui o nome do responsável/gerente primário."
-              handleChange={(value) =>
+              handleChange={(value) => {
                 setInfoHolder((prev) => ({ ...prev, pagamento: { ...prev.pagamento, credito: { ...prev.pagamento.credito, nomeResponsavel: value } } }))
-              }
+                if (!!setChanges) setChanges((prev) => ({ ...prev, project: { ...prev.project, 'pagamento.credito.nomeResponsavel': value } }))
+              }}
               width="100%"
             />
           </div>
@@ -59,12 +64,13 @@ function CreditorBlock({ infoHolder, setInfoHolder }: CreditorBlockProps) {
               label="TELEFONE DO GERENTE/RESPONSÁVEL"
               value={infoHolder.pagamento.credito.nomeResponsavel || ''}
               placeholder="Preencha aqui o telefone do responsável/gerente primário."
-              handleChange={(value) =>
+              handleChange={(value) => {
                 setInfoHolder((prev) => ({
                   ...prev,
                   pagamento: { ...prev.pagamento, credito: { ...prev.pagamento.credito, telefoneResponsavel: formatToPhone(value) } },
                 }))
-              }
+                if (!!setChanges) setChanges((prev) => ({ ...prev, project: { ...prev.project, 'pagamento.credito.telefoneResponsavel': value } }))
+              }}
               width="100%"
             />
           </div>
@@ -73,12 +79,13 @@ function CreditorBlock({ infoHolder, setInfoHolder }: CreditorBlockProps) {
           label="OBSERVAÇÕES DO FINANCIAMENTO"
           placeholder="Preencha aqui informações relevantes a cerca do financiamento..."
           value={infoHolder.pagamento.credito.observacoes || ''}
-          handleChange={(value) =>
+          handleChange={(value) => {
             setInfoHolder((prev) => ({
               ...prev,
               pagamento: { ...prev.pagamento, credito: { ...prev.pagamento.credito, observacoes: value } },
             }))
-          }
+            if (!!setChanges) setChanges((prev) => ({ ...prev, project: { ...prev.project, 'pagamento.credito.observacoes': value } }))
+          }}
         />
       </div>
     </div>

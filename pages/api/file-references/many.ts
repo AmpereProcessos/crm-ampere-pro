@@ -1,11 +1,39 @@
 import { insertManyFileReferences } from '@/repositories/file-references/mutation'
+import { getFileReferencesByOpportunityId, getFileReferencesByQuery } from '@/repositories/file-references/queries'
 import connectToDatabase from '@/services/mongodb/crm-db-connection'
 import { apiHandler, validateAuthenticationWithSession } from '@/utils/api'
-import { InsertFileReferenceSchema, TFileReference } from '@/utils/schemas/file-reference.schema'
+import { FileReferencesQueryParamsSchema, InsertFileReferenceSchema, TFileReference } from '@/utils/schemas/file-reference.schema'
 import createHttpError from 'http-errors'
-import { Collection } from 'mongodb'
+import { Collection, Filter } from 'mongodb'
 import { NextApiHandler } from 'next'
 import { z } from 'zod'
+
+type GetResponse = {
+  data: TFileReference[]
+}
+
+const getMultipleSourcesFileReferences: NextApiHandler<GetResponse> = async (req, res) => {
+  const session = await validateAuthenticationWithSession(req, res)
+
+  const { clientId, opportunityId, analysisId, homologationId, projectId } = FileReferencesQueryParamsSchema.parse(req.query)
+
+  const clientQuery: Filter<TFileReference> = clientId ? { idCliente: clientId } : {}
+  const opportunityQuery: Filter<TFileReference> = opportunityId ? { idOportunidade: opportunityId } : {}
+  const analysisQuery: Filter<TFileReference> = analysisId ? { idAnaliseTecnica: analysisId } : {}
+  const homologationQuery: Filter<TFileReference> = homologationId ? { idHomologacao: homologationId } : {}
+  const projectQuery: Filter<TFileReference> = projectId ? { idProjeto: projectId } : {}
+
+  const orQuery = { $or: [clientQuery, opportunityQuery, analysisQuery, homologationQuery, projectQuery] }
+  const query = { ...orQuery }
+
+  console.log(query)
+  const db = await connectToDatabase(process.env.MONGODB_URI, 'crm')
+  const collection: Collection<TFileReference> = db.collection('file-references')
+
+  const fileReferences = await getFileReferencesByQuery({ collection, query })
+
+  return res.status(200).json({ data: fileReferences })
+}
 
 type PostResponse = {
   data: {
@@ -13,7 +41,6 @@ type PostResponse = {
   }
   message: string
 }
-
 const createManyFileReferences: NextApiHandler<PostResponse> = async (req, res) => {
   const session = await validateAuthenticationWithSession(req, res)
   const partnerId = session.user.idParceiro
@@ -31,5 +58,6 @@ const createManyFileReferences: NextApiHandler<PostResponse> = async (req, res) 
 }
 
 export default apiHandler({
+  GET: getMultipleSourcesFileReferences,
   POST: createManyFileReferences,
 })

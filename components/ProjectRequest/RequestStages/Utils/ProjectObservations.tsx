@@ -58,7 +58,7 @@ function ProjectObservations({ infoHolder, setInfoHolder, changes, setChanges, s
         Se houver alguma informação relevante em relação ao serviços a serem prestado, a detalhes dos produtos, da negociação, da suprimentação
         (compra/entrega), da execução do projeto, etc, escolha o tópico aplicavél e preencha a observação e clique em ADICIONAR.
       </p>
-      <div className="my-1 flex w-full items-center justify-center gap-4 px-2">
+      <div className="my-1 flex w-full flex-wrap items-center justify-center gap-4 px-2">
         {ProjectObservationTopics.map((topic, index) => (
           <button
             key={index}

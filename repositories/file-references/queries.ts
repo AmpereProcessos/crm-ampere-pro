@@ -1,6 +1,19 @@
 import { TFileReference } from '@/utils/schemas/file-reference.schema'
-import { Collection } from 'mongodb'
+import { Collection, Filter } from 'mongodb'
 
+type GetFileReferenceByQueryParams = {
+  collection: Collection<TFileReference>
+  query: Filter<TFileReference>
+}
+
+export async function getFileReferencesByQuery({ collection, query }: GetFileReferenceByQueryParams) {
+  try {
+    const references = await collection.find({ ...query }).toArray()
+    return references
+  } catch (error) {
+    throw error
+  }
+}
 type GetFileReferenceByOpportunityParams = {
   collection: Collection<TFileReference>
   opportunityId: string
@@ -9,7 +22,7 @@ type GetFileReferenceByOpportunityParams = {
 
 export async function getFileReferencesByOpportunityId({ collection, opportunityId, partnerId }: GetFileReferenceByOpportunityParams) {
   try {
-    const references = await collection.find({ idOportunidade: opportunityId, idParceiro: partnerId }).toArray()
+    const references = await collection.find({ idOportunidade: opportunityId }).toArray()
     return references
   } catch (error) {
     throw error
@@ -24,7 +37,7 @@ type GetFileReferenceByAnalysisParams = {
 
 export async function getFileReferencesByAnalysisId({ collection, analysisId, partnerId }: GetFileReferenceByAnalysisParams) {
   try {
-    const references = await collection.find({ idAnaliseTecnica: analysisId, idParceiro: partnerId }).toArray()
+    const references = await collection.find({ idAnaliseTecnica: analysisId }).toArray()
     return references
   } catch (error) {
     throw error
@@ -38,7 +51,7 @@ type GetFileReferenceByClientParams = {
 
 export async function getFileReferencesByClientId({ collection, clientId, partnerId }: GetFileReferenceByClientParams) {
   try {
-    const references = await collection.find({ idCliente: clientId, idParceiro: partnerId }).toArray()
+    const references = await collection.find({ idCliente: clientId }).toArray()
     return references
   } catch (error) {
     throw error
@@ -52,7 +65,7 @@ type GetFileReferenceByHomologationParams = {
 
 export async function getFileReferencesByHomologationId({ collection, homologationId, partnerId }: GetFileReferenceByHomologationParams) {
   try {
-    const references = await collection.find({ idHomologacao: homologationId, idParceiro: partnerId }).toArray()
+    const references = await collection.find({ idHomologacao: homologationId }).toArray()
     return references
   } catch (error) {
     throw error

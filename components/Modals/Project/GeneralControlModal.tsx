@@ -10,6 +10,9 @@ import GeneralInformationBlock from './Blocks/GeneralInformationBlock'
 import ActiveHomologationBlock from './Blocks/ActiveHomologationBlock'
 import ActiveTechnicalAnalysisBlock from './Blocks/ActiveTechnicalAnalysisBlock'
 import SaleCompositionBlock from './Blocks/SaleCompositionBlock'
+import PaymentInformationBlock from './Blocks/PaymentInformationBlock'
+import DocumentsBlock from './Blocks/DocumentsBlock'
+import EntityReferencesBlock from './Blocks/EntityReferencesBlock'
 
 type GeneralControlModalProps = {
   projectId: string
@@ -47,6 +50,7 @@ function GeneralControlModal({ projectId, session, closeModal }: GeneralControlM
           {isError ? <ErrorComponent msg="Houve um erro ao buscar informações do projeto." /> : null}
           {isSuccess && !!infoHolder ? (
             <div className="flex h-full flex-col gap-y-2 overflow-y-auto overscroll-y-auto p-2 py-1 scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300">
+              <EntityReferencesBlock project={project} />
               <GeneralInformationBlock
                 session={session}
                 infoHolder={infoHolder}
@@ -75,6 +79,19 @@ function GeneralControlModal({ projectId, session, closeModal }: GeneralControlM
                 setInfoHolder={setInfoHolder as React.Dispatch<React.SetStateAction<TProjectDTOWithReferences>>}
                 changes={changes}
                 setChanges={setChanges}
+              />
+              <PaymentInformationBlock
+                infoHolder={infoHolder}
+                setInfoHolder={setInfoHolder as React.Dispatch<React.SetStateAction<TProjectDTOWithReferences>>}
+                changes={changes}
+                setChanges={setChanges}
+              />
+              <DocumentsBlock
+                projectId={projectId}
+                clientId={infoHolder.cliente.id}
+                opportunityId={infoHolder.oportunidade.id}
+                analysisId={infoHolder.idAnaliseTecnica}
+                homologationId={infoHolder.idHomologacao}
               />
             </div>
           ) : null}

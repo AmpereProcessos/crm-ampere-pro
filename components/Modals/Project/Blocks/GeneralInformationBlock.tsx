@@ -39,6 +39,16 @@ function GeneralInformationBlock({ infoHolder, setInfoHolder, changes, setChange
             cidade: addressInfo.localidade.toUpperCase(),
           },
         }))
+        setChanges((prev) => ({
+          ...prev,
+          project: {
+            ...prev.project,
+            'localizacao.endereco': addressInfo.logradouro,
+            'localizacao.bairro': addressInfo.bairro,
+            'localizacao.uf': addressInfo.uf,
+            'localizacao.cidade': addressInfo.localidade.toUpperCase(),
+          },
+        }))
       }
     }, 1000)
   }
