@@ -1,7 +1,7 @@
 import { stateCities } from '../estados_cidades'
 import { TPartnerSimplifiedDTO } from '../schemas/partner.schema'
 import { TPricingMethodConditionType, TPricingMethodItemResultItem } from '../schemas/pricing-method.schema'
-import { ElectricalInstallationGroups, EletricalPhasesTypes, StructureTypes, YesOrNoOptons } from '../select-options'
+import { ElectricalInstallationGroups, EletricalPhasesTypes, StructureTypes, YesOrNoOptions } from '../select-options'
 import { TPricingConditionData, TPricingVariableData } from './methods'
 
 type TVariablesAlias = { label: string; value: keyof TPricingVariableData; type: 'general' | 'technical-analysis' | 'cumulative' }
@@ -183,7 +183,7 @@ export function getConditionOptions({ variable, additional }: GetConditionOption
   if (variable == 'grupoInstalacao') return ElectricalInstallationGroups
   if (variable == 'faseamentoEletrico') return EletricalPhasesTypes
   if (variable == 'idParceiro') return additional.partners.map((p) => ({ id: p._id, label: p.nome, value: p._id }))
-  if (variable == 'ativacaoReferencia') return YesOrNoOptons
+  if (variable == 'ativacaoReferencia') return YesOrNoOptions
   return []
 }
 

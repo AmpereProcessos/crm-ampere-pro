@@ -1317,6 +1317,13 @@ export const HomologationControlStatus = [
   { id: 9, label: 'REPROVADO', value: 'REPROVADO' },
   { id: 10, label: 'REPROVADO COM REDUÇÃO', value: 'REPROVADO COM REDUÇÃO' },
 ]
+export const ProjectContractStatus: { id: number; label: string; value: TProject['contrato']['status'] }[] = [
+  { id: 1, label: 'AGUARDANDO APROVAÇÃO', value: 'AGUARDANDO APROVAÇÃO' },
+  { id: 2, label: 'SOLICITADO', value: 'SOLICITADO' },
+  { id: 3, label: 'AGUARDANDO ASSINATURA', value: 'AGUARDANDO ASSINATURA' },
+  { id: 4, label: 'ASSINADO', value: 'ASSINADO' },
+  { id: 5, label: 'RESCISÃO', value: 'RESCISÃO' },
+]
 export const TechnicalAnalysisStatus = [
   { id: 1, label: 'CONCLUIDO', value: 'CONCLUIDO' },
   { id: 2, label: 'EM ANÁLISE TÉCNICA', value: 'EM ANÁLISE TÉCNICA' },
@@ -1502,7 +1509,7 @@ export const SupplyOptions = {
     grandeza: 'MESA',
   },
 }
-export const YesOrNoOptons = [
+export const YesOrNoOptions = [
   { id: 1, label: 'SIM', value: 'SIM' },
   { id: 2, label: 'NÃO', value: 'NÃO' },
 ]

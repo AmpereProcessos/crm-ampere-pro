@@ -1,5 +1,6 @@
 import DocumentationInformationBlock from '@/components/ProjectType/DocumentationInformationBlock'
 import GeneralInformationBlock from '@/components/ProjectType/GeneralInformationBlock'
+import ProcessSettingsBlock from '@/components/ProjectType/ProcessSettingsBlock'
 import ProposalTemplatesInformationBlock from '@/components/ProjectType/ProposalTemplatesInformationBlock'
 import SizingInformationBlock from '@/components/ProjectType/SizingInformationBlock'
 import { useMutationWithFeedback } from '@/utils/mutations/general-hook'

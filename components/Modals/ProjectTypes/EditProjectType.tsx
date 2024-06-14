@@ -1,5 +1,6 @@
 import DocumentationInformationBlock from '@/components/ProjectType/DocumentationInformationBlock'
 import GeneralInformationBlock from '@/components/ProjectType/GeneralInformationBlock'
+import ProcessSettingsBlock from '@/components/ProjectType/ProcessSettingsBlock'
 import ProposalTemplatesInformationBlock from '@/components/ProjectType/ProposalTemplatesInformationBlock'
 import SizingInformationBlock from '@/components/ProjectType/SizingInformationBlock'
 import { useMutationWithFeedback } from '@/utils/mutations/general-hook'
@@ -68,6 +69,7 @@ function EditProjectType({ projectTypeId, session, closeModal }: EditProjectType
             <SizingInformationBlock infoHolder={infoHolder} setInfoHolder={setInfoHolder} />
             <ProposalTemplatesInformationBlock infoHolder={infoHolder} setInfoHolder={setInfoHolder} />
             <DocumentationInformationBlock infoHolder={infoHolder} setInfoHolder={setInfoHolder} />
+            {/* <ProcessSettingsBlock projectTypeId={projectTypeId} /> */}
           </div>
           <div className="flex w-full items-center justify-end p-2">
             <button
