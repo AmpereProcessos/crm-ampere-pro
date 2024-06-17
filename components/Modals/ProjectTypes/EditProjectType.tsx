@@ -69,7 +69,7 @@ function EditProjectType({ projectTypeId, session, closeModal }: EditProjectType
             <SizingInformationBlock infoHolder={infoHolder} setInfoHolder={setInfoHolder} />
             <ProposalTemplatesInformationBlock infoHolder={infoHolder} setInfoHolder={setInfoHolder} />
             <DocumentationInformationBlock infoHolder={infoHolder} setInfoHolder={setInfoHolder} />
-            {/* <ProcessSettingsBlock projectTypeId={projectTypeId} /> */}
+            <ProcessSettingsBlock projectTypeId={projectTypeId} />
           </div>
           <div className="flex w-full items-center justify-end p-2">
             <button

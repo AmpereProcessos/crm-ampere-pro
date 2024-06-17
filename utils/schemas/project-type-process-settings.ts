@@ -2,6 +2,7 @@ import { z } from 'zod'
 import { ProcessAutomationConditionTypes, ProcessAutomationEntities } from '../process-settings'
 
 export const GeneralProjectTypeProcessSetting = z.object({
+  id: z.string(),
   idTipoProjeto: z.string({}),
   idConfiguracaoDependencia: z.string().optional().nullable(),
   referencia: z.object({

@@ -36,6 +36,8 @@ export type TProcessAutomationEntitySpec = {
   entityLabel: string
   triggerConditions: TriggerCondition[]
   returnable: boolean
+  customizable: boolean
+  returns: boolean
 }
 
 export const ProcessAutomationEntitiesSpecs: TProcessAutomationEntitySpec[] = [
@@ -44,35 +46,62 @@ export const ProcessAutomationEntitiesSpecs: TProcessAutomationEntitySpec[] = [
     entityLabel: 'PROJETO',
     triggerConditions: processAutomationConditionAlias.filter((c) => c.entity == 'Project'),
     returnable: false,
+    customizable: false,
+    returns: true,
   },
   {
     entity: 'Revenue',
     entityLabel: 'RECEITA',
     triggerConditions: processAutomationConditionAlias.filter((c) => c.entity == 'Revenue'),
     returnable: true,
+    customizable: false,
+    returns: true,
   },
   {
     entity: 'Purchase',
     entityLabel: 'COMPRA',
     triggerConditions: processAutomationConditionAlias.filter((c) => c.entity == 'Purchase'),
     returnable: true,
+    customizable: false,
+    returns: true,
   },
   {
     entity: 'ServiceOrder',
     entityLabel: 'ORDEM DE SERVIÇO',
     triggerConditions: processAutomationConditionAlias.filter((c) => c.entity == 'ServiceOrder'),
     returnable: true,
+    customizable: false,
+    returns: true,
   },
   {
     entity: 'Activity',
     entityLabel: 'ATIVIDADE',
     triggerConditions: processAutomationConditionAlias.filter((c) => c.entity == 'Activity'),
     returnable: true,
+    customizable: true,
+    returns: true,
   },
   {
     entity: 'Notification',
     entityLabel: 'NOTIFICAÇÃO',
     triggerConditions: [],
     returnable: true,
+    customizable: true,
+    returns: false,
   },
 ]
+
+export function getActiveProcessAutomationReference(referenceEntity?: TProcessAutomationEntities) {
+  if (!referenceEntity) return ProcessAutomationEntitiesSpecs[0]
+  const entitySpecs = ProcessAutomationEntitiesSpecs.find((p) => p.entity == referenceEntity)
+  if (!entitySpecs) return ProcessAutomationEntitiesSpecs[0]
+  return entitySpecs
+}
+export function getProcessAutomationComparationMethods({ entity, variable }: { entity: TProcessAutomationEntitySpec; variable: string }) {
+  const types = entity.triggerConditions.find((c) => c.value == variable)
+  if (!types) return []
+  return types.types.map((t, index) => {
+    const typeLabel = ProcessAutomationConditionTypesOptions.find((o) => o.value == t)?.label
+    return { id: index + 1, label: typeLabel || 'NÃO DEFINIDO', value: t }
+  })
+}

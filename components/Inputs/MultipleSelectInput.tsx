@@ -102,7 +102,7 @@ function MultipleSelectInput<T>({
     }
   }, [onClickOutside])
   return (
-    <div ref={ref} className={`relative flex w-full flex-col gap-1 lg:w-[${width ? width : '350px'}]`}>
+    <div ref={ref} draggable={false} className={`relative flex w-full flex-col gap-1 lg:w-[${width ? width : '350px'}]`}>
       {showLabel ? (
         <label htmlFor={inputIdentifier} className={labelClassName}>
           {label}
@@ -149,9 +149,7 @@ function MultipleSelectInput<T>({
               <div
                 onClick={() => handleSelect(item.id, item.value)}
                 key={item.id ? item.id : index}
-                className={`flex w-full cursor-pointer items-center rounded p-1 px-2 hover:bg-gray-100 ${
-                  selectedIds?.includes(item.id) ? 'bg-gray-100' : ''
-                }`}
+                className={`flex w-full cursor-pointer items-center rounded p-1 px-2 hover:bg-gray-100 ${selectedIds?.includes(item.id) ? 'bg-gray-100' : ''}`}
               >
                 <p className="grow font-medium text-[#353432]">{item.label}</p>
                 {selectedIds?.includes(item.id) ? <HiCheck style={{ color: '#fead61', fontSize: '20px' }} /> : null}

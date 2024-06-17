@@ -23,7 +23,7 @@ function Service({ service, handleClick, userHasEditPermission, userHasPricingVi
     <div key={service._id} className="flex w-full gap-2 rounded-md border border-gray-500 bg-[#fff] font-Inter shadow-sm lg:w-[450px]">
       <div className="flex grow flex-col p-4">
         <div className="flex w-full items-center justify-between gap-2">
-          <div className="flex  items-center gap-1">
+          <div className="flex items-center gap-1">
             <div className="flex h-[25px] w-[25px] items-center justify-center rounded-full border border-black p-1">
               <MdOutlineMiscellaneousServices />
             </div>
