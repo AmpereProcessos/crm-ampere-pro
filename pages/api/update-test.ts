@@ -15,7 +15,7 @@ import { THomologationPropose } from '@/ampere-migration/proposes-schemas/homolo
 import { TOeMPropose } from '@/ampere-migration/proposes-schemas/oem.schema'
 import { TMonitoringPropose } from '@/ampere-migration/proposes-schemas/monitoring.schema'
 import { TPricingItem, TProposal } from '@/utils/schemas/proposal.schema'
-import { TProductItem } from '@/utils/schemas/kits.schema'
+import { TKit, TProductItem } from '@/utils/schemas/kits.schema'
 import { TUser } from '@/utils/schemas/user.schema'
 import { TTechnicalAnalysis } from '@/utils/schemas/technical-analysis.schema'
 import { TFunnelReference } from '@/utils/schemas/funnel-reference.schema'
@@ -56,7 +56,10 @@ const migrate: NextApiHandler<PostResponse> = async (req, res) => {
   // const session = await validateAuthenticationWithSession(req, res)
   // const { id } = req.query
 
-  // const crmDb = await connectToCRMDatabase(process.env.MONGODB_URI, 'crm')
+  const crmDb = await connectToCRMDatabase(process.env.MONGODB_URI, 'crm')
+  const kitsCollection: Collection<TKit> = crmDb.collection('kits')
+
+  const updateResp = await kitsCollection.updateMany({}, { $set: { idParceiro: null } })
   // const proposalsCollection: Collection<TProposal> = crmDb.collection('proposals')
 
   // const proposals = await proposalsCollection.find({ 'kits.0': { $exists: true } }).toArray()
@@ -263,7 +266,7 @@ const migrate: NextApiHandler<PostResponse> = async (req, res) => {
   // })
   // const bulkwriteResponse = await proposalsCollection.bulkWrite(bulkWriteArr)
   // const insertManyResponse = await userGroupsCollection.insertMany(insertUserGroups)
-  return res.json('DESATIVADA')
+  return res.json(updateResp)
 }
 export default apiHandler({
   GET: migrate,

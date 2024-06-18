@@ -90,7 +90,7 @@ const createClientOpportunityAndFunnelReferences: NextApiHandler<PostResponse> =
   const email = client.email || undefined
   const cpfCnpj = client.cpfCnpj || undefined
   const phoneNumber = client.telefonePrimario
-  const existingClientInDb = await getExistentClientByProperties({ collection: clientsCollection, email, cpfCnpj, phoneNumber, partnerId: partnerId || '' })
+  const existingClientInDb = await getExistentClientByProperties({ collection: clientsCollection, email, cpfCnpj, phoneNumber })
   if (!!existingClientInDb) throw new createHttpError.BadRequest('Cliente já existente. Não é permitida a duplicação de clientes.')
 
   const insertClientResponse = await insertClient({ collection: clientsCollection, info: client, partnerId: partnerId || '' })

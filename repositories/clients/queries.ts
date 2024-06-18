@@ -46,13 +46,12 @@ type GetExistentClientParams = {
   email?: string
   cpfCnpj?: string
   phoneNumber: string
-  partnerId: string
 }
-export async function getExistentClientByProperties({ collection, email, cpfCnpj, phoneNumber, partnerId }: GetExistentClientParams) {
+export async function getExistentClientByProperties({ collection, email, cpfCnpj, phoneNumber }: GetExistentClientParams) {
   try {
     const orParam = getClientSearchParams({ cpfCnpj, email, phoneNumber })
     const orQuery = orParam.length > 0 ? { $or: orParam } : {}
-    const query = { idParceiro: partnerId, ...orQuery }
+    const query = { ...orQuery }
     const client = await collection.findOne(query)
 
     return client
@@ -77,13 +76,13 @@ export async function getClients({ collection, partnerId, queryParam }: GetClien
 
 type GetSimilarClientsParams = {
   collection: Collection<TClient>
-  partnerId: string
+
   query: Filter<TClient>
 }
 
-export async function getSimilarClients({ collection, partnerId, query }: GetSimilarClientsParams) {
+export async function getSimilarClients({ collection, query }: GetSimilarClientsParams) {
   try {
-    const clients = await collection.find({ idParceiro: partnerId, ...query }, { projection: SimilarClientsSimplifiedProjection }).toArray()
+    const clients = await collection.find({ ...query }, { projection: SimilarClientsSimplifiedProjection }).toArray()
     return clients as TSimilarClientSimplified[]
   } catch (error) {
     throw error

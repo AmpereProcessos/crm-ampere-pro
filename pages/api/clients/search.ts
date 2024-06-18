@@ -56,7 +56,7 @@ const getPartnerSimilarClients: NextApiHandler<GetResponse> = async (req, res) =
 
   const orQuery = { $or: orParam }
 
-  const clients = await getSimilarClients({ collection: collection, query: orQuery, partnerId: partnerId || '' })
+  const clients = await getSimilarClients({ collection: collection, query: orQuery })
 
   res.status(200).json({ data: clients })
 }
@@ -125,7 +125,7 @@ const getClientsByPersonalizedFilters: NextApiHandler<PostResponse> = async (req
   // Defining the queries
   const insertionQuery: Filter<TClient> =
     after != 'null' && before != 'null'
-      ? { $and: [{ dataInsercao: { $gte: formatDateQuery(after, 'start') } }, { dataInsercao: { $lte: formatDateQuery(before, 'end') } }] }
+      ? { $and: [{ dataInsercao: { $gte: formatDateQuery(after, 'start') as string } }, { dataInsercao: { $lte: formatDateQuery(before, 'end') as string } }] }
       : {}
 
   const authorsQuery: Filter<TClient> = authors ? { 'autor.id': { $in: authors } } : {}
