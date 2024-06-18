@@ -54,11 +54,11 @@ function PowerOfAttorneyTemplate({ homologationJSON, error }: PowerOfAttorneyTem
       <div className="mt-6 flex w-full flex-col gap-2">
         <h1 className="w-full text-start text-[0.9rem] tracking-tight">
           1) DIOGO PAULINO CARVALHO, engenheiro eletricista, brasileiro, solteiro, portador do RG MG 14372057 e CPF: 072.427.186-43. Com registro geral CREA nº
-          <strong>MG0000222051D</strong>, residente e domiciliado na RUA VINTE E QUATRO, 75, Centro em Ituiutaba-MG.
+          <strong>MG0000222051D</strong>, residente e domiciliado em Ituiutaba-MG.
         </h1>
         <h1 className="w-full text-start text-[0.9rem] tracking-tight">
           2) POLLIANA CRISTINA DE REZENDE, engenheira eletricista, brasileira, solteira, portador do RG MG 15600702 e CPF: 099.112.586-02. Com registro geral
-          CREA nº <strong>MG0000221297D</strong>, residente e domiciliado na RUA DAS PALMEIRAS, 516, Novo Horizonte em Ituiutaba-MG.
+          CREA nº <strong>MG0000221297D</strong>, residente e domiciliado em Ituiutaba-MG.
         </h1>
       </div>
       <h1 className="mt-6 w-full text-start text-[0.9rem] tracking-tight">

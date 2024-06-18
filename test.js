@@ -117,17 +117,32 @@ const conditionsSunPlusPlanJSON = JSON.stringify(conditionsSunPlusPlan)
 
 //   console.log('The file was saved!')
 // })
-fs.writeFile('./conditions-simple-maintaince.json', conditionsSimpleMaintainceJSON, 'utf8', function (err) {
-  if (err) {
-    return console.log(err)
+// fs.writeFile('./conditions-simple-maintaince.json', conditionsSimpleMaintainceJSON, 'utf8', function (err) {
+//   if (err) {
+//     return console.log(err)
+//   }
+
+//   console.log('The file was saved!')
+// })
+// fs.writeFile('./conditions-sun-plan.json', conditionsSunPlanJSON, 'utf8', function (err) {
+//   if (err) {
+//     return console.log(err)
+//   }
+
+//   console.log('The file was saved!')
+// })
+
+function getADiasModuleInfo(item) {
+  const module = item
+  const powerRegex = /(\d+)W/
+  const powerMatch = module.match(powerRegex)
+  let power = powerMatch ? Number(powerMatch[1]) : 0
+
+  let manufacturer = module.slice(0, powerMatch?.index).trim()
+  const modFotovPrefix = 'MOD. FOTOV.'
+  if (manufacturer.startsWith(modFotovPrefix)) {
+    manufacturer = manufacturer.slice(modFotovPrefix.length).trim()
   }
 
-  console.log('The file was saved!')
-})
-fs.writeFile('./conditions-sun-plan.json', conditionsSunPlanJSON, 'utf8', function (err) {
-  if (err) {
-    return console.log(err)
-  }
-
-  console.log('The file was saved!')
-})
+  return { manufacturer, power }
+}
