@@ -13,6 +13,7 @@ import SaleCompositionBlock from './Blocks/SaleCompositionBlock'
 import PaymentInformationBlock from './Blocks/PaymentInformationBlock'
 import DocumentsBlock from './Blocks/DocumentsBlock'
 import EntityReferencesBlock from './Blocks/EntityReferencesBlock'
+import ProjectProcessFlowBlock from './Blocks/ProcessFlowBlock'
 
 type GeneralControlModalProps = {
   projectId: string
@@ -93,6 +94,7 @@ function GeneralControlModal({ projectId, session, closeModal }: GeneralControlM
                 analysisId={infoHolder.idAnaliseTecnica}
                 homologationId={infoHolder.idHomologacao}
               />
+              <ProjectProcessFlowBlock projectId={projectId} />
             </div>
           ) : null}
         </div>

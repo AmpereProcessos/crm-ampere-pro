@@ -2,7 +2,7 @@ import { z } from 'zod'
 import { ProcessAutomationConditionTypes, ProcessAutomationEntities } from '../process-settings'
 import { AuthorSchema } from './user.schema'
 
-const IndividualProcess = z.object({
+export const IndividualProcess = z.object({
   id: z.string({ required_error: 'ID do processo não informado.', invalid_type_error: 'Tipo não válido para o ID do processo.' }),
   idProcessoPai: z.string({ invalid_type_error: 'Tipo não válido para a referência de processo pai.' }).optional().nullable(),
   referencia: z.object({

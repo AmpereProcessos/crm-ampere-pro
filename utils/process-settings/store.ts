@@ -10,6 +10,7 @@ import PurchaseNode from '@/components/ReactFlowTesting/PurchaseNode'
 import ServiceOrderNode from '@/components/ReactFlowTesting/ServiceOrderNode'
 import NotificationNode from '@/components/ReactFlowTesting/NotificationNode'
 import { TIndividualProcess } from '../schemas/process-flow.schema'
+import ComissionNode from '@/components/ReactFlowTesting/ComissionNode'
 
 export type TProcessSettingNode = Node<TIndividualProcess>
 
@@ -20,6 +21,7 @@ const NodeTypeMap: TNodeTypeMap = {
   Project: 'project',
   Revenue: 'revenue',
   Expense: 'expense',
+  Comission: 'comission',
   Purchase: 'purchase',
   Homologation: 'homologation',
   ServiceOrder: 'serviceorder',
@@ -29,6 +31,7 @@ const NodeTypeMap: TNodeTypeMap = {
 export const nodeTypes = {
   project: ProjectNode,
   revenue: RevenueNode,
+  comission: ComissionNode,
   activity: ActivityNode,
   purchase: PurchaseNode,
   serviceorder: ServiceOrderNode,
@@ -76,6 +79,12 @@ export const useProjectSettingStore = create((set: any, get: any) => ({
     set({
       edges: applyEdgeChanges(changes, get().edges),
     })
+  },
+  setEdgesDirectly(edges: Edge[]) {
+    set({ edges })
+  },
+  setNodesDirectly(nodes: TProcessSettingNode[]) {
+    set({ nodes })
   },
   addEdge(data: any) {
     const id = nanoid(6)

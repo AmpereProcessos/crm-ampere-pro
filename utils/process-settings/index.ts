@@ -29,7 +29,17 @@ type TriggerCondition = {
   types: TProcessAutomationConditionType[]
 }
 
-export const ProcessAutomationEntities = z.enum(['Project', 'Revenue', 'Expense', 'Purchase', 'Homologation', 'ServiceOrder', 'Activity', 'Notification'])
+export const ProcessAutomationEntities = z.enum([
+  'Project',
+  'Revenue',
+  'Expense',
+  'Purchase',
+  'Comission',
+  'Homologation',
+  'ServiceOrder',
+  'Activity',
+  'Notification',
+])
 export type TProcessAutomationEntities = z.infer<typeof ProcessAutomationEntities>
 export type TProcessAutomationEntitySpec = {
   entity: TProcessAutomationEntities
@@ -56,6 +66,14 @@ export const ProcessAutomationEntitiesSpecs: TProcessAutomationEntitySpec[] = [
     returnable: true,
     customizable: false,
     returns: true,
+  },
+  {
+    entity: 'Comission',
+    entityLabel: 'COMISSÃO',
+    triggerConditions: processAutomationConditionAlias.filter((c) => c.entity == 'Comission'),
+    returnable: true,
+    customizable: false,
+    returns: false,
   },
   {
     entity: 'Purchase',
