@@ -31,7 +31,7 @@ export function getMonitoringTemplateData({ opportunity, proposal }: GetTemplate
       clientAddress: formatLocation({ location: opportunity.localizacao }),
       dailyEnergyGeneration: `${formatDecimalPlaces(dailyEnergyGeneration)} kWh`,
       dailyMonetaryLoss: formatToMoney(dailyMonetaryLoss),
-      signaturePrice: formatToMoney(proposal.valor),
+      signaturePrice: `${formatToMoney(proposal.valor)} / MÊS`,
       seller: sellerStr || sdrStr || '',
       opportunityIdentifier: opportunity.identificador || '',
       proposalId: `#${proposal._id}`,

@@ -85,7 +85,7 @@ export const ProposalTemplates = [
     label: 'TEMPLATE MONITORAMENTO',
     value: 'TEMPLATE MONITORAMENTO',
     idAnvil: 'Z1L7XqJE2GpnjiVS0Jf6',
-    createProposeObj: getDisassemblyAndAssemblyTemplateData,
+    createProposeObj: getMonitoringTemplateData,
   },
 ]
 export const ProposeTemplateOptions = [
