@@ -53,7 +53,7 @@ export async function getProjectById({ id, collection, query }: GetProjectByIdPa
       homologacaoDados: p.homologacaoDados[0],
       analiseTecnicaDados: p.analiseTecnicaDados[0],
     }))
-    return project[0] as TProjectWithReferences
+    return project[0] as WithId<TProjectWithReferences>
   } catch (error) {
     throw error
   }

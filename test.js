@@ -146,3 +146,5 @@ function getADiasModuleInfo(item) {
 
   return { manufacturer, power }
 }
+
+const processFlowReference = {}

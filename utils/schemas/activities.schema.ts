@@ -21,6 +21,13 @@ const GeneralActivitySchema = z.object({
     id: z.string().optional().nullable(),
     nome: z.string().optional().nullable(),
   }),
+  projeto: z
+    .object({
+      id: z.string().optional().nullable(),
+      nome: z.string().optional().nullable(),
+    })
+    .optional()
+    .nullable(),
   idHomologacao: z.string().optional().nullable(),
   idAnaliseTecnica: z.string().optional().nullable(),
   subatividades: z.array(
@@ -55,6 +62,13 @@ export const InsertActivitySchema = z.object({
     id: z.string({ invalid_type_error: 'Tipo não válido para a referência de oportunidade.' }).optional().nullable(),
     nome: z.string({ invalid_type_error: 'Tipo não válido para o nome da oportunidade referência.' }).optional().nullable(),
   }),
+  projeto: z
+    .object({
+      id: z.string({ invalid_type_error: 'Tipo não válido para a referência de oportunidade.' }).optional().nullable(),
+      nome: z.string({ invalid_type_error: 'Tipo não válido para o nome da oportunidade referência.' }).optional().nullable(),
+    })
+    .optional()
+    .nullable(),
   idHomologacao: z.string({ invalid_type_error: 'Tipo não válido para o ID de referência homologação.' }).optional().nullable(),
   idAnaliseTecnica: z.string({ invalid_type_error: 'Tipo não válido para o ID de referência de análise técnica.' }).optional().nullable(),
   subatividades: z.array(
@@ -125,6 +139,13 @@ const ActivityEntitySchema = z.object({
     id: z.string().optional().nullable(),
     nome: z.string().optional().nullable(),
   }),
+  projeto: z
+    .object({
+      id: z.string().optional().nullable(),
+      nome: z.string().optional().nullable(),
+    })
+    .optional()
+    .nullable(),
   idHomologacao: z.string().optional().nullable(),
   idAnaliseTecnica: z.string().optional().nullable(),
   subatividades: z.array(

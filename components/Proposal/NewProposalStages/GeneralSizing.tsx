@@ -24,6 +24,7 @@ type GeneralSizingProps = {
   moveToNextStage: () => void
 }
 function GeneralSizing({ opportunity, projectTypes, session, infoHolder, setInfoHolder, moveToNextStage }: GeneralSizingProps) {
+  const userHasPricingEditPermission = session.user.permissoes.precos.editar
   // Using the vinculated opportunity partner location reference as the origin city and uf
   const originCity = opportunity.parceiro?.localizacao.cidade || 'ITUIUTABA'
   const originUF = opportunity.parceiro?.localizacao.uf || 'MG'
@@ -32,6 +33,7 @@ function GeneralSizing({ opportunity, projectTypes, session, infoHolder, setInfo
   const destinationUF = opportunity.localizacao.uf
   const { data: distance } = useDistanceData({ originCity: originCity, originUF: originUF, destinationCity: destinationCity, destinationUF: destinationUF })
   function validateFields() {
+    if (!userHasPricingEditPermission) setInfoHolder((prev) => ({ ...prev, premissas: { ...prev.premissas, distancia: distance } }))
     return moveToNextStage()
   }
   useEffect(() => {

@@ -31,7 +31,7 @@ const updateProjectRelatedEntitiesRoute: NextApiHandler<PutResponse> = async (re
 
     const updateProjectResponse = await projectsCollection.updateOne({ _id: new ObjectId(projectId) }, { $set: { ...projectChanges } })
 
-    await handleProcessAutomations({ database: db, entityToTrack: 'Project', idToTrack: projectId as string })
+    await handleProcessAutomations({ database: db, entityToTrack: 'Project', idToTrack: projectId as string, projectId: projectId })
   }
 
   if (clientId) {

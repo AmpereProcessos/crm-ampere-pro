@@ -55,25 +55,31 @@ const GeneralProcessFlowReferenceSchema = z.object({
     required_error: 'ID de referência do projeto não informado.',
     invalid_type_error: 'Tipo não válido para o ID de referência do projeto.',
   }),
+  idProcessoReferenciaPai: z.string({ invalid_type_error: 'Tipo não válido para a referência de processo pai.' }).optional().nullable(), // Fluxo de referência do qual esse depende
+  // Vem do fluxo de processo que originou a referência
   idProcesso: z.string({ invalid_type_error: 'Tipo não válido para o ID do processo.' }),
   idProcessoPai: z.string({ invalid_type_error: 'Tipo não válido para a referência de processo pai.' }).optional().nullable(),
-  idProcessoReferenciaPai: z.string({ invalid_type_error: 'Tipo não válido para a referência de processo pai.' }).optional().nullable(),
-  referencia: z.object({
-    entidade: ProcessAutomationEntities,
+  entidade: z.object({
     id: z
       .string({ required_error: 'ID da entidade de referência não informado.', invalid_type_error: 'Tipo não válido para o ID da entidade de referência.' })
       .optional()
       .nullable(),
-  }),
-  gatilho: ProcessFlowTrigger,
-  retorno: z.object({
-    entidade: ProcessAutomationEntities.optional().nullable(),
-    id: z
-      .string({ required_error: 'ID da entidade de retorno não informado.', invalid_type_error: 'Tipo não válido para o ID da entidade de retorno.' })
-      .optional()
-      .nullable(),
+    identificacao: ProcessAutomationEntities,
     customizacao: z.record(z.any()),
   }),
+  ativacao: z
+    .object({
+      referencia: z.object({
+        identificacao: ProcessAutomationEntities,
+        id: z
+          .string({ required_error: 'ID da entidade de referência não informado.', invalid_type_error: 'Tipo não válido para o ID da entidade de referência.' })
+          .optional()
+          .nullable(),
+      }),
+      gatilho: ProcessFlowTrigger,
+    })
+    .optional()
+    .nullable(),
   canvas: z.object({
     id: z.string({ required_error: 'ID de referência do canvas.', invalid_type_error: 'Tipo inválido para o ID do canvas.' }).optional().nullable(),
     posX: z

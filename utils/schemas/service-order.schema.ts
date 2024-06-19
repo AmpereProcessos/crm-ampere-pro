@@ -63,7 +63,6 @@ const ServiceOrderMaterialItem = z.object({
 })
 
 const GeneralServiceOrderSchema = z.object({
-  _id: z.string().optional(),
   categoria: z.enum(['MONTAGEM', 'MANUTANÇÃO CORRETIVA', 'MANUTENÇÃO PREVENTIVA', 'PADRÃO', 'ESTRUTURA', 'OUTROS']),
   favorecido: z.object({
     nome: z.string({ required_error: 'Nome do favorecido não foi informado.' }),

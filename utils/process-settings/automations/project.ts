@@ -1,10 +1,22 @@
 import { TActivity } from '@/utils/schemas/activities.schema'
 import { TProcessFlowReference } from '@/utils/schemas/process-flow-reference.schema'
-import { TProjectWithReferences } from '@/utils/schemas/project.schema'
+import { TProject, TProjectWithReferences } from '@/utils/schemas/project.schema'
+import { WithId } from 'mongodb'
+import { TProcessAutomationEntities } from '..'
+
+type GetProjectToEntityProps = {
+  project: WithId<TProject>
+  customization: TProcessFlowReference['entidade']['customizacao']
+  newEntity: TProcessAutomationEntities
+}
+
+export function getProjectToEntity({ project, customization, newEntity }: GetProjectToEntityProps) {
+  if (newEntity == 'Activity') return getProjectToActivityData({ project, customization })
+}
 
 type GetProjectToActivityDataProps = {
-  project: TProjectWithReferences
-  customization: TProcessFlowReference['retorno']['customizacao']
+  project: WithId<TProject>
+  customization: TProcessFlowReference['entidade']['customizacao']
 }
 export function getProjectToActivityData({ project, customization }: GetProjectToActivityDataProps) {
   const activity: TActivity = {
@@ -13,6 +25,10 @@ export function getProjectToActivityData({ project, customization }: GetProjectT
     descricao: customization.descricao, // description of what to be done
     responsaveis: customization.responsaveis,
     oportunidade: project.oportunidade,
+    projeto: {
+      id: project._id.toString(),
+      nome: project.nome,
+    },
     idHomologacao: project.idHomologacao,
     idAnaliseTecnica: project.idAnaliseTecnica,
     subatividades: [],

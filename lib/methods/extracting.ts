@@ -4,6 +4,7 @@ import { TInverter, TModule, TProductItem } from '@/utils/schemas/kits.schema'
 import { TUserEntity, TUserDTOSimplified, TUserDTO } from '@/utils/schemas/user.schema'
 import dayjs from 'dayjs'
 import GenFactors from '@/utils/json-files/generationFactors.json'
+import { TRevenue } from '@/utils/schemas/revenues.schema'
 type GetPromoterAvatarUrl = {
   users?: TUserDTO[] | TUserDTOSimplified[]
   userName: string
@@ -82,6 +83,10 @@ export function getDateDifference({ dateOne, dateTwo, absolute }: { dateOne?: st
   const diff = dayjs(dateOne).diff(dateTwo, 'days')
   if (absolute) return Math.abs(diff)
   return diff
+}
+
+export function getRevenueReceivedTotal(receipts: TRevenue['recebimentos']) {
+  return receipts.reduce((acc, current) => acc + current.valor, 0)
 }
 
 type GetGenFactorByOrientationParams = {
