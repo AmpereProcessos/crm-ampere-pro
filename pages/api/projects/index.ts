@@ -51,4 +51,6 @@ const getProjectsRoute: NextApiHandler<GetResponse> = async (req, res) => {
   return res.status(200).json({ data: projects })
 }
 
+type PutResponse = {}
+
 export default apiHandler({ GET: getProjectsRoute, POST: addNewProject })

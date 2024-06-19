@@ -27,7 +27,6 @@ function ProjectNode(node: NodeProps<TIndividualProcess>) {
           </div>
           <h1 className="text-xl font-black leading-none tracking-tight">PROJETO</h1>
         </div>
-        <CustomizationBlock position={{ x: node.xPos, y: node.yPos }} {...node} />
         <ReturnConfigurationBlock position={{ x: node.xPos, y: node.yPos }} {...node} />
       </div>
       <Handle type="source" position={Position.Bottom} id="project-source" />

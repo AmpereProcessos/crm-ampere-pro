@@ -48,13 +48,13 @@ function ReturnConfigurationBlock(node: TProcessSettingNode) {
                             referencia: {
                               entidade: data.retorno.entidade || 'Activity',
                             },
-                            customizacao: {},
                             gatilho: {
                               tipo: getActiveProcessAutomationReference(data.retorno.entidade || undefined).triggerConditions[0]?.types[0] || null,
                               variavel: getActiveProcessAutomationReference(data.retorno.entidade || undefined).triggerConditions[0]?.value || '',
                             },
                             retorno: {
                               entidade: 'Activity',
+                              customizacao: {},
                             },
                             canvas: {},
                           },

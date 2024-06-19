@@ -85,7 +85,6 @@ function Testing() {
                       referencia: node.data.referencia,
                       gatilho: node.data.gatilho,
                       retorno: node.data.retorno,
-                      customizacao: node.data.customizacao,
                       canvas: {
                         id: node.id,
                         posX: node.position.x,

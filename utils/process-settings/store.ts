@@ -55,8 +55,8 @@ export const useProjectSettingStore = create((set: any, get: any) => ({
         },
         retorno: {
           entidade: 'Activity',
+          customizacao: {},
         },
-        customizacao: {},
         canvas: {},
       },
       position: { x: 0.5, y: 0.5 },

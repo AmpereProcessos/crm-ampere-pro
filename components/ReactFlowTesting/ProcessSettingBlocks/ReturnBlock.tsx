@@ -3,6 +3,7 @@ import { TProcessSettingNode, useProjectSettingStore } from '@/utils/process-set
 import { TProjectTypeProcessSetting } from '@/utils/schemas/project-type-process-settings'
 import { nanoid } from 'nanoid'
 import React from 'react'
+import CustomizationBlock from './CustomizationBlock'
 
 type ReturnBlockProps = TProcessSettingNode
 function ReturnBlock(node: ReturnBlockProps) {
@@ -19,7 +20,7 @@ function ReturnBlock(node: ReturnBlockProps) {
             <button
               key={index}
               onClick={() => {
-                updateNodeData(id, { ...data, retorno: { entidade: p.entity } })
+                updateNodeData(id, { ...data, retorno: { entidade: p.entity, customizacao: {} } })
               }}
               className={`grow ${
                 p.entity == data.retorno.entidade ? 'bg-green-700  text-white' : 'text-green-700 '
@@ -29,6 +30,7 @@ function ReturnBlock(node: ReturnBlockProps) {
             </button>
           ))}
         </div>
+        <CustomizationBlock {...node} />
       </div>
     </div>
   )

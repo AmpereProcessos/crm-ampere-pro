@@ -2,15 +2,14 @@ import { TProcessAutomationConditionType, TProcessAutomationEntities } from '.'
 import { ProjectContractStatus, YesOrNoOptions } from '../select-options'
 
 export type TProcessAutomationConditionData = {
-  projetoAprovado: 'SIM' | 'NÃO'
-  statusContrato: string
+  projetoAprovado: 'SIM' | 'NÃO' // PROJECT ENTITY
+  statusContrato: string // PROJECT ENTITY
   porcentagemReceitaRecebida: number
   pedidoCompraFeito: 'SIM' | 'NÃO'
   entregaCompraFeita: 'SIM' | 'NÃO'
   ordemServicoConcluida: 'SIM' | 'NÃO'
   atividadeConcluida: 'SIM' | 'NÃO'
 }
-
 type TProcessAutomationConditionAlias = {
   entity: TProcessAutomationEntities
   label: string

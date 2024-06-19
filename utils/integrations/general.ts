@@ -8,6 +8,7 @@ import { getBYDTemplateData } from './anvil/byd-template'
 import { getComplexTemplateData } from './anvil/complex-template'
 import { getComplexTemplate2024Data } from './anvil/complex-template-2024'
 import { getDisassemblyAndAssemblyTemplateData } from './anvil/disassembly-and-assembly-template-2024'
+import { getMonitoringTemplateData } from './anvil/monitoring-template'
 
 import { getOeMTemplateData } from './anvil/oem-template'
 import { getOeMTemplateData2024 } from './anvil/oem-template-2024'
@@ -79,6 +80,13 @@ export const ProposalTemplates = [
     idAnvil: 'QiAjovgEpAt2RCJx5Am7',
     createProposeObj: getDisassemblyAndAssemblyTemplateData,
   },
+  {
+    active: true,
+    label: 'TEMPLATE MONITORAMENTO',
+    value: 'TEMPLATE MONITORAMENTO',
+    idAnvil: 'Z1L7XqJE2GpnjiVS0Jf6',
+    createProposeObj: getDisassemblyAndAssemblyTemplateData,
+  },
 ]
 export const ProposeTemplateOptions = [
   'TEMPLATE SIMPLES 2024',
@@ -90,6 +98,7 @@ export const ProposeTemplateOptions = [
   'TEMPLATE O&M 2024',
   'TEMPLATE DESMONTAGEM E MONTAGEM',
   'TEMPLATE SEGURO FOTOVOLTAICO',
+  'TEMPLATE MONITORAMENTO',
 ] as const
 
 type GetTemplateDataParams = {
@@ -115,6 +124,8 @@ export function getTemplateData({ opportunity, proposal, template }: GetTemplate
   if (template == 'TEMPLATE O&M 2024') return getOeMTemplateData2024({ opportunity, proposal })
 
   if (template == 'TEMPLATE SEGURO FOTOVOLTAICO') return getInsuranceTemplateData({ opportunity, proposal })
+
+  if (template == 'TEMPLATE MONITORAMENTO') return getMonitoringTemplateData({ opportunity, proposal })
 
   return getSimpleTemplate2024Data({ opportunity, proposal })
 }

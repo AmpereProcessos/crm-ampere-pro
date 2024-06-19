@@ -8,7 +8,6 @@ export const IndividualProcess = z.object({
   referencia: z.object({
     entidade: ProcessAutomationEntities,
   }),
-  customizacao: z.record(z.any()),
   gatilho: z.object({
     tipo: ProcessAutomationConditionTypes,
     variavel: z.string(),
@@ -59,6 +58,7 @@ export const IndividualProcess = z.object({
   }),
   retorno: z.object({
     entidade: ProcessAutomationEntities.optional().nullable(),
+    customizacao: z.record(z.any()),
   }),
   canvas: z.object({
     id: z.string({ required_error: 'ID de referência do canvas.', invalid_type_error: 'Tipo inválido para o ID do canvas.' }).optional().nullable(),
