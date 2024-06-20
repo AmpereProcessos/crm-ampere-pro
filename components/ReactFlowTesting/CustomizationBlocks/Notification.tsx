@@ -35,12 +35,12 @@ function Notification(node: TProcessSettingNode) {
     const responsibles = [...(previousResponsibles || [])]
     responsibles.push(newResponsible)
     console.log(responsibles)
-    updateNodeData(id, { ...data, retorno: { ...data.retorno, customizacao: { ...data.retorno.customizacao, destinatarios: responsibles } } })
+    updateNodeData(id, { ...data, entidade: { ...data.entidade, customizacao: { ...data.entidade.customizacao, destinatarios: responsibles } } })
   }
   function removeResponsible(index: number, previousResponsibles?: TNotification['destinatarios']) {
     const responsibles = [...(previousResponsibles || [])]
     responsibles.splice(index, 1)
-    updateNodeData(id, { ...data, retorno: { ...data.retorno, customizacao: { ...data.retorno.customizacao, destinatarios: responsibles } } })
+    updateNodeData(id, { ...data, entidade: { ...data.entidade, customizacao: { ...data.entidade.customizacao, destinatarios: responsibles } } })
   }
   return (
     <div draggable={false} className="flex w-full flex-col gap-2">
@@ -66,7 +66,7 @@ function Notification(node: TProcessSettingNode) {
         <button
           draggable={false}
           onClick={() =>
-            vinculateResponsible({ userId: newResponsibleHolder, users: users || [], previousResponsibles: data.retorno.customizacao.destinatarios })
+            vinculateResponsible({ userId: newResponsibleHolder, users: users || [], previousResponsibles: data.entidade.customizacao.destinatarios })
           }
           className="min-h-[46.6px]  rounded border border-orange-500 px-4 py-2 text-sm font-medium text-orange-500 shadow hover:bg-orange-500 hover:text-white"
         >
@@ -74,7 +74,7 @@ function Notification(node: TProcessSettingNode) {
         </button>
       </div>
       <div className="flex flex-wrap items-center justify-start gap-2">
-        {(data.retorno.customizacao.destinatarios as TNotification['destinatarios'])?.map((resp, index) => (
+        {(data.entidade.customizacao.destinatarios as TNotification['destinatarios'])?.map((resp, index) => (
           <div
             key={index}
             onClick={() => removeResponsible(index)}
@@ -89,9 +89,9 @@ function Notification(node: TProcessSettingNode) {
       <div className="flex w-full flex-col rounded-md border border-gray-200 p-2 shadow-sm">
         <h1 className="text-sm font-medium leading-none tracking-tight text-gray-500">MENSAGEM DA NOTIFICAÇÃO</h1>
         <input
-          value={data.retorno.customizacao.mensagem}
+          value={data.entidade.customizacao.mensagem}
           onChange={(e) =>
-            updateNodeData(id, { ...data, retorno: { ...data.retorno, customizacao: { ...data.retorno.customizacao, mensagem: e.target.value } } })
+            updateNodeData(id, { ...data, entidade: { ...data.entidade, customizacao: { ...data.entidade.customizacao, mensagem: e.target.value } } })
           }
           type="text"
           placeholder="Preencha aqui uma mensagem padrão para a notificação..."

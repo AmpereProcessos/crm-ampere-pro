@@ -14,9 +14,12 @@ import { BsCartFill } from 'react-icons/bs'
 import { TIndividualProcess } from '@/utils/schemas/process-flow.schema'
 import ReturnConfigurationBlock from './ProcessSettingBlocks/ReturnConfigurationBlock'
 import CustomizationBlock from './ProcessSettingBlocks/CustomizationBlock'
+import ActivationBlock from './ProcessSettingBlocks/ActivationBlock'
+import ReturnDependentProcessBlock from './ProcessSettingBlocks/ReturnDependentProcessBlock'
 
 function PurchaseNode(node: NodeProps<TIndividualProcess>) {
   const { id, data } = node
+  const entityReference = getActiveProcessAutomationReference(data.entidade.identificacao)
   return (
     <>
       <Handle type="target" position={Position.Top} id="purchase-target" />
@@ -27,7 +30,10 @@ function PurchaseNode(node: NodeProps<TIndividualProcess>) {
           </div>
           <h1 className="text-xl font-black leading-none tracking-tight">COMPRA</h1>
         </div>
-        <ReturnConfigurationBlock position={{ x: node.xPos, y: node.yPos }} {...node} />
+        <p className="w-full text-center text-xs tracking-tight">{entityReference.description}</p>
+        <CustomizationBlock position={{ x: node.xPos, y: node.yPos }} {...node} />
+        <ActivationBlock position={{ x: node.xPos, y: node.yPos }} {...node} />
+        <ReturnDependentProcessBlock position={{ x: node.xPos, y: node.yPos }} {...node} />
       </div>
       <Handle type="source" position={Position.Bottom} id="purchase-source" />
     </>

@@ -1,5 +1,5 @@
 import { TProposal } from '@/utils/schemas/proposal.schema'
-import { Collection, ObjectId } from 'mongodb'
+import { Collection, Filter, ObjectId } from 'mongodb'
 
 type InsertProposalParams = {
   collection: Collection<TProposal>
@@ -19,11 +19,11 @@ type UpdateProposalParams = {
   id: string
   collection: Collection<TProposal>
   changes: Partial<TProposal>
-  partnerId: string
+  query: Filter<TProposal>
 }
-export async function updateProposal({ id, collection, changes, partnerId }: UpdateProposalParams) {
+export async function updateProposal({ id, collection, changes, query }: UpdateProposalParams) {
   try {
-    const updateResponse = await collection.updateOne({ _id: new ObjectId(id), idParceiro: partnerId }, { $set: { ...changes } })
+    const updateResponse = await collection.updateOne({ _id: new ObjectId(id), ...query }, { $set: { ...changes } })
 
     return updateResponse
   } catch (error) {

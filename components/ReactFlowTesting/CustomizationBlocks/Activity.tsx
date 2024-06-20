@@ -37,28 +37,30 @@ function Activity(node: TProcessSettingNode) {
     const responsibles = [...(previousResponsibles || [])]
     responsibles.push(newResponsible)
     console.log(responsibles)
-    updateNodeData(id, { ...data, retorno: { ...data.retorno, customizacao: { ...data.retorno.customizacao, responsaveis: responsibles } } })
+    updateNodeData(id, { ...data, entidade: { ...data.entidade, customizacao: { ...data.entidade.customizacao, responsaveis: responsibles } } })
   }
   function removeResponsible(index: number, previousResponsibles?: TActivity['responsaveis']) {
     const responsibles = [...(previousResponsibles || [])]
     responsibles.splice(index, 1)
-    updateNodeData(id, { ...data, retorno: { ...data.retorno, customizacao: { ...data.retorno.customizacao, responsaveis: responsibles } } })
+    updateNodeData(id, { ...data, entidade: { ...data.entidade, customizacao: { ...data.entidade.customizacao, responsaveis: responsibles } } })
   }
   return (
     <div draggable={false} className="flex w-full flex-col gap-2">
       <TextInput
         label="TÍTULO DA ATIVIDADE"
         placeholder="Preencha aqui o titulo a ser dado à atividade..."
-        value={data.retorno.customizacao.titulo}
-        handleChange={(value) => updateNodeData(id, { ...data, retorno: { ...data.retorno, customizacao: { ...data.retorno.customizacao, titulo: value } } })}
+        value={data.entidade.customizacao.titulo}
+        handleChange={(value) =>
+          updateNodeData(id, { ...data, entidade: { ...data.entidade, customizacao: { ...data.entidade.customizacao, titulo: value } } })
+        }
         width="100%"
       />
       <div className="flex w-full flex-col rounded-md border border-gray-200 p-2 shadow-sm">
         <h1 className="text-sm font-medium leading-none tracking-tight text-gray-500">DESCRIÇÃO DA ATIVIDADE</h1>
         <input
-          value={data.retorno.customizacao.descricao}
+          value={data.entidade.customizacao.descricao}
           onChange={(e) =>
-            updateNodeData(id, { ...data, retorno: { ...data.retorno, customizacao: { ...data.retorno.customizacao, descricao: e.target.value } } })
+            updateNodeData(id, { ...data, entidade: { ...data.entidade, customizacao: { ...data.entidade.customizacao, descricao: e.target.value } } })
           }
           type="text"
           placeholder="Preencha aqui uma descrição mais específica da atividade a ser feita..."
@@ -87,7 +89,7 @@ function Activity(node: TProcessSettingNode) {
         <button
           draggable={false}
           onClick={() =>
-            vinculateResponsible({ userId: newResponsibleHolder, users: users || [], previousResponsibles: data.retorno.customizacao.responsaveis })
+            vinculateResponsible({ userId: newResponsibleHolder, users: users || [], previousResponsibles: data.entidade.customizacao.responsaveis })
           }
           className="min-h-[46.6px]  rounded border border-orange-500 px-4 py-2 text-sm font-medium text-orange-500 shadow hover:bg-orange-500 hover:text-white"
         >
@@ -95,7 +97,7 @@ function Activity(node: TProcessSettingNode) {
         </button>
       </div>
       <div className="flex flex-wrap items-center justify-start gap-2">
-        {(data.retorno.customizacao.responsaveis as TActivity['responsaveis'])?.map((resp, index) => (
+        {(data.entidade.customizacao.responsaveis as TActivity['responsaveis'])?.map((resp, index) => (
           <div
             key={index}
             onClick={() => removeResponsible(index)}

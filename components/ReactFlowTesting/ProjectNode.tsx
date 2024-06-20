@@ -13,11 +13,11 @@ import ReturnBlock from './ProcessSettingBlocks/ReturnBlock'
 import { TIndividualProcess } from '@/utils/schemas/process-flow.schema'
 import CustomizationBlock from './ProcessSettingBlocks/CustomizationBlock'
 import ReturnConfigurationBlock from './ProcessSettingBlocks/ReturnConfigurationBlock'
+import ActivationBlock from './ProcessSettingBlocks/ActivationBlock'
+import ReturnDependentProcessBlock from './ProcessSettingBlocks/ReturnDependentProcessBlock'
 
 function ProjectNode(node: NodeProps<TIndividualProcess>) {
   const { id, data } = node
-  const updateNodeData = useProjectSettingStore((state) => state.updateNodeData)
-  const activeAutomationReference = getActiveProcessAutomationReference(data.referencia.entidade)
   return (
     <>
       <div className="flex min-w-[700px] max-w-[700px] flex-col gap-2 rounded border border-gray-500 bg-[#fff] p-6 ">
@@ -27,7 +27,7 @@ function ProjectNode(node: NodeProps<TIndividualProcess>) {
           </div>
           <h1 className="text-xl font-black leading-none tracking-tight">PROJETO</h1>
         </div>
-        <ReturnConfigurationBlock position={{ x: node.xPos, y: node.yPos }} {...node} />
+        <ReturnDependentProcessBlock position={{ x: node.xPos, y: node.yPos }} {...node} />
       </div>
       <Handle type="source" position={Position.Bottom} id="project-source" />
     </>

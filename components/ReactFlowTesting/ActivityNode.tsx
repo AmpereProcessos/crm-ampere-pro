@@ -13,9 +13,12 @@ import ReturnBlock from './ProcessSettingBlocks/ReturnBlock'
 import { TIndividualProcess } from '@/utils/schemas/process-flow.schema'
 import CustomizationBlock from './ProcessSettingBlocks/CustomizationBlock'
 import ReturnConfigurationBlock from './ProcessSettingBlocks/ReturnConfigurationBlock'
+import ActivationBlock from './ProcessSettingBlocks/ActivationBlock'
+import ReturnDependentProcessBlock from './ProcessSettingBlocks/ReturnDependentProcessBlock'
 
 function ActivityNode(node: NodeProps<TIndividualProcess>) {
   const { id, data } = node
+  const entityReference = getActiveProcessAutomationReference(data.entidade.identificacao)
   return (
     <>
       <Handle type="target" position={Position.Top} id="activity-target" />
@@ -26,7 +29,11 @@ function ActivityNode(node: NodeProps<TIndividualProcess>) {
           </div>
           <h1 className="text-xl font-black leading-none tracking-tight">ATIVIDADE</h1>
         </div>
-        <ReturnConfigurationBlock position={{ x: node.xPos, y: node.yPos }} {...node} />
+        <p className="w-full text-center text-xs tracking-tight">{entityReference.description}</p>
+
+        <CustomizationBlock position={{ x: node.xPos, y: node.yPos }} {...node} />
+        <ActivationBlock position={{ x: node.xPos, y: node.yPos }} {...node} />
+        <ReturnDependentProcessBlock position={{ x: node.xPos, y: node.yPos }} {...node} />
       </div>
       <Handle type="source" position={Position.Bottom} id="activity-source" />
     </>

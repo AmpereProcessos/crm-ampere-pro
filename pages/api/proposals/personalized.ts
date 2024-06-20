@@ -10,7 +10,7 @@ import { InsertOpportunitySchema, OpportunityWithClientSchema, TOpportunity, Upd
 import { InsertProposalSchema, TProposal, UpdateProposalSchema } from '@/utils/schemas/proposal.schema'
 import axios from 'axios'
 import createHttpError from 'http-errors'
-import { Collection, ObjectId } from 'mongodb'
+import { Collection, Filter, ObjectId } from 'mongodb'
 import { NextApiHandler } from 'next'
 import toast from 'react-hot-toast'
 import { z } from 'zod'
@@ -41,6 +41,8 @@ const PersonalizedProposalCreationSchema = z.object({
 const createProposalPersonalized: NextApiHandler<PostResponse> = async (req, res) => {
   const session = await validateAuthorization(req, res, 'propostas', 'criar', true)
   const partnerId = session.user.idParceiro
+  const parterScope = session.user.permissoes.parceiros.escopo
+  const partnerQuery: Filter<TProposal> = parterScope ? { idParceiro: { $in: [...parterScope] } } : {}
 
   const { proposal, opportunityWithClient, saveAsActive, idAnvil } = PersonalizedProposalCreationSchema.parse(req.body)
 
@@ -65,7 +67,7 @@ const createProposalPersonalized: NextApiHandler<PostResponse> = async (req, res
     console.log(anvilFileResponse)
     const { format, size, url } = await uploadFileAsPDF({ file: anvilFileResponse, fileName: proposal.nome, vinculationId: opportunityWithClient._id })
 
-    await updateProposal({ id: insertedId, collection: proposalsCollection, changes: { urlArquivo: url }, partnerId: partnerId || '' })
+    await updateProposal({ id: insertedId, collection: proposalsCollection, changes: { urlArquivo: url }, query: partnerQuery })
 
     if (saveAsActive)
       await updateOpportunity({
@@ -114,6 +116,9 @@ const PersonalizedProposalUpdateSchema = z.object({
 const updateProposalPersonalized: NextApiHandler<PutResponse> = async (req, res) => {
   const session = await validateAuthorization(req, res, 'propostas', 'editar', true)
   const partnerId = session.user.idParceiro
+  const parterScope = session.user.permissoes.parceiros.escopo
+  const partnerQuery: Filter<TProposal> = parterScope ? { idParceiro: { $in: [...parterScope] } } : {}
+
   const { id } = req.query
   if (!id || typeof id != 'string' || !ObjectId.isValid(id)) throw new createHttpError.BadRequest('ID inválido.')
 
@@ -140,7 +145,7 @@ const updateProposalPersonalized: NextApiHandler<PutResponse> = async (req, res)
         id: id,
         collection: proposalsCollection,
         changes: { ...proposal, urlArquivo: url },
-        partnerId: partnerId || '',
+        query: partnerQuery,
       })
       if (!updateResponse.acknowledged) throw new createHttpError.InternalServerError('Oops, houve um erro desconhecido ao atualizar proposta.')
       if (updateResponse.matchedCount == 0) throw new createHttpError.NotFound('Nenhum proposta foi encontrada para atualização.')
@@ -153,7 +158,7 @@ const updateProposalPersonalized: NextApiHandler<PutResponse> = async (req, res)
     id: id,
     collection: proposalsCollection,
     changes: { ...proposal },
-    partnerId: partnerId || '',
+    query: partnerQuery,
   })
   if (!updateResponse.acknowledged) throw new createHttpError.InternalServerError('Oops, houve um erro desconhecido ao atualizar proposta.')
   if (updateResponse.matchedCount == 0) throw new createHttpError.NotFound('Nenhum proposta foi encontrada para atualização.')

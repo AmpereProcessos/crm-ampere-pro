@@ -64,6 +64,9 @@ type PutResponse = {
 const editProposal: NextApiHandler<PutResponse> = async (req, res) => {
   const session = await validateAuthorization(req, res, 'propostas', 'editar', true)
   const partnerId = session.user.idParceiro
+  const parterScope = session.user.permissoes.parceiros.escopo
+  const partnerQuery: Filter<TProposal> = parterScope ? { idParceiro: { $in: [...parterScope] } } : {}
+
   const { id } = req.query
   if (!id || typeof id != 'string' || !ObjectId.isValid(id)) throw new createHttpError.BadRequest('ID inválido.')
   const changes = InsertProposalSchema.partial().parse(req.body)
@@ -71,7 +74,7 @@ const editProposal: NextApiHandler<PutResponse> = async (req, res) => {
   const db = await connectToDatabase(process.env.MONGODB_URI, 'crm')
   const collection: Collection<TProposal> = db.collection('proposals')
 
-  const updateResponse = await updateProposal({ id: id, collection: collection, changes: changes, partnerId: partnerId || '' })
+  const updateResponse = await updateProposal({ id: id, collection: collection, changes: changes, query: partnerQuery })
   if (!updateResponse.acknowledged) throw new createHttpError.InternalServerError('Oops, houve um erro desconhecido ao atualizar proposta.')
   if (updateResponse.matchedCount == 0) throw new createHttpError.NotFound('Nenhum proposta foi encontrada para atualização.')
 

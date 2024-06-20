@@ -44,8 +44,10 @@ export type TProcessAutomationEntities = z.infer<typeof ProcessAutomationEntitie
 export type TProcessAutomationEntitySpec = {
   entity: TProcessAutomationEntities
   entityLabel: string
+  description: string
   triggerConditions: TriggerCondition[]
   returnable: boolean
+  returnableEntities: TProcessAutomationEntities[]
   customizable: boolean
   returns: boolean
 }
@@ -54,23 +56,29 @@ export const ProcessAutomationEntitiesSpecs: TProcessAutomationEntitySpec[] = [
   {
     entity: 'Project',
     entityLabel: 'PROJETO',
+    description: '',
     triggerConditions: processAutomationConditionAlias.filter((c) => c.entity == 'Project'),
     returnable: false,
+    returnableEntities: ['Activity', 'Notification', 'Revenue', 'Comission', 'Purchase', 'ServiceOrder'],
     customizable: false,
     returns: true,
   },
   {
     entity: 'Revenue',
     entityLabel: 'RECEITA',
+    description: 'Esse processo cria uma receita de forma automática utilizando informações do projeto',
     triggerConditions: processAutomationConditionAlias.filter((c) => c.entity == 'Revenue'),
     returnable: true,
+    returnableEntities: ['Activity', 'Notification', 'Revenue', 'Comission', 'Purchase', 'ServiceOrder'],
     customizable: false,
     returns: true,
   },
   {
     entity: 'Comission',
     entityLabel: 'COMISSÃO',
+    description: 'Esse processo cria registros de comissão de forma automática utilizando informações dos responsáveis do projeto',
     triggerConditions: processAutomationConditionAlias.filter((c) => c.entity == 'Comission'),
+    returnableEntities: [],
     returnable: true,
     customizable: false,
     returns: false,
@@ -78,32 +86,40 @@ export const ProcessAutomationEntitiesSpecs: TProcessAutomationEntitySpec[] = [
   {
     entity: 'Purchase',
     entityLabel: 'COMPRA',
+    description: 'Esse processo cria um controle de compra de forma automática utilizando informações dos itens de venda do projeto',
     triggerConditions: processAutomationConditionAlias.filter((c) => c.entity == 'Purchase'),
     returnable: true,
+    returnableEntities: ['Activity', 'Notification', 'Revenue', 'Comission', 'Purchase', 'ServiceOrder'],
     customizable: false,
     returns: true,
   },
   {
     entity: 'ServiceOrder',
     entityLabel: 'ORDEM DE SERVIÇO',
+    description: 'Esse processo cria uma ordem de serviço de forma automática utilizando informações do projeto e/ou customizáveis.',
     triggerConditions: processAutomationConditionAlias.filter((c) => c.entity == 'ServiceOrder'),
     returnable: true,
+    returnableEntities: ['Activity', 'Notification', 'Revenue', 'Comission', 'Purchase', 'ServiceOrder'],
     customizable: false,
     returns: true,
   },
   {
     entity: 'Activity',
     entityLabel: 'ATIVIDADE',
+    description: 'Esse processo cria uma atividade de forma automática utilizando informações do projeto e/ou customizáveis.',
     triggerConditions: processAutomationConditionAlias.filter((c) => c.entity == 'Activity'),
     returnable: true,
+    returnableEntities: ['Activity', 'Notification', 'Revenue', 'Comission', 'Purchase', 'ServiceOrder'],
     customizable: true,
     returns: true,
   },
   {
     entity: 'Notification',
     entityLabel: 'NOTIFICAÇÃO',
+    description: 'Esse processo cria um notificação de forma automática utilizando informações do projeto e/ou customizáveis.',
     triggerConditions: [],
     returnable: true,
+    returnableEntities: [],
     customizable: true,
     returns: false,
   },
