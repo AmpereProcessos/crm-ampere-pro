@@ -78,6 +78,10 @@ type PutResponse = {
 const editTechnicalAnalysis: NextApiHandler<PutResponse> = async (req, res) => {
   const session = await validateAuthenticationWithSession(req, res)
   const partnerId = session.user.idParceiro
+
+  const parterScope = session.user.permissoes.parceiros.escopo
+  const partnerQuery: Filter<TTechnicalAnalysis> = parterScope ? { idParceiro: { $in: [...parterScope] } } : {}
+
   const { id } = req.query
   if (!id || typeof id != 'string' || !ObjectId.isValid(id)) throw new createHttpError.BadRequest('ID inválido.')
 
@@ -87,7 +91,7 @@ const editTechnicalAnalysis: NextApiHandler<PutResponse> = async (req, res) => {
   const collection: Collection<TTechnicalAnalysis> = db.collection('technical-analysis')
   const notificationsCollection: Collection<TNotification> = db.collection('notifications')
 
-  const updateResponse = await updateTechnicalAnalysis({ collection: collection, info: changes, analysisId: id, partnerId: partnerId || '' })
+  const updateResponse = await updateTechnicalAnalysis({ collection: collection, info: changes, analysisId: id, query: partnerQuery })
   if (!updateResponse.acknowledged) throw new createHttpError.InternalServerError('Oops, houve um erro desconhecido ao atualizar análise técnica.')
   if (updateResponse.matchedCount == 0) throw new createHttpError.NotFound('Análise técnica não encontrada.')
 

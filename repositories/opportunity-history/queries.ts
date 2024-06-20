@@ -38,11 +38,11 @@ export async function getOpenActivities({ collection, query }: GetOpenActivities
 type GetOpportunityHistoryById = {
   id: string
   collection: Collection<TOpportunityHistory>
-  partnerId: string
+  query: Filter<TOpportunityHistory>
 }
-export async function getOpportunityHistoryById({ id, collection, partnerId }: GetOpportunityHistoryById) {
+export async function getOpportunityHistoryById({ id, collection, query }: GetOpportunityHistoryById) {
   try {
-    const opportunityHistory = await collection.findOne({ _id: new ObjectId(id), idParceiro: partnerId })
+    const opportunityHistory = await collection.findOne({ _id: new ObjectId(id), ...query })
     return opportunityHistory
   } catch (error) {
     throw error

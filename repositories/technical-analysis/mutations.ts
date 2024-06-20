@@ -1,5 +1,5 @@
 import { TTechnicalAnalysis } from '@/utils/schemas/technical-analysis.schema'
-import { Collection, ObjectId } from 'mongodb'
+import { Collection, Filter, ObjectId } from 'mongodb'
 
 type InsertTechnicalAnalysisParams = {
   collection: Collection<TTechnicalAnalysis>
@@ -20,11 +20,11 @@ type UpdateTechnicalAnalysisParams = {
   collection: Collection<TTechnicalAnalysis>
   info: Partial<TTechnicalAnalysis>
   analysisId: string
-  partnerId: string
+  query: Filter<TTechnicalAnalysis>
 }
-export async function updateTechnicalAnalysis({ collection, info, analysisId, partnerId }: UpdateTechnicalAnalysisParams) {
+export async function updateTechnicalAnalysis({ collection, info, analysisId, query }: UpdateTechnicalAnalysisParams) {
   try {
-    const updateResponse = await collection.updateOne({ _id: new ObjectId(analysisId), idParceiro: partnerId }, { $set: { ...info } })
+    const updateResponse = await collection.updateOne({ _id: new ObjectId(analysisId), ...query }, { $set: { ...info } })
     return updateResponse
   } catch (error) {
     throw error

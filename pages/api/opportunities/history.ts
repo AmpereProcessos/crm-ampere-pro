@@ -86,6 +86,9 @@ const editOpportunityHistory: NextApiHandler<PutResponse> = async (req, res) => 
   const session = await validateAuthorization(req, res, 'oportunidades', 'editar', true)
   const userId = session.user.id
   const partnerId = session.user.idParceiro
+  const parterScope = session.user.permissoes.parceiros.escopo
+  const partnerQuery: Filter<TOpportunityHistory> = parterScope ? { idParceiro: { $in: [...parterScope] } } : {}
+
   const userScope = session.user.permissoes.oportunidades.escopo
 
   const { id } = req.query
@@ -95,7 +98,7 @@ const editOpportunityHistory: NextApiHandler<PutResponse> = async (req, res) => 
   const db = await connectToDatabase(process.env.MONGODB_URI, 'crm')
   const opportunityHistoryCollection: Collection<TOpportunityHistory> = db.collection('opportunities-history')
   // Validating existence of opportunity history
-  const opportunityHistory = await getOpportunityHistoryById({ collection: opportunityHistoryCollection, id: id, partnerId: partnerId || '' })
+  const opportunityHistory = await getOpportunityHistoryById({ collection: opportunityHistoryCollection, id: id, query: partnerQuery })
   if (!opportunityHistory) throw new createHttpError.NotFound('Objeto de alteração não encontrada.')
   // Checking for opportunity history edit authorization
   // @ts-ignore
@@ -106,7 +109,7 @@ const editOpportunityHistory: NextApiHandler<PutResponse> = async (req, res) => 
     id: id,
     collection: opportunityHistoryCollection,
     changes: changes,
-    partnerId: partnerId || '',
+    query: partnerQuery,
   })
   if (!updateResponse.acknowledged) throw new createHttpError.InternalServerError('Oops, houve um erro desconhecido na criação do usuário.')
   return res.status(201).json({ data: 'Objeto alterado com sucesso !', message: 'Objeto alterado com sucesso !' })

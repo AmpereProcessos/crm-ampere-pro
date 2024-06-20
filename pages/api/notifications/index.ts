@@ -36,7 +36,6 @@ type GetResponse = {
 }
 const getNotifications: NextApiHandler<GetResponse> = async (req, res) => {
   const session = await validateAuthenticationWithSession(req, res)
-  const partnerId = session.user.idParceiro
 
   const { id, recipientId, opportunityId } = req.query
 

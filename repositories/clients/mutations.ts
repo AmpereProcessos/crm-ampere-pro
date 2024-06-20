@@ -1,5 +1,5 @@
 import { TClient } from '@/utils/schemas/client.schema'
-import { Collection, ObjectId } from 'mongodb'
+import { Collection, Filter, ObjectId } from 'mongodb'
 
 type InsertClientParams = {
   collection: Collection<TClient>
@@ -19,11 +19,11 @@ type UpdateClientParams = {
   id: string
   collection: Collection<TClient>
   changes: any
-  partnerId: string
+  query: Filter<TClient>
 }
-export async function updateClient({ id, collection, changes, partnerId }: UpdateClientParams) {
+export async function updateClient({ id, collection, changes, query }: UpdateClientParams) {
   try {
-    const updateResponse = await collection.updateOne({ _id: new ObjectId(id), idParceiro: partnerId }, { $set: { ...changes } })
+    const updateResponse = await collection.updateOne({ _id: new ObjectId(id), ...query }, { $set: { ...changes } })
     return updateResponse
   } catch (error) {
     throw error

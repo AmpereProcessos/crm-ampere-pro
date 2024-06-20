@@ -4,7 +4,7 @@ import { apiHandler, validateAuthorization } from '@/utils/api'
 import { InsertNewKitSchema, KitDTOSchema, TKit } from '@/utils/schemas/kits.schema'
 
 import createHttpError from 'http-errors'
-import { Collection, ObjectId } from 'mongodb'
+import { Collection, Filter, ObjectId } from 'mongodb'
 import { NextApiHandler } from 'next'
 import z from 'zod'
 type PostResponse = {
@@ -33,6 +33,9 @@ type PutResponse = {
 const updateKits: NextApiHandler<PutResponse> = async (req, res) => {
   const session = await validateAuthorization(req, res, 'kits', 'editar', true)
   const partnerId = session.user.idParceiro
+  const parterScope = session.user.permissoes.parceiros.escopo
+  const partnerQuery: Filter<TKit> = parterScope ? { idParceiro: { $in: [...parterScope, null] } } : {}
+
   const kits = z.array(KitDTOSchema).parse(req.body)
 
   const db = await connectToDatabase(process.env.MONGODB_URI, 'crm')
@@ -44,7 +47,7 @@ const updateKits: NextApiHandler<PutResponse> = async (req, res) => {
     delete setObject._id
     return {
       updateOne: {
-        filter: { _id: new ObjectId(kit._id), idParceiro: partnerId || '' },
+        filter: { _id: new ObjectId(kit._id), ...partnerQuery },
         update: { $set: { ...setObject } },
       },
     }

@@ -3,7 +3,7 @@ import { ISession } from '../../../utils/models'
 
 import { apiHandler, validateAuthentication, validateAuthorization } from '@/utils/api'
 import connectToDatabase from '@/services/mongodb/crm-db-connection'
-import { Collection, Db, MatchKeysAndValues, ObjectId } from 'mongodb'
+import { Collection, Db, Filter, MatchKeysAndValues, ObjectId } from 'mongodb'
 import createHttpError from 'http-errors'
 
 import { isInvalidMongoId } from '@/lib/methods/validation'
@@ -27,7 +27,7 @@ const createClient: NextApiHandler<PostResponse> = async (req, res) => {
   const email = client.email || undefined
   const cpfCnpj = client.cpfCnpj || undefined
   const phoneNumber = client.telefonePrimario
-  const existingClientInDb = await getExistentClientByProperties({ collection, email, cpfCnpj, phoneNumber, partnerId: partnerId || '' })
+  const existingClientInDb = await getExistentClientByProperties({ collection, email, cpfCnpj, phoneNumber })
   if (!!existingClientInDb) {
     throw new createHttpError.BadRequest('Cliente com essas informações já foi criado.')
   }
@@ -86,6 +86,9 @@ type PutResponse = {
 const editClients: NextApiHandler<PutResponse> = async (req, res) => {
   const session = await validateAuthorization(req, res, 'clientes', 'editar', true)
   const partnerId = session.user.idParceiro
+  const parterScope = session.user.permissoes.parceiros.escopo
+  const partnerQuery: Filter<TClient> = parterScope ? { idParceiro: { $in: [...parterScope] } } : {}
+
   const userId = session.user.id
   const userScope = session.user.permissoes.oportunidades.escopo
 
@@ -101,7 +104,7 @@ const editClients: NextApiHandler<PutResponse> = async (req, res) => {
   const client = await getClientById({ collection: clientsCollection, id: id, partnerId: partnerId || '' })
   if (!client) throw new createHttpError.NotFound('Cliente não encontrado.')
 
-  const updateResponse = await updateClient({ id: id, collection: clientsCollection, changes: changes, partnerId: partnerId || '' })
+  const updateResponse = await updateClient({ id: id, collection: clientsCollection, changes: changes, query: partnerQuery })
 
   if (!updateResponse.acknowledged) throw new createHttpError.InternalServerError('Oops, houve um erro desconhecido na atualização do cliente.')
   return res.status(201).json({ data: 'Cliente alterado com sucesso !', message: 'Cliente alterado com sucesso !' })

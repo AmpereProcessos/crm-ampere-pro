@@ -38,6 +38,9 @@ type GetResponse = {
 const getOpportunitiesExport: NextApiHandler<GetResponse> = async (req, res) => {
   const session = await validateAuthorization(req, res, 'oportunidades', 'visualizar', true)
   const partnerId = session.user.idParceiro
+  const parterScope = session.user.permissoes.parceiros.escopo
+  const partnerQuery: Filter<TOpportunity> = parterScope ? { idParceiro: { $in: [...parterScope] } } : {}
+
   const userScope = session.user.permissoes.oportunidades.escopo
 
   const db = await connectToDatabase(process.env.MONGODB_URI, 'crm')
@@ -62,7 +65,7 @@ const getOpportunitiesExport: NextApiHandler<GetResponse> = async (req, res) => 
   // Defining, if provided, won/lost query parameters
   const queryStatus: Filter<TOpportunity> = status != 'undefined' ? statusOption : { 'perda.data': null, 'ganho.data': null }
 
-  const query = { ...queryResponsible, ...queryInsertion, ...queryStatus }
+  const query = { ...partnerQuery, ...queryResponsible, ...queryInsertion, ...queryStatus }
 
   const addFields = {
     activeProposeObjectID: {

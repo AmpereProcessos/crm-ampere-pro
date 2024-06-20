@@ -9,7 +9,7 @@ import connectToDatabase from '@/services/mongodb/crm-db-connection'
 import { apiHandler, validateAuthentication, validateAuthenticationWithSession } from '@/utils/api'
 import { InsertFileReferenceSchema, TFileReference, TFileReferenceEntity } from '@/utils/schemas/file-reference.schema'
 import createHttpError from 'http-errors'
-import { Collection, ObjectId } from 'mongodb'
+import { Collection, Filter, ObjectId } from 'mongodb'
 import { NextApiHandler } from 'next'
 
 type PostResponse = {
@@ -22,6 +22,9 @@ type PostResponse = {
 const createFileReference: NextApiHandler<PostResponse> = async (req, res) => {
   const session = await validateAuthenticationWithSession(req, res)
   const partnerId = session.user.idParceiro
+  const parterScope = session.user.permissoes.parceiros.escopo
+  const partnerQuery: Filter<TFileReference> = parterScope ? { idParceiro: { $in: [...parterScope] } } : {}
+
   // Parsing payload and validating fields
   const fileReference = InsertFileReferenceSchema.parse(req.body)
 
@@ -38,6 +41,8 @@ type GetResponse = {
 const getFileReferences: NextApiHandler<GetResponse> = async (req, res) => {
   const session = await validateAuthenticationWithSession(req, res)
   const partnerId = session.user.idParceiro
+  const parterScope = session.user.permissoes.parceiros.escopo
+  const partnerQuery: Filter<TFileReference> = parterScope ? { idParceiro: { $in: [...parterScope] } } : {}
 
   const { opportunityId, clientId, analysisId, homologationId } = req.query
   // if (!opportunityId && !clientId && analysisId) throw new createHttpError.BadRequest('Necessário ID de referência do arquivo.')
@@ -51,7 +56,7 @@ const getFileReferences: NextApiHandler<GetResponse> = async (req, res) => {
     const references = await getFileReferencesByOpportunityId({
       collection: collection,
       opportunityId: opportunityId,
-      partnerId: partnerId || '',
+      query: partnerQuery,
     })
 
     return res.status(200).json({ data: references })

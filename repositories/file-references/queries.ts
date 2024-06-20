@@ -17,10 +17,10 @@ export async function getFileReferencesByQuery({ collection, query }: GetFileRef
 type GetFileReferenceByOpportunityParams = {
   collection: Collection<TFileReference>
   opportunityId: string
-  partnerId: string
+  query: Filter<TFileReference>
 }
 
-export async function getFileReferencesByOpportunityId({ collection, opportunityId, partnerId }: GetFileReferenceByOpportunityParams) {
+export async function getFileReferencesByOpportunityId({ collection, opportunityId, query }: GetFileReferenceByOpportunityParams) {
   try {
     const references = await collection.find({ idOportunidade: opportunityId }).toArray()
     return references
