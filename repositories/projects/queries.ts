@@ -18,7 +18,7 @@ type GetProjectByIdParams = {
   collection: Collection<TProject>
   query: Filter<TProject>
 }
-export async function getProjectById({ id, collection, query }: GetProjectByIdParams) {
+export async function getProjectByIdWithReferences({ id, collection, query }: GetProjectByIdParams) {
   try {
     const addFields = {
       clientAsObjectId: { $toObjectId: '$cliente.id' },
@@ -54,6 +54,15 @@ export async function getProjectById({ id, collection, query }: GetProjectByIdPa
       analiseTecnicaDados: p.analiseTecnicaDados[0],
     }))
     return project[0] as WithId<TProjectWithReferences>
+  } catch (error) {
+    throw error
+  }
+}
+
+export async function getProjectById({ id, collection, query }: GetProjectByIdParams) {
+  try {
+    const project = await collection.findOne({ _id: new ObjectId(id), ...query })
+    return project
   } catch (error) {
     throw error
   }

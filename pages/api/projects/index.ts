@@ -1,4 +1,4 @@
-import { getProjectById, getProjects } from '@/repositories/projects/queries'
+import { getProjectByIdWithReferences, getProjects } from '@/repositories/projects/queries'
 import connectToDatabase from '@/services/mongodb/crm-db-connection'
 import { apiHandler, validateAuthenticationWithSession, validateAuthorization } from '@/utils/api'
 import { GeneralProjectSchema, TProject } from '@/utils/schemas/project.schema'
@@ -41,7 +41,7 @@ const getProjectsRoute: NextApiHandler<GetResponse> = async (req, res) => {
 
   if (id) {
     if (typeof id != 'string' || !ObjectId.isValid(id)) throw new createHttpError.BadRequest('ID inválido.')
-    const project = await getProjectById({ id, collection, query: {} })
+    const project = await getProjectByIdWithReferences({ id, collection, query: {} })
     if (!project) throw new createHttpError.BadRequest('Projeto não encontrado.')
     return res.status(200).json({ data: project })
   }

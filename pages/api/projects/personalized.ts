@@ -1,8 +1,9 @@
 import { updateClient } from '@/repositories/clients/mutations'
-import { getProjectById } from '@/repositories/projects/queries'
+import { getProjectByIdWithReferences } from '@/repositories/projects/queries'
 import connectToDatabase from '@/services/mongodb/crm-db-connection'
 import { apiHandler, validateAuthenticationWithSession } from '@/utils/api'
 import { handleProcessAutomations } from '@/utils/process-settings/automations/general'
+import { handleProcessAutomationsByProjectTracking } from '@/utils/process-settings/automations/project'
 import { TClient } from '@/utils/schemas/client.schema'
 import { TProject } from '@/utils/schemas/project.schema'
 import axios from 'axios'
@@ -30,13 +31,11 @@ const updateProjectRelatedEntitiesRoute: NextApiHandler<PutResponse> = async (re
     if (typeof projectId != 'string' || !ObjectId.isValid(projectId)) throw new createHttpError.BadRequest('ID de projeto inválido.')
 
     const updateProjectResponse = await projectsCollection.updateOne({ _id: new ObjectId(projectId) }, { $set: { ...projectChanges } })
-
-    await handleProcessAutomations({ database: db, entityToTrack: 'Project', idToTrack: projectId as string, projectId: projectId })
+    await handleProcessAutomationsByProjectTracking({ database: db, projectId: projectId })
   }
 
   if (clientId) {
     if (typeof clientId != 'string' || !ObjectId.isValid(clientId)) throw new createHttpError.BadRequest('ID de cliente inválido.')
-
     const updateClientResponse = await updateClient({ id: clientId, collection: clientsCollection, changes: clientChanges, partnerId })
   }
 

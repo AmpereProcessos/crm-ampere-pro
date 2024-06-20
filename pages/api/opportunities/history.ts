@@ -9,7 +9,7 @@ import {
   UpdateOpportunityHistorySchema,
 } from '@/utils/schemas/opportunity-history.schema'
 import createHttpError from 'http-errors'
-import { Collection, ObjectId } from 'mongodb'
+import { Collection, Filter, ObjectId } from 'mongodb'
 import { NextApiHandler } from 'next'
 
 type PostResponse = {
@@ -43,6 +43,8 @@ const getTypes = ['open-activities']
 const getOpportunitiesHistory: NextApiHandler<GetResponse> = async (req, res) => {
   const session = await validateAuthorization(req, res, 'oportunidades', 'visualizar', true)
   const partnerId = session.user.idParceiro
+  const parterScope = session.user.permissoes.parceiros.escopo
+  const partnerQuery: Filter<TOpportunityHistory> = parterScope ? { idParceiro: { $in: [...parterScope] } } : {}
 
   const { opportunityId, type } = req.query
   if (!opportunityId || typeof opportunityId != 'string' || !ObjectId.isValid(opportunityId))
@@ -51,7 +53,7 @@ const getOpportunitiesHistory: NextApiHandler<GetResponse> = async (req, res) =>
   const db = await connectToDatabase(process.env.MONGODB_URI, 'crm')
   const collection: Collection<TOpportunityHistory> = db.collection('opportunities-history')
 
-  const history = await getOpportunityHistory({ opportunityId: opportunityId, collection: collection, partnerId: partnerId || '' })
+  const history = await getOpportunityHistory({ opportunityId: opportunityId, collection: collection, query: partnerQuery })
 
   return res.status(200).json({ data: history })
   // if (!!opportunityId) {

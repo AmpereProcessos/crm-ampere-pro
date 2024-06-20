@@ -9,6 +9,7 @@ import {
 } from '@/repositories/acitivities/queries'
 import connectToDatabase from '@/services/mongodb/crm-db-connection'
 import { apiHandler, validateAuthenticationWithSession } from '@/utils/api'
+import { handleProcessAutomationsByActivityTracking } from '@/utils/process-settings/automations/activity'
 import { InsertActivitySchema, TActivity } from '@/utils/schemas/activities.schema'
 import { TNotification } from '@/utils/schemas/notification.schema'
 import createHttpError from 'http-errors'
@@ -104,6 +105,7 @@ const editActivity: NextApiHandler<PutResponse> = async (req, res) => {
   if (!updateResponse.acknowledged) throw new createHttpError.InternalServerError('Oops, houve um erro desconhecido ao atualizar atividade.')
   if (updateResponse.matchedCount == 0) throw new createHttpError.NotFound('Atividade não encontrada.')
 
+  await handleProcessAutomationsByActivityTracking({ database: db, activityId: id })
   // Validating need to generate an notification in activity conclusion
   if (!!changes.dataConclusao) {
     const activity = await getActivityById({ collection: collection, id: id, query: {} })

@@ -1,5 +1,5 @@
 import { TProposalUpdateRecord, TProposalUpdateRecordDTO } from '@/utils/schemas/proposal-update-records.schema'
-import { Collection, ObjectId } from 'mongodb'
+import { Collection, Filter, ObjectId } from 'mongodb'
 
 type InsertProposalUpdateRecordParams = {
   collection: Collection<TProposalUpdateRecord>
@@ -8,7 +8,7 @@ type InsertProposalUpdateRecordParams = {
 }
 export async function insertProposalUpdateRecord({ collection, info, partnerId }: InsertProposalUpdateRecordParams) {
   try {
-    const insertResponse = await collection.insertOne({ ...info, idParceiro: partnerId, dataInsercao: new Date().toISOString() })
+    const insertResponse = await collection.insertOne({ ...info, dataInsercao: new Date().toISOString() })
     return insertResponse
   } catch (error) {
     throw error

@@ -82,9 +82,8 @@ function Testing() {
                     return {
                       id: node.data.id,
                       idProcessoPai: node.data.idProcessoPai,
-                      referencia: node.data.referencia,
-                      gatilho: node.data.gatilho,
-                      retorno: node.data.retorno,
+                      entidade: node.data.entidade,
+                      ativacao: node.data.ativacao,
                       canvas: {
                         id: node.id,
                         posX: node.position.x,

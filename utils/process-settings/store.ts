@@ -41,28 +41,7 @@ export const nodeTypes = {
 export const useProjectSettingStore = create((set: any, get: any) => ({
   name: '',
   description: '',
-  nodes: [
-    {
-      id: nanoid(6),
-      data: {
-        id: nanoid(),
-        referencia: {
-          entidade: 'Project',
-        },
-        gatilho: {
-          tipo: 'IGUAL_TEXTO',
-          variavel: getActiveProcessAutomationReference('Project').triggerConditions[0].value,
-        },
-        retorno: {
-          entidade: 'Activity',
-          customizacao: {},
-        },
-        canvas: {},
-      },
-      position: { x: 0.5, y: 0.5 },
-      type: 'project',
-    },
-  ] as TProcessSettingNode[],
+  nodes: [] as TProcessSettingNode[],
   edges: [] as Edge[],
   updateName(newName: string) {
     set({ name: newName })

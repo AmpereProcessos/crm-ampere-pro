@@ -1,5 +1,5 @@
 import { getProductById } from '@/repositories/products/queries'
-import { getProjectById, getProjects } from '@/repositories/projects/queries'
+import { getProjectByIdWithReferences, getProjects } from '@/repositories/projects/queries'
 import connectToDatabase from '@/services/mongodb/crm-db-connection'
 import { apiHandler, validateAuthorization } from '@/utils/api'
 import { TProject } from '@/utils/schemas/project.schema'
@@ -19,7 +19,7 @@ const getComercialProjects: NextApiHandler<GetResponse> = async (req, res) => {
   const collection: Collection<TProject> = db.collection('projects')
   if (id) {
     if (typeof id != 'string' || !ObjectId.isValid(id)) throw new createHttpError.BadRequest('ID inválido.')
-    const project = await getProjectById({ collection, id, query: {} })
+    const project = await getProjectByIdWithReferences({ collection, id, query: {} })
     if (!project) throw new createHttpError.NotFound('Projeto não encontrado.')
     return res.status(200).json({ data: project })
   }

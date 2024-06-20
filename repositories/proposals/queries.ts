@@ -1,14 +1,17 @@
 import { TProposal, TProposalDTOWithOpportunity, TProposalDTOWithOpportunityAndClient } from '@/utils/schemas/proposal.schema'
-import { Collection, ObjectId } from 'mongodb'
+import { Collection, Filter, ObjectId } from 'mongodb'
 
 type GetOpportunityProposalsParams = {
   opportunityId: string
   collection: Collection<TProposal>
-  partnerId: string
+  query: Filter<TProposal>
 }
-export async function getOpportunityProposals({ opportunityId, collection, partnerId }: GetOpportunityProposalsParams) {
+export async function getOpportunityProposals({ opportunityId, collection, query }: GetOpportunityProposalsParams) {
   try {
-    const proposals = await collection.find({ 'oportunidade.id': opportunityId, idParceiro: partnerId }).sort({ _id: -1 }).toArray()
+    const proposals = await collection
+      .find({ 'oportunidade.id': opportunityId, ...query })
+      .sort({ _id: -1 })
+      .toArray()
     return proposals
   } catch (error) {
     throw error
@@ -17,13 +20,13 @@ export async function getOpportunityProposals({ opportunityId, collection, partn
 type GetProposalByIdParams = {
   id: string
   collection: Collection<TProposal>
-  partnerId: string
+  query: Filter<TProposal>
 }
-export async function getProposalById({ id, collection, partnerId }: GetProposalByIdParams) {
+export async function getProposalById({ id, collection, query }: GetProposalByIdParams) {
   try {
     const proposals = await collection
       .aggregate([
-        { $match: { _id: new ObjectId(id), idParceiro: partnerId } },
+        { $match: { _id: new ObjectId(id), ...query } },
         {
           $addFields: {
             opportunityObjectId: { $toObjectId: '$oportunidade.id' },

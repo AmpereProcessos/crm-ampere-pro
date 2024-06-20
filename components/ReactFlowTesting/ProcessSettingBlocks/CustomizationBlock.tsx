@@ -8,16 +8,15 @@ import Notification from '../CustomizationBlocks/Notification'
 
 function CustomizationBlock(node: TProcessSettingNode) {
   const { id, data } = node
-  const activeAutomationReference = getActiveProcessAutomationReference(data.referencia.entidade)
-  const returnAutomationReference = getActiveProcessAutomationReference(data.retorno.entidade as TProcessAutomationEntities)
+  const activeAutomationReference = getActiveProcessAutomationReference(data.entidade.identificacao)
   return (
     <div className="flex w-full flex-col gap-2">
       <h1 className="w-full rounded p-1 text-center text-xs font-bold text-blue-500">CUSTOMIZAÇÃO</h1>
       <div className="flex w-full flex-col gap-2 p-2">
-        {returnAutomationReference.customizable ? (
+        {activeAutomationReference.customizable ? (
           <>
-            {node.data.retorno.entidade == 'Activity' ? <Activity {...node} /> : null}
-            {node.data.retorno.entidade == 'Notification' ? <Notification {...node} /> : null}
+            {node.data.entidade.identificacao == 'Activity' ? <Activity {...node} /> : null}
+            {node.data.entidade.identificacao == 'Notification' ? <Notification {...node} /> : null}
           </>
         ) : (
           <h1 className="w-full max-w-full break-words rounded border border-gray-500 bg-gray-50 p-1 text-center text-[0.65rem] tracking-tight text-gray-500">

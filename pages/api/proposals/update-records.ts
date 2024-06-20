@@ -5,7 +5,7 @@ import { apiHandler, validateAuthenticationWithSession, validateAuthorization } 
 import { InsertProposalUpdateRecordSchema, TProposalUpdateRecord } from '@/utils/schemas/proposal-update-records.schema'
 import { TProposal } from '@/utils/schemas/proposal.schema'
 import createHttpError from 'http-errors'
-import { Collection, ObjectId } from 'mongodb'
+import { Collection, Filter, ObjectId } from 'mongodb'
 import { NextApiHandler } from 'next'
 
 type PostResponse = {
@@ -15,8 +15,7 @@ type PostResponse = {
 
 const createUpdateRecord: NextApiHandler<PostResponse> = async (req, res) => {
   const session = await validateAuthorization(req, res, 'propostas', 'editar', true)
-  const partnerId = session.user.idParceiro
-
+  const partnerId = session.user.id
   const record = InsertProposalUpdateRecordSchema.parse(req.body)
   const db = await connectToDatabase(process.env.MONGODB_URI, 'crm')
   const collection: Collection<TProposalUpdateRecord> = db.collection('proposal-update-records')
@@ -35,6 +34,8 @@ type GetResponse = {
 const getUpdateRecords: NextApiHandler<GetResponse> = async (req, res) => {
   const session = await validateAuthenticationWithSession(req, res)
   const partnerId = session.user.idParceiro
+  const parterScope = session.user.permissoes.parceiros.escopo
+  const partnerQuery: Filter<TProposalUpdateRecord> = parterScope ? { idParceiro: { $in: [...parterScope] } } : {}
 
   const { proposalId } = req.query
 
@@ -44,7 +45,7 @@ const getUpdateRecords: NextApiHandler<GetResponse> = async (req, res) => {
   if (proposalId) {
     if (typeof proposalId != 'string' || !ObjectId.isValid(proposalId)) throw new createHttpError.BadRequest('ID de proposta inválido.')
 
-    const records = await getProposalUpdateRecordsByProposeId({ collection: collection, proposalId: proposalId, partnerId: partnerId || '' })
+    const records = await getProposalUpdateRecordsByProposeId({ collection: collection, proposalId: proposalId, query: partnerQuery })
 
     return res.status(200).json({ data: records })
   }

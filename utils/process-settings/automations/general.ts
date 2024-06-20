@@ -4,7 +4,7 @@ import createHttpError from 'http-errors'
 import { TProject } from '@/utils/schemas/project.schema'
 import { TProcessFlowReference, TProcessFlowTrigger } from '@/utils/schemas/process-flow-reference.schema'
 import { getProcessFlowReferences } from '@/repositories/process-flows-references/queries'
-import { getProjectById } from '@/repositories/projects/queries'
+import { getProjectByIdWithReferences } from '@/repositories/projects/queries'
 import { TProcessAutomationConditionData } from '../helpers'
 import { getProjectToActivityData, getProjectToEntity } from './project'
 import { TActivity } from '@/utils/schemas/activities.schema'
@@ -13,6 +13,8 @@ import { getRevenueReceivedTotal } from '@/lib/methods/extracting'
 import { TPurchase } from '@/utils/schemas/purchase.schema'
 import { TServiceOrder } from '@/utils/schemas/service-order.schema'
 import { getActivityById } from '@/repositories/acitivities/queries'
+
+export type TProcessFlowInsertionReference = { flowId: ObjectId; dependingFlowIds: ObjectId[]; entity: TProcessAutomationEntities; data: any }
 
 type TInsertionReference = { flowId: ObjectId; dependingFlowIds: ObjectId[]; entity: TProcessAutomationEntities; data: any }
 
@@ -46,7 +48,7 @@ export async function handleProcessAutomations({ database, projectId, entityToTr
       case 'Project':
         // In case entity to track is Project, getting project data and defining the trigger condition data
         const projectsCollection: Collection<TProject> = database.collection('projects')
-        const project = await getProjectById({ id: idToTrack, collection: projectsCollection, query: {} })
+        const project = await getProjectByIdWithReferences({ id: idToTrack, collection: projectsCollection, query: {} })
         if (!project) return
         const conditionData: TProcessAutomationConditionData = {
           projetoAprovado: !!project.aprovacao.dataAprovacao ? 'SIM' : 'NÃO',
@@ -133,7 +135,7 @@ type ValidateConditionParams = {
   trigger: TProcessFlowTrigger
   conditionData: TProcessAutomationConditionData
 }
-function validateCondition({ trigger, conditionData }: ValidateConditionParams) {
+export function validateProcessFlowTrigger({ trigger, conditionData }: ValidateConditionParams) {
   if (!trigger.tipo || trigger.tipo == 'IGUAL_TEXTO' || trigger.tipo == 'IGUAL_NÚMERICO') {
     // If there's a condition, extracting the conditionns comparators and the condition data to compare
     const conditionVariable = trigger.variavel
@@ -435,7 +437,7 @@ async function getInsertionReferenceData({ database, referenceEntity, referenceE
       case 'Project':
         // In case entity to track is Project, getting project data and defining the trigger condition data
         const projectsCollection: Collection<TProject> = database.collection('projects')
-        const project = await getProjectById({ id: idToTrack, collection: projectsCollection, query: {} })
+        const project = await getProjectByIdWithReferences({ id: idToTrack, collection: projectsCollection, query: {} })
         if (!project) return
         const conditionData: TProcessAutomationConditionData = {
           projetoAprovado: !!project.aprovacao.dataAprovacao ? 'SIM' : 'NÃO',

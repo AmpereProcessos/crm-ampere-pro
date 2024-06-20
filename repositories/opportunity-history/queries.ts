@@ -5,11 +5,14 @@ import { Collection, Filter, ObjectId } from 'mongodb'
 type GetOpportunityHistoryParams = {
   opportunityId: string
   collection: Collection<TOpportunityHistory>
-  partnerId: string
+  query: Filter<TOpportunityHistory>
 }
-export async function getOpportunityHistory({ opportunityId, collection, partnerId }: GetOpportunityHistoryParams) {
+export async function getOpportunityHistory({ opportunityId, collection, query }: GetOpportunityHistoryParams) {
   try {
-    const opportunityHistory = await collection.find({ 'oportunidade.id': opportunityId, idParceiro: partnerId }).sort({ dataInsercao: -1 }).toArray()
+    const opportunityHistory = await collection
+      .find({ 'oportunidade.id': opportunityId, ...query })
+      .sort({ dataInsercao: -1 })
+      .toArray()
     return opportunityHistory
   } catch (error) {
     throw error
