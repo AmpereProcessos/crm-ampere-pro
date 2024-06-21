@@ -17,7 +17,7 @@ type ClientsPageProps = {
   session: Session
 }
 function ClientsPage({ session }: ClientsPageProps) {
-  const userClientsScope = session.user.permissoes.clientes.escopo || null
+  // const userClientsScope = session.user.permissoes.clientes.escopo || null
   const userPartnersScope = session.user.permissoes.parceiros.escopo || null
   const [filterMenuIsOpen, setFilterMenuIsOpen] = useState<boolean>(false)
   const [newClientModalIsOpen, setNewClientModalIsOpen] = useState(false)
@@ -26,7 +26,7 @@ function ClientsPage({ session }: ClientsPageProps) {
   // Queries and functions
   const [page, setPage] = useState<number>(1)
   const [period, setPeriod] = useState<{ after: string | null; before: string | null }>({ after: null, before: null })
-  const [authors, setAuthors] = useState<string[] | null>(userClientsScope)
+  const [authors, setAuthors] = useState<string[] | null>(null)
   const [partners, setPartners] = useState<string[] | null>(userPartnersScope)
   const { data: authorOptions } = useUsers()
   const { data: partnersOptions } = usePartnersSimplified()
