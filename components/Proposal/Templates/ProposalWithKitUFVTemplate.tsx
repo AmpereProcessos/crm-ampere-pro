@@ -116,7 +116,9 @@ function SolarSystemProposalTemplate({ proposal, opportunity, partner }: SolarSy
         {proposal.servicos.map((service) => (
           <div className="flex w-full items-center gap-1">
             <h1 className="w-3/4 text-center text-[0.7rem] font-bold text-black">{service.descricao}</h1>
-            <h1 className="w-1/4 text-center text-[0.7rem] font-bold text-black">{service.garantia} ANOS</h1>
+            <h1 className="w-1/4 text-center text-[0.7rem] font-bold text-black">
+              {service.garantia > 1 ? `${service.garantia} ANOS` : `${service.garantia} ANO`}
+            </h1>
           </div>
         ))}
       </div>

@@ -15,22 +15,18 @@ function ProcessFlowSelectionSetting({ flow }: ProcessFlowSelectionSettingProps)
       id: p.canvas.id || '',
       data: {
         id: p.id,
-        referencia: p.referencia,
-        customizacao: p.customizacao,
-        gatilho: p.gatilho,
-        retorno: p.retorno,
-        canvas: p.canvas,
         idProcessoPai: p.idProcessoPai,
+        entidade: p.entidade,
+        ativacao: p.ativacao,
+        canvas: p.canvas,
       },
       position: { x: p.canvas.posX || 0, y: p.canvas.posY || 0 },
-      type: p.referencia.entidade.toLowerCase(),
+      type: p.entidade.identificacao.toLowerCase(),
     }))
     const edges = flow.arestas
     store.setNodesDirectly(nodes)
     store.setEdgesDirectly(edges)
   }, [flow])
-  console.log('EDGES', store.edges)
-  console.log('NODES', store.nodes)
   return (
     <div className="flex h-[500px] w-full flex-col rounded border border-gray-500 p-2">
       <ReactFlow

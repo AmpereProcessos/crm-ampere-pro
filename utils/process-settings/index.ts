@@ -1,5 +1,9 @@
 import { z } from 'zod'
 import { processAutomationConditionAlias } from './helpers'
+import { TProcessFlowReference } from '../schemas/process-flow-reference.schema'
+import { applyEdgeChanges, applyNodeChanges, Edge, EdgeChange, Node } from 'reactflow'
+import { create } from 'zustand'
+import { nanoid } from 'nanoid'
 
 export const ProcessAutomationConditionTypes = z.enum(
   ['IGUAL_TEXTO', 'IGUAL_NÚMERICO', 'MAIOR_QUE_NÚMERICO', 'MENOR_QUE_NÚMERICO', 'INTERVALO_NÚMERICO', 'INCLUI_LISTA'],
@@ -124,7 +128,10 @@ export const ProcessAutomationEntitiesSpecs: TProcessAutomationEntitySpec[] = [
     returns: false,
   },
 ]
-
+export function getEntityLabel(entity: TProcessAutomationEntities) {
+  const entitySpecs = ProcessAutomationEntitiesSpecs.find((p) => p.entity == entity)
+  return entitySpecs?.entityLabel || 'NÃO DEFINIDO'
+}
 export function getActiveProcessAutomationReference(referenceEntity?: TProcessAutomationEntities) {
   if (!referenceEntity) return ProcessAutomationEntitiesSpecs[0]
   const entitySpecs = ProcessAutomationEntitiesSpecs.find((p) => p.entity == referenceEntity)
@@ -139,3 +146,60 @@ export function getProcessAutomationComparationMethods({ entity, variable }: { e
     return { id: index + 1, label: typeLabel || 'NÃO DEFINIDO', value: t }
   })
 }
+
+export type TProcessFlowReferenceNode = Node<TProcessFlowReference>
+
+export const useProjectProcessFlowReferencesStore = create((set: any, get: any) => ({
+  nodes: [] as TProcessFlowReferenceNode[],
+  edges: [] as Edge[],
+  onNodesChange(changes: any) {
+    set({
+      nodes: applyNodeChanges(changes, get().nodes),
+    })
+  },
+  onEdgesChange(changes: EdgeChange[]) {
+    set({
+      edges: applyEdgeChanges(changes, get().edges),
+    })
+  },
+  setEdgesDirectly(edges: Edge[]) {
+    set({ edges })
+  },
+  setNodesDirectly(nodes: TProcessFlowReferenceNode[]) {
+    set({ nodes })
+  },
+  addEdge(data: any) {
+    const id = nanoid(6)
+    const edge = { id, ...data }
+    set({ edges: [edge, ...get().edges] })
+  },
+  addNode({ parentNode, newNode }: { parentNode: TProcessFlowReferenceNode | null; newNode: TProcessFlowReferenceNode }) {
+    if (!!parentNode) {
+      const newEdge = {
+        id: nanoid(6),
+        source: parentNode.id,
+        target: newNode.id,
+      }
+      set({
+        nodes: [...get().nodes, newNode],
+        edges: [...get().edges, newEdge],
+      })
+    } else {
+      set({
+        nodes: [...get().nodes, newNode],
+      })
+    }
+  },
+  updateNodeData(nodeId: string, data: TProcessFlowReference) {
+    set({
+      nodes: get().nodes.map((node: TProcessFlowReferenceNode) => {
+        if (node.id === nodeId) {
+          // it's important to create a new object here, to inform React Flow about the changes
+          node.data = { ...node.data, ...data }
+        }
+
+        return node
+      }),
+    })
+  },
+}))

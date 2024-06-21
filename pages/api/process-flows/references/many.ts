@@ -36,13 +36,18 @@ const createManyProcessFlowReferencesRoute: NextApiHandler<PostResponse> = async
       idProcesso: p.id,
       idProcessoPai: p.idProcessoPai,
       idProcessoReferenciaPai: null,
-      referencia: {
-        entidade: p.referencia.entidade,
-        id: p.referencia.entidade == 'Project' ? projectId : null,
+      entidade: {
+        id: p.entidade.identificacao == 'Project' ? projectId : null,
+        customizacao: p.entidade.customizacao,
+        identificacao: p.entidade.identificacao,
       },
-      customizacao: p.customizacao,
-      gatilho: p.gatilho,
-      retorno: p.retorno,
+      ativacao: {
+        referencia: {
+          id: p.ativacao.referencia.identificacao == 'Project' ? projectId : null,
+          identificacao: p.ativacao.referencia.identificacao,
+        },
+        gatilho: p.ativacao.gatilho,
+      },
       canvas: p.canvas,
       dataInsercao: new Date().toISOString(),
     }
@@ -79,7 +84,7 @@ const createManyProcessFlowReferencesRoute: NextApiHandler<PostResponse> = async
       })
     })
     .flat(1)
-  const bulkwriteResponse = await collection.bulkWrite(bulkwriteArr)
+  if (bulkwriteArr.length > 0) await collection.bulkWrite(bulkwriteArr)
   return res.status(200).json({ data: { insertedIds }, message: 'Referências de fluxo de processo criadas com sucesso!' })
 }
 

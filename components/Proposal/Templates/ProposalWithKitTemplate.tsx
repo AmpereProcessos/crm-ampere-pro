@@ -75,10 +75,14 @@ function ProposalWithKitTemplate({ proposal, opportunity, partner }: ProposalWit
                     <ImPower size={12} />
                     <p className="text-[0.6rem] font-light text-gray-500 lg:text-xs">{product.potencia} W</p>
                   </div>
-                  <div className="flex items-center gap-1">
-                    <AiOutlineSafety size={12} />
-                    <p className="text-[0.6rem] font-light text-gray-500 lg:text-xs">{product.garantia} ANOS</p>
-                  </div>
+                  {product.garantia ? (
+                    <div className="flex items-center gap-1">
+                      <AiOutlineSafety size={12} />
+                      <p className="text-[0.6rem] font-light text-gray-500 lg:text-xs">
+                        {product.garantia > 1 ? `${product.garantia} ANOS` : `${product.garantia} ANO`}
+                      </p>
+                    </div>
+                  ) : null}
                 </div>
               </div>
             </div>
@@ -103,12 +107,14 @@ function ProposalWithKitTemplate({ proposal, opportunity, partner }: ProposalWit
                 ) : null}
 
                 <div className="flex w-full items-center justify-end gap-2 pl-2">
-                  <div className="flex items-center gap-1">
-                    <AiOutlineSafety size={12} />
-                    <p className="text-[0.6rem] font-light text-gray-500 lg:text-xs">
-                      {service.garantia} {service.garantia > 0 ? 'ANOS' : 'ANO'}
-                    </p>
-                  </div>
+                  {service.garantia ? (
+                    <div className="flex items-center gap-1">
+                      <AiOutlineSafety size={12} />
+                      <p className="text-[0.6rem] font-light text-gray-500 lg:text-xs">
+                        {service.garantia > 1 ? `${service.garantia} ANOS` : `${service.garantia} ANO`}
+                      </p>
+                    </div>
+                  ) : null}
                 </div>
               </div>
             </div>

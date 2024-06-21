@@ -107,41 +107,6 @@ function Testing() {
               CRIAR FLUXO
             </button>
           </div>
-          <div className="flex flex-wrap items-center gap-2">
-            {ProcessAutomationEntitiesSpecs.filter((p) => !!p.returnable).map((p, index) => (
-              <button
-                key={index}
-                onClick={() => {
-                  store.addNode({
-                    parentNode: null,
-                    newNode: {
-                      id: nanoid(6),
-                      data: {
-                        id: nanoid(),
-                        entidade: {
-                          identificacao: p.entity,
-                          customizacao: {},
-                        },
-                        ativacao: {
-                          referencia: { identificacao: 'Project' },
-                          gatilho: {
-                            tipo: getActiveProcessAutomationReference('Project').triggerConditions[0]?.types[0] || null,
-                            variavel: getActiveProcessAutomationReference('Project').triggerConditions[0]?.value || '',
-                          },
-                        },
-                        canvas: {},
-                      },
-                      type: p.entity.toLowerCase(),
-                      position: { x: 0.5, y: 0.5 },
-                    },
-                  })
-                }}
-                className={`grow rounded border border-green-700 p-1  text-xs font-medium text-green-500  duration-300 ease-in-out hover:bg-green-700  hover:text-white`}
-              >
-                {p.entityLabel}
-              </button>
-            ))}
-          </div>
         </div>
       </div>
     </div>

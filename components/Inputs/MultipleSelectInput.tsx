@@ -14,6 +14,7 @@ type SelectInputProps<T> = {
   labelClassName?: string
   showLabel?: boolean
   selected: (string | number)[] | null
+  editable?: boolean
   selectedItemLabel: string
   options: SelectOption<T>[] | null
   handleChange: (value: T[]) => void
@@ -26,6 +27,7 @@ function MultipleSelectInput<T>({
   labelClassName = 'font-sans font-bold  text-[#353432] text-start',
   showLabel = true,
   selected,
+  editable = true,
   options,
   selectedItemLabel,
   handleChange,
@@ -120,7 +122,12 @@ function MultipleSelectInput<T>({
             className="h-full w-full text-sm italic outline-none"
           />
         ) : (
-          <p onClick={() => setSelectMenuIsOpen((prev) => !prev)} className="grow cursor-pointer text-[#353432]">
+          <p
+            onClick={() => {
+              if (editable) setSelectMenuIsOpen((prev) => !prev)
+            }}
+            className="grow cursor-pointer text-[#353432]"
+          >
             {selectedIds && selectedIds.length > 0 && options
               ? options.filter((item) => selectedIds.includes(item.id)).length > 1
                 ? 'MÚLTIPLAS SELEÇÕES'
@@ -129,9 +136,19 @@ function MultipleSelectInput<T>({
           </p>
         )}
         {selectMenuIsOpen ? (
-          <IoMdArrowDropup style={{ cursor: 'pointer' }} onClick={() => setSelectMenuIsOpen((prev) => !prev)} />
+          <IoMdArrowDropup
+            style={{ cursor: 'pointer' }}
+            onClick={() => {
+              if (editable) setSelectMenuIsOpen((prev) => !prev)
+            }}
+          />
         ) : (
-          <IoMdArrowDropdown style={{ cursor: 'pointer' }} onClick={() => setSelectMenuIsOpen((prev) => !prev)} />
+          <IoMdArrowDropdown
+            style={{ cursor: 'pointer' }}
+            onClick={() => {
+              if (editable) setSelectMenuIsOpen((prev) => !prev)
+            }}
+          />
         )}
       </div>
       {selectMenuIsOpen ? (
@@ -147,7 +164,9 @@ function MultipleSelectInput<T>({
           {items ? (
             items.map((item, index) => (
               <div
-                onClick={() => handleSelect(item.id, item.value)}
+                onClick={() => {
+                  if (editable) handleSelect(item.id, item.value)
+                }}
                 key={item.id ? item.id : index}
                 className={`flex w-full cursor-pointer items-center rounded p-1 px-2 hover:bg-gray-100 ${selectedIds?.includes(item.id) ? 'bg-gray-100' : ''}`}
               >

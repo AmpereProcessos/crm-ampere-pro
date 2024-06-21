@@ -1,4 +1,5 @@
 import { formatToMoney } from '@/lib/methods/formatting'
+import { OeMPlansEquivalents } from '@/utils/constants'
 import { OeMPricing, getOeMPrices } from '@/utils/pricing/oem/methods'
 import { TContractRequest } from '@/utils/schemas/integrations/app-ampere/contract-request.schema'
 import { TProposalDTO } from '@/utils/schemas/proposal.schema'
@@ -60,8 +61,10 @@ function OeMPlansInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNext
         </button>
         <button
           onClick={() => {
+            const equivalentPlan = OeMPlansEquivalents[plan.nome as keyof typeof OeMPlansEquivalents]
+
+            setRequestInfo((prev) => ({ ...prev, planoOeM: equivalentPlan as TContractRequest['planoOeM'] }))
             goToNextStage()
-            setRequestInfo((prev) => ({ ...prev, planoOeM: plan.nome as TContractRequest['planoOeM'] }))
           }}
           className="rounded p-2 font-bold hover:bg-black hover:text-white"
         >

@@ -67,19 +67,16 @@ const GeneralProcessFlowReferenceSchema = z.object({
     identificacao: ProcessAutomationEntities,
     customizacao: z.record(z.any()),
   }),
-  ativacao: z
-    .object({
-      referencia: z.object({
-        identificacao: ProcessAutomationEntities,
-        id: z
-          .string({ required_error: 'ID da entidade de referência não informado.', invalid_type_error: 'Tipo não válido para o ID da entidade de referência.' })
-          .optional()
-          .nullable(),
-      }),
-      gatilho: ProcessFlowTrigger,
-    })
-    .optional()
-    .nullable(),
+  ativacao: z.object({
+    referencia: z.object({
+      identificacao: ProcessAutomationEntities,
+      id: z
+        .string({ required_error: 'ID da entidade de referência não informado.', invalid_type_error: 'Tipo não válido para o ID da entidade de referência.' })
+        .optional()
+        .nullable(),
+    }),
+    gatilho: ProcessFlowTrigger,
+  }),
   canvas: z.object({
     id: z.string({ required_error: 'ID de referência do canvas.', invalid_type_error: 'Tipo inválido para o ID do canvas.' }).optional().nullable(),
     posX: z

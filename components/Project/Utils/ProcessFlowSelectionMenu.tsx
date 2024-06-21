@@ -63,10 +63,8 @@ function ProcessFlowSelectionMenu({ projectId }: ProcessFlowSelectionMenuProps) 
                     return {
                       id: node.data.id,
                       idProcessoPai: node.data.idProcessoPai,
-                      referencia: node.data.referencia,
-                      customizacao: node.data.customizacao,
-                      gatilho: node.data.gatilho,
-                      retorno: node.data.retorno,
+                      entidade: node.data.entidade,
+                      ativacao: node.data.ativacao,
                       canvas: {
                         id: node.id,
                         posX: node.position.x,

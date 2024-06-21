@@ -114,6 +114,11 @@ export const GeneralVisibleHiddenExitMotionVariants = {
     },
   },
 }
+export const OeMPlansEquivalents = {
+  'MANUTENÇÃO SIMPLES': 'MANUTENÇÃO SIMPLES',
+  'PLANO SOL': 'PLANO SOL',
+  'PLANO SOL PLUS': 'PLANO SOL +',
+}
 
 export const brazilianStates = [
   'AC',

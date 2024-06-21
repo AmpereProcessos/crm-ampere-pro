@@ -113,18 +113,7 @@ function GeneralControlModal({ projectId, session, closeModal }: GeneralControlM
                 />
                 <ProjectProcessFlowBlock projectId={projectId} />
               </div>
-              <div className="flex w-full items-center justify-between pt-2">
-                <div className="w-fit">
-                  <CheckboxInput
-                    labelFalse="APROVAR"
-                    labelTrue="APROVAR"
-                    checked={!!infoHolder.aprovacao?.dataAprovacao}
-                    handleChange={(value) => {
-                      setInfoHolder((prev) => ({ ...prev, aprovacao: { ...(prev?.aprovacao || {}), dataAprovacao: new Date().toISOString() } }))
-                      setChanges((prev) => ({ ...prev, project: { 'aprovacao.dataAprovacao': new Date().toISOString() } }))
-                    }}
-                  />
-                </div>
+              <div className="flex w-full items-center justify-end pt-2">
                 <button
                   onClick={() => {
                     const clientId = project.cliente.id

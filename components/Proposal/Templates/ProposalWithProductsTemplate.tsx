@@ -75,10 +75,14 @@ function ProposalWithProductsTemplate({ proposal, opportunity, partner }: Propos
                     <ImPower size={12} />
                     <p className="text-[0.6rem] font-light text-gray-500 lg:text-xs">{product.potencia} W</p>
                   </div>
-                  <div className="flex items-center gap-1">
-                    <AiOutlineSafety size={12} />
-                    <p className="text-[0.6rem] font-light text-gray-500 lg:text-xs">{product.garantia} ANOS</p>
-                  </div>
+                  {product.garantia ? (
+                    <div className="flex items-center gap-1">
+                      <AiOutlineSafety size={12} />
+                      <p className="text-[0.6rem] font-light text-gray-500 lg:text-xs">
+                        {product.garantia > 1 ? `${product.garantia} ANOS` : `${product.garantia} ANO`}
+                      </p>
+                    </div>
+                  ) : null}
                 </div>
               </div>
             </div>

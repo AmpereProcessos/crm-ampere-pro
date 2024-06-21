@@ -1,4 +1,4 @@
-import { getActiveProcessAutomationReference } from '@/utils/process-settings'
+import { getActiveProcessAutomationReference, getEntityLabel } from '@/utils/process-settings'
 import { TProcessSettingNode, useProjectSettingStore } from '@/utils/process-settings/store'
 import { nanoid } from 'nanoid'
 import React from 'react'
@@ -27,6 +27,7 @@ function ReturnDependentProcessBlock(node: TProcessSettingNode) {
                   id: nanoid(6),
                   data: {
                     id: nanoid(),
+                    idProcessoPai: node.data.id,
                     entidade: {
                       identificacao: p,
                       customizacao: {},
@@ -47,7 +48,7 @@ function ReturnDependentProcessBlock(node: TProcessSettingNode) {
             }}
             className={`grow rounded border border-green-700 p-1  text-xs font-medium text-green-500  duration-300 ease-in-out hover:bg-green-700  hover:text-white`}
           >
-            {p}
+            {getEntityLabel(p)}
           </button>
         ))}
       </div>
