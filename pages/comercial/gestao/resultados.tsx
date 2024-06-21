@@ -34,6 +34,7 @@ import { TUserDTOWithSaleGoals } from '@/utils/schemas/user.schema'
 import { fetchResultsExports } from '@/utils/queries/stats/exports'
 import { usePartnersSimplified } from '@/utils/queries/partners'
 import { useComercialResultsQueryOptions } from '@/utils/queries/stats'
+import RegionResults from '@/components/Stats/Results/Region'
 
 const currentDate = new Date()
 const periodStr = dayjs(currentDate).format('MM/YYYY')
@@ -178,6 +179,13 @@ function ComercialResults() {
           </div>
         </div>
         <OverallResults
+          after={queryFilters.period.after}
+          before={queryFilters.period.before}
+          responsibles={queryFilters.responsibles}
+          partners={queryFilters.partners}
+          projectTypes={queryFilters.projectTypes}
+        />
+        <RegionResults
           after={queryFilters.period.after}
           before={queryFilters.period.before}
           responsibles={queryFilters.responsibles}
