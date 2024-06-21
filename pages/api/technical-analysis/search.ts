@@ -47,21 +47,21 @@ const getTechnicalAnalysisByPersonalizedFilters: NextApiHandler<PostResponse> = 
 
   // If user has a scope defined and in the request there isnt a responsible arr defined, then user is trying
   // to access a overall visualiation, which he/she isnt allowed
-  if (!!userScope && !applicants) throw new createHttpError.Unauthorized('Seu usuário não possui solicitação para esse escopo de visualização.')
+  if (!!userScope && !applicants) throw new createHttpError.Unauthorized('Seu usuário não possui autorização para esse escopo de visualização.')
 
   // If user has a scope defined and in the request there isnt a partners arr defined, then user is trying
   // to access a overall visualiation, which he/she isnt allowed
-  if (!!partnerScope && !partners) throw new createHttpError.Unauthorized('Seu usuário não possui solicitação para esse escopo de visualização.')
+  if (!!partnerScope && !partners) throw new createHttpError.Unauthorized('Seu usuário não possui autorização para esse escopo de visualização.')
 
   // If user has a scope defined and in the applicant arr request there is a single applicant that is not in hes/shes scope
   // then user is trying to access a visualization he/she isnt allowed
   if (!!userScope && applicants?.some((r) => !userScope.includes(r)))
-    throw new createHttpError.Unauthorized('Seu usuário não possui solicitação para esse escopo de visualização.')
+    throw new createHttpError.Unauthorized('Seu usuário não possui autorização para esse escopo de visualização.')
 
   // If user has a partner scope defined and in the partner arr request there is a single partner that is not in hes/shes scope
   // then user is trying to access a visualization he/she isnt allowed
   if (!!partnerScope && partners?.some((r) => !partnerScope.includes(r)))
-    throw new createHttpError.Unauthorized('Seu usuário não possui solicitação para esse escopo de visualização.')
+    throw new createHttpError.Unauthorized('Seu usuário não possui autorização para esse escopo de visualização.')
 
   // Validating page parameter
   if (!page || isNaN(Number(page))) throw new createHttpError.BadRequest('Parâmetro de paginação inválido ou não informado.')

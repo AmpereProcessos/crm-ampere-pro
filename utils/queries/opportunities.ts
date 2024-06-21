@@ -7,9 +7,12 @@ import {
   TOpportunityDTOWithFunnelReferenceAndActivitiesByStatus,
   TOpportunitySimplifiedDTOWithProposalAndActivitiesAndFunnels,
   TOpportunityWithFunnelReferenceAndActivitiesByStatus,
+  TPersonalizedOpportunitiesFilter,
 } from '../schemas/opportunity.schema'
 import { useQuery } from '@tanstack/react-query'
 import { TResultsExportsItem } from '@/pages/api/stats/comercial-results/results-export'
+import { TOpportunitiesByFilterResult } from '@/pages/api/opportunities/search'
+import { useState } from 'react'
 
 type UseOpportunitiesParams = {
   responsible: string | null
@@ -71,5 +74,47 @@ export async function fetchOpportunityExport({ responsible, funnel, after, befor
     return data.data as TResultsExportsItem[]
   } catch (error) {
     throw error
+  }
+}
+
+type FetchOpportunitiesByPersonalizedFiltersParams = {
+  page: number
+  responsibles: string[] | null
+  partners: string[] | null
+  filters: TPersonalizedOpportunitiesFilter
+}
+async function fetchOpportunitiesByPersonalizedFilters({ page, responsibles, partners, filters }: FetchOpportunitiesByPersonalizedFiltersParams) {
+  try {
+    const { data } = await axios.post(`/api/opportunities/search?page=${page}`, { responsibles, partners, filters })
+    return data.data as TOpportunitiesByFilterResult
+  } catch (error) {
+    throw error
+  }
+}
+
+type UseOpportunitiesByPersonalizedFiltersParams = {
+  page: number
+  responsibles: string[] | null
+  partners: string[] | null
+}
+export function useOpportunitiesByPersonalizedFilters({ page, partners, responsibles }: UseOpportunitiesByPersonalizedFiltersParams) {
+  const [filters, setFilters] = useState<TPersonalizedOpportunitiesFilter>({
+    name: '',
+    city: [],
+    period: {
+      after: null,
+      before: null,
+      field: null,
+    },
+  })
+  function updateFilters(filters: TPersonalizedOpportunitiesFilter) {
+    setFilters(filters)
+  }
+  return {
+    ...useQuery({
+      queryKey: ['opportunities-by-personalized-filters', page, responsibles, partners, filters],
+      queryFn: async () => await fetchOpportunitiesByPersonalizedFilters({ page, responsibles, partners, filters }),
+    }),
+    updateFilters,
   }
 }

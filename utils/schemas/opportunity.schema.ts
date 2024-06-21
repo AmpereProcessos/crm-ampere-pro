@@ -460,6 +460,10 @@ export type TOpportunityWithFunnelReferenceAndActivities = TOpportunity & {
 export type TOpportunityDTO = TOpportunity & { _id: string }
 export type TOpportunitySimplifiedDTO = Pick<TOpportunityDTO, '_id' | 'nome' | 'identificador' | 'responsaveis' | 'ganho' | 'perda'>
 
+export type TOpportunitySimplifiedDTOWithProposal = TOpportunitySimplifiedDTO & {
+  proposta: { nome: TProposal['nome']; valor: TProposal['valor']; potenciaPico: TProposal['potenciaPico'] }
+}
+
 export type TOpportunitySimplifiedDTOWithProposalAndActivitiesAndFunnels = TOpportunitySimplifiedDTO & {
   proposta: { nome: TProposal['nome']; valor: TProposal['valor']; potenciaPico: TProposal['potenciaPico'] }
   statusAtividades?: ActivitiesByStatus
@@ -493,3 +497,32 @@ export const SimplifiedOpportunityWithProposalProjection = {
   'proposta.valor': 1,
   'proposta.potenciaPico': 1,
 }
+
+const PersonalizedFieldsFilter = z.enum(['dataInsercao', 'ganho.data', 'perda.data'], {
+  required_error: 'Filtro de campo de período não informado.',
+  invalid_type_error: 'Tipo não válido para o campo de filtro de período.',
+})
+const OpportunityPersonalizedFiltersSchema = z.object({
+  name: z.string({ required_error: 'Filtro de nome não informado.', invalid_type_error: 'Tipo não válido para o filtro de nome.' }),
+  city: z.array(z.string({ required_error: 'Cidade de filtro não informada.', invalid_type_error: 'Tipo não válido para cidade de filtro.' }), {
+    required_error: 'Lista de cidades de filtro não informada.',
+    invalid_type_error: 'Tipo não válido para lista de cidades de filtro.',
+  }),
+  period: z.object({
+    after: z
+      .string({ required_error: 'Filtro de depois de não informado.', invalid_type_error: 'Tipo não válido para o filtro de depois de.' })
+      .optional()
+      .nullable(),
+    before: z
+      .string({ required_error: 'Filtro de antes de não informado.', invalid_type_error: 'Tipo não válido para o filtro de antes de.' })
+      .optional()
+      .nullable(),
+    field: PersonalizedFieldsFilter.optional().nullable(),
+  }),
+})
+export type TPersonalizedOpportunitiesFilter = z.infer<typeof OpportunityPersonalizedFiltersSchema>
+export const PersonalizedOpportunityQuerySchema = z.object({
+  responsibles: z.array(z.string({ required_error: 'Autores não informados ou inválidos.', invalid_type_error: 'Autores inválidos.' })).nullable(),
+  partners: z.array(z.string({ required_error: 'Parceiros não informados ou inválidos.', invalid_type_error: 'Parceiros inválidos.' })).nullable(),
+  filters: OpportunityPersonalizedFiltersSchema,
+})

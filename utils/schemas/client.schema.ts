@@ -267,7 +267,7 @@ export const ClientSimplifiedProjection = {
 }
 
 const PersonalizedFiltersSchema = z.object({
-  name: z.string({ required_error: 'Filtro de novo não informado.', invalid_type_error: 'Tipo não válido para filtro de nome.' }),
+  name: z.string({ required_error: 'Filtro de nome não informado.', invalid_type_error: 'Tipo não válido para filtro de nome.' }),
   phone: z.string({ required_error: 'Filtro de telefone não informado.', invalid_type_error: 'Tipo não válido para filtro de telefone.' }),
   city: z.array(z.string({ required_error: 'Cidade de filtro não informada.', invalid_type_error: 'Tipo não válido para cidade de filtro.' }), {
     required_error: 'Lista de cidades de filtro não informada.',
