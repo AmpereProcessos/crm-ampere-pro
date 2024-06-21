@@ -1,6 +1,6 @@
 import DateInput from '@/components/Inputs/DateInput'
 import { Sidebar } from '@/components/Sidebar'
-import { formatToMoney } from '@/lib/methods/formatting'
+import { formatDateInputChange, formatToMoney } from '@/lib/methods/formatting'
 import { formatDate, getFirstDayOfMonth, getLastDayOfMonth } from '@/utils/methods'
 import { usePartnersSimplified } from '@/utils/queries/partners'
 import { useOpportunityCreators } from '@/utils/queries/users'
@@ -127,7 +127,10 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
                     handleChange={(value) =>
                       setQueryFilters((prev) => ({
                         ...prev,
-                        period: { ...prev.period, after: value ? value : firstDayOfMonth },
+                        period: {
+                          ...prev.period,
+                          after: formatDateInputChange(value) || firstDayOfMonth,
+                        },
                       }))
                     }
                     width="100%"
@@ -143,7 +146,7 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
                         ...prev,
                         period: {
                           ...prev.period,
-                          before: value ? value : lastDayOfMonth,
+                          before: formatDateInputChange(value) || lastDayOfMonth,
                         },
                       }))
                     }
