@@ -162,7 +162,7 @@ function NewFileReference({ opportunityId, clientId, session, closeModal }: NewF
                   labelTrue="VINCULAR AO CLIENTE"
                   checked={!!infoHolder.idCliente}
                   justify="justify-center"
-                  handleChange={() => setInfoHolder((prev) => ({ ...prev, idCliente: clientId }))}
+                  handleChange={(value) => setInfoHolder((prev) => ({ ...prev, idCliente: !!prev.idCliente ? null : clientId }))}
                 />
               </div>
               <div className="w-full lg:w-1/2">
@@ -170,6 +170,7 @@ function NewFileReference({ opportunityId, clientId, session, closeModal }: NewF
                   labelFalse="VINCULAR A OPORTUNIDADE"
                   labelTrue="VINCULAR A OPORTUNIDADE"
                   checked={!!infoHolder.idOportunidade}
+                  editable={false}
                   justify="justify-center"
                   handleChange={() => setInfoHolder((prev) => ({ ...prev, idOportunidade: opportunityId }))}
                 />

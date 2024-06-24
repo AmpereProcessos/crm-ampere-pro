@@ -1,7 +1,11 @@
 import FileReferenceCard from '@/components/FileReference/FileReferenceCard'
+import ProjectFileAttachmentMenu from '@/components/Project/Utils/ProjectFileAttachmentMenu'
 import ErrorComponent from '@/components/utils/ErrorComponent'
 import { useFileReferences } from '@/utils/queries/file-references'
-import React from 'react'
+import { Session } from 'next-auth'
+import React, { useState } from 'react'
+import { MdAttachFile } from 'react-icons/md'
+import { VscChromeClose } from 'react-icons/vsc'
 
 type DocumentsBlockProps = {
   projectId: string
@@ -9,8 +13,9 @@ type DocumentsBlockProps = {
   opportunityId: string
   analysisId?: string | null
   homologationId?: string | null
+  session: Session
 }
-function DocumentsBlock({ projectId, clientId, opportunityId, analysisId, homologationId }: DocumentsBlockProps) {
+function DocumentsBlock({ projectId, clientId, opportunityId, analysisId, homologationId, session }: DocumentsBlockProps) {
   const { data: fileReferences, isLoading, isError, isSuccess } = useFileReferences({ projectId, clientId, opportunityId, analysisId, homologationId })
   return (
     <div className="flex w-full flex-col gap-2 rounded border border-gray-800">
@@ -32,6 +37,14 @@ function DocumentsBlock({ projectId, clientId, opportunityId, analysisId, homolo
           <p className="w-full text-center text-xs font-medium italic text-gray-500">Nenhum arquivo adicionado.</p>
         )}
       </div>
+      <ProjectFileAttachmentMenu
+        projectId={projectId}
+        clientId={clientId}
+        opportunityId={opportunityId}
+        analysisId={analysisId}
+        homologationId={homologationId}
+        session={session}
+      />
     </div>
   )
 }

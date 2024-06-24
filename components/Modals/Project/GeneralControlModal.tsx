@@ -110,6 +110,7 @@ function GeneralControlModal({ projectId, session, closeModal }: GeneralControlM
                   opportunityId={infoHolder.oportunidade.id}
                   analysisId={infoHolder.idAnaliseTecnica}
                   homologationId={infoHolder.idHomologacao}
+                  session={session}
                 />
                 <ProjectProcessFlowBlock projectId={projectId} />
               </div>
