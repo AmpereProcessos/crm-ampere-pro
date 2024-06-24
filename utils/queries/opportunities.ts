@@ -13,6 +13,7 @@ import { useQuery } from '@tanstack/react-query'
 import { TResultsExportsItem } from '@/pages/api/stats/comercial-results/results-export'
 import { TOpportunitiesByFilterResult } from '@/pages/api/opportunities/search'
 import { useState } from 'react'
+import { TOpportunitiesQueryOptions } from '@/pages/api/opportunities/query-options'
 
 type UseOpportunitiesParams = {
   responsible: string | null
@@ -81,11 +82,12 @@ type FetchOpportunitiesByPersonalizedFiltersParams = {
   page: number
   responsibles: string[] | null
   partners: string[] | null
+  projectTypes: string[] | null
   filters: TPersonalizedOpportunitiesFilter
 }
-async function fetchOpportunitiesByPersonalizedFilters({ page, responsibles, partners, filters }: FetchOpportunitiesByPersonalizedFiltersParams) {
+async function fetchOpportunitiesByPersonalizedFilters({ page, responsibles, partners, projectTypes, filters }: FetchOpportunitiesByPersonalizedFiltersParams) {
   try {
-    const { data } = await axios.post(`/api/opportunities/search?page=${page}`, { responsibles, partners, filters })
+    const { data } = await axios.post(`/api/opportunities/search?page=${page}`, { responsibles, partners, projectTypes, filters })
     return data.data as TOpportunitiesByFilterResult
   } catch (error) {
     throw error
@@ -96,8 +98,9 @@ type UseOpportunitiesByPersonalizedFiltersParams = {
   page: number
   responsibles: string[] | null
   partners: string[] | null
+  projectTypes: string[] | null
 }
-export function useOpportunitiesByPersonalizedFilters({ page, partners, responsibles }: UseOpportunitiesByPersonalizedFiltersParams) {
+export function useOpportunitiesByPersonalizedFilters({ page, partners, responsibles, projectTypes }: UseOpportunitiesByPersonalizedFiltersParams) {
   const [filters, setFilters] = useState<TPersonalizedOpportunitiesFilter>({
     name: '',
     city: [],
@@ -112,9 +115,25 @@ export function useOpportunitiesByPersonalizedFilters({ page, partners, responsi
   }
   return {
     ...useQuery({
-      queryKey: ['opportunities-by-personalized-filters', page, responsibles, partners, filters],
-      queryFn: async () => await fetchOpportunitiesByPersonalizedFilters({ page, responsibles, partners, filters }),
+      queryKey: ['opportunities-by-personalized-filters', page, responsibles, partners, projectTypes, filters],
+      queryFn: async () => await fetchOpportunitiesByPersonalizedFilters({ page, responsibles, partners, projectTypes, filters }),
     }),
     updateFilters,
   }
+}
+
+async function fetchOpportunitiesQueryOptions() {
+  try {
+    const { data } = await axios.get('/api/opportunities/query-options')
+    return data.data as TOpportunitiesQueryOptions
+  } catch (error) {
+    throw error
+  }
+}
+
+export function useOpportunitiesQueryOptions() {
+  return useQuery({
+    queryKey: ['opportunities-query-options'],
+    queryFn: fetchOpportunitiesQueryOptions,
+  })
 }

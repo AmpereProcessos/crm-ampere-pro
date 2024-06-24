@@ -60,7 +60,7 @@ const getOpportunitiesByPersonalizedFilters: NextApiHandler<PostResponse> = asyn
   const userScope = session.user.permissoes.oportunidades.escopo
 
   const { page } = QuerySchema.parse(req.query)
-  const { responsibles, partners, filters } = PersonalizedOpportunityQuerySchema.parse(req.body)
+  const { responsibles, partners, projectTypes, filters } = PersonalizedOpportunityQuerySchema.parse(req.body)
 
   // If user has a scope defined and in the request there isnt a responsible arr defined, then user is trying
   // to access a overall visualiation, which he/she isnt allowed
@@ -85,6 +85,8 @@ const getOpportunitiesByPersonalizedFilters: NextApiHandler<PostResponse> = asyn
 
   const nameQuery: Filter<TOpportunity> =
     filters.name.trim().length > 0 ? { $or: [{ nome: { $regex: filters.name, $options: 'i' } }, { nome: filters.name }] } : {}
+
+  const projectTypesQuery: Filter<TOpportunity> = projectTypes ? { 'tipo.id': { $in: projectTypes } } : {}
   const cityQuery: Filter<TOpportunity> = filters.city.length > 0 ? { 'localizacao.cidade': { $in: filters.city } } : {}
   const dateQuery: Filter<TOpportunity> =
     filters.period.after && filters.period.before && filters.period.field
@@ -98,7 +100,7 @@ const getOpportunitiesByPersonalizedFilters: NextApiHandler<PostResponse> = asyn
   const responsiblesQuery: Filter<TOpportunity> = responsibles ? { 'responsaveis.id': { $in: responsibles } } : {}
   const partnersQuery: Filter<TOpportunity> = partners ? { idParceiro: { $in: partners } } : {}
 
-  const query = { ...nameQuery, ...cityQuery, ...dateQuery, ...responsiblesQuery, ...partnersQuery }
+  const query = { ...nameQuery, ...cityQuery, ...dateQuery, ...responsiblesQuery, ...projectTypesQuery, ...partnersQuery }
 
   const skip = PAGE_SIZE * (Number(page) - 1)
   const limit = PAGE_SIZE
@@ -127,12 +129,20 @@ type GetOpportunitiesByFiltersParams = {
 }
 async function getOpportunitiesByFilters({ collection, query, skip, limit }: GetOpportunitiesByFiltersParams) {
   const opportunitiesMatched = await collection.countDocuments({ ...query })
-
+  const sort = { _id: -1 }
   const addFields = { idPropostaAtivaObjectId: { $toObjectId: '$idPropostaAtiva' } }
   const lookup = { from: 'proposals', localField: 'idPropostaAtivaObjectId', foreignField: '_id', as: 'proposta' }
   const projection = SimplifiedOpportunityWithProposalProjection
   const opportunities = await collection
-    .aggregate([{ $match: { ...query } }, { $skip: skip }, { $addFields: addFields }, { $lookup: lookup }, { $project: projection }, { $limit: limit }])
+    .aggregate([
+      { $sort: sort },
+      { $match: { ...query } },
+      { $skip: skip },
+      { $addFields: addFields },
+      { $lookup: lookup },
+      { $project: projection },
+      { $limit: limit },
+    ])
     .toArray()
   return { opportunities, opportunitiesMatched }
 }

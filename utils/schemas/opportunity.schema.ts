@@ -458,7 +458,10 @@ export type TOpportunityWithFunnelReferenceAndActivities = TOpportunity & {
 // export type TOpportunityEntityWithFunnelReference = TOpportunityEntity & { funil: { id: string; idFunil: string; idEstagio: string } }
 
 export type TOpportunityDTO = TOpportunity & { _id: string }
-export type TOpportunitySimplifiedDTO = Pick<TOpportunityDTO, '_id' | 'nome' | 'identificador' | 'responsaveis' | 'ganho' | 'perda'>
+export type TOpportunitySimplifiedDTO = Pick<
+  TOpportunityDTO,
+  '_id' | 'nome' | 'identificador' | 'idMarketing' | 'responsaveis' | 'ganho' | 'perda' | 'dataInsercao'
+>
 
 export type TOpportunitySimplifiedDTOWithProposal = TOpportunitySimplifiedDTO & {
   proposta: { nome: TProposal['nome']; valor: TProposal['valor']; potenciaPico: TProposal['potenciaPico'] }
@@ -491,11 +494,13 @@ export const SimplifiedOpportunityWithProposalProjection = {
   nome: 1,
   identificador: 1,
   responsaveis: 1,
+  idMarketing: 1,
   'ganho.data': 1,
   'perda.data': 1,
   'proposta.nome': 1,
   'proposta.valor': 1,
   'proposta.potenciaPico': 1,
+  dataInsercao: 1,
 }
 
 const PersonalizedFieldsFilter = z.enum(['dataInsercao', 'ganho.data', 'perda.data'], {
@@ -524,5 +529,8 @@ export type TPersonalizedOpportunitiesFilter = z.infer<typeof OpportunityPersona
 export const PersonalizedOpportunityQuerySchema = z.object({
   responsibles: z.array(z.string({ required_error: 'Autores não informados ou inválidos.', invalid_type_error: 'Autores inválidos.' })).nullable(),
   partners: z.array(z.string({ required_error: 'Parceiros não informados ou inválidos.', invalid_type_error: 'Parceiros inválidos.' })).nullable(),
+  projectTypes: z
+    .array(z.string({ required_error: 'Tipos de projeto não informados ou inválidos.', invalid_type_error: 'Tipos de projeto inválidos.' }))
+    .nullable(),
   filters: OpportunityPersonalizedFiltersSchema,
 })
