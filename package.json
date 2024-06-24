@@ -39,6 +39,7 @@
     "nanoid": "^5.0.7",
     "next": "13.2.4",
     "next-auth": "^4.20.1",
+    "nookies": "^2.5.2",
     "puppeteer": "^21.4.1",
     "react": "18.2.0",
     "react-beautiful-dnd": "^13.1.1",

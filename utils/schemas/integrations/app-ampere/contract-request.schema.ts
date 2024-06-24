@@ -107,6 +107,7 @@ const GeneralContractRequestSchema = z.object({
     .array(z.object({ title: z.string(), link: z.string(), format: z.string() }))
     .nullable()
     .optional(),
+  nomeParceiro: z.string().optional().nullable(),
   idParceiro: z.string().optional().nullable(),
   idVisitaTecnica: z.string().optional().nullable(),
   idProjetoCRM: z.string().optional().nullable(),

@@ -9,6 +9,7 @@ import createHttpError from 'http-errors'
 import { TContractRequest } from '@/utils/schemas/integrations/app-ampere/contract-request.schema'
 import { TOpportunity } from '@/utils/schemas/opportunity.schema'
 import { SellersInApp } from '@/utils/select-options'
+import { TPartner } from '@/utils/schemas/partner.schema'
 
 type PostResponse = {
   data: { insertedId: string }
@@ -29,11 +30,13 @@ const createRequest: NextApiHandler<PostResponse> = async (req, res) => {
 
   const db = await connectToRequestsDatabase(process.env.OPERATIONAL_MONGODB_URI)
   const collection: Collection<TContractRequest> = db.collection('contrato')
-
+  const partnersCollection: Collection<TPartner> = db.collection('partners')
   // Getting CRM project informations
   const crmOpportunity = await crmOpportunitiesCollection.findOne({ _id: new ObjectId(opportunityId) })
 
   if (!crmOpportunity) throw new createHttpError.BadRequest('Projeto não encontrado.')
+
+  const partner = await partnersCollection.findOne({ _id: new ObjectId(crmOpportunity.idParceiro) })
   const { responsaveis, idMarketing } = crmOpportunity
 
   var sellerName = SellersInApp.find((x) => calculateStringSimilarity((requestInfo.nomeVendedor || 'NÃO DEFINIDO')?.toUpperCase(), x) > 80)
@@ -46,6 +49,7 @@ const createRequest: NextApiHandler<PostResponse> = async (req, res) => {
   }
   const insertContractRequestResponse = await collection.insertOne({
     ...requestInfo,
+    nomeParceiro: partner?.nome,
     nomeVendedor: sellerName,
     idOportunidade: idMarketing,
     insider: insiderName,
