@@ -460,7 +460,7 @@ export type TOpportunityWithFunnelReferenceAndActivities = TOpportunity & {
 export type TOpportunityDTO = TOpportunity & { _id: string }
 export type TOpportunitySimplifiedDTO = Pick<
   TOpportunityDTO,
-  '_id' | 'nome' | 'identificador' | 'idMarketing' | 'responsaveis' | 'ganho' | 'perda' | 'dataInsercao'
+  '_id' | 'nome' | 'identificador' | 'tipo' | 'idMarketing' | 'responsaveis' | 'ganho' | 'perda' | 'dataInsercao'
 >
 
 export type TOpportunitySimplifiedDTOWithProposal = TOpportunitySimplifiedDTO & {
@@ -493,6 +493,7 @@ export const SimplifiedOpportunityWithProposalProjection = {
   _id: 1,
   nome: 1,
   identificador: 1,
+  tipo: 1,
   responsaveis: 1,
   idMarketing: 1,
   'ganho.data': 1,

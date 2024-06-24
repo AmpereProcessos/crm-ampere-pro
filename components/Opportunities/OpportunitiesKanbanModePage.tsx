@@ -302,6 +302,7 @@ export default function OpportunitiesKanbanModePage({ session, funnelsOptions, r
                         idOportunidade: item._id,
                         nome: item.nome,
                         identificador: item.identificador,
+                        tipo: item.tipo.titulo,
                         responsaveis: item.responsaveis,
                         idMarketing: undefined,
                         proposta: item.proposta,
@@ -309,6 +310,7 @@ export default function OpportunitiesKanbanModePage({ session, funnelsOptions, r
                         ganho: !!item.ganho.data,
                         perca: !!item.perda.data,
                         contratoSolicitado: !!item.ganho.dataSolicitacao,
+                        dataInsercao: item.dataInsercao,
                       }
                     })}
                   />

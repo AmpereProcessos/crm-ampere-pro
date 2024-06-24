@@ -17,6 +17,7 @@ interface IFunnelListProps {
     idOportunidade: string
     nome: string
     identificador?: string
+    tipo: string
     responsaveis: TOpportunityDTO['responsaveis']
     idMarketing?: string
     statusAtividades?: TOpportunityDTOWithFunnelReferenceAndActivitiesByStatus['statusAtividades']
@@ -28,6 +29,7 @@ interface IFunnelListProps {
     ganho?: boolean
     perca?: boolean
     contratoSolicitado?: boolean
+    dataInsercao: string
   }[]
 }
 function FunnelList({ stageName, session, items, id }: IFunnelListProps) {
@@ -56,7 +58,7 @@ function FunnelList({ stageName, session, items, id }: IFunnelListProps) {
   return (
     <Droppable droppableId={id.toString()}>
       {(provided) => (
-        <div className="flex w-full min-w-[350px] flex-col p-2 px-4 lg:w-[350px]">
+        <div className="flex w-full min-w-[375px] flex-col p-2 px-4 lg:w-[375px]">
           <div className="flex h-[100px] w-full flex-col rounded bg-[#15599a] px-2 lg:h-[60px]">
             <h1 className="w-full rounded p-1 text-center font-medium text-white">{stageName}</h1>
             <div className="mt-1 flex w-full flex-col items-center justify-between px-2 pb-2 lg:flex-row">

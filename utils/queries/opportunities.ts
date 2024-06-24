@@ -135,5 +135,6 @@ export function useOpportunitiesQueryOptions() {
   return useQuery({
     queryKey: ['opportunities-query-options'],
     queryFn: fetchOpportunitiesQueryOptions,
+    refetchOnWindowFocus: false,
   })
 }

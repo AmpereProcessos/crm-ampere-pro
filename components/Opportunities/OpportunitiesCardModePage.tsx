@@ -112,13 +112,13 @@ function OpportunitiesCardModePage({
           opportunitiesMatched={opportunitiesMatched}
           opportunitiesShowing={opportunities?.length}
         />
-        <div className="flex flex-wrap justify-between gap-2 py-2">
+        <div className="flex flex-wrap justify-between gap-4 py-2">
           {isLoading ? <LoadingComponent /> : null}
           {isError ? <ErrorComponent msg="Erro ao buscar oportunidades." /> : null}
           {isSuccess && opportunities ? (
             opportunities.length > 0 ? (
               opportunities.map((opportunity) => (
-                <div key={opportunity._id} className="w-full lg:w-[450px]">
+                <div key={opportunity._id} className="w-full lg:w-[500px]">
                   <OpportunityCardMode opportunity={opportunity} />
                 </div>
               ))
