@@ -39,9 +39,6 @@ function CompositionInformationBlock({ infoHolder, setInfoHolder }: CompositionI
     <div className="flex w-full flex-col gap-y-2">
       <h1 className="w-full bg-gray-700  p-1 text-center font-medium text-white">COMPOSIÇÃO DA COMPRA</h1>
       <div className="flex w-full flex-col gap-1">
-        <div className="flex w-full items-center justify-end gap-2">
-          <h1 className="rounded border border-green-600 bg-green-50 p-1 text-xs font-medium text-green-600">TOTAL: {formatToMoney(infoHolder.total)}</h1>
-        </div>
         <div className="flex w-full flex-col gap-1">
           <div className="flex w-full flex-col gap-2">
             <div className="flex w-full flex-col items-center gap-2 lg:flex-row">
@@ -136,6 +133,14 @@ function CompositionInformationBlock({ infoHolder, setInfoHolder }: CompositionI
           </div>
         </div>
         <CompositionItemsTable infoHolder={infoHolder} setInfoHolder={setInfoHolder} />
+        <div className="flex w-full items-center justify-center">
+          <NumberInput
+            label="TOTAL DA COMPRA"
+            placeholder="Preencha o valor total da compra..."
+            value={infoHolder.total}
+            handleChange={(value) => setInfoHolder((prev) => ({ ...prev, total: value }))}
+          />
+        </div>
       </div>
     </div>
   )

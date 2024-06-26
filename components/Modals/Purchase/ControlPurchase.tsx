@@ -10,12 +10,16 @@ import BillingInformationBlock from './Blocks/BillingInformationBlock'
 import DeliveryInformationBlock from './Blocks/DeliveryInformationBlock'
 import LoadingComponent from '@/components/utils/LoadingComponent'
 import ErrorComponent from '@/components/utils/ErrorComponent'
+import { useMutationWithFeedback } from '@/utils/mutations/general-hook'
+import { useQueryClient } from '@tanstack/react-query'
+import { editPurchase } from '@/utils/mutations/purchases'
 
 type ControlPurchaseProps = {
   purchaseId: string
   closeModal: () => void
 }
 function ControlPurchase({ purchaseId, closeModal }: ControlPurchaseProps) {
+  const queryClient = useQueryClient()
   const { data: purchase, isLoading, isError, isSuccess } = usePurchaseById({ id: purchaseId })
   const [infoHolder, setInfoHolder] = useState<TPurchaseDTO>({
     _id: 'id-holder',
@@ -62,6 +66,14 @@ function ControlPurchase({ purchaseId, closeModal }: ControlPurchaseProps) {
 
     dataInsercao: new Date().toISOString(),
   })
+  const { mutate: handleUpdatePurchase, isPending } = useMutationWithFeedback({
+    mutationKey: ['edit-purchase', purchaseId],
+    mutationFn: editPurchase,
+    queryClient: queryClient,
+    affectedQueryKey: ['purchases'],
+    callbackFn: async () => await queryClient.invalidateQueries({ queryKey: ['purchase-by-id', purchaseId] }),
+  })
+
   useEffect(() => {
     if (purchase) setInfoHolder(purchase)
   }, [purchase])
@@ -108,6 +120,17 @@ function ControlPurchase({ purchaseId, closeModal }: ControlPurchaseProps) {
                   infoHolder={infoHolder as TPurchaseDTO}
                   setInfoHolder={setInfoHolder as React.Dispatch<React.SetStateAction<TPurchaseDTO>>}
                 />
+                <div className="flex w-full items-center justify-end p-2">
+                  <button
+                    onClick={() => {
+                      // @ts-ignore
+                      handleUpdatePurchase({ id: purchaseId, changes: infoHolder })
+                    }}
+                    className="h-9 whitespace-nowrap rounded bg-blue-800 px-4 py-2 text-sm font-medium text-white shadow disabled:bg-gray-500 disabled:text-white enabled:hover:bg-blue-800 enabled:hover:text-white"
+                  >
+                    ATUALIZAR COMPRA
+                  </button>
+                </div>
               </>
             ) : null}
           </div>
