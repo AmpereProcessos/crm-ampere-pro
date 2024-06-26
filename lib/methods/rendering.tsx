@@ -2,7 +2,7 @@ import dayjs from 'dayjs'
 
 import ReactDOM from 'react-dom/server'
 import { TProductItem } from '@/utils/schemas/kits.schema'
-import { ProductItemCategories } from '@/utils/select-options'
+import { ProductItemCategories, Units } from '@/utils/select-options'
 import { BsCart } from 'react-icons/bs'
 import { IconType } from 'react-icons'
 import { AiFillFile } from 'react-icons/ai'
@@ -96,4 +96,9 @@ export function renderPaginationPageItemsIcons({
       {p}
     </button>
   ))
+}
+
+export function renderUnitLabel(str: string) {
+  const unit = Units.find((u) => u.value == str)
+  return unit?.label || str
 }

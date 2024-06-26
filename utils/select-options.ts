@@ -22,6 +22,7 @@ import { TProject } from './schemas/project.schema'
 import { TTechnicalAnalysisPendencyCategory } from './schemas/technical-analysis.schema'
 import { TPricingMethodConditionType } from './schemas/pricing-method.schema'
 import { getAllValueCombinations } from '@/lib/methods/array-manipulation'
+import { TPurchaseDeliveryStatus, TPurchaseStatus } from './schemas/purchase.schema'
 
 export const AllSellers = [
   {
@@ -1041,6 +1042,19 @@ export const UserGroups: TUserGroup[] = [
   },
 ]
 
+export const PurchaseStatus: { id: number; label: string; value: TPurchaseStatus }[] = [
+  { id: 1, label: 'AGUARDANDO LIBERAÇÃO', value: 'AGUARDANDO LIBERAÇÃO' },
+  { id: 2, label: 'AGUARDANDO PAGAMENTO', value: 'AGUARDANDO PAGAMENTO' },
+  { id: 3, label: 'PENDÊNCIA COMERCIAL', value: 'PENDÊNCIA COMERCIAL' },
+  { id: 4, label: 'PENDÊNCIA OPERACIONAL', value: 'PENDÊNCIA OPERACIONAL' },
+  { id: 5, label: 'PENDÊNCIA EXTERNA', value: 'PENDÊNCIA EXTERNA' },
+  { id: 6, label: 'CONCLUÍDA', value: 'CONCLUÍDA' },
+]
+export const PurchaseDeliveryStatus: { id: number; label: string; value: TPurchaseDeliveryStatus }[] = [
+  { id: 1, label: 'AGUARDANDO COMPRA', value: 'AGUARDANDO COMPRA' },
+  { id: 2, label: 'EM ROTA', value: 'EM ROTA' },
+  { id: 3, label: 'ENTREGUE', value: 'ENTREGUE' },
+]
 export const ProductItemCategories = [
   { id: 1, label: 'MÓDULO', value: 'MÓDULO', icon: FaSolarPanel as React.ComponentType },
   { id: 2, label: 'INVERSOR', value: 'INVERSOR', icon: TbTopologyFull as React.ComponentType },

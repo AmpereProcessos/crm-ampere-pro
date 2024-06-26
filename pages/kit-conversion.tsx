@@ -52,7 +52,7 @@ type TExtractionParams = {
 }
 
 function KitFormatting() {
-  const { data: session, status } = useSession()
+  const { data: session, status } = useSession({ required: true })
   const [file, setFile] = useState<File | null>(null)
 
   const [rawJSONData, setRawJSONData] = useState<ExtractedADias[] | null>(null)

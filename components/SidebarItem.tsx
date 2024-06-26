@@ -38,7 +38,7 @@ function SidebarItem({ isOpen, icon, text, url }: SiderbarItemProps) {
         >
           {icon}
           {isOpen ? (
-            <motion.p variants={paragraphVariant} className={`pl-3 text-xs text-gray-600 `}>
+            <motion.p variants={paragraphVariant} className={`pl-3 text-[0.65rem] text-gray-600 `}>
               {text}
             </motion.p>
           ) : null}

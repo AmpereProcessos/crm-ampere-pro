@@ -62,48 +62,48 @@ export const Sidebar = ({ session }: SidebarProps) => {
             <TfiAngleRight />
           </motion.div>
           {sidebarExtended ? <h2 className="h-[18px] text-xs text-gray-500">PRINCIPAL</h2> : <div className="h-[18px] w-full "></div>}
-          <SidebarItem text="Dashboard" isOpen={sidebarExtended} url="/" icon={<BiStats style={{ fontSize: '15px', color: '#264653' }} />} />
+          <SidebarItem text="Dashboard" isOpen={sidebarExtended} url="/" icon={<BiStats style={{ fontSize: '12px', color: '#264653' }} />} />
           <SidebarItem
             text="Oportunidades"
             isOpen={sidebarExtended}
             url="/comercial/oportunidades"
-            icon={<BsFillFunnelFill style={{ fontSize: '15px', color: '#264653' }} />}
+            icon={<BsFillFunnelFill style={{ fontSize: '12px', color: '#264653' }} />}
           />
-          <SidebarItem text="Clientes" isOpen={sidebarExtended} url="/clientes" icon={<FaUser style={{ fontSize: '15px', color: '#264653' }} />} />
+          <SidebarItem text="Clientes" isOpen={sidebarExtended} url="/clientes" icon={<FaUser style={{ fontSize: '12px', color: '#264653' }} />} />
           {sidebarExtended ? <h2 className="mt-2 h-[18px] text-xs text-gray-500">COMPOSIÇÕES</h2> : <div className="mt-2 h-[18px]"></div>}
-          <SidebarItem text="Kits" isOpen={sidebarExtended} url="/kits" icon={<FaTag style={{ fontSize: '15px', color: '#264653' }} />} />
+          <SidebarItem text="Kits" isOpen={sidebarExtended} url="/kits" icon={<FaTag style={{ fontSize: '12px', color: '#264653' }} />} />
           <SidebarItem
             text="Planos de assinatura"
             isOpen={sidebarExtended}
             url="/planos"
-            icon={<BsBookmarksFill style={{ fontSize: '15px', color: '#264653' }} />}
+            icon={<BsBookmarksFill style={{ fontSize: '12px', color: '#264653' }} />}
           />
-          <SidebarItem text="Produtos" isOpen={sidebarExtended} url="/produtos" icon={<BsCart style={{ fontSize: '15px', color: '#264653' }} />} />
+          <SidebarItem text="Produtos" isOpen={sidebarExtended} url="/produtos" icon={<BsCart style={{ fontSize: '12px', color: '#264653' }} />} />
           <SidebarItem
             text="Serviços"
             isOpen={sidebarExtended}
             url="/servicos"
-            icon={<MdOutlineMiscellaneousServices style={{ fontSize: '15px', color: '#264653' }} />}
+            icon={<MdOutlineMiscellaneousServices style={{ fontSize: '12px', color: '#264653' }} />}
           />
           {sidebarExtended ? <h2 className="mt-2 h-[18px] text-xs text-gray-500">OPERACIONAL</h2> : <div className="mt-2 h-[18px]"></div>}
           <SidebarItem
             text="Homologações"
             isOpen={sidebarExtended}
             url="/operacional/homologacoes"
-            icon={<FaProjectDiagram style={{ fontSize: '15px', color: '#264653' }} />}
+            icon={<FaProjectDiagram style={{ fontSize: '12px', color: '#264653' }} />}
           />
           <SidebarItem
             text="Análises Técnicas"
             isOpen={sidebarExtended}
             url="/operacional/analises-tecnicas"
-            icon={<BsFillClipboardDataFill style={{ fontSize: '15px', color: '#264653' }} />}
+            icon={<BsFillClipboardDataFill style={{ fontSize: '12px', color: '#264653' }} />}
           />
           {session.user.permissoes.projetos.visualizar ? (
             <SidebarItem
               text="Projetos"
               isOpen={sidebarExtended}
               url="/operacional/setores/comercial"
-              icon={<MdDashboard style={{ fontSize: '15px', color: '#264653' }} />}
+              icon={<MdDashboard style={{ fontSize: '12px', color: '#264653' }} />}
             />
           ) : (
             false
@@ -124,7 +124,7 @@ export const Sidebar = ({ session }: SidebarProps) => {
             text="Configurações"
             isOpen={sidebarExtended}
             url={'/configuracoes'}
-            icon={<IoMdSettings style={{ fontSize: '15px', color: '#264653' }} />}
+            icon={<IoMdSettings style={{ fontSize: '12px', color: '#264653' }} />}
           />
           <div
             onClick={() => {
@@ -209,7 +209,7 @@ export const Sidebar = ({ session }: SidebarProps) => {
           >
             <div className="flex items-center justify-center p-2 text-[#264653] duration-300 ease-in hover:scale-105 hover:bg-blue-100">
               <Link href={'/'}>
-                <BiStats style={{ fontSize: '15px', color: '#264653' }} />
+                <BiStats style={{ fontSize: '12px', color: '#264653' }} />
               </Link>
             </div>
             <div className="flex items-center justify-center p-2 text-[#264653] duration-300 ease-in hover:scale-105 hover:bg-blue-100">

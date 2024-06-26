@@ -76,6 +76,7 @@ export function formatLocation({ location, includeUf, includeCity }: { location:
   addressStr = addressStr + location.endereco
   if (location.numeroOuIdentificador) addressStr = addressStr + `, Nº ${location.numeroOuIdentificador}`
   if (location.bairro) addressStr = addressStr + `, ${location.bairro}`
+  addressStr += '.'
   return addressStr.toUpperCase()
 }
 
