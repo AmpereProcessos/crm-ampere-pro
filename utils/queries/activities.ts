@@ -52,6 +52,21 @@ export function useActivitiesByTechnicalAnalysisId({ technicalAnalysisId }: { te
     queryFn: async () => await fetchActivitiesByTechnicalAnalysisId({ technicalAnalysisId }),
   })
 }
+async function fetchActivitiesByPurchaseId({ purchaseId }: { purchaseId: string }) {
+  try {
+    const { data } = await axios.get(`/api/activities?purchaseId=${purchaseId}`)
+    return data.data as TActivityDTO[]
+  } catch (error) {
+    throw error
+  }
+}
+
+export function useActivitiesByPurchaseId({ purchaseId }: { purchaseId: string }) {
+  return useQuery({
+    queryKey: ['purchase-activities', purchaseId],
+    queryFn: async () => await fetchActivitiesByPurchaseId({ purchaseId }),
+  })
+}
 
 async function fetchActivities({ responsibleId, openOnly, dueOnly }: { responsibleId?: string | null; openOnly?: boolean; dueOnly?: boolean }) {
   try {

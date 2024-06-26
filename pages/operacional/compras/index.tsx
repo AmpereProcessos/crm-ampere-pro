@@ -57,7 +57,9 @@ function PurchasesMainPage() {
           ) : null}
         </div>
       </div>
-      {editModal.id && editModal.isOpen ? <ControlPurchase purchaseId={editModal.id} closeModal={() => setEditModal({ id: null, isOpen: false })} /> : null}
+      {editModal.id && editModal.isOpen ? (
+        <ControlPurchase purchaseId={editModal.id} session={session} closeModal={() => setEditModal({ id: null, isOpen: false })} />
+      ) : null}
     </div>
   )
 }

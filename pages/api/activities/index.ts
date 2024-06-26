@@ -2,6 +2,7 @@ import { insertActivity, updateActivity } from '@/repositories/acitivities/mutat
 import {
   getActivitiesByHomologationId,
   getActivitiesByOpportunityId,
+  getActivitiesByPurchaseId,
   getActivitiesByResponsibleId,
   getActivitiesByTechnicalAnalysisId,
   getActivityById,
@@ -24,7 +25,7 @@ const getActivities: NextApiHandler<GetResponse> = async (req, res) => {
   const parterScope = session.user.permissoes.parceiros.escopo
   const partnerQuery: Filter<TActivity> = parterScope ? { idParceiro: { $in: [...parterScope] } } : {}
 
-  const { opportunityId, homologationId, technicalAnalysisId, responsibleId, openOnly, dueOnly } = req.query
+  const { opportunityId, homologationId, technicalAnalysisId, purchaseId, responsibleId, openOnly, dueOnly } = req.query
 
   // Specifing queries
   const queryOpenOnly: Filter<TActivity> = openOnly == 'true' ? { dataConclusao: null } : {}
@@ -49,6 +50,11 @@ const getActivities: NextApiHandler<GetResponse> = async (req, res) => {
     if (typeof technicalAnalysisId != 'string' || !ObjectId.isValid(technicalAnalysisId))
       throw new createHttpError.BadRequest('ID de análise técnica inválido.')
     const activities = await getActivitiesByTechnicalAnalysisId({ collection: collection, technicalAnalysisId: technicalAnalysisId, query: query })
+    return res.status(200).json({ data: activities })
+  }
+  if (purchaseId) {
+    if (typeof purchaseId != 'string' || !ObjectId.isValid(purchaseId)) throw new createHttpError.BadRequest('ID de registro de compra inválido.')
+    const activities = await getActivitiesByPurchaseId({ collection: collection, purchaseId: purchaseId, query: query })
     return res.status(200).json({ data: activities })
   }
   if (responsibleId) {

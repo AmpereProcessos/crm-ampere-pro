@@ -30,6 +30,7 @@ const GeneralActivitySchema = z.object({
     .nullable(),
   idHomologacao: z.string().optional().nullable(),
   idAnaliseTecnica: z.string().optional().nullable(),
+  idCompra: z.string().optional().nullable(),
   subatividades: z.array(
     z.object({
       titulo: z.string(),
@@ -71,6 +72,7 @@ export const InsertActivitySchema = z.object({
     .nullable(),
   idHomologacao: z.string({ invalid_type_error: 'Tipo não válido para o ID de referência homologação.' }).optional().nullable(),
   idAnaliseTecnica: z.string({ invalid_type_error: 'Tipo não válido para o ID de referência de análise técnica.' }).optional().nullable(),
+  idCompra: z.string({ invalid_type_error: 'Tipo não válido para o ID de referência de compra.' }).optional().nullable(),
   subatividades: z.array(
     z.object({
       titulo: z.string({
@@ -148,6 +150,7 @@ const ActivityEntitySchema = z.object({
     .nullable(),
   idHomologacao: z.string().optional().nullable(),
   idAnaliseTecnica: z.string().optional().nullable(),
+  idCompra: z.string().optional().nullable(),
   subatividades: z.array(
     z.object({
       titulo: z.string(),

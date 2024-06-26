@@ -55,6 +55,19 @@ export async function getActivitiesByTechnicalAnalysisId({ technicalAnalysisId, 
     throw error
   }
 }
+type GetActivitiesByPurchaseIdParams = {
+  purchaseId: string
+  collection: Collection<TActivity>
+  query: Filter<TActivity>
+}
+export async function getActivitiesByPurchaseId({ purchaseId, collection, query }: GetActivitiesByPurchaseIdParams) {
+  try {
+    const activities = await collection.find({ idCompra: purchaseId, ...query }, { sort: { dataInsercao: -1 } }).toArray()
+    return activities
+  } catch (error) {
+    throw error
+  }
+}
 
 type GetActivitiesByResponsibleIdParams = {
   responsibleId: string

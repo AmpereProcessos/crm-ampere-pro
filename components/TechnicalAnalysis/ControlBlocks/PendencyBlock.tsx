@@ -45,6 +45,7 @@ function PendencyBlock({ session, technicalAnalysisId, opportunity, infoHolder, 
       <NewActivityMenu
         session={session}
         opportunity={opportunity}
+        project={undefined}
         technicalAnalysisId={technicalAnalysisId}
         affectedQueryKey={['technical-analysis-activities', technicalAnalysisId]}
       />

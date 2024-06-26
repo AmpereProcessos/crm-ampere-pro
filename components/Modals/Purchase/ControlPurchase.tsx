@@ -13,12 +13,15 @@ import ErrorComponent from '@/components/utils/ErrorComponent'
 import { useMutationWithFeedback } from '@/utils/mutations/general-hook'
 import { useQueryClient } from '@tanstack/react-query'
 import { editPurchase } from '@/utils/mutations/purchases'
+import PendencyBlock from './Blocks/PendencyBlock'
+import { Session } from 'next-auth'
 
 type ControlPurchaseProps = {
   purchaseId: string
+  session: Session
   closeModal: () => void
 }
-function ControlPurchase({ purchaseId, closeModal }: ControlPurchaseProps) {
+function ControlPurchase({ purchaseId, session, closeModal }: ControlPurchaseProps) {
   const queryClient = useQueryClient()
   const { data: purchase, isLoading, isError, isSuccess } = usePurchaseById({ id: purchaseId })
   const [infoHolder, setInfoHolder] = useState<TPurchaseDTO>({
@@ -100,6 +103,7 @@ function ControlPurchase({ purchaseId, closeModal }: ControlPurchaseProps) {
                   infoHolder={infoHolder as TPurchaseDTO}
                   setInfoHolder={setInfoHolder as React.Dispatch<React.SetStateAction<TPurchaseDTO>>}
                 />
+                <PendencyBlock purchaseId={purchaseId} project={infoHolder.projeto} session={session} />
                 <CompositionInformationBlock
                   infoHolder={infoHolder as TPurchaseDTO}
                   setInfoHolder={setInfoHolder as React.Dispatch<React.SetStateAction<TPurchaseDTO>>}

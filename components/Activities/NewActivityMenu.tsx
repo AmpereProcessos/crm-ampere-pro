@@ -38,11 +38,19 @@ const variants = {
 type NewActivityMenuProps = {
   session: Session
   opportunity: { id?: string | null; nome?: string | null }
+  project:
+    | {
+        id?: string | null | undefined
+        nome?: string | null | undefined
+      }
+    | null
+    | undefined
   homologationId?: string | null
   technicalAnalysisId?: string | null
+  purchaseId?: string | null
   affectedQueryKey: any[]
 }
-function NewActivityMenu({ session, opportunity, homologationId, technicalAnalysisId, affectedQueryKey }: NewActivityMenuProps) {
+function NewActivityMenu({ session, opportunity, project, homologationId, technicalAnalysisId, purchaseId, affectedQueryKey }: NewActivityMenuProps) {
   const queryClient = useQueryClient()
   const { data: users } = useUsers()
   const [newActivityMenuIsOpen, setNewActivityMenuIsOpen] = useState<boolean>(false)
@@ -54,8 +62,10 @@ function NewActivityMenu({ session, opportunity, homologationId, technicalAnalys
     descricao: '', // description of what to be done
     responsaveis: [],
     oportunidade: opportunity,
+    projeto: project,
     idHomologacao: homologationId,
     idAnaliseTecnica: technicalAnalysisId,
+    idCompra: purchaseId,
     subatividades: [],
     dataVencimento: null,
     dataConclusao: null,
