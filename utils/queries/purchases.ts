@@ -1,11 +1,11 @@
 import axios from 'axios'
-import { TPurchaseDTO } from '../schemas/purchase.schema'
+import { TPurchaseDTO, TPurchaseWithProjectDTO } from '../schemas/purchase.schema'
 import { useQuery } from '@tanstack/react-query'
 
 async function fetchPurchaseById({ id }: { id: string }) {
   try {
     const { data } = await axios.get(`/api/purchases?id=${id}`)
-    return data.data as TPurchaseDTO
+    return data.data as TPurchaseWithProjectDTO
   } catch (error) {
     throw error
   }

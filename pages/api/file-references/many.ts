@@ -15,15 +15,19 @@ type GetResponse = {
 const getMultipleSourcesFileReferences: NextApiHandler<GetResponse> = async (req, res) => {
   const session = await validateAuthenticationWithSession(req, res)
 
-  const { clientId, opportunityId, analysisId, homologationId, projectId } = FileReferencesQueryParamsSchema.parse(req.query)
+  const { clientId, opportunityId, analysisId, homologationId, projectId, purchaseId } = FileReferencesQueryParamsSchema.parse(req.query)
 
   const clientQuery: Filter<TFileReference> = clientId ? { idCliente: clientId } : {}
   const opportunityQuery: Filter<TFileReference> = opportunityId ? { idOportunidade: opportunityId } : {}
   const analysisQuery: Filter<TFileReference> = analysisId ? { idAnaliseTecnica: analysisId } : {}
   const homologationQuery: Filter<TFileReference> = homologationId ? { idHomologacao: homologationId } : {}
   const projectQuery: Filter<TFileReference> = projectId ? { idProjeto: projectId } : {}
+  const purchaseQuery: Filter<TFileReference> = purchaseId ? { idCompra: purchaseId } : {}
 
-  const orQuery = { $or: [clientQuery, opportunityQuery, analysisQuery, homologationQuery, projectQuery] }
+  const nonEmptyQueries = [clientQuery, opportunityQuery, analysisQuery, homologationQuery, projectQuery, purchaseQuery].filter(
+    (r) => Object.keys(r).length > 0
+  )
+  const orQuery = { $or: nonEmptyQueries }
   const query = { ...orQuery }
 
   console.log(query)
@@ -31,7 +35,6 @@ const getMultipleSourcesFileReferences: NextApiHandler<GetResponse> = async (req
   const collection: Collection<TFileReference> = db.collection('file-references')
 
   const fileReferences = await getFileReferencesByQuery({ collection, query })
-
   return res.status(200).json({ data: fileReferences })
 }
 

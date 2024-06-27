@@ -2,13 +2,13 @@ import { insertPurchase, updatePurchase } from '@/repositories/purchases/mutatio
 import { getPurchaseById, getPurchases, getPurchasesByProjectId } from '@/repositories/purchases/queries'
 import connectToDatabase from '@/services/mongodb/crm-db-connection'
 import { apiHandler, validateAuthenticationWithSession } from '@/utils/api'
-import { InsertPurchaseSchema, TPurchase } from '@/utils/schemas/purchase.schema'
+import { InsertPurchaseSchema, TPurchase, TPurchaseWithProject } from '@/utils/schemas/purchase.schema'
 import createHttpError from 'http-errors'
 import { Collection, ObjectId } from 'mongodb'
 import { NextApiHandler } from 'next'
 
 type GetResponse = {
-  data: TPurchase | TPurchase[]
+  data: TPurchaseWithProject | TPurchase[]
 }
 
 const getPurchasesRoute: NextApiHandler<GetResponse> = async (req, res) => {

@@ -1,4 +1,4 @@
-import { TPurchase } from '@/utils/schemas/purchase.schema'
+import { TPurchase, TPurchaseWithProject } from '@/utils/schemas/purchase.schema'
 import { Collection, Filter, ObjectId } from 'mongodb'
 
 type GetPurchaseByIdParams = {
@@ -9,9 +9,14 @@ type GetPurchaseByIdParams = {
 
 export async function getPurchaseById({ collection, id, query }: GetPurchaseByIdParams) {
   try {
-    const purchase = await collection.findOne({ _id: new ObjectId(id), ...query })
+    const addFields = { projectAsObjectId: { $toObjectId: '$projeto.id' } }
+    const lookup = { from: 'projects', localField: 'projectAsObjectId', foreignField: '_id', as: 'projetoDados' }
 
-    return purchase
+    const purchasesArr = await collection.aggregate([{ $match: { _id: new ObjectId(id), ...query } }, { $addFields: addFields }, { $lookup: lookup }]).toArray()
+
+    const purchase = purchasesArr.map((p) => ({ ...p, projetoDados: p.projetoDados[0] }))
+
+    return purchase[0] as TPurchaseWithProject
   } catch (error) {
     throw error
   }

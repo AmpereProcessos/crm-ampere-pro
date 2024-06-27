@@ -12,6 +12,7 @@ function TextareaInput({ label, value, placeholder, editable = true, handleChang
     <div className="flex w-full flex-col rounded-md border border-gray-300 shadow-sm">
       <h1 className="font w-full rounded-tl-md rounded-tr-md bg-gray-600 p-1 text-center text-xs font-bold text-white">{label}</h1>
       <textarea
+        disabled={!editable}
         placeholder={placeholder}
         value={value}
         onChange={(e) => {

@@ -1,5 +1,5 @@
 import { usePurchaseById } from '@/utils/queries/purchases'
-import { TPurchaseDTO } from '@/utils/schemas/purchase.schema'
+import { TPurchaseDTO, TPurchaseWithProjectDTO } from '@/utils/schemas/purchase.schema'
 import React, { useEffect, useState } from 'react'
 import { VscChromeClose } from 'react-icons/vsc'
 import GeneralInformationBlock from './Blocks/GeneralInformationBlock'
@@ -15,6 +15,9 @@ import { useQueryClient } from '@tanstack/react-query'
 import { editPurchase } from '@/utils/mutations/purchases'
 import PendencyBlock from './Blocks/PendencyBlock'
 import { Session } from 'next-auth'
+import ProjectInformationBlock from './Blocks/ProjectInformationBlock'
+import { TProjectDTO } from '@/utils/schemas/project.schema'
+import TechnicalAnalysisBlock from './Blocks/TechnicalAnalysisBlock'
 
 type ControlPurchaseProps = {
   purchaseId: string
@@ -24,7 +27,7 @@ type ControlPurchaseProps = {
 function ControlPurchase({ purchaseId, session, closeModal }: ControlPurchaseProps) {
   const queryClient = useQueryClient()
   const { data: purchase, isLoading, isError, isSuccess } = usePurchaseById({ id: purchaseId })
-  const [infoHolder, setInfoHolder] = useState<TPurchaseDTO>({
+  const [infoHolder, setInfoHolder] = useState<TPurchaseWithProjectDTO>({
     _id: 'id-holder',
     titulo: '',
     status: null,
@@ -36,6 +39,7 @@ function ControlPurchase({ purchaseId, session, closeModal }: ControlPurchasePro
       tipo: '',
       identificador: '',
     },
+    projetoDados: {} as TProjectDTO,
     anotacoes: '',
     composicao: [],
     total: 0,
@@ -104,6 +108,8 @@ function ControlPurchase({ purchaseId, session, closeModal }: ControlPurchasePro
                   setInfoHolder={setInfoHolder as React.Dispatch<React.SetStateAction<TPurchaseDTO>>}
                 />
                 <PendencyBlock purchaseId={purchaseId} project={infoHolder.projeto} session={session} />
+                <ProjectInformationBlock purchaseId={purchaseId} project={purchase.projetoDados} session={session} />
+                <TechnicalAnalysisBlock analysisId={purchase.projetoDados.idAnaliseTecnica} />
                 <CompositionInformationBlock
                   infoHolder={infoHolder as TPurchaseDTO}
                   setInfoHolder={setInfoHolder as React.Dispatch<React.SetStateAction<TPurchaseDTO>>}
