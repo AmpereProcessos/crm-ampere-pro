@@ -159,6 +159,11 @@ const GeneralPurchaseSchema = z.object({
   faturamento: PurchaseInvoicing,
   entrega: PurchaseDelivery,
   dataInsercao: z.string({ invalid_type_error: 'Tipo não válido para a data de inserção.' }).datetime({ message: 'Formato inválido para data de inserção.' }),
+  dataEfetivacao: z
+    .string({ invalid_type_error: 'Tipo não válido para a data de efetivação.' })
+    .datetime({ message: 'Formato inválido para data de efetivação.' })
+    .optional()
+    .nullable(),
 })
 
 export const InsertPurchaseSchema = z.object({
@@ -183,6 +188,11 @@ export const InsertPurchaseSchema = z.object({
   faturamento: PurchaseInvoicing,
   entrega: PurchaseDelivery,
   dataInsercao: z.string({ invalid_type_error: 'Tipo não válido para a data de inserção.' }).datetime({ message: 'Formato inválido para data de inserção.' }),
+  dataEfetivacao: z
+    .string({ invalid_type_error: 'Tipo não válido para a data de efetivação.' })
+    .datetime({ message: 'Formato inválido para data de efetivação.' })
+    .optional()
+    .nullable(),
 })
 
 export type TPurchase = z.infer<typeof GeneralPurchaseSchema>
@@ -190,3 +200,63 @@ export type TPurchaseWithProject = TPurchase & { projetoDados: TProjectDTO }
 
 export type TPurchaseDTO = TPurchase & { _id: string }
 export type TPurchaseWithProjectDTO = TPurchaseWithProject & { _id: string }
+
+const PersonalizedFieldFilters = z.enum(['liberacao.data', 'pedido.data', 'faturamento.data', 'entrega.previsao', 'entrega.efetivacao'], {
+  required_error: 'Filtro de campo de período não informado.',
+  invalid_type_error: 'Tipo não válido para o campo de filtro de período.',
+})
+export const PersonalizedPurchaseFiltersSchema = z.object({
+  title: z.string({ required_error: 'Filtro de título de compra não informado.', invalid_type_error: 'Tipo não válido para o filtro de título de compra.' }),
+  status: z.array(z.string({ required_error: 'Status de filtro não informada.', invalid_type_error: 'Tipo não válido para status de filtro.' }), {
+    required_error: 'Lista de status de filtro não informada.',
+    invalid_type_error: 'Tipo não válido para lista de status de filtro.',
+  }),
+  state: z.array(z.string({ required_error: 'Estado de filtro não informada.', invalid_type_error: 'Tipo não válido para estado de filtro.' }), {
+    required_error: 'Lista de estados de filtro não informada.',
+    invalid_type_error: 'Tipo não válido para lista de estados de filtro.',
+  }),
+  city: z.array(z.string({ required_error: 'Cidade de filtro não informada.', invalid_type_error: 'Tipo não válido para cidade de filtro.' }), {
+    required_error: 'Lista de cidades de filtro não informada.',
+    invalid_type_error: 'Tipo não válido para lista de cidades de filtro.',
+  }),
+  pendingOrder: z.boolean({
+    required_error: 'Filtro de pedidos pendentes não informado.',
+    invalid_type_error: 'Filtro de pedidos pendentes não informado.',
+  }),
+  pendingInvoicing: z.boolean({
+    required_error: 'Filtro de faturamentos pendentes não informado.',
+    invalid_type_error: 'Filtro de faturamentos pendentes não informado.',
+  }),
+  pendingDelivery: z.boolean({
+    required_error: 'Filtro de entregas pendentes não informado.',
+    invalid_type_error: 'Filtro de entregas pendentes não informado.',
+  }),
+  deliveryStatus: z.array(
+    z.string({ required_error: 'Status de entrega de filtro não informada.', invalid_type_error: 'Tipo não válido para status de entrega de filtro.' }),
+    {
+      required_error: 'Lista de status de entrega de filtro não informada.',
+      invalid_type_error: 'Tipo não válido para lista de status de entrega de filtro.',
+    }
+  ),
+  period: z.object({
+    after: z
+      .string({ required_error: 'Filtro de depois de não informado.', invalid_type_error: 'Tipo não válido para o filtro de depois de.' })
+      .optional()
+      .nullable(),
+    before: z
+      .string({ required_error: 'Filtro de antes de não informado.', invalid_type_error: 'Tipo não válido para o filtro de antes de.' })
+      .optional()
+      .nullable(),
+    field: PersonalizedFieldFilters.optional().nullable(),
+  }),
+  pendingConclusion: z.boolean({
+    required_error: 'Filtro de compras não concluídas não informado.',
+    invalid_type_error: 'Filtro de compras não concluídas não informado.',
+  }),
+})
+export type TPersonalizedPurchaseFilters = z.infer<typeof PersonalizedPurchaseFiltersSchema>
+
+export const PersonalizePurchasesQuerySchema = z.object({
+  partners: z.array(z.string({ required_error: 'Parceiros não informados ou inválidos.', invalid_type_error: 'Parceiros inválidos.' })).nullable(),
+  filters: PersonalizedPurchaseFiltersSchema,
+})

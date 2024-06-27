@@ -1,4 +1,4 @@
-import { TPurchase, TPurchaseWithProject } from '@/utils/schemas/purchase.schema'
+import { TPurchase, TPurchaseDTO, TPurchaseWithProject } from '@/utils/schemas/purchase.schema'
 import { Collection, Filter, ObjectId } from 'mongodb'
 
 type GetPurchaseByIdParams = {
@@ -45,6 +45,25 @@ export async function getPurchases({ collection, query }: GetPurchasesParams) {
   try {
     const purchases = await collection.find({ ...query }).toArray()
     return purchases
+  } catch (error) {
+    throw error
+  }
+}
+
+type GetPurchasesByFiltersParams = {
+  collection: Collection<TPurchase>
+  query: Filter<TPurchase>
+  skip: number
+  limit: number
+}
+export async function getPurchasesByFilters({ collection, query, skip, limit }: GetPurchasesByFiltersParams) {
+  try {
+    const purchasesMatched = await collection.countDocuments({ ...query })
+    const sort = { _id: -1 }
+    const match = { ...query }
+    const purchases = await collection.aggregate([{ $sort: sort }, { $match: match }, { $skip: skip }, { $limit: limit }]).toArray()
+
+    return { purchases, purchasesMatched } as { purchases: TPurchaseDTO[]; purchasesMatched: number }
   } catch (error) {
     throw error
   }
