@@ -233,7 +233,7 @@ function NewContractRequest({ closeModal, proposeInfo, client, session, responsi
                 }
               />
             </div>
-            {proposeInfo?.oportunidadeDados.tipo.titulo == 'SISTEMA FOTOVOLTAICO' || proposeInfo?.oportunidadeDados.tipo.titulo == 'MONTAGEM E DESMONTAGEM' ? (
+            {!['OPERAÇÃO E MANUTENÇÃO', 'HOMOLOGAÇÃO', 'SEGURO DE SISTEMA FOTOVOLTAICO'].includes(proposeInfo?.oportunidadeDados.tipo.titulo) ? (
               <SolarSystemForm requestInfo={requestInfo} setRequestInfo={setRequestInfo} proposeInfo={proposeInfo} />
             ) : null}
             {proposeInfo?.oportunidadeDados.tipo.titulo == 'OPERAÇÃO E MANUTENÇÃO' ? (
