@@ -1,22 +1,22 @@
 import { renderPaginationPageItemsIcons } from '@/lib/methods/rendering'
 import React from 'react'
 
-type PurchasePaginationMenuProps = {
+type RevenuePaginationMenuProps = {
   activePage: number
   selectPage: (x: number) => void
   totalPages: number
-  purchasesMatched?: number
-  purchasesShowing?: number
+  revenuesMatched?: number
+  revenuesShowing?: number
   queryLoading: boolean
 }
-function PurchasePaginationMenu({ activePage, selectPage, totalPages, purchasesMatched, purchasesShowing, queryLoading }: PurchasePaginationMenuProps) {
+function RevenuePaginationMenu({ activePage, selectPage, totalPages, revenuesMatched, revenuesShowing, queryLoading }: RevenuePaginationMenuProps) {
   return (
     <div className="my-2 flex w-full flex-col items-center gap-1 ">
       {totalPages > 1 ? (
         <>
           <p className="w-full text-center text-sm leading-none tracking-tight text-gray-500">
-            Um número grande de registros de compra foi encontrado, separamos em páginas para facilitar a visualização. Clique na página desejada para
-            visualizar os demais registros de compra.
+            Um número grande de receitas foi encontrado, separamos em páginas para facilitar a visualização. Clique na página desejada para visualizar os demais
+            receitas.
           </p>
           <div className="flex items-center justify-center gap-4">
             <button
@@ -69,21 +69,13 @@ function PurchasePaginationMenu({ activePage, selectPage, totalPages, purchasesM
       ) : null}
 
       <p className="w-full text-center text-sm leading-none tracking-tight text-gray-500">
-        {purchasesMatched
-          ? purchasesMatched > 0
-            ? `${purchasesMatched} registros de compra encontrados.`
-            : `${purchasesMatched} registro de compra encontrado.`
-          : '...'}
+        {revenuesMatched ? (revenuesMatched > 0 ? `${revenuesMatched} receitas encontrados.` : `${revenuesMatched} receita encontrado.`) : '...'}
       </p>
       <p className="w-full text-center text-sm leading-none tracking-tight text-gray-500">
-        {purchasesShowing
-          ? purchasesShowing > 0
-            ? `Mostrando ${purchasesShowing} registros de compra.`
-            : `Mostrando ${purchasesShowing} registro de compra.`
-          : '...'}
+        {revenuesShowing ? (revenuesShowing > 0 ? `Mostrando ${revenuesShowing} receitas.` : `Mostrando ${revenuesShowing} receita.`) : '...'}
       </p>
     </div>
   )
 }
 
-export default PurchasePaginationMenu
+export default RevenuePaginationMenu

@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { AuthorSchema } from './user.schema'
+import { TProjectDTO } from './project.schema'
 
 const RevenueProjectReference = z.object({
   id: z.string({ required_error: 'ID do projeto não informado.', invalid_type_error: 'Tipo não válido para o ID do projeto.' }).optional().nullable(),
@@ -133,5 +134,50 @@ export const InsertRevenueSchema = z.object({
     .datetime({ message: 'Formato inválido para a data de inserção.' }),
 })
 export type TRevenue = z.infer<typeof GeneralRevenueSchema>
+export type TRevenueWithProject = TRevenue & { projetoDados: TProjectDTO }
 
 export type TRevenueDTO = TRevenue & { _id: string }
+export type TRevenueWithProjectDTO = TRevenueWithProject & { _id: string }
+
+const PersonalizedFieldFilters = z.enum(['dataInsercao', 'dataCompetencia', 'recebimentos.dataRecebimento'], {
+  required_error: 'Filtro de campo de período não informado.',
+  invalid_type_error: 'Tipo não válido para o campo de filtro de período.',
+})
+
+const PersonalizedRevenueFiltersSchema = z.object({
+  title: z.string({ required_error: 'Filtro de título de receita não informado.', invalid_type_error: 'Tipo não válido para o filtro de título de receita.' }),
+  category: z.string({
+    required_error: 'Filtro de categoria de receita não informado.',
+    invalid_type_error: 'Tipo não válido para o filtro de categoria de receita.',
+  }),
+  total: z.object({
+    greater: z.number({ invalid_type_error: 'Tipo não válido para o filtro de total maior que.' }).optional().nullable(),
+    less: z.number({ invalid_type_error: 'Tipo não válido para o filtro de total menor que.' }).optional().nullable(),
+  }),
+  period: z.object({
+    after: z
+      .string({ required_error: 'Filtro de depois de não informado.', invalid_type_error: 'Tipo não válido para o filtro de depois de.' })
+      .optional()
+      .nullable(),
+    before: z
+      .string({ required_error: 'Filtro de antes de não informado.', invalid_type_error: 'Tipo não válido para o filtro de antes de.' })
+      .optional()
+      .nullable(),
+    field: PersonalizedFieldFilters.optional().nullable(),
+  }),
+  pendingPartialReceipt: z.boolean({
+    required_error: 'Filtro de recebimento parcial pendente não informado.',
+    invalid_type_error: 'Filtro de recebimento parcial pendente não informado.',
+  }),
+  pendingTotalReceipt: z.boolean({
+    required_error: 'Filtro de recebimento total pendente não informado.',
+    invalid_type_error: 'Filtro de recebimento total pendente não informado.',
+  }),
+})
+
+export type TPersonalizedRevenuesFilters = z.infer<typeof PersonalizedRevenueFiltersSchema>
+
+export const PersonalizedRevenueQuerySchema = z.object({
+  partners: z.array(z.string({ required_error: 'Parceiros não informados ou inválidos.', invalid_type_error: 'Parceiros inválidos.' })).nullable(),
+  filters: PersonalizedRevenueFiltersSchema,
+})

@@ -44,7 +44,7 @@ type PurchaseCardProps = {
 function PurchaseCard({ purchase, handleClick }: PurchaseCardProps) {
   const { dates: deliveryDatesText, location: deliveryLocationText } = renderDeliveryText(purchase.entrega)
   return (
-    <div className="flex w-full flex-col gap-2 rounded border border-gray-500 bg-[#fff] p-4">
+    <div className="flex w-full flex-col gap-2 rounded-md border border-gray-500 bg-[#fff] p-4">
       <div className="flex w-full items-center justify-between">
         {true ? (
           <h1

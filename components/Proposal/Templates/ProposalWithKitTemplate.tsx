@@ -63,7 +63,6 @@ function ProposalWithKitTemplate({ proposal, opportunity, partner }: ProposalWit
                       <strong className="text-[#15599a]">{product.qtde}</strong> x {product.modelo}
                     </p>
                   </div>
-                  {/* <h1 className="text-sm font-bold">{formatToMoney(product.valor || 0)}</h1> */}
                 </div>
 
                 <div className="flex w-full items-center justify-end gap-2 pl-2">
@@ -100,7 +99,6 @@ function ProposalWithKitTemplate({ proposal, opportunity, partner }: ProposalWit
                     </div>
                     <p className="text-sm font-medium leading-none tracking-tight">{service.descricao}</p>
                   </div>
-                  {/* <h1 className="text-sm font-bold">{formatToMoney(service.valor || 0)}</h1> */}
                 </div>
                 {service.observacoes.trim().length > 0 ? (
                   <p className="w-full text-start text-[0.65rem] text-gray-500">{service.observacoes || '...'}</p>
