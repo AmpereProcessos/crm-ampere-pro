@@ -18,7 +18,6 @@ function RevenueReceiptInformationBlock({ infoHolder, setInfoHolder }: RevenueRe
   const pendingTotal = infoHolder.total - infoHolder.recebimentos.reduce((acc, current) => current.valor + acc, 0)
   const pendingPercentage = 1 - (pendingTotal / infoHolder.total || 0)
   const [receiptHolder, setReceiptHolder] = useState<TRevenueReceiptItem>({
-    porcentagem: pendingPercentage,
     valor: pendingTotal,
     metodo: PaymentMethods[0].value,
     dataRecebimento: null,
@@ -27,13 +26,12 @@ function RevenueReceiptInformationBlock({ infoHolder, setInfoHolder }: RevenueRe
   function addReceipt(receipt: TRevenueReceiptItem) {
     if (receipt.valor > pendingTotal) return toast.error('Valor do novo recebimento não pode exceder o valor total pendente.')
     if (receipt.efetivado && !receipt.dataRecebimento) return toast.error('Para recebimentos efetivados, preencher a data de recebimento.')
-    const percentage = receipt.valor / infoHolder.total
+
     const receipts = [...infoHolder.recebimentos]
-    receipts.push({ ...receipt, porcentagem: percentage })
+    receipts.push({ ...receipt })
     setInfoHolder((prev) => ({ ...prev, recebimentos: receipts }))
     const newPendingTotal = infoHolder.total - receipts.reduce((acc, current) => current.valor + acc, 0)
-    const newPendingPercentage = 1 - (pendingTotal / infoHolder.total || 0)
-    setReceiptHolder({ porcentagem: newPendingPercentage, valor: newPendingTotal, metodo: PaymentMethods[0].value, dataRecebimento: null, efetivado: false })
+    setReceiptHolder({ valor: newPendingTotal, metodo: PaymentMethods[0].value, dataRecebimento: null, efetivado: false })
   }
 
   return (
@@ -48,7 +46,6 @@ function RevenueReceiptInformationBlock({ infoHolder, setInfoHolder }: RevenueRe
           />
         </div>
         <h1 className="w-full bg-gray-500 p-1 text-center text-xs font-medium text-white">RECEBIMENTOS DA RECEITA</h1>
-        {/* ADICIONAR ITERAÇÃO DOS RECEBIMENTOS */}
         <div className="flex w-full flex-col gap-2">
           <div className="flex w-full flex-col items-center gap-2 lg:flex-row">
             <div className="w-full lg:w-[25%]">

@@ -15,10 +15,11 @@ import { MdAttachMoney, MdDelete, MdEdit } from 'react-icons/md'
 
 type ReceiptTableItemProps = {
   item: TRevenueReceiptItem
+  revenueTotal: number
   handleUpdate: (item: TRevenueReceiptItem) => void
   handleRemove: () => void
 }
-function ReceiptTableItem({ item, handleUpdate, handleRemove }: ReceiptTableItemProps) {
+function ReceiptTableItem({ item, revenueTotal, handleUpdate, handleRemove }: ReceiptTableItemProps) {
   const [editMenuIsOpen, setEditMenuIsOpen] = useState<boolean>(false)
   const [itemHolder, setItemHolder] = useState<TRevenueReceiptItem>(item)
   return (
@@ -32,7 +33,9 @@ function ReceiptTableItem({ item, handleUpdate, handleRemove }: ReceiptTableItem
                 <div className="flex items-center gap-2">
                   <div className="flex items-center gap-1">
                     <FaPercentage size={10} />
-                    <p className="text-[0.65rem] font-light italic leading-none tracking-tight text-gray-500">{formatDecimalPlaces(item.porcentagem * 100)}%</p>
+                    <p className="text-[0.65rem] font-light italic leading-none tracking-tight text-gray-500">
+                      {formatDecimalPlaces((item.valor / revenueTotal) * 100)}%
+                    </p>
                   </div>
                 </div>
                 {/* <p className="text-[0.65rem] font-light italic leading-none tracking-tight text-gray-500">{item.categoria}</p> */}
@@ -62,7 +65,7 @@ function ReceiptTableItem({ item, handleUpdate, handleRemove }: ReceiptTableItem
                 <MdAttachMoney size={15} />
               </div>
               <p className="text-[0.6rem] font-medium leading-none tracking-tight lg:text-xs">
-                RECEBIMENTO DE <strong className="text-[#FF9B50]">{item.porcentagem}%</strong>
+                RECEBIMENTO DE <strong className="text-[#FF9B50]">{formatDecimalPlaces((item.valor / revenueTotal) * 100)}%</strong>
               </p>
             </div>
             {item.valor > 0 ? (

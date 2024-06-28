@@ -145,7 +145,6 @@ export function getProjectToRevenueData({ project, customization }: GetProjectEn
   }) {
     const receipts: TRevenue['recebimentos'] = paymentFractionment.map((f) => {
       return {
-        porcentagem: f.porcentagem,
         valor: (f.porcentagem * saleTotal) / 100,
         metodo: f.metodo,
         efetivado: false,
@@ -157,6 +156,7 @@ export function getProjectToRevenueData({ project, customization }: GetProjectEn
     idParceiro: project.idParceiro,
     titulo: `RECEITA DO PROJETO ${project.nome}`,
     categorias: [project.venda.tipo, project.tipo.titulo],
+    anotacoes: '',
     projeto: {
       id: project._id.toString(),
       indexador: project.indexador,
@@ -216,14 +216,33 @@ export function getProjectToPurchase({ project, customization }: GetProjectEntit
       tipo: project.tipo.titulo,
       identificador: project.identificador,
     },
+    idParceiro: project.idParceiro,
+    anotacoes: '',
     composicao: composition,
-    total: 0,
-    fornecedor: {
-      nome: 'NÃO DEFINIDO',
-      contato: '',
+    liberacao: {
+      data: new Date().toISOString(),
+      autor: {
+        id: 'id-holder',
+        nome: 'AUTOMAÇÃO',
+      },
     },
-    dataLiberacao: new Date().toISOString(),
-    entrega: {},
+    pedido: {
+      fornecedor: {
+        nome: '',
+        contato: '',
+      },
+    },
+    transporte: {
+      transportadora: {
+        nome: '',
+        contato: '',
+      },
+    },
+
+    total: 0,
+    entrega: {
+      localizacao: project.localizacao,
+    },
     faturamento: {
       codigoNotaFiscal: '',
     },

@@ -56,10 +56,6 @@ const RevenueCompositionItem = z.object({
 export type TRevenueCompositionItem = z.infer<typeof RevenueCompositionItem>
 
 const RevenueReceiptItem = z.object({
-  porcentagem: z.number({
-    required_error: 'Porcentagem do item de recebimento não informada.',
-    invalid_type_error: 'Tipo não válido para porcentagem do item de recebimento.',
-  }),
   valor: z.number({
     required_error: 'Valor do item de recebimento não informada.',
     invalid_type_error: 'Tipo não válido para valor do item de recebimento.',

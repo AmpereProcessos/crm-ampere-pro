@@ -75,7 +75,11 @@ const getRevenuesByPersonalizedFiltersRoute: NextApiHandler<PostResponse> = asyn
   const pendingTotalReceiptQuery: Filter<TRevenue> = filters.pendingTotalReceipt
     ? {
         recebimentos: {
-          $all: [{ $elemMatch: { efetivado: false } }],
+          $not: {
+            $elemMatch: {
+              efetivado: true,
+            },
+          },
         },
       }
     : {}

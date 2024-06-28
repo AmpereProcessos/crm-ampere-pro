@@ -36,6 +36,8 @@ function RevenueCompositionInformationBlock({ infoHolder, setInfoHolder }: Reven
     })
     return toast.success('Item adicionado !', { duration: 500 })
   }
+
+  const compositionItemsTotal = infoHolder.composicao.reduce((acc, current) => acc + current.valor, 0)
   return (
     <div className="flex w-full flex-col gap-y-2">
       <h1 className="w-full bg-gray-700  p-1 text-center font-medium text-white">COMPOSIÇÃO DA RECEITA</h1>
@@ -111,7 +113,12 @@ function RevenueCompositionInformationBlock({ infoHolder, setInfoHolder }: Reven
           </div>
         </div>
         <RevenueCompositionTable infoHolder={infoHolder} setInfoHolder={setInfoHolder} />
-        <div className="flex w-full items-center justify-center">
+        {compositionItemsTotal > infoHolder.total ? (
+          <p className="w-full rounded border border-orange-400 bg-orange-50 p-1 text-center text-xs italic tracking-tight text-orange-400">
+            Por favor, ajuste os valores dos itens da composição. A somatória dos itens atuais excede o valor total estabelecido para a receita.
+          </p>
+        ) : null}
+        <div className="flex w-full items-end justify-center">
           <NumberInput
             label="TOTAL DA RECEITA"
             placeholder="Preencha o valor total da receita..."

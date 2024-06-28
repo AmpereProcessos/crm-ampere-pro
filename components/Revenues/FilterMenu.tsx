@@ -114,11 +114,10 @@ function RevenuesFilterMenu({
                 label={'CAMPO DE FILTRO'}
                 value={filtersHolder.period.field}
                 options={[
-                  { id: 1, label: 'DATA DE LIBERAÇÃO', value: 'liberacao.data' },
-                  { id: 2, label: 'DATA DO PEDIDO', value: 'pedido.data' },
+                  { id: 1, label: 'DATA DE INSERÇÃO', value: 'dataInsercao' },
+                  { id: 2, label: 'DATA DE COMPETÊNCIA', value: 'dataCompetencia' },
                   { id: 3, label: 'DATA DE FATURAMENTO', value: 'faturamento.data' },
-                  { id: 4, label: 'PREVISÃO DE ENTREGA', value: 'entrega.previsao' },
-                  { id: 5, label: 'EFETICAÇÃO DE ENTREGA', value: 'entrega.efetivacao' },
+                  { id: 4, label: 'DATA/PREVISÃO DE RECEBIMENTO', value: 'recebimentos.dataRecebimento' },
                 ]}
                 selectedItemLabel={'SEM FILTRO'}
                 handleChange={(value) =>

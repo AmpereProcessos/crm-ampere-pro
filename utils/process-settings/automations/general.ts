@@ -238,7 +238,7 @@ function getConditionData({ referenceEntity, referenceEntityData }: GetCondition
           projetoAprovado: 'NÃO',
           statusContrato: 'N/A',
           porcentagemReceitaRecebida: 0,
-          pedidoCompraFeito: !!purchase.dataPedido ? 'SIM' : 'NÃO',
+          pedidoCompraFeito: !!purchase.pedido.data ? 'SIM' : 'NÃO',
           entregaCompraFeita: !!purchase.entrega.efetivacao ? 'SIM' : 'NÃO',
           ordemServicoConcluida: 'NÃO',
           atividadeConcluida: 'NÃO',

@@ -165,7 +165,7 @@ function PurchasesFilterMenu({
                   { id: 2, label: 'DATA DO PEDIDO', value: 'pedido.data' },
                   { id: 3, label: 'DATA DE FATURAMENTO', value: 'faturamento.data' },
                   { id: 4, label: 'PREVISÃO DE ENTREGA', value: 'entrega.previsao' },
-                  { id: 5, label: 'EFETICAÇÃO DE ENTREGA', value: 'entrega.efetivacao' },
+                  { id: 5, label: 'EFETIVAÇÃO DE ENTREGA', value: 'entrega.efetivacao' },
                 ]}
                 selectedItemLabel={'SEM FILTRO'}
                 handleChange={(value) =>
