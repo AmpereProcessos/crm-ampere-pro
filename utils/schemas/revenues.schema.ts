@@ -5,7 +5,7 @@ import { TProjectDTO } from './project.schema'
 const RevenueProjectReference = z.object({
   id: z.string({ required_error: 'ID do projeto não informado.', invalid_type_error: 'Tipo não válido para o ID do projeto.' }).optional().nullable(),
   nome: z.string({ required_error: 'Nome do projeto não informado.', invalid_type_error: 'Tipo não válido para o nome do projeto.' }).optional().nullable(),
-  tipo: z.string({ required_error: 'Tipo do projeto não informado.', invalid_type_error: 'Tipo não válido para o tipo do projeto.' }),
+  tipo: z.string({ required_error: 'Tipo do projeto não informado.', invalid_type_error: 'Tipo não válido para o tipo do projeto.' }).optional().nullable(),
   indexador: z
     .number({ required_error: 'Indexador do projeto não informado.', invalid_type_error: 'Tipo não válido para o indexador do projeto.' })
     .optional()
@@ -53,6 +53,8 @@ const RevenueCompositionItem = z.object({
     invalid_type_error: 'Tipo não válido para a quantidade do item de receita.',
   }),
 })
+export type TRevenueCompositionItem = z.infer<typeof RevenueCompositionItem>
+
 const RevenueReceiptItem = z.object({
   porcentagem: z.number({
     required_error: 'Porcentagem do item de recebimento não informada.',
@@ -79,12 +81,13 @@ const RevenueReceiptItem = z.object({
     invalid_type_error: 'Tipo não válido para o status de recebimento.',
   }),
 })
-
+export type TRevenueReceiptItem = z.infer<typeof RevenueReceiptItem>
 export const GeneralRevenueSchema = z.object({
   idParceiro: z.string({ invalid_type_error: 'Tipo não válido para referência de parceiro.' }).optional().nullable(),
   titulo: z
     .string({ required_error: 'Título da receita não informada.', invalid_type_error: 'Tipo não válido para o título da receita.' })
     .min(5, 'Preencha um título de ao menos 5 caracteres.'),
+  anotacoes: z.string({ required_error: 'Anotações da receita não informada.', invalid_type_error: 'Tipo não válido para as anotações da receita.' }),
   categorias: z.array(z.string({ required_error: 'Categoria da receita não informada.', invalid_type_error: 'Tipo não válido para a categoria da receita.' }), {
     required_error: 'Lista de categorias da receita não informada.',
     invalid_type_error: 'Tipo não válido para a lista de categorias da receita.',
@@ -110,6 +113,7 @@ export const InsertRevenueSchema = z.object({
   titulo: z
     .string({ required_error: 'Título da receita não informada.', invalid_type_error: 'Tipo não válido para o título da receita.' })
     .min(5, 'Preencha um título de ao menos 5 caracteres.'),
+  anotacoes: z.string({ required_error: 'Anotações da receita não informada.', invalid_type_error: 'Tipo não válido para as anotações da receita.' }),
   categorias: z.array(z.string({ required_error: 'Categoria da receita não informada.', invalid_type_error: 'Tipo não válido para a categoria da receita.' }), {
     required_error: 'Lista de categorias da receita não informada.',
     invalid_type_error: 'Tipo não válido para a lista de categorias da receita.',
@@ -134,7 +138,7 @@ export const InsertRevenueSchema = z.object({
     .datetime({ message: 'Formato inválido para a data de inserção.' }),
 })
 export type TRevenue = z.infer<typeof GeneralRevenueSchema>
-export type TRevenueWithProject = TRevenue & { projetoDados: TProjectDTO }
+export type TRevenueWithProject = TRevenue & { projetoDados?: TProjectDTO }
 
 export type TRevenueDTO = TRevenue & { _id: string }
 export type TRevenueWithProjectDTO = TRevenueWithProject & { _id: string }

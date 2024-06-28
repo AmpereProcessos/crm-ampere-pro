@@ -1,4 +1,4 @@
-import { TProject, TProjectWithReferences } from '@/utils/schemas/project.schema'
+import { ProjectUltraSimplifiedProjection, TProject, TProjectUltraSimplified, TProjectWithReferences } from '@/utils/schemas/project.schema'
 import { Collection, Document, Filter, ObjectId, WithId } from 'mongodb'
 
 type GetProjectsParams = {
@@ -58,11 +58,24 @@ export async function getProjectByIdWithReferences({ id, collection, query }: Ge
     throw error
   }
 }
-
 export async function getProjectById({ id, collection, query }: GetProjectByIdParams) {
   try {
     const project = await collection.findOne({ _id: new ObjectId(id), ...query })
     return project
+  } catch (error) {
+    throw error
+  }
+}
+
+type GetProjectsUltraSimplifiedParams = {
+  collection: Collection<TProject>
+  query: Filter<TProject>
+}
+export async function getProjectsUltraSimplified({ collection, query }: GetProjectsUltraSimplifiedParams) {
+  try {
+    const projects = await collection.find({ ...query }, { projection: ProjectUltraSimplifiedProjection, sort: { indexador: -1 } }).toArray()
+
+    return projects as TProjectUltraSimplified[]
   } catch (error) {
     throw error
   }

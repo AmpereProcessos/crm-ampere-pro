@@ -1,4 +1,4 @@
-import { TRevenue, TRevenueWithProject } from '@/utils/schemas/revenues.schema'
+import { TRevenue, TRevenueDTO, TRevenueWithProject } from '@/utils/schemas/revenues.schema'
 import { Collection, Filter, ObjectId } from 'mongodb'
 
 type GetRevenueByIdParams = {
@@ -63,7 +63,7 @@ export async function getRevenuesByFilters({ collection, query, skip, limit }: G
     const match = { ...query }
     const revenues = await collection.aggregate([{ $sort: sort }, { $match: match }, { $skip: skip }, { $limit: limit }]).toArray()
 
-    return { revenues, revenuesMatched } as { revenues: TRevenue[]; revenuesMatched: number }
+    return { revenues, revenuesMatched } as { revenues: TRevenueDTO[]; revenuesMatched: number }
   } catch (error) {
     throw error
   }

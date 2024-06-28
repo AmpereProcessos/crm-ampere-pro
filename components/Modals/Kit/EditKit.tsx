@@ -4,7 +4,7 @@ import { Session } from 'next-auth'
 
 import { VscChromeClose } from 'react-icons/vsc'
 
-import { TInverter, TKitDTO, TModule, TProductItem, TServiceItem } from '@/utils/schemas/kits.schema'
+import { TInverter, TKit, TKitDTO, TModule, TProductItem, TServiceItem } from '@/utils/schemas/kits.schema'
 
 import { usePricingMethods } from '@/utils/queries/pricing-methods'
 import { useMutationWithFeedback } from '@/utils/mutations/general-hook'

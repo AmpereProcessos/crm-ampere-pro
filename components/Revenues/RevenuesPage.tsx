@@ -8,6 +8,9 @@ import { useRevenuesByPersonalizedFilters } from '@/utils/queries/revenues'
 import RevenuePaginationMenu from './PaginationMenu'
 import LoadingComponent from '../utils/LoadingComponent'
 import ErrorComponent from '../utils/ErrorComponent'
+import RevenueCard from '../Cards/RevenueCard'
+import NewRevenue from '../Modals/Revenues/NewRevenue'
+import EditRevenue from '../Modals/Revenues/EditRevenue'
 
 type RevenuesPageProps = {
   session: Session
@@ -16,7 +19,9 @@ function RevenuesPage({ session }: RevenuesPageProps) {
   const userPartnersScope = session.user.permissoes.parceiros.escopo
   const [filterMenuIsOpen, setFilterMenuIsOpen] = useState<boolean>(false)
 
+  const [newRevenueModalIsOpen, setNewRevenueModalIsOpen] = useState<boolean>(false)
   const [editModal, setEditModal] = useState<{ id: string | null; isOpen: boolean }>({ id: null, isOpen: false })
+
   const [page, setPage] = useState<number>(1)
   const [partners, setPartners] = useState<string[] | null>(userPartnersScope || null)
   const { data: partnersOptions } = usePartnersSimplified()
@@ -44,6 +49,12 @@ function RevenuesPage({ session }: RevenuesPageProps) {
                 <h1 className="text-xl font-black leading-none tracking-tight md:text-2xl">CONTROLE DE COMPRAS</h1>
               </div>
             </div>
+            <button
+              onClick={() => setNewRevenueModalIsOpen(true)}
+              className="h-9 whitespace-nowrap rounded bg-gray-900 px-4 py-2 text-sm font-medium text-white shadow disabled:bg-gray-500 disabled:text-white enabled:hover:bg-gray-800 enabled:hover:text-white"
+            >
+              CRIAR RECEITA
+            </button>
           </div>
           {filterMenuIsOpen ? (
             <RevenuesFilterMenu
@@ -68,8 +79,23 @@ function RevenuesPage({ session }: RevenuesPageProps) {
         <div className="flex flex-wrap justify-between gap-2 py-2">
           {isLoading ? <LoadingComponent /> : null}
           {isError ? <ErrorComponent msg={'Erro ao buscar receitas.'} /> : null}
+          {isSuccess && revenues ? (
+            revenues.length > 0 ? (
+              revenues.map((revenue) => (
+                <div key={revenue._id} className="w-full lg:w-[500px]">
+                  <RevenueCard revenue={revenue} handleClick={(id) => setEditModal({ id: id, isOpen: true })} />
+                </div>
+              ))
+            ) : (
+              <p className="w-full text-center italic text-gray-500">Nenhuma receita encontrada...</p>
+            )
+          ) : null}
         </div>
       </div>
+      {newRevenueModalIsOpen ? <NewRevenue session={session} closeModal={() => setNewRevenueModalIsOpen(false)} /> : null}
+      {editModal.id && editModal.isOpen ? (
+        <EditRevenue session={session} revenueId={editModal.id} closeModal={() => setEditModal({ id: null, isOpen: false })} />
+      ) : null}
     </div>
   )
 }

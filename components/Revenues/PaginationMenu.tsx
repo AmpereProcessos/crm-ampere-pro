@@ -69,10 +69,10 @@ function RevenuePaginationMenu({ activePage, selectPage, totalPages, revenuesMat
       ) : null}
 
       <p className="w-full text-center text-sm leading-none tracking-tight text-gray-500">
-        {revenuesMatched ? (revenuesMatched > 0 ? `${revenuesMatched} receitas encontrados.` : `${revenuesMatched} receita encontrado.`) : '...'}
+        {revenuesMatched ? (revenuesMatched > 1 ? `${revenuesMatched} receitas encontrados.` : `${revenuesMatched} receita encontrado.`) : null}
       </p>
       <p className="w-full text-center text-sm leading-none tracking-tight text-gray-500">
-        {revenuesShowing ? (revenuesShowing > 0 ? `Mostrando ${revenuesShowing} receitas.` : `Mostrando ${revenuesShowing} receita.`) : '...'}
+        {revenuesShowing ? (revenuesShowing > 1 ? `Mostrando ${revenuesShowing} receitas.` : `Mostrando ${revenuesShowing} receita.`) : null}
       </p>
     </div>
   )

@@ -52,7 +52,7 @@ export function formatToMoney(value: string | number, tag: string = 'R$') {
 }
 export function formatDecimalPlaces(value: string | number, minPlaces?: number, maxPlaces?: number) {
   return Number(value).toLocaleString('pt-br', {
-    minimumFractionDigits: minPlaces != null && minPlaces != undefined ? minPlaces : 2,
+    minimumFractionDigits: minPlaces != null && minPlaces != undefined ? minPlaces : 0,
     maximumFractionDigits: maxPlaces != null && maxPlaces != undefined ? maxPlaces : 2,
   })
 }

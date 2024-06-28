@@ -15,7 +15,7 @@ type GetResponse = {
 const getMultipleSourcesFileReferences: NextApiHandler<GetResponse> = async (req, res) => {
   const session = await validateAuthenticationWithSession(req, res)
 
-  const { clientId, opportunityId, analysisId, homologationId, projectId, purchaseId } = FileReferencesQueryParamsSchema.parse(req.query)
+  const { clientId, opportunityId, analysisId, homologationId, projectId, purchaseId, revenueId } = FileReferencesQueryParamsSchema.parse(req.query)
 
   const clientQuery: Filter<TFileReference> = clientId ? { idCliente: clientId } : {}
   const opportunityQuery: Filter<TFileReference> = opportunityId ? { idOportunidade: opportunityId } : {}
@@ -23,8 +23,9 @@ const getMultipleSourcesFileReferences: NextApiHandler<GetResponse> = async (req
   const homologationQuery: Filter<TFileReference> = homologationId ? { idHomologacao: homologationId } : {}
   const projectQuery: Filter<TFileReference> = projectId ? { idProjeto: projectId } : {}
   const purchaseQuery: Filter<TFileReference> = purchaseId ? { idCompra: purchaseId } : {}
+  const revenueQuery: Filter<TFileReference> = revenueId ? { idReceita: revenueId } : {}
 
-  const nonEmptyQueries = [clientQuery, opportunityQuery, analysisQuery, homologationQuery, projectQuery, purchaseQuery].filter(
+  const nonEmptyQueries = [clientQuery, opportunityQuery, analysisQuery, homologationQuery, projectQuery, purchaseQuery, revenueQuery].filter(
     (r) => Object.keys(r).length > 0
   )
   const orQuery = { $or: nonEmptyQueries }

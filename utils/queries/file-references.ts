@@ -70,7 +70,15 @@ export function useFileReferencesByHomologationId({ homologationId }: { homologa
   })
 }
 
-async function fetchFileReferencesByQuery({ clientId, opportunityId, analysisId, homologationId, projectId, purchaseId }: TFileReferencesQueryParams) {
+async function fetchFileReferencesByQuery({
+  clientId,
+  opportunityId,
+  analysisId,
+  homologationId,
+  projectId,
+  purchaseId,
+  revenueId,
+}: TFileReferencesQueryParams) {
   try {
     const clientParam = clientId ? `clientId=${clientId}` : null
     const opportunityParam = opportunityId ? `opportunityId=${opportunityId}` : null
@@ -78,7 +86,8 @@ async function fetchFileReferencesByQuery({ clientId, opportunityId, analysisId,
     const homologationParam = homologationId ? `homologationId=${homologationId}` : null
     const projectParam = projectId ? `projectId=${projectId}` : null
     const purchaseParam = purchaseId ? `purchaseId=${purchaseId}` : null
-    const param = [clientParam, opportunityParam, analysisParam, homologationParam, projectParam, purchaseParam].filter((q) => !!q).join('&')
+    const revenueParam = revenueId ? `revenueId=${revenueId}` : null
+    const param = [clientParam, opportunityParam, analysisParam, homologationParam, projectParam, purchaseParam, revenueParam].filter((q) => !!q).join('&')
     if (!param) return []
 
     const { data } = await axios.get(`/api/file-references/many?${param}`)
@@ -88,9 +97,9 @@ async function fetchFileReferencesByQuery({ clientId, opportunityId, analysisId,
   }
 }
 
-export function useFileReferences({ clientId, opportunityId, analysisId, homologationId, projectId, purchaseId }: TFileReferencesQueryParams) {
+export function useFileReferences({ clientId, opportunityId, analysisId, homologationId, projectId, purchaseId, revenueId }: TFileReferencesQueryParams) {
   return useQuery({
-    queryKey: ['file-references-by-query', clientId, opportunityId, analysisId, homologationId, projectId, purchaseId],
-    queryFn: async () => await fetchFileReferencesByQuery({ clientId, opportunityId, analysisId, homologationId, projectId, purchaseId }),
+    queryKey: ['file-references-by-query', clientId, opportunityId, analysisId, homologationId, projectId, purchaseId, revenueId],
+    queryFn: async () => await fetchFileReferencesByQuery({ clientId, opportunityId, analysisId, homologationId, projectId, purchaseId, revenueId }),
   })
 }

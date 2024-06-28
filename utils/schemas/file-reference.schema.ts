@@ -8,6 +8,7 @@ const GeneralFileReferenceSchema = z.object({
   idAnaliseTecnica: z.string().optional().nullable(),
   idHomologacao: z.string().optional().nullable(),
   idCompra: z.string().optional().nullable(),
+  idReceita: z.string().optional().nullable(),
   idParceiro: z.string(),
   titulo: z.string(),
   formato: z.string(),
@@ -26,6 +27,7 @@ export const InsertFileReferenceSchema = z.object({
   idCliente: z.string({ invalid_type_error: 'Tipo não válido para a referência de cliente.' }).optional().nullable(),
   idProjeto: z.string({ invalid_type_error: 'Tipo não válido para a referência de projeto.' }).optional().nullable(),
   idCompra: z.string({ invalid_type_error: 'Tipo não válido para a referência de compra.' }).optional().nullable(),
+  idReceita: z.string({ invalid_type_error: 'Tipo não válido para a referência de receita.' }).optional().nullable(),
   idParceiro: z.string({ required_error: 'Referência a parceiro não informada.', invalid_type_error: 'Tipo não válida para referência a parceiro.' }),
   idAnaliseTecnica: z
     .string({
@@ -69,6 +71,7 @@ const FileReferenceEntitySchema = z.object({
   idHomologacao: z.string().optional().nullable(),
   idProjeto: z.string().optional().nullable(),
   idCompra: z.string().optional().nullable(),
+  idReceita: z.string().optional().nullable(),
   idParceiro: z.string(),
   titulo: z.string(),
   formato: z.string(),
@@ -97,6 +100,7 @@ export const FileReferencesQueryParamsSchema = z.object({
   homologationId: z.string({ invalid_type_error: 'Tipo inválido para referência de homologação.' }).optional().nullable(),
   projectId: z.string({ invalid_type_error: 'Tipo inválido para referência de projeto.' }).optional().nullable(),
   purchaseId: z.string({ invalid_type_error: 'Tipo inválido para referência de compra.' }).optional().nullable(),
+  revenueId: z.string({ invalid_type_error: 'Tipo inválido para referência de receita.' }).optional().nullable(),
 })
 
 export type TFileReferencesQueryParams = z.infer<typeof FileReferencesQueryParamsSchema>

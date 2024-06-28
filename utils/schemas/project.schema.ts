@@ -202,15 +202,32 @@ export const GeneralProjectSchema = z.object({
   dataInsercao: z.string({ required_error: 'Data de inserção não informada.', invalid_type_error: 'Tipo não válido para data de inserção.' }).datetime(),
 })
 export type TProject = z.infer<typeof GeneralProjectSchema>
+export type TProjectUltraSimplified = Pick<
+  TProject,
+  'indexador' | 'nome' | 'tipo' | 'identificador' | 'responsaveis' | 'idParceiro' | 'cliente' | 'oportunidade'
+>
 export type TProjectWithReferences = TProject & { clienteDados: TClientDTO; homologacaoDados?: THomologationDTO; analiseTecnicaDados?: TTechnicalAnalysisDTO }
+
 export type TProjectDTO = TProject & { _id: string }
 export type TProjectDTOWithReferences = TProjectDTO & {
   clienteDados: TClientDTO
   homologacaoDados?: THomologationDTO
   analiseTecnicaDados?: TTechnicalAnalysisDTO
 }
+export type TProjectUltraSimplifiedDTO = TProjectUltraSimplified & { _id: string }
 
 export type TChangesControl = {
   project: { [key: string]: any }
   client: { [key: string]: any }
+}
+
+export const ProjectUltraSimplifiedProjection = {
+  indexador: 1,
+  nome: 1,
+  tipo: 1,
+  identificador: 1,
+  responsaveis: 1,
+  idParceiro: 1,
+  cliente: 1,
+  oportunidade: 1,
 }

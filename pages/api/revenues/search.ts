@@ -4,14 +4,14 @@ import { getRevenuesByFilters } from '@/repositories/revenues/queries'
 import connectToDatabase from '@/services/mongodb/crm-db-connection'
 import { apiHandler, validateAuthenticationWithSession } from '@/utils/api'
 
-import { PersonalizedRevenueQuerySchema, TRevenue } from '@/utils/schemas/revenues.schema'
+import { PersonalizedRevenueQuerySchema, TRevenue, TRevenueDTO } from '@/utils/schemas/revenues.schema'
 import createHttpError from 'http-errors'
 import { Collection, Filter } from 'mongodb'
 import { NextApiHandler } from 'next'
 import { z } from 'zod'
 
 export type TRevenuesByFiltersResult = {
-  revenues: TRevenue[]
+  revenues: TRevenueDTO[]
   revenuesMatched: number
   totalPages: number
 }
@@ -92,7 +92,7 @@ const getRevenuesByPersonalizedFiltersRoute: NextApiHandler<PostResponse> = asyn
   const skip = PAGE_SIZE * (Number(page) - 1)
   const limit = PAGE_SIZE
   const db = await connectToDatabase(process.env.MONGODB_URI, 'crm')
-  const collection: Collection<TRevenue> = db.collection('purchases')
+  const collection: Collection<TRevenue> = db.collection('revenues')
 
   const { revenues, revenuesMatched } = await getRevenuesByFilters({ collection, query, skip, limit })
   const totalPages = Math.round(revenuesMatched / PAGE_SIZE)

@@ -36,6 +36,7 @@ function ActivitiesInformation({ homologation, session, opportunity }: Activitie
         session={session}
         opportunity={opportunity}
         homologationId={homologation._id}
+        project={undefined}
         affectedQueryKey={['homologation-activities', homologation._id]}
       />
       <div className="mt-2 flex w-full flex-col gap-1">

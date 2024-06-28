@@ -9,6 +9,7 @@ import { TFileReference } from '@/utils/schemas/file-reference.schema'
 import { useQueryClient } from '@tanstack/react-query'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Session } from 'next-auth'
+
 import React, { useState } from 'react'
 import toast from 'react-hot-toast'
 import { MdAttachFile } from 'react-icons/md'
@@ -18,29 +19,39 @@ type TAttachmentHolder = {
   title: string
   files: FileList | null
   idProject: string
-  idPurchase: string
+  idRevenue: string
   idClient?: string
   idOpportunity?: string
   idAnalysis?: string | null
   homologationId?: string | null
 }
 
-type PurchaseFileAttachmentMenuProps = {
-  purchaseId: string
+type RevenueFileAttachmentMenuProps = {
+  revenueId: string
   projectId: string
   clientId: string
   opportunityId?: string
   analysisId?: string
   homologationId?: string
+  purchaseId?: string
   session: Session
 }
-function PurchaseFileAttachmentMenu({ purchaseId, projectId, clientId, opportunityId, analysisId, homologationId, session }: PurchaseFileAttachmentMenuProps) {
+function RevenueFileAttachmentMenu({
+  revenueId,
+  projectId,
+  clientId,
+  opportunityId,
+  analysisId,
+  homologationId,
+  purchaseId,
+  session,
+}: RevenueFileAttachmentMenuProps) {
   const queryClient = useQueryClient()
   const [newFileMenuIsOpen, setNewFileMenuIsOpen] = useState<boolean>(false)
   const [attachmentHolder, setAttachmentHolder] = useState<TAttachmentHolder>({
     title: '',
     files: null,
-    idPurchase: purchaseId,
+    idRevenue: revenueId,
     idProject: projectId,
     idClient: clientId,
     idOpportunity: opportunityId,
@@ -54,7 +65,7 @@ function PurchaseFileAttachmentMenu({ purchaseId, projectId, clientId, opportuni
       if (attachmentHolder.title.trim().length < 2) return toast.error('Preencha um titulo de ao menos 2 letras.')
       const formattedFileName = attachmentHolder.title.toLowerCase().replaceAll(' ', '_')
       const vinculationId =
-        attachmentHolder.idPurchase || attachmentHolder.idProject || attachmentHolder.idOpportunity || attachmentHolder.idClient || 'naodefinido'
+        attachmentHolder.idRevenue || attachmentHolder.idProject || attachmentHolder.idOpportunity || attachmentHolder.idClient || 'naodefinido'
 
       var fileReferences: TFileReference[] = []
       if (attachmentHolder.files.length > 1) {
@@ -64,7 +75,7 @@ function PurchaseFileAttachmentMenu({ purchaseId, projectId, clientId, opportuni
           fileReferences.push({
             titulo: `${attachmentHolder.title} (${index + 1})`,
             idProjeto: attachmentHolder.idProject,
-            idCompra: attachmentHolder.idPurchase,
+            idReceita: attachmentHolder.idRevenue,
             idOportunidade: attachmentHolder.idOpportunity,
             idCliente: attachmentHolder.idClient,
             idAnaliseTecnica: attachmentHolder.idAnalysis,
@@ -85,7 +96,7 @@ function PurchaseFileAttachmentMenu({ purchaseId, projectId, clientId, opportuni
         fileReferences.push({
           titulo: attachmentHolder.title,
           idProjeto: attachmentHolder.idProject,
-          idCompra: attachmentHolder.idPurchase,
+          idReceita: attachmentHolder.idRevenue,
           idOportunidade: attachmentHolder.idOpportunity,
           idCliente: attachmentHolder.idClient,
           idAnaliseTecnica: attachmentHolder.idAnalysis,
@@ -116,7 +127,7 @@ function PurchaseFileAttachmentMenu({ purchaseId, projectId, clientId, opportuni
       setAttachmentHolder({
         title: '',
         files: null,
-        idPurchase: purchaseId,
+        idRevenue: revenueId,
         idProject: projectId,
         idClient: clientId,
         idOpportunity: opportunityId,
@@ -177,12 +188,12 @@ function PurchaseFileAttachmentMenu({ purchaseId, projectId, clientId, opportuni
               <div className="mt-4 flex w-full flex-col flex-wrap items-center justify-center gap-4 lg:flex-row">
                 <div className="w-fit">
                   <CheckboxInput
-                    labelFalse="VINCULAR À COMPRA"
-                    labelTrue="VINCULAR À COMPRA"
-                    checked={!!attachmentHolder.idPurchase}
+                    labelFalse="VINCULAR À RECEITA"
+                    labelTrue="VINCULAR À RECEITA"
+                    checked={!!attachmentHolder.idRevenue}
                     justify="justify-center"
                     editable={false}
-                    handleChange={(value) => setAttachmentHolder((prev) => ({ ...prev, idPurchase: clientId }))}
+                    handleChange={(value) => setAttachmentHolder((prev) => ({ ...prev, idRevenue: clientId }))}
                   />
                 </div>
                 <div className="w-fit">
@@ -233,4 +244,4 @@ function PurchaseFileAttachmentMenu({ purchaseId, projectId, clientId, opportuni
   )
 }
 
-export default PurchaseFileAttachmentMenu
+export default RevenueFileAttachmentMenu
