@@ -79,7 +79,7 @@ const RevenueReceiptItem = z.object({
 })
 export type TRevenueReceiptItem = z.infer<typeof RevenueReceiptItem>
 export const GeneralRevenueSchema = z.object({
-  idParceiro: z.string({ invalid_type_error: 'Tipo não válido para referência de parceiro.' }).optional().nullable(),
+  idParceiro: z.string({ invalid_type_error: 'Tipo não válido para referência de parceiro.' }),
   titulo: z
     .string({ required_error: 'Título da receita não informada.', invalid_type_error: 'Tipo não válido para o título da receita.' })
     .min(5, 'Preencha um título de ao menos 5 caracteres.'),
@@ -105,7 +105,7 @@ export const GeneralRevenueSchema = z.object({
     .datetime({ message: 'Formato inválido para a data de inserção.' }),
 })
 export const InsertRevenueSchema = z.object({
-  idParceiro: z.string({ invalid_type_error: 'Tipo não válido para referência de parceiro.' }).optional().nullable(),
+  idParceiro: z.string({ invalid_type_error: 'Tipo não válido para referência de parceiro.' }),
   titulo: z
     .string({ required_error: 'Título da receita não informada.', invalid_type_error: 'Tipo não válido para o título da receita.' })
     .min(5, 'Preencha um título de ao menos 5 caracteres.'),
