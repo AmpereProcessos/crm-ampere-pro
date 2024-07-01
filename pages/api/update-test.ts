@@ -62,32 +62,36 @@ const migrate: NextApiHandler<PostResponse> = async (req, res) => {
   const afterDate = formatDateQuery(after, 'start', 'date') as Date
   const beforeDate = formatDateQuery(before, 'end', 'date') as Date
   const crmDb = await connectToCRMDatabase(process.env.MONGODB_URI, 'crm')
-  const opportunitiesCollection: Collection<TOpportunity> = crmDb.collection('opportunities')
+  const kitsCollection: Collection<TKit> = crmDb.collection('kits')
 
-  const opportunities = await opportunitiesCollection.find({ idMarketing: { $ne: null }, dataInsercao: { $gte: '2024-01-01T00:00:00.000Z' } }).toArray()
+  const updateResponse = await kitsCollection.updateMany({}, { $set: { idParceiro: null } })
 
-  const groupByCity = opportunities.reduce((acc: { [key: string]: { INSERIDOS: number; GANHOS: number; PERDAS: number } }, current) => {
-    const currentCity = current.localizacao.cidade
-    const insertDate = new Date(current.dataInsercao)
-    const wonDate = current.ganho.data ? new Date(current.ganho.data) : null
-    const lostDate = current.perda.data ? new Date(current.perda.data) : null
-    const wasInsertedWithinCurrentPeriod = insertDate >= afterDate && insertDate <= beforeDate
-    const wasSignedWithinCurrentPeriod = wonDate && wonDate >= afterDate && wonDate <= beforeDate
-    const wasLostWithinCurrentPeriod = !!lostDate && lostDate >= afterDate && lostDate <= beforeDate
+  // const opportunitiesCollection: Collection<TOpportunity> = crmDb.collection('opportunities')
 
-    console.log(insertDate, wasInsertedWithinCurrentPeriod)
-    if (!acc[currentCity]) acc[currentCity] = { INSERIDOS: 0, GANHOS: 0, PERDAS: 0 }
-    if (!!wasInsertedWithinCurrentPeriod) acc[currentCity].INSERIDOS += 1
-    if (!!wasSignedWithinCurrentPeriod) acc[currentCity].GANHOS += 1
-    if (!!wasLostWithinCurrentPeriod) acc[currentCity].PERDAS += 1
-    return acc
-  }, {})
-  const group = Object.entries(groupByCity).map(([key, value]) => {
-    return {
-      CIDADE: key,
-      ...value,
-    }
-  })
+  // const opportunities = await opportunitiesCollection.find({ idMarketing: { $ne: null }, dataInsercao: { $gte: '2024-01-01T00:00:00.000Z' } }).toArray()
+
+  // const groupByCity = opportunities.reduce((acc: { [key: string]: { INSERIDOS: number; GANHOS: number; PERDAS: number } }, current) => {
+  //   const currentCity = current.localizacao.cidade
+  //   const insertDate = new Date(current.dataInsercao)
+  //   const wonDate = current.ganho.data ? new Date(current.ganho.data) : null
+  //   const lostDate = current.perda.data ? new Date(current.perda.data) : null
+  //   const wasInsertedWithinCurrentPeriod = insertDate >= afterDate && insertDate <= beforeDate
+  //   const wasSignedWithinCurrentPeriod = wonDate && wonDate >= afterDate && wonDate <= beforeDate
+  //   const wasLostWithinCurrentPeriod = !!lostDate && lostDate >= afterDate && lostDate <= beforeDate
+
+  //   console.log(insertDate, wasInsertedWithinCurrentPeriod)
+  //   if (!acc[currentCity]) acc[currentCity] = { INSERIDOS: 0, GANHOS: 0, PERDAS: 0 }
+  //   if (!!wasInsertedWithinCurrentPeriod) acc[currentCity].INSERIDOS += 1
+  //   if (!!wasSignedWithinCurrentPeriod) acc[currentCity].GANHOS += 1
+  //   if (!!wasLostWithinCurrentPeriod) acc[currentCity].PERDAS += 1
+  //   return acc
+  // }, {})
+  // const group = Object.entries(groupByCity).map(([key, value]) => {
+  //   return {
+  //     CIDADE: key,
+  //     ...value,
+  //   }
+  // })
   // const proposalsCollection: Collection<TProposal> = crmDb.collection('proposals')
 
   // const proposals = await proposalsCollection.find({ 'kits.0': { $exists: true } }).toArray()
@@ -294,7 +298,7 @@ const migrate: NextApiHandler<PostResponse> = async (req, res) => {
   // })
   // const bulkwriteResponse = await proposalsCollection.bulkWrite(bulkWriteArr)
   // const insertManyResponse = await userGroupsCollection.insertMany(insertUserGroups)
-  return res.json(group)
+  return res.json(updateResponse)
 }
 export default apiHandler({
   GET: migrate,

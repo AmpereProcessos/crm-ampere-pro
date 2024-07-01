@@ -110,7 +110,7 @@ function KitBulkOperation({ session, closeModal }: KitBulkOperationProps) {
         return {
           _id: bulkKit.ID || null,
           nome: bulkKit.NOME,
-          idParceiro: session.user.idParceiro || '',
+          idParceiro: null,
           idMetodologiaPrecificacao: pricingMethodologyId,
           ativo: bulkKit.ATIVO == 'SIM' ? true : false,
           topologia: bulkKit.TOPOLOGIA,
