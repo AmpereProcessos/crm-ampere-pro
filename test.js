@@ -1,150 +1,45 @@
-// const Equipments = require('./main.equipments.json')
-const fs = require('fs/promises')
+const dayjs = require('dayjs')
+// function getDayStringsBetweenDates({ initialDate, endDate, format }) {
+//   let strings = []
+//   let iteratingDate = dayjs(initialDate)
+//   const goalDate = dayjs(endDate)
 
-const oemPricesByModuleQty = [
-  {
-    min: 0,
-    max: 12,
-    price: 19.9,
-  },
-  {
-    min: 13,
-    max: 19,
-    price: 18.91,
-  },
-  {
-    min: 20,
-    max: 29,
-    price: 17.96,
-  },
-  {
-    min: 30,
-    max: 49,
-    price: 17.06,
-  },
-  {
-    min: 50,
-    max: 79,
-    price: 16.21,
-  },
-  {
-    min: 80,
-    max: 109,
-    price: 15.4,
-  },
-  {
-    min: 110,
-    max: 149,
-    price: 13.86,
-  },
-  {
-    min: 150,
-    max: 199,
-    price: 12.47,
-  },
-  {
-    min: 200,
-    max: 299,
-    price: 11.23,
-  },
-  {
-    min: 300,
-    max: 499,
-    price: 10.1,
-  },
-  {
-    min: 500,
-    max: 2000,
-    price: 9.09,
-  },
-]
-
-const conditionsSimpleMaintaince = oemPricesByModuleQty.map((range) => {
-  return {
-    condicao: {
-      tipo: 'INTERVALO_NÚMERICO',
-      aplicavel: true,
-      variavel: 'numModulos',
-      entre: {
-        minimo: range.min,
-        maximo: range.max,
-      },
-    },
-    faturavel: false,
-    margemLucro: 0,
-    formulaArr: ['[numModulos]', '*', `${range.price}`],
-  }
-})
-const conditionsSunPlan = oemPricesByModuleQty.map((range) => {
-  return {
-    condicao: {
-      tipo: 'INTERVALO_NÚMERICO',
-      aplicavel: true,
-      variavel: 'numModulos',
-      entre: {
-        minimo: range.min,
-        maximo: range.max,
-      },
-    },
-    faturavel: false,
-    margemLucro: 0,
-    formulaArr: ['[plan]', '+', '(', '[numModulos]', '*', `${range.price}`, ')', '*', '1.3'],
-  }
-})
-const conditionsSunPlusPlan = oemPricesByModuleQty.map((range) => {
-  return {
-    condicao: {
-      tipo: 'INTERVALO_NÚMERICO',
-      aplicavel: true,
-      variavel: 'numModulos',
-      entre: {
-        minimo: range.min,
-        maximo: range.max,
-      },
-    },
-    faturavel: false,
-    margemLucro: 0,
-    formulaArr: ['[plan]', '+', '(', '[numModulos]', '*', `${range.price}`, ')', '*', '1.5'],
-  }
-})
-const conditionsSimpleMaintainceJSON = JSON.stringify(conditionsSimpleMaintaince)
-const conditionsSunPlanJSON = JSON.stringify(conditionsSunPlan)
-const conditionsSunPlusPlanJSON = JSON.stringify(conditionsSunPlusPlan)
-// fs.writeFile('./conditions-oem-plus.json', conditionsJSON, 'utf8', function (err) {
-//   if (err) {
-//     return console.log(err)
+//   while (iteratingDate.isBefore(goalDate) || iteratingDate.isSame(goalDate, 'day')) {
+//     const dayStr = iteratingDate.format(format || 'DD/MM')
+//     strings.push(dayStr)
+//     iteratingDate = iteratingDate.add(1, 'day')
 //   }
 
-//   console.log('The file was saved!')
-// })
-// fs.writeFile('./conditions-simple-maintaince.json', conditionsSimpleMaintainceJSON, 'utf8', function (err) {
-//   if (err) {
-//     return console.log(err)
-//   }
+//   return strings
+// }
 
-//   console.log('The file was saved!')
-// })
-// fs.writeFile('./conditions-sun-plan.json', conditionsSunPlanJSON, 'utf8', function (err) {
-//   if (err) {
-//     return console.log(err)
-//   }
+// const strings = getDayStringsBetweenDates({ initialDate: '2024-06-21T17:00:35.647Z', endDate: '2024-08-21T17:00:35.647Z' })
+// console.log(strings)
 
-//   console.log('The file was saved!')
-// })
-
-function getADiasModuleInfo(item) {
-  const module = item
-  const powerRegex = /(\d+)W/
-  const powerMatch = module.match(powerRegex)
-  let power = powerMatch ? Number(powerMatch[1]) : 0
-
-  let manufacturer = module.slice(0, powerMatch?.index).trim()
-  const modFotovPrefix = 'MOD. FOTOV.'
-  if (manufacturer.startsWith(modFotovPrefix)) {
-    manufacturer = manufacturer.slice(modFotovPrefix.length).trim()
-  }
-
-  return { manufacturer, power }
+function getFirstDayOfMonth(year, month) {
+  return new Date(year, month, 1)
+}
+function getLastDayOfMonth(year, month) {
+  return new Date(year, month + 1, 0)
 }
 
-const processFlowReference = {}
+const referenceDate = '2024-07-15T03:00:00.000Z'
+
+function getPeriodDateParamsByReferenceDate({ reference, type = 'month', resetStart, resetEnd }) {
+  if (type == 'month') {
+    var start = dayjs(reference).startOf('month')
+    var end = dayjs(reference).endOf('month')
+    if (resetStart) start = start.subtract(3, 'hour')
+    if (resetEnd) end = end.startOf('day').subtract(3, 'hour')
+    return { start: start.toDate(), end: end.toDate() }
+  }
+  if (type == 'year') {
+    var start = dayjs(reference).startOf('year')
+    var end = dayjs(reference).endOf('year')
+    if (resetStart) start = start.subtract(3, 'hour')
+    if (resetEnd) end = end.startOf('day').subtract(3, 'hour')
+    return { start: start.toDate(), end: end.toDate() }
+  }
+}
+
+console.log(getPeriodDateParamsByReferenceDate({ reference: referenceDate, type: 'year', resetStart: true }))

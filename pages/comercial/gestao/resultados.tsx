@@ -28,7 +28,7 @@ import { getExcelFromJSON } from '@/lib/methods/excel-utils'
 import { getErrorMessage } from '@/lib/methods/errors'
 import { formatDateInputChange } from '@/lib/methods/formatting'
 
-import { formatDate, getFirstDayOfMonth, getLastDayOfMonth } from '@/utils/methods'
+import { formatDateForInput, getFirstDayOfMonth, getLastDayOfMonth } from '@/utils/methods'
 import { useSalePromoters } from '@/utils/queries/users'
 import { TUserDTOWithSaleGoals } from '@/utils/schemas/user.schema'
 import { fetchResultsExports } from '@/utils/queries/stats/exports'
@@ -114,7 +114,7 @@ function ComercialResults() {
                   <DateInput
                     showLabel={false}
                     label="PERÍODO"
-                    value={formatDate(queryFilters.period.after)}
+                    value={formatDateForInput(queryFilters.period.after)}
                     handleChange={(value) =>
                       setQueryFilters((prev) => ({
                         ...prev,
@@ -128,7 +128,7 @@ function ComercialResults() {
                   <DateInput
                     showLabel={false}
                     label="PERÍODO"
-                    value={formatDate(queryFilters.period.before)}
+                    value={formatDateForInput(queryFilters.period.before)}
                     handleChange={(value) =>
                       setQueryFilters((prev) => ({
                         ...prev,

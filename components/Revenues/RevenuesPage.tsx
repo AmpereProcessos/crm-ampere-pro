@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Sidebar } from '../Sidebar'
 import { Session } from 'next-auth'
-import { IoMdArrowDropdownCircle, IoMdArrowDropupCircle } from 'react-icons/io'
+import { IoIosStats, IoMdArrowDropdownCircle, IoMdArrowDropupCircle } from 'react-icons/io'
 import RevenuesFilterMenu from './FilterMenu'
 import { usePartnersSimplified } from '@/utils/queries/partners'
 import { useRevenuesByPersonalizedFilters } from '@/utils/queries/revenues'
@@ -11,6 +11,8 @@ import ErrorComponent from '../utils/ErrorComponent'
 import RevenueCard from '../Cards/RevenueCard'
 import NewRevenue from '../Modals/Revenues/NewRevenue'
 import EditRevenue from '../Modals/Revenues/EditRevenue'
+import { AiOutlineTeam } from 'react-icons/ai'
+import RevenueStats from './Stats'
 
 type RevenuesPageProps = {
   session: Session
@@ -18,6 +20,7 @@ type RevenuesPageProps = {
 function RevenuesPage({ session }: RevenuesPageProps) {
   const userPartnersScope = session.user.permissoes.parceiros.escopo
   const [filterMenuIsOpen, setFilterMenuIsOpen] = useState<boolean>(false)
+  const [statsBlockIsOpen, setStatsBlockIsOpen] = useState<boolean>(false)
 
   const [newRevenueModalIsOpen, setNewRevenueModalIsOpen] = useState<boolean>(false)
   const [editModal, setEditModal] = useState<{ id: string | null; isOpen: boolean }>({ id: null, isOpen: false })
@@ -49,12 +52,23 @@ function RevenuesPage({ session }: RevenuesPageProps) {
                 <h1 className="text-xl font-black leading-none tracking-tight md:text-2xl">CONTROLE DE COMPRAS</h1>
               </div>
             </div>
-            <button
-              onClick={() => setNewRevenueModalIsOpen(true)}
-              className="h-9 whitespace-nowrap rounded bg-gray-900 px-4 py-2 text-sm font-medium text-white shadow disabled:bg-gray-500 disabled:text-white enabled:hover:bg-gray-800 enabled:hover:text-white"
-            >
-              CRIAR RECEITA
-            </button>
+            <div className="flex items-center gap-2">
+              {true ? (
+                <button
+                  onClick={() => setStatsBlockIsOpen((prev) => !prev)}
+                  className="flex items-center gap-1 font-bold tracking-tight text-gray-500 duration-300 ease-in-out hover:text-cyan-500"
+                >
+                  <p className="text-sm">ESTATÍSTICAS</p>
+                  <IoIosStats />
+                </button>
+              ) : null}
+              <button
+                onClick={() => setNewRevenueModalIsOpen(true)}
+                className="h-9 whitespace-nowrap rounded bg-gray-900 px-4 py-2 text-sm font-medium text-white shadow disabled:bg-gray-500 disabled:text-white enabled:hover:bg-gray-800 enabled:hover:text-white"
+              >
+                CRIAR RECEITA
+              </button>
+            </div>
           </div>
           {filterMenuIsOpen ? (
             <RevenuesFilterMenu
@@ -67,6 +81,7 @@ function RevenuesPage({ session }: RevenuesPageProps) {
               resetSelectedPage={() => setPage(1)}
             />
           ) : null}
+          {statsBlockIsOpen ? <RevenueStats session={session} partnerOptions={partnersOptions || []} closeMenu={() => setStatsBlockIsOpen(false)} /> : null}
         </div>
         <RevenuePaginationMenu
           activePage={page}

@@ -3,7 +3,7 @@ import { VscChromeClose } from 'react-icons/vsc'
 import DropdownSelect from '../../Inputs/DropdownSelect'
 import TextInput from '../../Inputs/TextInput'
 import { ObjectId } from 'mongodb'
-import { formatDate, formatToCEP, formatToCPForCNPJ, formatToPhone, getCEPInfo } from '@/utils/methods'
+import { formatDateForInput, formatToCEP, formatToCPForCNPJ, formatToPhone, getCEPInfo } from '@/utils/methods'
 import { stateCities } from '../../../utils/estados_cidades'
 import { IRepresentative } from '@/utils/models'
 import representatives from '@/pages/api/representatives'
@@ -165,7 +165,7 @@ function NewClient({ session, partnerId, closeModal }: NewClientModalProps) {
                 <DateInput
                   label={'DATA DE NASCIMENTO'}
                   editable={true}
-                  value={clientInfo.dataNascimento ? formatDate(clientInfo.dataNascimento) : undefined}
+                  value={clientInfo.dataNascimento ? formatDateForInput(clientInfo.dataNascimento) : undefined}
                   handleChange={(value) =>
                     setClientInfo((prev) => ({
                       ...prev,

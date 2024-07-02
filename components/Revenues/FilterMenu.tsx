@@ -8,7 +8,7 @@ import TextInput from '../Inputs/TextInput'
 import NumberInput from '../Inputs/NumberInput'
 import MultipleSelectInput from '../Inputs/MultipleSelectInput'
 import DateInput from '../Inputs/DateInput'
-import { formatDate } from '@/utils/methods'
+import { formatDateForInput } from '@/utils/methods'
 import { formatDateInputChange } from '@/lib/methods/formatting'
 import SelectInput from '../Inputs/SelectInput'
 import CheckboxInput from '../Inputs/CheckboxInput'
@@ -93,7 +93,7 @@ function RevenuesFilterMenu({
                 <DateInput
                   width={'100%'}
                   label={'DEPOIS DE'}
-                  value={filtersHolder.period.after ? formatDate(filtersHolder.period.after) : undefined}
+                  value={filtersHolder.period.after ? formatDateForInput(filtersHolder.period.after) : undefined}
                   handleChange={(value) => setFiltersHolder((prev) => ({ ...prev, period: { ...prev.period, after: formatDateInputChange(value) } }))}
                   labelClassName="text-xs font-medium tracking-tight text-black"
                 />
@@ -102,13 +102,13 @@ function RevenuesFilterMenu({
                 <DateInput
                   width={'100%'}
                   label={'ANTES DE'}
-                  value={filtersHolder.period.before ? formatDate(filtersHolder.period.before) : undefined}
+                  value={filtersHolder.period.before ? formatDateForInput(filtersHolder.period.before) : undefined}
                   handleChange={(value) => setFiltersHolder((prev) => ({ ...prev, period: { ...prev.period, before: formatDateInputChange(value) } }))}
                   labelClassName="text-xs font-medium tracking-tight text-black"
                 />
               </div>
             </div>
-            <div className="w-full lg:w-[250px]">
+            <div className="w-full lg:w-[350px]">
               <SelectInput
                 width={'100%'}
                 label={'CAMPO DE FILTRO'}

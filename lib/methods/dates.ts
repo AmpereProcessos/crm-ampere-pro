@@ -23,7 +23,19 @@ export function getMonthPeriodsStrings({ initialYear, endYear }: { initialYear: 
   }
   return periods
 }
+export function getDayStringsBetweenDates({ initialDate, endDate, format }: { initialDate: string; endDate: string; format?: string }) {
+  let strings = []
+  let iteratingDate = dayjs(initialDate)
+  const goalDate = dayjs(endDate)
 
+  while (iteratingDate.isBefore(goalDate) || iteratingDate.isSame(goalDate, 'day')) {
+    const dayStr = iteratingDate.format(format || 'DD/MM')
+    strings.push(dayStr)
+    iteratingDate = iteratingDate.add(1, 'day')
+  }
+
+  return strings
+}
 export function getHoursDiff({ start, finish, businessOnly }: { start: string; finish: string; businessOnly?: boolean }) {
   // if (businessOnly) {
   //   // @ts-ignore
@@ -32,4 +44,41 @@ export function getHoursDiff({ start, finish, businessOnly }: { start: string; f
   // }
   const hourDiff = dayjs(finish).diff(dayjs(start), 'hour')
   return hourDiff
+}
+export function getFixedDate(date: string, type: 'start' | 'end') {
+  if (type == 'start') return dayjs(date).add(3, 'hour').startOf('day').toDate() as Date
+
+  if (type == 'end') return dayjs(date).add(3, 'hour').endOf('day').toDate() as Date
+
+  return dayjs(date).startOf('day').subtract(3, 'hour').toDate()
+}
+
+type GetPeriodDateParamsByReferenceDateParams = {
+  reference: string | Date
+  type?: 'month' | 'year'
+  resetStart?: boolean
+  resetEnd?: boolean
+}
+export function getPeriodDateParamsByReferenceDate({ reference, type = 'month', resetStart, resetEnd }: GetPeriodDateParamsByReferenceDateParams) {
+  if (type == 'month') {
+    var start = dayjs(reference).startOf('month')
+    var end = dayjs(reference).endOf('month')
+    if (!!resetStart) start = start.subtract(3, 'hour')
+    if (!!resetEnd) end = end.startOf('day').subtract(3, 'hour')
+    return { start: start.toDate(), end: end.toDate() }
+  }
+  if (type == 'year') {
+    var start = dayjs(reference).startOf('year')
+    var end = dayjs(reference).endOf('year')
+    if (!!resetStart) start = start.subtract(3, 'hour')
+    if (!!resetEnd) end = end.startOf('day').subtract(3, 'hour')
+    return { start: start.toDate(), end: end.toDate() }
+  }
+
+  // Default for month
+  var start = dayjs(reference).startOf('month')
+  var end = dayjs(reference).endOf('month')
+  if (!!resetStart) start = start.subtract(3, 'hour')
+  if (!!resetEnd) end = end.startOf('day').subtract(3, 'hour')
+  return { start: start.toDate(), end: end.toDate() }
 }

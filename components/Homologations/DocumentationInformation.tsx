@@ -1,7 +1,7 @@
 import { THomologationDTO } from '@/utils/schemas/homologation.schema'
 import React from 'react'
 import DateInput from '../Inputs/DateInput'
-import { formatDate } from '@/utils/methods'
+import { formatDateForInput } from '@/utils/methods'
 import { formatDateInputChange } from '@/lib/methods/formatting'
 
 type DocumentationInformationProps = {
@@ -16,7 +16,7 @@ function DocumentationInformation({ infoHolder, setInfoHolder }: DocumentationIn
         <div className="w-full lg:w-1/2">
           <DateInput
             label="DATA DE LIBERAÇÃO DA DOCUMENTAÇÃO"
-            value={formatDate(infoHolder.documentacao.dataLiberacao)}
+            value={formatDateForInput(infoHolder.documentacao.dataLiberacao)}
             handleChange={(value) =>
               setInfoHolder((prev) => ({ ...prev, documentacao: { ...prev.documentacao, dataLiberacao: formatDateInputChange(value) } }))
             }
@@ -26,7 +26,7 @@ function DocumentationInformation({ infoHolder, setInfoHolder }: DocumentationIn
         <div className="w-full lg:w-1/2">
           <DateInput
             label="DATA DE ASSINATURA DA DOCUMENTAÇÃO"
-            value={formatDate(infoHolder.documentacao.dataAssinatura)}
+            value={formatDateForInput(infoHolder.documentacao.dataAssinatura)}
             handleChange={(value) =>
               setInfoHolder((prev) => ({ ...prev, documentacao: { ...prev.documentacao, dataAssinatura: formatDateInputChange(value) } }))
             }

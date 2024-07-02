@@ -37,7 +37,7 @@ function RevenueCompositionInformationBlock({ infoHolder, setInfoHolder }: Reven
     return toast.success('Item adicionado !', { duration: 500 })
   }
 
-  const compositionItemsTotal = infoHolder.composicao.reduce((acc, current) => acc + current.valor, 0)
+  const compositionItemsTotal = infoHolder.composicao.reduce((acc, current) => acc + current.qtde * current.valor, 0)
   return (
     <div className="flex w-full flex-col gap-y-2">
       <h1 className="w-full bg-gray-700  p-1 text-center font-medium text-white">COMPOSIÇÃO DA RECEITA</h1>

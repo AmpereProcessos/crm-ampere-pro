@@ -2,7 +2,7 @@ import { THomologationDTO } from '@/utils/schemas/homologation.schema'
 import React from 'react'
 import TextInput from '../Inputs/TextInput'
 import DateInput from '../Inputs/DateInput'
-import { formatDate } from '@/utils/methods'
+import { formatDateForInput } from '@/utils/methods'
 import { formatDateInputChange } from '@/lib/methods/formatting'
 
 type AccessInformationProps = {
@@ -26,7 +26,7 @@ function AccessInformation({ infoHolder, setInfoHolder }: AccessInformationProps
         <div className="w-full lg:w-1/3">
           <DateInput
             label="DATA DE SOLICITAÇÃO DA HOMOLOGAÇÃO"
-            value={formatDate(infoHolder.acesso.dataSolicitacao)}
+            value={formatDateForInput(infoHolder.acesso.dataSolicitacao)}
             handleChange={(value) => setInfoHolder((prev) => ({ ...prev, acesso: { ...prev.acesso, dataSolicitacao: formatDateInputChange(value) } }))}
             width="100%"
           />
@@ -34,7 +34,7 @@ function AccessInformation({ infoHolder, setInfoHolder }: AccessInformationProps
         <div className="w-full lg:w-1/3">
           <DateInput
             label="DATA DE RESPOSTA DA HOMOLOGAÇÃO"
-            value={formatDate(infoHolder.acesso.dataResposta)}
+            value={formatDateForInput(infoHolder.acesso.dataResposta)}
             handleChange={(value) => setInfoHolder((prev) => ({ ...prev, acesso: { ...prev.acesso, dataResposta: formatDateInputChange(value) } }))}
             width="100%"
           />

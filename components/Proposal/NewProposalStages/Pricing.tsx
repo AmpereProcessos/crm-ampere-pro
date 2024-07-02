@@ -31,8 +31,10 @@ function Pricing({ opportunity, infoHolder, setInfoHolder, moveToNextStage, move
   const [addCostModalIsOpen, setAddCostModalIsOpen] = useState<boolean>(false)
 
   function handleProceed() {
+    const updatePlanPrice = infoHolder.planos.length == 1
+    const proposalPlans: TProposal['planos'] = updatePlanPrice ? [{ ...infoHolder.planos[0], valor: pricingTotal }] : infoHolder.planos
     // Updating proposal final price
-    setInfoHolder((prev) => ({ ...prev, precificacao: pricing, valor: pricingTotal }))
+    setInfoHolder((prev) => ({ ...prev, planos: proposalPlans, precificacao: pricing, valor: pricingTotal }))
     // Moving to next stage
     moveToNextStage()
   }

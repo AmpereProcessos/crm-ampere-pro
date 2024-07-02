@@ -7,7 +7,7 @@ import NumberInput from '../Inputs/NumberInput'
 import MultipleSelectInput from '../Inputs/MultipleSelectInput'
 import { TPricingMethodDTO } from '@/utils/schemas/pricing-method.schema'
 import { StructureTypes } from '@/utils/select-options'
-import { formatDate } from '@/utils/methods'
+import { formatDateForInput } from '@/utils/methods'
 import DateInput from '../Inputs/DateInput'
 import { formatDateInputChange } from '@/lib/methods/formatting'
 import { TNewKit } from '../Modals/Kit/NewKit'
@@ -147,7 +147,7 @@ function GeneralInformationBlock({ infoHolder, setInfoHolder, pricingMethods }: 
         <div className="flex w-full items-center justify-center">
           <DateInput
             label="DATA DE VALIDADE (SE HOUVER)"
-            value={formatDate(infoHolder.dataValidade)}
+            value={formatDateForInput(infoHolder.dataValidade)}
             handleChange={(value) => setInfoHolder((prev) => ({ ...prev, dataValidade: formatDateInputChange(value) }))}
           />
         </div>

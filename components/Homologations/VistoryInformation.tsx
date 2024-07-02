@@ -1,7 +1,7 @@
 import { THomologationDTO } from '@/utils/schemas/homologation.schema'
 import React from 'react'
 import DateInput from '../Inputs/DateInput'
-import { formatDate } from '@/utils/methods'
+import { formatDateForInput } from '@/utils/methods'
 import { formatDateInputChange } from '@/lib/methods/formatting'
 
 type VistoryInformationProps = {
@@ -16,7 +16,7 @@ function VistoryInformation({ infoHolder, setInfoHolder }: VistoryInformationPro
         <div className="w-full lg:w-1/2">
           <DateInput
             label="DATA DE SOLICITAÇÃO DA VISTORIA"
-            value={formatDate(infoHolder.vistoria.dataSolicitacao)}
+            value={formatDateForInput(infoHolder.vistoria.dataSolicitacao)}
             handleChange={(value) => setInfoHolder((prev) => ({ ...prev, vistoria: { ...prev.vistoria, dataSolicitacao: formatDateInputChange(value) } }))}
             width="100%"
           />
@@ -24,7 +24,7 @@ function VistoryInformation({ infoHolder, setInfoHolder }: VistoryInformationPro
         <div className="w-full lg:w-1/2">
           <DateInput
             label="DATA DE EXECUÇÃO DA VISTORIA"
-            value={formatDate(infoHolder.vistoria.dataEfetivacao)}
+            value={formatDateForInput(infoHolder.vistoria.dataEfetivacao)}
             handleChange={(value) => setInfoHolder((prev) => ({ ...prev, vistoria: { ...prev.vistoria, dataEfetivacao: formatDateInputChange(value) } }))}
             width="100%"
           />

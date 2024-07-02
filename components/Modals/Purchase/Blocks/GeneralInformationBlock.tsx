@@ -4,7 +4,7 @@ import SelectInput from '@/components/Inputs/SelectInput'
 import TextareaInput from '@/components/Inputs/TextareaInput'
 import TextInput from '@/components/Inputs/TextInput'
 import { formatDateInputChange } from '@/lib/methods/formatting'
-import { formatDate } from '@/utils/methods'
+import { formatDateForInput } from '@/utils/methods'
 import { TPurchaseDTO } from '@/utils/schemas/purchase.schema'
 import { PurchaseStatus } from '@/utils/select-options'
 import React from 'react'
@@ -56,7 +56,7 @@ function GeneralInformationBlock({ infoHolder, setInfoHolder }: GeneralInformati
           <div className="w-full lg:w-1/2">
             <DateInput
               label="DATA DE LIBERAÇÃO"
-              value={formatDate(infoHolder.liberacao.data)}
+              value={formatDateForInput(infoHolder.liberacao.data)}
               handleChange={(value) => setInfoHolder((prev) => ({ ...prev, liberacao: { ...prev.liberacao, data: formatDateInputChange(value) } }))}
               width="100%"
             />

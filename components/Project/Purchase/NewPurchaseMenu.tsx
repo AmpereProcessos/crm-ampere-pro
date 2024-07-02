@@ -3,7 +3,7 @@ import { TPurchase, TPurchaseCompositionItem } from '@/utils/schemas/purchase.sc
 import React, { useState } from 'react'
 import { VscChromeClose } from 'react-icons/vsc'
 import TextInput from '../../Inputs/TextInput'
-import { formatDate, formatToCEP, formatToPhone, getCEPInfo } from '@/utils/methods'
+import { formatDateForInput, formatToCEP, formatToPhone, getCEPInfo } from '@/utils/methods'
 import SelectInput from '../../Inputs/SelectInput'
 import { PurchaseDeliveryStatus, PurchaseStatus } from '@/utils/select-options'
 import PurchaseCompositionBlock from './PurchaseCompositionBlock'
@@ -150,7 +150,7 @@ function NewPurchaseMenu({ session, project, closeMenu }: NewPurchaseMenuProps) 
         <div className="w-full lg:w-1/2">
           <DateInput
             label="DATA DE LIBERAÇÃO"
-            value={formatDate(infoHolder.liberacao.data)}
+            value={formatDateForInput(infoHolder.liberacao.data)}
             handleChange={(value) => setInfoHolder((prev) => ({ ...prev, liberacao: { ...prev.liberacao, data: formatDateInputChange(value) } }))}
             width="100%"
           />
@@ -168,7 +168,7 @@ function NewPurchaseMenu({ session, project, closeMenu }: NewPurchaseMenuProps) 
         <div className="w-full lg:w-1/3">
           <DateInput
             label="DATA DO PEDIDO"
-            value={formatDate(infoHolder.pedido.data)}
+            value={formatDateForInput(infoHolder.pedido.data)}
             handleChange={(value) => setInfoHolder((prev) => ({ ...prev, pedido: { ...prev.pedido, data: formatDateInputChange(value) } }))}
             width="100%"
           />
@@ -236,7 +236,7 @@ function NewPurchaseMenu({ session, project, closeMenu }: NewPurchaseMenuProps) 
         <div className="w-full lg:w-1/2">
           <DateInput
             label="DATA DE FATURAMENTO"
-            value={formatDate(infoHolder.faturamento.data)}
+            value={formatDateForInput(infoHolder.faturamento.data)}
             handleChange={(value) => setInfoHolder((prev) => ({ ...prev, faturamento: { ...prev.faturamento, data: formatDateInputChange(value) } }))}
             width="100%"
           />
@@ -267,7 +267,7 @@ function NewPurchaseMenu({ session, project, closeMenu }: NewPurchaseMenuProps) 
         <div className="w-full lg:w-1/3">
           <DateInput
             label="DATA DE PREVISÃO DA ENTREGA"
-            value={formatDate(infoHolder.entrega.previsao)}
+            value={formatDateForInput(infoHolder.entrega.previsao)}
             handleChange={(value) => setInfoHolder((prev) => ({ ...prev, entrega: { ...prev.entrega, previsao: formatDateInputChange(value) } }))}
             width="100%"
           />
@@ -275,7 +275,7 @@ function NewPurchaseMenu({ session, project, closeMenu }: NewPurchaseMenuProps) 
         <div className="w-full lg:w-1/3">
           <DateInput
             label="DATA DE EFETIVAÇÃO DA ENTREGA"
-            value={formatDate(infoHolder.entrega.efetivacao)}
+            value={formatDateForInput(infoHolder.entrega.efetivacao)}
             handleChange={(value) => setInfoHolder((prev) => ({ ...prev, entrega: { ...prev.entrega, efetivacao: formatDateInputChange(value) } }))}
             width="100%"
           />

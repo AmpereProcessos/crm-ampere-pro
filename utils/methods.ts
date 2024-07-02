@@ -138,7 +138,7 @@ export function formatToPhone(value: string): string {
   return value
 }
 
-export function formatDate(value: any) {
+export function formatDateForInput(value: any) {
   if (!value) return undefined
   if (isNaN(new Date(value).getMilliseconds())) return undefined
   return new Date(value).toISOString().slice(0, 10)

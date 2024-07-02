@@ -1,5 +1,5 @@
 import { GeneralVisibleHiddenExitMotionVariants } from '@/utils/constants'
-import { formatDate, getFirstDayOfYear, getLastDayOfYear } from '@/utils/methods'
+import { formatDateForInput, getFirstDayOfYear, getLastDayOfYear } from '@/utils/methods'
 import { AnimatePresence, motion } from 'framer-motion'
 import React, { useState } from 'react'
 import DateInput from '../Inputs/DateInput'
@@ -59,7 +59,7 @@ function Stats({ closeMenu }: StatsProps) {
               <DateInput
                 showLabel={false}
                 label="PERÍODO"
-                value={formatDate(period.after)}
+                value={formatDateForInput(period.after)}
                 handleChange={(value) =>
                   setPeriod((prev) => ({
                     ...prev,
@@ -73,7 +73,7 @@ function Stats({ closeMenu }: StatsProps) {
               <DateInput
                 showLabel={false}
                 label="PERÍODO"
-                value={formatDate(period.before)}
+                value={formatDateForInput(period.before)}
                 handleChange={(value) =>
                   setPeriod((prev) => ({
                     ...prev,

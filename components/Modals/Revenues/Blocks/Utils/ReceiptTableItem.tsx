@@ -4,7 +4,7 @@ import NumberInput from '@/components/Inputs/NumberInput'
 import SelectInput from '@/components/Inputs/SelectInput'
 import { formatDateAsLocale, formatDateInputChange, formatDecimalPlaces } from '@/lib/methods/formatting'
 import { GeneralVisibleHiddenExitMotionVariants } from '@/utils/constants'
-import { formatDate, formatToMoney } from '@/utils/methods'
+import { formatDateForInput, formatToMoney } from '@/utils/methods'
 import { TRevenueReceiptItem } from '@/utils/schemas/revenues.schema'
 import { PaymentMethods } from '@/utils/select-options'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -147,7 +147,7 @@ function ReceiptTableItem({ item, revenueTotal, handleUpdate, handleRemove }: Re
               <div className="w-full lg:w-[25%]">
                 <DateInput
                   label="DATA/PREVISÃO DE RECEBIMENTO"
-                  value={formatDate(itemHolder.dataRecebimento)}
+                  value={formatDateForInput(itemHolder.dataRecebimento)}
                   handleChange={(value) =>
                     setItemHolder((prev) => ({
                       ...prev,

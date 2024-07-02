@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import SelectInput from '../Inputs/SelectInput'
 import TextInput from '../Inputs/TextInput'
 import DateInput from '../Inputs/DateInput'
-import { formatDate, formatToCPForCNPJ, useResponsibles } from '@/utils/methods'
+import { formatDateForInput, formatToCPForCNPJ, useResponsibles } from '@/utils/methods'
 
 import { AiOutlineCheck } from 'react-icons/ai'
 import { useQueryClient } from '@tanstack/react-query'
@@ -364,7 +364,7 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
             <div className="grow">
               <DateInput
                 label="DATA DE NASCIMENTO"
-                value={infoHolder?.cliente && infoHolder?.cliente.dataNascimento ? formatDate(infoHolder.cliente.dataNascimento) : undefined}
+                value={infoHolder?.cliente && infoHolder?.cliente.dataNascimento ? formatDateForInput(infoHolder.cliente.dataNascimento) : undefined}
                 handleChange={(value) => {
                   if (value)
                     setInfoHolder((prev: any) => ({

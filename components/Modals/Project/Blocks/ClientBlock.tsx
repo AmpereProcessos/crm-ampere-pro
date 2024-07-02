@@ -3,7 +3,7 @@ import SelectInput from '@/components/Inputs/SelectInput'
 import TextInput from '@/components/Inputs/TextInput'
 import { formatDateInputChange } from '@/lib/methods/formatting'
 import { stateCities } from '@/utils/estados_cidades'
-import { formatDate, formatToCEP, formatToCPForCNPJ, formatToPhone, getCEPInfo } from '@/utils/methods'
+import { formatDateForInput, formatToCEP, formatToCPForCNPJ, formatToPhone, getCEPInfo } from '@/utils/methods'
 import { TChangesControl, TProjectDTOWithReferences } from '@/utils/schemas/project.schema'
 import { CustomersAcquisitionChannels, MaritalStatus } from '@/utils/select-options'
 import React from 'react'
@@ -94,7 +94,7 @@ function ClientBlock({ infoHolder, setInfoHolder, changes, setChanges, userHasCl
             <DateInput
               label={'DATA DE NASCIMENTO'}
               editable={userHasClientEditPermission}
-              value={infoHolder.clienteDados.dataNascimento ? formatDate(infoHolder.clienteDados.dataNascimento) : undefined}
+              value={infoHolder.clienteDados.dataNascimento ? formatDateForInput(infoHolder.clienteDados.dataNascimento) : undefined}
               handleChange={(value) => {
                 setInfoHolder((prev) => ({
                   ...prev,

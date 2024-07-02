@@ -3,7 +3,7 @@ import SelectInput from '@/components/Inputs/SelectInput'
 import TextInput from '@/components/Inputs/TextInput'
 
 import { stateCities } from '@/utils/estados_cidades'
-import { formatDate, formatToCEP, formatToCPForCNPJ, formatToPhone, getCEPInfo } from '@/utils/methods'
+import { formatDateForInput, formatToCEP, formatToCPForCNPJ, formatToPhone, getCEPInfo } from '@/utils/methods'
 
 import { TContractRequest } from '@/utils/schemas/integrations/app-ampere/contract-request.schema'
 import { CustomersAcquisitionChannels, SigningForms } from '@/utils/select-options'
@@ -169,7 +169,7 @@ function ContractInfo({ requestInfo, setRequestInfo, goToNextStage }: ContractIn
             width={'450px'}
             label={'DATA DE NASCIMENTO'}
             editable={true}
-            value={requestInfo.dataDeNascimento ? formatDate(requestInfo.dataDeNascimento) : undefined}
+            value={requestInfo.dataDeNascimento ? formatDateForInput(requestInfo.dataDeNascimento) : undefined}
             handleChange={(value) =>
               setRequestInfo({
                 ...requestInfo,

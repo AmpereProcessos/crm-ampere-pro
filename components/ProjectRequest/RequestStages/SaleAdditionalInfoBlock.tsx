@@ -1,7 +1,7 @@
 import DateInput from '@/components/Inputs/DateInput'
 import SelectInput from '@/components/Inputs/SelectInput'
 import TextInput from '@/components/Inputs/TextInput'
-import { formatDate, formatToPhone } from '@/utils/methods'
+import { formatDateForInput, formatToPhone } from '@/utils/methods'
 import { TProject } from '@/utils/schemas/project.schema'
 import { ComercialSegments, SigningForms } from '@/utils/select-options'
 import React from 'react'

@@ -1,7 +1,7 @@
 import DateInput from '@/components/Inputs/DateInput'
 import { Sidebar } from '@/components/Sidebar'
 import { formatDateInputChange, formatToMoney } from '@/lib/methods/formatting'
-import { formatDate, getFirstDayOfMonth, getLastDayOfMonth } from '@/utils/methods'
+import { formatDateForInput, getFirstDayOfMonth, getLastDayOfMonth } from '@/utils/methods'
 import { usePartnersSimplified } from '@/utils/queries/partners'
 import { useOpportunityCreators } from '@/utils/queries/users'
 import { Session } from 'next-auth'
@@ -123,7 +123,7 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
                   <DateInput
                     showLabel={false}
                     label="PERÍODO"
-                    value={formatDate(queryFilters.period.after)}
+                    value={formatDateForInput(queryFilters.period.after)}
                     handleChange={(value) =>
                       setQueryFilters((prev) => ({
                         ...prev,
@@ -140,7 +140,7 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
                   <DateInput
                     showLabel={false}
                     label="PERÍODO"
-                    value={formatDate(queryFilters.period.before)}
+                    value={formatDateForInput(queryFilters.period.before)}
                     handleChange={(value) =>
                       setQueryFilters((prev) => ({
                         ...prev,

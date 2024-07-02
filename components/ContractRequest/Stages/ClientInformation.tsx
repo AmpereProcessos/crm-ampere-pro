@@ -4,7 +4,7 @@ import TextInput from '@/components/Inputs/TextInput'
 import { getErrorMessage } from '@/lib/methods/errors'
 import { formatDateInputChange } from '@/lib/methods/formatting'
 import { stateCities } from '@/utils/estados_cidades'
-import { formatDate, formatToCEP, formatToCPForCNPJ, formatToPhone, getCEPInfo } from '@/utils/methods'
+import { formatDateForInput, formatToCEP, formatToCPForCNPJ, formatToPhone, getCEPInfo } from '@/utils/methods'
 import { Optional } from '@/utils/models'
 import { updateClient } from '@/utils/mutations/clients'
 import { InsertClientSchema, TClientDTO } from '@/utils/schemas/client.schema'
@@ -128,7 +128,7 @@ function ClientInformation({ client, requestInfo, setRequestInfo, goToNextState 
           <div className="w-full lg:w-1/3">
             <DateInput
               label="DATA DE NASCIMENTO DO CLIENTE"
-              value={clientInfo.dataNascimento ? formatDate(clientInfo.dataNascimento) : undefined}
+              value={clientInfo.dataNascimento ? formatDateForInput(clientInfo.dataNascimento) : undefined}
               handleChange={(value) => setClientInfo((prev) => ({ ...prev, dataNascimento: formatDateInputChange(value) }))}
               width="100%"
             />
@@ -221,9 +221,7 @@ function ClientInformation({ client, requestInfo, setRequestInfo, goToNextState 
             <SelectInput
               label="ESTADO"
               value={clientInfo.uf}
-              handleChange={(value) =>
-                setClientInfo((prev) => ({ ...prev, uf: value, cidade: stateCities[value as keyof typeof stateCities][0] as string }))
-              }
+              handleChange={(value) => setClientInfo((prev) => ({ ...prev, uf: value, cidade: stateCities[value as keyof typeof stateCities][0] as string }))}
               selectedItemLabel="NÃO DEFINIDO"
               onReset={() => setClientInfo((prev) => ({ ...prev, uf: '', cidade: '' }))}
               options={Object.keys(stateCities).map((state, index) => ({

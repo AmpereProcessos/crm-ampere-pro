@@ -61,11 +61,15 @@ function RevenueCard({ revenue, handleClick }: RevenueCardProps) {
           <p className="text-[0.65rem] font-medium text-gray-500">CATEGORIAS</p>
         </div>
         <div className="flex w-full flex-wrap items-center gap-2">
-          {revenue.categorias.map((item, index) => (
-            <div key={index} className="rounded border border-blue-600 bg-blue-50 p-2 text-center shadow-sm">
-              <p className="text-[0.6rem] font-medium leading-none tracking-tight text-blue-600">{item}</p>
-            </div>
-          ))}
+          {revenue.categorias.length > 0 ? (
+            revenue.categorias.map((item, index) => (
+              <div key={index} className="rounded border border-blue-600 bg-blue-50 p-2 text-center shadow-sm">
+                <p className="text-[0.6rem] font-medium leading-none tracking-tight text-blue-600">{item}</p>
+              </div>
+            ))
+          ) : (
+            <p className="text-[0.6rem] font-medium leading-none tracking-tight text-gray-500">SEM CATEGORIAS DEFINIDAS</p>
+          )}
         </div>
       </div>
       <div className="flex w-full flex-col items-center justify-between gap-2 lg:flex-row">

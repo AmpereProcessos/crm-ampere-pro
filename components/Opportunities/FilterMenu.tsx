@@ -7,7 +7,7 @@ import React, { useState } from 'react'
 import TextInput from '../Inputs/TextInput'
 import MultipleSelectInputVirtualized from '../Inputs/MultipleSelectInputVirtualized'
 import DateInput from '../Inputs/DateInput'
-import { formatDate } from '@/utils/methods'
+import { formatDateForInput } from '@/utils/methods'
 import { formatDateInputChange } from '@/lib/methods/formatting'
 import SelectInput from '../Inputs/SelectInput'
 import { TUserDTO, TUserDTOSimplified } from '@/utils/schemas/user.schema'
@@ -118,7 +118,7 @@ function OpportunitiesFiltersMenu({
                   <DateInput
                     showLabel={false}
                     label="PERÍODO"
-                    value={formatDate(filtersHolder.period.after)}
+                    value={formatDateForInput(filtersHolder.period.after)}
                     handleChange={(value) =>
                       setFiltersHolder((prev) => ({
                         ...prev,
@@ -135,7 +135,7 @@ function OpportunitiesFiltersMenu({
                   <DateInput
                     showLabel={false}
                     label="PERÍODO"
-                    value={formatDate(filtersHolder.period.before)}
+                    value={formatDateForInput(filtersHolder.period.before)}
                     handleChange={(value) =>
                       setFiltersHolder((prev) => ({
                         ...prev,

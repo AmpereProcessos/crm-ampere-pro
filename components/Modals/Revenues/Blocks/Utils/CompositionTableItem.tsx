@@ -33,13 +33,13 @@ function CompositionTableItem({ item, handleUpdate, handleRemove }: CompositionT
                   {true ? (
                     <div className="flex items-center gap-1">
                       <BsCart size={10} />
-                      <p className="text-[0.65rem] font-light italic leading-none tracking-tight text-gray-500">#3172y37y23712312</p>
+                      <p className="text-[0.55rem] font-normal italic leading-none tracking-tight text-gray-500">#3172y37y23712312</p>
                     </div>
                   ) : null}
                   {true ? (
                     <div className="flex items-center gap-1">
                       <MdOutlineMiscellaneousServices size={10} />
-                      <p className="text-[0.65rem] font-light italic leading-none tracking-tight text-gray-500">#4214232142132</p>
+                      <p className="text-[0.55rem] font-normal italic leading-none tracking-tight text-gray-500">#4214232142132</p>
                     </div>
                   ) : null}
                 </div>

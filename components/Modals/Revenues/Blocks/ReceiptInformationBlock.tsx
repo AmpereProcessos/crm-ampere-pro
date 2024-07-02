@@ -3,7 +3,7 @@ import DateInput from '@/components/Inputs/DateInput'
 import NumberInput from '@/components/Inputs/NumberInput'
 import SelectInput from '@/components/Inputs/SelectInput'
 import { formatDateInputChange } from '@/lib/methods/formatting'
-import { formatDate } from '@/utils/methods'
+import { formatDateForInput } from '@/utils/methods'
 import { TRevenue, TRevenueReceiptItem } from '@/utils/schemas/revenues.schema'
 import { PaymentMethods } from '@/utils/select-options'
 import React, { useState } from 'react'
@@ -41,7 +41,7 @@ function RevenueReceiptInformationBlock({ infoHolder, setInfoHolder }: RevenueRe
         <div className="flex w-full items-center justify-center lg:justify-end">
           <DateInput
             label="DATA DE COMPETÊNCIA"
-            value={formatDate(infoHolder.dataCompetencia)}
+            value={formatDateForInput(infoHolder.dataCompetencia)}
             handleChange={(value) => setInfoHolder((prev) => ({ ...prev, dataCompetencia: formatDateInputChange(value) || prev.dataCompetencia }))}
           />
         </div>
@@ -81,7 +81,7 @@ function RevenueReceiptInformationBlock({ infoHolder, setInfoHolder }: RevenueRe
             <div className="w-full lg:w-[25%]">
               <DateInput
                 label="DATA/PREVISÃO DE RECEBIMENTO"
-                value={formatDate(receiptHolder.dataRecebimento)}
+                value={formatDateForInput(receiptHolder.dataRecebimento)}
                 handleChange={(value) =>
                   setReceiptHolder((prev) => ({
                     ...prev,

@@ -8,7 +8,7 @@ import { renderCategoryIcon } from '@/lib/methods/rendering'
 import { structureTypes } from '@/utils/constants'
 
 import { stateCities } from '@/utils/estados_cidades'
-import { formatDate, formatToCEP, formatToCPForCNPJ, formatToMoney, formatToPhone, getPeakPotByModules } from '@/utils/methods'
+import { formatDateForInput, formatToCEP, formatToCPForCNPJ, formatToMoney, formatToPhone, getPeakPotByModules } from '@/utils/methods'
 
 import { useMutationWithFeedback } from '@/utils/mutations/general-hook'
 import { getOeMPrices } from '@/utils/pricing/oem/methods'
@@ -143,7 +143,7 @@ function ReviewInfo({
                 width={'450px'}
                 label={'DATA DE NASCIMENTO'}
                 editable={true}
-                value={requestInfo.dataDeNascimento ? formatDate(requestInfo.dataDeNascimento) : undefined}
+                value={requestInfo.dataDeNascimento ? formatDateForInput(requestInfo.dataDeNascimento) : undefined}
                 handleChange={(value) =>
                   setRequestInfo({
                     ...requestInfo,

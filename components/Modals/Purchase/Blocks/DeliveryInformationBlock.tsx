@@ -3,7 +3,7 @@ import SelectInput from '@/components/Inputs/SelectInput'
 import TextInput from '@/components/Inputs/TextInput'
 import { formatDateInputChange } from '@/lib/methods/formatting'
 import { stateCities } from '@/utils/estados_cidades'
-import { formatDate, formatToCEP, getCEPInfo } from '@/utils/methods'
+import { formatDateForInput, formatToCEP, getCEPInfo } from '@/utils/methods'
 import { TPurchaseDTO } from '@/utils/schemas/purchase.schema'
 import { PurchaseDeliveryStatus } from '@/utils/select-options'
 import React from 'react'
@@ -60,7 +60,7 @@ function DeliveryInformationBlock({ infoHolder, setInfoHolder }: DeliveryInforma
           <div className="w-full lg:w-1/3">
             <DateInput
               label="DATA DE PREVISÃO DA ENTREGA"
-              value={formatDate(infoHolder.entrega.previsao)}
+              value={formatDateForInput(infoHolder.entrega.previsao)}
               handleChange={(value) => setInfoHolder((prev) => ({ ...prev, entrega: { ...prev.entrega, previsao: formatDateInputChange(value) } }))}
               width="100%"
             />
@@ -68,7 +68,7 @@ function DeliveryInformationBlock({ infoHolder, setInfoHolder }: DeliveryInforma
           <div className="w-full lg:w-1/3">
             <DateInput
               label="DATA DE EFETIVAÇÃO DA ENTREGA"
-              value={formatDate(infoHolder.entrega.efetivacao)}
+              value={formatDateForInput(infoHolder.entrega.efetivacao)}
               handleChange={(value) => setInfoHolder((prev) => ({ ...prev, entrega: { ...prev.entrega, efetivacao: formatDateInputChange(value) } }))}
               width="100%"
             />

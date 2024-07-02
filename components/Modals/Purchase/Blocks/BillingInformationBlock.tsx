@@ -1,7 +1,7 @@
 import DateInput from '@/components/Inputs/DateInput'
 import TextInput from '@/components/Inputs/TextInput'
 import { formatDateInputChange } from '@/lib/methods/formatting'
-import { formatDate } from '@/utils/methods'
+import { formatDateForInput } from '@/utils/methods'
 import { TPurchaseDTO } from '@/utils/schemas/purchase.schema'
 import React from 'react'
 
@@ -18,7 +18,7 @@ function BillingInformationBlock({ infoHolder, setInfoHolder }: BillingInformati
           <div className="w-full lg:w-1/2">
             <DateInput
               label="DATA DE FATURAMENTO"
-              value={formatDate(infoHolder.faturamento.data)}
+              value={formatDateForInput(infoHolder.faturamento.data)}
               handleChange={(value) => setInfoHolder((prev) => ({ ...prev, faturamento: { ...prev.faturamento, data: formatDateInputChange(value) } }))}
               width="100%"
             />
