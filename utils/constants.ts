@@ -5,6 +5,7 @@ import { IconType } from 'react-icons/lib'
 import { TSaleCategory } from './schemas/opportunity.schema'
 import { TProposalPremisses } from './schemas/proposal.schema'
 import { easeBackInOut } from 'd3-ease'
+import { TProductItem, TServiceItem } from './schemas/kits.schema'
 
 export type TProjectTypes = {
   id: number
@@ -62,7 +63,13 @@ export const ProjectTypes: TProjectTypes[] = [
   },
 ]
 
-export const CommonServicesByProjectType = [
+type TCommonServicesByProjectType = {
+  id: string
+  nome: string
+  servicos: TServiceItem[]
+  cores: { texto: string; fundo: string }
+}
+export const CommonServicesByProjectType: TCommonServicesByProjectType[] = [
   {
     id: '6615785ddcb7a6e66ede9785',
     nome: 'SISTEMA FOTOVOLTAICO',
@@ -82,6 +89,24 @@ export const CommonServicesByProjectType = [
         observacoes: 'Comissionamento do sistema, com ativação e testes de performance e configuração do software de acompanhamento.',
         garantia: 1,
       },
+    ],
+    cores: { texto: '#fead41', fundo: '#15599a' },
+  },
+]
+type TCommonProductsByProjectType = {
+  id: string
+  nome: string
+  produtos: TProductItem[]
+  cores: { texto: string; fundo: string }
+}
+export const CommonProductsByProjectType: TCommonProductsByProjectType[] = [
+  {
+    id: '6615785ddcb7a6e66ede9785',
+    nome: 'SISTEMA FOTOVOLTAICO',
+    produtos: [
+      { categoria: 'ESTRUTURA', fabricante: 'N/A', modelo: 'ESTRUTURA DE FIXAÇÃO', qtde: 1, garantia: 20 },
+      { categoria: 'INSUMO', fabricante: 'N/A', modelo: 'INFRAESTRUTURA ELÉTRICA CC & CA', qtde: 1, garantia: 1 },
+      { categoria: 'INSUMO', fabricante: 'N/A', modelo: 'DISPOSITIVOS DE PROTEÇÃO CC & CA', qtde: 1, garantia: 1 },
     ],
     cores: { texto: '#fead41', fundo: '#15599a' },
   },

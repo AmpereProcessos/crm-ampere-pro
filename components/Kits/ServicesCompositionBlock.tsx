@@ -84,7 +84,7 @@ function ServicesCompositionBlock({ infoHolder, setInfoHolder }: ServicesComposi
         <div className="flex w-full flex-wrap items-start justify-start gap-2">
           {CommonServicesByProjectType.map((type, index) => (
             <button
-              onClick={() => setInfoHolder((prev) => ({ ...prev, servicos: type.servicos }))}
+              onClick={() => setInfoHolder((prev) => ({ ...prev, servicos: [...prev.servicos, ...type.servicos] }))}
               key={index}
               className={`rounded-lg px-2 py-1 text-xs font-medium bg-[${type.cores.texto}] text-[${type.cores.fundo}]  w-fit`}
             >

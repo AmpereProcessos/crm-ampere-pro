@@ -5,7 +5,7 @@ import { getErrorMessage } from '@/lib/methods/errors'
 import toast from 'react-hot-toast'
 import { useState } from 'react'
 
-import { TKit, TKitDTO, TKitDTOWithPricingMethod } from '../schemas/kits.schema'
+import { TBulkOperationKit, TKit, TKitDTO, TKitDTOWithPricingMethod } from '../schemas/kits.schema'
 import { getModulesPeakPotByProducts, getPeakPotByModules } from '@/lib/methods/extracting'
 type FetchKitsByQueryParams = {
   pipeline: any
@@ -369,4 +369,13 @@ export function useKitById({ id }: { id: string }) {
     queryKey: ['kit-by-id', id],
     queryFn: async () => await fetchKitById({ id }),
   })
+}
+
+export async function fetchKitsExportation() {
+  try {
+    const { data } = await axios.get('/api/kits/export')
+    return data.data as TBulkOperationKit[]
+  } catch (error) {
+    throw error
+  }
 }

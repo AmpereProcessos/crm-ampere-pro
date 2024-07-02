@@ -11,7 +11,7 @@ import ErrorComponent from '@/components/utils/ErrorComponent'
 import LoadingPage from '@/components/utils/LoadingPage'
 import NotAuthorizedPage from '@/components/utils/NotAuthorizedPage'
 
-import { useKits } from '@/utils/queries/kits'
+import { fetchKitsExportation, useKits } from '@/utils/queries/kits'
 import { IoMdArrowDropdownCircle, IoMdArrowDropupCircle } from 'react-icons/io'
 import KitBulkOperation from '@/components/Modals/Kit/BulkOperation'
 import { TbFileDownload, TbFileExport } from 'react-icons/tb'
@@ -35,40 +35,10 @@ function Kits() {
   const [bulkOperationModalIsOpen, setBulkOperationModalIsOpen] = useState<boolean>(false)
   const [filterMenuIsOpen, setFilterMenuIsOpen] = useState<boolean>(false)
 
-  async function handleDataExport(kits: TKitDTO[]) {
+  async function handleDataExport() {
     try {
-      const formatted: TBulkOperationKit[] = kits.map((kit) => {
-        const pricingMethodologyName = pricingMethods?.find((m) => m._id == kit.idMetodologiaPrecificacao)?.nome || 'SOMENTE VALOR DO KIT'
-
-        return {
-          ID: kit._id,
-          ATIVO: kit.ativo ? 'SIM' : 'NÃO',
-          NOME: kit.nome,
-          TOPOLOGIA: kit.topologia,
-          PREÇO: kit.preco,
-          'METODOLOGIA DE PRECIFICAÇÃO': pricingMethodologyName,
-          'DATA DE VALIDADE': formatDateAsLocale(kit.dataValidade || undefined),
-          'TIPO DE ESTRUTURA': kit.estruturasCompativeis[0],
-          'CATEGORIA PRODUTO 1': kit.produtos[0]?.categoria,
-          'FABRICANTE PRODUTO 1': kit.produtos[0]?.fabricante,
-          'MODELO PRODUTO 1': kit.produtos[0]?.modelo,
-          'POTÊNCIA PRODUTO 1': kit.produtos[0]?.potencia,
-          'QUANTIDADE PRODUTO 1': kit.produtos[0]?.qtde,
-          'GARANTIA PRODUTO 1': kit.produtos[0]?.garantia,
-          'CATEGORIA PRODUTO 2': kit.produtos[1]?.categoria,
-          'FABRICANTE PRODUTO 2': kit.produtos[1]?.fabricante,
-          'MODELO PRODUTO 2': kit.produtos[1]?.modelo,
-          'POTÊNCIA PRODUTO 2': kit.produtos[1]?.potencia,
-          'QUANTIDADE PRODUTO 2': kit.produtos[1]?.qtde,
-          'GARANTIA PRODUTO 2': kit.produtos[1]?.garantia,
-          'DESCRIÇÃO SERVIÇO 1': kit.servicos[0]?.descricao,
-          'GARANTIA SERVIÇO 1': kit.servicos[0]?.garantia,
-          'DESCRIÇÃO SERVIÇO 2': kit.servicos[1]?.descricao,
-          'GARANTIA SERVIÇO 2': kit.servicos[1]?.garantia,
-          EXCLUIR: 'NÃO',
-        }
-      })
-      getExcelFromJSON(formatted, `KITS ${formatDateAsLocale(new Date().toISOString())}`)
+      const kits = await fetchKitsExportation()
+      getExcelFromJSON(kits, `KITS ${formatDateAsLocale(new Date().toISOString())}`)
       return toast.success('Exportação concluída com sucesso ')
     } catch (error) {
       const msg = getErrorMessage(error)
@@ -127,7 +97,7 @@ function Kits() {
               <>
                 <button
                   onClick={async () => {
-                    if (kits) handleDataExport(kits)
+                    handleDataExport()
                   }}
                   className="flex w-full items-center gap-2 rounded-md bg-gray-300 px-2 py-1 text-sm font-medium lg:w-fit"
                 >

@@ -163,6 +163,10 @@ export const KitsBulkOperationItemSchema = z.object({
     invalid_type_error: 'Tipo não válido para a topologia do kit.',
   }),
   PREÇO: z.number({ required_error: 'Preço do kit não informado.', invalid_type_error: 'Tipo não válido para o preço do kit.' }),
+  'VISIBILIDADE DE PARCEIRO': z.string({
+    required_error: 'Visibilidade de parceiro do kit não informada..',
+    invalid_type_error: 'Tipo não válido para a visibilidade de parceiro do kit.',
+  }),
   'METODOLOGIA DE PRECIFICAÇÃO': z.string({
     required_error: 'Metodologia de precificação do kit não informada..',
     invalid_type_error: 'Tipo não válido para a metodologia de precificação do kit.',
@@ -247,14 +251,20 @@ export const KitsBulkOperationItemSchema = z.object({
     })
     .optional()
     .nullable(),
-  'DESCRIÇÃO SERVIÇO 1': z.string({
-    required_error: 'Descrição do serviço 1 não informada.',
-    invalid_type_error: 'Tipo não válido para a descrição do serviço 1.',
-  }),
-  'GARANTIA SERVIÇO 1': z.number({
-    required_error: 'Garantia do serviço 1 não informada.',
-    invalid_type_error: 'Tipo não válido para a garantia do serviço 1.',
-  }),
+  'DESCRIÇÃO SERVIÇO 1': z
+    .string({
+      required_error: 'Descrição do serviço 1 não informada.',
+      invalid_type_error: 'Tipo não válido para a descrição do serviço 1.',
+    })
+    .optional()
+    .nullable(),
+  'GARANTIA SERVIÇO 1': z
+    .number({
+      required_error: 'Garantia do serviço 1 não informada.',
+      invalid_type_error: 'Tipo não válido para a garantia do serviço 1.',
+    })
+    .optional()
+    .nullable(),
   'DESCRIÇÃO SERVIÇO 2': z
     .string({
       required_error: 'Descrição do serviço 2 não informada.',

@@ -17,6 +17,10 @@ import { FaTag } from 'react-icons/fa'
 import { MdContentCopy } from 'react-icons/md'
 import { VscChromeClose } from 'react-icons/vsc'
 import { z } from 'zod'
+import BulkOperationHelpMenu from './Utils/BulkOperationHelpMenu'
+import { CommonProductsByProjectType, CommonServicesByProjectType } from '@/utils/constants'
+import { usePartnersSimplified } from '@/utils/queries/partners'
+import user from '@/pages/api/onboarding/user'
 
 function getStatusTag({ active, expiryDate }: { active: boolean; expiryDate?: string | null }) {
   if (!active) return <h1 className="rounded-full bg-gray-600 px-2 py-1 text-[0.65rem] font-bold text-white lg:text-xs">INATIVO</h1>
@@ -30,9 +34,12 @@ type KitBulkOperationProps = {
   closeModal: () => void
 }
 function KitBulkOperation({ session, closeModal }: KitBulkOperationProps) {
+  const userPartnerScope = session.user.permissoes.parceiros.escopo
+  const userPartnerId = session.user.idParceiro
   const queryClient = useQueryClient()
 
   const { data: pricingMethods } = usePricingMethods()
+  const { data: partners } = usePartnersSimplified()
   const [fileHolder, setFileHolder] = useState<File | null>(null)
   const [kitsHolder, setKitsHolder] = useState<(TKit & { _id: string | null; excluir: boolean })[]>([])
   async function handleExtracting(file: File | null) {
@@ -40,6 +47,7 @@ function KitBulkOperation({ session, closeModal }: KitBulkOperationProps) {
     try {
       // Extracting excel data as JSON
       const data = await getJSONFromExcelFile(file)
+      console.log(data)
       // Parsing the JSON obtained to validate types and values in correct form
       const bulkOperationKits = await z.array(KitsBulkOperationItemSchema).parseAsync(data)
       // Formatting data into TKit schema
@@ -76,13 +84,16 @@ function KitBulkOperation({ session, closeModal }: KitBulkOperationProps) {
           productsArr.push(secondProduct)
         }
 
-        // Defining the first service and pushing it
-        const firstService: TServiceItem = {
-          descricao: bulkKit['DESCRIÇÃO SERVIÇO 1'],
-          observacoes: '',
-          garantia: bulkKit['GARANTIA SERVIÇO 1'],
+        if (bulkKit['DESCRIÇÃO SERVIÇO 1'] && bulkKit['GARANTIA SERVIÇO 1']) {
+          // Defining the first service and pushing it
+          const firstService: TServiceItem = {
+            descricao: bulkKit['DESCRIÇÃO SERVIÇO 1'],
+            observacoes: '',
+            garantia: bulkKit['GARANTIA SERVIÇO 1'],
+          }
+          servicesArr.push(firstService)
         }
-        servicesArr.push(firstService)
+
         // Validating if there is a second service and pushing it
         if (bulkKit['DESCRIÇÃO SERVIÇO 2'] && bulkKit['GARANTIA SERVIÇO 2']) {
           const secondService: TServiceItem = {
@@ -95,6 +106,17 @@ function KitBulkOperation({ session, closeModal }: KitBulkOperationProps) {
 
         // Finding the equivalent pricing method, if not found, using the default
         const pricingMethodologyId = pricingMethods?.find((m) => m.nome == bulkKit['METODOLOGIA DE PRECIFICAÇÃO'])?._id || '660dab0b0fcb72da4ed8c35e'
+        // Finding the equivalent defined partner, if not found, using users partner
+        const definedPartner =
+          bulkKit['VISIBILIDADE DE PARCEIRO'] != 'N/A' ? partners?.find((p) => p.nome == bulkKit['VISIBILIDADE DE PARCEIRO'])?._id || userPartnerId : null
+
+        const partnerId = !!userPartnerScope
+          ? !definedPartner // In case user has a defined partner scope and didnt selected a partner:
+            ? userPartnerId //  using the default (user partner)
+            : !userPartnerScope.includes(definedPartner) // In case user has a defined partner scope and selected a non valid partner
+            ? userPartnerId // using the default (user partner)
+            : definedPartner // Else, the scope does include the defined partner, so using it
+          : definedPartner // Else, user has global scope, so using the defined partner
 
         // Extracting module peak power
         const modulesTotalPeakPower = getModulesPeakPotByProducts(productsArr)
@@ -110,7 +132,7 @@ function KitBulkOperation({ session, closeModal }: KitBulkOperationProps) {
         return {
           _id: bulkKit.ID || null,
           nome: bulkKit.NOME,
-          idParceiro: null,
+          idParceiro: partnerId,
           idMetodologiaPrecificacao: pricingMethodologyId,
           ativo: bulkKit.ATIVO == 'SIM' ? true : false,
           topologia: bulkKit.TOPOLOGIA,
@@ -185,45 +207,7 @@ function KitBulkOperation({ session, closeModal }: KitBulkOperationProps) {
             </button>
           </div>
           <div className="flex grow flex-col gap-y-2 overflow-y-auto overscroll-y-auto px-2 py-1 scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300">
-            <div className="my-5 flex flex-col items-center">
-              <p className="text-sm tracking-tight text-gray-500">Faça operações em massa nos seus kits através da nossa planilha modelo.</p>
-              <p className="text-sm tracking-tight text-gray-500">Adicione, altere e/ou exclua diversos kits simultaneamente.</p>
-              <p className="text-sm tracking-tight text-gray-500">
-                Linhas com a <strong className="text-[#E25E3E]">coluna ID</strong> preenchida serão utilizadas para{' '}
-                <strong className="text-[#E25E3E]">atualização de um kit existente.</strong>
-              </p>
-              <p className="text-sm tracking-tight text-gray-500">
-                Linhas com a <strong className="text-[#E25E3E]">coluna EXCLUIR preenchida com SIM</strong> serão utilizadas para{' '}
-                <strong className="text-[#E25E3E]">exclusão de um kit existente.</strong>
-              </p>
-            </div>
-
-            <div className="flex w-full flex-col items-center gap-1">
-              <p className="text-sm tracking-tight text-gray-500">Abaixo estão as suas metodologias de precificação</p>
-              <p className="text-sm tracking-tight text-gray-500">
-                Preencha a coluna de <strong className="text-[#E25E3E]">METODOLOGIA DE PRECIFICAÇÃO</strong> com o nome da metodologia desejada.
-              </p>
-              <p className="text-sm tracking-tight text-gray-500">Para facilitar, clique na que deseja utilizar e você poderá colar no cédula da planilha.</p>
-              <div className="mt-2 flex w-full flex-wrap items-start gap-2">
-                {pricingMethods ? (
-                  pricingMethods.map((method) => (
-                    <button
-                      key={method._id}
-                      onClick={() => copyToClipboard(method.nome)}
-                      className="flex items-center gap-1 rounded border border-cyan-600 px-2 py-1 font-medium text-cyan-600"
-                    >
-                      <p className="text-xs">{method.nome}</p>
-                      <MdContentCopy />
-                    </button>
-                  ))
-                ) : (
-                  <p className="flex w-full grow items-center justify-center py-2 text-center text-sm font-medium italic tracking-tight text-gray-500">
-                    Carregando metodologias...
-                  </p>
-                )}
-              </div>
-            </div>
-
+            <BulkOperationHelpMenu session={session} pricingMethods={pricingMethods || []} partners={partners || []} />
             <div className="relative mb-4 flex w-full items-center justify-center">
               <label
                 htmlFor="dropzone-file"
@@ -272,7 +256,35 @@ function KitBulkOperation({ session, closeModal }: KitBulkOperationProps) {
                 <p className="text-sm font-medium text-gray-500">
                   Foram identificados <strong className="text-[#f25041]">{deleteCount}</strong> kits para exclusão.
                 </p>
-                <div className="flex flex-wrap justify-between gap-2 py-2">
+                <div className="mt-2 flex w-full flex-col gap-1">
+                  <h1 className="text-start font-Inter text-xs font-medium leading-none tracking-tight">ADICIONAR PRODUTOS COMUNS</h1>
+                  <div className="flex w-full flex-wrap items-start justify-start gap-2">
+                    {CommonProductsByProjectType.map((type, index) => (
+                      <button
+                        onClick={() => setKitsHolder((prev) => prev.map((k) => ({ ...k, produtos: [...k.produtos, ...type.produtos] })))}
+                        key={index}
+                        className={`rounded-lg px-2 py-1 text-xs font-medium bg-[${type.cores.texto}] text-[${type.cores.fundo}]  w-fit`}
+                      >
+                        {type.nome}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div className="mt-2 flex w-full flex-col gap-1">
+                  <h1 className="text-start font-Inter text-xs font-medium leading-none tracking-tight">ADICIONAR SERVIÇOS COMUNS</h1>
+                  <div className="flex w-full flex-wrap items-start justify-start gap-2">
+                    {CommonServicesByProjectType.map((type, index) => (
+                      <button
+                        onClick={() => setKitsHolder((prev) => prev.map((k) => ({ ...k, servicos: [...k.servicos, ...type.servicos] })))}
+                        key={index}
+                        className={`rounded-lg px-2 py-1 text-xs font-medium bg-[${type.cores.texto}] text-[${type.cores.fundo}]  w-fit`}
+                      >
+                        {type.nome}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div className="flex flex-col gap-2 py-2">
                   {kitsHolder.map((kit, index) => (
                     <BulkOperationKit key={index} kit={kit} />
                   ))}

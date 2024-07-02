@@ -14,6 +14,7 @@ import { ProductItemCategories } from '@/utils/select-options'
 import { TNewKit } from '../Modals/Kit/NewKit'
 import { useEquipments } from '@/utils/queries/utils'
 import SelectInputVirtualized from '../Inputs/SelectInputVirtualized'
+import { CommonProductsByProjectType } from '@/utils/constants'
 
 type ProductCompositionProps = {
   infoHolder: TKit
@@ -403,7 +404,20 @@ function ProductComposition({ infoHolder, setInfoHolder }: ProductCompositionPro
             </button>
           </div>
         </div>
-
+        <div className="flex w-full flex-col gap-1">
+          <h1 className="text-start font-Inter text-xs font-medium leading-none tracking-tight">PRODUTOS COMUNS</h1>
+          <div className="flex w-full flex-wrap items-start justify-start gap-2">
+            {CommonProductsByProjectType.map((type, index) => (
+              <button
+                onClick={() => setInfoHolder((prev) => ({ ...prev, produtos: [...prev.produtos, ...type.produtos] }))}
+                key={index}
+                className={`rounded-lg px-2 py-1 text-xs font-medium bg-[${type.cores.texto}] text-[${type.cores.fundo}]  w-fit`}
+              >
+                {type.nome}
+              </button>
+            ))}
+          </div>
+        </div>
         <div className="mt-2 flex min-h-[150px] w-full flex-col rounded-md border border-gray-500 p-3 shadow-sm">
           <h1 className="mb-2 text-start font-Inter font-bold leading-none tracking-tight">PRODUTOS ADICIONADOS</h1>
           <div className="flex w-full flex-wrap items-center justify-around gap-2">
