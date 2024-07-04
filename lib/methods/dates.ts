@@ -36,7 +36,7 @@ export function getDayStringsBetweenDates({ initialDate, endDate, format }: { in
 
   return strings
 }
-export function getHoursDiff({ start, finish, businessOnly }: { start: string; finish: string; businessOnly?: boolean }) {
+export function getHoursDiff({ start, finish, businessOnly }: { start: string | Date; finish: string | Date; businessOnly?: boolean }) {
   // if (businessOnly) {
   //   // @ts-ignore
   //   const hourDiff = dayjs(finish).businessDiff(dayjs(start), 'hour')

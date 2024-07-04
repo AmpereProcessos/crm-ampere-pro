@@ -15,7 +15,7 @@ function DocumentationInformation({ infoHolder, setInfoHolder }: DocumentationIn
       <div className="flex w-full flex-col items-center gap-2 lg:flex-row">
         <div className="w-full lg:w-1/2">
           <DateInput
-            label="DATA DE LIBERAÇÃO DA DOCUMENTAÇÃO"
+            label="DATA DE LIBERAÇÃO PARA ASSINATURA"
             value={formatDateForInput(infoHolder.documentacao.dataLiberacao)}
             handleChange={(value) =>
               setInfoHolder((prev) => ({ ...prev, documentacao: { ...prev.documentacao, dataLiberacao: formatDateInputChange(value) } }))
@@ -29,6 +29,28 @@ function DocumentationInformation({ infoHolder, setInfoHolder }: DocumentationIn
             value={formatDateForInput(infoHolder.documentacao.dataAssinatura)}
             handleChange={(value) =>
               setInfoHolder((prev) => ({ ...prev, documentacao: { ...prev.documentacao, dataAssinatura: formatDateInputChange(value) } }))
+            }
+            width="100%"
+          />
+        </div>
+      </div>
+      <div className="flex w-full flex-col items-center gap-2 lg:flex-row">
+        <div className="w-full lg:w-1/2">
+          <DateInput
+            label="INÍCIO DA ELABORAÇÃO DAS DOCUMENTAÇÕES"
+            value={formatDateForInput(infoHolder.documentacao.dataInicioElaboracao)}
+            handleChange={(value) =>
+              setInfoHolder((prev) => ({ ...prev, documentacao: { ...prev.documentacao, dataInicioElaboracao: formatDateInputChange(value) } }))
+            }
+            width="100%"
+          />
+        </div>
+        <div className="w-full lg:w-1/2">
+          <DateInput
+            label="CONCLUSÃO DA ELABORAÇÃO DAS DOCUMENTAÇÕES"
+            value={formatDateForInput(infoHolder.documentacao.dataConclusaoElaboracao)}
+            handleChange={(value) =>
+              setInfoHolder((prev) => ({ ...prev, documentacao: { ...prev.documentacao, dataConclusaoElaboracao: formatDateInputChange(value) } }))
             }
             width="100%"
           />

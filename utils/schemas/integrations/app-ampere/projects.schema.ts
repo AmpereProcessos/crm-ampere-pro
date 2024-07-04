@@ -511,6 +511,30 @@ export const ProjectDBSimplifiedProjection = {
   numeroResidencia: 1,
 }
 
+export const AppProjectResultsSimplifiedProjection = {
+  _id: 1,
+  qtde: 1,
+  nomeDoContrato: 1,
+  codigoSVB: 1,
+  cidade: 1,
+  idParceiro: 1,
+  idProjetoCRM: 1,
+  'sistema.potPico': 1,
+  'sistema.valorProjeto': 1,
+  'padrao.valor': 1,
+  'estruturaPersonalizada.valor': 1,
+  'contrato.dataSolicitacao': 1,
+  'contrato.dataLiberacao': 1,
+  'contrato.dataAssinatura': 1,
+  'projeto.dataAssDocumentacao': 1,
+  'parecer.dataParecerDeAcesso': 1,
+  'compra.dataLiberacao': 1,
+  'compra.dataPedido': 1,
+  'compra.dataEntrega': 1,
+  'obra.entrada': 1,
+  'obra.saida': 1,
+}
+
 const PersonalizedFieldFilters = z.enum(
   [
     'contrato.dataAssinatura',

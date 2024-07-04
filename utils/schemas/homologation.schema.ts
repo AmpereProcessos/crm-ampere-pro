@@ -118,14 +118,24 @@ const HomologationDocumentationSchema = z.object({
     required_error: 'Forma de assinatura da documentação não informada.',
     invalid_type_error: 'Tipo não válido para a forma de assinatura da documentação.',
   }),
+  dataInicioElaboracao: z
+    .string({ invalid_type_error: 'Tipo não válido para a data de início da elaboração da documentação.' })
+    .datetime({ message: 'Formato inválido para a data de início da elaboração da documentação.' })
+    .optional()
+    .nullable(),
+  dataConclusaoElaboracao: z
+    .string({ invalid_type_error: 'Tipo não válido para a data de início da elaboração da documentação.' })
+    .datetime({ message: 'Formato inválido para a data de início da elaboração da documentação.' })
+    .optional()
+    .nullable(),
   dataLiberacao: z
-    .string({ invalid_type_error: 'Tipo não válido para a data de liberação da documentação.' })
-    .datetime({ message: 'Formato inválido para a data de liberação da documentação.' })
+    .string({ invalid_type_error: 'Tipo não válido para a data de liberação das documentações.' })
+    .datetime({ message: 'Formato inválido para a data de liberação das documentações.' })
     .optional()
     .nullable(),
   dataAssinatura: z
-    .string({ invalid_type_error: 'Tipo não válido para a data de assinatura da documentação.' })
-    .datetime({ message: 'Formato inválido para a data de assinatura da documentação.' })
+    .string({ invalid_type_error: 'Tipo não válido para a data de assinatura das documentações.' })
+    .datetime({ message: 'Formato inválido para a data de assinatura das documentações.' })
     .optional()
     .nullable(),
 })

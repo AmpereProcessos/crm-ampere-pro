@@ -22,11 +22,13 @@ type GetRequestObjectByProjectTypeArguments = {
   client?: TClientDTO
 }
 function getRequestObjectByProjectType({ propose, projectType, responsible, client }: GetRequestObjectByProjectTypeArguments): TContractRequest {
+  const seller = propose.oportunidadeDados?.responsaveis.find((r) => r.papel == 'VENDEDOR')
+  const sdr = propose.oportunidadeDados?.responsaveis.find((r) => r.papel == 'SDR')
   return {
-    nomeVendedor: propose.oportunidadeDados?.responsaveis.find((r) => r.papel == 'VENDEDOR')?.nome || '',
+    nomeVendedor: seller?.nome || sdr?.nome || '',
     nomeDoProjeto: propose.oportunidadeDados?.nome ? propose.oportunidadeDados?.nome : '',
     idParceiro: propose.oportunidadeDados?.idParceiro,
-    telefoneVendedor: responsible?.telefone || '',
+    telefoneVendedor: seller?.telefone || sdr?.telefone || '',
     tipoDeServico: propose.oportunidadeDados.tipo.titulo ? propose.oportunidadeDados.tipo.titulo : 'SISTEMA FOTOVOLTAICO',
     nomeDoContrato: propose.oportunidadeDados?.nome ? propose.oportunidadeDados?.nome : '',
     telefone: client?.telefonePrimario || '',
