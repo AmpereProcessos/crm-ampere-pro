@@ -1,7 +1,8 @@
 import { formatToMoney } from '@/lib/methods/formatting'
-import { getPricingTotals } from '@/utils/pricing/methods'
+import { getPricingTotals, getProfitMargin } from '@/utils/pricing/methods'
 import { TProposalDTO } from '@/utils/schemas/proposal.schema'
 import React from 'react'
+import { TbMathFunction } from 'react-icons/tb'
 
 type ProposalViewPricingBlockProps = {
   userHasPricingViewPermission: boolean
@@ -30,21 +31,34 @@ function ProposalViewPricingBlock({ userHasPricingViewPermission, pricing }: Pro
             </div>
             <div className="flex w-full flex-col rounded-md bg-[#fff] py-2">
               {pricing.map((priceItem, index) => {
-                const { descricao, custoFinal, margemLucro, valorCalculado, valorFinal } = priceItem
+                const { descricao, custoFinal, custoCalculado, margemLucro, valorCalculado, valorFinal } = priceItem
                 const profitMarginPercentage = margemLucro / 100
+                const calculatedProfitMargin = getProfitMargin(custoCalculado, valorCalculado)
                 return (
                   <div className={`flex w-full items-center rounded ${Math.abs(valorFinal - valorCalculado) > 1 ? 'bg-orange-200' : ''}`} key={index}>
                     <div className="flex w-6/12 items-center justify-center p-1">
                       <h1 className="text-gray-500">{descricao}</h1>
                     </div>
-                    <div className="flex w-2/12 items-center justify-center p-1">
+                    <div className="flex w-2/12 flex-col items-center justify-center p-1">
                       <h1 className="text-gray-500">{formatToMoney(custoFinal)}</h1>
+                      <div className="flex items-center gap-1">
+                        <TbMathFunction color={'rgb(6,182,212)'} />
+                        <h1 className="text-[0.65rem] text-gray-500">{formatToMoney(custoFinal)}</h1>
+                      </div>
                     </div>
-                    <div className="flex w-2/12 items-center justify-center p-1">
+                    <div className="flex w-2/12 flex-col items-center justify-center p-1">
                       <h1 className="text-gray-500">{formatToMoney(valorFinal * profitMarginPercentage)}</h1>
+                      <div className="flex items-center gap-1">
+                        <TbMathFunction color={'rgb(6,182,212)'} />
+                        <h1 className="text-[0.65rem] text-gray-500">{formatToMoney(valorCalculado * calculatedProfitMargin)}</h1>
+                      </div>
                     </div>
-                    <div className="flex w-2/12 items-center justify-center gap-4 p-1">
+                    <div className="flex w-2/12 flex-col items-center justify-center p-1">
                       <h1 className="w-full text-center text-gray-500 lg:w-1/2">{formatToMoney(valorFinal)}</h1>
+                      <div className="flex items-center gap-1">
+                        <TbMathFunction color={'rgb(6,182,212)'} />
+                        <h1 className="text-[0.65rem] text-gray-500">{formatToMoney(valorCalculado)}</h1>
+                      </div>
                     </div>
                   </div>
                 )
@@ -53,14 +67,26 @@ function ProposalViewPricingBlock({ userHasPricingViewPermission, pricing }: Pro
                 <div className="flex w-6/12 items-center justify-center p-1">
                   <h1 className="font-bold text-gray-800">TOTAIS</h1>
                 </div>
-                <div className="flex w-2/12 items-center justify-center p-1">
+                <div className="flex w-2/12 flex-col items-center justify-center p-1">
                   <h1 className="font-medium text-gray-800">{formatToMoney(getPricingTotals(pricing).cost)}</h1>
+                  <div className="flex items-center gap-1">
+                    <TbMathFunction color={'rgb(6,182,212)'} />
+                    <h1 className="text-[0.65rem] text-gray-500">{formatToMoney(getPricingTotals(pricing).costCalculated)}</h1>
+                  </div>
                 </div>
-                <div className="flex w-2/12 items-center justify-center p-1">
+                <div className="flex w-2/12 flex-col items-center justify-center p-1">
                   <h1 className="font-medium text-gray-800">{formatToMoney(getPricingTotals(pricing).profit)}</h1>
+                  <div className="flex items-center gap-1">
+                    <TbMathFunction color={'rgb(6,182,212)'} />
+                    <h1 className="text-[0.65rem] text-gray-500">{formatToMoney(getPricingTotals(pricing).profitCalculated)}</h1>
+                  </div>
                 </div>
-                <div className="flex w-2/12 items-center justify-center p-1">
+                <div className="flex w-2/12 flex-col items-center justify-center p-1">
                   <h1 className="font-medium text-gray-800">{formatToMoney(getPricingTotals(pricing).total)}</h1>
+                  <div className="flex items-center gap-1">
+                    <TbMathFunction color={'rgb(6,182,212)'} />
+                    <h1 className="text-[0.65rem] text-gray-500">{formatToMoney(getPricingTotals(pricing).totalCalculated)}</h1>
+                  </div>
                 </div>
               </div>
             </div>

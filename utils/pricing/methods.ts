@@ -402,16 +402,23 @@ export function getPricingSuggestedTotal({ pricing }: { pricing: TPricingItem[] 
 export function getPricingTotals(pricing: TPricingItem[]) {
   const totals = pricing.reduce(
     (acc, current) => {
-      const { custoFinal, margemLucro, valorFinal } = current
+      const { custoFinal, custoCalculado, margemLucro, valorFinal, valorCalculado } = current
+      const margemLucroCalculada = getProfitMargin(custoCalculado, valorCalculado)
       acc.cost += custoFinal
+      acc.costCalculated += custoCalculado
       acc.profit += valorFinal * (margemLucro / 100)
+      acc.profitCalculated += valorCalculado * margemLucroCalculada
       acc.total += valorFinal
+      acc.totalCalculated += valorCalculado
       return acc
     },
     {
       cost: 0,
+      costCalculated: 0,
       profit: 0,
+      profitCalculated: 0,
       total: 0,
+      totalCalculated: 0,
     }
   )
   return totals

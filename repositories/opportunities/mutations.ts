@@ -13,7 +13,6 @@ export async function insertOpportunity({ collection, info, partnerId }: CreateO
   try {
     const lastInsertedIdentificator = await collection
       .aggregate([
-        { $match: { idParceiro: partnerId } },
         { $project: { identificador: 1 } },
         {
           $sort: {
