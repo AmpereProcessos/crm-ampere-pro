@@ -173,7 +173,7 @@ const getProcessTrackingStatsRoute: NextApiHandler<GetResponse> = async (req, re
       { 'obra.saida': { $gte: afterDateStr, $lte: beforeDateStr } },
     ],
   }
-  const query = { ...partnerQuery, ...orQuery }
+  const query: Filter<TAppProject> = { ...partnerQuery, ...orQuery, tipoDeServico: projectType }
 
   const projects = await getSimplifiedProjects({ collection, query })
   console.log('PROJETOS ENCONTRADOS', projects.length)
