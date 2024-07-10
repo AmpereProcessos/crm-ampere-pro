@@ -817,9 +817,11 @@ export const AppProjectResultsSimplifiedProjection = {
   'contrato.dataLiberacao': 1,
   'contrato.dataAssinatura': 1,
   homologacao: 1,
+  'compra.status': 1,
   'compra.dataLiberacao': 1,
   'compra.dataPedido': 1,
   'compra.dataEntrega': 1,
+  'obra.statusDaObra': 1,
   'obra.entrada': 1,
   'obra.saida': 1,
 }

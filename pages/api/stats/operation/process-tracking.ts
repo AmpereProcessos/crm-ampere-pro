@@ -217,20 +217,16 @@ const getProcessTrackingStatsRoute: NextApiHandler<GetResponse> = async (req, re
     }
     if (ProjectTypeProcesses.some((p) => HomologationProcessesIds.includes(p))) {
       if (!acc['HOMOLOGAÇÃO']) acc['HOMOLOGAÇÃO'] = {}
+      const homologationConcluded = current.homologacao.concluido
       const homologationLiberationDate = getDateFromString(current.homologacao.dataLiberacao)
       const homologationElaborationStartDate = getDateFromString(current.homologacao.dataInicioElaboracao)
       const homologationElaborationEndDate = getDateFromString(current.homologacao.dataConclusaoElaboracao)
       const homologationAccessRequestDate = getDateFromString(current.homologacao.dataSolicitacaoAcesso)
       const homologationAccessResponseDate = getDateFromString(current.homologacao.dataRespostaAcesso)
 
-      const executionEndDate = getDateFromString(current.execucao.fim)
-
-      const homologationVistoryRequestDate = getDateFromString(current.homologacao.dataSolicitacaoVistoria)
-      const homologationVistoryApprovalDate = getDateFromString(current.homologacao.dataEfetivacaoVistoria)
-
       if (ProjectTypeProcesses.includes('homologation_initiation')) {
         if (!acc['HOMOLOGAÇÃO']['INICIAÇÃO DE PROJETO']) acc['HOMOLOGAÇÃO']['INICIAÇÃO DE PROJETO'] = { andamento: 0, concluidos: 0, tempoTotalConclusao: 0 }
-        const isInHomologationInitiation = !!homologationLiberationDate && !homologationElaborationStartDate
+        const isInHomologationInitiation = !homologationConcluded && !!homologationLiberationDate && !homologationElaborationStartDate
         if (isInHomologationInitiation) acc['HOMOLOGAÇÃO']['INICIAÇÃO DE PROJETO'].andamento += 1
         const wasInitiatedWithinPeriod = getDateIsWithinPeriod({ date: homologationElaborationStartDate, after: afterDate, before: beforeDate })
         if (wasInitiatedWithinPeriod) {
@@ -246,7 +242,7 @@ const getProcessTrackingStatsRoute: NextApiHandler<GetResponse> = async (req, re
       if (ProjectTypeProcesses.includes('homologation_documents_elaboration')) {
         if (!acc['HOMOLOGAÇÃO']['ELABORAÇÃO DA DOCUMENTAÇÃO'])
           acc['HOMOLOGAÇÃO']['ELABORAÇÃO DA DOCUMENTAÇÃO'] = { andamento: 0, concluidos: 0, tempoTotalConclusao: 0 }
-        const isInHomologationElaboration = !!homologationElaborationStartDate && !homologationElaborationEndDate
+        const isInHomologationElaboration = !homologationConcluded && !!homologationElaborationStartDate && !homologationElaborationEndDate
         if (isInHomologationElaboration) acc['HOMOLOGAÇÃO']['ELABORAÇÃO DA DOCUMENTAÇÃO'].andamento += 1
         const wasElaboratedWithinPeriod = getDateIsWithinPeriod({ date: homologationElaborationEndDate, after: afterDate, before: beforeDate })
         if (wasElaboratedWithinPeriod) {
@@ -262,7 +258,7 @@ const getProcessTrackingStatsRoute: NextApiHandler<GetResponse> = async (req, re
       if (ProjectTypeProcesses.includes('homologation_access_request')) {
         if (!acc['HOMOLOGAÇÃO']['SOLICITAÇÃO DE ACESSO A CONCESSIONÁRIA'])
           acc['HOMOLOGAÇÃO']['SOLICITAÇÃO DE ACESSO A CONCESSIONÁRIA'] = { andamento: 0, concluidos: 0, tempoTotalConclusao: 0 }
-        const isInHomologationAccessRequest = !!homologationElaborationEndDate && !homologationAccessRequestDate
+        const isInHomologationAccessRequest = !homologationConcluded && !!homologationElaborationEndDate && !homologationAccessRequestDate
         if (isInHomologationAccessRequest) acc['HOMOLOGAÇÃO']['SOLICITAÇÃO DE ACESSO A CONCESSIONÁRIA'].andamento += 1
         const wasRequestedAccessWithinPeriod = getDateIsWithinPeriod({ date: homologationAccessRequestDate, after: afterDate, before: beforeDate })
         if (wasRequestedAccessWithinPeriod) {
@@ -278,7 +274,7 @@ const getProcessTrackingStatsRoute: NextApiHandler<GetResponse> = async (req, re
       if (ProjectTypeProcesses.includes('homologation_access_approval')) {
         if (!acc['HOMOLOGAÇÃO']['APROVAÇÃO DA CONCESSIONÁRIA'])
           acc['HOMOLOGAÇÃO']['APROVAÇÃO DA CONCESSIONÁRIA'] = { andamento: 0, concluidos: 0, tempoTotalConclusao: 0 }
-        const isInHomologationAccessApproval = !!homologationAccessRequestDate && !homologationAccessResponseDate
+        const isInHomologationAccessApproval = !homologationConcluded && !!homologationAccessRequestDate && !homologationAccessResponseDate
         if (isInHomologationAccessApproval) acc['HOMOLOGAÇÃO']['APROVAÇÃO DA CONCESSIONÁRIA'].andamento += 1
         const wasApprovedAccessWithinPeriod = getDateIsWithinPeriod({ date: homologationAccessResponseDate, after: afterDate, before: beforeDate })
         if (wasApprovedAccessWithinPeriod) {
@@ -294,6 +290,7 @@ const getProcessTrackingStatsRoute: NextApiHandler<GetResponse> = async (req, re
     }
     if (ProjectTypeProcesses.some((p) => SupplyProcessesIds.includes(p))) {
       if (!acc['SUPRIMENTAÇÃO']) acc['SUPRIMENTAÇÃO'] = {}
+      const supplyConcluded = current.compra.concluido
       const contractSignatureDate = getDateFromString(current.contrato.dataAssinatura)
 
       const supplyLiberationDate = getDateFromString(current.compra.dataLiberacao)
@@ -303,7 +300,7 @@ const getProcessTrackingStatsRoute: NextApiHandler<GetResponse> = async (req, re
       if (ProjectTypeProcesses.includes('supplementation_release')) {
         if (!acc['SUPRIMENTAÇÃO']['LIBERAÇÃO PARA COMPRA'])
           acc['SUPRIMENTAÇÃO']['LIBERAÇÃO PARA COMPRA'] = { andamento: 0, concluidos: 0, tempoTotalConclusao: 0 }
-        const isInSupplyLiberation = !!contractSignatureDate && !supplyLiberationDate
+        const isInSupplyLiberation = !supplyConcluded && !!contractSignatureDate && !supplyLiberationDate
         if (isInSupplyLiberation) acc['SUPRIMENTAÇÃO']['LIBERAÇÃO PARA COMPRA'].andamento += 1
         const wasReleasedForSupplyWithinPeriod = getDateIsWithinPeriod({ date: supplyLiberationDate, after: afterDate, before: beforeDate })
         if (wasReleasedForSupplyWithinPeriod) {
@@ -315,7 +312,7 @@ const getProcessTrackingStatsRoute: NextApiHandler<GetResponse> = async (req, re
       }
       if (ProjectTypeProcesses.includes('supplementation_order')) {
         if (!acc['SUPRIMENTAÇÃO']['COMPRA DE PRODUTOS']) acc['SUPRIMENTAÇÃO']['COMPRA DE PRODUTOS'] = { andamento: 0, concluidos: 0, tempoTotalConclusao: 0 }
-        const isInSupplyOrder = !!supplyLiberationDate && !supplyOrderDate
+        const isInSupplyOrder = !supplyConcluded && !!supplyLiberationDate && !supplyOrderDate
         if (isInSupplyOrder) acc['SUPRIMENTAÇÃO']['COMPRA DE PRODUTOS'].andamento += 1
         const wasOrderedWithinPeriod = getDateIsWithinPeriod({ date: supplyOrderDate, after: afterDate, before: beforeDate })
         if (wasOrderedWithinPeriod) {
@@ -327,7 +324,7 @@ const getProcessTrackingStatsRoute: NextApiHandler<GetResponse> = async (req, re
       }
       if (ProjectTypeProcesses.includes('supplementation_delivery')) {
         if (!acc['SUPRIMENTAÇÃO']['ENTREGA DE PRODUTOS']) acc['SUPRIMENTAÇÃO']['ENTREGA DE PRODUTOS'] = { andamento: 0, concluidos: 0, tempoTotalConclusao: 0 }
-        const inInSupplyDelivery = !!supplyOrderDate && !supplyDeliveryDate
+        const inInSupplyDelivery = !supplyConcluded && !!supplyOrderDate && !supplyDeliveryDate
         if (inInSupplyDelivery) acc['SUPRIMENTAÇÃO']['ENTREGA DE PRODUTOS'].andamento += 1
         const wasDeliveredWithinPeriod = getDateIsWithinPeriod({ date: supplyDeliveryDate, after: afterDate, before: beforeDate })
         if (wasDeliveredWithinPeriod) {
@@ -340,6 +337,7 @@ const getProcessTrackingStatsRoute: NextApiHandler<GetResponse> = async (req, re
     }
     if (ProjectTypeProcesses.some((p) => ExecutionProcessesIds.includes(p))) {
       if (!acc['EXECUÇÃO']) acc['EXECUÇÃO'] = {}
+      const executionConcluded = current.execucao.concluido
       const contractSignatureDate = getDateFromString(current.contrato.dataAssinatura)
       const supplyDeliveryDate = getDateFromString(current.compra.dataEntrega)
 
@@ -350,7 +348,7 @@ const getProcessTrackingStatsRoute: NextApiHandler<GetResponse> = async (req, re
         if (!acc['EXECUÇÃO']['PLANEJAMENTO PÓS ENTREGA PARA EXECUÇÃO'])
           acc['EXECUÇÃO']['PLANEJAMENTO PÓS ENTREGA PARA EXECUÇÃO'] = { andamento: 0, concluidos: 0, tempoTotalConclusao: 0 }
 
-        const isInExecutionPlanningPosDelivery = !!supplyDeliveryDate && !executionStartDate
+        const isInExecutionPlanningPosDelivery = !executionConcluded && !!supplyDeliveryDate && !executionStartDate
         if (isInExecutionPlanningPosDelivery) acc['EXECUÇÃO']['PLANEJAMENTO PÓS ENTREGA PARA EXECUÇÃO'].andamento += 1
         const wasStartedExecutionWithinPeriod = getDateIsWithinPeriod({ date: executionStartDate, after: afterDate, before: beforeDate })
         if (wasStartedExecutionWithinPeriod) {
@@ -364,7 +362,7 @@ const getProcessTrackingStatsRoute: NextApiHandler<GetResponse> = async (req, re
         if (!acc['EXECUÇÃO']['PLANEJAMENTO PÓS CONTRATO PARA EXECUÇÃO'])
           acc['EXECUÇÃO']['PLANEJAMENTO PÓS CONTRATO PARA EXECUÇÃO'] = { andamento: 0, concluidos: 0, tempoTotalConclusao: 0 }
 
-        const isInExecutionPlanningPosContractSigning = !!contractSignatureDate && !executionStartDate
+        const isInExecutionPlanningPosContractSigning = !executionConcluded && !!contractSignatureDate && !executionStartDate
         if (isInExecutionPlanningPosContractSigning) acc['EXECUÇÃO']['PLANEJAMENTO PÓS CONTRATO PARA EXECUÇÃO'].andamento += 1
         const wasStartedExecutionWithinPeriod = getDateIsWithinPeriod({ date: executionStartDate, after: afterDate, before: beforeDate })
         if (wasStartedExecutionWithinPeriod) {
@@ -377,7 +375,7 @@ const getProcessTrackingStatsRoute: NextApiHandler<GetResponse> = async (req, re
       if (ProjectTypeProcesses.includes('execution')) {
         if (!acc['EXECUÇÃO']['EXECUÇÃO']) acc['EXECUÇÃO']['EXECUÇÃO'] = { andamento: 0, concluidos: 0, tempoTotalConclusao: 0 }
 
-        const isInExecution = !!executionStartDate && !executionEndDate
+        const isInExecution = !executionConcluded && !!executionStartDate && !executionEndDate
         if (isInExecution) acc['EXECUÇÃO']['EXECUÇÃO'].andamento += 1
         const wasExecutedWithinPeriod = getDateIsWithinPeriod({ date: executionEndDate, after: afterDate, before: beforeDate })
         if (wasExecutedWithinPeriod) {
@@ -390,7 +388,7 @@ const getProcessTrackingStatsRoute: NextApiHandler<GetResponse> = async (req, re
     }
     if (ProjectTypeProcesses.some((p) => CommissioningProcessesIds.includes(p))) {
       if (!acc['COMISSIONAMENTO']) acc['COMISSIONAMENTO'] = {}
-
+      const homologationConcluded = current.homologacao.concluido
       const executionEndDate = getDateFromString(current.execucao.fim)
 
       const homologationVistoryRequestDate = getDateFromString(current.homologacao.dataSolicitacaoVistoria)
@@ -398,7 +396,7 @@ const getProcessTrackingStatsRoute: NextApiHandler<GetResponse> = async (req, re
       if (ProjectTypeProcesses.includes('homologation_vistory_request')) {
         if (!acc['COMISSIONAMENTO']['SOLICITAÇÃO DE VISTORIA'])
           acc['COMISSIONAMENTO']['SOLICITAÇÃO DE VISTORIA'] = { andamento: 0, concluidos: 0, tempoTotalConclusao: 0 }
-        const isInHomologationVistoryRequest = !!executionEndDate && !homologationVistoryRequestDate
+        const isInHomologationVistoryRequest = !homologationConcluded && !!executionEndDate && !homologationVistoryRequestDate
         if (isInHomologationVistoryRequest) acc['COMISSIONAMENTO']['SOLICITAÇÃO DE VISTORIA'].andamento += 1
         const wasRequestedVistoryWithinPeriod = getDateIsWithinPeriod({ date: homologationVistoryRequestDate, after: afterDate, before: beforeDate })
         if (wasRequestedVistoryWithinPeriod) {
@@ -412,7 +410,7 @@ const getProcessTrackingStatsRoute: NextApiHandler<GetResponse> = async (req, re
       if (ProjectTypeProcesses.includes('homologation_vistory_approval')) {
         if (!acc['COMISSIONAMENTO']['APROVAÇÃO DA VISTORIA'])
           acc['COMISSIONAMENTO']['APROVAÇÃO DA VISTORIA'] = { andamento: 0, concluidos: 0, tempoTotalConclusao: 0 }
-        const isInHomologationVistoryApproval = !!homologationVistoryRequestDate && !homologationVistoryApprovalDate
+        const isInHomologationVistoryApproval = !homologationConcluded && !!homologationVistoryRequestDate && !homologationVistoryApprovalDate
         if (isInHomologationVistoryApproval) acc['COMISSIONAMENTO']['APROVAÇÃO DA VISTORIA'].andamento += 1
         const wasApprovedVistoryWithinPeriod = getDateIsWithinPeriod({ date: homologationVistoryApprovalDate, after: afterDate, before: beforeDate })
         if (wasApprovedVistoryWithinPeriod) {
@@ -448,6 +446,7 @@ type TSimplifiedProjectResult = {
     dataAssinatura: TAppProject['contrato']['dataAssinatura']
   }
   homologacao: {
+    concluido: boolean
     dataLiberacao: TAppProject['homologacao']['dataLiberacao']
     dataInicioElaboracao: TAppProject['homologacao']['documentacao']['dataInicioElaboracao']
     dataConclusaoElaboracao: TAppProject['homologacao']['documentacao']['dataConclusaoElaboracao']
@@ -457,11 +456,13 @@ type TSimplifiedProjectResult = {
     dataEfetivacaoVistoria: TAppProject['homologacao']['vistoria']['dataEfetivacao']
   }
   compra: {
+    concluido: boolean
     dataLiberacao: TAppProject['compra']['dataLiberacao']
     dataPedido: TAppProject['compra']['dataPedido']
     dataEntrega: TAppProject['compra']['dataEntrega']
   }
   execucao: {
+    concluido: boolean
     inicio: TAppProject['obra']['entrada']
     fim: TAppProject['obra']['saida']
   }
@@ -496,6 +497,7 @@ async function getSimplifiedProjects({ collection, query }: GetSimplifiedProject
           dataAssinatura: info.contrato.dataAssinatura,
         },
         homologacao: {
+          concluido: !!info.homologacao.dataEfetivacao,
           dataLiberacao: info.homologacao.dataLiberacao,
           dataInicioElaboracao: info.homologacao.documentacao.dataInicioElaboracao,
           dataConclusaoElaboracao: info.homologacao.documentacao.dataConclusaoElaboracao,
@@ -505,11 +507,13 @@ async function getSimplifiedProjects({ collection, query }: GetSimplifiedProject
           dataEfetivacaoVistoria: info.homologacao.vistoria.dataEfetivacao,
         },
         compra: {
+          concluido: info.compra.status == 'CONCLUIDA',
           dataLiberacao: info.compra.dataLiberacao,
           dataPedido: info.compra.dataPedido,
           dataEntrega: info.compra.dataEntrega,
         },
         execucao: {
+          concluido: info.obra.statusDaObra == 'CONCLUIDA',
           inicio: info.obra.entrada,
           fim: info.obra.saida,
         },
