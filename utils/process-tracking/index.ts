@@ -38,17 +38,6 @@ export const AllProcessTracked = {
       descricao:
         'Processo de aprovação da solicitação de acesso. Refere-se ao tempo necessário entre a solicitação de acesso e a aprovação do parecer de acesso pela concessionária.',
     },
-    {
-      id: 'homologation_vistory_request',
-      processo: 'SOLICITAÇÃO DE VISTORIA',
-      descricao: 'Processo de solicitação de vistoria a concessionária. Refere-se ao tempo necessário, uma vez concluída a obra, para o pedido de vistoria.',
-    },
-    {
-      id: 'homologation_vistory_approval',
-      processo: 'APROVAÇÃO DA VISTORIA',
-      descricao:
-        'Processo de vistoria da concessionária. Refere-se ao tempo entre o pedido de vistoria a concessionária até a realização da vistoria (troca do medidor).',
-    },
   ],
   SUPRIMENTAÇÃO: [
     {
@@ -88,11 +77,25 @@ export const AllProcessTracked = {
         'Processo de execução do serviço uma vez iniciado o serviço. Compreende o período entre a data de entrada na obra até a data de saída da obra.',
     },
   ],
+  COMISSIONAMENTO: [
+    {
+      id: 'homologation_vistory_request',
+      processo: 'SOLICITAÇÃO DE VISTORIA',
+      descricao: 'Processo de solicitação de vistoria a concessionária. Refere-se ao tempo necessário, uma vez concluída a obra, para o pedido de vistoria.',
+    },
+    {
+      id: 'homologation_vistory_approval',
+      processo: 'APROVAÇÃO DA VISTORIA',
+      descricao:
+        'Processo de vistoria da concessionária. Refere-se ao tempo entre o pedido de vistoria a concessionária até a realização da vistoria (troca do medidor).',
+    },
+  ],
 }
 export const ContractProcessesIds = AllProcessTracked.CONTRATOS.map((p) => p.id)
 export const HomologationProcessesIds = AllProcessTracked.HOMOLOGAÇÃO.map((p) => p.id)
 export const SupplyProcessesIds = AllProcessTracked.SUPRIMENTAÇÃO.map((p) => p.id)
 export const ExecutionProcessesIds = AllProcessTracked.EXECUÇÃO.map((p) => p.id)
+export const CommissioningProcessesIds = AllProcessTracked.COMISSIONAMENTO.map((p) => p.id)
 export const ProcessTrackedByProjectType = {
   'SISTEMA FOTOVOLTAICO': [
     'contract_formulation',

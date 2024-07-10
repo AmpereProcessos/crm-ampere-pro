@@ -20,5 +20,6 @@ export function useProcessTrackingStats({ after, before, projectType }: UseProce
   return useQuery({
     queryKey: ['process-tracking', after, before, projectType],
     queryFn: async () => await fetchProcessTrackingStats({ after, before, projectType }),
+    refetchOnWindowFocus: false,
   })
 }

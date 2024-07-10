@@ -16,6 +16,7 @@ import PPSOpenCallsBlock from './PPSOpenCallsBlock'
 import OpenActivitiesBlock from './OpenActivitiesBlock'
 import MultipleSelectInput from '@/components/Inputs/MultipleSelectInput'
 import { useStats, useStatsQueryOptions } from '@/utils/queries/stats'
+import { FaListCheck } from 'react-icons/fa6'
 
 const currentDate = new Date()
 const firstDayOfMonth = getFirstDayOfMonth(currentDate.getFullYear(), currentDate.getMonth()).toISOString()
@@ -68,14 +69,24 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
       <div className="flex w-full max-w-full grow flex-col overflow-x-hidden bg-[#f8f9fa] p-6">
         <div className="flex w-full flex-col items-center justify-between border-b border-black pb-2 lg:flex-row">
           <h1 className="font-Raleway text-2xl font-black text-black">DASHBOARD</h1>
-          {session?.user.permissoes.resultados?.visualizarComercial ? (
-            <Link href="/comercial/gestao/resultados">
-              <div className="flex items-center gap-1 font-bold tracking-tight text-gray-500 duration-300 ease-in-out hover:text-cyan-500">
-                <p className="text-sm">ACOMPANHAMENTO DE RESULTADOS</p>
-                <AiOutlineTeam />
-              </div>
-            </Link>
-          ) : null}
+          <div className="flex items-center gap-2">
+            {session?.user.permissoes.resultados?.visualizarComercial ? (
+              <Link href="/comercial/gestao/resultados">
+                <div className="flex items-center gap-1 font-bold tracking-tight text-gray-500 duration-300 ease-in-out hover:text-cyan-500">
+                  <p className="text-sm">RESULTADOS COMERCIAIS</p>
+                  <AiOutlineTeam />
+                </div>
+              </Link>
+            ) : null}
+            {session?.user.permissoes.resultados?.visualizarOperacional ? (
+              <Link href="/operacional/gestao/acompanhamento">
+                <div className="flex items-center gap-1 font-bold tracking-tight text-gray-500 duration-300 ease-in-out hover:text-cyan-500">
+                  <p className="text-sm">ACOMPANHAMENTO DE OPERAÇÃO</p>
+                  <FaListCheck />
+                </div>
+              </Link>
+            ) : null}
+          </div>
         </div>
         <div className="flex grow flex-col py-2">
           <div className="flex w-full flex-col items-end justify-end gap-2 lg:flex-row">

@@ -3,6 +3,7 @@ import connectToAmpereProjectsDatabase from '@/services/mongodb/ampere/projects-
 import { apiHandler, validateAuthenticationWithSession, validateAuthorization } from '@/utils/api'
 import {
   AllProcessTracked,
+  CommissioningProcessesIds,
   ContractProcessesIds,
   ExecutionProcessesIds,
   HomologationProcessesIds,
@@ -290,35 +291,6 @@ const getProcessTrackingStatsRoute: NextApiHandler<GetResponse> = async (req, re
           acc['HOMOLOGAÇÃO']['APROVAÇÃO DA CONCESSIONÁRIA'].tempoTotalConclusao += time
         }
       }
-      if (ProjectTypeProcesses.includes('homologation_vistory_request')) {
-        if (!acc['HOMOLOGAÇÃO']['SOLICITAÇÃO DE VISTORIA'])
-          acc['HOMOLOGAÇÃO']['SOLICITAÇÃO DE VISTORIA'] = { andamento: 0, concluidos: 0, tempoTotalConclusao: 0 }
-        const isInHomologationVistoryRequest = !!executionEndDate && !homologationVistoryRequestDate
-        if (isInHomologationVistoryRequest) acc['HOMOLOGAÇÃO']['SOLICITAÇÃO DE VISTORIA'].andamento += 1
-        const wasRequestedVistoryWithinPeriod = getDateIsWithinPeriod({ date: homologationVistoryRequestDate, after: afterDate, before: beforeDate })
-        if (wasRequestedVistoryWithinPeriod) {
-          const time =
-            executionEndDate && homologationVistoryRequestDate ? getHoursDiff({ start: executionEndDate, finish: homologationVistoryRequestDate }) || 8 : 0
-
-          acc['HOMOLOGAÇÃO']['SOLICITAÇÃO DE VISTORIA'].concluidos += 1
-          acc['HOMOLOGAÇÃO']['SOLICITAÇÃO DE VISTORIA'].tempoTotalConclusao += time
-        }
-      }
-      if (ProjectTypeProcesses.includes('homologation_vistory_approval')) {
-        if (!acc['HOMOLOGAÇÃO']['APROVAÇÃO DA VISTORIA']) acc['HOMOLOGAÇÃO']['APROVAÇÃO DA VISTORIA'] = { andamento: 0, concluidos: 0, tempoTotalConclusao: 0 }
-        const isInHomologationVistoryApproval = !!homologationVistoryRequestDate && !homologationVistoryApprovalDate
-        if (isInHomologationVistoryApproval) acc['HOMOLOGAÇÃO']['APROVAÇÃO DA VISTORIA'].andamento += 1
-        const wasApprovedVistoryWithinPeriod = getDateIsWithinPeriod({ date: homologationVistoryApprovalDate, after: afterDate, before: beforeDate })
-        if (wasApprovedVistoryWithinPeriod) {
-          const time =
-            homologationVistoryRequestDate && homologationVistoryApprovalDate
-              ? getHoursDiff({ start: homologationVistoryRequestDate, finish: homologationVistoryApprovalDate }) || 8
-              : 0
-
-          acc['HOMOLOGAÇÃO']['APROVAÇÃO DA VISTORIA'].concluidos += 1
-          acc['HOMOLOGAÇÃO']['APROVAÇÃO DA VISTORIA'].tempoTotalConclusao += time
-        }
-      }
     }
     if (ProjectTypeProcesses.some((p) => SupplyProcessesIds.includes(p))) {
       if (!acc['SUPRIMENTAÇÃO']) acc['SUPRIMENTAÇÃO'] = {}
@@ -366,7 +338,7 @@ const getProcessTrackingStatsRoute: NextApiHandler<GetResponse> = async (req, re
         }
       }
     }
-    if (ProjectTypeProcesses.some((p) => ExecutionProcessesIds)) {
+    if (ProjectTypeProcesses.some((p) => ExecutionProcessesIds.includes(p))) {
       if (!acc['EXECUÇÃO']) acc['EXECUÇÃO'] = {}
       const contractSignatureDate = getDateFromString(current.contrato.dataAssinatura)
       const supplyDeliveryDate = getDateFromString(current.compra.dataEntrega)
@@ -413,6 +385,44 @@ const getProcessTrackingStatsRoute: NextApiHandler<GetResponse> = async (req, re
 
           acc['EXECUÇÃO']['EXECUÇÃO'].concluidos += 1
           acc['EXECUÇÃO']['EXECUÇÃO'].tempoTotalConclusao += time
+        }
+      }
+    }
+    if (ProjectTypeProcesses.some((p) => CommissioningProcessesIds.includes(p))) {
+      if (!acc['COMISSIONAMENTO']) acc['COMISSIONAMENTO'] = {}
+
+      const executionEndDate = getDateFromString(current.execucao.fim)
+
+      const homologationVistoryRequestDate = getDateFromString(current.homologacao.dataSolicitacaoVistoria)
+      const homologationVistoryApprovalDate = getDateFromString(current.homologacao.dataEfetivacaoVistoria)
+      if (ProjectTypeProcesses.includes('homologation_vistory_request')) {
+        if (!acc['COMISSIONAMENTO']['SOLICITAÇÃO DE VISTORIA'])
+          acc['COMISSIONAMENTO']['SOLICITAÇÃO DE VISTORIA'] = { andamento: 0, concluidos: 0, tempoTotalConclusao: 0 }
+        const isInHomologationVistoryRequest = !!executionEndDate && !homologationVistoryRequestDate
+        if (isInHomologationVistoryRequest) acc['COMISSIONAMENTO']['SOLICITAÇÃO DE VISTORIA'].andamento += 1
+        const wasRequestedVistoryWithinPeriod = getDateIsWithinPeriod({ date: homologationVistoryRequestDate, after: afterDate, before: beforeDate })
+        if (wasRequestedVistoryWithinPeriod) {
+          const time =
+            executionEndDate && homologationVistoryRequestDate ? getHoursDiff({ start: executionEndDate, finish: homologationVistoryRequestDate }) || 8 : 0
+
+          acc['COMISSIONAMENTO']['SOLICITAÇÃO DE VISTORIA'].concluidos += 1
+          acc['COMISSIONAMENTO']['SOLICITAÇÃO DE VISTORIA'].tempoTotalConclusao += time
+        }
+      }
+      if (ProjectTypeProcesses.includes('homologation_vistory_approval')) {
+        if (!acc['COMISSIONAMENTO']['APROVAÇÃO DA VISTORIA'])
+          acc['COMISSIONAMENTO']['APROVAÇÃO DA VISTORIA'] = { andamento: 0, concluidos: 0, tempoTotalConclusao: 0 }
+        const isInHomologationVistoryApproval = !!homologationVistoryRequestDate && !homologationVistoryApprovalDate
+        if (isInHomologationVistoryApproval) acc['COMISSIONAMENTO']['APROVAÇÃO DA VISTORIA'].andamento += 1
+        const wasApprovedVistoryWithinPeriod = getDateIsWithinPeriod({ date: homologationVistoryApprovalDate, after: afterDate, before: beforeDate })
+        if (wasApprovedVistoryWithinPeriod) {
+          const time =
+            homologationVistoryRequestDate && homologationVistoryApprovalDate
+              ? getHoursDiff({ start: homologationVistoryRequestDate, finish: homologationVistoryApprovalDate }) || 8
+              : 0
+
+          acc['COMISSIONAMENTO']['APROVAÇÃO DA VISTORIA'].concluidos += 1
+          acc['COMISSIONAMENTO']['APROVAÇÃO DA VISTORIA'].tempoTotalConclusao += time
         }
       }
     }
