@@ -545,6 +545,16 @@ function PaymentInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNextS
                   },
                   {
                     id: 3,
+                    label: '100% PARCELADO NO CARTÃO DE CRÉDITO',
+                    value: '100% PARCELADO NO CARTÃO DE CRÉDITO',
+                  },
+                  {
+                    id: 4,
+                    label: '100% À VISTA NO DINHEIRO/DÉBITO/PIX',
+                    value: '100% À VISTA NO DINHEIRO/DÉBITO/PIX',
+                  },
+                  {
+                    id: 5,
                     label: 'NEGOCIAÇÃO DIFERENTE (DESCREVE ABAIXO)',
                     value: 'NEGOCIAÇÃO DIFERENTE (DESCREVE ABAIXO)',
                   },

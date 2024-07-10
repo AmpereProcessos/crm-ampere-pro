@@ -24,7 +24,7 @@ export const authOptions = {
         const db = await connectToDatabase(process.env.MONGODB_URI, 'crm')
         const usersCollection = db.collection('users')
         const partnersCollection = db.collection('partners')
-        const userInDb = await usersCollection.findOne({ email: email })
+        const userInDb = await usersCollection.findOne({ ativo: true, email: email })
         console.log(userInDb)
         if (!userInDb) throw new createHttpError.BadRequest('Usuário não encontrado.')
 

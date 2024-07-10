@@ -82,3 +82,12 @@ export function getPeriodDateParamsByReferenceDate({ reference, type = 'month', 
   if (!!resetEnd) end = end.startOf('day').subtract(3, 'hour')
   return { start: start.toDate(), end: end.toDate() }
 }
+
+export function getDateFromString(value: any) {
+  if (!value) return undefined
+  if (isNaN(new Date(value).getMilliseconds())) return undefined
+  return new Date(value)
+}
+export function getDateIsWithinPeriod({ date, after, before }: { date: Date | undefined; after: Date; before: Date }) {
+  return !!(date && date >= after && date <= before)
+}
