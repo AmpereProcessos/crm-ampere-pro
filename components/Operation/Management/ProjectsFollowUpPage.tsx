@@ -24,8 +24,8 @@ function ProjectsFollowUpPage({ session }: ProjectsFollowUpPageProps) {
       {isSuccess ? (
         <>
           <div className="mb-4 flex w-full flex-col items-center justify-between gap-2 lg:flex-row">
-            <div className="flex min-w-fit flex-col items-center gap-2">
-              <h1 className="py-6 text-center text-lg font-black leading-4 tracking-tighter">FOLLOW UP DE PROJETOS</h1>
+            <div className="flex min-w-fit flex-col items-center">
+              <h1 className="text-center text-lg font-black tracking-tighter">FOLLOW UP DE PROJETOS</h1>
               <p className="text-xs tracking-tight text-gray-500">{projects.length} projetos encontrados...</p>
             </div>
             <div className="flex grow flex-wrap items-center justify-end gap-2">
