@@ -32,7 +32,7 @@ function ProcessTrackingPage({ session }: ProcessTrackingPageProps) {
       {isSuccess ? (
         <>
           <div className="flex w-full flex-col items-center justify-between gap-2 lg:flex-row">
-            <div className="flex grow items-center gap-2">
+            <div className="flex grow flex-col items-center gap-2 lg:flex-row">
               <h1 className="py-6 text-center text-lg font-black leading-4 tracking-tighter">PROCESSOS</h1>
               {Object.keys(ProcessTrackedByProjectType).map((type, index) => (
                 <button
@@ -46,7 +46,7 @@ function ProcessTrackingPage({ session }: ProcessTrackingPageProps) {
               ))}
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex w-full items-center gap-2 lg:w-fit">
               <div className="flex flex-col items-center gap-4 lg:flex-row">
                 <h1 className="text-end text-sm font-medium uppercase tracking-tight">PERÍODO</h1>
                 <div className="flex w-full flex-col items-center gap-2 md:flex-row lg:w-fit">

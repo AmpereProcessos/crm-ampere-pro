@@ -1,24 +1,27 @@
-import DateInput from '@/components/Inputs/DateInput'
 import { Sidebar } from '@/components/Sidebar'
-import ProcessTrackingPage from '@/components/Stats/OperationFollowUpDashboard/ProcessTrackingPage'
-import ProjectsFollowUpPage from '@/components/Stats/OperationFollowUpDashboard/ProjectsFollowUpPage'
-import ErrorComponent from '@/components/utils/ErrorComponent'
-import LoadingComponent from '@/components/utils/LoadingComponent'
-import { getPeriodDateParamsByReferenceDate } from '@/lib/methods/dates'
-import { formatDateInputChange, formatDecimalPlaces } from '@/lib/methods/formatting'
-import { formatDateForInput } from '@/utils/methods'
-import { useProcessTrackingStats } from '@/utils/queries/stats/operation/process-tracking'
-import { useSession } from 'next-auth/react'
+import { Session } from 'next-auth'
 import React, { useState } from 'react'
-import { BsCheckCircle } from 'react-icons/bs'
-import { MdOutlineTimer, MdTimer } from 'react-icons/md'
-import { TbProgress } from 'react-icons/tb'
+import ProcessTrackingPage from './ProcessTrackingPage'
+import ProjectsFollowUpPage from './ProjectsFollowUpPage'
+import { getPeriodDateParamsByReferenceDate } from '@/lib/methods/dates'
+import { after, before } from 'lodash'
+import { useOperationGeneralStats } from '@/utils/queries/stats/operation/general'
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
+import { Area, AreaChart, CartesianGrid, Label, Pie, PieChart, XAxis, YAxis } from 'recharts'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import GeneralStats from './GeneralStats'
 
-function OperationFollowUp() {
-  const { data: session, status } = useSession({ required: true })
+const currentDate = new Date()
+const { start, end } = getPeriodDateParamsByReferenceDate({ reference: currentDate, type: 'year', resetStart: true })
+
+type MainManagementPageProps = {
+  session: Session
+}
+function MainManagementPage({ session }: MainManagementPageProps) {
   const [mode, setMode] = useState<'process-tracking' | 'projects-follow-up'>('process-tracking')
-
-  if (status != 'authenticated') return <LoadingComponent />
+  const { data: stats, isLoading, isError } = useOperationGeneralStats({ after: start.toISOString(), before: currentDate.toISOString() })
+  const chartData = stats?.vendas || []
+  const chartConfig = { valor: { label: 'VALOR VENDIDO' } }
   return (
     <div className="flex h-full flex-col md:flex-row">
       <Sidebar session={session} />
@@ -44,7 +47,7 @@ function OperationFollowUp() {
             </button>
           </div>
         </div>
-
+        <GeneralStats />
         <>
           {mode == 'process-tracking' ? <ProcessTrackingPage session={session} /> : null}
           {mode == 'projects-follow-up' ? <ProjectsFollowUpPage session={session} /> : null}
@@ -54,4 +57,4 @@ function OperationFollowUp() {
   )
 }
 
-export default OperationFollowUp
+export default MainManagementPage

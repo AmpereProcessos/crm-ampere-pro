@@ -79,7 +79,7 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
               </Link>
             ) : null}
             {session?.user.permissoes.resultados?.visualizarOperacional ? (
-              <Link href="/operacional/gestao/acompanhamento">
+              <Link href="/operacional/gestao">
                 <div className="flex items-center gap-1 font-bold tracking-tight text-gray-500 duration-300 ease-in-out hover:text-cyan-500">
                   <p className="text-sm">ACOMPANHAMENTO DE OPERAÇÃO</p>
                   <FaListCheck />

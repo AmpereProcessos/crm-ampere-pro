@@ -73,59 +73,7 @@ const getProcessTrackingStatsRoute: NextApiHandler<GetResponse> = async (req, re
   const beforeDateStr = beforeDate.toISOString()
   console.log(afterDateStr, beforeDateStr)
   const partnerQuery = partnerScope ? { idParceiro: { $in: [...partnerScope] } } : {}
-  // const orQuery: Filter<TAppProject> = {
-  //   $or: [
-  //     { $and: [{ 'contrato.dataSolicitacao': { $gte: afterDateStr } }, { 'contrato.dataSolicitacao': { $lte: beforeDateStr } }] },
-  //     { $and: [{ 'contrato.dataLiberacao': { $gte: afterDateStr } }, { 'contrato.dataLiberacao': { $lte: beforeDateStr } }] },
-  //     { $and: [{ 'contrato.dataAssinatura': { $gte: afterDateStr } }, { 'contrato.dataAssinatura': { $lte: beforeDateStr } }] },
-  //     { $and: [{ 'homologacao.dataLiberacao': { $gte: afterDateStr } }, { 'homologacao.dataLiberacao': { $lte: beforeDateStr } }] },
-  //     {
-  //       $and: [
-  //         { 'homologacao.documentacao.dataInicioElaboracao': { $gte: afterDateStr } },
-  //         { 'homologacao.documentacao.dataInicioElaboracao': { $lte: beforeDateStr } },
-  //       ],
-  //     },
-  //     {
-  //       $and: [
-  //         { 'homologacao.documentacao.dataConclusaoElaboracao': { $gte: afterDateStr } },
-  //         { 'homologacao.documentacao.dataConclusaoElaboracao': { $lte: beforeDateStr } },
-  //       ],
-  //     },
-  //     {
-  //       $and: [
-  //         { 'homologacao.documentacao.dataConclusaoElaboracao': { $gte: afterDateStr } },
-  //         { 'homologacao.documentacao.dataConclusaoElaboracao': { $lte: beforeDateStr } },
-  //       ],
-  //     },
-  //     {
-  //       $and: [{ 'homologacao.acesso.dataSolicitacao': { $gte: afterDateStr } }, { 'homologacao.acesso.dataSolicitacao': { $lte: beforeDateStr } }],
-  //     },
-  //     {
-  //       $and: [{ 'homologacao.acesso.dataResposta': { $gte: afterDateStr } }, { 'homologacao.acesso.dataResposta': { $lte: beforeDateStr } }],
-  //     },
-  //     {
-  //       $and: [{ 'homologacao.vistoria.dataSolicitacao': { $gte: afterDateStr } }, { 'homologacao.vistoria.dataSolicitacao': { $lte: beforeDateStr } }],
-  //     },
-  //     {
-  //       $and: [{ 'homologacao.vistoria.dataEfetivacao': { $gte: afterDateStr } }, { 'homologacao.vistoria.dataEfetivacao': { $lte: beforeDateStr } }],
-  //     },
-  //     {
-  //       $and: [{ 'compra.dataLiberacao': { $gte: afterDateStr } }, { 'compra.dataLiberacao': { $lte: beforeDateStr } }],
-  //     },
-  //     {
-  //       $and: [{ 'compra.dataPedido': { $gte: afterDateStr } }, { 'compra.dataPedido': { $lte: beforeDateStr } }],
-  //     },
-  //     {
-  //       $and: [{ 'compra.dataEntrega': { $gte: afterDateStr } }, { 'compra.dataEntrega': { $lte: beforeDateStr } }],
-  //     },
-  //     {
-  //       $and: [{ 'obra.entrada': { $gte: afterDateStr } }, { 'obra.entrada': { $lte: beforeDateStr } }],
-  //     },
-  //     {
-  //       $and: [{ 'obra.saida': { $gte: afterDateStr } }, { 'obra.saida': { $lte: beforeDateStr } }],
-  //     },
-  //   ],
-  // }
+
   const orQuery: Filter<TAppProject> = {
     $or: [
       { 'contrato.dataSolicitacao': { $gte: afterDateStr, $lte: beforeDateStr } },
