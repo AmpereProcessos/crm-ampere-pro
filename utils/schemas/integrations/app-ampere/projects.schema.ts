@@ -807,6 +807,8 @@ export const AppProjectResultsSimplifiedProjection = {
   nomeDoContrato: 1,
   codigoSVB: 1,
   cidade: 1,
+  identificador: 1,
+  tipoDeServico: 1,
   idParceiro: 1,
   idProjetoCRM: 1,
   'sistema.potPico': 1,

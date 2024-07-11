@@ -2,7 +2,7 @@ import DateInput from '@/components/Inputs/DateInput'
 import { Sidebar } from '@/components/Sidebar'
 import ErrorComponent from '@/components/utils/ErrorComponent'
 import LoadingComponent from '@/components/utils/LoadingComponent'
-import { getPeriodDateParamsByReferenceDate } from '@/lib/methods/dates'
+import { getPeriodDateParamsByReferenceDate, getTimeFormattedTextFromHours } from '@/lib/methods/dates'
 import { formatDateInputChange, formatDecimalPlaces } from '@/lib/methods/formatting'
 import { formatDateForInput } from '@/utils/methods'
 import { ProcessTrackedByProjectType } from '@/utils/process-tracking'
@@ -113,7 +113,9 @@ function ProcessTrackingPage({ session }: ProcessTrackingPageProps) {
                             <MdOutlineTimer size={18} />
                             <h3 className="text-xs tracking-tight text-gray-500">TEMPO MÉDIO</h3>
                           </div>
-                          <h1 className="text-center font-bold">{formatDecimalPlaces(metrics.tempoTotalConclusao / metrics.concluidos / 24)} dias</h1>
+                          <h1 className="text-center font-bold">
+                            {getTimeFormattedTextFromHours(metrics.tempoTotalConclusao / metrics.concluidos).toLowerCase()}
+                          </h1>
                         </div>
                       </div>
                     </div>

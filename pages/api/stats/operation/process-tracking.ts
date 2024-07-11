@@ -186,8 +186,7 @@ const getProcessTrackingStatsRoute: NextApiHandler<GetResponse> = async (req, re
       const contractSignatureDate = getDateFromString(current.contrato.dataAssinatura)
 
       if (ProjectTypeProcesses.includes('contract_formulation')) {
-        if (!acc['CONTRATOS']['COLETA DE ASSINATURA DO CONTRATO'])
-          acc['CONTRATOS']['FORMULAÇÃO DE CONTRATO'] = { concluidos: 0, andamento: 0, tempoTotalConclusao: 0 }
+        if (!acc['CONTRATOS']['FORMULAÇÃO DE CONTRATO']) acc['CONTRATOS']['FORMULAÇÃO DE CONTRATO'] = { concluidos: 0, andamento: 0, tempoTotalConclusao: 0 }
         const isInFormulation = !!contractSolicitationDate && !contractLiberationDate
         if (isInFormulation) acc['CONTRATOS']['FORMULAÇÃO DE CONTRATO'].andamento += 1
 
@@ -195,9 +194,9 @@ const getProcessTrackingStatsRoute: NextApiHandler<GetResponse> = async (req, re
         if (wasFormulatedWithinPeriod) {
           const time =
             contractSolicitationDate && contractLiberationDate ? getHoursDiff({ start: contractSolicitationDate, finish: contractLiberationDate }) || 8 : 0
-
+          console.log(current.nome, time, contractSolicitationDate, contractLiberationDate)
           acc['CONTRATOS']['FORMULAÇÃO DE CONTRATO'].concluidos += 1
-          acc['CONTRATOS']['FORMULAÇÃO DE CONTRATO'].tempoTotalConclusao += time
+          acc['CONTRATOS']['FORMULAÇÃO DE CONTRATO'].tempoTotalConclusao += time <= 0 ? 8 : time
         }
       }
       if (ProjectTypeProcesses.includes('contract_signature_collection')) {
@@ -211,7 +210,7 @@ const getProcessTrackingStatsRoute: NextApiHandler<GetResponse> = async (req, re
           const time = contractLiberationDate && contractSignatureDate ? getHoursDiff({ start: contractLiberationDate, finish: contractSignatureDate }) || 8 : 0
 
           acc['CONTRATOS']['COLETA DE ASSINATURA DO CONTRATO'].concluidos += 1
-          acc['CONTRATOS']['COLETA DE ASSINATURA DO CONTRATO'].tempoTotalConclusao += time
+          acc['CONTRATOS']['COLETA DE ASSINATURA DO CONTRATO'].tempoTotalConclusao += time <= 0 ? 8 : time
         }
       }
     }
@@ -236,7 +235,7 @@ const getProcessTrackingStatsRoute: NextApiHandler<GetResponse> = async (req, re
               : 0
 
           acc['HOMOLOGAÇÃO']['INICIAÇÃO DE PROJETO'].concluidos += 1
-          acc['HOMOLOGAÇÃO']['INICIAÇÃO DE PROJETO'].tempoTotalConclusao += time
+          acc['HOMOLOGAÇÃO']['INICIAÇÃO DE PROJETO'].tempoTotalConclusao += time <= 0 ? 8 : time
         }
       }
       if (ProjectTypeProcesses.includes('homologation_documents_elaboration')) {
@@ -252,7 +251,7 @@ const getProcessTrackingStatsRoute: NextApiHandler<GetResponse> = async (req, re
               : 0
 
           acc['HOMOLOGAÇÃO']['ELABORAÇÃO DA DOCUMENTAÇÃO'].concluidos += 1
-          acc['HOMOLOGAÇÃO']['ELABORAÇÃO DA DOCUMENTAÇÃO'].tempoTotalConclusao += time
+          acc['HOMOLOGAÇÃO']['ELABORAÇÃO DA DOCUMENTAÇÃO'].tempoTotalConclusao += time <= 0 ? 8 : time
         }
       }
       if (ProjectTypeProcesses.includes('homologation_access_request')) {
@@ -268,7 +267,7 @@ const getProcessTrackingStatsRoute: NextApiHandler<GetResponse> = async (req, re
               : 0
 
           acc['HOMOLOGAÇÃO']['SOLICITAÇÃO DE ACESSO A CONCESSIONÁRIA'].concluidos += 1
-          acc['HOMOLOGAÇÃO']['SOLICITAÇÃO DE ACESSO A CONCESSIONÁRIA'].tempoTotalConclusao += time
+          acc['HOMOLOGAÇÃO']['SOLICITAÇÃO DE ACESSO A CONCESSIONÁRIA'].tempoTotalConclusao += time <= 0 ? 8 : time
         }
       }
       if (ProjectTypeProcesses.includes('homologation_access_approval')) {
@@ -284,7 +283,7 @@ const getProcessTrackingStatsRoute: NextApiHandler<GetResponse> = async (req, re
               : 0
 
           acc['HOMOLOGAÇÃO']['APROVAÇÃO DA CONCESSIONÁRIA'].concluidos += 1
-          acc['HOMOLOGAÇÃO']['APROVAÇÃO DA CONCESSIONÁRIA'].tempoTotalConclusao += time
+          acc['HOMOLOGAÇÃO']['APROVAÇÃO DA CONCESSIONÁRIA'].tempoTotalConclusao += time <= 0 ? 8 : time
         }
       }
     }
@@ -307,7 +306,7 @@ const getProcessTrackingStatsRoute: NextApiHandler<GetResponse> = async (req, re
           const time = contractSignatureDate && supplyLiberationDate ? getHoursDiff({ start: contractSignatureDate, finish: supplyLiberationDate }) || 8 : 0
 
           acc['SUPRIMENTAÇÃO']['LIBERAÇÃO PARA COMPRA'].concluidos += 1
-          acc['SUPRIMENTAÇÃO']['LIBERAÇÃO PARA COMPRA'].tempoTotalConclusao += time
+          acc['SUPRIMENTAÇÃO']['LIBERAÇÃO PARA COMPRA'].tempoTotalConclusao += time <= 0 ? 8 : time
         }
       }
       if (ProjectTypeProcesses.includes('supplementation_order')) {
@@ -319,7 +318,7 @@ const getProcessTrackingStatsRoute: NextApiHandler<GetResponse> = async (req, re
           const time = supplyLiberationDate && supplyOrderDate ? getHoursDiff({ start: supplyLiberationDate, finish: supplyOrderDate }) || 8 : 0
 
           acc['SUPRIMENTAÇÃO']['COMPRA DE PRODUTOS'].concluidos += 1
-          acc['SUPRIMENTAÇÃO']['COMPRA DE PRODUTOS'].tempoTotalConclusao += time
+          acc['SUPRIMENTAÇÃO']['COMPRA DE PRODUTOS'].tempoTotalConclusao += time <= 0 ? 8 : time
         }
       }
       if (ProjectTypeProcesses.includes('supplementation_delivery')) {
@@ -331,7 +330,7 @@ const getProcessTrackingStatsRoute: NextApiHandler<GetResponse> = async (req, re
           const time = supplyOrderDate && supplyDeliveryDate ? getHoursDiff({ start: supplyOrderDate, finish: supplyDeliveryDate }) || 8 : 0
 
           acc['SUPRIMENTAÇÃO']['ENTREGA DE PRODUTOS'].concluidos += 1
-          acc['SUPRIMENTAÇÃO']['ENTREGA DE PRODUTOS'].tempoTotalConclusao += time
+          acc['SUPRIMENTAÇÃO']['ENTREGA DE PRODUTOS'].tempoTotalConclusao += time <= 0 ? 8 : time
         }
       }
     }
@@ -355,7 +354,7 @@ const getProcessTrackingStatsRoute: NextApiHandler<GetResponse> = async (req, re
           const time = supplyDeliveryDate && executionStartDate ? getHoursDiff({ start: supplyDeliveryDate, finish: executionStartDate }) || 8 : 0
 
           acc['EXECUÇÃO']['PLANEJAMENTO PÓS ENTREGA PARA EXECUÇÃO'].concluidos += 1
-          acc['EXECUÇÃO']['PLANEJAMENTO PÓS ENTREGA PARA EXECUÇÃO'].tempoTotalConclusao += time
+          acc['EXECUÇÃO']['PLANEJAMENTO PÓS ENTREGA PARA EXECUÇÃO'].tempoTotalConclusao += time <= 0 ? 8 : time
         }
       }
       if (ProjectTypeProcesses.includes('execution_planning_post_contract')) {
@@ -369,7 +368,7 @@ const getProcessTrackingStatsRoute: NextApiHandler<GetResponse> = async (req, re
           const time = contractSignatureDate && executionStartDate ? getHoursDiff({ start: contractSignatureDate, finish: executionStartDate }) || 8 : 0
 
           acc['EXECUÇÃO']['PLANEJAMENTO PÓS CONTRATO PARA EXECUÇÃO'].concluidos += 1
-          acc['EXECUÇÃO']['PLANEJAMENTO PÓS CONTRATO PARA EXECUÇÃO'].tempoTotalConclusao += time
+          acc['EXECUÇÃO']['PLANEJAMENTO PÓS CONTRATO PARA EXECUÇÃO'].tempoTotalConclusao += time <= 0 ? 8 : time
         }
       }
       if (ProjectTypeProcesses.includes('execution')) {
@@ -382,7 +381,7 @@ const getProcessTrackingStatsRoute: NextApiHandler<GetResponse> = async (req, re
           const time = executionStartDate && executionEndDate ? getHoursDiff({ start: executionStartDate, finish: executionEndDate }) || 8 : 0
 
           acc['EXECUÇÃO']['EXECUÇÃO'].concluidos += 1
-          acc['EXECUÇÃO']['EXECUÇÃO'].tempoTotalConclusao += time
+          acc['EXECUÇÃO']['EXECUÇÃO'].tempoTotalConclusao += time <= 0 ? 8 : time
         }
       }
     }
@@ -404,7 +403,7 @@ const getProcessTrackingStatsRoute: NextApiHandler<GetResponse> = async (req, re
             executionEndDate && homologationVistoryRequestDate ? getHoursDiff({ start: executionEndDate, finish: homologationVistoryRequestDate }) || 8 : 0
 
           acc['COMISSIONAMENTO']['SOLICITAÇÃO DE VISTORIA'].concluidos += 1
-          acc['COMISSIONAMENTO']['SOLICITAÇÃO DE VISTORIA'].tempoTotalConclusao += time
+          acc['COMISSIONAMENTO']['SOLICITAÇÃO DE VISTORIA'].tempoTotalConclusao += time <= 0 ? 8 : time
         }
       }
       if (ProjectTypeProcesses.includes('homologation_vistory_approval')) {
@@ -420,7 +419,7 @@ const getProcessTrackingStatsRoute: NextApiHandler<GetResponse> = async (req, re
               : 0
 
           acc['COMISSIONAMENTO']['APROVAÇÃO DA VISTORIA'].concluidos += 1
-          acc['COMISSIONAMENTO']['APROVAÇÃO DA VISTORIA'].tempoTotalConclusao += time
+          acc['COMISSIONAMENTO']['APROVAÇÃO DA VISTORIA'].tempoTotalConclusao += time <= 0 ? 8 : time
         }
       }
     }

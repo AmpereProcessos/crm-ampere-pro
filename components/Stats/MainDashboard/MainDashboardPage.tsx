@@ -69,7 +69,7 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
       <div className="flex w-full max-w-full grow flex-col overflow-x-hidden bg-[#f8f9fa] p-6">
         <div className="flex w-full flex-col items-center justify-between border-b border-black pb-2 lg:flex-row">
           <h1 className="font-Raleway text-2xl font-black text-black">DASHBOARD</h1>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-col items-center gap-6 lg:flex-row">
             {session?.user.permissoes.resultados?.visualizarComercial ? (
               <Link href="/comercial/gestao/resultados">
                 <div className="flex items-center gap-1 font-bold tracking-tight text-gray-500 duration-300 ease-in-out hover:text-cyan-500">

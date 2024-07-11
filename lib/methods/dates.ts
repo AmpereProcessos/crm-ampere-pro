@@ -1,6 +1,7 @@
 import dayjs from 'dayjs'
 // @ts-ignore
 import dayjsBusinessDays from 'dayjs-business-days'
+import { formatDecimalPlaces } from './formatting'
 
 dayjs.extend(dayjsBusinessDays)
 
@@ -90,4 +91,12 @@ export function getDateFromString(value: any) {
 }
 export function getDateIsWithinPeriod({ date, after, before }: { date: Date | undefined; after: Date; before: Date }) {
   return !!(date && date >= after && date <= before)
+}
+
+export function getTimeFormattedTextFromHours(hours: number) {
+  if (hours > 24) {
+    const days = hours / 24
+    return `${formatDecimalPlaces(days)} ${days > 2 ? 'DIAS' : 'DIA'}`
+  }
+  return `${formatDecimalPlaces(hours)} ${hours > 2 ? 'HORAS' : 'HORA'}`
 }

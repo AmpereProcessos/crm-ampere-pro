@@ -37,8 +37,8 @@ function PricingMethod({ partnerId, author, goToNextStage, goToPreviousStage }: 
   return (
     <div className="flex grow flex-col gap-y-2">
       <h1 className="mt-4 w-full text-center text-lg tracking-tight text-gray-500">
-        Nós possibilitamos que você defina suas metodologias de precificação. Essas podem ser vinculadas aos kits que você eventualmente criar, de
-        modo que as proposta geradas utilizando-os sejam precificadas com a metodologia que você definiu.
+        Nós possibilitamos que você defina suas metodologias de precificação. Essas podem ser vinculadas aos kits que você eventualmente criar, de modo que as
+        proposta geradas utilizando-os sejam precificadas com a metodologia que você definiu.
       </h1>
       <h1 className="mb-4 w-full text-center text-lg tracking-tight text-gray-500">
         Se desejar, você pode pular essa etapa e definir suas metodologias posteriormente.
