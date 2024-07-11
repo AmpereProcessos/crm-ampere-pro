@@ -31,7 +31,7 @@ function GeneralStats() {
           <h1 className="w-full text-center font-bold tracking-tight">PROGRESSÃO DE VALOR VENDIDO</h1>
           <p className="text-center text-xs font-medium leading-none text-gray-500">Gráfico de progressão ao longo do ano do valor vendido.</p>
           <div className="flex w-full grow flex-col p-2">
-            <ChartContainer config={salesChartConfig} className="h-[250px] w-full">
+            <ChartContainer config={salesChartConfig} className="h-[275px] w-full">
               <AreaChart
                 accessibilityLayer
                 data={salesChartData}
@@ -53,7 +53,7 @@ function GeneralStats() {
           <h1 className="w-full text-center font-bold tracking-tight">PROJETOS POR TIPO</h1>
           <p className="text-center text-xs font-medium leading-none text-gray-500">Distribuição de projetos por tipo.</p>
           <div className="flex w-full grow flex-col p-2">
-            <ChartContainer config={projectTypesChartConfig} className="h-[250px] w-full">
+            <ChartContainer config={projectTypesChartConfig} className="h-[275px] w-full">
               <PieChart>
                 <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
                 <Pie data={projectTypesChartData.filter((d) => d.qtde > 20)} dataKey="qtde" nameKey="tipo" innerRadius={60} strokeWidth={5}>
@@ -66,7 +66,7 @@ function GeneralStats() {
                               {projectTypesTotal.toLocaleString()}
                             </tspan>
                             <tspan x={viewBox.cx} y={(viewBox.cy || 0) + 24} className="fill-muted-foreground">
-                              Projetos
+                              PROJETOS
                             </tspan>
                           </text>
                         )
@@ -74,7 +74,7 @@ function GeneralStats() {
                     }}
                   />
                 </Pie>
-                {/* <ChartLegend content={<ChartLegendContent nameKey="tipo" />} className="-translate-y-2 flex-wrap gap-2 [&>*]:basis-1/4 [&>*]:justify-center" /> */}
+                <ChartLegend content={<ChartLegendContent color="#000" />} className="-translate-y-2 flex-wrap gap-2 [&>*]:basis-1/4 [&>*]:justify-center" />
               </PieChart>
             </ChartContainer>
           </div>
@@ -83,7 +83,7 @@ function GeneralStats() {
           <h1 className="w-full text-center font-bold tracking-tight">NOTA NPS</h1>
           <p className="text-center text-xs font-medium leading-none text-gray-500">Índice de Satisfação dos Clientes</p>
           <div className="flex w-full grow flex-col p-2">
-            <ChartContainer config={npsChartConfig} className="h-[250px] w-full">
+            <ChartContainer config={npsChartConfig} className="h-[275px] w-full">
               <RadialBarChart data={npsChartData} startAngle={0} endAngle={(npsChartData[0].valor * 360) / 100} innerRadius={80} outerRadius={110}>
                 <PolarGrid gridType="circle" radialLines={false} stroke="none" className="first:fill-muted last:fill-background" polarRadius={[86, 74]} />
                 <RadialBar dataKey="valor" background cornerRadius={10} />

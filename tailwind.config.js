@@ -9,6 +9,13 @@ module.exports = {
     './src/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
+    container: {
+      center: true,
+      padding: '2rem',
+      screens: {
+        '2xl': '1400px',
+      },
+    },
     extend: {
       gridTemplateColumns: {
         10: 'repeat(10, minmax(0, 1fr))',
