@@ -26,7 +26,7 @@ function GeneralStats() {
   const npsChartConfig = { tipo: { label: 'NPS' } }
   return (
     <div className="flex w-full flex-col gap-2">
-      <div className="flex w-full items-center gap-2">
+      <div className="flex w-full flex-col items-center gap-2 lg:flex-row">
         <div className="flex w-full flex-col border border-gray-500 bg-[#fff] p-3 lg:w-1/3">
           <h1 className="w-full text-center font-bold tracking-tight">PROGRESSÃO DE VALOR VENDIDO</h1>
           <p className="text-center text-xs font-medium leading-none text-gray-500">Gráfico de progressão ao longo do ano do valor vendido.</p>

@@ -31,7 +31,7 @@ function ProcessTrackingPage({ session }: ProcessTrackingPageProps) {
       {isError ? <ErrorComponent msg="Oops, houve um erro ao buscar resultados." /> : null}
       {isSuccess ? (
         <>
-          <div className="flex w-full flex-col items-center justify-between gap-2 lg:flex-row">
+          <div className="mb-2 flex w-full flex-col items-center justify-between gap-2 lg:flex-row">
             <div className="flex grow flex-col items-center gap-2 lg:flex-row">
               <h1 className="py-6 text-center text-lg font-black leading-4 tracking-tighter">PROCESSOS</h1>
               {Object.keys(ProcessTrackedByProjectType).map((type, index) => (
@@ -45,9 +45,8 @@ function ProcessTrackingPage({ session }: ProcessTrackingPageProps) {
                 </button>
               ))}
             </div>
-
             <div className="flex w-full items-center gap-2 lg:w-fit">
-              <div className="flex flex-col items-center gap-4 lg:flex-row">
+              <div className="flex w-full flex-col items-center gap-4 lg:flex-row">
                 <h1 className="text-end text-sm font-medium uppercase tracking-tight">PERÍODO</h1>
                 <div className="flex w-full flex-col items-center gap-2 md:flex-row lg:w-fit">
                   <div className="w-full md:w-[150px]">

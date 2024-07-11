@@ -28,12 +28,12 @@ function MainManagementPage({ session }: MainManagementPageProps) {
       <div className="flex w-full max-w-full grow flex-col gap-2 overflow-x-hidden bg-[#f8f9fa] p-6">
         <div className="flex w-full flex-col items-center justify-between gap-4 border-b border-black pb-2 lg:flex-row lg:items-end">
           <h1 className="text-center font-Raleway text-xl font-black text-black lg:text-start lg:text-2xl">ACOMPANHAMENTO OPERACIONAL</h1>
-          <div className="flex h-9 items-center gap-2 rounded-lg bg-gray-300 px-3 py-2">
+          <div className="flex h-9 items-center gap-2 rounded-lg bg-gray-300 px-1 py-2 lg:px-3">
             <button
               onClick={() => setMode('process-tracking')}
               className={`${
                 mode == 'process-tracking' ? 'bg-white text-black shadow-sm' : 'bg-transparent text-gray-500 hover:bg-gray-200'
-              } whitespace-nowrap rounded-md px-3 py-2 text-sm font-medium leading-none tracking-tight`}
+              } whitespace-nowrap rounded-md px-3 py-2 text-[0.57rem] font-medium leading-none tracking-tight lg:text-sm`}
             >
               VISUALIZAÇÃO DE PROCESSOS
             </button>
@@ -41,7 +41,7 @@ function MainManagementPage({ session }: MainManagementPageProps) {
               onClick={() => setMode('projects-follow-up')}
               className={`${
                 mode == 'projects-follow-up' ? 'bg-white text-black shadow-sm' : 'bg-transparent text-gray-500 hover:bg-gray-200'
-              } whitespace-nowrap rounded-md px-3 py-2 text-sm font-medium leading-none tracking-tight shadow-sm`}
+              } whitespace-nowrap rounded-md px-3 py-2 text-[0.57rem] font-medium leading-none tracking-tight shadow-sm lg:text-sm`}
             >
               FOLLOW UP DE PROJETOS
             </button>
