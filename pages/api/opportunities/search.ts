@@ -23,7 +23,7 @@ type GetResponse = {
 }
 
 const getOpportunitiesBySearch: NextApiHandler<GetResponse> = async (req, res) => {
-  await validateAuthentication(req)
+  await validateAuthentication(req, res)
   const search = ParamSchema.parse(req.query.param)
 
   const db = await connectToDatabase(process.env.MONGODB_URI, 'crm')

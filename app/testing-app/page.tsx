@@ -1,11 +1,10 @@
-'use client'
-
+import { auth } from '@/auth'
 import { useSession } from 'next-auth/react'
 
 import React from 'react'
 
-function TestingPage() {
-  const { data: session } = useSession()
+async function TestingPage() {
+  const session = await auth()
   console.log(session)
   return <div>TestinPage</div>
 }

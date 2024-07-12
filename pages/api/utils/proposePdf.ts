@@ -9,7 +9,7 @@ type PostResponse = {
 }
 
 const getProposal: NextApiHandler<PostResponse> = async (req, res) => {
-  await validateAuthentication(req)
+  await validateAuthentication(req, res)
   const proposal = req.body
   const { templateId } = req.query
   console.log('TEMPLATE', templateId)

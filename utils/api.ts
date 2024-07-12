@@ -4,11 +4,10 @@ import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next'
 
 import { Method } from 'axios'
 import { ZodError } from 'zod'
-import { getToken } from 'next-auth/jwt'
-import { getSession } from 'next-auth/react'
+
 import { TSessionUser, TUser } from './schemas/user.schema'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/pages/api/auth/[...nextauth]'
+
+import { auth } from '@/auth'
 
 export interface ErrorResponse {
   error: {
@@ -22,18 +21,14 @@ type ApiMethodHandlers = {
 }
 
 // Validação de sessão para rotas autenticadas
-export async function validateAuthentication(req: NextApiRequest) {
-  const sessionToken = await getToken({
-    req,
-    secret: process.env.SECRET_NEXT_AUTH,
-    raw: true,
-  })
+export async function validateAuthentication(req: NextApiRequest, res: NextApiResponse) {
+  const sessionToken = await auth(req, res)
   if (!sessionToken) throw new createHttpError.Unauthorized(`Rota não acessível a usuários não autenticados.`)
   return sessionToken
 }
 export async function validateAuthenticationWithSession(req: NextApiRequest, res: NextApiResponse) {
   // @ts-ignore
-  const session = await getServerSession(req, res, authOptions)
+  const session = await auth(req, res)
   if (!session) throw new createHttpError.Unauthorized(`Recurso não acessível a usuários não autenticados.`)
   return session
 }
@@ -46,7 +41,7 @@ export async function validateAuthorization<T extends keyof TUser['permissoes'],
   validate: any
 ) {
   // @ts-ignore
-  const session = await getServerSession(req, res, authOptions)
+  const session = await auth(req, res)
 
   if (session) {
     // console.log('PERMISSAO', session.user.permissoes[field][permission])
@@ -56,26 +51,10 @@ export async function validateAuthorization<T extends keyof TUser['permissoes'],
     throw new createHttpError.Unauthorized(`Nível de autorização insuficiente.`)
   }
 }
-// Validação de aquisição de módulo
-type ValidateModuleAccessParams = {
-  req: NextApiRequest
-  res: NextApiResponse
-  module: keyof TSessionUser['modulos']
-}
-export async function validateModuleAccess({ req, res, module }: ValidateModuleAccessParams) {
-  // @ts-ignore
-  const session = await getServerSession(req, res, authOptions)
-  if (!session) throw new createHttpError.Unauthorized('Nível de acesso insuficiente.')
-  // Getting user modules and validating if session user has given module
-  const userModules = session.user.modulos
-  // If not, throwing unauthorized error
-  if (!userModules[module]) throw new createHttpError.Unauthorized('Nível de acesso insuficiente.')
-  // Else, returning session
-  return session
-}
+
 export async function validateAdminAuthorizaton(req: NextApiRequest, res: NextApiResponse) {
   // @ts-ignore
-  const session = await getServerSession(req, res, authOptions)
+  const session = await auth(req, res)
   if (session) {
     const idAdmin = !!session.user.administrador
     if (!idAdmin) throw new createHttpError.Unauthorized('Nível de autorização insuficiente.')

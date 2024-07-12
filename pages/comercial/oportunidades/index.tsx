@@ -1,6 +1,5 @@
 import { useState } from 'react'
-import { getServerSession } from 'next-auth'
-import { Collection, Filter } from 'mongodb'
+
 import { GetServerSidePropsContext } from 'next'
 import { authOptions } from '../../api/auth/[...nextauth]'
 

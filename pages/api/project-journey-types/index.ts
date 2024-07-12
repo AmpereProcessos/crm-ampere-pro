@@ -12,7 +12,7 @@ type GetResponse = {
 }
 
 const getProjectJourneyTypesRoute: NextApiHandler<GetResponse> = async (req, res) => {
-  await validateAuthentication(req)
+  await validateAuthentication(req, res)
   const { id } = req.query
 
   const db = await connectToDatabase(process.env.MONGODB_URI, 'crm')

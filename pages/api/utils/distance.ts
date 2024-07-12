@@ -15,7 +15,7 @@ type GetResponse = {
 const removeAccents = (str: string) => str.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
 
 const queryDistance: NextApiHandler<GetResponse> = async (req, res) => {
-  await validateAuthentication(req)
+  await validateAuthentication(req, res)
   const { destination, origin } = req.query
 
   if (typeof destination != 'string' || typeof origin != 'string') throw new createHttpError.BadRequest('Parâmetros de origem e/ou destino inválidos.')

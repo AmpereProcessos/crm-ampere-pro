@@ -11,7 +11,7 @@ type PostResponse = {
 }
 
 const uploadDocument: NextApiHandler<PostResponse> = async (req, res) => {
-  await validateAuthentication(req)
+  await validateAuthentication(req, res)
   const { filePath } = req.query
   try {
     if (typeof filePath === 'string') {
