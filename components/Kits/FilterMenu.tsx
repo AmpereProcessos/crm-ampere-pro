@@ -27,7 +27,7 @@ function FilterMenu({ filters, setFilters }: FilterMenuProps) {
         initial="hidden"
         animate="visible"
         exit="exit"
-        className="mt-2 flex w-full flex-col gap-2 rounded-md border border-gray-300 bg-[#fff] p-2"
+        className="bg-[#fff] mt-2 flex w-full flex-col gap-2 rounded-md border border-gray-300 p-2"
       >
         <h1 className="text-sm font-bold tracking-tight">FILTROS</h1>
         <div className="flex w-full flex-col flex-wrap items-center justify-start gap-2 lg:flex-row">
@@ -65,7 +65,7 @@ function FilterMenu({ filters, setFilters }: FilterMenuProps) {
               </div>
             </div>
           </div>
-          <div className="w-full lg:w-[200px]">
+          <div className="lg:w-[200px] w-full">
             <MultipleSelectInput
               label="TOPOLOGIA"
               selected={filters.topology}
@@ -94,7 +94,7 @@ function FilterMenu({ filters, setFilters }: FilterMenuProps) {
               labelClassName="text-xs font-medium tracking-tight text-black"
             />
           </div>
-          <div className="w-full lg:w-[200px]">
+          <div className="lg:w-[200px] w-full">
             <MultipleSelectInput
               label="MARCA (MÓDULOS)"
               selected={filters.moduleManufacturer.length > 0 ? filters.moduleManufacturer.map((manufacturer) => manufacturer) : null}
@@ -122,7 +122,7 @@ function FilterMenu({ filters, setFilters }: FilterMenuProps) {
               labelClassName="text-xs font-medium tracking-tight text-black"
             />
           </div>
-          <div className="w-full lg:w-[200px]">
+          <div className="lg:w-[200px] w-full">
             <MultipleSelectInput
               label="MARCA (INVERSORES)"
               selected={filters.inverterManufacturer.length > 0 ? filters.inverterManufacturer.map((manufacturer) => manufacturer) : null}
@@ -154,32 +154,40 @@ function FilterMenu({ filters, setFilters }: FilterMenuProps) {
         <div className="flex w-full flex-col flex-wrap items-center justify-start gap-2 lg:flex-row">
           <div className="w-fit">
             <CheckboxInput
+              labelFalse="PROMOCIONAIS"
+              labelTrue="PROMOCIONAIS"
+              checked={filters.promo}
+              handleChange={(value) => setFilters((prev) => ({ ...prev, promo: value }))}
+            />
+          </div>
+          <div className="w-fit">
+            <CheckboxInput
               labelFalse="SOMENTE KITS ATIVOS"
               labelTrue="SOMENTE KITS ATIVOS"
               checked={filters.onlyActive}
               handleChange={(value) => setFilters((prev) => ({ ...prev, onlyActive: value }))}
             />
           </div>
-          <div className="w-fit">
+          {/* <div className="w-fit">
             <CheckboxInput
               labelFalse="SOMENTE KITS INATIVOS"
               labelTrue="SOMENTE KITS INATIVOS"
               checked={filters.onlyInactive}
               handleChange={(value) => setFilters((prev) => ({ ...prev, onlyInactive: value }))}
             />
-          </div>
+          </div> */}
           <div
             onClick={() => setFilters((prev) => ({ ...prev, powerOrder: prev.powerOrder == 'ASC' ? null : 'ASC', priceOrder: null }))}
-            className={`flex w-full cursor-pointer items-center justify-center rounded-md border border-[rgb(239,68,68)] p-2 px-4 text-center font-Inter text-xs font-bold leading-none tracking-tight lg:w-fit ${
-              filters.powerOrder == 'ASC' ? 'bg-[rgb(239,68,68)] text-white' : 'bg-transparent text-[rgb(239,68,68)]'
+            className={`border-[rgb(239,68,68)] flex w-full cursor-pointer items-center justify-center rounded-md border p-2 px-4 text-center font-Inter text-xs font-bold leading-none tracking-tight lg:w-fit ${
+              filters.powerOrder == 'ASC' ? 'bg-[rgb(239,68,68)] text-white' : 'text-[rgb(239,68,68)] bg-transparent'
             }`}
           >
             POTÊNCIA CRESCENTE
           </div>
           <div
             onClick={() => setFilters((prev) => ({ ...prev, powerOrder: prev.powerOrder == 'DESC' ? null : 'DESC', priceOrder: null }))}
-            className={`flex w-full cursor-pointer items-center justify-center rounded-md border border-[rgb(239,68,68)] p-2 px-4 text-center font-Inter text-xs font-bold leading-none tracking-tight lg:w-fit ${
-              filters.powerOrder == 'DESC' ? 'bg-[rgb(239,68,68)] text-white' : 'bg-transparent text-[rgb(239,68,68)]'
+            className={`border-[rgb(239,68,68)] flex w-full cursor-pointer items-center justify-center rounded-md border p-2 px-4 text-center font-Inter text-xs font-bold leading-none tracking-tight lg:w-fit ${
+              filters.powerOrder == 'DESC' ? 'bg-[rgb(239,68,68)] text-white' : 'text-[rgb(239,68,68)] bg-transparent'
             }`}
           >
             POTÊNCIA DECRESCENTE

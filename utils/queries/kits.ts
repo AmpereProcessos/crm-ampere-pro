@@ -7,6 +7,7 @@ import { useState } from 'react'
 
 import { TBulkOperationKit, TKit, TKitDTO, TKitDTOWithPricingMethod } from '../schemas/kits.schema'
 import { getModulesPeakPotByProducts, getPeakPotByModules } from '@/lib/methods/extracting'
+import { formatWithoutDiacritics } from '@/lib/methods/formatting'
 type FetchKitsByQueryParams = {
   pipeline: any
 }
@@ -30,6 +31,7 @@ export type UseKitsFilters = {
   search: string
   onlyActive: boolean
   onlyInactive: boolean
+  promo: boolean
   topology: string[]
   moduleManufacturer: string[]
   inverterManufacturer: string[]
@@ -45,6 +47,7 @@ export function useKitsByQuery({ enabled, queryType, pipeline }: UseKitsByQueryP
     search: '',
     onlyActive: false,
     onlyInactive: false,
+    promo: false,
     topology: [],
     moduleManufacturer: [],
     inverterManufacturer: [],
@@ -66,6 +69,10 @@ export function useKitsByQuery({ enabled, queryType, pipeline }: UseKitsByQueryP
   function matchOnlyInactive(kit: TKitDTOWithPricingMethod) {
     if (!filters.onlyInactive) return true
     return !kit.ativo
+  }
+  function matchPromo(kit: TKitDTOWithPricingMethod) {
+    if (!filters.promo) return true
+    return formatWithoutDiacritics(kit.nome, true).includes('PROMO')
   }
   function matchModuleManufacturer(kit: TKitDTOWithPricingMethod) {
     if (filters.moduleManufacturer.length == 0) return true
@@ -121,6 +128,7 @@ export function useKitsByQuery({ enabled, queryType, pipeline }: UseKitsByQueryP
         matchSearch(kit) &&
         matchOnlyActive(kit) &&
         matchOnlyInactive(kit) &&
+        matchPromo(kit) &&
         matchTopology(kit) &&
         matchPowerRange(kit) &&
         matchModuleManufacturer(kit) &&
