@@ -1,5 +1,6 @@
 import createHttpError from 'http-errors'
 import { Db, MongoClient } from 'mongodb'
+import clientPromise from './mongo-client'
 
 let cachedDb: Db | null = null
 export default async function connectToAmpereDatabase(uri: unknown, database: string) {
@@ -7,7 +8,7 @@ export default async function connectToAmpereDatabase(uri: unknown, database: st
   if (cachedDb) {
     return cachedDb
   }
-  const client = await MongoClient.connect(uri)
+  const client = await clientPromise
   const db = client.db(database)
   cachedDb = db
   return db

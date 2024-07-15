@@ -226,7 +226,7 @@ async function getSimplifiedProjects({ collection, query }: GetSimplifiedProject
     // console.log(JSON.stringify(match))
     const projection = AppProjectResultsSimplifiedProjection
 
-    const result = await collection.find({ ...match }, { projection: projection, sort: { qtde: 1 } }).toArray()
+    const result = await collection.find({ ...match }, { projection: projection, sort: { qtde: -1 } }).toArray()
     const projects: TSimplifiedProjectResult[] = result.map((project) => {
       const info = project as WithId<TAppProject>
       return {

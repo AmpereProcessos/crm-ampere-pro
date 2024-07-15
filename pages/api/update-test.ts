@@ -62,10 +62,24 @@ const migrate: NextApiHandler<PostResponse> = async (req, res) => {
   const afterDate = formatDateQuery(after, 'start', 'date') as Date
   const beforeDate = formatDateQuery(before, 'end', 'date') as Date
   const crmDb = await connectToCRMDatabase(process.env.MONGODB_URI, 'crm')
-  const kitsCollection: Collection<TKit> = crmDb.collection('kits')
+  const opportunitiesCollection: Collection<TOpportunity> = crmDb.collection('opportunities')
 
-  const updateResponse = await kitsCollection.updateMany({}, { $set: { idParceiro: null } })
+  const opportunities = await opportunitiesCollection.find({ 'responsaveis.id': '65ae7335f947f69f2c5efd40' }, { projection: { responsaveis: 1 } }).toArray()
 
+  const bulkWrite = opportunities.map((opportunity) => {
+    const responsibles = opportunity.responsaveis
+    const userWasSeller = responsibles.find((r) => r.id == '65ae7335f947f69f2c5efd40')?.papel == 'VENDEDOR'
+    return {
+      updateOne: {
+        filter: { _id: new ObjectId(opportunity._id) },
+        update: {
+          $set: {
+            idParceiro: userWasSeller ? '668bfd75e7d15fe85e605827' : opportunity.idParceiro,
+          },
+        },
+      },
+    }
+  })
   // const opportunitiesCollection: Collection<TOpportunity> = crmDb.collection('opportunities')
 
   // const opportunities = await opportunitiesCollection.find({ idMarketing: { $ne: null }, dataInsercao: { $gte: '2024-01-01T00:00:00.000Z' } }).toArray()
@@ -296,9 +310,10 @@ const migrate: NextApiHandler<PostResponse> = async (req, res) => {
   //     },
   //   }
   // })
-  // const bulkwriteResponse = await proposalsCollection.bulkWrite(bulkWriteArr)
+  const bulkwriteResponse = await opportunitiesCollection.bulkWrite(bulkWrite)
   // const insertManyResponse = await userGroupsCollection.insertMany(insertUserGroups)
-  return res.json(updateResponse)
+
+  return res.json(bulkwriteResponse)
 }
 export default apiHandler({
   GET: migrate,

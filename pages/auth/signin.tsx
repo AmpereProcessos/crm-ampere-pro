@@ -87,23 +87,6 @@ function SignIn() {
             >
               ACESSAR
             </button>
-            {/* <div className="flex w-full items-center gap-6">
-              <div className="h-[1px] grow rounded bg-gray-500"></div>
-              <h1 className="text-sm tracking-tight text-gray-500">OU</h1>
-              <div className="h-[1px] grow rounded bg-gray-500"></div>
-            </div> */}
-            {/* <button
-              onClick={(e) => {
-                e.preventDefault()
-                signIn('google')
-              }}
-              className="flex w-full items-center justify-center gap-2 rounded border border-gray-500 px-6 py-2 duration-300 ease-in-out"
-            >
-              <div className="relative h-[25px] w-[25px]">
-                <Image src={GoogleLogo} alt="Logo do Google" fill={true} />
-              </div>
-              <h1 className="text-center text-sm">ACESSAR COM GOOGLE</h1>
-            </button> */}
           </div>
         </form>
       </div>

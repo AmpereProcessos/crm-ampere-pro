@@ -5,6 +5,8 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 import connectToDatabase from './services/mongodb/crm-db-connection'
 import createHttpError from 'http-errors'
 import { ObjectId } from 'mongodb'
+import MyMongoAdapter from './utils/integrations/auth/adapter'
+import clientPromise from './services/mongodb/mongo-client'
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   providers: [
@@ -96,8 +98,11 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       return session
     },
     async jwt({ token, user, account, profile, isNewUser }) {
-      // console.log('GOT CALLED', token)
-      // console.log('GOT CALLED', account)
+      console.log('============ JWT =============')
+      console.log('TOKEN JWT', token)
+      console.log('ACCOUNT JWT', account)
+      console.log('USER JWT', user)
+      console.log('PROFILE JWT', profile)
       // if (!!profile && !!account) {
       //   console.log('GOT CALLED WITH DB QUERIES')
       //   const profileEmail = profile?.email
