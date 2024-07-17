@@ -46,45 +46,6 @@ function HomologationsControlPage() {
             </div>
           </div>
           {filterMenuIsOpen ? <FilterMenu filters={filters} setFilters={setFilters} /> : null}
-
-          {/* <AnimatePresence>
-            {filterMenuIsOpen ? (
-              <motion.div initial={{ scale: 0.8, opacity: 0.6 }} animate={{ scale: 1, opacity: 1 }} className="mt-4 flex w-full flex-col gap-y-2">
-                <div className="flex flex-col flex-wrap items-center justify-center gap-2 lg:flex-row">
-                  <TextInput
-                    label="NOME DA ANÁLISE"
-                    placeholder="Filtre pelo nome da análise..."
-                    value={filters.search}
-                    handleChange={(value) => setFilters((prev) => ({ ...prev, search: value }))}
-                  />
-                  <MultipleSelectInput
-                    label={'STATUS'}
-                    selectedItemLabel={'NÃO DEFINIDO'}
-                    selected={filters.status}
-                    options={TechnicalAnalysisStatus}
-                    handleChange={(value) => setFilters((prev) => ({ ...prev, status: value as string[] }))}
-                    onReset={() => setFilters((prev) => ({ ...prev, status: [] }))}
-                  />
-                  <MultipleSelectInput
-                    label={'COMPLEXIDADE'}
-                    selectedItemLabel={'NÃO DEFINIDO'}
-                    selected={filters.complexity}
-                    options={TechnicalAnalysisStatus}
-                    handleChange={(value) => setFilters((prev) => ({ ...prev, complexity: value as string[] }))}
-                    onReset={() => setFilters((prev) => ({ ...prev, complexity: [] }))}
-                  />
-                  <SelectWithImages
-                    label="ANALISTA"
-                    value={filters.analyst}
-                    options={analysts?.map((a) => ({ id: a._id, label: a.nome, value: a._id, url: a.avatar_url || undefined })) || []}
-                    selectedItemLabel="NÃO DEFINIDO"
-                    handleChange={(value) => setFilters((prev) => ({ ...prev, analyst: value }))}
-                    onReset={() => setFilters((prev) => ({ ...prev, analyst: null }))}
-                  />
-                </div>
-              </motion.div>
-            ) : null}
-          </AnimatePresence> */}
         </div>
         <div className="flex flex-wrap justify-between gap-2 py-2">
           {isLoading ? <LoadingComponent /> : null}

@@ -40,14 +40,6 @@ const getProjectsFollowUp: NextApiHandler<GetResponse> = async (req, res) => {
   const collection: Collection<TAppProject> = db.collection('dados')
 
   const partnerQuery = partnerScope ? { idParceiro: { $in: [...partnerScope] } } : {}
-  // const nonConclusionQuery: Filter<TAppProject> = {
-  //   $and: [
-  //     { 'contrato.dataAssinatura': { $ne: null } },
-  //     { 'homologacao.dataEfetivacao': { $ne: null } },
-  //     { 'compra.status': { $ne: 'CONCLUIDA' } },
-  //     { 'obra.status': { $ne: 'CONCLUIDA' } },
-  //   ],
-  // }
 
   const query = { ...partnerQuery }
 

@@ -1,4 +1,5 @@
 import z from 'zod'
+import { ProductItemSchema, ServiceItemSchema } from '../../kits.schema'
 
 const GeneralContractRequestSchema = z.object({
   nomeVendedor: z.string().optional(),
@@ -53,6 +54,8 @@ const GeneralContractRequestSchema = z.object({
   longitude: z.string(),
   potPico: z.number().optional(),
   geracaoPrevista: z.number().optional(),
+  produtos: z.array(ProductItemSchema),
+  servicos: z.array(ServiceItemSchema),
   topologia: z.enum(['INVERSOR', 'MICRO-INVERSOR']).nullable().optional(),
   marcaInversor: z.string(),
   qtdeInversor: z.string(),

@@ -25,16 +25,13 @@ function RevenueCard({ revenue, handleClick }: RevenueCardProps) {
   return (
     <div className="flex w-full flex-col gap-2 rounded-md border border-gray-500 bg-[#fff] p-4">
       <div className="flex w-full items-center justify-between">
-        {true ? (
-          <h1
-            onClick={() => handleClick(revenue._id)}
-            className="cursor-pointer text-sm font-black leading-none tracking-tight duration-300 ease-in-out hover:text-cyan-500"
-          >
-            {revenue.titulo}
-          </h1>
-        ) : (
-          <h1 className="text-sm font-black leading-none tracking-tight">{revenue.titulo}</h1>
-        )}
+        <h1
+          onClick={() => handleClick(revenue._id)}
+          className="cursor-pointer text-sm font-black leading-none tracking-tight duration-300 ease-in-out hover:text-cyan-500"
+        >
+          {revenue.titulo}
+        </h1>
+
         <div className="flex items-center gap-2">{getStatusTag({ total: revenue.total, receipts: revenue.recebimentos })}</div>
       </div>
       <div className="flex w-full flex-col items-center justify-between gap-2 lg:flex-row">

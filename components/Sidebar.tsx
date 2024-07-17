@@ -86,12 +86,12 @@ export const Sidebar = ({ session }: SidebarProps) => {
             icon={<MdOutlineMiscellaneousServices style={{ fontSize: '12px', color: '#264653' }} />}
           />
           {sidebarExtended ? <h2 className="mt-2 h-[18px] text-xs text-gray-500">OPERACIONAL</h2> : <div className="mt-2 h-[18px]"></div>}
-          <SidebarItem
+          {/* <SidebarItem
             text="Homologações"
             isOpen={sidebarExtended}
             url="/operacional/homologacoes"
             icon={<FaProjectDiagram style={{ fontSize: '12px', color: '#264653' }} />}
-          />
+          /> */}
           <SidebarItem
             text="Análises Técnicas"
             isOpen={sidebarExtended}

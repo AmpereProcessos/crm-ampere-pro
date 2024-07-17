@@ -121,6 +121,8 @@ function getRequestObjectByProjectType({ propose, projectType, responsible, clie
           .map((mod) => mod.potencia)
           .join('/')
       : '',
+    produtos: propose.produtos,
+    servicos: propose.servicos,
     tipoEstrutura: propose.premissas.tipoEstrutura ? propose.premissas.tipoEstrutura : '',
     materialEstrutura: null,
     estruturaAmpere: 'NÃO',

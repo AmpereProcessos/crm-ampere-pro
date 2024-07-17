@@ -31,15 +31,18 @@ const HomologationOpportunitySchema = z.object({
 const HomologationAccessStatusSchema = z.union(
   [
     z.literal('PENDENTE'),
+    z.literal('CANCELADO'),
     z.literal('ELABORANDO DOCUMENTAÇÕES'),
     z.literal('AGUARDANDO ASSINATURA'),
     z.literal('AGUARDANDO FATURAMENTO'),
     z.literal('AGUARDANDO PENDÊNCIAS'),
-    z.literal('APROVADO COM OBRAS'),
-    z.literal('APROVADO COM REDUÇÃO'), // houve redução e optou-se por prosseguir com termo de responsabilidade
-    z.literal('APROVADO'), // houve aprovação, sem restrições
+    z.literal('AGUARDANDO RESPOSTA'),
+    z.literal('APROVADO COM REDUÇÃO'),
+    z.literal('APROVADO NOTURNO'),
+    z.literal('APROVADO'),
     z.literal('REPROVADO'),
-    z.literal('REPROVADO COM REDUÇÃO'), // houve redução e optou-se por não prosseguir com o contrato
+    z.literal('SUSPENSO'),
+    z.literal('REPROVADO COM REDUÇÃO'),
   ],
   { required_error: 'Status da homologação não informado.', invalid_type_error: 'Tipo não válido para o status da homologação.' }
 )
@@ -111,6 +114,24 @@ const HomologationInstalationSchema = z.object({
     required_error: 'Número do cliente (junto a concessionária) não informado.',
     invalid_type_error: 'Tipo não válido para o número do cliente (junto a concessionária).',
   }),
+  dependentes: z.array(
+    z.object(
+      {
+        numeroInstalacao: z.string({
+          required_error: 'Número da instalação elétrica dependente. não informado.',
+          invalid_type_error: 'Tipo não válido para o número da instalação elétrica dependente..',
+        }),
+        recebimentoPercentual: z.number({
+          required_error: 'Porcentagem de recebimento da instalação dependente não informado.',
+          invalid_type_error: 'Tipo não válido para a porcentagem de recebimento.',
+        }),
+      },
+      {
+        required_error: 'Lista de dependentes da instalação não informada.',
+        invalid_type_error: 'Tipo não válido para a lista de dependentes da instalação.',
+      }
+    )
+  ),
   grupo: ElectricalInstallationGroupsSchema,
 })
 const HomologationDocumentationSchema = z.object({

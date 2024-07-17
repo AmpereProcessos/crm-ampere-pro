@@ -24,6 +24,7 @@ import UserGroup from '@/components/Cards/UserGroup'
 import { UserGroups } from '@/utils/select-options'
 import { getInverterQty, getModulesPeakPotByProducts, getModulesQty } from '@/lib/methods/extracting'
 import { formatDateQuery } from '@/lib/methods/formatting'
+import { TFileReference } from '@/utils/schemas/file-reference.schema'
 type PostResponse = any
 
 const UserGroupEquivalents = {
@@ -56,29 +57,106 @@ type Reduced = { [key: string]: string[] }
 const migrate: NextApiHandler<PostResponse> = async (req, res) => {
   // const session = await validateAuthenticationWithSession(req, res)
   // const { id } = req.query
-  const after = '2024-05-01T00:00:00.000Z'
-  const before = '2024-06-21T21:00:00.000Z'
 
-  const afterDate = formatDateQuery(after, 'start', 'date') as Date
-  const beforeDate = formatDateQuery(before, 'end', 'date') as Date
   const crmDb = await connectToCRMDatabase(process.env.MONGODB_URI, 'crm')
   const opportunitiesCollection: Collection<TOpportunity> = crmDb.collection('opportunities')
+  const funnelReferencesCollection: Collection<TFunnelReference> = crmDb.collection('funnel-references')
+  const proposalsCollection: Collection<TProposal> = crmDb.collection('proposals')
+  const fileReferencesCollection: Collection<TFileReference> = crmDb.collection('file-references')
+  const technicalAnalysisCollection: Collection<TTechnicalAnalysis> = crmDb.collection('technical-analysis')
 
-  const opportunities = await opportunitiesCollection.find({ 'responsaveis.id': '65ae7335f947f69f2c5efd40' }, { projection: { responsaveis: 1 } }).toArray()
+  const opportunities = await opportunitiesCollection.find({ 'responsaveis.id': '65a581f1197d20ecdcba12a8' }, { projection: { responsaveis: 1 } }).toArray()
+  const funnelReferences = await funnelReferencesCollection.find({}, { projection: { idOportunidade: 1 } }).toArray()
+  const proposals = await proposalsCollection.find({}, { projection: { 'oportunidade.id': 1 } }).toArray()
+  const fileReferences = await fileReferencesCollection.find({}, { projection: { idOportunidade: 1 } }).toArray()
+  const analysis = await technicalAnalysisCollection.find({}, { projection: { 'oportunidade.id': 1 } }).toArray()
 
-  const bulkWrite = opportunities.map((opportunity) => {
+  const opportunitiesFiltered = opportunities.filter((opportunity) => {
     const responsibles = opportunity.responsaveis
-    const userWasSeller = responsibles.find((r) => r.id == '65ae7335f947f69f2c5efd40')?.papel == 'VENDEDOR'
+    const userWasSeller = responsibles.find((r) => r.id == '65a581f1197d20ecdcba12a8')?.papel == 'VENDEDOR'
+    return !!userWasSeller
+  })
+  const opportunitiesIds = opportunitiesFiltered.map((o) => o._id.toString())
+  const bulkWriteOpportunities = opportunitiesFiltered.map((opportunity) => {
     return {
       updateOne: {
         filter: { _id: new ObjectId(opportunity._id) },
         update: {
           $set: {
-            idParceiro: userWasSeller ? '668bfd75e7d15fe85e605827' : opportunity.idParceiro,
+            idParceiro: '668bfd75e7d15fe85e605827',
           },
         },
       },
     }
+  })
+
+  const bulkWriteFunnelReferences = funnelReferences
+    .filter((f) => opportunitiesIds.includes(f.idOportunidade))
+    .map((reference) => {
+      return {
+        updateOne: {
+          filter: { _id: new ObjectId(reference._id) },
+          update: {
+            $set: {
+              idParceiro: '668bfd75e7d15fe85e605827',
+            },
+          },
+        },
+      }
+    })
+  const bulkWriteProposals = proposals
+    .filter((f) => opportunitiesIds.includes(f.oportunidade.id))
+    .map((proposal) => {
+      return {
+        updateOne: {
+          filter: { _id: new ObjectId(proposal._id) },
+          update: {
+            $set: {
+              idParceiro: '668bfd75e7d15fe85e605827',
+            },
+          },
+        },
+      }
+    })
+  const bulkWriteFileReferences = fileReferences
+    .filter((f) => opportunitiesIds.includes(f.idOportunidade || ''))
+    .map((fileReference) => {
+      return {
+        updateOne: {
+          filter: { _id: new ObjectId(fileReference._id) },
+          update: {
+            $set: {
+              idParceiro: '668bfd75e7d15fe85e605827',
+            },
+          },
+        },
+      }
+    })
+  const bulkWriteAnalysis = analysis
+    .filter((f) => opportunitiesIds.includes(f.oportunidade.id || ''))
+    .map((analysis) => {
+      return {
+        updateOne: {
+          filter: { _id: new ObjectId(analysis._id) },
+          update: {
+            $set: {
+              idParceiro: '668bfd75e7d15fe85e605827',
+            },
+          },
+        },
+      }
+    })
+  const bulkwriteOpportunitiesResponse = bulkWriteOpportunities.length > 0 ? await opportunitiesCollection.bulkWrite(bulkWriteOpportunities) : null
+  const bulkwriteFunnelReferencesResponse = bulkWriteFunnelReferences.length > 0 ? await funnelReferencesCollection.bulkWrite(bulkWriteFunnelReferences) : null
+  const bulkwriteProposalsResponse = bulkWriteProposals.length > 0 ? await proposalsCollection.bulkWrite(bulkWriteProposals) : null
+  const bulkwriteFileReferencesResponse = bulkWriteFileReferences.length > 0 ? await fileReferencesCollection.bulkWrite(bulkWriteFileReferences) : null
+  const bulkwriteAnalysisResponse = bulkWriteAnalysis.length > 0 ? await technicalAnalysisCollection.bulkWrite(bulkWriteAnalysis) : null
+  return res.json({
+    bulkwriteOpportunitiesResponse,
+    bulkwriteFunnelReferencesResponse,
+    bulkwriteProposalsResponse,
+    bulkwriteFileReferencesResponse,
+    bulkwriteAnalysisResponse,
   })
   // const opportunitiesCollection: Collection<TOpportunity> = crmDb.collection('opportunities')
 
@@ -310,10 +388,7 @@ const migrate: NextApiHandler<PostResponse> = async (req, res) => {
   //     },
   //   }
   // })
-  const bulkwriteResponse = await opportunitiesCollection.bulkWrite(bulkWrite)
   // const insertManyResponse = await userGroupsCollection.insertMany(insertUserGroups)
-
-  return res.json(bulkwriteResponse)
 }
 export default apiHandler({
   GET: migrate,

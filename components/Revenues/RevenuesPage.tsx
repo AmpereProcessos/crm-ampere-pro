@@ -49,7 +49,7 @@ function RevenuesPage({ session }: RevenuesPageProps) {
                 </div>
               )}
               <div className="flex flex-col gap-1">
-                <h1 className="text-xl font-black leading-none tracking-tight md:text-2xl">CONTROLE DE COMPRAS</h1>
+                <h1 className="text-xl font-black leading-none tracking-tight md:text-2xl">CONTROLE DE RECEITAS</h1>
               </div>
             </div>
             <div className="flex items-center gap-2">
@@ -97,7 +97,7 @@ function RevenuesPage({ session }: RevenuesPageProps) {
           {isSuccess && revenues ? (
             revenues.length > 0 ? (
               revenues.map((revenue) => (
-                <div key={revenue._id} className="w-full lg:w-[500px]">
+                <div key={revenue._id} className="w-full">
                   <RevenueCard revenue={revenue} handleClick={(id) => setEditModal({ id: id, isOpen: true })} />
                 </div>
               ))
