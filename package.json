@@ -11,6 +11,8 @@
   "dependencies": {
     "@fileforge/client": "^0.1.17",
     "@fileforge/react-print": "^0.1.141",
+    "@radix-ui/react-dialog": "^1.1.1",
+    "@radix-ui/react-slot": "^1.1.0",
     "@tanstack/react-query": "^5.28.0",
     "@tanstack/react-query-devtools": "^5.4.2",
     "@types/adm-zip": "^0.5.0",

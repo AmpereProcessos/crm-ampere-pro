@@ -19,9 +19,7 @@ type MainManagementPageProps = {
 }
 function MainManagementPage({ session }: MainManagementPageProps) {
   const [mode, setMode] = useState<'process-tracking' | 'projects-follow-up'>('process-tracking')
-  const { data: stats, isLoading, isError } = useOperationGeneralStats({ after: start.toISOString(), before: currentDate.toISOString() })
-  const chartData = stats?.vendas || []
-  const chartConfig = { valor: { label: 'VALOR VENDIDO' } }
+
   return (
     <div className="flex h-full flex-col md:flex-row">
       <Sidebar session={session} />

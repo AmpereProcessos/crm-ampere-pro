@@ -139,6 +139,19 @@ export type TRevenueWithProject = TRevenue & { projetoDados?: TProjectDTO }
 export type TRevenueDTO = TRevenue & { _id: string }
 export type TRevenueWithProjectDTO = TRevenueWithProject & { _id: string }
 
+export type TRevenueSimplified = Pick<TRevenue, 'titulo' | 'projeto' | 'categorias' | 'total' | 'dataCompetencia'>
+export type TRevenueDTOSimplified = TRevenueSimplified & { _id: string }
+
+export type TReceipt = { _id: string; titulo: 1; recebimentos: TRevenueReceiptItem; indexRecebimento: number }
+
+export const RevenueSimplifiedProjection = {
+  titulo: 1,
+  projeto: 1,
+  categorias: 1,
+  total: 1,
+  dataCompetencia: 1,
+}
+
 const PersonalizedFieldFilters = z.enum(['dataInsercao', 'dataCompetencia', 'recebimentos.dataRecebimento'], {
   required_error: 'Filtro de campo de período não informado.',
   invalid_type_error: 'Tipo não válido para o campo de filtro de período.',

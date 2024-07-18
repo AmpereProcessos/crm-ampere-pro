@@ -1,25 +1,42 @@
+import { ChartConfig, ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
 import { TRevenueStatsResults } from '@/pages/api/stats/finances/revenues'
 import React from 'react'
-import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+import { BsBarChartFill } from 'react-icons/bs'
+import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 
 type PeriodReceiptsGraphProps = {
   dailyData: TRevenueStatsResults['diario']
 }
 function PeriodReceiptsGraph({ dailyData }: PeriodReceiptsGraphProps) {
-  const graphData = dailyData.map((d) => ({ DIA: d.dia, EFETIVO: d.efetivo, PREVISTO: d.previsto }))
+  const chartData = dailyData.map((d) => ({ DIA: d.dia, EFETIVO: d.efetivo, PREVISTO: d.previsto }))
+  const chartConfig = {
+    EFETIVO: {
+      label: 'RECEBIDO',
+      color: '#16a34a',
+    },
+    PREVISTO: {
+      label: 'A RECEBER',
+      color: '#ca8a04',
+    },
+  } satisfies ChartConfig
+
   return (
-    <div className="flex w-full flex-col gap-3">
-      <h1 className="text-sm font-medium tracking-tight">PROGRESSÃO</h1>
-      <div className="h-[300px] w-full">
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart width={730} height={300} data={graphData} margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
-            <XAxis dataKey="DIA" fontSize={10} />
-            <YAxis fontSize={12} />
-            <Tooltip />
-            <Bar dataKey="EFETIVO" label="EFETIVO" stackId={'a'} fill="#000" />
-            <Bar dataKey="PREVISTO" label="PREVISTO" stackId={'a'} fill="rgb(107,114,128)" />
+    <div className="flex w-full flex-col rounded-md border border-gray-500 bg-[#fff] shadow-sm">
+      <div className="flex items-center justify-between p-4 text-black">
+        <h1 className="text-sm font-medium uppercase tracking-tight">FLUXO DE RECEBIMENTOS</h1>
+        <BsBarChartFill />
+      </div>
+      <div className="flex min-h-[150px] w-full flex-col px-4">
+        <ChartContainer config={chartConfig} className="h-[150px] w-full">
+          <BarChart accessibilityLayer data={chartData}>
+            <CartesianGrid vertical={false} strokeWidth={0.2} />
+            <XAxis dataKey="DIA" tickLine={false} tickMargin={10} axisLine={false} tickFormatter={(value) => value.slice(0, 12)} />
+            <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dashed" />} />
+            <Bar dataKey="EFETIVO" fill="var(--color-EFETIVO)" radius={4} />
+            <Bar dataKey="PREVISTO" fill="var(--color-PREVISTO)" radius={4} />
+            <ChartLegend content={<ChartLegendContent color="#000" />} className="-translate-y-2 flex-wrap gap-2 [&>*]:basis-1/4 [&>*]:justify-center" />
           </BarChart>
-        </ResponsiveContainer>
+        </ChartContainer>
       </div>
     </div>
   )

@@ -25,15 +25,13 @@ const lastDayOfMonth = periodParams.end.toISOString()
 type RevenueStatsProps = {
   session: Session
   partnerOptions: TPartnerSimplifiedDTO[]
-  closeMenu: () => void
 }
-function RevenueStats({ session, partnerOptions, closeMenu }: RevenueStatsProps) {
+function RevenueStats({ session, partnerOptions }: RevenueStatsProps) {
   const userPartnerScope = session.user.permissoes.parceiros.escopo
   const [partners, setParners] = useState<string[] | null>(userPartnerScope || null)
   const [projectTypes, setProjectTypes] = useState(null)
   const [period, setPeriod] = useState<{ after: string; before: string }>({ after: firstDayOfMonth, before: lastDayOfMonth })
 
-  console.log(period)
   const { data: stats, isLoading, isError, isSuccess } = useRevenueStats({ after: period.after, before: period.before, partners, projectTypes })
   return (
     <AnimatePresence>
@@ -47,13 +45,6 @@ function RevenueStats({ session, partnerOptions, closeMenu }: RevenueStatsProps)
       >
         <div className="flex w-full flex-col items-center justify-between gap-2 lg:flex-row">
           <div className="flex items-center gap-2">
-            <button
-              onClick={() => closeMenu()}
-              type="button"
-              className="flex items-center justify-center rounded-lg p-1 duration-300 ease-linear hover:scale-105 hover:bg-red-200"
-            >
-              <VscChromeClose style={{ color: 'red' }} />
-            </button>
             <h1 className="text-sm font-bold tracking-tight">ESTÁTISTICAS DE RECEITAS</h1>
           </div>
           <div className="flex w-full flex-col items-center gap-2 md:flex-row lg:w-fit">
@@ -91,46 +82,40 @@ function RevenueStats({ session, partnerOptions, closeMenu }: RevenueStatsProps)
         {isError ? <ErrorComponent msg="Erro ao buscar estatísticas de receitas." /> : null}
         {isSuccess ? (
           <div className="flex w-full flex-col gap-2">
-            <div className="my-2 flex w-full flex-col items-center justify-center gap-3 lg:flex-row">
-              <div className="flex min-h-[110px] w-full flex-col rounded-xl border border-gray-200 bg-[#fff] p-3 shadow-sm lg:w-1/4">
-                <div className="flex items-center justify-between">
-                  <h1 className="text-sm font-medium uppercase tracking-tight">TOTAL</h1>
-                  <TbSum />
+            <div className="flex w-full grow flex-col items-center justify-around gap-3 lg:flex-row">
+              <div className="flex min-h-[60px] w-full items-start justify-between gap-2 rounded border border-gray-500 p-2 lg:w-1/4">
+                <div className="flex items-center gap-1">
+                  <TbSum color="#1f2937" />
+                  <h1 className="text-xs font-medium uppercase tracking-tight">TOTAL FATURADO</h1>
                 </div>
-                <div className="mt-2 flex w-full flex-col">
-                  <div className="text-2xl font-bold text-[#15599a]">{formatToMoney(stats.total)}</div>
+                <h1 className="text-xs font-medium uppercase tracking-tight">{formatToMoney(stats.total)}</h1>
+              </div>
+              <div className="flex min-h-[60px] w-full items-start justify-between gap-2 rounded border border-gray-500 p-2 lg:w-1/4">
+                <div className="flex items-center gap-1">
+                  <BsPatchCheck color="#16a34a" />
+                  <h1 className="text-xs font-medium uppercase tracking-tight">TOTAL RECEBIDO</h1>
+                </div>
+                <h1 className="text-xs font-medium uppercase tracking-tight">{formatToMoney(stats.totalRecebido)}</h1>
+              </div>
+              <div className="flex min-h-[60px] w-full items-start justify-between gap-2 rounded border border-gray-500 p-2 lg:w-1/4">
+                <div className="flex items-center gap-1">
+                  <BsCalendarEvent color="#ca8a04" />
+                  <h1 className="text-xs font-medium uppercase tracking-tight">TOTAL A RECEBER</h1>
+                </div>
+                <div className="flex flex-col items-end">
+                  <h1 className="text-xs font-medium uppercase tracking-tight">{formatToMoney(stats.totalAReceber)}</h1>
+                  <h1 className="text-[0.6rem]  uppercase tracking-tight">{formatToMoney(stats.totalAReceberHoje)} para hoje</h1>
                 </div>
               </div>
-              <div className="flex min-h-[110px] w-full flex-col rounded-xl border border-gray-200 bg-[#fff] p-3 shadow-sm lg:w-1/4">
-                <div className="flex items-center justify-between">
-                  <h1 className="text-sm font-medium uppercase tracking-tight">TOTAL RECEBIDO</h1>
-                  <BsPatchCheck />
+              <div className="flex min-h-[60px] w-full items-start justify-between gap-2 rounded border border-gray-500 p-2 lg:w-1/4">
+                <div className="flex items-center gap-1">
+                  <TbAlertTriangle color="#dc2626" />
+                  <h1 className="text-xs font-medium uppercase tracking-tight">TOTAL EM ATRASO</h1>
                 </div>
-                <div className="mt-2 flex w-full flex-col">
-                  <div className="text-2xl font-bold text-[#15599a]">{formatToMoney(stats.totalRecebido)}</div>
-                </div>
-              </div>
-              <div className="flex min-h-[110px] w-full flex-col rounded-xl border border-gray-200 bg-[#fff] p-3 shadow-sm lg:w-1/4">
-                <div className="flex items-center justify-between">
-                  <h1 className="text-sm font-medium uppercase tracking-tight">TOTAL A RECEBER</h1>
-                  <BsCalendarEvent />
-                </div>
-                <div className="mt-2 flex w-full flex-col">
-                  <div className="text-2xl font-bold text-[#15599a]">{formatToMoney(stats.totalAReceber)}</div>
-                </div>
-                <p className="text-sm tracking-tight">{formatToMoney(stats.totalAReceberHoje)} para hoje</p>
-              </div>
-              <div className="flex min-h-[110px] w-full flex-col rounded-xl border border-gray-200 bg-[#fff] p-3 shadow-sm lg:w-1/4">
-                <div className="flex items-center justify-between">
-                  <h1 className="text-sm font-medium uppercase tracking-tight">TOTAL EM ATRASO</h1>
-                  <TbAlertTriangle />
-                </div>
-                <div className="mt-2 flex w-full flex-col">
-                  <div className="text-2xl font-bold text-[#15599a]">{formatToMoney(stats.totalAReceberEmAtraso)}</div>
-                </div>
+                <h1 className="text-xs font-medium uppercase tracking-tight">{formatToMoney(stats.totalAReceberEmAtraso)}</h1>
               </div>
             </div>
-            <div className="my-2 flex w-full flex-col gap-3">
+            <div className="flex w-full flex-col gap-3">
               <PeriodReceiptsGraph dailyData={stats.diario} />
             </div>
           </div>

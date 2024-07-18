@@ -20,3 +20,13 @@ export async function editRevenue({ id, changes }: { id: string; changes: Partia
     throw error
   }
 }
+
+export async function editRevenuePersonalized({ id, changes }: { id: string; changes: any }) {
+  try {
+    const { data } = await axios.put(`/api/revenues/personalized?id=${id}`, changes)
+    if (typeof data.message != 'string') return 'Receita atualizada com sucesso!'
+    return data.message as string
+  } catch (error) {
+    throw error
+  }
+}

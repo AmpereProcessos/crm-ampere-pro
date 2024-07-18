@@ -4,14 +4,14 @@ import { getRevenuesByFilters } from '@/repositories/revenues/queries'
 import connectToDatabase from '@/services/mongodb/crm-db-connection'
 import { apiHandler, validateAuthenticationWithSession } from '@/utils/api'
 
-import { PersonalizedRevenueQuerySchema, TRevenue, TRevenueDTO } from '@/utils/schemas/revenues.schema'
+import { PersonalizedRevenueQuerySchema, TRevenue, TRevenueDTO, TRevenueDTOSimplified } from '@/utils/schemas/revenues.schema'
 import createHttpError from 'http-errors'
 import { Collection, Filter } from 'mongodb'
 import { NextApiHandler } from 'next'
 import { z } from 'zod'
 
 export type TRevenuesByFiltersResult = {
-  revenues: TRevenueDTO[]
+  revenues: TRevenueDTOSimplified[]
   revenuesMatched: number
   totalPages: number
 }

@@ -22,7 +22,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         const usersCollection = db.collection('users')
         const partnersCollection = db.collection('partners')
         const userInDb = await usersCollection.findOne({ ativo: true, email: email })
-        console.log(userInDb)
+
         if (!userInDb) throw new createHttpError.BadRequest('Usuário não encontrado.')
 
         let compareResult = bcrypt.compareSync(password, userInDb.senha)
@@ -98,11 +98,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       return session
     },
     async jwt({ token, user, account, profile, isNewUser }) {
-      console.log('============ JWT =============')
-      console.log('TOKEN JWT', token)
-      console.log('ACCOUNT JWT', account)
-      console.log('USER JWT', user)
-      console.log('PROFILE JWT', profile)
       // if (!!profile && !!account) {
       //   console.log('GOT CALLED WITH DB QUERIES')
       //   const profileEmail = profile?.email

@@ -129,14 +129,12 @@ function PurchaseFileAttachmentMenu({ purchaseId, projectId, clientId, opportuni
       <div className="my-4 flex w-full flex-col gap-2">
         <div className="flex w-full items-center justify-end p-2">
           {newFileMenuIsOpen ? (
-            <button>
-              <button
-                onClick={() => setNewFileMenuIsOpen(false)}
-                className="flex items-center gap-1 rounded-lg border border-red-500 bg-red-50 px-2 py-1 text-xs text-red-500 duration-300 ease-in-out hover:border-red-700 hover:text-red-700"
-              >
-                <VscChromeClose />
-                <p className="font-medium">FECHAR MENU</p>
-              </button>
+            <button
+              onClick={() => setNewFileMenuIsOpen(false)}
+              className="flex items-center gap-1 rounded-lg border border-red-500 bg-red-50 px-2 py-1 text-xs text-red-500 duration-300 ease-in-out hover:border-red-700 hover:text-red-700"
+            >
+              <VscChromeClose />
+              <p className="font-medium">FECHAR MENU</p>
             </button>
           ) : (
             <button

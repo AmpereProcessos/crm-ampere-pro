@@ -2,7 +2,8 @@ import axios from 'axios'
 import { TPersonalizedRevenuesFilters, TRevenueDTO, TRevenueWithProjectDTO } from '../schemas/revenues.schema'
 import { useQuery } from '@tanstack/react-query'
 import { TRevenuesByFiltersResult } from '@/pages/api/revenues/search'
-import { useState } from 'react'
+import { use, useState } from 'react'
+import { TReceiptsByFiltersResult } from '@/pages/api/revenues/receipts/search'
 
 async function fetchRevenues() {
   try {
@@ -95,4 +96,17 @@ export function useRevenuesByPersonalizedFilters({ page, partners }: UseRevenues
     }),
     updateFilters,
   }
+}
+async function fetchReceiptsByPersonalizedFilters({ page }: { page: number }) {
+  try {
+    const { data } = await axios.post(`/api/revenues/receipts/search?page=${page}`)
+
+    return data.data as TReceiptsByFiltersResult
+  } catch (error) {
+    throw error
+  }
+}
+
+export function useReceiptsByPersonalizedFilters({ page }: { page: number }) {
+  return useQuery({ queryKey: ['receipts-by-personalized-filters', page], queryFn: async () => await fetchReceiptsByPersonalizedFilters({ page }) })
 }

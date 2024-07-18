@@ -49,7 +49,6 @@ function EditRevenue({ revenueId, session, closeModal }: EditRevenueProps) {
     affectedQueryKey: ['revenue-by-id', revenueId],
     callbackFn: async () => await queryClient.invalidateQueries({ queryKey: ['revenues-by-personalized-filters'] }),
   })
-  console.log(infoHolder)
   useEffect(() => {
     if (revenue) setInfoHolder(revenue)
   }, [revenue])
