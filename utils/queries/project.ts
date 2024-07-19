@@ -5,7 +5,7 @@ import { TFollowUpProject } from '@/pages/api/projects/follow-up'
 import { useState } from 'react'
 import { formatWithoutDiacritics } from '@/lib/methods/formatting'
 
-async function fetchProjectById(id: string) {
+export async function fetchProjectById(id: string) {
   console.log('ID', id)
   if (!id) throw new Error('ID inválido.')
   try {

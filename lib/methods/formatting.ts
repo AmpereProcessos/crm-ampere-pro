@@ -8,7 +8,7 @@ export function formatDateTime(value: any) {
   return dayjs(value).format('YYYY-MM-DDTHH:mm')
 }
 
-export function formatDateAsLocale(date?: string, showHours = false) {
+export function formatDateAsLocale(date?: string | Date | null, showHours = false) {
   if (!date) return null
   if (showHours) return dayjs(date).format('DD/MM/YYYY HH:mm')
   return dayjs(date).add(3, 'hour').format('DD/MM/YYYY')

@@ -20,7 +20,7 @@ const editRevenuePersonalizedRoute: NextApiHandler<PutResponse> = async (req, re
   const collection: Collection<TRevenue> = db.collection('revenues')
 
   const updateResponse = await updateRevenue({ id, collection, changes, query: partnerQuery })
-  if (!updateResponse.acknowledged) throw new createHttpError.InternalServerError('Oops, houve um erro desconhecido ao a')
+  if (!updateResponse.acknowledged) throw new createHttpError.InternalServerError('Oops, houve um erro desconhecido ao atualizar receita.')
   if (updateResponse.matchedCount == 0) throw new createHttpError.NotFound('Receita não encontrada.')
   return res.status(200).json({ data: 'Receita atualizada com sucesso !', message: 'Receita atualizada com sucesso !' })
 }

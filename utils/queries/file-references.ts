@@ -78,6 +78,7 @@ async function fetchFileReferencesByQuery({
   projectId,
   purchaseId,
   revenueId,
+  expenseId,
 }: TFileReferencesQueryParams) {
   try {
     const clientParam = clientId ? `clientId=${clientId}` : null
@@ -87,7 +88,10 @@ async function fetchFileReferencesByQuery({
     const projectParam = projectId ? `projectId=${projectId}` : null
     const purchaseParam = purchaseId ? `purchaseId=${purchaseId}` : null
     const revenueParam = revenueId ? `revenueId=${revenueId}` : null
-    const param = [clientParam, opportunityParam, analysisParam, homologationParam, projectParam, purchaseParam, revenueParam].filter((q) => !!q).join('&')
+    const expenseParam = expenseId ? `expenseId=${expenseId}` : null
+    const param = [clientParam, opportunityParam, analysisParam, homologationParam, projectParam, purchaseParam, revenueParam, expenseParam]
+      .filter((q) => !!q)
+      .join('&')
     if (!param) return []
 
     const { data } = await axios.get(`/api/file-references/many?${param}`)

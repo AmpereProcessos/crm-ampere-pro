@@ -1,39 +1,36 @@
+import { fetchProjectById, useProjectsUltraSimplified } from '@/utils/queries/project'
+import { TExpenseWithProject } from '@/utils/schemas/expenses.schema'
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { GeneralVisibleHiddenExitMotionVariants } from '@/utils/constants'
-import { useProjectsUltraSimplified } from '@/utils/queries/project'
 import SelectInputVirtualized from '@/components/Inputs/SelectInputVirtualized'
-import { TRevenue } from '@/utils/schemas/revenues.schema'
 import { FaLink } from 'react-icons/fa'
 import toast from 'react-hot-toast'
 import { TProjectUltraSimplifiedDTO } from '@/utils/schemas/project.schema'
-
-type RevenueProjectVinculationMenuProps = {
+type ExpenseProjectVinculationMenuProps = {
   vinculatedId?: string | null
-  infoHolder: TRevenue
-  setInfoHolder: React.Dispatch<React.SetStateAction<TRevenue>>
+  infoHolder: TExpenseWithProject
+  setInfoHolder: React.Dispatch<React.SetStateAction<TExpenseWithProject>>
   closeMenu: () => void
-  handleUpdateRevenue?: (revenue: TRevenue) => void
 }
-function RevenueProjectVinculationMenu({ vinculatedId, infoHolder, setInfoHolder, closeMenu, handleUpdateRevenue }: RevenueProjectVinculationMenuProps) {
+function ExpenseProjectVinculationMenu({ vinculatedId, infoHolder, setInfoHolder, closeMenu }: ExpenseProjectVinculationMenuProps) {
   const [selectedProjectId, setSelectedProjectId] = useState(vinculatedId)
   const { data: projects } = useProjectsUltraSimplified()
-  function handleVinculation({ id, projects }: { id?: string | null; projects?: TProjectUltraSimplifiedDTO[] }) {
+
+  async function handleVinculation({ id, projects }: { id?: string | null; projects?: TProjectUltraSimplifiedDTO[] }) {
     if (!projects) return
     if (!id) return toast.error('Selecione um projeto para prosseguir com a vinculação.')
+    if (id.length != 24) return toast.error('Preencha um ID válido.')
     const project = projects.find((p) => p._id == id)
     if (!project) return
+
+    const projectData = await fetchProjectById(id)
     setInfoHolder((prev) => ({
       ...prev,
       idParceiro: project.idParceiro,
       projeto: { id: project?._id, nome: project?.nome, tipo: project?.tipo.titulo, indexador: project?.indexador, identificador: project?.identificador },
+      projetoDados: projectData,
     }))
-    if (!!handleUpdateRevenue)
-      handleUpdateRevenue({
-        ...infoHolder,
-        idParceiro: project.idParceiro,
-        projeto: { id: project?._id, nome: project?.nome, tipo: project?.tipo.titulo, indexador: project?.indexador, identificador: project?.identificador },
-      })
     closeMenu()
     return toast.success('Vinculação feita com sucesso !', { duration: 500 })
   }
@@ -68,4 +65,4 @@ function RevenueProjectVinculationMenu({ vinculatedId, infoHolder, setInfoHolder
   )
 }
 
-export default RevenueProjectVinculationMenu
+export default ExpenseProjectVinculationMenu

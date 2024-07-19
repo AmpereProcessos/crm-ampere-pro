@@ -59,7 +59,7 @@ const createRevenueRoute: NextApiHandler<PostResponse> = async (req, res) => {
   if (!insertResponse.acknowledged) throw new createHttpError.BadRequest('Oops, houve um erro desconhecido ao criar receita.')
   const insertedId = insertResponse.insertedId.toString()
 
-  return res.status(200).json({ data: { insertedId }, message: 'Receita criada com sucesso !' })
+  return res.status(201).json({ data: { insertedId }, message: 'Receita criada com sucesso !' })
 }
 
 type PutResponse = {

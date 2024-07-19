@@ -73,7 +73,7 @@ function PurchasesPage({ session }: PurchasesPageProps) {
           {isError ? <ErrorComponent msg={'Erro ao buscar registros de compra.'} /> : null}
           {isSuccess && purchases
             ? purchases.map((purchase) => (
-                <div key={purchase._id} className="w-full lg:w-[600px]">
+                <div key={purchase._id} className="w-full">
                   <PurchaseCard purchase={purchase} handleClick={(id) => setEditModal({ id: id, isOpen: true })} />
                 </div>
               ))

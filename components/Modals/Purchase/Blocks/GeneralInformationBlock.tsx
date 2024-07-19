@@ -1,4 +1,5 @@
 import CheckboxInput from '@/components/Inputs/CheckboxInput'
+import CheckboxWithDate from '@/components/Inputs/CheckboxWithDate'
 import DateInput from '@/components/Inputs/DateInput'
 import SelectInput from '@/components/Inputs/SelectInput'
 import TextareaInput from '@/components/Inputs/TextareaInput'
@@ -40,27 +41,13 @@ function GeneralInformationBlock({ infoHolder, setInfoHolder }: GeneralInformati
             />
           </div>
         </div>
-        <div className="flex w-full flex-col items-center gap-2 lg:flex-row">
-          <div className="flex w-full items-center justify-center lg:w-1/2">
-            <div className="w-fit">
-              <CheckboxInput
-                labelFalse="COMPRA LIBERADA"
-                labelTrue="COMPRA LIBERADA"
-                checked={!!infoHolder.liberacao.data}
-                handleChange={(value) =>
-                  setInfoHolder((prev) => ({ ...prev, liberacao: { ...prev.liberacao, data: value ? new Date().toISOString() : null } }))
-                }
-              />
-            </div>
-          </div>
-          <div className="w-full lg:w-1/2">
-            <DateInput
-              label="DATA DE LIBERAÇÃO"
-              value={formatDateForInput(infoHolder.liberacao.data)}
-              handleChange={(value) => setInfoHolder((prev) => ({ ...prev, liberacao: { ...prev.liberacao, data: formatDateInputChange(value) } }))}
-              width="100%"
-            />
-          </div>
+        <div className="my-3 flex w-full flex-col items-center justify-center gap-2 lg:flex-row">
+          <CheckboxWithDate
+            labelFalse="COMPRA LIBERADA"
+            labelTrue="COMPRA LIBERADA"
+            date={infoHolder.liberacao.data || null}
+            handleChange={(value) => setInfoHolder((prev) => ({ ...prev, liberacao: { ...prev.liberacao, data: value } }))}
+          />
         </div>
         <TextareaInput
           label="ANOTAÇÕES"

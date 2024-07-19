@@ -1,18 +1,16 @@
+import { Session } from 'next-auth'
 import React, { useState } from 'react'
 import { Sidebar } from '../Sidebar'
-import { Session } from 'next-auth'
+import NewExpense from '../Modals/Expenses/NewExpense'
+import ExpenseStats from './Stats'
+import ExpensesBlock from './ExpensesBlock'
+import PaymentsBlock from './PaymentsBlock'
 
-import NewRevenue from '../Modals/Revenues/NewRevenue'
-
-import RevenueStats from './Stats'
-import ReceiptsBlock from './ReceiptsBlock'
-import RevenuesBlock from './RevenuesBlock'
-
-type RevenuesPageProps = {
+type ExpensesPageProps = {
   session: Session
 }
-function RevenuesPage({ session }: RevenuesPageProps) {
-  const [newRevenueModalIsOpen, setNewRevenueModalIsOpen] = useState<boolean>(false)
+function ExpensesPage({ session }: ExpensesPageProps) {
+  const [newExpenseModalIsOpen, setNewExpenseModalIsOpen] = useState<boolean>()
   return (
     <div className="flex h-full flex-col md:flex-row">
       <Sidebar session={session} />
@@ -21,34 +19,32 @@ function RevenuesPage({ session }: RevenuesPageProps) {
           <div className="flex w-full flex-col items-center justify-between gap-2 lg:flex-row">
             <div className="flex items-center gap-1">
               <div className="flex flex-col gap-1">
-                <h1 className="text-xl font-black leading-none tracking-tight md:text-2xl">CONTROLE DE RECEITAS</h1>
+                <h1 className="text-xl font-black leading-none tracking-tight md:text-2xl">CONTROLE DE DESPESAS</h1>
               </div>
             </div>
             <div className="flex items-center gap-2">
               <button
-                onClick={() => setNewRevenueModalIsOpen(true)}
+                onClick={() => setNewExpenseModalIsOpen(true)}
                 className="h-9 whitespace-nowrap rounded bg-gray-900 px-4 py-2 text-sm font-medium text-white shadow disabled:bg-gray-500 disabled:text-white enabled:hover:bg-gray-800 enabled:hover:text-white"
               >
-                CRIAR RECEITA
+                CRIAR DESPESA
               </button>
             </div>
           </div>
-
-          {/* <RevenueStats session={session} partnerOptions={partnersOptions || []} closeMenu={() => setStatsBlockIsOpen(false)} /> */}
         </div>
-        <RevenueStats session={session} partnerOptions={[]} />
+        <ExpenseStats session={session} partnerOptions={[]} />
         <div className="flex w-full grow flex-col items-start gap-4 lg:flex-row">
           <div className="h-full w-full lg:w-[40%]">
-            <ReceiptsBlock />
+            <PaymentsBlock />
           </div>
           <div className="h-full w-full lg:w-[60%]">
-            <RevenuesBlock session={session} />
+            <ExpensesBlock session={session} />
           </div>
         </div>
       </div>
-      {newRevenueModalIsOpen ? <NewRevenue session={session} closeModal={() => setNewRevenueModalIsOpen(false)} /> : null}
+      {newExpenseModalIsOpen ? <NewExpense session={session} closeModal={() => setNewExpenseModalIsOpen(false)} /> : null}
     </div>
   )
 }
 
-export default RevenuesPage
+export default ExpensesPage

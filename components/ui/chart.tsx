@@ -230,10 +230,8 @@ const ChartLegendContent = React.forwardRef<
   return (
     <div ref={ref} className={cn('flex items-center justify-center gap-4', verticalAlign === 'top' ? 'pb-3' : 'pt-3', className)}>
       {payload.map((item) => {
-        console.log('ITEM', item)
         const key = `${nameKey || item.dataKey || 'value'}`
         const itemConfig = getPayloadConfigFromPayload(config, item, key)
-        console.log('ITEMCONFIG', itemConfig)
         return (
           <div key={item.value} className={cn('flex min-w-fit items-center gap-1.5 [&>svg]:h-3 [&>svg]:w-3 [&>svg]:text-gray-500 dark:[&>svg]:text-gray-400')}>
             {itemConfig?.icon && !hideIcon ? (

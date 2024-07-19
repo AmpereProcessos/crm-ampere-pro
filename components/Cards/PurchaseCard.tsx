@@ -1,4 +1,4 @@
-import { formatDateAsLocale, formatLocation, formatNameAsInitials } from '@/lib/methods/formatting'
+import { formatDateAsLocale, formatLocation, formatNameAsInitials, formatToMoney } from '@/lib/methods/formatting'
 import { TPurchaseDTO } from '@/utils/schemas/purchase.schema'
 import React from 'react'
 import { BsBox2, BsCalendar, BsCalendarPlus, BsCart, BsPatchCheck, BsTagFill } from 'react-icons/bs'
@@ -18,24 +18,23 @@ function renderDeliveryText(delivery: TPurchaseDTO['entrega']) {
 
 function getStatusTag(status?: string | null) {
   if (status == 'AGUARDANDO LIBERAÇÃO')
-    return <h1 className={`w-fit self-center rounded border border-gray-500 p-1 text-center text-[0.6rem] font-black text-gray-500`}>{status}</h1>
+    return <h1 className="rounded-md bg-gray-500 px-2 py-0.5 text-[0.5rem] font-medium text-white lg:text-[0.6rem]">{status}</h1>
 
   if (status == 'AGUARDANDO PAGAMENTO')
-    return <h1 className={`w-fit self-center rounded border border-blue-500 p-1 text-center text-[0.6rem] font-black text-blue-500`}>{status}</h1>
+    return <h1 className="rounded-md bg-blue-500 px-2 py-0.5 text-[0.5rem] font-medium text-white lg:text-[0.6rem]">{status}</h1>
 
   if (status == 'PENDÊNCIA COMERCIAL')
-    return <h1 className={`w-fit self-center rounded border border-green-800 p-1 text-center text-[0.6rem] font-black text-green-800`}>{status}</h1>
+    return <h1 className="rounded-md bg-green-800 px-2 py-0.5 text-[0.5rem] font-medium text-white lg:text-[0.6rem]">{status}</h1>
 
   if (status == 'PENDÊNCIA OPERACIONAL')
-    return <h1 className={`w-fit self-center rounded border border-blue-800 p-1 text-center text-[0.6rem] font-black text-blue-800`}>{status}</h1>
+    return <h1 className="rounded-md bg-blue-800 px-2 py-0.5 text-[0.5rem] font-medium text-white lg:text-[0.6rem]">{status}</h1>
 
   if (status == 'PENDÊNCIA EXTERNA')
-    return <h1 className={`w-fit self-center rounded border border-gray-800 p-1 text-center text-[0.6rem] font-black text-gray-800`}>{status}</h1>
+    return <h1 className="rounded-md bg-gray-800 px-2 py-0.5 text-[0.5rem] font-medium text-white lg:text-[0.6rem]">{status}</h1>
 
-  if (status == 'CONCLUÍDA')
-    return <h1 className={`w-fit self-center rounded border border-green-500 p-1 text-center text-[0.6rem] font-black text-green-500`}>{status}</h1>
+  if (status == 'CONCLUÍDA') return <h1 className="rounded-md bg-green-500 px-2 py-0.5 text-[0.5rem] font-medium text-white lg:text-[0.6rem]">{status}</h1>
 
-  return <h1 className={`w-fit self-center rounded border border-gray-500 p-1 text-center text-[0.6rem] font-black text-gray-500`}>NÃO DEFINIDO</h1>
+  return <h1 className="rounded-md bg-gray-500 px-2 py-0.5 text-[0.5rem] font-medium text-white lg:text-[0.6rem]">NÃO DEFINIDO</h1>
 }
 type PurchaseCardProps = {
   purchase: TPurchaseDTO
@@ -43,21 +42,58 @@ type PurchaseCardProps = {
 }
 function PurchaseCard({ purchase, handleClick }: PurchaseCardProps) {
   const { dates: deliveryDatesText, location: deliveryLocationText } = renderDeliveryText(purchase.entrega)
+  const total = purchase.total
   return (
-    <div className="flex w-full flex-col gap-2 rounded-md border border-gray-500 bg-[#fff] p-4">
-      <div className="flex w-full items-center justify-between">
-        {true ? (
-          <h1
-            onClick={() => handleClick(purchase._id)}
-            className="cursor-pointer text-sm font-black leading-none tracking-tight duration-300 ease-in-out hover:text-cyan-500"
-          >
-            {purchase.titulo}
-          </h1>
-        ) : (
-          <h1 className="text-sm font-black leading-none tracking-tight">{purchase.titulo}</h1>
-        )}
-        <div className="flex items-center gap-2">{getStatusTag(purchase.status)}</div>
+    <div className="flex w-full flex-col gap-2 rounded-md border border-gray-500 bg-[#fff] p-2">
+      <div className="flex w-full items-center justify-between gap-2">
+        <div className="flex items-center gap-1">
+          {getStatusTag(purchase.status)}
+          {true ? (
+            <h1
+              onClick={() => handleClick(purchase._id)}
+              className="cursor-pointer text-sm font-black leading-none tracking-tight duration-300 ease-in-out hover:text-cyan-500"
+            >
+              {purchase.titulo}
+            </h1>
+          ) : (
+            <h1 className="text-sm font-black leading-none tracking-tight">{purchase.titulo}</h1>
+          )}
+        </div>
+        <h1 className="rounded-lg bg-black px-2 py-0.5 text-center text-[0.65rem] font-bold text-white lg:py-1">{formatToMoney(purchase.total)}</h1>
       </div>
+      <div className="flex w-full flex-col items-center justify-between gap-2 lg:flex-row">
+        <div className="flex items-center gap-2">
+          <div className="hidden w-full flex-wrap items-center gap-1 xl:flex">
+            <BsCart size={12} />
+            <p className="text-[0.6rem] font-medium leading-none tracking-tight">ITENS:</p>
+            {purchase.composicao.map((item, index) => (
+              <div key={index} className="rounded border border-gray-500 bg-[#f8f8f8] p-2 text-center shadow-sm">
+                <p className="text-[0.6rem] font-medium leading-none tracking-tight">
+                  {item.qtde} x {item.descricao}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
+            <Avatar
+              url={purchase.liberacao.autor?.avatar_url || undefined}
+              height={20}
+              width={20}
+              fallback={formatNameAsInitials(purchase.liberacao.autor?.nome || 'NA')}
+            />
+            <p className="text-[0.6rem] font-medium leading-none tracking-tight">
+              LIBERADO POR {purchase.liberacao.autor?.nome} EM {formatDateAsLocale(purchase.liberacao.data)}
+            </p>
+          </div>
+          <div className={`flex items-center gap-1`}>
+            <BsCalendarPlus />
+            <p className="text-[0.65rem] font-medium text-gray-500">{formatDateAsLocale(purchase.dataInsercao, true)}</p>
+          </div>
+        </div>
+      </div>
+      {/* 
       <div className="flex flex-col gap-1">
         <div className="flex items-center gap-1">
           <BsPatchCheck size={12} />
@@ -163,7 +199,7 @@ function PurchaseCard({ purchase, handleClick }: PurchaseCardProps) {
           <BsCalendarPlus />
           <p className="text-[0.65rem] font-medium text-gray-500">{formatDateAsLocale(purchase.dataInsercao, true)}</p>
         </div>
-      </div>
+      </div> */}
     </div>
   )
 }

@@ -1,26 +1,25 @@
 import NumberInput from '@/components/Inputs/NumberInput'
 import SelectInput from '@/components/Inputs/SelectInput'
 import TextInput from '@/components/Inputs/TextInput'
+import { formatToMoney } from '@/lib/methods/formatting'
 import { renderUnitLabel } from '@/lib/methods/rendering'
 import { GeneralVisibleHiddenExitMotionVariants } from '@/utils/constants'
-import { formatToMoney } from '@/utils/methods'
-import { TRevenueCompositionItem } from '@/utils/schemas/revenues.schema'
+import { TExpenseCompositionItem } from '@/utils/schemas/expenses.schema'
 import { Units } from '@/utils/select-options'
 import { AnimatePresence, motion } from 'framer-motion'
 import React, { useState } from 'react'
-import { BsCart } from 'react-icons/bs'
-import { FaDollarSign } from 'react-icons/fa'
-import { MdDelete, MdEdit, MdOutlineMiscellaneousServices } from 'react-icons/md'
+import { FaBox, FaDollarSign } from 'react-icons/fa'
+import { MdDelete, MdEdit } from 'react-icons/md'
 import { TbRulerMeasure } from 'react-icons/tb'
 
 type CompositionTableItemProps = {
-  item: TRevenueCompositionItem
-  handleUpdate: (item: TRevenueCompositionItem) => void
+  item: TExpenseCompositionItem
+  handleUpdate: (item: TExpenseCompositionItem) => void
   handleRemove: () => void
 }
 function CompositionTableItem({ item, handleUpdate, handleRemove }: CompositionTableItemProps) {
   const [editMenuIsOpen, setEditMenuIsOpen] = useState<boolean>(false)
-  const [itemHolder, setItemHolder] = useState<TRevenueCompositionItem>(item)
+  const [itemHolder, setItemHolder] = useState<TExpenseCompositionItem>(item)
   return (
     <>
       <AnimatePresence>
@@ -30,16 +29,10 @@ function CompositionTableItem({ item, handleUpdate, handleRemove }: CompositionT
               <div className="flex flex-col">
                 <h1 className="text-xs tracking-tight">{item.descricao}</h1>
                 <div className="flex items-center gap-2">
-                  {item.idProduto ? (
+                  {item.idMaterial ? (
                     <div className="flex items-center gap-1">
-                      <BsCart size={10} />
-                      <p className="text-[0.55rem] font-normal italic leading-none tracking-tight text-gray-500">#{item.idProduto}</p>
-                    </div>
-                  ) : null}
-                  {item.idServico ? (
-                    <div className="flex items-center gap-1">
-                      <MdOutlineMiscellaneousServices size={10} />
-                      <p className="text-[0.55rem] font-normal italic leading-none tracking-tight text-gray-500">#{item.idServico}</p>
+                      <FaBox size={10} />
+                      <p className="text-[0.55rem] font-normal italic leading-none tracking-tight text-gray-500">#{item.idMaterial}</p>
                     </div>
                   ) : null}
                 </div>
@@ -74,16 +67,10 @@ function CompositionTableItem({ item, handleUpdate, handleRemove }: CompositionT
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
-                  {item.idProduto ? (
+                  {item.idMaterial ? (
                     <div className="flex items-center gap-1">
-                      <BsCart size={10} />
-                      <p className="text-[0.65rem] font-light italic leading-none tracking-tight text-gray-500">#{item.idProduto}</p>
-                    </div>
-                  ) : null}
-                  {item.idServico ? (
-                    <div className="flex items-center gap-1">
-                      <MdOutlineMiscellaneousServices size={10} />
-                      <p className="text-[0.65rem] font-light italic leading-none tracking-tight text-gray-500">#{item.idServico}</p>
+                      <FaBox size={10} />
+                      <p className="text-[0.65rem] font-light italic leading-none tracking-tight text-gray-500">#{item.idMaterial}</p>
                     </div>
                   ) : null}
                 </div>
