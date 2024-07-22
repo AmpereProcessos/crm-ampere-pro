@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { AuthorSchema } from './user.schema'
+import { TProjectDTO } from './project.schema'
 
 const ServiceOrderResponsible = z.object({
   id: z.string({
@@ -174,4 +175,7 @@ export const InsertServiceOrderSchema = z.object({
 })
 
 export type TServiceOrder = z.infer<typeof GeneralServiceOrderSchema>
+export type TServiceOrderWithProject = TServiceOrder & { projetoDados: TProjectDTO }
+
 export type TServiceOrderDTO = TServiceOrder & { _id: string }
+export type TServiceOrderWithProjectDTO = TServiceOrderWithProject & { _id: string }

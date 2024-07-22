@@ -1,24 +1,10 @@
-import ProjectPurchaseCard from '@/components/Cards/ProjectPurchaseCard'
-import TextareaInput from '@/components/Inputs/TextareaInput'
-import TextInput from '@/components/Inputs/TextInput'
-import ProjectNode from '@/components/ReactFlowTesting/ProjectNode'
 import { Sidebar } from '@/components/Sidebar'
 import LoadingPage from '@/components/utils/LoadingPage'
-import { useMutationWithFeedback } from '@/utils/mutations/general-hook'
-import { createProcessFlow } from '@/utils/mutations/process-flows'
-import { getActiveProcessAutomationReference, ProcessAutomationEntitiesSpecs } from '@/utils/process-settings'
-import { nodeTypes, useProjectSettingStore } from '@/utils/process-settings/store'
-import { TProcessFlow } from '@/utils/schemas/process-flow.schema'
-import { TPurchaseDTO } from '@/utils/schemas/purchase.schema'
-import { useQueryClient } from '@tanstack/react-query'
-import { nanoid } from 'nanoid'
 import { useSession } from 'next-auth/react'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
-
-import ReactFlow, { addEdge, applyEdgeChanges, applyNodeChanges, Background, Connection, Controls } from 'reactflow'
-import 'reactflow/dist/style.css'
+import { useEffect, useState } from 'react'
 
 function Testing() {
+  const [location, setLocation] = useState()
   const { data: session, status } = useSession()
   const purchase = {
     _id: '667ad35e43f86083effc1a10',
@@ -68,15 +54,15 @@ function Testing() {
     entrega: {},
     dataInsercao: '2024-06-25T14:24:27.735Z',
   }
-
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition((position) => console.log(position))
+  }, [])
   if (status != 'authenticated') return <LoadingPage />
   return (
     <div className="flex h-full flex-col md:flex-row">
       <Sidebar session={session} />
       <div className="flex w-full max-w-full grow flex-col overflow-x-hidden bg-[#f8f9fa] p-6">
-        <div className="w-full self-center lg:w-[40%]">
-          <ProjectPurchaseCard purchase={purchase as TPurchaseDTO} />
-        </div>
+        <div className="w-full self-center lg:w-[40%]"></div>
       </div>
     </div>
   )

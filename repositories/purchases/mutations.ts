@@ -7,7 +7,7 @@ type InsertPurchaseParams = {
 }
 export async function insertPurchase({ collection, info }: InsertPurchaseParams) {
   try {
-    const insertResponse = await collection.insertOne({ ...info, dataLiberacao: new Date().toISOString() })
+    const insertResponse = await collection.insertOne({ ...info })
 
     return insertResponse
   } catch (error) {
