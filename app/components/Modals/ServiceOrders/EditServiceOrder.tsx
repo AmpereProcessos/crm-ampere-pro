@@ -18,6 +18,8 @@ import { orderBy } from 'lodash'
 import LoadingComponent from '@/components/utils/LoadingComponent'
 import ErrorComponent from '@/components/utils/ErrorComponent'
 import * as Dialog from '@radix-ui/react-dialog'
+import CheckboxWithDate from '@/components/Inputs/CheckboxWithDate'
+import PeriodInformationBlock from './Blocks/PeriodInformationBlock'
 
 type EditServiceOrderProps = {
   orderId: string
@@ -49,6 +51,7 @@ function EditServiceOrder({ orderId, session, closeModal }: EditServiceOrderProp
       numeroOuIdentificador: '',
     },
     periodo: {},
+    registros: [],
     materiais: {
       disponiveis: [],
       retiraveis: [],
@@ -93,6 +96,16 @@ function EditServiceOrder({ orderId, session, closeModal }: EditServiceOrderProp
           {isSuccess ? (
             <>
               <div className="flex grow flex-col gap-y-2 overflow-y-auto overscroll-y-auto px-2 py-1 scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300">
+                <div className="my-4 flex w-full items-center justify-center">
+                  <div className="w-fit">
+                    <CheckboxWithDate
+                      labelFalse="ORDEM DE SERVIÇO CONCLUÍDA"
+                      labelTrue="ORDEM DE SERVIÇO CONCLUÍDA"
+                      date={infoHolder.dataEfetivacao || null}
+                      handleChange={(value) => setInfoHolder((prev) => ({ ...prev, dataEfetivacao: value }))}
+                    />
+                  </div>
+                </div>
                 <GeneralInformationBlock infoHolder={infoHolder} setInfoHolder={setInfoHolder as React.Dispatch<React.SetStateAction<TServiceOrder>>} />
                 <FavoredInformationBlock infoHolder={infoHolder} setInfoHolder={setInfoHolder as React.Dispatch<React.SetStateAction<TServiceOrder>>} />
                 <ProjectInformationBlock
@@ -105,13 +118,18 @@ function EditServiceOrder({ orderId, session, closeModal }: EditServiceOrderProp
                 <ResponsibleInformationBlock infoHolder={infoHolder} setInfoHolder={setInfoHolder as React.Dispatch<React.SetStateAction<TServiceOrder>>} />
                 <LocationInformationBlock infoHolder={infoHolder} setInfoHolder={setInfoHolder as React.Dispatch<React.SetStateAction<TServiceOrder>>} />
                 <MaterialsInformationBlock infoHolder={infoHolder} setInfoHolder={setInfoHolder as React.Dispatch<React.SetStateAction<TServiceOrder>>} />
+                <PeriodInformationBlock
+                  infoHolder={infoHolder}
+                  setInfoHolder={setInfoHolder as React.Dispatch<React.SetStateAction<TServiceOrder>>}
+                  session={session}
+                />
               </div>
               <div className="flex w-full items-center justify-end p-2">
                 <button
                   disabled={isPending}
                   onClick={() => {
                     // @ts-ignore
-                    editServiceOrder({ id: orderId, changes: infoHolder })
+                    handleEditServiceOrder({ id: orderId, changes: infoHolder })
                   }}
                   className="h-9 whitespace-nowrap rounded bg-blue-700 px-4 py-2 text-sm font-medium text-white shadow disabled:bg-gray-500 disabled:text-white enabled:hover:bg-blue-600 enabled:hover:text-white"
                 >

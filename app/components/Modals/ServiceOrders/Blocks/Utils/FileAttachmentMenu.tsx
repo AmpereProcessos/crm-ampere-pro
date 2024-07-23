@@ -206,7 +206,7 @@ function ServiceOrderFileAttachmentMenu({
                     checked={!!attachmentHolder.idServiceOrder}
                     justify="justify-center"
                     editable={false}
-                    handleChange={(value) => setAttachmentHolder((prev) => ({ ...prev, idExpense: !!prev.idServiceOrder ? undefined : serviceOrderId }))}
+                    handleChange={(value) => setAttachmentHolder((prev) => ({ ...prev, idServiceOrder: serviceOrderId }))}
                   />
                 </div>
                 <div className="w-fit">

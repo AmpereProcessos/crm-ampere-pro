@@ -64,6 +64,21 @@ const ServiceOrderMaterialItem = z.object({
   }),
 })
 export type TServiceOrderMaterialItem = z.infer<typeof ServiceOrderMaterialItem>
+const ServiceOrderExecutionLog = z.object({
+  inicio: z.string({
+    required_error: 'Data hora do início do registro não informada.',
+    invalid_type_error: 'Tipo não válido para o data hora do início do registro.',
+  }),
+  fim: z
+    .string({ required_error: 'Data hora do início do registro não informada.', invalid_type_error: 'Tipo não válido para o data hora do início do registro.' })
+    .optional()
+    .nullable(),
+  anotacoes: z.string({ required_error: 'Anotações od registro não informadas.', invalid_type_error: 'Tipo não válido para as anotações do registro.' }),
+  autor: AuthorSchema,
+})
+
+export type TServiceOrderExecutionLog = z.infer<typeof ServiceOrderExecutionLog>
+
 const GeneralServiceOrderSchema = z.object({
   categoria: z.enum(['MONTAGEM', 'MANUTANÇÃO CORRETIVA', 'MANUTENÇÃO PREVENTIVA', 'PADRÃO', 'ESTRUTURA', 'OUTROS']),
   favorecido: z.object({
@@ -91,6 +106,10 @@ const GeneralServiceOrderSchema = z.object({
   periodo: z.object({
     inicio: z.string().optional().nullable(),
     fim: z.string().optional().nullable(),
+  }),
+  registros: z.array(ServiceOrderExecutionLog, {
+    required_error: 'Registros de execução não informados.',
+    invalid_type_error: 'Tipo não válido para registros de execução.',
   }),
   autor: AuthorSchema,
   materiais: z.object({
@@ -139,6 +158,10 @@ export const InsertServiceOrderSchema = z.object({
   periodo: z.object({
     inicio: z.string().optional().nullable(),
     fim: z.string().optional().nullable(),
+  }),
+  registros: z.array(ServiceOrderExecutionLog, {
+    required_error: 'Registros de execução não informados.',
+    invalid_type_error: 'Tipo não válido para registros de execução.',
   }),
   autor: AuthorSchema,
   materiais: z.object({

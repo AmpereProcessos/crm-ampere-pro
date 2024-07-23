@@ -14,6 +14,7 @@ import { useMutationWithFeedback } from '@/utils/mutations/general-hook'
 import { createServiceOrder } from '@/utils/mutations/service-orders'
 import { useQueryClient } from '@tanstack/react-query'
 import * as Dialog from '@radix-ui/react-dialog'
+import PeriodInformationBlock from './Blocks/PeriodInformationBlock'
 
 type NewServiceOrderProps = {
   session: Session
@@ -41,6 +42,7 @@ function NewServiceOrder({ session, closeModal }: NewServiceOrderProps) {
       numeroOuIdentificador: '',
     },
     periodo: {},
+    registros: [],
     materiais: {
       disponiveis: [],
       retiraveis: [],
@@ -83,6 +85,11 @@ function NewServiceOrder({ session, closeModal }: NewServiceOrderProps) {
             <ResponsibleInformationBlock infoHolder={infoHolder} setInfoHolder={setInfoHolder} />
             <LocationInformationBlock infoHolder={infoHolder} setInfoHolder={setInfoHolder} />
             <MaterialsInformationBlock infoHolder={infoHolder} setInfoHolder={setInfoHolder} />
+            <PeriodInformationBlock
+              infoHolder={infoHolder}
+              setInfoHolder={setInfoHolder as React.Dispatch<React.SetStateAction<TServiceOrder>>}
+              session={session}
+            />
             <div className="flex w-full items-center justify-end p-2">
               <button
                 disabled={isPending}
