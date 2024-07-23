@@ -62,7 +62,7 @@ function ObservationsBlock({ infoHolder, setInfoHolder }: ObservationsBlockProps
       </div>
       <div className="flex w-full flex-col gap-1">
         <div className="flex w-full flex-col items-center gap-2 lg:flex-row">
-          <div className="w-1/3 lg:w-full">
+          <div className="w-full lg:w-1/3">
             <TextInput
               label="TÓPICO"
               placeholder="Preencha o tópico da observação..."
@@ -71,7 +71,7 @@ function ObservationsBlock({ infoHolder, setInfoHolder }: ObservationsBlockProps
               width="100%"
             />
           </div>
-          <div className="w-2/3 lg:w-full">
+          <div className="w-full lg:w-2/3">
             <TextInput
               label="DESCRIÇÃO"
               placeholder="Preencha aqui o texto da observação..."

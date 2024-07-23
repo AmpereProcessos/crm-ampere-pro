@@ -28,7 +28,8 @@ export async function getServiceOrderById({ id, collection, query }: GetServiceO
 
     const ordersArr = await collection.aggregate([{ $match: { _id: new ObjectId(id), ...query } }, { $addFields: addFields }, { $lookup: lookup }]).toArray()
 
-    return ordersArr[0] as TServiceOrderWithProject
+    const order = ordersArr.map((order) => ({ ...order, projetoDados: order.projetoDados[0] }))
+    return order[0] as TServiceOrderWithProject
   } catch (error) {
     throw error
   }

@@ -13,6 +13,7 @@ import TechnicalAnalysisBlock from './Blocks/TechnicalAnalysisBlock'
 import { useMutationWithFeedback } from '@/utils/mutations/general-hook'
 import { createServiceOrder } from '@/utils/mutations/service-orders'
 import { useQueryClient } from '@tanstack/react-query'
+import * as Dialog from '@radix-ui/react-dialog'
 
 type NewServiceOrderProps = {
   session: Session
@@ -60,11 +61,12 @@ function NewServiceOrder({ session, closeModal }: NewServiceOrderProps) {
     affectedQueryKey: ['service-orders-by-personalized-filters'],
   })
   return (
-    <div id="new-service-order" className="fixed bottom-0 left-0 right-0 top-0 z-[100] bg-[rgba(0,0,0,.85)]">
-      <div className="fixed left-[50%] top-[50%] z-[100] h-[80%] w-[90%] translate-x-[-50%] translate-y-[-50%] rounded-md bg-[#fff] p-[10px] lg:w-[70%]">
+    <Dialog.Root open onOpenChange={closeModal}>
+      <Dialog.Overlay className="fixed inset-0 z-[100] bg-[rgba(0,0,0,.85)] backdrop-blur-sm" />
+      <Dialog.Content className="fixed left-[50%] top-[50%] z-[100] h-[80%] w-[90%] translate-x-[-50%] translate-y-[-50%] rounded-md bg-[#fff] p-[10px] lg:w-[70%]">
         <div className="flex h-full flex-col">
           <div className="flex flex-col items-center justify-between border-b border-gray-200 px-2 pb-2 text-lg lg:flex-row">
-            <h3 className="text-xl font-bold text-[#353432] dark:text-white ">NOVO KIT</h3>
+            <h3 className="text-xl font-bold text-[#353432] dark:text-white ">NOVA ORDEM DE SERVIÇO</h3>
             <button
               onClick={() => closeModal()}
               type="button"
@@ -95,8 +97,8 @@ function NewServiceOrder({ session, closeModal }: NewServiceOrderProps) {
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      </Dialog.Content>
+    </Dialog.Root>
   )
 }
 

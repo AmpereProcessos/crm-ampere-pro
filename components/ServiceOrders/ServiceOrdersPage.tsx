@@ -10,6 +10,8 @@ import LoadingComponent from '../utils/LoadingComponent'
 import ErrorComponent from '../utils/ErrorComponent'
 import { Sidebar } from '@/app/components/Sidebar'
 import NewServiceOrder from '@/app/components/Modals/ServiceOrders/NewServiceOrder'
+import EditServiceOrder from '@/app/components/Modals/ServiceOrders/EditServiceOrder'
+import ServiceOrder from '@/app/components/Cards/ServiceOrder'
 
 type ServiceOrdersPageProps = {
   session: Session
@@ -66,13 +68,20 @@ function ServiceOrdersPage({ session }: ServiceOrdersPageProps) {
           itemsMatched={serviceOrdersMatched}
           itemsShowing={serviceOrders?.length}
         />
-        <div className="flex flex-wrap justify-between gap-2 py-2">
+        <div className="flex flex-col justify-between gap-2 py-2">
           {isLoading ? <LoadingComponent /> : null}
           {isError ? <ErrorComponent msg={'Erro ao buscar ordens de serviço.'} /> : null}
-          {isSuccess && serviceOrders ? null : null}
+          {isSuccess && serviceOrders
+            ? serviceOrders.map((serviceOrder) => (
+                <ServiceOrder key={serviceOrder._id} serviceOrder={serviceOrder} handleClick={(id) => setEditModal({ id, isOpen: true })} />
+              ))
+            : null}
         </div>
       </div>
       {newServiceOrderModalIsOpen ? <NewServiceOrder session={session} closeModal={() => setNewServiceOrderModalIsOpen(false)} /> : null}
+      {editModal.isOpen && editModal.id ? (
+        <EditServiceOrder session={session} orderId={editModal.id} closeModal={() => setEditModal({ id: null, isOpen: false })} />
+      ) : null}
     </div>
   )
 }

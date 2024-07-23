@@ -56,7 +56,7 @@ function GeneralInformationBlock({ infoHolder, setInfoHolder, initialEditModeEna
             />
           </div>
           <div className="flex w-full flex-col items-center gap-2 lg:flex-row">
-            <div className="w-1/2 lg:w-full">
+            <div className="w-full lg:w-1/2">
               <SelectInput
                 label="CATEGORIA DO SERVIÇO"
                 value={infoHolder.categoria}
@@ -66,7 +66,7 @@ function GeneralInformationBlock({ infoHolder, setInfoHolder, initialEditModeEna
                 onReset={() => setInfoHolder((prev) => ({ ...prev, categoria: 'OUTROS' }))}
               />
             </div>
-            <div className="w-1/2 lg:w-full">
+            <div className="w-full lg:w-1/2">
               <SelectInput
                 label="URGÊNCIA DO SERVIÇO"
                 value={infoHolder.urgencia}
@@ -104,7 +104,7 @@ function GeneralInformationBlock({ infoHolder, setInfoHolder, initialEditModeEna
   //               />
   //             </div>
   //             <div className="flex w-full flex-col items-center gap-2 lg:flex-row">
-  //               <div className="w-1/2 lg:w-full">
+  //               <div className="w-full lg:w-1/2">
   //                 <SelectInput
   //                   label="CATEGORIA DO SERVIÇO"
   //                   value={infoHolder.categoria}
@@ -114,7 +114,7 @@ function GeneralInformationBlock({ infoHolder, setInfoHolder, initialEditModeEna
   //                   onReset={() => setInfoHolder((prev) => ({ ...prev, categoria: 'OUTROS' }))}
   //                 />
   //               </div>
-  //               <div className="w-1/2 lg:w-full">
+  //               <div className="w-full lg:w-1/2">
   //                 <SelectInput
   //                   label="URGÊNCIA DO SERVIÇO"
   //                   value={infoHolder.urgencia}

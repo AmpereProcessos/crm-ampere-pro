@@ -36,7 +36,7 @@ function FavoredInformationBlock({ infoHolder, setInfoHolder }: FavoredInformati
       <h1 className="w-full bg-gray-700  p-1 text-center font-medium text-white">FAVORECIDO</h1>
       <div className="flex w-full flex-col gap-1">
         <div className="flex w-full flex-col items-center gap-2 lg:flex-row">
-          <div className="w-1/2 lg:w-full">
+          <div className="w-full lg:w-1/2">
             <TextInput
               label="NOME DO FAVORECIDO"
               placeholder="Preencha aqui o nome do favorecido."
@@ -45,7 +45,7 @@ function FavoredInformationBlock({ infoHolder, setInfoHolder }: FavoredInformati
               width="100%"
             />
           </div>
-          <div className="w-1/2 lg:w-full">
+          <div className="w-full lg:w-1/2">
             <TextInput
               label="CONTATO DO FAVORECIDO"
               placeholder="Preencha aqui o contato do favorecido."

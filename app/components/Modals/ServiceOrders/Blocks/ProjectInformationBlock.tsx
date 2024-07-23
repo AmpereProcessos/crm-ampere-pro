@@ -43,6 +43,7 @@ type ProjectInformationBlockProps = {
 function ProjectInformationBlock({ orderId, infoHolder, setInfoHolder, session }: ProjectInformationBlockProps) {
   const [vinculationMenuIsOpen, setVinculationMenuIsOpen] = useState<boolean>(false)
   const [showFiles, setShowFiles] = useState<boolean>(false)
+  console.log(infoHolder.projetoDados)
   return (
     <div className="flex w-full flex-col gap-y-2">
       <h1 className="w-full bg-gray-700  p-1 text-center font-medium text-white">INFORMAÇÕES DO PROJETO</h1>

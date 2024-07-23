@@ -69,10 +69,10 @@ function GeneralQueryPaginationMenu({ activePage, selectPage, totalPages, itemsM
       ) : null}
 
       <p className="w-full text-center text-sm leading-none tracking-tight text-gray-500">
-        {itemsMatched ? (itemsMatched > 0 ? `${itemsMatched} itens encontrados.` : `${itemsMatched} item encontrado.`) : '...'}
+        {itemsMatched ? (itemsMatched > 0 ? `${itemsMatched} itens encontrados.` : `${itemsMatched} item encontrado.`) : 'Nenhum item encontrado.'}
       </p>
       <p className="w-full text-center text-sm leading-none tracking-tight text-gray-500">
-        {itemsShowing ? (itemsShowing > 0 ? `Mostrando ${itemsShowing} itens.` : `Mostrando ${itemsShowing} item.`) : '...'}
+        {itemsShowing ? (itemsShowing > 0 ? `Mostrando ${itemsShowing} itens.` : `Mostrando ${itemsShowing} item.`) : null}
       </p>
     </div>
   )

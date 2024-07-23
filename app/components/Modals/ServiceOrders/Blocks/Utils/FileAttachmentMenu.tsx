@@ -17,7 +17,7 @@ import { VscChromeClose } from 'react-icons/vsc'
 type TAttachmentHolder = {
   title: string
   files: FileList | null
-  idProject: string
+  idProject?: string
   idServiceOrder: string
   idExpense?: string
   idRevenue?: string
@@ -60,8 +60,8 @@ function ServiceOrderFileAttachmentMenu({
     idExpense: expenseId,
     idRevenue: revenueId,
     idProject: projectId,
-    idClient: clientId,
-    idOpportunity: opportunityId,
+    idClient: undefined,
+    idOpportunity: undefined,
     idAnalysis: analysisId,
     homologationId: homologationId,
   })
@@ -203,10 +203,10 @@ function ServiceOrderFileAttachmentMenu({
                   <CheckboxInput
                     labelFalse="VINCULAR À ORDEM DE SERVIÇO"
                     labelTrue="VINCULAR À ORDEM DE SERVIÇO"
-                    checked={!!attachmentHolder.idExpense}
+                    checked={!!attachmentHolder.idServiceOrder}
                     justify="justify-center"
                     editable={false}
-                    handleChange={(value) => setAttachmentHolder((prev) => ({ ...prev, idExpense: serviceOrderId }))}
+                    handleChange={(value) => setAttachmentHolder((prev) => ({ ...prev, idExpense: !!prev.idServiceOrder ? undefined : serviceOrderId }))}
                   />
                 </div>
                 <div className="w-fit">
@@ -216,7 +216,7 @@ function ServiceOrderFileAttachmentMenu({
                     checked={!!attachmentHolder.idProject}
                     justify="justify-center"
                     editable={false}
-                    handleChange={(value) => setAttachmentHolder((prev) => ({ ...prev, idProject: projectId }))}
+                    handleChange={(value) => setAttachmentHolder((prev) => ({ ...prev, idProject: !!prev.idProject ? undefined : projectId }))}
                   />
                 </div>
                 <div className="w-fit">
