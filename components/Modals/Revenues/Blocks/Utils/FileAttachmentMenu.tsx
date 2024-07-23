@@ -193,7 +193,7 @@ function RevenueFileAttachmentMenu({
                     checked={!!attachmentHolder.idRevenue}
                     justify="justify-center"
                     editable={false}
-                    handleChange={(value) => setAttachmentHolder((prev) => ({ ...prev, idRevenue: clientId }))}
+                    handleChange={(value) => setAttachmentHolder((prev) => ({ ...prev, idRevenue: revenueId }))}
                   />
                 </div>
                 <div className="w-fit">
@@ -203,7 +203,7 @@ function RevenueFileAttachmentMenu({
                     checked={!!attachmentHolder.idProject}
                     justify="justify-center"
                     editable={false}
-                    handleChange={(value) => setAttachmentHolder((prev) => ({ ...prev, idProject: clientId }))}
+                    handleChange={(value) => setAttachmentHolder((prev) => ({ ...prev, idProject: projectId }))}
                   />
                 </div>
                 <div className="w-fit">

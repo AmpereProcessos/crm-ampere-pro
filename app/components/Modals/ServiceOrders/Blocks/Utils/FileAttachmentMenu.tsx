@@ -18,29 +18,47 @@ type TAttachmentHolder = {
   title: string
   files: FileList | null
   idProject: string
-  idPurchase: string
+  idServiceOrder: string
+  idExpense?: string
+  idRevenue?: string
   idClient?: string
   idOpportunity?: string
   idAnalysis?: string | null
   homologationId?: string | null
 }
 
-type PurchaseFileAttachmentMenuProps = {
-  purchaseId: string
+type ServiceOrderFileAttachmentMenuProps = {
+  serviceOrderId: string
   projectId: string
   clientId: string
   opportunityId?: string
   analysisId?: string
   homologationId?: string
+  purchaseId?: string
+  revenueId?: string
+  expenseId?: string
   session: Session
 }
-function PurchaseFileAttachmentMenu({ purchaseId, projectId, clientId, opportunityId, analysisId, homologationId, session }: PurchaseFileAttachmentMenuProps) {
+function ServiceOrderFileAttachmentMenu({
+  serviceOrderId,
+  expenseId,
+  revenueId,
+  projectId,
+  clientId,
+  opportunityId,
+  analysisId,
+  homologationId,
+  purchaseId,
+  session,
+}: ServiceOrderFileAttachmentMenuProps) {
   const queryClient = useQueryClient()
   const [newFileMenuIsOpen, setNewFileMenuIsOpen] = useState<boolean>(false)
   const [attachmentHolder, setAttachmentHolder] = useState<TAttachmentHolder>({
     title: '',
     files: null,
-    idPurchase: purchaseId,
+    idServiceOrder: serviceOrderId,
+    idExpense: expenseId,
+    idRevenue: revenueId,
     idProject: projectId,
     idClient: clientId,
     idOpportunity: opportunityId,
@@ -54,7 +72,7 @@ function PurchaseFileAttachmentMenu({ purchaseId, projectId, clientId, opportuni
       if (attachmentHolder.title.trim().length < 2) return toast.error('Preencha um titulo de ao menos 2 letras.')
       const formattedFileName = attachmentHolder.title.toLowerCase().replaceAll(' ', '_')
       const vinculationId =
-        attachmentHolder.idPurchase || attachmentHolder.idProject || attachmentHolder.idOpportunity || attachmentHolder.idClient || 'naodefinido'
+        attachmentHolder.idServiceOrder || attachmentHolder.idProject || attachmentHolder.idOpportunity || attachmentHolder.idClient || 'naodefinido'
 
       var fileReferences: TFileReference[] = []
       if (attachmentHolder.files.length > 1) {
@@ -64,7 +82,9 @@ function PurchaseFileAttachmentMenu({ purchaseId, projectId, clientId, opportuni
           fileReferences.push({
             titulo: `${attachmentHolder.title} (${index + 1})`,
             idProjeto: attachmentHolder.idProject,
-            idCompra: attachmentHolder.idPurchase,
+            idReceita: attachmentHolder.idRevenue,
+            idDespesa: attachmentHolder.idExpense,
+            idOrdemServico: attachmentHolder.idServiceOrder,
             idOportunidade: attachmentHolder.idOpportunity,
             idCliente: attachmentHolder.idClient,
             idAnaliseTecnica: attachmentHolder.idAnalysis,
@@ -85,7 +105,9 @@ function PurchaseFileAttachmentMenu({ purchaseId, projectId, clientId, opportuni
         fileReferences.push({
           titulo: attachmentHolder.title,
           idProjeto: attachmentHolder.idProject,
-          idCompra: attachmentHolder.idPurchase,
+          idReceita: attachmentHolder.idRevenue,
+          idDespesa: attachmentHolder.idExpense,
+          idOrdemServico: attachmentHolder.idServiceOrder,
           idOportunidade: attachmentHolder.idOpportunity,
           idCliente: attachmentHolder.idClient,
           idAnaliseTecnica: attachmentHolder.idAnalysis,
@@ -116,7 +138,9 @@ function PurchaseFileAttachmentMenu({ purchaseId, projectId, clientId, opportuni
       setAttachmentHolder({
         title: '',
         files: null,
-        idPurchase: purchaseId,
+        idServiceOrder: serviceOrderId,
+        idExpense: expenseId,
+        idRevenue: revenueId,
         idProject: projectId,
         idClient: clientId,
         idOpportunity: opportunityId,
@@ -129,12 +153,14 @@ function PurchaseFileAttachmentMenu({ purchaseId, projectId, clientId, opportuni
       <div className="my-4 flex w-full flex-col gap-2">
         <div className="flex w-full items-center justify-end p-2">
           {newFileMenuIsOpen ? (
-            <button
-              onClick={() => setNewFileMenuIsOpen(false)}
-              className="flex items-center gap-1 rounded-lg border border-red-500 bg-red-50 px-2 py-1 text-xs text-red-500 duration-300 ease-in-out hover:border-red-700 hover:text-red-700"
-            >
-              <VscChromeClose />
-              <p className="font-medium">FECHAR MENU</p>
+            <button>
+              <button
+                onClick={() => setNewFileMenuIsOpen(false)}
+                className="flex items-center gap-1 rounded-lg border border-red-500 bg-red-50 px-2 py-1 text-xs text-red-500 duration-300 ease-in-out hover:border-red-700 hover:text-red-700"
+              >
+                <VscChromeClose />
+                <p className="font-medium">FECHAR MENU</p>
+              </button>
             </button>
           ) : (
             <button
@@ -175,12 +201,12 @@ function PurchaseFileAttachmentMenu({ purchaseId, projectId, clientId, opportuni
               <div className="mt-4 flex w-full flex-col flex-wrap items-center justify-center gap-4 lg:flex-row">
                 <div className="w-fit">
                   <CheckboxInput
-                    labelFalse="VINCULAR À COMPRA"
-                    labelTrue="VINCULAR À COMPRA"
-                    checked={!!attachmentHolder.idPurchase}
+                    labelFalse="VINCULAR À ORDEM DE SERVIÇO"
+                    labelTrue="VINCULAR À ORDEM DE SERVIÇO"
+                    checked={!!attachmentHolder.idExpense}
                     justify="justify-center"
                     editable={false}
-                    handleChange={(value) => setAttachmentHolder((prev) => ({ ...prev, idPurchase: purchaseId }))}
+                    handleChange={(value) => setAttachmentHolder((prev) => ({ ...prev, idExpense: serviceOrderId }))}
                   />
                 </div>
                 <div className="w-fit">
@@ -231,4 +257,4 @@ function PurchaseFileAttachmentMenu({ purchaseId, projectId, clientId, opportuni
   )
 }
 
-export default PurchaseFileAttachmentMenu
+export default ServiceOrderFileAttachmentMenu

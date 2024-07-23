@@ -11,16 +11,17 @@ const ServiceOrderResponsible = z.object({
     required_error: 'Nome do responsável da ativade não informado.',
     invalid_type_error: 'Tipo não válido para nome do responsável da ativade.',
   }),
-  tipo: z
-    .enum(['INTERNO', 'EXTERNO'], { required_error: 'Tipo do responsável não informado.', invalid_type_error: 'Tipo não válido para o tipo do responsável.' })
-    .optional(),
+  tipo: z.enum(['INTERNO', 'EXTERNO'], {
+    required_error: 'Tipo do responsável não informado.',
+    invalid_type_error: 'Tipo não válido para o tipo do responsável.',
+  }),
   avatar_url: z.string({ invalid_type_error: 'Tipo não válido para a referência de avatar do responsável.' }).optional().nullable(),
 })
 
 const ServiceOrderProjectReference = z.object({
   id: z.string({ required_error: 'ID do projeto não informado.', invalid_type_error: 'Tipo não válido para o ID do projeto.' }).optional().nullable(),
   nome: z.string({ required_error: 'Nome do projeto não informado.', invalid_type_error: 'Tipo não válido para o nome do projeto.' }).optional().nullable(),
-  tipo: z.string({ required_error: 'Tipo do projeto não informado.', invalid_type_error: 'Tipo não válido para o tipo do projeto.' }),
+  tipo: z.string({ required_error: 'Tipo do projeto não informado.', invalid_type_error: 'Tipo não válido para o tipo do projeto.' }).optional().nullable(),
   indexador: z
     .number({ required_error: 'Indexador do projeto não informado.', invalid_type_error: 'Tipo não válido para o indexador do projeto.' })
     .optional()
@@ -62,7 +63,7 @@ const ServiceOrderMaterialItem = z.object({
     invalid_type_error: 'Tipo não válido para a quantidade do item de compra.',
   }),
 })
-
+export type TServiceOrderMaterialItem = z.infer<typeof ServiceOrderMaterialItem>
 const GeneralServiceOrderSchema = z.object({
   categoria: z.enum(['MONTAGEM', 'MANUTANÇÃO CORRETIVA', 'MANUTENÇÃO PREVENTIVA', 'PADRÃO', 'ESTRUTURA', 'OUTROS']),
   favorecido: z.object({
@@ -81,14 +82,15 @@ const GeneralServiceOrderSchema = z.object({
       required_error: 'Número ou identificador não foi informado.',
       invalid_type_error: 'Tipo não válido para o número/identificador da localização.',
     }),
+    complemento: z.string({ invalid_type_error: 'Tipo não válido para o complemento da localização.' }).optional().nullable(),
     latitude: z.string({ invalid_type_error: 'Tipo não válido para a longitude da localização' }).optional().nullable(),
     longitude: z.string({ invalid_type_error: 'Tipo não válido para a latitude da localização' }).optional().nullable(),
   }),
   responsaveis: z.array(ServiceOrderResponsible).min(1, 'Adicione ao menos um responsável à atividade.'),
-  urgencia: z.enum(['POUCO URGENTE', 'URGENTE', 'EMERGÊNCIA']).optional(),
+  urgencia: z.enum(['POUCO URGENTE', 'URGENTE', 'EMERGÊNCIA']).optional().nullable(),
   periodo: z.object({
-    inicio: z.string().nullable(),
-    fim: z.string().nullable(),
+    inicio: z.string().optional().nullable(),
+    fim: z.string().optional().nullable(),
   }),
   autor: AuthorSchema,
   materiais: z.object({
@@ -96,30 +98,21 @@ const GeneralServiceOrderSchema = z.object({
     disponiveis: z.array(ServiceOrderMaterialItem),
     retiraveis: z.array(ServiceOrderMaterialItem),
   }),
-  detalhes: z.object({
-    pontoAgua: z.string({ required_error: 'Ponto de água não foi informado.' }),
-    senhaWifi: z.string({ required_error: 'Senha do Wi-Fi não foi informada.' }),
-    configuracaoMonitoramento: z.boolean({ required_error: 'Configuração de monitoramento não foi informada.' }),
-    possuiTrafo: z.boolean({ required_error: 'Informação sobre transformador não foi informada.' }),
-    tipoEstrutura: z.string({ required_error: 'Tipo de estrutura não foi informado.' }),
-    tipoTelha: z.string({ invalid_type_error: 'Tipo não válido para tipo de telha.' }).optional(),
-    tipoPadrao: z.string({ invalid_type_error: 'Tipo não válido para tipo de padrão.' }).optional(),
-    tipoSaidaPadrao: z.string({ invalid_type_error: 'Tipo não válido para tipo de saída padrão.' }).optional(),
-    amperagemPadrao: z.string({ invalid_type_error: 'Tipo não válido para amperagem do padrão.' }).optional(),
-    responsabilidadePadrao: z.string({ invalid_type_error: 'Tipo não válido para responsabilidade do padrão.' }).optional(),
-    topologia: z.string({ required_error: 'Topologia não foi informada.' }),
-  }),
   anotacoes: z.string({ required_error: 'Anotações não foram informadas.', invalid_type_error: 'Tipo não válido para anotações da ordem de serviço.' }),
   observacoes: z.array(
-    z.string({ required_error: 'Observações não foram informadas.', invalid_type_error: 'Tipo inválido para item de observação da ordem de serviço.' }),
-    { required_error: 'Lista de itens de observação não informada.', invalid_type_error: 'Tipo não válido para lista de itens de observação.' }
+    z.object({
+      topico: z.string({ required_error: 'Tópico da observação não informado.', invalid_type_error: 'Tipo não válido para o tópico da observação.' }),
+      descricao: z.string({
+        required_error: 'Descrição da observação não informada.',
+        invalid_type_error: 'Tipo não válido para a descrição da observação.',
+      }),
+    })
   ),
-  dataEfetivacao: z.string({ invalid_type_error: 'Tipo não válido para data de efetivação.' }).optional(),
+  dataEfetivacao: z.string({ invalid_type_error: 'Tipo não válido para data de efetivação.' }).optional().nullable(),
   dataInsercao: z.string({ required_error: 'Data de inserção não foi informada.', invalid_type_error: 'Tipo não válido para data de inserção.' }),
 })
 
 export const InsertServiceOrderSchema = z.object({
-  _id: z.string().optional(),
   categoria: z.enum(['MONTAGEM', 'MANUTANÇÃO CORRETIVA', 'MANUTENÇÃO PREVENTIVA', 'PADRÃO', 'ESTRUTURA', 'OUTROS']),
   favorecido: z.object({
     nome: z.string({ required_error: 'Nome do favorecido não foi informado.' }),
@@ -137,14 +130,15 @@ export const InsertServiceOrderSchema = z.object({
       required_error: 'Número ou identificador não foi informado.',
       invalid_type_error: 'Tipo não válido para o número/identificador da localização.',
     }),
+    complemento: z.string({ invalid_type_error: 'Tipo não válido para o complemento da localização.' }).optional().nullable(),
     latitude: z.string({ invalid_type_error: 'Tipo não válido para a longitude da localização' }).optional().nullable(),
     longitude: z.string({ invalid_type_error: 'Tipo não válido para a latitude da localização' }).optional().nullable(),
   }),
   responsaveis: z.array(ServiceOrderResponsible).min(1, 'Adicione ao menos um responsável à atividade.'),
-  urgencia: z.enum(['POUCO URGENTE', 'URGENTE', 'EMERGÊNCIA']).optional(),
+  urgencia: z.enum(['POUCO URGENTE', 'URGENTE', 'EMERGÊNCIA']).optional().nullable(),
   periodo: z.object({
-    inicio: z.string().nullable(),
-    fim: z.string().nullable(),
+    inicio: z.string().optional().nullable(),
+    fim: z.string().optional().nullable(),
   }),
   autor: AuthorSchema,
   materiais: z.object({
@@ -152,30 +146,70 @@ export const InsertServiceOrderSchema = z.object({
     disponiveis: z.array(ServiceOrderMaterialItem),
     retiraveis: z.array(ServiceOrderMaterialItem),
   }),
-  detalhes: z.object({
-    pontoAgua: z.string({ required_error: 'Ponto de água não foi informado.' }),
-    senhaWifi: z.string({ required_error: 'Senha do Wi-Fi não foi informada.' }),
-    configuracaoMonitoramento: z.boolean({ required_error: 'Configuração de monitoramento não foi informada.' }),
-    possuiTrafo: z.boolean({ required_error: 'Informação sobre transformador não foi informada.' }),
-    tipoEstrutura: z.string({ required_error: 'Tipo de estrutura não foi informado.' }),
-    tipoTelha: z.string({ invalid_type_error: 'Tipo não válido para tipo de telha.' }).optional(),
-    tipoPadrao: z.string({ invalid_type_error: 'Tipo não válido para tipo de padrão.' }).optional(),
-    tipoSaidaPadrao: z.string({ invalid_type_error: 'Tipo não válido para tipo de saída padrão.' }).optional(),
-    amperagemPadrao: z.string({ invalid_type_error: 'Tipo não válido para amperagem do padrão.' }).optional(),
-    responsabilidadePadrao: z.string({ invalid_type_error: 'Tipo não válido para responsabilidade do padrão.' }).optional(),
-    topologia: z.string({ required_error: 'Topologia não foi informada.' }),
-  }),
   anotacoes: z.string({ required_error: 'Anotações não foram informadas.', invalid_type_error: 'Tipo não válido para anotações da ordem de serviço.' }),
   observacoes: z.array(
-    z.string({ required_error: 'Observações não foram informadas.', invalid_type_error: 'Tipo inválido para item de observação da ordem de serviço.' }),
-    { required_error: 'Lista de itens de observação não informada.', invalid_type_error: 'Tipo não válido para lista de itens de observação.' }
+    z.object({
+      topico: z.string({ required_error: 'Tópico da observação não informado.', invalid_type_error: 'Tipo não válido para o tópico da observação.' }),
+      descricao: z.string({
+        required_error: 'Descrição da observação não informada.',
+        invalid_type_error: 'Tipo não válido para a descrição da observação.',
+      }),
+    })
   ),
-  dataEfetivacao: z.string({ invalid_type_error: 'Tipo não válido para data de efetivação.' }).optional(),
+  dataEfetivacao: z.string({ invalid_type_error: 'Tipo não válido para data de efetivação.' }).optional().nullable(),
   dataInsercao: z.string({ required_error: 'Data de inserção não foi informada.', invalid_type_error: 'Tipo não válido para data de inserção.' }),
 })
 
+const PersonalizedFieldFilters = z.enum(['dataInsercao', 'dataEfetivacao'], {
+  required_error: 'Tipo não válido para o campo de filtro de período.',
+  invalid_type_error: 'Tipo não válido para o campo de filtro de período.',
+})
+export const PersonalizedFiltersSchema = z.object({
+  name: z.string({
+    required_error: 'Filtro de nome da ordem de serviço não informado.',
+    invalid_type_error: 'Tipo não válido para o filtro de nome da ordem de serviço.',
+  }),
+  state: z.array(z.string({ required_error: 'Estado de filtro não informada.', invalid_type_error: 'Tipo não válido para estado de filtro.' }), {
+    required_error: 'Lista de estados de filtro não informada.',
+    invalid_type_error: 'Tipo não válido para lista de estados de filtro.',
+  }),
+  city: z.array(z.string({ required_error: 'Cidade de filtro não informada.', invalid_type_error: 'Tipo não válido para cidade de filtro.' }), {
+    required_error: 'Lista de cidades de filtro não informada.',
+    invalid_type_error: 'Tipo não válido para lista de cidades de filtro.',
+  }),
+  category: z.array(z.string({ required_error: 'Categoria de filtro não informada.', invalid_type_error: 'Tipo não válido para categoria de filtro.' }), {
+    required_error: 'Lista de categorias de filtro não informada.',
+    invalid_type_error: 'Tipo não válido para lista de categorias de filtro.',
+  }),
+  urgency: z.array(z.string({ required_error: 'Urgência de filtro não informada.', invalid_type_error: 'Tipo não válido para urgência de filtro.' }), {
+    required_error: 'Lista de urgências de filtro não informada.',
+    invalid_type_error: 'Tipo não válido para lista de urgências de filtro.',
+  }),
+  period: z.object({
+    after: z
+      .string({ required_error: 'Filtro de depois de não informado.', invalid_type_error: 'Tipo não válido para o filtro de depois de.' })
+      .optional()
+      .nullable(),
+    before: z
+      .string({ required_error: 'Filtro de antes de não informado.', invalid_type_error: 'Tipo não válido para o filtro de antes de.' })
+      .optional()
+      .nullable(),
+    field: PersonalizedFieldFilters.optional().nullable(),
+  }),
+  pending: z.boolean({
+    required_error: 'Filtro de somente pendentes não informado.',
+    invalid_type_error: 'Tipo não válido para filtro de somente pendentes.',
+  }),
+})
+
+export type TPersonalizedServiceOrderFilter = z.infer<typeof PersonalizedFiltersSchema>
+export const PersonalizedServiceOrderQuerySchema = z.object({
+  partners: z.array(z.string({ required_error: 'Parceiros não informados ou inválidos.', invalid_type_error: 'Parceiros inválidos.' })).nullable(),
+  filters: PersonalizedFiltersSchema,
+})
+
 export type TServiceOrder = z.infer<typeof GeneralServiceOrderSchema>
-export type TServiceOrderWithProject = TServiceOrder & { projetoDados: TProjectDTO }
+export type TServiceOrderWithProject = TServiceOrder & { projetoDados?: TProjectDTO }
 
 export type TServiceOrderDTO = TServiceOrder & { _id: string }
 export type TServiceOrderWithProjectDTO = TServiceOrderWithProject & { _id: string }

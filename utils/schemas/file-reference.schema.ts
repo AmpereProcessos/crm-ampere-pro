@@ -10,6 +10,7 @@ const GeneralFileReferenceSchema = z.object({
   idCompra: z.string().optional().nullable(),
   idReceita: z.string().optional().nullable(),
   idDespesa: z.string().optional().nullable(),
+  idOrdemServico: z.string().optional().nullable(),
   idParceiro: z.string(),
   titulo: z.string(),
   formato: z.string(),
@@ -29,7 +30,8 @@ export const InsertFileReferenceSchema = z.object({
   idProjeto: z.string({ invalid_type_error: 'Tipo não válido para a referência de projeto.' }).optional().nullable(),
   idCompra: z.string({ invalid_type_error: 'Tipo não válido para a referência de compra.' }).optional().nullable(),
   idReceita: z.string({ invalid_type_error: 'Tipo não válido para a referência de receita.' }).optional().nullable(),
-  idDespesa: z.string({ invalid_type_error: 'Tipo não válido para a referência de receita.' }).optional().nullable(),
+  idDespesa: z.string({ invalid_type_error: 'Tipo não válido para a referência de despesa.' }).optional().nullable(),
+  idOrdemServico: z.string({ invalid_type_error: 'Tipo não válido para a referência de ordem de serviço.' }).optional().nullable(),
   idParceiro: z.string({ required_error: 'Referência a parceiro não informada.', invalid_type_error: 'Tipo não válida para referência a parceiro.' }),
   idAnaliseTecnica: z
     .string({
@@ -75,6 +77,7 @@ const FileReferenceEntitySchema = z.object({
   idCompra: z.string().optional().nullable(),
   idReceita: z.string().optional().nullable(),
   idDespesa: z.string().optional().nullable(),
+  idOrdemServico: z.string().optional().nullable(),
   idParceiro: z.string(),
   titulo: z.string(),
   formato: z.string(),
@@ -105,6 +108,7 @@ export const FileReferencesQueryParamsSchema = z.object({
   purchaseId: z.string({ invalid_type_error: 'Tipo inválido para referência de compra.' }).optional().nullable(),
   revenueId: z.string({ invalid_type_error: 'Tipo inválido para referência de receita.' }).optional().nullable(),
   expenseId: z.string({ invalid_type_error: 'Tipo inválido para referência de despesa.' }).optional().nullable(),
+  serviceOrderId: z.string({ invalid_type_error: 'Tipo inválido para referência de ordem de serviço.' }).optional().nullable(),
 })
 
 export type TFileReferencesQueryParams = z.infer<typeof FileReferencesQueryParamsSchema>

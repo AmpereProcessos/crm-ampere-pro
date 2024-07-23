@@ -74,6 +74,7 @@ function EditExpense({ expenseId, session, closeModal }: EditExpenseProps) {
               <div className="flex grow flex-col gap-y-2 overflow-y-auto overscroll-y-auto px-2 py-1 scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300">
                 <GeneralInformationBlock infoHolder={infoHolder} setInfoHolder={setInfoHolder as React.Dispatch<React.SetStateAction<TExpense>>} />
                 <ProjectInformationBlock
+                  expenseId={expenseId}
                   infoHolder={infoHolder}
                   setInfoHolder={setInfoHolder as React.Dispatch<React.SetStateAction<TExpense>>}
                   session={session}

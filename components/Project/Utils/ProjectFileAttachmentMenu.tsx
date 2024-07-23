@@ -176,7 +176,7 @@ function ProjectFileAttachmentMenu({ projectId, clientId, opportunityId, analysi
                     checked={!!attachmentHolder.idProject}
                     justify="justify-center"
                     editable={false}
-                    handleChange={(value) => setAttachmentHolder((prev) => ({ ...prev, idProject: clientId }))}
+                    handleChange={(value) => setAttachmentHolder((prev) => ({ ...prev, idProject: projectId }))}
                   />
                 </div>
                 <div className="w-fit">

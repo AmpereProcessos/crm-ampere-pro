@@ -764,6 +764,12 @@ export const UserGroups: TUserGroup[] = [
         tiposProjeto: true,
         gruposUsuarios: true,
       },
+      projetos: {
+        criar: false,
+        editar: false,
+        visualizar: false,
+        escopo: null,
+      },
       integracoes: {
         receberLeads: false,
       },
@@ -855,6 +861,12 @@ export const UserGroups: TUserGroup[] = [
         tiposProjeto: false,
         gruposUsuarios: false,
       },
+      projetos: {
+        criar: false,
+        editar: false,
+        visualizar: false,
+        escopo: null,
+      },
       integracoes: {
         receberLeads: false,
       },
@@ -944,6 +956,12 @@ export const UserGroups: TUserGroup[] = [
         metodosPagamento: false,
         tiposProjeto: false,
         gruposUsuarios: false,
+      },
+      projetos: {
+        criar: false,
+        editar: false,
+        visualizar: false,
+        escopo: null,
       },
       integracoes: {
         receberLeads: false,
@@ -1035,6 +1053,12 @@ export const UserGroups: TUserGroup[] = [
         tiposProjeto: false,
         gruposUsuarios: false,
       },
+      projetos: {
+        criar: false,
+        editar: false,
+        visualizar: false,
+        escopo: null,
+      },
       integracoes: {
         receberLeads: true,
       },
@@ -1042,6 +1066,19 @@ export const UserGroups: TUserGroup[] = [
   },
 ]
 
+export const ServiceOrderCategories = [
+  { id: 1, label: 'PADRÃO', value: 'PADRÃO' },
+  { id: 2, label: 'ESTRUTURA', value: 'ESTRUTURA' },
+  { id: 3, label: 'MONTAGEM', value: 'MONTAGEM' },
+  { id: 4, label: 'MANUTENÇÃO PREVENTIVA', value: 'MANUTENÇÃO PREVENTIVA' },
+  { id: 5, label: 'MANUTENÇÃO CORRETIVA', value: 'MANUTENÇÃO CORRETIVA' },
+  { id: 6, label: 'OUTROS', value: 'OUTROS' },
+]
+export const ServiceOrderUrgencies = [
+  { id: 1, label: 'POUCO URGENTE', value: 'POUCO URGENTE' },
+  { id: 2, label: 'URGENTE', value: 'URGENTE' },
+  { id: 3, label: 'EMERGÊNCIA', value: 'EMERGÊNCIA' },
+]
 export const PurchaseStatus: { id: number; label: string; value: TPurchaseStatus }[] = [
   { id: 1, label: 'AGUARDANDO LIBERAÇÃO', value: 'AGUARDANDO LIBERAÇÃO' },
   { id: 2, label: 'AGUARDANDO PAGAMENTO', value: 'AGUARDANDO PAGAMENTO' },

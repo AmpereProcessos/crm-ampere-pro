@@ -1,16 +1,11 @@
 import { useState } from 'react'
 
 import { GetServerSidePropsContext } from 'next'
-import { authOptions } from '../../api/auth/[...nextauth]'
-
-import { getPartnerFunnels } from '@/repositories/funnels/queries'
-import connectToDatabase from '@/services/mongodb/crm-db-connection'
 
 import LoadingPage from '@/components/utils/LoadingPage'
 
 import { useOpportunitiesQueryOptions } from '@/utils/queries/opportunities'
 
-import { TFunnel, TFunnelDTO } from '@/utils/schemas/funnel.schema'
 import OpportunitiesCardModePage from '@/components/Opportunities/OpportunitiesCardModePage'
 import OpportunitiesKanbanModePage from '@/components/Opportunities/OpportunitiesKanbanModePage'
 import { useSession } from 'next-auth/react'

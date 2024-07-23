@@ -106,6 +106,7 @@ export function getEstimatedGen(
 export async function getCEPInfo(cep: string): Promise<ViaCEPSuccessfulReturn | null> {
   try {
     const { data } = await axios.get(`https://viacep.com.br/ws/${cep.replace('-', '')}/json/`)
+    console.log(data)
     if (data.erro) throw new Error('Erro')
     return data
   } catch (error) {

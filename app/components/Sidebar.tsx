@@ -5,17 +5,18 @@ import { MdDashboard, MdLogout, MdNotifications, MdNotificationsActive, MdOutlin
 import { FaProjectDiagram, FaTag, FaUser, FaUsers } from 'react-icons/fa'
 import { TfiAngleRight } from 'react-icons/tfi'
 import { BsBookmarksFill, BsCart, BsFillClipboardDataFill, BsFillFunnelFill, BsFillGearFill, BsGraphUpArrow, BsPatchCheckFill } from 'react-icons/bs'
-import SidebarItem from './SidebarItem'
-import { useRouter } from 'next/router'
+
 import Image from 'next/image'
-import Logo from '../utils/images/ampere-logo-azul.png'
+import Logo from '@/utils/images/ampere-logo-azul.png'
 import { signOut } from 'next-auth/react'
 import Link from 'next/link'
 
 import { BiStats } from 'react-icons/bi'
 import { IoMdSettings } from 'react-icons/io'
 import { Session } from 'next-auth'
-import NotificationBlock from './NotificationBlock'
+import SidebarItem from '@/components/SidebarItem'
+import NotificationBlock from '@/components/NotificationBlock'
+import { usePathname, useRouter } from 'next/navigation'
 
 //react-icons.github.io/react-icons
 
@@ -25,8 +26,9 @@ type SidebarProps = {
 export const Sidebar = ({ session }: SidebarProps) => {
   const [sidebarExtended, setSidebarExtended] = useState(false)
   const [notificationMenuIsOpen, setNotificationMenuIsOpen] = useState<boolean>(false)
-  const { pathname, push } = useRouter()
-  if (pathname.includes('/auth/signin')) return null
+  const router = useRouter()
+  const pathname = usePathname()
+  if (pathname?.includes('/auth/signin')) return null
   return (
     <AnimatePresence>
       <motion.div
@@ -130,7 +132,7 @@ export const Sidebar = ({ session }: SidebarProps) => {
           <div
             onClick={() => {
               signOut({ redirect: false })
-              push('/auth/signin')
+              router.push('/auth/signin')
             }}
             className={`mt-2 flex cursor-pointer items-center justify-center rounded p-2  duration-300 ease-in  hover:bg-blue-100`}
           >
