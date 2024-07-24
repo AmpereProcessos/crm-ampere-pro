@@ -1,6 +1,6 @@
 import z from 'zod'
 
-const PricingMethodConditionTypes = z.enum(
+export const PricingMethodConditionTypes = z.enum(
   ['IGUAL_TEXTO', 'IGUAL_NÚMERICO', 'MAIOR_QUE_NÚMERICO', 'MENOR_QUE_NÚMERICO', 'INTERVALO_NÚMERICO', 'INCLUI_LISTA'],
   {
     required_error: 'Tipo de condicional não informado.',

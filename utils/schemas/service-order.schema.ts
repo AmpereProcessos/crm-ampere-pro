@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { AuthorSchema } from './user.schema'
 import { TProjectDTO } from './project.schema'
+import { PricingMethodConditionTypes } from './pricing-method.schema'
 
 const ServiceOrderResponsible = z.object({
   id: z.string({
@@ -76,9 +77,105 @@ const ServiceOrderExecutionLog = z.object({
   anotacoes: z.string({ required_error: 'Anotações od registro não informadas.', invalid_type_error: 'Tipo não válido para as anotações do registro.' }),
   autor: AuthorSchema,
 })
-
 export type TServiceOrderExecutionLog = z.infer<typeof ServiceOrderExecutionLog>
 
+const ServiceOrderReportSchema = z.object({
+  aplicavel: z.boolean({
+    required_error: 'Aplicabilidade de relatório de conclusão não informada.',
+    invalid_type_error: 'Tipo não válido para aplicabilidade de relatório de conclusão.',
+  }),
+  secoes: z.array(
+    z.object({
+      titulo: z.string({
+        required_error: 'Título da seção do relatório não informado.',
+        invalid_type_error: 'Tipo não válido para o título da seção do relatório.',
+      }),
+      controles: z.array(
+        z.object({
+          titulo: z.string({
+            required_error: 'Título do item de controle não informado.',
+            invalid_type_error: 'Tipo não válido para o título do item de controle.',
+          }),
+          efetivado: z.boolean({
+            required_error: 'Status do item de controle não informado.',
+            invalid_type_error: 'Tipo não válido para o status do item de controle.',
+          }),
+        })
+      ),
+      arquivos: z.array(
+        z.object({
+          titulo: z.string({
+            required_error: 'Título do arquivo de controle não informado.',
+            invalid_type_error: 'Tipo não válido para o título do arquivo de controle.',
+          }),
+          efetivado: z.boolean({
+            required_error: 'Status do arquivo de controle não informado.',
+            invalid_type_error: 'Tipo não válido para o status do arquivo de controle.',
+          }),
+          condicao: z.object({
+            tipo: PricingMethodConditionTypes.optional().nullable(),
+            aplicavel: z.boolean({
+              required_error: 'Aplicabilidade de condição no resultado não informada.',
+              invalid_type_error: 'Tipo não válido para aplicabilidade de condição no resultado.',
+            }),
+            variavel: z
+              .string({
+                required_error: 'Variável de condição no resultado não informada.',
+                invalid_type_error: 'Tipo não válido para variável de condição no resultado.',
+              })
+              .optional()
+              .nullable(),
+            igual: z
+              .string({
+                required_error: 'Valor de comparação de igualdade da condição não informado.',
+                invalid_type_error: 'Tipo não válido para o valor de comparação de igualdade da condição.',
+              })
+              .optional()
+              .nullable(),
+            maiorQue: z
+              .number({
+                required_error: 'Valor de comparação de maior que não informado.',
+                invalid_type_error: 'Tipo não válido para valor de comparação de maior que.',
+              })
+              .optional()
+              .nullable(),
+            menorQue: z
+              .number({
+                required_error: 'Valor de comparação de menor que não informado.',
+                invalid_type_error: 'Tipo não válido para valor de comparação de menor que.',
+              })
+              .optional()
+              .nullable(),
+            entre: z
+              .object({
+                minimo: z.number({
+                  required_error: 'Valor mínimo do intervalo de comparação númerico não informado.',
+                  invalid_type_error: 'Tipo não válido para o valor mínimo do invervalo de comparação númerico.',
+                }),
+                maximo: z.number({
+                  required_error: 'Valor máximo do intervalo de comparação númerico não informado.',
+                  invalid_type_error: 'Tipo não válido para o valor máximo do invervalo de comparação númerico.',
+                }),
+              })
+              .optional()
+              .nullable(),
+            inclui: z
+              .array(
+                z.string({
+                  required_error: 'Texto de comparação da lista de opções da condição não informado.',
+                  invalid_type_error: 'Tipo não válido para texto de comparação da lista de opções da condição.',
+                }),
+                { required_error: 'Lista de opções de comparação não informada.', invalid_type_error: 'Tipo não válido para lista de opções de comparação.' }
+              )
+              .optional()
+              .nullable(),
+          }),
+        })
+      ),
+    })
+  ),
+})
+export type TServiceOrderReport = z.infer<typeof ServiceOrderReportSchema>
 const GeneralServiceOrderSchema = z.object({
   categoria: z.enum(['MONTAGEM', 'MANUTANÇÃO CORRETIVA', 'MANUTENÇÃO PREVENTIVA', 'PADRÃO', 'ESTRUTURA', 'OUTROS']),
   favorecido: z.object({
@@ -127,6 +224,7 @@ const GeneralServiceOrderSchema = z.object({
       }),
     })
   ),
+  relatorio: ServiceOrderReportSchema,
   dataEfetivacao: z.string({ invalid_type_error: 'Tipo não válido para data de efetivação.' }).optional().nullable(),
   dataInsercao: z.string({ required_error: 'Data de inserção não foi informada.', invalid_type_error: 'Tipo não válido para data de inserção.' }),
 })
@@ -179,6 +277,7 @@ export const InsertServiceOrderSchema = z.object({
       }),
     })
   ),
+  relatorio: ServiceOrderReportSchema,
   dataEfetivacao: z.string({ invalid_type_error: 'Tipo não válido para data de efetivação.' }).optional().nullable(),
   dataInsercao: z.string({ required_error: 'Data de inserção não foi informada.', invalid_type_error: 'Tipo não válido para data de inserção.' }),
 })

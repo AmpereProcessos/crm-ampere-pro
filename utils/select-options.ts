@@ -324,8 +324,8 @@ export const AllSellers = [
     label: 'LAYANE FERNANDA',
     value: 'LAYANE FERNANDA',
     qualification: 'INSIDE JUNIOR',
-    comissionAsActive: 0,
-    comissionWithInside: 0,
+    comissionAsActive: 0.5,
+    comissionWithInside: 0.5,
   },
   {
     id: 38,
@@ -533,6 +533,24 @@ export const AllSellers = [
     qualification: '',
     comissionAsActive: 1,
     comissionWithInside: 1,
+  },
+  {
+    id: 63,
+    active: true,
+    label: 'DANDARA LINA',
+    value: 'DANDARA LINA',
+    qualification: '',
+    comissionAsActive: 0.5,
+    comissionWithInside: 0.5,
+  },
+  {
+    id: 64,
+    active: true,
+    label: 'ADÃO FERRAZ',
+    value: 'ADÃO FERRAZ',
+    qualification: '',
+    comissionAsActive: 0.5,
+    comissionWithInside: 0.5,
   },
 ].sort((a, b) => a.value.localeCompare(b.value))
 export const SellersInApp = AllSellers.map((s) => s.value)
