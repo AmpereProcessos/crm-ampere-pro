@@ -31,11 +31,11 @@ function renderExecutionObservations(observations: TServiceOrderWithProjectAndAn
     <div key={topicIndex} className="flex w-full flex-col gap-1">
       <div className="flex items-center gap-1">
         <VscDebugBreakpointLog />
-        <h2 className="text-[0.7rem] font-bold tracking-tight">{topic}</h2>
+        <h2 className="text-[0.85rem] font-bold tracking-tight">{topic}</h2>
       </div>
       <ul className="list-disc pl-4">
         {observations.map((obs, obsIndex) => (
-          <li className="text-[0.65rem] font-medium text-gray-800" key={obsIndex}>
+          <li className="text-[0.8rem] font-medium text-gray-800" key={obsIndex}>
             {obs}
           </li>
         ))}
@@ -180,47 +180,47 @@ function ReportPage({ user, order }: ReportPageProps) {
           <div className="flex w-full flex-col gap-3 p-3 lg:w-1/2">
             <h1 className="text-start font-black leading-none tracking-tight">INFORMAÇÕES GERAIS</h1>
             <div className="flex w-full flex-col items-start gap-1">
-              <h1 className="w-full text-start text-[0.7rem] tracking-tight text-gray-500">SERVIÇO</h1>
+              <h1 className="w-full text-start text-[0.85rem] tracking-tight text-gray-500">SERVIÇO</h1>
               <div className="flex w-full items-center justify-start gap-1">
                 <MdMenu />
-                <h1 className="text-[0.7rem] font-[600] tracking-tight">{order.descricao}</h1>
+                <h1 className="text-[0.85rem] font-[600] tracking-tight">{order.descricao}</h1>
               </div>
               <div className="flex w-full flex-col items-start justify-start gap-2 lg:flex-row lg:items-center lg:gap-6">
                 <div className="flex w-fit items-center gap-1">
                   <FaDiamond />
-                  <h1 className="text-[0.7rem] font-[600] tracking-tight">{order.categoria}</h1>
+                  <h1 className="text-[0.85rem] font-[600] tracking-tight">{order.categoria}</h1>
                 </div>
                 <div className="flex w-fit items-center gap-1">
                   <TbUrgent />
-                  <h1 className="text-[0.7rem] font-[600] tracking-tight">{order.urgencia || 'URGÊNCIA NÃO DEFINIDA'}</h1>
+                  <h1 className="text-[0.85rem] font-[600] tracking-tight">{order.urgencia || 'URGÊNCIA NÃO DEFINIDA'}</h1>
                 </div>
               </div>
             </div>
             <div className="flex w-full flex-col items-center justify-start gap-1">
-              <h1 className="w-full text-start text-[0.7rem] tracking-tight text-gray-500">RESPONSÁVEIS</h1>
+              <h1 className="w-full text-start text-[0.85rem] tracking-tight text-gray-500">RESPONSÁVEIS</h1>
               <div className="flex w-full flex-wrap items-center justify-start gap-1">
                 {order.responsaveis.map((responsible, index) => (
                   <div key={index} className="flex items-center gap-2 rounded border border-gray-500 bg-[#f8f8f8] px-2 py-1 shadow-sm">
                     <Avatar fallback={formatNameAsInitials(responsible.nome)} url={responsible.avatar_url || undefined} height={20} width={20} />
-                    <p className="text-[0.7rem] font-[600] leading-none tracking-tight">{responsible.nome}</p>
+                    <p className="text-[0.85rem] font-[600] leading-none tracking-tight">{responsible.nome}</p>
                   </div>
                 ))}
               </div>
             </div>
             <div className="flex w-full flex-col items-center justify-start gap-1">
-              <h1 className="w-full text-start text-[0.7rem] tracking-tight text-gray-500">FAVORECIDO</h1>
+              <h1 className="w-full text-start text-[0.85rem] tracking-tight text-gray-500">FAVORECIDO</h1>
               <div className="flex w-full flex-col items-start justify-start gap-2 lg:flex-row lg:items-center lg:gap-6">
                 <div className="flex w-fit items-center gap-1">
                   <FaUser />
-                  <h1 className="text-[0.7rem] font-[600] tracking-tight">{order.favorecido.nome}</h1>
+                  <h1 className="text-[0.85rem] font-[600] tracking-tight">{order.favorecido.nome}</h1>
                 </div>
                 <div className="flex w-fit items-center gap-1">
                   <FaPhone />
-                  <h1 className="text-[0.7rem] font-[600] tracking-tight">{order.favorecido.contato}</h1>
+                  <h1 className="text-[0.85rem] font-[600] tracking-tight">{order.favorecido.contato}</h1>
                 </div>
                 <div className="flex w-fit items-center gap-1">
                   <FaLocationDot />
-                  <h1 className="text-[0.7rem] font-[600] tracking-tight">
+                  <h1 className="text-[0.85rem] font-[600] tracking-tight">
                     {formatLocation({ location: order.localizacao, includeCity: true, includeUf: true })}
                   </h1>
                 </div>
@@ -230,7 +230,7 @@ function ReportPage({ user, order }: ReportPageProps) {
           <div className="flex w-full flex-col gap-3 p-3 lg:w-1/2">
             <h1 className="text-start font-black leading-none tracking-tight">DETALHES SOBRE A EXECUÇÃO</h1>
             <div className="flex w-full flex-col items-center justify-center gap-1">
-              <h1 className="w-full text-[0.7rem] font-medium tracking-tight text-gray-500 lg:text-start">
+              <h1 className="w-full text-[0.85rem] font-medium tracking-tight text-gray-500 lg:text-start">
                 ESSAS SÃO AS OBSERVAÇÕES DEFINIDAS PARA EXECUÇÃO DESSA ORDEM DE SERVIÇO:
               </h1>
               {renderExecutionObservations(order.observacoes)}
@@ -249,13 +249,13 @@ function ReportPage({ user, order }: ReportPageProps) {
                       <div className="flex h-[15] w-[15] items-center justify-center rounded-full border border-black p-1 text-[15px]">
                         {renderCategoryIcon(material.categoria)}
                       </div>
-                      <p className="text-[0.6rem] font-medium leading-none tracking-tight lg:text-xs">
+                      <p className="text-[0.7rem] font-medium leading-none tracking-tight lg:text-xs">
                         <strong className="text-[#FF9B50]">{material.qtde}</strong> x {material.descricao} ({material.unidade})
                       </p>
                     </div>
                   ))
                 ) : (
-                  <p className="w-full text-center text-[0.6rem] font-medium leading-none tracking-tight lg:text-xs">Nenhum material disponível in loco.</p>
+                  <p className="w-full text-center text-[0.7rem] font-medium leading-none tracking-tight lg:text-xs">Nenhum material disponível in loco.</p>
                 )}
               </div>
             </div>
@@ -268,13 +268,13 @@ function ReportPage({ user, order }: ReportPageProps) {
                       <div className="flex h-[15] w-[15] items-center justify-center rounded-full border border-black p-1 text-[15px]">
                         {renderCategoryIcon(material.categoria)}
                       </div>
-                      <p className="text-[0.6rem] font-medium leading-none tracking-tight lg:text-xs">
+                      <p className="text-[0.7rem] font-medium leading-none tracking-tight lg:text-xs">
                         <strong className="text-[#FF9B50]">{material.qtde}</strong> x {material.descricao} ({material.unidade})
                       </p>
                     </div>
                   ))
                 ) : (
-                  <p className="w-full text-center text-[0.6rem] font-medium leading-none tracking-tight lg:text-xs">Nenhum material para retirada</p>
+                  <p className="w-full text-center text-[0.7rem] font-medium leading-none tracking-tight lg:text-xs">Nenhum material para retirada</p>
                 )}
               </div>
             </div>
