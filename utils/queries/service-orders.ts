@@ -1,14 +1,15 @@
+'use client'
 import axios from 'axios'
-import { TPersonalizedServiceOrderFilter, TServiceOrderDTO, TServiceOrderWithProjectDTO } from '../schemas/service-order.schema'
+import { TPersonalizedServiceOrderFilter, TServiceOrderDTO, TServiceOrderWithProjectAndAnalysisDTO } from '../schemas/service-order.schema'
 import { useQuery } from '@tanstack/react-query'
 import { TServiceOrderByFilters } from '@/pages/api/service-orders/search'
 import { useState } from 'react'
 
-async function fetchServiceOrderById({ id }: { id: string }) {
+export async function fetchServiceOrderById({ id }: { id: string }) {
   try {
     const { data } = await axios.get(`/api/service-orders?id=${id}`)
 
-    return data.data as TServiceOrderWithProjectDTO
+    return data.data as TServiceOrderWithProjectAndAnalysisDTO
   } catch (error) {
     throw error
   }

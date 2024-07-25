@@ -1,4 +1,4 @@
-import { TServiceOrder, TServiceOrderWithProject } from '@/utils/schemas/service-order.schema'
+import { TServiceOrder, TServiceOrderWithProjectAndAnalysis } from '@/utils/schemas/service-order.schema'
 import React from 'react'
 import { TServiceOrderGeneralMaterial } from '../MaterialsInformationBlock'
 import MaterialsTableBlockItem from './MaterialsTableBlockItem'
@@ -47,7 +47,7 @@ function MaterialsTableBlock({ infoHolder, setInfoHolder, allMaterials }: Materi
             key={index}
             material={material}
             handleUpdate={(item) => updateItem({ item })}
-            handleRemove={() => removeItem(index, material.tipo)}
+            handleRemove={() => removeItem(material.index, material.tipo)}
           />
         ))}
       </div>

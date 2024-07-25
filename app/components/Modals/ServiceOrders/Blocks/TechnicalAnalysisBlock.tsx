@@ -1,17 +1,18 @@
 import CheckboxInput from '@/components/Inputs/CheckboxInput'
 import React, { useState } from 'react'
 import TechnicalAnalysisInformation from './Utils/TechnicalAnalysisInformation'
+import { TTechnicalAnalysisDTO } from '@/utils/schemas/technical-analysis.schema'
 
 type TechnicalAnalysisBlockProps = {
-  analysisId?: string | null
+  analysis?: TTechnicalAnalysisDTO
 }
-function TechnicalAnalysisBlock({ analysisId }: TechnicalAnalysisBlockProps) {
+function TechnicalAnalysisBlock({ analysis }: TechnicalAnalysisBlockProps) {
   const [showInfo, setShowInfo] = useState<boolean>(false)
   return (
     <div className="flex w-full flex-col gap-y-2">
       <h1 className="w-full rounded bg-gray-700 p-1 text-center font-bold text-white">INFORMAÇÕES DA ANÁLISE TÉCNICA</h1>
       <div className="flex w-full grow flex-wrap justify-around gap-2">
-        {!analysisId ? (
+        {!analysis ? (
           <p className="w-full text-center text-sm font-medium tracking-tight text-gray-500">Não há análise técnica disponível.</p>
         ) : (
           <div className="flex w-full items-center justify-center py-2">
@@ -21,7 +22,7 @@ function TechnicalAnalysisBlock({ analysisId }: TechnicalAnalysisBlockProps) {
           </div>
         )}
       </div>
-      {showInfo && analysisId ? <TechnicalAnalysisInformation analysisId={analysisId} /> : null}
+      {showInfo && analysis ? <TechnicalAnalysisInformation analysis={analysis} /> : null}
     </div>
   )
 }

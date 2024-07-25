@@ -3,14 +3,14 @@ import { getServiceOrderById, getServiceOrders, getServiceOrdersByProjectId } fr
 import connectToDatabase from '@/services/mongodb/crm-db-connection'
 import { apiHandler, validateAuthenticationWithSession } from '@/utils/api'
 import { TPurchase } from '@/utils/schemas/purchase.schema'
-import { InsertServiceOrderSchema, TServiceOrder, TServiceOrderWithProject } from '@/utils/schemas/service-order.schema'
+import { InsertServiceOrderSchema, TServiceOrder, TServiceOrderWithProjectAndAnalysis } from '@/utils/schemas/service-order.schema'
 import createHttpError from 'http-errors'
 import { update } from 'lodash'
 import { Collection, ObjectId } from 'mongodb'
 import { NextApiHandler } from 'next'
 
 type GetResponse = {
-  data: TServiceOrderWithProject | TServiceOrder[]
+  data: TServiceOrderWithProjectAndAnalysis | TServiceOrder[]
 }
 
 const getServiceOrdersRoute: NextApiHandler<GetResponse> = async (req, res) => {

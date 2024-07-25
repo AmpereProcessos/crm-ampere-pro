@@ -2,13 +2,13 @@ import SelectInput from '@/components/Inputs/SelectInput'
 import TextInput from '@/components/Inputs/TextInput'
 import { stateCities } from '@/utils/estados_cidades'
 import { formatToCEP, getCEPInfo } from '@/utils/methods'
-import { TServiceOrderWithProject } from '@/utils/schemas/service-order.schema'
+import { TServiceOrderWithProjectAndAnalysis } from '@/utils/schemas/service-order.schema'
 import React from 'react'
 import toast from 'react-hot-toast'
 
 type LocationInformationBlockProps = {
-  infoHolder: TServiceOrderWithProject
-  setInfoHolder: React.Dispatch<React.SetStateAction<TServiceOrderWithProject>>
+  infoHolder: TServiceOrderWithProjectAndAnalysis
+  setInfoHolder: React.Dispatch<React.SetStateAction<TServiceOrderWithProjectAndAnalysis>>
 }
 function LocationInformationBlock({ infoHolder, setInfoHolder }: LocationInformationBlockProps) {
   async function setAddressDataByCEP(cep: string) {

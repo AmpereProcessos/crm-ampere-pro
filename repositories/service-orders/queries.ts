@@ -1,4 +1,4 @@
-import { TServiceOrder, TServiceOrderDTO, TServiceOrderWithProject } from '@/utils/schemas/service-order.schema'
+import { TServiceOrder, TServiceOrderDTO, TServiceOrderWithProjectAndAnalysis } from '@/utils/schemas/service-order.schema'
 import { Collection, Filter, ObjectId } from 'mongodb'
 
 type GetServiceOrdersParams = {
@@ -23,13 +23,15 @@ type GetServiceOrderByIdParams = {
 }
 export async function getServiceOrderById({ id, collection, query }: GetServiceOrderByIdParams) {
   try {
-    const addFields = { projectAsObjectId: { $toObjectId: '$projeto.id' } }
-    const lookup = { from: 'projects', localField: 'projectAsObjectId', foreignField: '_id', as: 'projetoDados' }
+    const addFields = { projectAsObjectId: { $toObjectId: '$projeto.id' }, technicalAnalysisAsObjectId: { $toObjectId: '$idAnaliseTecnica' } }
+    const projectLookup = { from: 'projects', localField: 'projectAsObjectId', foreignField: '_id', as: 'projetoDados' }
+    const analysisLookup = { from: 'technical-analysis', localField: 'technicalAnalysisAsObjectId', foreignField: '_id', as: 'analiseTecnicaDados' }
+    const ordersArr = await collection
+      .aggregate([{ $match: { _id: new ObjectId(id), ...query } }, { $addFields: addFields }, { $lookup: projectLookup }, { $lookup: analysisLookup }])
+      .toArray()
 
-    const ordersArr = await collection.aggregate([{ $match: { _id: new ObjectId(id), ...query } }, { $addFields: addFields }, { $lookup: lookup }]).toArray()
-
-    const order = ordersArr.map((order) => ({ ...order, projetoDados: order.projetoDados[0] }))
-    return order[0] as TServiceOrderWithProject
+    const order = ordersArr.map((order) => ({ ...order, projetoDados: order.projetoDados[0], analiseTecnicaDados: order.analiseTecnicaDados[0] }))
+    return order[0] as TServiceOrderWithProjectAndAnalysis
   } catch (error) {
     throw error
   }

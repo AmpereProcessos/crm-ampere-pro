@@ -1,7 +1,7 @@
 import CheckboxInput from '@/components/Inputs/CheckboxInput'
 import Avatar from '@/components/utils/Avatar'
 import { formatDateAsLocale, formatLocation, formatNameAsInitials } from '@/lib/methods/formatting'
-import { TServiceOrderWithProject } from '@/utils/schemas/service-order.schema'
+import { TServiceOrderWithProjectAndAnalysis } from '@/utils/schemas/service-order.schema'
 import { AnimatePresence, motion } from 'framer-motion'
 import React, { useState } from 'react'
 import { AiFillCloseCircle, AiFillEdit } from 'react-icons/ai'
@@ -36,8 +36,8 @@ const variants = {
 
 type ProjectInformationBlockProps = {
   orderId?: string
-  infoHolder: TServiceOrderWithProject
-  setInfoHolder: React.Dispatch<React.SetStateAction<TServiceOrderWithProject>>
+  infoHolder: TServiceOrderWithProjectAndAnalysis
+  setInfoHolder: React.Dispatch<React.SetStateAction<TServiceOrderWithProjectAndAnalysis>>
   session: Session
 }
 function ProjectInformationBlock({ orderId, infoHolder, setInfoHolder, session }: ProjectInformationBlockProps) {

@@ -69,7 +69,6 @@ export function formatProductStr(product: TProductItem, showModel?: boolean) {
   return `${product.qtde}x ${product.fabricante} ${product.potencia}W`
 }
 export function formatLocation({ location, includeUf, includeCity }: { location: TOpportunity['localizacao']; includeUf?: boolean; includeCity?: boolean }) {
-  console.log('DEBUG', location)
   var addressStr = ''
   if (includeCity && location.cidade) addressStr = addressStr + `${location.cidade}`
   if (includeUf && location.uf) addressStr = addressStr + ` (${location.uf}), `

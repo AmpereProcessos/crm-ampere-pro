@@ -1,5 +1,5 @@
 'use client'
-import { TServiceOrder, TServiceOrderWithProjectDTO } from '@/utils/schemas/service-order.schema'
+import { TServiceOrder, TServiceOrderWithProjectAndAnalysis, TServiceOrderWithProjectAndAnalysisDTO } from '@/utils/schemas/service-order.schema'
 import { Session } from 'next-auth'
 import React, { useEffect, useState } from 'react'
 import { VscChromeClose } from 'react-icons/vsc'
@@ -20,6 +20,7 @@ import ErrorComponent from '@/components/utils/ErrorComponent'
 import * as Dialog from '@radix-ui/react-dialog'
 import CheckboxWithDate from '@/components/Inputs/CheckboxWithDate'
 import PeriodInformationBlock from './Blocks/PeriodInformationBlock'
+import ReportInformationBlock from './Blocks/ReportInformationBlock'
 
 type EditServiceOrderProps = {
   orderId: string
@@ -30,8 +31,9 @@ type EditServiceOrderProps = {
 function EditServiceOrder({ orderId, session, closeModal }: EditServiceOrderProps) {
   const queryClient = useQueryClient()
   const { data: order, isLoading, isError, isSuccess } = useServiceOrderById({ id: orderId })
-  const [infoHolder, setInfoHolder] = useState<TServiceOrderWithProjectDTO>({
+  const [infoHolder, setInfoHolder] = useState<TServiceOrderWithProjectAndAnalysisDTO>({
     _id: 'id-holder',
+    idParceiro: '',
     categoria: 'OUTROS',
     descricao: '',
     urgencia: 'URGENTE',
@@ -57,11 +59,16 @@ function EditServiceOrder({ orderId, session, closeModal }: EditServiceOrderProp
       retiraveis: [],
     },
     anotacoes: '',
+    relatorio: {
+      aplicavel: false,
+      secoes: [],
+    },
     autor: {
       id: session.user.id,
       nome: session.user.nome,
       avatar_url: session.user.avatar_url,
     },
+
     dataInsercao: new Date().toISOString(),
   })
 
@@ -114,7 +121,7 @@ function EditServiceOrder({ orderId, session, closeModal }: EditServiceOrderProp
                   setInfoHolder={setInfoHolder as React.Dispatch<React.SetStateAction<TServiceOrder>>}
                   session={session}
                 />
-                <TechnicalAnalysisBlock analysisId={null} />
+                <TechnicalAnalysisBlock analysis={infoHolder.analiseTecnicaDados} />
                 <ResponsibleInformationBlock infoHolder={infoHolder} setInfoHolder={setInfoHolder as React.Dispatch<React.SetStateAction<TServiceOrder>>} />
                 <LocationInformationBlock infoHolder={infoHolder} setInfoHolder={setInfoHolder as React.Dispatch<React.SetStateAction<TServiceOrder>>} />
                 <MaterialsInformationBlock infoHolder={infoHolder} setInfoHolder={setInfoHolder as React.Dispatch<React.SetStateAction<TServiceOrder>>} />
@@ -122,6 +129,11 @@ function EditServiceOrder({ orderId, session, closeModal }: EditServiceOrderProp
                   infoHolder={infoHolder}
                   setInfoHolder={setInfoHolder as React.Dispatch<React.SetStateAction<TServiceOrder>>}
                   session={session}
+                />
+                <ReportInformationBlock
+                  orderId={orderId}
+                  infoHolder={infoHolder}
+                  setInfoHolder={setInfoHolder as React.Dispatch<React.SetStateAction<TServiceOrderWithProjectAndAnalysis>>}
                 />
               </div>
               <div className="flex w-full items-center justify-end p-2">

@@ -1,7 +1,7 @@
 import NumberInput from '@/components/Inputs/NumberInput'
 import SelectInput from '@/components/Inputs/SelectInput'
 import TextInput from '@/components/Inputs/TextInput'
-import { TServiceOrder, TServiceOrderMaterialItem, TServiceOrderWithProject } from '@/utils/schemas/service-order.schema'
+import { TServiceOrder, TServiceOrderMaterialItem, TServiceOrderWithProjectAndAnalysis } from '@/utils/schemas/service-order.schema'
 import { ProductItemCategories, Units } from '@/utils/select-options'
 import React, { useState } from 'react'
 import MaterialsTableBlock from './Utils/MaterialsTableBlock'

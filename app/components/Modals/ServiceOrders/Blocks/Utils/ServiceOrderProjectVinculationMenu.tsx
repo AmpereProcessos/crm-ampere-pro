@@ -1,5 +1,5 @@
 import { fetchProjectById, useProjectsUltraSimplified } from '@/utils/queries/project'
-import { TServiceOrderWithProject } from '@/utils/schemas/service-order.schema'
+import { TServiceOrderWithProjectAndAnalysis } from '@/utils/schemas/service-order.schema'
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { GeneralVisibleHiddenExitMotionVariants } from '@/utils/constants'
@@ -9,8 +9,8 @@ import { TProjectUltraSimplifiedDTO } from '@/utils/schemas/project.schema'
 import { FaLink } from 'react-icons/fa'
 type ServiceOrderProjectVinculationMenuProps = {
   vinculatedId?: string | null
-  infoHolder: TServiceOrderWithProject
-  setInfoHolder: React.Dispatch<React.SetStateAction<TServiceOrderWithProject>>
+  infoHolder: TServiceOrderWithProjectAndAnalysis
+  setInfoHolder: React.Dispatch<React.SetStateAction<TServiceOrderWithProjectAndAnalysis>>
   closeMenu: () => void
 }
 function ServiceOrderProjectVinculationMenu({ vinculatedId, infoHolder, setInfoHolder, closeMenu }: ServiceOrderProjectVinculationMenuProps) {
@@ -28,6 +28,7 @@ function ServiceOrderProjectVinculationMenu({ vinculatedId, infoHolder, setInfoH
     setInfoHolder((prev) => ({
       ...prev,
       idParceiro: project.idParceiro,
+      idAnaliseTecnica: projectData.idAnaliseTecnica,
       projeto: { id: project?._id, nome: project?.nome, tipo: project?.tipo.titulo, indexador: project?.indexador, identificador: project?.identificador },
       projetoDados: projectData,
     }))

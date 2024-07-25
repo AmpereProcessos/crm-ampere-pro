@@ -1,5 +1,5 @@
 'use client'
-import { TServiceOrder } from '@/utils/schemas/service-order.schema'
+import { TServiceOrder, TServiceOrderWithProjectAndAnalysis } from '@/utils/schemas/service-order.schema'
 import { Session } from 'next-auth'
 import React, { useState } from 'react'
 import { VscChromeClose } from 'react-icons/vsc'
@@ -15,6 +15,7 @@ import { createServiceOrder } from '@/utils/mutations/service-orders'
 import { useQueryClient } from '@tanstack/react-query'
 import * as Dialog from '@radix-ui/react-dialog'
 import PeriodInformationBlock from './Blocks/PeriodInformationBlock'
+import ReportInformationBlock from './Blocks/ReportInformationBlock'
 
 type NewServiceOrderProps = {
   session: Session
@@ -22,7 +23,8 @@ type NewServiceOrderProps = {
 }
 function NewServiceOrder({ session, closeModal }: NewServiceOrderProps) {
   const queryClient = useQueryClient()
-  const [infoHolder, setInfoHolder] = useState<TServiceOrder>({
+  const [infoHolder, setInfoHolder] = useState<TServiceOrderWithProjectAndAnalysis>({
+    idParceiro: '',
     categoria: 'OUTROS',
     descricao: '',
     urgencia: 'URGENTE',
@@ -48,6 +50,10 @@ function NewServiceOrder({ session, closeModal }: NewServiceOrderProps) {
       retiraveis: [],
     },
     anotacoes: '',
+    relatorio: {
+      aplicavel: false,
+      secoes: [],
+    },
     autor: {
       id: session.user.id,
       nome: session.user.nome,
@@ -81,7 +87,7 @@ function NewServiceOrder({ session, closeModal }: NewServiceOrderProps) {
             <GeneralInformationBlock infoHolder={infoHolder} setInfoHolder={setInfoHolder} />
             <FavoredInformationBlock infoHolder={infoHolder} setInfoHolder={setInfoHolder} />
             <ProjectInformationBlock infoHolder={infoHolder} setInfoHolder={setInfoHolder} session={session} />
-            <TechnicalAnalysisBlock analysisId={null} />
+            <TechnicalAnalysisBlock analysis={infoHolder.analiseTecnicaDados} />
             <ResponsibleInformationBlock infoHolder={infoHolder} setInfoHolder={setInfoHolder} />
             <LocationInformationBlock infoHolder={infoHolder} setInfoHolder={setInfoHolder} />
             <MaterialsInformationBlock infoHolder={infoHolder} setInfoHolder={setInfoHolder} />
@@ -90,6 +96,7 @@ function NewServiceOrder({ session, closeModal }: NewServiceOrderProps) {
               setInfoHolder={setInfoHolder as React.Dispatch<React.SetStateAction<TServiceOrder>>}
               session={session}
             />
+            <ReportInformationBlock infoHolder={infoHolder} setInfoHolder={setInfoHolder} />
             <div className="flex w-full items-center justify-end p-2">
               <button
                 disabled={isPending}
