@@ -1,3 +1,4 @@
+'use client'
 import axios from 'axios'
 import { THomologationDTO } from '../schemas/homologation.schema'
 import { useQuery } from '@tanstack/react-query'
