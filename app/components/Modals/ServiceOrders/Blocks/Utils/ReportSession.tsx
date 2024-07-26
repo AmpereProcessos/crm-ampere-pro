@@ -6,6 +6,11 @@ import { FaCheck } from 'react-icons/fa'
 import { FaListCheck } from 'react-icons/fa6'
 import { MdAttachFile } from 'react-icons/md'
 
+function getStatusTag(effectivationDate: string | null) {
+  if (!effectivationDate) return <h1 className="rounded-md bg-gray-500 px-2 py-0.5 text-[0.5rem] font-medium text-white lg:text-[0.6rem]">PENDENTE</h1>
+
+  return <h1 className="rounded-md bg-green-500 px-2 py-0.5 text-[0.5rem] font-medium text-white lg:text-[0.6rem]">CONCLUÍDA</h1>
+}
 type ReportSessionProps = {
   session: TServiceOrder['relatorio']['secoes'][number]
 }
@@ -14,6 +19,7 @@ function ReportSession({ session }: ReportSessionProps) {
     <div className="flex w-full flex-col gap-1 rounded border border-gray-500 p-3">
       <div className="flex w-full items-center gap-2">
         <h1 className="text-sm font-bold tracking-tight">{session.titulo}</h1>
+        {getStatusTag(session.dataConclusao || null)}
         {session.dataConclusao ? (
           <div className={`flex items-center gap-1`}>
             <BsCalendarCheck color="rgb(34,197,94)" />

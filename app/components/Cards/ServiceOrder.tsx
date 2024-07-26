@@ -2,7 +2,7 @@ import Avatar from '@/components/utils/Avatar'
 import { formatDateAsLocale, formatLocation, formatNameAsInitials } from '@/lib/methods/formatting'
 import { TServiceOrderDTO } from '@/utils/schemas/service-order.schema'
 import React from 'react'
-import { BsCalendarPlus } from 'react-icons/bs'
+import { BsCalendarCheck, BsCalendarPlus } from 'react-icons/bs'
 import { FaUser } from 'react-icons/fa'
 import { FaLocationDot } from 'react-icons/fa6'
 import { TbUrgent } from 'react-icons/tb'
@@ -87,6 +87,12 @@ function ServiceOrder({ serviceOrder, handleClick }: ServiceOrderProps) {
           </div>
         </div>
         <div className="flex items-center gap-2">
+          {serviceOrder.dataEfetivacao ? (
+            <div className={`flex items-center gap-1`}>
+              <BsCalendarCheck color="rgb(34,197,94)" />
+              <p className="text-[0.65rem] font-medium text-gray-500">{formatDateAsLocale(serviceOrder.dataEfetivacao, true)}</p>
+            </div>
+          ) : null}
           <div className={`flex items-center gap-1`}>
             <BsCalendarPlus />
             <p className="text-[0.65rem] font-medium text-gray-500">{formatDateAsLocale(serviceOrder.dataInsercao, true)}</p>

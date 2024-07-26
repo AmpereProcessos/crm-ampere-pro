@@ -1,7 +1,6 @@
+'use client'
 import HomologationCard from '@/components/Cards/Homologation'
-import FilterMenu from '@/components/Homologations/OtherBlocks/FilterMenu'
-import ControlHomologation from '@/components/Modals/Homologation/ControlHomologation'
-import { Sidebar } from '@/components/Sidebar'
+import FilterMenu from '@/app/components/Homologations/OtherBlocks/FilterMenu'
 import ErrorComponent from '@/components/utils/ErrorComponent'
 import LoadingComponent from '@/components/utils/LoadingComponent'
 import LoadingPage from '@/components/utils/LoadingPage'
@@ -9,14 +8,18 @@ import { useHomologations } from '@/utils/queries/homologations'
 import { useSession } from 'next-auth/react'
 import React, { useState } from 'react'
 import { IoMdArrowDropdownCircle, IoMdArrowDropupCircle } from 'react-icons/io'
+import ControlHomologation from '../Modals/Homologations/ControlHomologation'
+import { Session } from 'next-auth'
+import { Sidebar } from '../Sidebar'
 
-function HomologationsControlPage() {
-  const { data: session, status } = useSession({ required: true })
+type HomologationsControlPageProps = {
+  session: Session
+}
+function HomologationsControlPage({ session }: HomologationsControlPageProps) {
   const { data: homologations, isLoading, isError, isSuccess, filters, setFilters } = useHomologations()
   const [filterMenuIsOpen, setFilterMenuIsOpen] = useState<boolean>(false)
   const [editModal, setEditModal] = useState<{ id: string | null; isOpen: boolean }>({ id: null, isOpen: false })
 
-  if (status != 'authenticated') return <LoadingPage />
   return (
     <div className="flex h-full flex-col md:flex-row">
       <Sidebar session={session} />

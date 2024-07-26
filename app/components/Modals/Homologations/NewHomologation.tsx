@@ -1,34 +1,38 @@
-import ApplicantBlock from '@/components/Homologations/ApplicantBlock'
-import AttachFiles from '@/components/Homologations/AttachFiles'
-import EquipmentsComposition from '@/components/Homologations/EquipmentsComposition'
-import HolderInformation from '@/components/Homologations/HolderInformation'
-import InstallationInformation from '@/components/Homologations/InstallationInformation'
-import LocationInformation from '@/components/Homologations/LocationInformation'
-import SelectInput from '@/components/Inputs/SelectInput'
-import TextInput from '@/components/Inputs/TextInput'
-import ErrorComponent from '@/components/utils/ErrorComponent'
-import LoadingComponent from '@/components/utils/LoadingComponent'
-import { getErrorMessage } from '@/lib/methods/errors'
-import { uploadFile } from '@/lib/methods/firebase'
-import { storage } from '@/services/firebase/storage-config'
-import { fileTypes } from '@/utils/constants'
-import { stateCities } from '@/utils/estados_cidades'
-import { formatToCEP, formatToCPForCNPJ, formatToPhone, getCEPInfo } from '@/utils/methods'
-import { createManyFileReferences } from '@/utils/mutations/file-references'
-import { useMutationWithFeedback } from '@/utils/mutations/general-hook'
-import { createHomologation } from '@/utils/mutations/homologations'
-import { TFileHolder, TFileReference } from '@/utils/schemas/file-reference.schema'
-import { THomologation } from '@/utils/schemas/homologation.schema'
-import { TOpportunityDTO, TOpportunityDTOWithClient } from '@/utils/schemas/opportunity.schema'
-import { ElectricalInstallationGroups } from '@/utils/select-options'
-import { useQueryClient } from '@tanstack/react-query'
-import { getMetadata, ref } from 'firebase/storage'
-import { Session } from 'next-auth'
 import React, { useState } from 'react'
 import toast from 'react-hot-toast'
-import { BsCode, BsFillClipboardCheckFill } from 'react-icons/bs'
+import { Session } from 'next-auth'
+import { useQueryClient } from '@tanstack/react-query'
+import { getMetadata, ref } from 'firebase/storage'
+
+import * as Dialog from '@radix-ui/react-dialog'
+
+import { BsFillClipboardCheckFill } from 'react-icons/bs'
 import { MdCode } from 'react-icons/md'
 import { VscChromeClose } from 'react-icons/vsc'
+
+import ErrorComponent from '@/components/utils/ErrorComponent'
+import LoadingComponent from '@/components/utils/LoadingComponent'
+
+import ApplicantBlock from '@/app/components/Homologations/ApplicantBlock'
+import AttachFiles from '@/app/components/Homologations/AttachFiles'
+import EquipmentsComposition from '@/app/components/Homologations/EquipmentsComposition'
+import HolderInformation from '@/app/components/Homologations/HolderInformation'
+import InstallationInformation from '@/app/components/Homologations/InstallationInformation'
+import LocationInformation from '@/app/components/Homologations/LocationInformation'
+
+import { getErrorMessage } from '@/lib/methods/errors'
+import { uploadFile } from '@/lib/methods/firebase'
+
+import { TFileHolder, TFileReference } from '@/utils/schemas/file-reference.schema'
+import { THomologation } from '@/utils/schemas/homologation.schema'
+import { TOpportunityDTOWithClient } from '@/utils/schemas/opportunity.schema'
+
+import { createManyFileReferences } from '@/utils/mutations/file-references'
+import { createHomologation } from '@/utils/mutations/homologations'
+import { useMutationWithFeedback } from '@/utils/mutations/general-hook'
+
+import { storage } from '@/services/firebase/storage-config'
+import { fileTypes } from '@/utils/constants'
 
 type NewHomologationProps = {
   opportunity: TOpportunityDTOWithClient
@@ -40,6 +44,7 @@ function NewHomologation({ opportunity, session, closeModal }: NewHomologationPr
   const [infoHolder, setInfoHolder] = useState<THomologation>({
     status: 'PENDENTE',
     idParceiro: session.user.idParceiro || '',
+    pendencias: {},
     distribuidora: '',
     idProposta: opportunity.idPropostaAtiva,
     requerente: {
@@ -73,6 +78,7 @@ function NewHomologation({ opportunity, session, closeModal }: NewHomologationPr
       numeroInstalacao: opportunity.instalacao.numero || '',
       numeroCliente: '',
       grupo: opportunity.instalacao.grupo || 'RESIDENCIAL',
+      dependentes: [],
     },
     documentacao: {
       formaAssinatura: 'FÍSICA',
@@ -184,8 +190,9 @@ function NewHomologation({ opportunity, session, closeModal }: NewHomologationPr
     affectedQueryKey: ['opportunity-homologations', opportunity._id],
   })
   return (
-    <div id="new-technical-analysis" className="fixed bottom-0 left-0 right-0 top-0 z-[100] bg-[rgba(0,0,0,.85)]">
-      <div className="relative left-[50%] top-[50%] z-[100] h-[80%] max-h-[80%] w-[90%] translate-x-[-50%] translate-y-[-50%] overflow-hidden rounded-md bg-[#fff] p-[10px] lg:w-[80%]">
+    <Dialog.Root open onOpenChange={closeModal}>
+      <Dialog.Overlay className="fixed inset-0 z-[100] bg-[rgba(0,0,0,.85)] backdrop-blur-sm" />
+      <Dialog.Content className="fixed left-[50%] top-[50%] z-[100] h-[80%] w-[90%] translate-x-[-50%] translate-y-[-50%] rounded-md bg-[#fff] p-[10px] lg:w-[70%]">
         <div className="flex h-full w-full flex-col">
           <div className="flex flex-col items-center justify-between border-b border-gray-200 px-2 pb-2 text-lg lg:flex-row">
             <h3 className="text-xl font-bold text-[#353432] dark:text-white ">NOVA HOMOLOGAÇÃO</h3>
@@ -235,8 +242,8 @@ function NewHomologation({ opportunity, session, closeModal }: NewHomologationPr
             </>
           ) : null}
         </div>
-      </div>
-    </div>
+      </Dialog.Content>
+    </Dialog.Root>
   )
 }
 

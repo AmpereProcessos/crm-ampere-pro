@@ -5,7 +5,7 @@ import React from 'react'
 
 async function ServiceOrderMainPage() {
   const session = await auth()
-  if (!session) return redirect('/')
+  if (!session) return redirect('/auth/signin')
 
   return <ServiceOrdersPage session={session} />
 }

@@ -1,27 +1,25 @@
-import { getHomologationById } from '@/repositories/homologations/queries'
-import connectToDatabase from '@/services/mongodb/crm-db-connection'
-import { THomologation, THomologationDTO } from '@/utils/schemas/homologation.schema'
-import { Collection, ObjectId } from 'mongodb'
-import { GetServerSidePropsContext } from 'next'
-import Image from 'next/image'
-import React from 'react'
-import Logo from '@/utils/svgs/vertical-blue-logo-with-text.svg'
+import { auth } from '@/auth'
 import ErrorComponent from '@/components/utils/ErrorComponent'
 import { formatLocation } from '@/lib/methods/formatting'
+import { fetchHomologationById } from '@/utils/queries/homologations'
 import dayjs from 'dayjs'
 import ptBr from 'dayjs/locale/pt-br'
+import Logo from '@/utils/svgs/vertical-blue-logo-with-text.svg'
+import { ObjectId } from 'mongodb'
+import Image from 'next/image'
+import React from 'react'
 import { FaLocationDot } from 'react-icons/fa6'
-import { TbWorld } from 'react-icons/tb'
 import { MdEmail } from 'react-icons/md'
+import { TbWorld } from 'react-icons/tb'
 dayjs.locale(ptBr)
-type PowerOfAttorneyTemplateProps = {
-  homologationJSON: string
-  error: string | null | undefined
-}
-function PowerOfAttorneyTemplate({ homologationJSON, error }: PowerOfAttorneyTemplateProps) {
-  if (!!error) return <ErrorComponent msg={error} />
+async function HomologationProcurationPage({ params }: { params: { id: string } }) {
+  const session = await auth()
+  if (!session) return <ErrorComponent msg="Usuário não autenticado." />
+  const homologationId = params.id
+  if (!homologationId || typeof homologationId != 'string' || !ObjectId.isValid(homologationId)) return <ErrorComponent msg="Oops, ID inválido." />
 
-  const homologation: THomologationDTO = JSON.parse(homologationJSON)
+  const homologation = await fetchHomologationById({ id: homologationId })
+
   return (
     <div className="relative flex h-fit w-full flex-col self-center overflow-hidden bg-white px-12 py-4 lg:h-[297mm] lg:w-[210mm]">
       <div className="flex min-h-[100px] items-center justify-center">
@@ -97,34 +95,4 @@ function PowerOfAttorneyTemplate({ homologationJSON, error }: PowerOfAttorneyTem
   )
 }
 
-export default PowerOfAttorneyTemplate
-
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const { query } = context
-  const { id } = query
-  if (!id || typeof id != 'string' || !ObjectId.isValid(id)) {
-    return {
-      props: {
-        error: 'Oops, o ID requerido é inválido.',
-      },
-    }
-  }
-  const db = await connectToDatabase(process.env.MONGODB_URI, 'crm')
-  const homologationsCollection: Collection<THomologation> = db.collection('homologations')
-
-  const homologation = await getHomologationById({ collection: homologationsCollection, id: id, query: {} })
-
-  if (!homologation) {
-    return {
-      props: {
-        error: 'Oops, a homologação requerida não foi encontrada.',
-      },
-    }
-  }
-
-  return {
-    props: {
-      homologationJSON: JSON.stringify(homologation),
-    },
-  }
-}
+export default HomologationProcurationPage

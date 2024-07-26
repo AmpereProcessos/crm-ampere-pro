@@ -213,6 +213,43 @@ const HomologationApplicantSchema = z.object({
     invalid_type_error: 'Tipo não válido para o contato do requerente.',
   }),
 })
+const HomologationPendencies = z.object({
+  diagramas: z
+    .string({
+      required_error: 'Conclusão da pendência de diagramas não informada.',
+      invalid_type_error: 'Tipo não válido para a conclusão da pendência de diagramas.',
+    })
+    .optional()
+    .nullable(),
+  formularios: z
+    .string({
+      required_error: 'Conclusão da pendência de formulários não informada.',
+      invalid_type_error: 'Tipo não válido para a conclusão da pendência de formulários.',
+    })
+    .optional()
+    .nullable(),
+  desenhos: z
+    .string({
+      required_error: 'Conclusão da pendência de desenhos não informada.',
+      invalid_type_error: 'Tipo não válido para a conclusão da pendência de desenhos.',
+    })
+    .optional()
+    .nullable(),
+  mapasDeMicro: z
+    .string({
+      required_error: 'Conclusão da pendência de mapa de micro não informada.',
+      invalid_type_error: 'Tipo não válido para a conclusão da pendência de mapa de micro.',
+    })
+    .optional()
+    .nullable(),
+  distribuicoes: z
+    .string({
+      required_error: 'Conclusão da pendência de distribuição de créditos não informada.',
+      invalid_type_error: 'Tipo não válido para a conclusão da pendência de distribuição de créditos.',
+    })
+    .optional()
+    .nullable(),
+})
 const GeneralHomologationSchema = z.object({
   idParceiro: z.string({
     required_error: 'ID de referência do parceiro não informado.',
@@ -231,6 +268,7 @@ const GeneralHomologationSchema = z.object({
     .number({ required_error: 'Potência de homologação não informada.', invalid_type_error: 'Tipo não válido para a potência de homologação.' })
     .optional()
     .nullable(),
+  pendencias: HomologationPendencies,
   distribuidora: z.string({
     required_error: 'Nome da concessionária/distribuidora de energia não informada.',
     invalid_type_error: 'Tipo não válido para o nome da concessionária/distribuidora de energia.',
@@ -252,7 +290,9 @@ const GeneralHomologationSchema = z.object({
     .optional()
     .nullable(),
   autor: AuthorSchema,
-  dataInsercao: z.string().datetime(),
+  dataInsercao: z
+    .string({ required_error: 'Data de inserção não informada.', invalid_type_error: 'Tipo não válido para a data de inserção.' })
+    .datetime({ message: 'Tipo não válido para data de inserção.' }),
 })
 
 export const InsertHomologationSchema = z.object({
@@ -273,6 +313,7 @@ export const InsertHomologationSchema = z.object({
     .number({ required_error: 'Potência de homologação não informada.', invalid_type_error: 'Tipo não válido para a potência de homologação.' })
     .optional()
     .nullable(),
+  pendencias: HomologationPendencies,
   distribuidora: z.string({
     required_error: 'Nome da concessionária/distribuidora de energia não informada.',
     invalid_type_error: 'Tipo não válido para o nome da concessionária/distribuidora de energia.',
@@ -294,7 +335,9 @@ export const InsertHomologationSchema = z.object({
     .optional()
     .nullable(),
   autor: AuthorSchema,
-  dataInsercao: z.string().datetime(),
+  dataInsercao: z
+    .string({ required_error: 'Data de inserção não informada.', invalid_type_error: 'Tipo não válido para a data de inserção.' })
+    .datetime({ message: 'Tipo não válido para data de inserção.' }),
 })
 
 export type THomologation = z.infer<typeof GeneralHomologationSchema>

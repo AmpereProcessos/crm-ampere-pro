@@ -1,6 +1,6 @@
 import { THomologationDTO } from '@/utils/schemas/homologation.schema'
 import React from 'react'
-import DateInput from '../Inputs/DateInput'
+import DateInput from '../../../components/Inputs/DateInput'
 import { formatDateForInput } from '@/utils/methods'
 import { formatDateInputChange } from '@/lib/methods/formatting'
 

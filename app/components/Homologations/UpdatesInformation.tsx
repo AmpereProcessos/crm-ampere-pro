@@ -1,14 +1,14 @@
 import { THomologationDTO } from '@/utils/schemas/homologation.schema'
 import React, { useState } from 'react'
-import DateInput from '../Inputs/DateInput'
+import DateInput from '../../../components/Inputs/DateInput'
 import { formatDateForInput } from '@/utils/methods'
 import { formatDateAsLocale, formatDateInputChange, formatDateTime } from '@/lib/methods/formatting'
-import TextInput from '../Inputs/TextInput'
-import DateTimeInput from '../Inputs/DateTimeInput'
+import TextInput from '../../../components/Inputs/TextInput'
+import DateTimeInput from '../../../components/Inputs/DateTimeInput'
 import toast from 'react-hot-toast'
 import { Session } from 'next-auth'
 import { BsCalendarPlus } from 'react-icons/bs'
-import Avatar from '../utils/Avatar'
+import Avatar from '../../../components/utils/Avatar'
 import { MdDelete } from 'react-icons/md'
 
 type UpdatesInformationProps = {

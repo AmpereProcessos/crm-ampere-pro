@@ -82,7 +82,7 @@ export async function getReceiptsByFilters({ collection, query, limit, skip }: G
   try {
     const match = { ...query }
     const unwind = { path: '$recebimentos', includeArrayIndex: 'indexRecebimento', preserveNullAndEmptyArrays: false }
-    const sort = { 'recebimentos.efetivado': 1, 'recebimentos.dataRecebimento': 1 }
+    const sort = { 'recebimentos.efetivado': 1, 'recebimentos.dataRecebimento': -1 }
 
     const receiptsMatched = (await collection.aggregate([{ $match: match }, { $unwind: unwind }, { $count: 'contagem' }]).toArray())[0]?.contagem || 0
 

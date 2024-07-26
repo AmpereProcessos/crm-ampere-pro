@@ -21,7 +21,7 @@ export function useOpportunityHomologations({ opportunityId }: { opportunityId: 
   })
 }
 
-async function fetchHomologationById({ id }: { id: string }) {
+export async function fetchHomologationById({ id }: { id: string }) {
   try {
     const { data } = await axios.get(`/api/homologations?id=${id}`)
 

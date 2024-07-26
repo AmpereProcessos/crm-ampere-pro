@@ -2,36 +2,37 @@ import React, { useEffect, useState } from 'react'
 import { Session } from 'next-auth'
 import { useQueryClient } from '@tanstack/react-query'
 import { getMetadata, ref } from 'firebase/storage'
+import Link from 'next/link'
+
+import * as Dialog from '@radix-ui/react-dialog'
 
 import { MdCode } from 'react-icons/md'
 import { VscChromeClose } from 'react-icons/vsc'
 
-import AttachFiles from '@/components/Homologations/AttachFiles'
-import EquipmentsComposition from '@/components/Homologations/EquipmentsComposition'
-import HolderInformation from '@/components/Homologations/HolderInformation'
-import InstallationInformation from '@/components/Homologations/InstallationInformation'
-import LocationInformation from '@/components/Homologations/LocationInformation'
-
 import ErrorComponent from '@/components/utils/ErrorComponent'
 import LoadingComponent from '@/components/utils/LoadingComponent'
 
-import { uploadFile } from '@/lib/methods/firebase'
-import { storage } from '@/services/firebase/storage-config'
-import { fileTypes } from '@/utils/constants'
-import { useHomologationById } from '@/utils/queries/homologations'
-import { TFileHolder, TFileReference } from '@/utils/schemas/file-reference.schema'
+import EquipmentsComposition from '@/app/components/Homologations/EquipmentsComposition'
+import HolderInformation from '@/app/components/Homologations/HolderInformation'
+import InstallationInformation from '@/app/components/Homologations/InstallationInformation'
+import LocationInformation from '@/app/components/Homologations/LocationInformation'
+import DocumentationInformation from '@/app/components/Homologations/DocumentationInformation'
+import AccessInformation from '@/app/components/Homologations/AccessInformation'
+import VistoryInformation from '@/app/components/Homologations/VistoryInformation'
+import UpdatesInformation from '@/app/components/Homologations/UpdatesInformation'
+import ActivitiesInformation from '@/app/components/Homologations/ActivitiesInformation'
+import HomologationFiles from '@/app/components/Homologations/Files'
+import StatusInformation from '@/app/components/Homologations/StatusInformation'
+import ApplicantBlock from '@/app/components/Homologations/ApplicantBlock'
+
+import { getErrorMessage } from '@/lib/methods/errors'
+
 import { THomologation, THomologationDTO } from '@/utils/schemas/homologation.schema'
+
+import { useHomologationById } from '@/utils/queries/homologations'
+
 import { useMutationWithFeedback } from '@/utils/mutations/general-hook'
 import { editHomologation } from '@/utils/mutations/homologations'
-import DocumentationInformation from '@/components/Homologations/DocumentationInformation'
-import AccessInformation from '@/components/Homologations/AccessInformation'
-import VistoryInformation from '@/components/Homologations/VistoryInformation'
-import UpdatesInformation from '@/components/Homologations/UpdatesInformation'
-import ActivitiesInformation from '@/components/Homologations/ActivitiesInformation'
-import HomologationFiles from '@/components/Homologations/Files'
-import StatusInformation from '@/components/Homologations/StatusInformation'
-import ApplicantBlock from '@/components/Homologations/ApplicantBlock'
-import Link from 'next/link'
 
 type ControlHomologationProps = {
   homologationId: string
@@ -40,11 +41,12 @@ type ControlHomologationProps = {
 }
 function ControlHomologation({ homologationId, session, closeModal }: ControlHomologationProps) {
   const queryClient = useQueryClient()
-  const { data: homologation, isLoading, isError, isSuccess } = useHomologationById({ id: homologationId })
+  const { data: homologation, isLoading, isError, isSuccess, error } = useHomologationById({ id: homologationId })
   const [infoHolder, setInfoHolder] = useState<THomologationDTO>({
     _id: 'id-holder',
     status: 'PENDENTE',
     distribuidora: '',
+    pendencias: {},
     idParceiro: session.user.idParceiro || '',
     oportunidade: {
       id: '',
@@ -77,6 +79,7 @@ function ControlHomologation({ homologationId, session, closeModal }: ControlHom
       numeroInstalacao: '',
       numeroCliente: '',
       grupo: 'RESIDENCIAL',
+      dependentes: [],
     },
     documentacao: {
       formaAssinatura: 'FÍSICA',
@@ -100,61 +103,6 @@ function ControlHomologation({ homologationId, session, closeModal }: ControlHom
     },
     dataInsercao: new Date().toISOString(),
   })
-  const [files, setFiles] = useState<TFileHolder>({})
-  async function handleUploadFiles({ files, homologationId }: { files: TFileHolder; homologationId: string }) {
-    var links: TFileReference[] = []
-    try {
-      const uploadPromises = Object.entries(files).map(async ([key, value]) => {
-        const file = value
-        if (!file) return
-        if (typeof file == 'string') {
-          const fileRef = ref(storage, file)
-          const metaData = await getMetadata(fileRef)
-          const format = metaData.contentType && fileTypes[metaData.contentType] ? fileTypes[metaData.contentType].title : 'INDEFINIDO'
-          const link: TFileReference = {
-            idParceiro: session.user.idParceiro || '',
-            idHomologacao: homologationId,
-            titulo: key,
-            formato: format,
-            url: file,
-            tamanho: metaData.size,
-            autor: {
-              id: session.user.id,
-              nome: session.user.nome,
-              avatar_url: session.user.avatar_url,
-            },
-            dataInsercao: new Date().toISOString(),
-          }
-          links.push(link)
-        }
-        if (typeof file != 'string') {
-          const formattedFileName = key.toLowerCase().replaceAll(' ', '_')
-          const vinculationId = homologationId
-          // Uploading file to Firebase and getting url and format
-          const { url, format, size } = await uploadFile({ file: file, fileName: formattedFileName, vinculationId: vinculationId })
-          const link: TFileReference = {
-            idParceiro: session.user.idParceiro || '',
-            idHomologacao: homologationId,
-            titulo: key,
-            formato: format,
-            url: url,
-            tamanho: size,
-            autor: {
-              id: session.user.id,
-              nome: session.user.nome,
-              avatar_url: session.user.avatar_url,
-            },
-            dataInsercao: new Date().toISOString(),
-          }
-          links.push(link)
-        }
-      })
-      await Promise.all(uploadPromises)
-      return links
-    } catch (error) {
-      throw error
-    }
-  }
 
   const { mutate: handleUpdateHomologation, isPending } = useMutationWithFeedback({
     mutationKey: ['edit-homologation', homologationId],
@@ -166,8 +114,9 @@ function ControlHomologation({ homologationId, session, closeModal }: ControlHom
     if (homologation) setInfoHolder(homologation)
   }, [homologation])
   return (
-    <div id="new-technical-analysis" className="fixed bottom-0 left-0 right-0 top-0 z-[100] bg-[rgba(0,0,0,.85)]">
-      <div className="relative left-[50%] top-[50%] z-[100] h-[80%] max-h-[80%] w-[90%] translate-x-[-50%] translate-y-[-50%] overflow-hidden rounded-md bg-[#fff] p-[10px] lg:w-[80%]">
+    <Dialog.Root open onOpenChange={closeModal}>
+      <Dialog.Overlay className="fixed inset-0 z-[100] bg-[rgba(0,0,0,.85)] backdrop-blur-sm" />
+      <Dialog.Content className="fixed left-[50%] top-[50%] z-[100] h-[80%] w-[90%] translate-x-[-50%] translate-y-[-50%] rounded-md bg-[#fff] p-[10px] lg:w-[70%]">
         <div className="flex h-full w-full flex-col">
           <div className="flex flex-col items-center justify-between border-b border-gray-200 px-2 pb-2 text-lg lg:flex-row">
             <div className="flex flex-col">
@@ -184,7 +133,7 @@ function ControlHomologation({ homologationId, session, closeModal }: ControlHom
             </button>
           </div>
           {isLoading ? <LoadingComponent /> : null}
-          {isError ? <ErrorComponent msg="Oops, houve um erro ao buscar a homologação." /> : null}
+          {isError ? <ErrorComponent msg={getErrorMessage(error)} /> : null}
           {isSuccess ? (
             <>
               <div className="flex grow flex-col gap-y-2 overflow-y-auto overscroll-y-auto px-2 py-1 scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300">
@@ -225,8 +174,8 @@ function ControlHomologation({ homologationId, session, closeModal }: ControlHom
             </>
           ) : null}
         </div>
-      </div>
-    </div>
+      </Dialog.Content>
+    </Dialog.Root>
   )
 }
 
