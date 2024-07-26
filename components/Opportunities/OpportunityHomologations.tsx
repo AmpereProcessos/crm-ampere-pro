@@ -3,11 +3,11 @@ import { IoMdArrowDropdownCircle, IoMdArrowDropupCircle } from 'react-icons/io'
 import { MdAdd } from 'react-icons/md'
 import LoadingComponent from '../utils/LoadingComponent'
 import ErrorComponent from '../utils/ErrorComponent'
-import NewHomologation from '../Modals/Homologation/NewHomologation'
 import { Session } from 'next-auth'
 import { TOpportunityDTOWithClient } from '@/utils/schemas/opportunity.schema'
 import { useOpportunityHomologations } from '@/utils/queries/homologations'
 import OpportunityHomologationCard from '../Cards/OpportunityHomologation'
+import NewHomologation from '@/app/components/Modals/Homologations/NewHomologation'
 
 type OpportunityHomologationsProps = {
   opportunity: TOpportunityDTOWithClient
