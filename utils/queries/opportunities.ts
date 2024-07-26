@@ -5,6 +5,7 @@ import {
   TOpportunityDTOWithClientAndPartnerAndFunnelReferences,
   TOpportunityDTOWithFunnelReferenceAndActivities,
   TOpportunityDTOWithFunnelReferenceAndActivitiesByStatus,
+  TOpportunitySimplifiedDTO,
   TOpportunitySimplifiedDTOWithProposalAndActivitiesAndFunnels,
   TOpportunityWithFunnelReferenceAndActivitiesByStatus,
   TPersonalizedOpportunitiesFilter,
@@ -136,5 +137,21 @@ export function useOpportunitiesQueryOptions() {
     queryKey: ['opportunities-query-options'],
     queryFn: fetchOpportunitiesQueryOptions,
     refetchOnWindowFocus: false,
+  })
+}
+
+async function fetchOpportunitiesUltraSimplified() {
+  try {
+    const { data } = await axios.get('/api/opportunities/simplified')
+    return data.data as TOpportunitySimplifiedDTO[]
+  } catch (error) {
+    throw error
+  }
+}
+
+export function useOpportunitiesUltraSimplified() {
+  return useQuery({
+    queryKey: ['opportunities-ultra-simplified'],
+    queryFn: fetchOpportunitiesUltraSimplified,
   })
 }

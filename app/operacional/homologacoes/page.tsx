@@ -1,4 +1,4 @@
-import HomologationsControlPage from '@/app/components/Homologations/HomologationPage'
+import HomologationsControlPage from '@/app/components/Homologations/Page/HomologationPage'
 import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
 import React from 'react'

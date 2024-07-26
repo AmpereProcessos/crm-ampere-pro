@@ -19,14 +19,20 @@ const HolderSchema = z.object({
     .min(12, 'O contato do titular deve possuir ao menos 12 caractéres.'),
 })
 const HomologationOpportunitySchema = z.object({
-  id: z.string({
-    required_error: 'ID de referência da oportunidade não fornecido.',
-    invalid_type_error: 'Tipo não válido para ID de referência da oportunidade.',
-  }),
-  nome: z.string({
-    required_error: 'Nome da oportunidade de referência não informado.',
-    invalid_type_error: 'Tipo não válido para o nome da oportunidade de referência.',
-  }),
+  id: z
+    .string({
+      required_error: 'ID de referência da oportunidade não fornecido.',
+      invalid_type_error: 'Tipo não válido para ID de referência da oportunidade.',
+    })
+    .optional()
+    .nullable(),
+  nome: z
+    .string({
+      required_error: 'Nome da oportunidade de referência não informado.',
+      invalid_type_error: 'Tipo não válido para o nome da oportunidade de referência.',
+    })
+    .optional()
+    .nullable(),
 })
 const HomologationAccessStatusSchema = z.union(
   [

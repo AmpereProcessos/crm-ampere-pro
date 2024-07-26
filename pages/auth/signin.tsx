@@ -30,6 +30,8 @@ function SignIn() {
       password: user.password,
       redirect: false,
     })
+
+    console.log('SIGNIN', signInResponse)
     if (!signInResponse?.ok) {
       toast.error(signInResponse?.error ? signInResponse?.error : 'Erro ao fazer login.')
       setLoading(false)
@@ -56,7 +58,14 @@ function SignIn() {
           </h1>
           <AiFillThunderbolt size={27} color="#fead41" />
         </div>
-        <form className="flex w-full flex-col items-center justify-center" onSubmit={handleLogin}>
+        <form
+          className="flex w-full flex-col items-center justify-center"
+          onSubmit={(e) => {
+            e.preventDefault()
+
+            handleLogin(e)
+          }}
+        >
           <div className="flex w-full flex-col">
             <h1 className="w-full text-start font-Inter text-sm leading-none tracking-tight text-gray-500">Seja bem vindo !</h1>
             <h1 className="w-full text-start font-Inter text-sm leading-none tracking-tight text-gray-500">

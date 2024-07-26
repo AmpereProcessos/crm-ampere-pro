@@ -1,19 +1,19 @@
 import { TFileHolder } from '@/utils/schemas/file-reference.schema'
 import React, { useState } from 'react'
-import TextInput from '../../../components/Inputs/TextInput'
-import DocumentFileInput from '../../../components/Inputs/DocumentFileInput'
+import TextInput from '../../../../components/Inputs/TextInput'
+import DocumentFileInput from '../../../../components/Inputs/DocumentFileInput'
 import toast from 'react-hot-toast'
-import { useFileReferencesByOpportunityId } from '@/utils/queries/file-references'
+import { useFileReferences, useFileReferencesByOpportunityId } from '@/utils/queries/file-references'
 import { AiFillFile } from 'react-icons/ai'
 import { formatLongString } from '@/utils/methods'
 
 type AttachFilesProps = {
-  opportunityId: string
+  opportunityId?: string
   files: TFileHolder
   setFiles: React.Dispatch<React.SetStateAction<TFileHolder>>
 }
 function AttachFiles({ opportunityId, files, setFiles }: AttachFilesProps) {
-  const { data: fileReferences } = useFileReferencesByOpportunityId({ opportunityId })
+  const { data: fileReferences } = useFileReferences({ opportunityId })
   const [personalizedFile, setPersonalizedFile] = useState<{ titulo: string; arquivo: File | string | null }>({
     titulo: '',
     arquivo: null,

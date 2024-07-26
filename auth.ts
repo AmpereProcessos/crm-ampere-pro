@@ -16,67 +16,68 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       credentials: {},
       // @ts-ignore
       async authorize(credentials, req) {
-        // @ts-ignore
-        const { email, password } = credentials
-        const db = await connectToDatabase(process.env.MONGODB_URI, 'crm')
-        const usersCollection = db.collection('users')
-        const partnersCollection = db.collection('partners')
-        const userInDb = await usersCollection.findOne({ ativo: true, email: email })
+        try {
+          // @ts-ignore
+          const { email, password } = credentials
+          const db = await connectToDatabase(process.env.MONGODB_URI, 'crm')
+          const usersCollection = db.collection('users')
+          const partnersCollection = db.collection('partners')
+          const userInDb = await usersCollection.findOne({ ativo: true, email: email })
 
-        if (!userInDb) throw new createHttpError.BadRequest('Usuário não encontrado.')
+          if (!userInDb) throw new createHttpError.NotFound('Usuário não encontrado.')
 
-        let compareResult = bcrypt.compareSync(password, userInDb.senha)
-        if (!compareResult) throw new createHttpError.BadRequest('Senha incorreta.')
+          let compareResult = bcrypt.compareSync(password, userInDb.senha)
+          if (!compareResult) throw new createHttpError.Unauthorized('Senha incorreta.')
 
-        const userPartner = await partnersCollection.findOne({ _id: new ObjectId(userInDb.idParceiro) })
-        const user = {
-          id: userInDb._id,
-          administrador: userInDb.administrador,
-          telefone: userInDb.telefone,
-          email: userInDb.email,
-          nome: userInDb.nome,
-          avatar_url: userInDb.avatar_url,
-          idParceiro: userInDb.idParceiro,
-          idGrupo: userInDb.idGrupo,
-          permissoes: userInDb.permissoes,
-          parceiro: {
-            nome: userPartner?.nome,
-            logo_url: userPartner?.logo_url,
-          },
+          const userPartner = await partnersCollection.findOne({ _id: new ObjectId(userInDb.idParceiro) })
+          const user = {
+            id: userInDb._id,
+            administrador: userInDb.administrador,
+            telefone: userInDb.telefone,
+            email: userInDb.email,
+            nome: userInDb.nome,
+            avatar_url: userInDb.avatar_url,
+            idParceiro: userInDb.idParceiro,
+            idGrupo: userInDb.idGrupo,
+            permissoes: userInDb.permissoes,
+            parceiro: {
+              nome: userPartner?.nome,
+              logo_url: userPartner?.logo_url,
+            },
+          }
+          // If no error and we have user data, return it
+          if (user) {
+            return user
+          }
+          // Return null if user data could not be retrieved
+          return null
+        } catch (error) {
+          console.log('ERRO', error)
+          throw new Error('OOps, deu erro')
         }
-        // If no error and we have user data, return it
-        if (user) {
-          return user
-        }
-        // Return null if user data could not be retrieved
-        return null
       },
     }),
   ],
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
-      try {
-        // console.log('========================= SESSION ========================')
-        // console.log('USER', user)
-        // console.log('ACCOUNT', account)
-        // console.log('PROFILE', profile)
-        // console.log('EMAIL', email)
-        // console.log('CREDENTIALS', credentials)
-        // console.log('========================= SESSION ========================')
-        // if (!account || !profile) throw new createHttpError.InternalServerError('Oops, um erro desconhecido ocorreu durante a autenticação.')
-        // const { access_token, id_token } = account
-        // const { email: profileEmail } = profile
-        // const db = await connectToDatabase(process.env.MONGODB_URI, 'crm')
-        // const usersCollection = db.collection('users')
-        // const partnersCollection = db.collection('partners')
-        // const userInDb = await usersCollection.findOne({ ativo: true, email: profileEmail }, { projection: { nome: 1 } })
-        // console.log(userInDb)
-        // if (!userInDb) throw new createHttpError.Unauthorized('Usuário não encontrado.')
+      // console.log('========================= SESSION ========================')
+      // console.log('USER', user)
+      // console.log('ACCOUNT', account)
+      // console.log('PROFILE', profile)
+      // console.log('EMAIL', email)
+      // console.log('CREDENTIALS', credentials)
+      // console.log('========================= SESSION ========================')
+      // if (!account || !profile) throw new createHttpError.InternalServerError('Oops, um erro desconhecido ocorreu durante a autenticação.')
+      // const { access_token, id_token } = account
+      // const { email: profileEmail } = profile
+      // const db = await connectToDatabase(process.env.MONGODB_URI, 'crm')
+      // const usersCollection = db.collection('users')
+      // const partnersCollection = db.collection('partners')
+      // const userInDb = await usersCollection.findOne({ ativo: true, email: profileEmail }, { projection: { nome: 1 } })
+      // console.log(userInDb)
+      // if (!userInDb) throw new createHttpError.Unauthorized('Usuário não encontrado.')
 
-        return user
-      } catch (error) {
-        throw error
-      }
+      return user
     },
     async redirect({ url, baseUrl }) {
       return baseUrl

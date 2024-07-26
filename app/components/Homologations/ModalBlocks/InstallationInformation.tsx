@@ -1,8 +1,8 @@
 import { THomologation } from '@/utils/schemas/homologation.schema'
 import React from 'react'
-import TextInput from '../../../components/Inputs/TextInput'
+import TextInput from '../../../../components/Inputs/TextInput'
 import { ElectricalInstallationGroups, EnergyDistributorsOptions, SigningForms } from '@/utils/select-options'
-import SelectInput from '../../../components/Inputs/SelectInput'
+import SelectInput from '../../../../components/Inputs/SelectInput'
 
 type InstallationInformationProps = {
   infoHolder: THomologation

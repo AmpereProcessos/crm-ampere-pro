@@ -1,8 +1,8 @@
 import { THomologation } from '@/utils/schemas/homologation.schema'
 import React from 'react'
-import TextInput from '../../../components/Inputs/TextInput'
+import TextInput from '../../../../components/Inputs/TextInput'
 import { formatToCEP, getCEPInfo } from '@/utils/methods'
-import SelectInput from '../../../components/Inputs/SelectInput'
+import SelectInput from '../../../../components/Inputs/SelectInput'
 import { stateCities } from '@/utils/estados_cidades'
 import toast from 'react-hot-toast'
 

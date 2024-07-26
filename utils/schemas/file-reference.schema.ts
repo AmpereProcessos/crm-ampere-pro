@@ -98,6 +98,7 @@ export type TFileReferenceEntity = z.infer<typeof FileReferenceEntitySchema>
 export type TFileReferenceDTO = TFileReference & { _id: string }
 
 export type TFileHolder = { [key: string]: File | string | null }
+export type TFileListHolder = { [key: string]: FileList | string | null }
 
 export const FileReferencesQueryParamsSchema = z.object({
   clientId: z.string({ invalid_type_error: 'Tipo inválido para referência de cliente.' }).optional().nullable(),

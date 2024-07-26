@@ -5,6 +5,7 @@ import {
   TOpportunityDTOWithClient,
   TOpportunityDTOWithClientAndPartnerAndFunnelReferences,
   TOpportunitySimplified,
+  TOpportunitySimplifiedDTO,
 } from '@/utils/schemas/opportunity.schema'
 import { TProposal } from '@/utils/schemas/proposal.schema'
 import { Collection, Filter, MatchKeysAndValues, ObjectId, WithId } from 'mongodb'
@@ -69,6 +70,20 @@ export async function getOpportunitiesByQuery({ collection, query }: GetOpportun
       .toArray()) as WithId<TOpportunityByQueryResult>[]
 
     return opportunities
+  } catch (error) {
+    throw error
+  }
+}
+
+type GetOpportunitiesSimplifiedParams = {
+  collection: Collection<TOpportunity>
+  query: Filter<TOpportunity>
+}
+export async function getOpportunitiesSimplified({ collection, query }: GetOpportunitiesSimplifiedParams) {
+  try {
+    const projects = await collection.find({ ...query }, { projection: SimplifiedOpportunityWithProposalProjection, sort: { _id: -1 } }).toArray()
+
+    return projects as TOpportunitySimplified[]
   } catch (error) {
     throw error
   }

@@ -1,8 +1,8 @@
 import { THomologation } from '@/utils/schemas/homologation.schema'
 import React from 'react'
-import SelectInput from '../../../components/Inputs/SelectInput'
+import SelectInput from '../../../../components/Inputs/SelectInput'
 import { HomologationControlStatus } from '@/utils/select-options'
-import NumberInput from '../../../components/Inputs/NumberInput'
+import NumberInput from '../../../../components/Inputs/NumberInput'
 
 type StatusInformationProps = {
   infoHolder: THomologation

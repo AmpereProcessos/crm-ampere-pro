@@ -12,18 +12,18 @@ import { VscChromeClose } from 'react-icons/vsc'
 import ErrorComponent from '@/components/utils/ErrorComponent'
 import LoadingComponent from '@/components/utils/LoadingComponent'
 
-import EquipmentsComposition from '@/app/components/Homologations/EquipmentsComposition'
-import HolderInformation from '@/app/components/Homologations/HolderInformation'
-import InstallationInformation from '@/app/components/Homologations/InstallationInformation'
-import LocationInformation from '@/app/components/Homologations/LocationInformation'
-import DocumentationInformation from '@/app/components/Homologations/DocumentationInformation'
-import AccessInformation from '@/app/components/Homologations/AccessInformation'
-import VistoryInformation from '@/app/components/Homologations/VistoryInformation'
-import UpdatesInformation from '@/app/components/Homologations/UpdatesInformation'
-import ActivitiesInformation from '@/app/components/Homologations/ActivitiesInformation'
-import HomologationFiles from '@/app/components/Homologations/Files'
-import StatusInformation from '@/app/components/Homologations/StatusInformation'
-import ApplicantBlock from '@/app/components/Homologations/ApplicantBlock'
+import EquipmentsComposition from '@/app/components/Homologations/ModalBlocks/EquipmentsComposition'
+import HolderInformation from '@/app/components/Homologations/ModalBlocks/HolderInformation'
+import InstallationInformation from '@/app/components/Homologations/ModalBlocks/InstallationInformation'
+import LocationInformation from '@/app/components/Homologations/ModalBlocks/LocationInformation'
+import DocumentationInformation from '@/app/components/Homologations/ModalBlocks/DocumentationInformation'
+import AccessInformation from '@/app/components/Homologations/ModalBlocks/AccessInformation'
+import VistoryInformation from '@/app/components/Homologations/ModalBlocks/VistoryInformation'
+import UpdatesInformation from '@/app/components/Homologations/ModalBlocks/UpdatesInformation'
+import ActivitiesInformation from '@/app/components/Homologations/ModalBlocks/ActivitiesInformation'
+import HomologationFiles from '@/app/components/Homologations/ModalBlocks/Files'
+import StatusInformation from '@/app/components/Homologations/ModalBlocks/StatusInformation'
+import ApplicantBlock from '@/app/components/Homologations/ModalBlocks/ApplicantBlock'
 
 import { getErrorMessage } from '@/lib/methods/errors'
 
@@ -33,6 +33,7 @@ import { useHomologationById } from '@/utils/queries/homologations'
 
 import { useMutationWithFeedback } from '@/utils/mutations/general-hook'
 import { editHomologation } from '@/utils/mutations/homologations'
+import PendenciesInformation from '../../Homologations/ModalBlocks/PendenciesInformation'
 
 type ControlHomologationProps = {
   homologationId: string
@@ -149,6 +150,7 @@ function ControlHomologation({ homologationId, session, closeModal }: ControlHom
 
                 <ActivitiesInformation session={session} homologation={homologation} opportunity={homologation.oportunidade} />
                 <UpdatesInformation session={session} infoHolder={infoHolder} setInfoHolder={setInfoHolder} />
+                <PendenciesInformation infoHolder={infoHolder} setInfoHolder={setInfoHolder as React.Dispatch<React.SetStateAction<THomologation>>} />
                 <StatusInformation infoHolder={infoHolder} setInfoHolder={setInfoHolder as React.Dispatch<React.SetStateAction<THomologation>>} />
                 <ApplicantBlock infoHolder={infoHolder} setInfoHolder={setInfoHolder as React.Dispatch<React.SetStateAction<THomologation>>} />
                 <HolderInformation infoHolder={infoHolder} setInfoHolder={setInfoHolder as React.Dispatch<React.SetStateAction<THomologation>>} />
@@ -159,7 +161,6 @@ function ControlHomologation({ homologationId, session, closeModal }: ControlHom
                 <DocumentationInformation infoHolder={infoHolder} setInfoHolder={setInfoHolder} />
                 <AccessInformation infoHolder={infoHolder} setInfoHolder={setInfoHolder} />
                 <VistoryInformation infoHolder={infoHolder} setInfoHolder={setInfoHolder} />
-                {/* <AttachFiles opportunityId={homologation.oportunidade.id} files={files} setFiles={setFiles} /> */}
               </div>
               <div className="flex w-full items-center justify-end p-2">
                 <button

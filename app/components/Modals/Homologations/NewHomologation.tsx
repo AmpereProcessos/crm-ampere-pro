@@ -13,12 +13,12 @@ import { VscChromeClose } from 'react-icons/vsc'
 import ErrorComponent from '@/components/utils/ErrorComponent'
 import LoadingComponent from '@/components/utils/LoadingComponent'
 
-import ApplicantBlock from '@/app/components/Homologations/ApplicantBlock'
-import AttachFiles from '@/app/components/Homologations/AttachFiles'
-import EquipmentsComposition from '@/app/components/Homologations/EquipmentsComposition'
-import HolderInformation from '@/app/components/Homologations/HolderInformation'
-import InstallationInformation from '@/app/components/Homologations/InstallationInformation'
-import LocationInformation from '@/app/components/Homologations/LocationInformation'
+import ApplicantBlock from '@/app/components/Homologations/ModalBlocks/ApplicantBlock'
+import AttachFiles from '@/app/components/Homologations/ModalBlocks/AttachFiles'
+import EquipmentsComposition from '@/app/components/Homologations/ModalBlocks/EquipmentsComposition'
+import HolderInformation from '@/app/components/Homologations/ModalBlocks/HolderInformation'
+import InstallationInformation from '@/app/components/Homologations/ModalBlocks/InstallationInformation'
+import LocationInformation from '@/app/components/Homologations/ModalBlocks/LocationInformation'
 
 import { getErrorMessage } from '@/lib/methods/errors'
 import { uploadFile } from '@/lib/methods/firebase'
@@ -35,18 +35,19 @@ import { storage } from '@/services/firebase/storage-config'
 import { fileTypes } from '@/utils/constants'
 
 type NewHomologationProps = {
-  opportunity: TOpportunityDTOWithClient
+  opportunity?: TOpportunityDTOWithClient
   session: Session
   closeModal: () => void
+  affectedQueryKey: any[]
 }
-function NewHomologation({ opportunity, session, closeModal }: NewHomologationProps) {
+function NewHomologation({ opportunity, session, closeModal, affectedQueryKey }: NewHomologationProps) {
   const queryClient = useQueryClient()
   const [infoHolder, setInfoHolder] = useState<THomologation>({
     status: 'PENDENTE',
     idParceiro: session.user.idParceiro || '',
     pendencias: {},
     distribuidora: '',
-    idProposta: opportunity.idPropostaAtiva,
+    idProposta: opportunity?.idPropostaAtiva,
     requerente: {
       id: session.user.id,
       nome: session.user.nome,
@@ -55,29 +56,29 @@ function NewHomologation({ opportunity, session, closeModal }: NewHomologationPr
       avatar_url: session.user.avatar_url,
     },
     oportunidade: {
-      id: opportunity._id,
-      nome: opportunity.nome,
+      id: opportunity?._id,
+      nome: opportunity?.nome,
     },
     titular: {
-      nome: opportunity.instalacao.nomeTitular || '',
-      identificador: opportunity.cliente.cpfCnpj || '',
-      contato: opportunity.cliente.telefonePrimario || '',
+      nome: opportunity?.instalacao.nomeTitular || '',
+      identificador: opportunity?.cliente.cpfCnpj || '',
+      contato: opportunity?.cliente.telefonePrimario || '',
     },
     equipamentos: [],
     localizacao: {
-      cep: opportunity.localizacao.cep,
-      uf: opportunity.localizacao.uf,
-      cidade: opportunity.localizacao.cidade,
-      bairro: opportunity.localizacao.bairro,
-      endereco: opportunity.localizacao.endereco,
-      numeroOuIdentificador: opportunity.localizacao.numeroOuIdentificador,
-      complemento: opportunity.localizacao.complemento,
+      cep: opportunity?.localizacao.cep,
+      uf: opportunity?.localizacao.uf || '',
+      cidade: opportunity?.localizacao.cidade || '',
+      bairro: opportunity?.localizacao.bairro,
+      endereco: opportunity?.localizacao.endereco,
+      numeroOuIdentificador: opportunity?.localizacao.numeroOuIdentificador,
+      complemento: opportunity?.localizacao.complemento,
       // distancia: z.number().optional().nullable(),
     },
     instalacao: {
-      numeroInstalacao: opportunity.instalacao.numero || '',
+      numeroInstalacao: opportunity?.instalacao.numero || '',
       numeroCliente: '',
-      grupo: opportunity.instalacao.grupo || 'RESIDENCIAL',
+      grupo: opportunity?.instalacao.grupo || 'RESIDENCIAL',
       dependentes: [],
     },
     documentacao: {
@@ -187,7 +188,7 @@ function NewHomologation({ opportunity, session, closeModal }: NewHomologationPr
     mutationKey: ['create-homologation'],
     mutationFn: requestHomologation,
     queryClient: queryClient,
-    affectedQueryKey: ['opportunity-homologations', opportunity._id],
+    affectedQueryKey: affectedQueryKey, //['opportunity-homologations', opportunity?._id],
   })
   return (
     <Dialog.Root open onOpenChange={closeModal}>
@@ -226,8 +227,8 @@ function NewHomologation({ opportunity, session, closeModal }: NewHomologationPr
                 <HolderInformation infoHolder={infoHolder} setInfoHolder={setInfoHolder} />
                 <InstallationInformation infoHolder={infoHolder} setInfoHolder={setInfoHolder} />
                 <LocationInformation infoHolder={infoHolder} setInfoHolder={setInfoHolder} />
-                <EquipmentsComposition infoHolder={infoHolder} setInfoHolder={setInfoHolder} activeProposalId={opportunity.idPropostaAtiva} />
-                <AttachFiles opportunityId={opportunity._id} files={files} setFiles={setFiles} />
+                <EquipmentsComposition infoHolder={infoHolder} setInfoHolder={setInfoHolder} activeProposalId={opportunity?.idPropostaAtiva} />
+                <AttachFiles opportunityId={opportunity?._id} files={files} setFiles={setFiles} />
               </div>
               <div className="flex w-full items-center justify-end p-2">
                 <button

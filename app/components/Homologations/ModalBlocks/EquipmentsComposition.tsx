@@ -2,19 +2,19 @@ import { THomologation, THomologationEquipment } from '@/utils/schemas/homologat
 import { TInverter, TModule, TProductItem } from '@/utils/schemas/kits.schema'
 import React, { useState } from 'react'
 import toast from 'react-hot-toast'
-import SelectInput from '../../../components/Inputs/SelectInput'
+import SelectInput from '../../../../components/Inputs/SelectInput'
 
 import Inverters from '@/utils/json-files/pvinverters.json'
 import Modules from '@/utils/json-files/pvmodules.json'
-import NumberInput from '../../../components/Inputs/NumberInput'
-import TextInput from '../../../components/Inputs/TextInput'
+import NumberInput from '../../../../components/Inputs/NumberInput'
+import TextInput from '../../../../components/Inputs/TextInput'
 import { ImPower } from 'react-icons/im'
 import { FaIndustry, FaSolarPanel } from 'react-icons/fa'
 import { MdDelete } from 'react-icons/md'
 import { renderCategoryIcon } from '@/lib/methods/rendering'
 import { getInverterPeakPowerByProducts, getModulesPeakPotByProducts } from '@/lib/methods/extracting'
 import { TProduct } from '@/utils/schemas/products.schema'
-import UseActiveProposalProducts from './Utils/UseActiveProposalProducts'
+import UseActiveProposalProducts from '../Utils/UseActiveProposalProducts'
 type EquipmentsCompositionProps = {
   infoHolder: THomologation
   setInfoHolder: React.Dispatch<React.SetStateAction<THomologation>>

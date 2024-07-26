@@ -437,7 +437,18 @@ export const OpportunityWithClientSchema = z.object({
 })
 
 export type TOpportunity = z.infer<typeof GeneralOpportunitySchema>
-export type TOpportunitySimplified = Pick<TOpportunity, 'nome' | 'identificador' | 'responsaveis' | 'ganho' | 'perda'>
+export type TOpportunitySimplified = Pick<TOpportunity, 'nome' | 'identificador' | 'tipo' | 'idMarketing' | 'responsaveis' | 'ganho' | 'perda' | 'dataInsercao'>
+export const SimplifiedOpportunityProjection = {
+  _id: 1,
+  nome: 1,
+  identificador: 1,
+  tipo: 1,
+  idMarketing: 1,
+  responsaveis: 1,
+  ganho: 1,
+  perda: 1,
+  dataInsercao: 1,
+}
 
 export type TOpportunitySimplifiedWithProposalAndActivitiesAndFunnels = TOpportunitySimplified & {
   proposta: { nome: TProposal['nome']; valor: TProposal['valor']; potenciaPico: TProposal['potenciaPico'] }
@@ -458,10 +469,7 @@ export type TOpportunityWithFunnelReferenceAndActivities = TOpportunity & {
 // export type TOpportunityEntityWithFunnelReference = TOpportunityEntity & { funil: { id: string; idFunil: string; idEstagio: string } }
 
 export type TOpportunityDTO = TOpportunity & { _id: string }
-export type TOpportunitySimplifiedDTO = Pick<
-  TOpportunityDTO,
-  '_id' | 'nome' | 'identificador' | 'tipo' | 'idMarketing' | 'responsaveis' | 'ganho' | 'perda' | 'dataInsercao'
->
+export type TOpportunitySimplifiedDTO = TOpportunitySimplified & { _id: string }
 
 export type TOpportunitySimplifiedDTOWithProposal = TOpportunitySimplifiedDTO & {
   proposta: { nome: TProposal['nome']; valor: TProposal['valor']; potenciaPico: TProposal['potenciaPico'] }

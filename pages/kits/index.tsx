@@ -15,8 +15,7 @@ import { fetchKitsExportation, useKits } from '@/utils/queries/kits'
 import { IoMdArrowDropdownCircle, IoMdArrowDropupCircle } from 'react-icons/io'
 import KitBulkOperation from '@/components/Modals/Kit/BulkOperation'
 import { TbFileDownload, TbFileExport } from 'react-icons/tb'
-import { TBulkOperationKit, TKitDTO } from '@/utils/schemas/kits.schema'
-import { usePricingMethods } from '@/utils/queries/pricing-methods'
+
 import { formatDateAsLocale } from '@/lib/methods/formatting'
 import { getExcelFromJSON } from '@/lib/methods/excel-utils'
 import toast from 'react-hot-toast'
@@ -28,7 +27,6 @@ type TEditModal = {
 function Kits() {
   const { data: session, status } = useSession({ required: true })
   const { data: kits, status: kitsStatus, isSuccess, isLoading, isError, filters, setFilters } = useKits()
-  const { data: pricingMethods } = usePricingMethods()
 
   const [editModal, setEditModal] = useState<TEditModal>({ isOpen: false, id: null })
   const [newKitModalIsOpen, setNewKitModalIsOpen] = useState(false)
