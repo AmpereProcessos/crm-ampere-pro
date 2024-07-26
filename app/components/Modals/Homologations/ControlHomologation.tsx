@@ -34,6 +34,8 @@ import { useHomologationById } from '@/utils/queries/homologations'
 import { useMutationWithFeedback } from '@/utils/mutations/general-hook'
 import { editHomologation } from '@/utils/mutations/homologations'
 import PendenciesInformation from '../../Homologations/ModalBlocks/PendenciesInformation'
+import OpportunityVinculationMenu from '../../Homologations/ModalBlocks/Utils/OpportunityVinculationMenu'
+import OpportunityInformationBlock from '../../Homologations/ModalBlocks/OpportunityInformationBlock'
 
 type ControlHomologationProps = {
   homologationId: string
@@ -138,20 +140,11 @@ function ControlHomologation({ homologationId, session, closeModal }: ControlHom
           {isSuccess ? (
             <>
               <div className="flex grow flex-col gap-y-2 overflow-y-auto overscroll-y-auto px-2 py-1 scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300">
-                <div className="my-2 flex flex-col items-center justify-center">
-                  <h1 className="font-bold">OPORTUNIDADE</h1>
-                  <Link href={`/comercial/oportunidades/id/${infoHolder.oportunidade.id}`}>
-                    <div className="flex items-center gap-1 rounded-lg bg-cyan-500 px-2 py-1 text-white">
-                      <MdCode />
-                      <p className="text-sm font-bold tracking-tight">{infoHolder.oportunidade.nome}</p>
-                    </div>
-                  </Link>
-                </div>
-
+                <StatusInformation infoHolder={infoHolder} setInfoHolder={setInfoHolder as React.Dispatch<React.SetStateAction<THomologation>>} />
                 <ActivitiesInformation session={session} homologation={homologation} opportunity={homologation.oportunidade} />
                 <UpdatesInformation session={session} infoHolder={infoHolder} setInfoHolder={setInfoHolder} />
                 <PendenciesInformation infoHolder={infoHolder} setInfoHolder={setInfoHolder as React.Dispatch<React.SetStateAction<THomologation>>} />
-                <StatusInformation infoHolder={infoHolder} setInfoHolder={setInfoHolder as React.Dispatch<React.SetStateAction<THomologation>>} />
+                <OpportunityInformationBlock infoHolder={infoHolder} setInfoHolder={setInfoHolder as React.Dispatch<React.SetStateAction<THomologation>>} />
                 <ApplicantBlock infoHolder={infoHolder} setInfoHolder={setInfoHolder as React.Dispatch<React.SetStateAction<THomologation>>} />
                 <HolderInformation infoHolder={infoHolder} setInfoHolder={setInfoHolder as React.Dispatch<React.SetStateAction<THomologation>>} />
                 <HomologationFiles session={session} homologationId={homologationId} />

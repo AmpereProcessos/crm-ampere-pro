@@ -437,12 +437,16 @@ export const OpportunityWithClientSchema = z.object({
 })
 
 export type TOpportunity = z.infer<typeof GeneralOpportunitySchema>
-export type TOpportunitySimplified = Pick<TOpportunity, 'nome' | 'identificador' | 'tipo' | 'idMarketing' | 'responsaveis' | 'ganho' | 'perda' | 'dataInsercao'>
+export type TOpportunitySimplified = Pick<
+  TOpportunity,
+  'nome' | 'idParceiro' | 'identificador' | 'tipo' | 'idMarketing' | 'responsaveis' | 'ganho' | 'perda' | 'dataInsercao'
+>
 export const SimplifiedOpportunityProjection = {
   _id: 1,
   nome: 1,
   identificador: 1,
   tipo: 1,
+  idParceiro: 1,
   idMarketing: 1,
   responsaveis: 1,
   ganho: 1,

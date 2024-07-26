@@ -3,7 +3,6 @@ import { THomologation } from '@/utils/schemas/homologation.schema'
 import React, { useState } from 'react'
 import SelectWithImages from '../../../../components/Inputs/SelectWithImages'
 import { formatNameAsInitials } from '@/lib/methods/formatting'
-import TextInput from '../../../../components/Inputs/TextInput'
 
 type ApplicantBlockProps = {
   infoHolder: THomologation
