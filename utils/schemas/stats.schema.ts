@@ -57,12 +57,14 @@ export type TGeneralStats = {
       projetosGanhos: number
       projetosPerdidos: number
       totalVendido: number
+      potenciaVendida: number
     }
     ATUAL: {
       projetosCriados: number
       projetosGanhos: number
       projetosPerdidos: number
       totalVendido: number
+      potenciaVendida: number
     }
   }
   ganhos: {

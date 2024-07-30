@@ -1,17 +1,13 @@
-import { useUsers } from '@/utils/queries/users'
-import { TActivity } from '@/utils/schemas/activities.schema'
-import { THomologation, THomologationDTO } from '@/utils/schemas/homologation.schema'
-import { useQueryClient } from '@tanstack/react-query'
-import { AnimatePresence, motion } from 'framer-motion'
-import { Session } from 'next-auth'
 import React, { useState } from 'react'
+import { Session } from 'next-auth'
+
+import { THomologation, THomologationDTO } from '@/utils/schemas/homologation.schema'
 
 import NewActivityMenu from '@/components/Activities/NewActivityMenu'
 import { useActivitiesByHomologationId } from '@/utils/queries/activities'
 import LoadingComponent from '@/components/utils/LoadingComponent'
 import ErrorComponent from '@/components/utils/ErrorComponent'
 import HomologationActivity from '@/components/Cards/HomologationActivity'
-import { AiFillCloseCircle, AiFillEdit } from 'react-icons/ai'
 import { IoMdArrowDropdownCircle, IoMdArrowDropupCircle } from 'react-icons/io'
 
 type ActivitiesInformationProps = {

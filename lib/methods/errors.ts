@@ -3,7 +3,8 @@ import createHttpError from 'http-errors'
 import { ZodError } from 'zod'
 
 export function getErrorMessage(error: any) {
-  console.log('ERRO', error)
+  const isDefaultError = !!error.response && !!error.response.data && !!error.response.data.message
+  if (isDefaultError) return error.response.data.message as string
   if (createHttpError.isHttpError(error) && error.expose) return error.message as string
   if (error instanceof AxiosError) {
     const personalizedHttpError = error?.response?.data.error

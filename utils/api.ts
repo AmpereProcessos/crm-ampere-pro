@@ -8,6 +8,7 @@ import { ZodError } from 'zod'
 import { TSessionUser, TUser } from './schemas/user.schema'
 
 import { auth } from '@/auth'
+import { NextRequest, NextResponse } from 'next/server'
 
 export interface ErrorResponse {
   error: {
@@ -21,7 +22,8 @@ type ApiMethodHandlers = {
 }
 
 // Validação de sessão para rotas autenticadas
-export async function validateAuthentication(req: NextApiRequest, res: NextApiResponse) {
+export async function validateAuthentication(req: NextApiRequest | NextRequest, res: NextApiResponse | typeof NextResponse) {
+  // @ts-ignore
   const sessionToken = await auth(req, res)
   if (!sessionToken) throw new createHttpError.Unauthorized(`Rota não acessível a usuários não autenticados.`)
   return sessionToken

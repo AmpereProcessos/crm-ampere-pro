@@ -1,12 +1,10 @@
 import { formatDateQuery } from '@/lib/methods/formatting'
 import { getPartnersSimplified } from '@/repositories/partner-simplified/query'
-import { getProjectTypes, getProjectTypesSimplified } from '@/repositories/project-type/queries'
+import { getProjectTypesSimplified } from '@/repositories/project-type/queries'
 import { getOpportunityCreators } from '@/repositories/users/queries'
 import connectToDatabase from '@/services/mongodb/crm-db-connection'
 import { apiHandler, validateAuthenticationWithSession, validateAuthorization } from '@/utils/api'
-import { ISession } from '@/utils/models'
-import { TActivity, TActivityDTO } from '@/utils/schemas/activities.schema'
-import { TOpportunityHistory } from '@/utils/schemas/opportunity-history.schema'
+import { TActivity } from '@/utils/schemas/activities.schema'
 import { TOpportunity } from '@/utils/schemas/opportunity.schema'
 import { TPartner, TPartnerSimplifiedDTO } from '@/utils/schemas/partner.schema'
 import { TProjectType, TProjectTypeDTOSimplified } from '@/utils/schemas/project-types.schema'
@@ -119,7 +117,7 @@ type TOpportunitySimplifiedResult = {
   responsaveis: TOpportunity['responsaveis']
   ganho: TOpportunity['ganho']
   perda: TOpportunity['perda']
-  proposta: { valor: number }[]
+  proposta: { valor: number; potenciaPico: number }[]
   dataInsercao: TOpportunity['dataInsercao']
 }
 type GetSimplifiedInfoParams = {
@@ -159,6 +157,7 @@ async function getSimplifiedInfo({
       ganho: 1,
       perda: 1,
       'proposta.valor': 1,
+      'proposta.potenciaPico': 1,
       dataInsercao: 1,
     }
     const result = (await opportunitiesCollection
@@ -169,6 +168,7 @@ async function getSimplifiedInfo({
       responsaveis: r.responsaveis,
       ganho: r.ganho,
       valorProposta: r.proposta[0] ? r.proposta[0].valor : 0,
+      potenciaProposta: r.proposta[0] ? r.proposta[0].potenciaPico : 0,
       dataPerda: r.perda.data,
       motivoPerda: r.perda.descricaoMotivo,
       dataInsercao: r.dataInsercao,
@@ -188,6 +188,7 @@ async function getSimplifiedInfo({
         const wasSignedWithinPreviousPeriod = hasContractSigned && signatureDate >= afterWithMarginDate && signatureDate <= beforeWithMarginDate
 
         const proposalValue = current.valorProposta
+        const proposalPower = current.potenciaProposta
         // Lost related checkings
         const lostDate = !!current.dataPerda ? new Date(current.dataPerda) : null
         const isLostProject = !!lostDate
@@ -199,12 +200,14 @@ async function getSimplifiedInfo({
         if (wasSignedWithinCurrentPeriod) acc['ATUAL'].projetosGanhos += 1
         if (wasLostWithinCurrentPeriod) acc['ATUAL'].projetosPerdidos += 1
         if (wasSignedWithinCurrentPeriod) acc['ATUAL'].totalVendido += proposalValue
+        if (wasSignedWithinCurrentPeriod) acc['ATUAL'].potenciaVendida += proposalPower
 
         // Increasing ANTERIOR qtys based on checkings
         if (wasInsertedWithinPreviousPeriod) acc['ANTERIOR'].projetosCriados += 1
         if (wasSignedWithinPreviousPeriod) acc['ANTERIOR'].projetosGanhos += 1
         if (wasLostWithinPreviousPeriod) acc['ANTERIOR'].projetosPerdidos += 1
         if (wasSignedWithinPreviousPeriod) acc['ANTERIOR'].totalVendido += proposalValue
+        if (wasSignedWithinPreviousPeriod) acc['ANTERIOR'].potenciaVendida += proposalPower
 
         return acc
       },
@@ -214,12 +217,14 @@ async function getSimplifiedInfo({
           projetosGanhos: 0,
           projetosPerdidos: 0,
           totalVendido: 0,
+          potenciaVendida: 0,
         },
         ATUAL: {
           projetosCriados: 0,
           projetosGanhos: 0,
           projetosPerdidos: 0,
           totalVendido: 0,
+          potenciaVendida: 0,
         },
       }
     )

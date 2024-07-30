@@ -8,7 +8,7 @@ import { ObjectId } from 'mongodb'
 import MyMongoAdapter from './utils/integrations/auth/adapter'
 import clientPromise from './services/mongodb/mongo-client'
 
-export const { auth, handlers, signIn, signOut } = NextAuth({
+export const { auth, handlers, signIn, signOut, unstable_update } = NextAuth({
   providers: [
     Google({ clientId: process.env.GOOGLE_CLIENT_ID, clientSecret: process.env.GOOGLE_CLIENT_SECRET_KEY }),
     CredentialsProvider({

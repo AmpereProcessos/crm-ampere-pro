@@ -1,6 +1,6 @@
 import DateInput from '@/components/Inputs/DateInput'
 import { Sidebar } from '@/components/Sidebar'
-import { formatDateInputChange, formatToMoney } from '@/lib/methods/formatting'
+import { formatDateInputChange, formatDecimalPlaces, formatToMoney } from '@/lib/methods/formatting'
 import { formatDateForInput, getFirstDayOfMonth, getLastDayOfMonth } from '@/utils/methods'
 import { usePartnersSimplified } from '@/utils/queries/partners'
 import { useOpportunityCreators } from '@/utils/queries/users'
@@ -17,6 +17,7 @@ import OpenActivitiesBlock from './OpenActivitiesBlock'
 import MultipleSelectInput from '@/components/Inputs/MultipleSelectInput'
 import { useStats, useStatsQueryOptions } from '@/utils/queries/stats'
 import { FaListCheck } from 'react-icons/fa6'
+import { FaBolt } from 'react-icons/fa'
 
 const currentDate = new Date()
 const firstDayOfMonth = getFirstDayOfMonth(currentDate.getFullYear(), currentDate.getMonth()).toISOString()
@@ -92,37 +93,37 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
           <div className="flex w-full flex-col items-end justify-end gap-2 lg:flex-row">
             <div className="w-full lg:w-[300px]">
               <MultipleSelectInput
+                labelClassName="text-sm font-medium uppercase tracking-tight"
                 selectedItemLabel="TODOS OS USUÁRIOS"
                 selected={queryFilters.responsibles}
                 options={responsiblesSelectableOptions?.map((resp) => ({ id: resp._id || '', label: resp.nome || '', value: resp._id || '' })) || []}
                 handleChange={(value) => setQueryFilters((prev) => ({ ...prev, responsibles: value as string[] }))}
                 onReset={() => setQueryFilters((prev) => ({ ...prev, responsibles: userOpportunitiesScope }))}
-                showLabel={false}
                 label="USUÁRIOS"
                 width="100%"
               />
             </div>
             <div className="w-full lg:w-[300px]">
               <MultipleSelectInput
+                labelClassName="text-sm font-medium uppercase tracking-tight"
                 selectedItemLabel="TODOS OS PARCEIROS"
                 selected={queryFilters.partners}
                 options={partnersSelectableOptions?.map((resp) => ({ id: resp._id || '', label: resp.nome || '', value: resp._id || '' })) || []}
                 handleChange={(value) => setQueryFilters((prev) => ({ ...prev, partners: value as string[] }))}
                 onReset={() => setQueryFilters((prev) => ({ ...prev, partners: userPartnersScope }))}
-                showLabel={false}
-                label="USUÁRIOS"
+                label="PARCEIROS"
                 width="100%"
               />
             </div>
             <div className="w-full lg:w-[300px]">
               <MultipleSelectInput
+                labelClassName="text-sm font-medium uppercase tracking-tight"
                 selectedItemLabel="TODOS OS PROJETOS"
                 selected={queryFilters.projectTypes}
                 options={queryOptions?.projectTypes?.map((resp) => ({ id: resp._id || '', label: resp.nome || '', value: resp._id || '' })) || null}
                 handleChange={(value) => setQueryFilters((prev) => ({ ...prev, projectTypes: value as string[] }))}
                 onReset={() => setQueryFilters((prev) => ({ ...prev, projectTypes: null }))}
-                showLabel={false}
-                label="USUÁRIOS"
+                label="PROJETOS"
                 width="100%"
               />
             </div>
@@ -132,8 +133,8 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
               <div className="flex flex-col items-center gap-2 lg:flex-row">
                 <div className="w-full lg:w-[150px]">
                   <DateInput
-                    showLabel={false}
                     label="PERÍODO"
+                    showLabel={false}
                     value={formatDateForInput(queryFilters.period.after)}
                     handleChange={(value) =>
                       setQueryFilters((prev) => ({
@@ -149,8 +150,8 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
                 </div>
                 <div className="w-full lg:w-[150px]">
                   <DateInput
-                    showLabel={false}
                     label="PERÍODO"
+                    showLabel={false}
                     value={formatDateForInput(queryFilters.period.before)}
                     handleChange={(value) =>
                       setQueryFilters((prev) => ({
@@ -168,60 +169,74 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
             </div>
           </div>
           <div className="mt-2 flex w-full flex-col items-center justify-around gap-2 lg:flex-row">
-            <div className="flex min-h-[110px] w-full flex-col rounded-xl border border-gray-200 bg-[#fff] p-6 shadow-sm lg:w-1/5">
+            <div className="flex min-h-[110px] w-full flex-col rounded-xl border border-gray-200 bg-[#fff] p-6 shadow-sm lg:w-1/6">
               <div className="flex items-center justify-between">
                 <h1 className="text-sm font-medium uppercase tracking-tight">Projetos Criados</h1>
                 <VscDiffAdded />
               </div>
               <div className="mt-2 flex w-full flex-col">
-                <div className="text-2xl font-bold text-[#15599a]">{data?.simplificado.ATUAL.projetosCriados || 0}</div>
-                <p className="text-xs text-gray-500">{data?.simplificado.ANTERIOR.projetosCriados || 0} no último período</p>
+                <div className="text-xl font-bold text-[#15599a]">{data?.simplificado.ATUAL.projetosCriados || 0}</div>
+                <p className="text-xs text-gray-500 lg:text-[0.6rem]">{data?.simplificado.ANTERIOR.projetosCriados || 0} no último período</p>
               </div>
             </div>
-            <div className="flex min-h-[110px] w-full flex-col rounded-xl border border-gray-200 bg-[#fff] p-6 shadow-sm lg:w-1/5">
+            <div className="flex min-h-[110px] w-full flex-col rounded-xl border border-gray-200 bg-[#fff] p-6 shadow-sm lg:w-1/6">
               <div className="flex items-center justify-between">
                 <h1 className="text-sm font-medium uppercase tracking-tight">Projetos Ganhos</h1>
                 <BsPatchCheck />
               </div>
               <div className="mt-2 flex w-full flex-col">
-                <div className="text-2xl font-bold text-[#15599a]">{data?.simplificado.ATUAL.projetosGanhos || 0}</div>
-                <p className="text-xs text-gray-500">{data?.simplificado.ANTERIOR.projetosGanhos || 0} no último período</p>
+                <div className="text-xl font-bold text-[#15599a]">{data?.simplificado.ATUAL.projetosGanhos || 0}</div>
+                <p className="text-xs text-gray-500 lg:text-[0.6rem]">{data?.simplificado.ANTERIOR.projetosGanhos || 0} no último período</p>
               </div>
             </div>
-            <div className="flex min-h-[110px] w-full flex-col rounded-xl border border-gray-200 bg-[#fff] p-6 shadow-sm lg:w-1/5">
+            <div className="flex min-h-[110px] w-full flex-col rounded-xl border border-gray-200 bg-[#fff] p-6 shadow-sm lg:w-1/6">
               <div className="flex items-center justify-between">
                 <h1 className="text-sm font-medium uppercase tracking-tight">Projetos Perdidos</h1>
                 <AiOutlineCloseCircle size={'20px'} />
               </div>
               <div className="mt-2 flex w-full flex-col">
-                <div className="text-2xl font-bold text-[#15599a]">{data?.simplificado.ATUAL.projetosPerdidos || 0}</div>
-                <p className="text-xs text-gray-500">{data?.simplificado.ANTERIOR.projetosPerdidos || 0} no último período</p>
+                <div className="text-xl font-bold text-[#15599a]">{data?.simplificado.ATUAL.projetosPerdidos || 0}</div>
+                <p className="text-xs text-gray-500 lg:text-[0.6rem]">{data?.simplificado.ANTERIOR.projetosPerdidos || 0} no último período</p>
               </div>
             </div>
-            <div className="flex min-h-[110px] w-full flex-col rounded-xl border border-gray-200 bg-[#fff] p-6 shadow-sm lg:w-1/5">
+            <div className="flex min-h-[110px] w-full flex-col rounded-xl border border-gray-200 bg-[#fff] p-6 shadow-sm lg:w-1/6">
+              <div className="flex items-center justify-between">
+                <h1 className="text-sm font-medium uppercase tracking-tight">Potência Vendida</h1>
+                <FaBolt />
+              </div>
+              <div className="mt-2 flex w-full flex-col">
+                <div className="text-xl font-bold text-[#15599a]">
+                  {data?.simplificado.ATUAL.potenciaVendida ? formatDecimalPlaces(data.simplificado.ATUAL.potenciaVendida) : 0} kWp
+                </div>
+                <p className="text-xs text-gray-500 lg:text-[0.6rem]">
+                  {data?.simplificado.ANTERIOR.potenciaVendida ? formatDecimalPlaces(data.simplificado.ANTERIOR.potenciaVendida) : 0} kWp no último período
+                </p>
+              </div>
+            </div>
+            <div className="flex min-h-[110px] w-full flex-col rounded-xl border border-gray-200 bg-[#fff] p-6 shadow-sm lg:w-1/6">
               <div className="flex items-center justify-between">
                 <h1 className="text-sm font-medium uppercase tracking-tight">Total Vendido</h1>
                 <BsFileEarmarkText />
               </div>
               <div className="mt-2 flex w-full flex-col">
-                <div className="text-2xl font-bold text-[#15599a]">
+                <div className="text-xl font-bold text-[#15599a]">
                   {data?.simplificado.ATUAL.totalVendido ? formatToMoney(data.simplificado.ATUAL.totalVendido) : 0}
                 </div>
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-gray-500 lg:text-[0.6rem]">
                   {data?.simplificado.ANTERIOR.totalVendido ? formatToMoney(data.simplificado.ANTERIOR.totalVendido) : 0} no último período
                 </p>
               </div>
             </div>
-            <div className="flex min-h-[110px] w-full flex-col rounded-xl border border-gray-200 bg-[#fff] p-6 shadow-sm lg:w-1/5">
+            <div className="flex min-h-[110px] w-full flex-col rounded-xl border border-gray-200 bg-[#fff] p-6 shadow-sm lg:w-1/6">
               <div className="flex items-center justify-between">
                 <h1 className="text-sm font-medium uppercase tracking-tight">Ticket Médio</h1>
                 <BsTicketPerforated />
               </div>
               <div className="mt-2 flex w-full flex-col">
-                <div className="text-2xl font-bold text-[#15599a]">
+                <div className="text-xl font-bold text-[#15599a]">
                   {data?.simplificado.ATUAL.totalVendido ? formatToMoney(data.simplificado.ATUAL.totalVendido / data.simplificado.ATUAL.projetosGanhos) : 0}
                 </div>
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-gray-500 lg:text-[0.6rem]">
                   {data?.simplificado.ANTERIOR.totalVendido
                     ? formatToMoney(data.simplificado.ANTERIOR.totalVendido / data.simplificado.ANTERIOR.projetosGanhos)
                     : 0}{' '}

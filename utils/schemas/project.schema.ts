@@ -12,22 +12,6 @@ const PurchaseItemsSchema = z.object({
   qtde: z.number(),
   grandeza: z.string(),
 })
-const SupplySchema = z.object({
-  descricao: z.string(),
-  status: z.union([z.literal('PENDENTE'), z.literal('EM AGUARDO'), z.literal('COMPRA REALIZADA'), z.literal('CONCLUÍDO')]),
-  itens: z.array(PurchaseItemsSchema),
-  fornecedor: z.string(),
-  dataLiberacao: z.string().datetime().optional().nullable(),
-  dataPedido: z.string().datetime().optional().nullable(),
-  dataPagamento: z.string().datetime().optional().nullable(),
-  dataFaturamento: z.string().datetime().optional().nullable(),
-  dataPrevisaoEntrega: z.string().datetime().optional().nullable(),
-  dataEntrega: z.string().datetime().optional().nullable(),
-  rastreio: z.string(),
-  anotacoes: z.string(),
-  localEntrega: z.string(),
-  valorTotal: z.number(),
-})
 
 const ProjectObservationSchema = z.object({
   assunto: z.enum(['SERVIÇOS', 'PRODUTOS', 'NEGOCIAÇÃO', 'SUPRIMENTAÇÃO', 'EXECUÇÃO']),
