@@ -17,12 +17,10 @@ export function formatDateInputChange(value: any) {
   if (isNaN(new Date(value).getMilliseconds())) return undefined
   return new Date(value).toISOString()
 }
-
 export function formatToDateTime(date: string | null) {
   if (!date) return ''
   return dayjs(date).format('DD/MM/YYYY HH:mm')
 }
-
 export function formatDateQuery(date: string, type: 'start' | 'end', returnAs?: 'string' | 'date') {
   if (type == 'start') {
     if (returnAs == 'date') return dayjs(date).startOf('day').subtract(3, 'hour').toDate() as Date
@@ -43,7 +41,6 @@ export function formatNameAsInitials(name: string) {
   if (!firstLetter && !secondLetter) return 'N'
   return firstLetter + secondLetter
 }
-
 export function formatToMoney(value: string | number, tag: string = 'R$') {
   return `${tag} ${Number(value).toLocaleString('pt-br', {
     minimumFractionDigits: 2,
@@ -79,7 +76,6 @@ export function formatLocation({ location, includeUf, includeCity }: { location:
   addressStr += '.'
   return addressStr.toUpperCase()
 }
-
 export function formatWithoutDiacritics(string: string, useUpperCase?: boolean) {
   if (!useUpperCase) return string.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
   else

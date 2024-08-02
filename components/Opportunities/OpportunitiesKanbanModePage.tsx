@@ -28,7 +28,6 @@ import { useFunnelReferenceUpdate } from '@/utils/mutations/funnel-references'
 
 import { getExcelFromJSON } from '@/lib/methods/excel-utils'
 import { formatDateAsLocale } from '@/lib/methods/formatting'
-import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { TOpportunitiesPageModes } from '@/pages/comercial/oportunidades'
 import { FaRotate } from 'react-icons/fa6'
 
@@ -193,7 +192,7 @@ export default function OpportunitiesKanbanModePage({ session, funnelsOptions, r
     <div className="flex h-full flex-col md:flex-row">
       <Sidebar session={session} />
       <div className="flex w-full max-w-full grow flex-col overflow-x-hidden bg-[#f8f9fa] p-6">
-        <div className="border-[#000] flex flex-col items-center border-b pb-2 xl:flex-row">
+        <div className="flex flex-col items-center border-b border-[#000] pb-2 xl:flex-row">
           <div className="flex items-center gap-1">
             <div className="text-xl font-black leading-none tracking-tight md:text-2xl">OPORTUNIDADES</div>
             <button
@@ -207,7 +206,7 @@ export default function OpportunitiesKanbanModePage({ session, funnelsOptions, r
 
           <div className="flex grow flex-col items-center justify-end  gap-2 xl:flex-row">
             <PeriodDropdownFilter initialAfter={dateParam.after} initialBefore={dateParam.before} setDateParam={setDateParam} />
-            <div className="lg:w-[200px] w-full">
+            <div className="w-full lg:w-[200px]">
               <SelectInput
                 showLabel={false}
                 label="STATUS"
@@ -224,7 +223,7 @@ export default function OpportunitiesKanbanModePage({ session, funnelsOptions, r
                 width="100%"
               />
             </div>
-            <div className="lg:w-[200px] w-full">
+            <div className="w-full lg:w-[200px]">
               <SelectInput
                 label="Usuários"
                 showLabel={false}
@@ -247,7 +246,7 @@ export default function OpportunitiesKanbanModePage({ session, funnelsOptions, r
                 width="100%"
               />
             </div>
-            <div className="lg:w-[200px] w-full">
+            <div className="w-full lg:w-[200px]">
               <SelectInput
                 label="Funis"
                 showLabel={false}
@@ -267,7 +266,7 @@ export default function OpportunitiesKanbanModePage({ session, funnelsOptions, r
 
             <button
               onClick={() => handleExportData()}
-              className="h-[46.6px] bg-[#2c6e49] flex items-center justify-center gap-2 rounded-md border p-2 px-3 text-sm font-medium text-white shadow-sm duration-300 ease-in-out hover:scale-105"
+              className="flex h-[46.6px] items-center justify-center gap-2 rounded-md border bg-[#2c6e49] p-2 px-3 text-sm font-medium text-white shadow-sm duration-300 ease-in-out hover:scale-105"
             >
               <BsDownload style={{ fontSize: '18px' }} />
             </button>
@@ -275,16 +274,16 @@ export default function OpportunitiesKanbanModePage({ session, funnelsOptions, r
             <SearchOpportunities />
             <button
               onClick={() => setNewProjectModalIsOpen(true)}
-              className="h-[46.6px] bg-[#15599a] flex items-center justify-center gap-2 rounded-md border p-2 px-3 text-sm font-medium text-white shadow-sm duration-300 ease-in-out hover:scale-105"
+              className="flex h-[46.6px] items-center justify-center gap-2 rounded-md border bg-[#15599a] p-2 px-3 text-sm font-medium text-white shadow-sm duration-300 ease-in-out hover:scale-105"
             >
               <AiOutlinePlus style={{ fontSize: '18px' }} />
             </button>
           </div>
         </div>
         <DragDropContext onDragEnd={(e) => onDragEnd(e)}>
-          <div className="1.5xl:max-h- md:max-h-[500px] lg:max-h-[600px] 2.25xl:max-h-[800px] mt-2 flex w-full overflow-x-auto scrollbar-thin scrollbar-track-gray-100  scrollbar-thumb-gray-300">
+          <div className="1.5xl:max-h- mt-2 flex w-full overflow-x-auto scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300 md:max-h-[500px] lg:max-h-[600px]  2.25xl:max-h-[800px]">
             {!projects || !funnelsOptions ? (
-              <div className="min-h-[600px] flex w-full items-center justify-center">
+              <div className="flex min-h-[600px] w-full items-center justify-center">
                 <LoadingComponent />
               </div>
             ) : funnelsOptions.filter((funn) => funn._id == funnel)[0] ? (

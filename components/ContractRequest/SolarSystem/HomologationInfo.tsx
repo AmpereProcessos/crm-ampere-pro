@@ -2,12 +2,14 @@ import CheckboxInput from '@/components/Inputs/CheckboxInput'
 import NumberInput from '@/components/Inputs/NumberInput'
 import SelectInput from '@/components/Inputs/SelectInput'
 import TextInput from '@/components/Inputs/TextInput'
+import { cn } from '@/lib/utils'
 import { stateCities } from '@/utils/estados_cidades'
 import { formatToCEP, getCEPInfo } from '@/utils/methods'
 import { TContractRequest } from '@/utils/schemas/integrations/app-ampere/contract-request.schema'
-import React from 'react'
+import React, { useState } from 'react'
 import { toast } from 'react-hot-toast'
 import { AiOutlineSearch } from 'react-icons/ai'
+import { BsCheck } from 'react-icons/bs'
 type HomologationInfoProps = {
   requestInfo: TContractRequest
   setRequestInfo: React.Dispatch<React.SetStateAction<TContractRequest>>
@@ -17,6 +19,8 @@ type HomologationInfoProps = {
   goToNextStage: () => void
 }
 function HomologationInfo({ requestInfo, setRequestInfo, sameProjectHolder, setSameProjectHolder, goToPreviousStage, goToNextStage }: HomologationInfoProps) {
+  const [homologationModality, setHomologationModality] = useState<'CONVENCIONAL' | 'FAST TRACK'>('CONVENCIONAL')
+
   async function setAddressDataByCEP(cep: string) {
     const addressInfo = await getCEPInfo(cep)
     const toastID = toast.loading('Buscando informações sobre o CEP...', {
@@ -93,19 +97,68 @@ function HomologationInfo({ requestInfo, setRequestInfo, sameProjectHolder, setS
       toast.error('Por favor, preencha uma latitude válida.')
       return false
     }
+    if (homologationModality == 'FAST TRACK')
+      setRequestInfo((prev) => ({
+        ...prev,
+        observacoesHomologacao:
+          'A HOMOLOGAÇÃO SERÁ FEITA NA MODALIDADE FAST TRACK. NESSE SENTIDO O CLIENTE OPTA POR ABDICAR, PERMANENTEMENTE, DE DISTRUIÇÕES DE CRÉDITO.',
+      }))
     return true
   }
   return (
     <div className="flex w-full grow flex-col bg-[#fff] pb-2">
       <span className="py-2 text-center text-sm font-bold uppercase text-[#15599a]">DADOS DE HOMOLOGAÇÃO</span>
       <div className="flex w-full items-center justify-center">
-        <CheckboxInput
-          labelFalse="MESMO TITULAR DO CONTRATO"
-          labelTrue="MESMO TITULAR DO CONTRATO"
-          checked={sameProjectHolder}
-          handleChange={(value) => setSameProjectHolder(value)}
-        />
+        <div className="w-fit">
+          <CheckboxInput
+            labelFalse="MESMO TITULAR DO CONTRATO"
+            labelTrue="MESMO TITULAR DO CONTRATO"
+            checked={sameProjectHolder}
+            handleChange={(value) => setSameProjectHolder(value)}
+          />
+        </div>
       </div>
+      {/* <h1 className="w-full text-start text-sm font-medium tracking-tight">MODALIDADE DE HOMOLOGAÇÃO</h1>
+      <div className="flex w-full flex-col gap-2">
+        <div className="w-full rounded border border-blue-800 bg-blue-50 p-2">
+          <div className="flex w-full items-center justify-between gap-2">
+            <h1 className="text-sm font-bold text-blue-800">HOMOLOGAÇÃO CONVENCIONAL</h1>
+            <button
+              onClick={() => setHomologationModality('CONVENCIONAL')}
+              className={cn(
+                'flex h-[20px] w-[20px] items-center justify-center rounded-full border border-blue-800 p-2',
+                homologationModality == 'CONVENCIONAL' ? 'bg-blue-800 text-xs text-white' : ''
+              )}
+            ></button>
+          </div>
+          <p className="text-sm tracking-tight text-blue-700">
+            Modalidade convencional no qual a potência de homologação será a máxima possível liberada pela concessionária local.
+          </p>
+          <p className="text-sm tracking-tight text-blue-700">
+            Em casos em que a potência de contrato ultrapasse a de homologação, o prosseguimento se dará com o consentimento do cliente sobre possíveis riscos.
+          </p>
+        </div>
+        {requestInfo.potPico && requestInfo.potPico <= 7.5 ? (
+          <div className="w-full rounded border border-green-800 bg-green-50 p-2">
+            <div className="flex w-full items-center justify-between gap-2">
+              <h1 className="text-sm font-bold text-green-800">HOMOLOGAÇÃO FAST TRACK</h1>
+              <button
+                onClick={() => setHomologationModality('FAST TRACK')}
+                className={cn(
+                  'flex h-[20px] w-[20px] items-center justify-center rounded-full border border-green-800 p-2 text-xs',
+                  homologationModality == 'FAST TRACK' ? 'bg-green-800 text-white' : ''
+                )}
+              ></button>
+            </div>
+            <p className="text-sm tracking-tight text-green-700">
+              Nova modalidade liberada pela ANEEL que dispensa análise de potência para sistemas de até 7,5KW.
+            </p>
+            <p className="text-sm tracking-tight text-green-700">
+              <strong>IMPORTANTE:</strong> para participar dessa modalidade a instalação deve optar pela abdicação permanente de distribuição de créditos.
+            </p>
+          </div>
+        ) : null}
+      </div> */}
       <div className="flex flex-col gap-2 p-2 lg:grid lg:grid-cols-3">
         <h1 className="col-span-3 py-2 text-center font-bold text-[#fead61]">INFORMAÇÕES DA INSTALAÇÃO DO CLIENTE</h1>
         <div className="col-span-3 flex w-full items-center justify-center gap-2">

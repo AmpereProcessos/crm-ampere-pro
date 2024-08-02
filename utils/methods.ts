@@ -138,7 +138,6 @@ export function formatToPhone(value: string): string {
   value = value.replace(/(\d)(\d{4})$/, '$1-$2')
   return value
 }
-
 export function formatDateForInput(value: any) {
   if (!value) return undefined
   if (isNaN(new Date(value).getMilliseconds())) return undefined

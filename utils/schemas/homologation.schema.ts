@@ -107,8 +107,8 @@ const HomologationLocationSchema = z.object({
     .optional()
     .nullable(),
   complemento: z.string().optional().nullable(),
-  latitude: z.string({ invalid_type_error: 'Tipo não válido para latitude da localização da oportunidade.' }).optional().nullable(),
-  longitude: z.string({ invalid_type_error: 'Tipo não válido para longitude da localização da oportunidade.' }).optional().nullable(),
+  latitude: z.string({ invalid_type_error: 'Tipo não válido para latitude da localização da homologação.' }).optional().nullable(),
+  longitude: z.string({ invalid_type_error: 'Tipo não válido para longitude da localização da homologação.' }).optional().nullable(),
   // distancia: z.number().optional().nullable(),
 })
 const HomologationInstalationSchema = z.object({
@@ -274,6 +274,7 @@ const GeneralHomologationSchema = z.object({
     .number({ required_error: 'Potência de homologação não informada.', invalid_type_error: 'Tipo não válido para a potência de homologação.' })
     .optional()
     .nullable(),
+  observacoes: z.string({ invalid_type_error: 'Tipo não válido para as observações da homologação.' }).optional().nullable(),
   pendencias: HomologationPendencies,
   distribuidora: z.string({
     required_error: 'Nome da concessionária/distribuidora de energia não informada.',

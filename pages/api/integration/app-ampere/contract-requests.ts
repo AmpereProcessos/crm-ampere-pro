@@ -30,7 +30,7 @@ const createRequest: NextApiHandler<PostResponse> = async (req, res) => {
 
   const db = await connectToRequestsDatabase(process.env.OPERATIONAL_MONGODB_URI)
   const collection: Collection<TContractRequest> = db.collection('contrato')
-  const partnersCollection: Collection<TPartner> = db.collection('partners')
+  const partnersCollection: Collection<TPartner> = crmDb.collection('partners')
   // Getting CRM project informations
   const crmOpportunity = await crmOpportunitiesCollection.findOne({ _id: new ObjectId(opportunityId) })
 
