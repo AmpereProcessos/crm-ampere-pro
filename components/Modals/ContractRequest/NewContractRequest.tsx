@@ -1,3 +1,4 @@
+import EnergyConsortiumForm from '@/components/ContractRequest/EnergyConsortiumForm'
 import HomologationForm from '@/components/ContractRequest/HomologationForm'
 import OeMForm from '@/components/ContractRequest/OeMForm'
 import SolarSystemForm from '@/components/ContractRequest/SolarSystemForm'
@@ -237,7 +238,9 @@ function NewContractRequest({ closeModal, proposeInfo, client, session, responsi
                 }
               />
             </div>
-            {!['OPERAÇÃO E MANUTENÇÃO', 'HOMOLOGAÇÃO', 'SEGURO DE SISTEMA FOTOVOLTAICO'].includes(proposeInfo?.oportunidadeDados.tipo.titulo) ? (
+            {!['OPERAÇÃO E MANUTENÇÃO', 'HOMOLOGAÇÃO', 'SEGURO DE SISTEMA FOTOVOLTAICO', 'CONSÓRCIO DE ENERGIA'].includes(
+              proposeInfo?.oportunidadeDados.tipo.titulo
+            ) ? (
               <SolarSystemForm requestInfo={requestInfo} setRequestInfo={setRequestInfo} proposeInfo={proposeInfo} />
             ) : null}
             {proposeInfo?.oportunidadeDados.tipo.titulo == 'OPERAÇÃO E MANUTENÇÃO' ? (
@@ -255,6 +258,9 @@ function NewContractRequest({ closeModal, proposeInfo, client, session, responsi
             ) : null}
             {proposeInfo.oportunidadeDados.tipo.titulo == 'SEGURO DE SISTEMA FOTOVOLTAICO' ? (
               <SolarSystemInsuranceForm requestInfo={requestInfo} setRequestInfo={setRequestInfo} proposeInfo={proposeInfo} closeForm={() => closeModal()} />
+            ) : null}
+            {proposeInfo?.oportunidadeDados.tipo.titulo == 'CONSÓRCIO DE ENERGIA' ? (
+              <EnergyConsortiumForm requestInfo={requestInfo} setRequestInfo={setRequestInfo} proposeInfo={proposeInfo} closeForm={() => closeModal()} />
             ) : null}
           </div>
         </div>
