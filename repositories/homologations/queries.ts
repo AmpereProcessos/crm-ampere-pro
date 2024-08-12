@@ -14,6 +14,7 @@ export async function getHomologationById({ collection, id, query }: GetHomologa
     throw error
   }
 }
+
 type GetHomologationByOpportunityIdParams = {
   collection: Collection<THomologation>
   opportunityId: string
@@ -36,7 +37,6 @@ type GetPartnerHomologationsParams = {
 export async function getPartnerHomologations({ collection, query }: GetPartnerHomologationsParams) {
   try {
     const homologations = await collection.find({ ...query }, { sort: { _id: -1 } }).toArray()
-
     return homologations
   } catch (error) {
     throw error

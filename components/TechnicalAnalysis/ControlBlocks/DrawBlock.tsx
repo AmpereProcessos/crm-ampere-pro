@@ -65,7 +65,7 @@ function DrawBlock({ infoHolder, setInfoHolder, changes, setChanges, updateAnaly
                 value: 'SOLAR EDGE DESIGN',
               },
               { id: 2, label: 'REVIT 3D', value: 'REVIT 3D' },
-              { id: 4, label: 'AUTOCAD 2D', value: 'AUTOCAD 2D' },
+              { id: 3, label: 'AUTOCAD 2D', value: 'AUTOCAD 2D' },
               {
                 id: 4,
                 label: 'APENAS VIABILIDADE DE ESPAÇO',
