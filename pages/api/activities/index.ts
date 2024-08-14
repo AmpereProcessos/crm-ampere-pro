@@ -31,7 +31,11 @@ const getActivities: NextApiHandler<GetResponse> = async (req, res) => {
   const queryOpenOnly: Filter<TActivity> = openOnly == 'true' ? { dataConclusao: null } : {}
   const queryDueOnly: Filter<TActivity> = dueOnly == 'true' ? { dataVencimento: { $ne: null } } : {}
   // Final query
-  const query: Filter<TActivity> = { ...partnerQuery, ...queryOpenOnly, ...queryDueOnly }
+  const query: Filter<TActivity> = {
+    // ...partnerQuery,
+    ...queryOpenOnly,
+    ...queryDueOnly,
+  }
 
   const db = await connectToDatabase(process.env.MONGODB_URI, 'crm')
   const collection: Collection<TActivity> = db.collection('activities')

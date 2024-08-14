@@ -53,7 +53,7 @@ const getOpportunitiesHistory: NextApiHandler<GetResponse> = async (req, res) =>
   const db = await connectToDatabase(process.env.MONGODB_URI, 'crm')
   const collection: Collection<TOpportunityHistory> = db.collection('opportunities-history')
 
-  const history = await getOpportunityHistory({ opportunityId: opportunityId, collection: collection, query: partnerQuery })
+  const history = await getOpportunityHistory({ opportunityId: opportunityId, collection: collection, query: {} })
 
   return res.status(200).json({ data: history })
   // if (!!opportunityId) {

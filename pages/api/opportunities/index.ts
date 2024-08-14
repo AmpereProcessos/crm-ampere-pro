@@ -136,7 +136,7 @@ const getOpportunities: NextApiHandler<GetResponse> = async (req, res) => {
   const funnelReferences = await getFunnelReferences({
     collection: funnelReferencesCollection,
     funnelId: funnel,
-    query: partnerQuery as Filter<TFunnelReference>,
+    query: {} as Filter<TFunnelReference>,
   })
   // Looking for open activities
   const activities = await getOpenActivities({ collection: opportunityActivitiesCollection, query: partnerQuery as Filter<TActivity> })
