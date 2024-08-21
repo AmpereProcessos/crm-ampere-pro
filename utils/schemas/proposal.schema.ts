@@ -152,6 +152,7 @@ const ProposalServiceSchema = z.object({
 export type TProposalService = z.infer<typeof ProposalServiceSchema>
 export const GeneralProposalSchema = z.object({
   nome: z.string(),
+  descricao: z.string().optional().nullable(),
   idParceiro: z.string(),
   idCliente: z.string(),
   idMetodologiaPrecificacao: z.string(),
@@ -186,6 +187,7 @@ export const GeneralProposalSchema = z.object({
 })
 export const InsertProposalSchema = z.object({
   nome: z.string({ required_error: 'Nome da proposta não informado.', invalid_type_error: 'Tipo não válido para o nome da proposta.' }),
+  descricao: z.string({ invalid_type_error: 'Tipo não válido para a descrição da proposta.' }).optional().nullable(),
   idParceiro: z.string({
     required_error: 'Referência a parceiro não informado.',
     invalid_type_error: 'Tipo não válido para a referência de parceiro.',
@@ -320,6 +322,7 @@ export const UpdateProposalSchema = z.object({
 const ProposalEntitySchema = z.object({
   _id: z.instanceof(ObjectId),
   nome: z.string(),
+  descricao: z.string().optional().nullable(),
   idParceiro: z.string(),
   idCliente: z.string(),
   idMetodologiaPrecificacao: z.string(),

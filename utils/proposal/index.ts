@@ -1,8 +1,9 @@
 import { TOpportunityDTOWithClient } from '../schemas/opportunity.schema'
-import { TProposal } from '../schemas/proposal.schema'
+import { TProposal, TProposalPremisses } from '../schemas/proposal.schema'
 import GenerationFactors from '../json-files/generationFactors.json'
 import { getEstimatedGen } from '../methods'
 import dayjs from 'dayjs'
+import { formatDecimalPlaces, formatToMoney } from '@/lib/methods/formatting'
 type GetScenariosInfoParams = {
   proposal: TProposal
   opportunity: TOpportunityDTOWithClient
@@ -202,4 +203,67 @@ function getIndexEnergyTariff({ StartEnergyTariff, InitialYear, IndexYear }: { S
   const EnergyAnnualInflation = 0.05
   const Increase = (1 + EnergyAnnualInflation) ** YearDiff
   return StartEnergyTariff * Increase
+}
+
+export const ProposalPremissesLabel: Record<keyof TProposalPremisses, string> = {
+  consumoEnergiaMensal: 'CONSUMO DE ENERGIA MENSAL',
+  fatorSimultaneidade: 'FATOR DE SIMULTANEIDADE',
+  tarifaEnergia: 'TARIFA DE ENERGIA',
+  tarifaFioB: 'TARIFA DE FIO B',
+  tipoEstrutura: 'TIPO DE ESTRUTURA',
+  orientacao: 'ORIENTAÇÃO',
+  distancia: 'DISTÂNCIA',
+  cidade: 'CIDADE',
+  uf: 'UF',
+  topologia: 'TOPOLOGIA',
+  potenciaPico: 'POTÊNCIA PICO',
+  numModulos: 'NÚMERO DE MÓDULOS',
+  numInversores: 'NÚMERO DE INVERSORES',
+  eficienciaGeracao: 'EFICIÊNCIA DE GERAÇÃO',
+  grupoInstalacao: 'GRUPO DE INSTALAÇÃO',
+  valorReferencia: 'VALOR DE REFERÊNCIA',
+  ativacaoReferencia: 'ATIVAÇÃO DE REFERÊNCIA',
+  faseamentoEletrico: 'FASEAMENTO ELÉTRICO',
+  custosInstalacao: 'CUSTO ESTIMADO DE INSTALAÇÃO',
+  custosPadraoEnergia: 'CUSTO ESTIMADO DE ADEQUAÇÃO DE PADRÃO',
+  custosEstruturaInstalacao: 'CUSTO ESTIMADO DE ESTRUTURA DE INSTALAÇÃO',
+  custosOutros: 'OUTROS CUSTOS ESTIMADOS',
+}
+export function formatProposalPremissesLabel(key: keyof TProposalPremisses) {
+  return ProposalPremissesLabel[key] || 'NÃO DEFINIDO'
+}
+export function formatProposalPremissesValue<K extends keyof TProposalPremisses>({ key, value }: { key: K; value: TProposalPremisses[K] }) {
+  // Caso seja número, formatando as casas decimais
+  if (!value) return null
+  switch (key) {
+    case 'consumoEnergiaMensal':
+      return `${formatDecimalPlaces(value)} kWh`
+    case 'fatorSimultaneidade':
+      return `${formatDecimalPlaces(value)}%`
+    case 'tarifaEnergia':
+      return `${formatToMoney(value)}/kWh`
+    case 'tarifaFioB':
+      return `${formatToMoney(value)}/kWh`
+    case 'distancia':
+      return `${formatDecimalPlaces(value)} km`
+    case 'potenciaPico':
+      return `${formatDecimalPlaces(value)} kW`
+    case 'numModulos':
+      return `${formatDecimalPlaces(value)}`
+    case 'numInversores':
+      return `${formatDecimalPlaces(value)}`
+    case 'valorReferencia':
+      return `${formatDecimalPlaces(value)}`
+    case 'custosInstalacao':
+      return formatToMoney(value)
+    case 'custosPadraoEnergia':
+      return formatToMoney(value)
+    case 'custosEstruturaInstalacao':
+      return formatToMoney(value)
+    case 'custosOutros':
+      return formatToMoney(value)
+
+    default:
+      return value
+  }
 }

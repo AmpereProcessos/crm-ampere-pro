@@ -99,7 +99,7 @@ function OpportunityPage({ session, opportunityId }: OpportunityPageProps) {
 
           {/* <div className="flex w-full flex-col items-start gap-6 py-4 lg:flex-row"></div> */}
           <div className="flex w-full flex-col gap-6 lg:flex-row">
-            <div className="flex w-full flex-col gap-4 lg:w-[40%] ">
+            <div className="flex w-full flex-col gap-4 lg:w-[40%]">
               <OpportunityClient client={opportunity.cliente} session={session} opportunityId={opportunityId} responsibles={opportunity.responsaveis} />
               <OpportunityDetails info={opportunity} session={session} opportunityId={opportunity._id} />
             </div>

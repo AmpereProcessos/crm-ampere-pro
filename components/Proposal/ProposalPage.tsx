@@ -39,6 +39,8 @@ import { copyToClipboard } from '@/lib/hooks'
 import { handleDownload } from '@/lib/methods/download'
 import EditProposalFile from '../Modals/Proposal/EditFile'
 import toast from 'react-hot-toast'
+import { formatProposalPremissesLabel, formatProposalPremissesValue } from '@/utils/proposal'
+import { TProposalPremisses } from '@/utils/schemas/proposal.schema'
 
 function getPricingMethodById({ methods, id }: { methods?: TPricingMethodDTO[]; id: string }) {
   if (!methods) return 'NÃO DEFINIDO'
@@ -98,7 +100,14 @@ function ProposalPage({ proposalId, session }: ProposalPageProps) {
         <div className="flex w-full max-w-full grow flex-col overflow-x-hidden bg-[#f8f9fa] p-6">
           <div className="flex w-full flex-col items-center justify-between border-b border-gray-200 pb-2 lg:flex-row">
             <div className="flex flex-col gap-1">
-              <h1 className="tracking-tightl text-center text-2xl font-bold leading-none text-gray-800 lg:text-start">{proposal?.nome}</h1>
+              <div className="flex items-center gap-2">
+                <h1 className="text-center text-2xl font-bold leading-none tracking-tight text-gray-800 lg:text-start">{proposal?.nome}</h1>
+                <Link href={`/comercial/proposta/documento/${proposal._id}`}>
+                  <div className="flex w-full items-center justify-center gap-2 self-center rounded-lg border border-cyan-500 p-1.5 text-xs font-medium text-cyan-500 duration-300 ease-in-out hover:border-cyan-600 hover:text-cyan-600">
+                    <FaExternalLinkAlt />
+                  </div>
+                </Link>
+              </div>
               <div className="flex items-center gap-2">
                 <Link href={`/comercial/oportunidades/id/${proposal.oportunidade.id}`}>
                   <div className="flex items-center gap-2">
@@ -109,7 +118,7 @@ function ProposalPage({ proposalId, session }: ProposalPageProps) {
                 <div className="flex items-center gap-2">
                   <FaUser style={{ color: '#15599a', fontSize: '15px' }} />
                   <p className="text-xs">Criada por: </p>
-                  <Avatar url={proposal.autor.avatar_url || undefined} fallback={formatNameAsInitials(proposal.autor.nome)} height={30} width={30} />
+                  <Avatar url={proposal.autor.avatar_url || undefined} fallback={formatNameAsInitials(proposal.autor.nome)} height={25} width={25} />
                   <p className="text-xs">{proposal?.autor?.nome}</p>
                 </div>
               </div>
@@ -206,17 +215,44 @@ function ProposalPage({ proposalId, session }: ProposalPageProps) {
                   <div className="flex w-full flex-col items-center justify-between gap-1 lg:flex-row">
                     <p className="text-xs font-medium leading-none tracking-tight text-gray-500">KIT</p>
                     <p className="text-end text-sm font-medium leading-none tracking-tight lg:text-xs">
-                      {proposal.kits.map((kit, index) => (index + 1 == proposal.kits.length ? kit.nome : `${kit.nome} + `))}
+                      {proposal.kits.length > 0 ? proposal.kits.map((p) => p.nome).join(' + ') : 'SEM KITS'}
                     </p>
                   </div>
-                  <Link href={`/comercial/proposta/documento/${proposal._id}`}>
-                    <h1 className="flex w-full items-center justify-center gap-2 self-center rounded-lg border border-dashed border-[#fead61] p-2 font-medium text-[#fead61]">
-                      <p>LINK DA PROPOSTA</p>
-                      <FaExternalLinkAlt />
-                    </h1>
-                  </Link>
-
+                  <div className="flex w-full flex-col items-center justify-between gap-1 lg:flex-row">
+                    <p className="text-xs font-medium leading-none tracking-tight text-gray-500">PLANOS</p>
+                    <p className="text-end text-sm font-medium leading-none tracking-tight lg:text-xs">
+                      {proposal.planos.length > 0 ? proposal.planos.map((p) => p.nome).join(' + ') : 'SEM PLANOS'}
+                    </p>
+                  </div>
                   {proposal.urlArquivo ? (
+                    <div className="flex w-full flex-col items-center justify-between gap-1 lg:flex-row">
+                      <p className="text-xs font-medium leading-none tracking-tight text-gray-500">ARQUIVO</p>
+                      <div className="flex items-center justify-end gap-2">
+                        <button
+                          onClick={() => handleDownload({ fileName: proposal.nome, fileUrl: proposal.urlArquivo || '' })}
+                          className="flex w-fit items-center gap-2 self-center rounded-lg border border-blue-500 p-1.5 text-xs text-blue-500"
+                        >
+                          <TbDownload />
+                        </button>
+                        <button
+                          onClick={() => copyToClipboard(proposal.urlArquivo || '')}
+                          className="flex w-fit items-center gap-2 self-center rounded-lg border border-black p-1.5 text-xs text-black"
+                        >
+                          <MdContentCopy />
+                        </button>
+                        {session?.user.permissoes.propostas.editar ? (
+                          <button
+                            onClick={() => setEditProposalFileModalIsOpen(true)}
+                            className="flex w-fit items-center gap-2 self-center rounded-lg border border-[#fead41] p-1.5 text-xs text-[#fead41]"
+                          >
+                            <AiFillEdit />
+                          </button>
+                        ) : null}
+                      </div>
+                    </div>
+                  ) : null}
+
+                  {/* {proposal.urlArquivo ? (
                     <>
                       <button
                         onClick={() => handleDownload({ fileName: proposal.nome, fileUrl: proposal.urlArquivo || '' })}
@@ -243,7 +279,7 @@ function ProposalPage({ proposalId, session }: ProposalPageProps) {
                         </button>
                       ) : null}
                     </>
-                  ) : null}
+                  ) : null} */}
                 </div>
               </div>
               <div className="flex h-full w-full flex-col rounded border border-gray-500 bg-[#fff] p-6 shadow-md lg:w-1/4">
@@ -252,7 +288,19 @@ function ProposalPage({ proposalId, session }: ProposalPageProps) {
                   <p className="text-center text-xs italic text-gray-500">Essas são as premissas de dimensionamento dessa proposta.</p>
                 </div>
                 <div className="flex w-full grow flex-col justify-around">
-                  <div className="flex w-full flex-col items-center justify-between gap-1 lg:flex-row">
+                  {Object.entries(proposal.premissas)
+                    .filter(([key, value]) => !!value)
+                    .map(([key, value], index) => (
+                      <div className="flex w-full flex-col items-center justify-between gap-1 lg:flex-row">
+                        <h1 className="text-xs font-medium uppercase leading-none tracking-tight text-gray-500">
+                          {formatProposalPremissesLabel(key as keyof TProposalPremisses)}
+                        </h1>
+                        <h1 className="text-end text-sm font-medium leading-none tracking-tight lg:text-xs">
+                          {formatProposalPremissesValue({ key: key as keyof TProposalPremisses, value })}
+                        </h1>
+                      </div>
+                    ))}
+                  {/* <div className="flex w-full flex-col items-center justify-between gap-1 lg:flex-row">
                     <h1 className="text-xs font-medium uppercase leading-none tracking-tight text-gray-500">Consumo de energia mensal</h1>
                     <h1 className="text-end text-sm font-medium leading-none tracking-tight lg:text-xs">{proposal?.premissas.consumoEnergiaMensal} kWh</h1>
                   </div>
@@ -275,7 +323,7 @@ function ProposalPage({ proposalId, session }: ProposalPageProps) {
                   <div className="flex w-full flex-col items-center justify-between gap-1 lg:flex-row">
                     <h1 className="text-xs font-medium uppercase leading-none tracking-tight text-gray-500">Distância</h1>
                     <h1 className="text-end text-sm font-medium leading-none tracking-tight lg:text-xs">{proposal?.premissas.distancia} km</h1>
-                  </div>
+                  </div> */}
                 </div>
               </div>
               <div className="flex h-full w-full flex-col rounded border border-gray-500 bg-[#fff] p-6 shadow-md lg:w-1/4">
@@ -349,6 +397,12 @@ function ProposalPage({ proposalId, session }: ProposalPageProps) {
                 </div>
               </div>
             </div>
+            {proposal.descricao ? (
+              <div className="my-4 flex w-full flex-col gap-1">
+                <h1 className="text-center text-xs font-medium leading-none tracking-tight text-gray-500">DESCRIÇÃO/ANOTAÇÃO</h1>
+                <p className="w-full text-center  text-sm italic leading-none text-gray-500">{proposal.descricao}</p>
+              </div>
+            ) : null}
             {proposal.planos.length > 1 ? (
               <ProposalViewPlansBlock
                 plans={proposal.planos}

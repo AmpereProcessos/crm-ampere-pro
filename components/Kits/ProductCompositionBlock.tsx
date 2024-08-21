@@ -8,10 +8,8 @@ import NumberInput from '../Inputs/NumberInput'
 import TextInput from '../Inputs/TextInput'
 
 import { TInverter, TKit, TKitDTO, TModule, TProductItem } from '@/utils/schemas/kits.schema'
-import Inverters from '../../utils/json-files/pvinverters.json'
-import Modules from '../../utils/json-files/pvmodules.json'
+
 import { ProductItemCategories } from '@/utils/select-options'
-import { TNewKit } from '../Modals/Kit/NewKit'
 import { useEquipments } from '@/utils/queries/utils'
 import SelectInputVirtualized from '../Inputs/SelectInputVirtualized'
 import { CommonProductsByProjectType } from '@/utils/constants'

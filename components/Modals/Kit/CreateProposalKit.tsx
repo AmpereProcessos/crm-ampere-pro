@@ -3,7 +3,7 @@ import ProductCompositionBlock from '@/components/Kits/ProductCompositionBlock'
 import ServicesCompositionBlock from '@/components/Kits/ServicesCompositionBlock'
 import { combineUniqueProducts, combineUniqueServices } from '@/lib/methods/array-manipulation'
 import { getInverterQty, getModulesPeakPotByProducts, getModulesQty } from '@/lib/methods/extracting'
-import { handlePricingCalculation, TPricingConditionData, TPricingVariableData } from '@/utils/pricing/methods'
+import { getPricingTotal, getPricingTotals, handlePricingCalculation, TPricingConditionData, TPricingVariableData } from '@/utils/pricing/methods'
 import { usePricingMethods } from '@/utils/queries/pricing-methods'
 import { TKit } from '@/utils/schemas/kits.schema'
 import { TOpportunity } from '@/utils/schemas/opportunity.schema'
@@ -96,10 +96,11 @@ function CreateProposalKit({ proposal, setProposal, opportunity, closeModal, ses
       conditionData,
       variableData,
     })
+    const total = getPricingTotal({ pricing })
     setProposal((prev) => ({
       ...prev,
       idMetodologiaPrecificacao: methodologyId,
-      kits: [],
+      kits: [{ id: '', nome: kitName, preco: price, valor: total }],
       produtos: products,
       servicos: services,
       precificacao: pricing,

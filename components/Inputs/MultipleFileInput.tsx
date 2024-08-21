@@ -66,30 +66,6 @@ function MultipleFileInput({ label, value, mode = 'default', handleChange, multi
             />
           </label>
         </div>
-
-        {/* <div className="relative mt-2 flex h-fit items-center justify-center rounded-lg border-2 border-dotted border-blue-700 bg-gray-100 p-2">
-        <div className="absolute">
-          {value ? (
-            <div className="flex flex-col items-center">
-              <i className="fa fa-folder-open fa-4x text-blue-700"></i>
-              <span className="block text-center font-normal text-gray-400">
-                {typeof value != 'string' ? value.name : formatLongString(value, 30)}
-              </span>
-            </div>
-          ) : (
-            <div className="flex flex-col items-center">
-              <i className="fa fa-folder-open fa-4x text-blue-700"></i>
-              <span className="block font-normal text-gray-400">Adicione o arquivo aqui...</span>
-            </div>
-          )}
-        </div>
-        <input
-          onChange={(e) => handleChange(e.target.files ? e.target.files[0] : null)}
-          className="h-full w-full opacity-0"
-          type="file"
-          accept=".png, .jpeg, .pdf"
-        />
-      </div> */}
       </div>
     )
 

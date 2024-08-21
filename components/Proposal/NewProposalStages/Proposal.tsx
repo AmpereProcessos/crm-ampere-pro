@@ -33,6 +33,7 @@ import { handleDownload } from '@/lib/methods/download'
 import CheckboxInput from '@/components/Inputs/CheckboxInput'
 import toast from 'react-hot-toast'
 import AccessGrantingWarning from '../Utils/AccessGrantingWarning'
+import TextareaInput from '@/components/Inputs/TextareaInput'
 
 function renderProposalPreview({
   proposal,
@@ -193,6 +194,12 @@ function Proposal({ opportunity, projectTypes, infoHolder, setInfoHolder, moveTo
                   value={infoHolder.nome}
                   handleChange={(value) => setInfoHolder((prev) => ({ ...prev, nome: value }))}
                   width="100%"
+                />
+                <TextareaInput
+                  label="DESCRIÇÃO/ANOTAÇÃO"
+                  placeholder="Preencha aqui alguma descrição ou anotação sobre a proposta..."
+                  value={infoHolder.descricao || ''}
+                  handleChange={(value) => setInfoHolder((prev) => ({ ...prev, descricao: value }))}
                 />
                 {ProposalTemplateOptions ? (
                   <SelectInput
