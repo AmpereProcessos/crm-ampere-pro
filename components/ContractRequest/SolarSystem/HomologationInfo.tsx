@@ -100,6 +100,7 @@ function HomologationInfo({ requestInfo, setRequestInfo, sameProjectHolder, setS
     if (homologationModality == 'FAST TRACK')
       setRequestInfo((prev) => ({
         ...prev,
+        homologacaoFastTrack: true,
         observacoesHomologacao:
           'A HOMOLOGAÇÃO SERÁ FEITA NA MODALIDADE FAST TRACK. NESSE SENTIDO O CLIENTE OPTA POR ABDICAR, PERMANENTEMENTE, DE DISTRUIÇÕES DE CRÉDITO.',
       }))

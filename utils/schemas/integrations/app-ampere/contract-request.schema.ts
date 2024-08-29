@@ -41,6 +41,7 @@ const GeneralContractRequestSchema = z.object({
   tipoDaLigacao: z.enum(['NOVA', 'EXISTENTE']).nullable().optional(),
   tipoDaInstalacao: z.enum(['URBANO', 'RURAL']).nullable().optional(),
   observacoesHomologacao: z.string({ invalid_type_error: 'Tipo não válido para as observações da homologação.' }).optional().nullable(),
+  homologacaoFastTrack: z.boolean().optional().nullable(),
   cepInstalacao: z.string(),
   enderecoInstalacao: z.string(),
   numeroResInstalacao: z.string().optional(),
