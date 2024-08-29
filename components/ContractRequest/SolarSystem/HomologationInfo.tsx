@@ -118,7 +118,7 @@ function HomologationInfo({ requestInfo, setRequestInfo, sameProjectHolder, setS
           />
         </div>
       </div>
-      {/* <h1 className="w-full text-start text-sm font-medium tracking-tight">MODALIDADE DE HOMOLOGAÇÃO</h1>
+      <h1 className="w-full text-start text-sm font-medium tracking-tight">MODALIDADE DE HOMOLOGAÇÃO</h1>
       <div className="flex w-full flex-col gap-2">
         <div className="w-full rounded border border-blue-800 bg-blue-50 p-2">
           <div className="flex w-full items-center justify-between gap-2">
@@ -158,7 +158,7 @@ function HomologationInfo({ requestInfo, setRequestInfo, sameProjectHolder, setS
             </p>
           </div>
         ) : null}
-      </div> */}
+      </div>
       <div className="flex flex-col gap-2 p-2 lg:grid lg:grid-cols-3">
         <h1 className="col-span-3 py-2 text-center font-bold text-[#fead61]">INFORMAÇÕES DA INSTALAÇÃO DO CLIENTE</h1>
         <div className="col-span-3 flex w-full items-center justify-center gap-2">
