@@ -117,6 +117,7 @@ export const GeneralOpportunitySchema = z.object({
     avatar_url: z.string().optional().nullable(),
   }),
   idMarketing: z.string().optional().nullable(),
+  dataExclusao: z.string().datetime().optional().nullable(),
   dataInsercao: z.string().datetime(),
   // adicionar contrato e solicitação de contrato futuramente
 })
@@ -218,6 +219,11 @@ export const InsertOpportunitySchema = z.object({
       required_error: 'ID de referência do Lead Marketing não fornecido.',
       invalid_type_error: 'Tipo não válido para o ID de referência do Lead Marketing',
     })
+    .optional()
+    .nullable(),
+  dataExclusao: z
+    .string({ invalid_type_error: 'Tipo não válido para data de exclusão.' })
+    .datetime({ message: 'Tipo não válido para data de exclusão.' })
     .optional()
     .nullable(),
   dataInsercao: z.string().datetime(),
@@ -326,6 +332,11 @@ export const UpdateOpportunitySchema = z.object({
     })
     .optional()
     .nullable(),
+  dataExclusao: z
+    .string({ invalid_type_error: 'Tipo não válido para data de exclusão.' })
+    .datetime({ message: 'Tipo não válido para data de exclusão.' })
+    .optional()
+    .nullable(),
   dataInsercao: z.string().datetime(),
 })
 export const OpportunityWithClientSchema = z.object({
@@ -431,6 +442,11 @@ export const OpportunityWithClientSchema = z.object({
       required_error: 'ID de referência do Lead Marketing não fornecido.',
       invalid_type_error: 'Tipo não válido para o ID de referência do Lead Marketing',
     })
+    .optional()
+    .nullable(),
+  dataExclusao: z
+    .string({ invalid_type_error: 'Tipo não válido para data de exclusão.' })
+    .datetime({ message: 'Tipo não válido para data de exclusão.' })
     .optional()
     .nullable(),
   dataInsercao: z.string().datetime(),

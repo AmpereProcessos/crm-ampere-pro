@@ -54,7 +54,46 @@ const PlansEquivalents = {
 }
 
 const migrate: NextApiHandler<PostResponse> = async (req, res) => {
-  return res.json('DESATIVADA')
+  const crmDb = await connectToCRMDatabase(process.env.MONGODB_URI, 'crm')
+  const opportunitiesCollection: Collection<TOpportunity> = crmDb.collection('opportunities')
+  const funnelReferencesCollection: Collection<TFunnelReference> = crmDb.collection('funnel-references')
+
+  const opportunities = await opportunitiesCollection.find({ 'responsaveis.id': '64c7fbc0cd53f13e52fb534c' }).toArray()
+  const funnelReferences = await funnelReferencesCollection.find({ idFunil: '661eaeb6c387dfeddd9a23c9' }).toArray()
+
+  const toUpdate = funnelReferences
+    .map((p) => {
+      const opportunity = opportunities.find((o) => o._id.toString() == p.idOportunidade)
+      if (!opportunity) return null
+
+      const opportunityIsWon = !!opportunity.ganho.data
+
+      const stageMap = {
+        '1': 1,
+        '2': 2,
+        '3': 3,
+        '4': 5,
+        '5': 5,
+        '6': 5,
+        '7': 5,
+        '8': 6,
+      }
+      return {
+        updateOne: {
+          filter: { _id: new ObjectId(p._id) },
+          update: {
+            $set: {
+              idFunil: '6682aa86b99e34b5f3581c36',
+              idEstagioFunil: opportunityIsWon ? 7 : stageMap[p.idEstagioFunil.toString()] || 5,
+            },
+          },
+        },
+      }
+    })
+    .filter((f) => !!f)
+
+  const bulkwriteResponse = await funnelReferencesCollection.bulkWrite(toUpdate)
+  return res.json(bulkwriteResponse)
 }
 export default apiHandler({
   GET: migrate,

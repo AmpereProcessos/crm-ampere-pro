@@ -32,6 +32,7 @@ const getOpportunitiesBySearch: NextApiHandler<GetResponse> = async (req, res) =
   const opportunities = await collection
     .find(
       {
+        dataExclusao: { $ne: null },
         $or: [{ nome: { $regex: search, $options: 'i' } }, { identificador: { $regex: search, $options: 'i' } }],
       },
       { projection: { nome: 1, identificador: 1, responsavel: 1 } }
@@ -136,7 +137,7 @@ async function getOpportunitiesByFilters({ collection, query, skip, limit }: Get
   const opportunities = await collection
     .aggregate([
       { $sort: sort },
-      { $match: { ...query } },
+      { $match: { ...query, dataExclusao: { $ne: null } } },
       { $skip: skip },
       { $addFields: addFields },
       { $lookup: lookup },

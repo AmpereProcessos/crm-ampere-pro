@@ -299,6 +299,7 @@ async function getOpportunities({ opportunitiesCollection, responsiblesQuery, pa
         { $and: [{ dataInsercao: { $gte: afterDateStr } }, { dataInsercao: { $lte: beforeDateStr } }] },
         { $and: [{ 'ganho.data': { $gte: afterDateStr } }, { 'ganho.data': { $lte: beforeDateStr } }] },
       ],
+      dataExclusao: { $ne: null },
     }
     const addFields = {
       activeProposeObjectID: {

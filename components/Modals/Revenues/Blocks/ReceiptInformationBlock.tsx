@@ -16,7 +16,6 @@ type RevenueReceiptInformationBlockProps = {
 }
 function RevenueReceiptInformationBlock({ infoHolder, setInfoHolder }: RevenueReceiptInformationBlockProps) {
   const pendingTotal = infoHolder.total - infoHolder.recebimentos.reduce((acc, current) => current.valor + acc, 0)
-  const pendingPercentage = 1 - (pendingTotal / infoHolder.total || 0)
   const [receiptHolder, setReceiptHolder] = useState<TRevenueReceiptItem>({
     valor: pendingTotal,
     metodo: PaymentMethods[0].value,

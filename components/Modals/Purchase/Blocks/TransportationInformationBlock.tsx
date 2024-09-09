@@ -42,8 +42,8 @@ function TransportationInformationBlock({ infoHolder, setInfoHolder }: Transport
             <TextInput
               label="LINK DE RASTREIO (SE HOUVER)"
               placeholder="Preencha, se houver, o link de rastreio..."
-              value={infoHolder.titulo}
-              handleChange={(value) => setInfoHolder((prev) => ({ ...prev, titulo: value }))}
+              value={infoHolder.transporte.linkRastreio || ''}
+              handleChange={(value) => setInfoHolder((prev) => ({ ...prev, transporte: { ...prev.transporte, linkRastreio: value } }))}
               width="100%"
             />
           </div>
