@@ -552,6 +552,15 @@ export const AllSellers = [
     comissionAsActive: 0.5,
     comissionWithInside: 0.5,
   },
+  {
+    id: 65,
+    active: true,
+    label: 'LEONARDO VITAL',
+    value: 'LEONARDO VITAL',
+    qualification: '',
+    comissionAsActive: 0.5,
+    comissionWithInside: 0.5,
+  },
 ].sort((a, b) => a.value.localeCompare(b.value))
 export const SellersInApp = AllSellers.map((s) => s.value)
 export const PPSCallTypes = [
