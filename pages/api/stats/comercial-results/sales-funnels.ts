@@ -271,7 +271,7 @@ async function getOpportunities({ opportunitiesCollection, responsiblesQuery, af
       ...partnerQuery,
       ...projectTypesQuery,
       $or: [{ 'ganho.data': null, 'perda.data': null }, { $and: [{ 'perda.data': { $gte: afterDateStr } }, { 'perda.data': { $lte: beforeDateStr } }] }],
-      dataExclusao: { $ne: null },
+      dataExclusao: null,
     }
     const addFields = { activeProposeObjectID: { $toObjectId: '$idPropostaAtiva' } }
     const proposeLookup = { from: 'proposals', localField: 'activeProposeObjectID', foreignField: '_id', as: 'proposta' }

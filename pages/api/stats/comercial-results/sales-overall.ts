@@ -224,7 +224,7 @@ async function getOpportunities({ opportunitiesCollection, partnerQuery, respons
         { $and: [{ 'perda.data': { $gte: afterDateStr } }, { 'perda.data': { $lte: beforeDateStr } }] },
         { $and: [{ 'ganho.data': { $gte: afterDateStr } }, { 'ganho.data': { $lte: beforeDateStr } }] },
       ],
-      dataExclusao: { $ne: null },
+      dataExclusao: null,
     }
     const addFields = { wonProposeObjectId: { $toObjectId: '$ganho.idProposta' } }
     const lookup = { from: 'proposals', localField: 'wonProposeObjectId', foreignField: '_id', as: 'proposta' }

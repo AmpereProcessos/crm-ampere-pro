@@ -66,7 +66,7 @@ export async function getOpportunitiesByQuery({ collection, query }: GetOpportun
     const projection = SimplifiedOpportunityWithProposalProjection
     // const opportunities = await collection.find({ ...query, idParceiro: partnerId || '' }).toArray()
     const opportunities = (await collection
-      .aggregate([{ $match: { ...query, dataExclusao: { $ne: null } } }, { $addFields: addFields }, { $lookup: lookup }, { $project: projection }])
+      .aggregate([{ $match: { ...query, dataExclusao: null } }, { $addFields: addFields }, { $lookup: lookup }, { $project: projection }])
       .toArray()) as WithId<TOpportunityByQueryResult>[]
 
     return opportunities
@@ -82,7 +82,7 @@ type GetOpportunitiesSimplifiedParams = {
 export async function getOpportunitiesSimplified({ collection, query }: GetOpportunitiesSimplifiedParams) {
   try {
     const projects = await collection
-      .find({ ...query, dataExclusao: { $ne: null } }, { projection: SimplifiedOpportunityWithProposalProjection, sort: { _id: -1 } })
+      .find({ ...query, dataExclusao: null }, { projection: SimplifiedOpportunityWithProposalProjection, sort: { _id: -1 } })
       .toArray()
 
     return projects as TOpportunitySimplified[]
