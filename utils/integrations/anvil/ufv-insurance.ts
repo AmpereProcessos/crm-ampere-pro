@@ -13,7 +13,11 @@ export function getInsuranceTemplateData({ opportunity, proposal }: GetTemplateD
   const sdr = opportunity.responsaveis.find((r) => r.papel == 'SDR')
   function getInstallmentsText(value: number) {
     const FIX_UNIQUE_INSTALLMENT_VALUE = 200
-    const maxInstallments = Math.floor(value / FIX_UNIQUE_INSTALLMENT_VALUE)
+    const MAX_POSSIBLE_INSTALLMENTS = 12
+    const maxInstallments =
+      Math.floor(value / FIX_UNIQUE_INSTALLMENT_VALUE) > MAX_POSSIBLE_INSTALLMENTS
+        ? MAX_POSSIBLE_INSTALLMENTS
+        : Math.floor(value / FIX_UNIQUE_INSTALLMENT_VALUE)
     const maxInstallmentsValue = value / maxInstallments
 
     return `EM ATÉ ${maxInstallments}x DE ${formatToMoney(maxInstallmentsValue)}`
