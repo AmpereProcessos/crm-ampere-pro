@@ -21,7 +21,7 @@ export function getComplexTemplate2024Data({ opportunity, proposal }: GetTemplat
   const averageEnergyConsumption = proposal.premissas.consumoEnergiaMensal || 0
   const monthlyEnergyExpense = (proposal.premissas.consumoEnergiaMensal || 0) * (proposal.premissas.tarifaEnergia || 0)
   const annualEnergyExpense = (proposal.premissas.consumoEnergiaMensal || 0) * (proposal.premissas.tarifaEnergia || 0) * 12
-  const twentyFiveYearsEnergyExpense = Table.reduce((acc, current) => acc + current.ConventionalEnergyBill, 0)
+  const twelveYearsEnergyExpense = Table.reduce((acc, current) => acc + current.ConventionalEnergyBill, 0)
 
   // Economy related
   const estimatedGeneration = getEstimatedGen(
@@ -32,7 +32,7 @@ export function getComplexTemplate2024Data({ opportunity, proposal }: GetTemplat
   )
   const monthlySavedValue = Table.reduce((acc, current) => acc + (current.ConventionalEnergyBill - current.EnergyBillValue), 0) / Table.length
   const annualSavedValue = (12 * Table.reduce((acc, current) => acc + (current.ConventionalEnergyBill - current.EnergyBillValue), 0)) / Table.length
-  const twentyFiveYearsSavedValue = Table.reduce((acc, current) => acc + (current.ConventionalEnergyBill - current.EnergyBillValue), 0)
+  const twelveYearsSavedValue = Table.reduce((acc, current) => acc + (current.ConventionalEnergyBill - current.EnergyBillValue), 0)
   return {
     title: proposal.nome,
     fontSize: 10,
@@ -49,7 +49,7 @@ export function getComplexTemplate2024Data({ opportunity, proposal }: GetTemplat
       energyConsumption: formatDecimalPlaces(averageEnergyConsumption),
       energyExpense: formatToMoney(monthlyEnergyExpense),
       energyExpenseAnnually: formatToMoney(annualEnergyExpense),
-      energyExpense25years: formatToMoney(twentyFiveYearsEnergyExpense),
+      energyExpenseInScope: formatToMoney(twelveYearsEnergyExpense),
       modules: getModulesStrByProducts(proposal.produtos),
       modulesWarranty: `${Math.max(...proposal.produtos.filter((p) => p.categoria == 'MÓDULO').map((x) => (x.garantia ? x.garantia : 0)))} anos`,
       Inverters: getInvertersStrByProducts(proposal.produtos),
@@ -57,7 +57,7 @@ export function getComplexTemplate2024Data({ opportunity, proposal }: GetTemplat
       generationMonthly: formatDecimalPlaces(estimatedGeneration),
       economyMonthly: formatToMoney(monthlySavedValue),
       economyAnually: formatToMoney(annualSavedValue),
-      economy25years: formatToMoney(twentyFiveYearsSavedValue),
+      economyInScope: formatToMoney(twelveYearsSavedValue),
       investment: formatToMoney(proposal.valor || 0),
       clientRegistry: opportunity.cliente.cpfCnpj,
     },

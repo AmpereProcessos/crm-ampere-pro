@@ -26,7 +26,7 @@ export function getSimpleTemplate2024Data({ opportunity, proposal }: GetTemplate
   const averageEnergyConsumption = proposal.premissas.consumoEnergiaMensal || 0
   const monthlyEnergyExpense = (proposal.premissas.consumoEnergiaMensal || 0) * (proposal.premissas.tarifaEnergia || 0)
   const annualEnergyExpense = (proposal.premissas.consumoEnergiaMensal || 0) * (proposal.premissas.tarifaEnergia || 0) * 12
-  const twentyFiveYearsEnergyExpense = Table.reduce((acc, current) => acc + current.ConventionalEnergyBill, 0)
+  const twelveYearsEnergyExpense = Table.reduce((acc, current) => acc + current.ConventionalEnergyBill, 0)
 
   // Economy related
   const estimatedGeneration = getEstimatedGen(
@@ -38,7 +38,7 @@ export function getSimpleTemplate2024Data({ opportunity, proposal }: GetTemplate
   const monthlySavedValue =
     SingleYearScopedTable.reduce((acc, current) => acc + (current.ConventionalEnergyBill - current.EnergyBillValue), 0) / SingleYearScopedTable.length
   const annualSavedValue = (12 * Table.reduce((acc, current) => acc + (current.ConventionalEnergyBill - current.EnergyBillValue), 0)) / Table.length
-  const twentyFiveYearsSavedValue = Table.reduce((acc, current) => acc + (current.ConventionalEnergyBill - current.EnergyBillValue), 0)
+  const twelveYearsSavedValue = Table.reduce((acc, current) => acc + (current.ConventionalEnergyBill - current.EnergyBillValue), 0)
   const obj = {
     title: opportunity.nome,
     fontSize: 10,
@@ -54,7 +54,7 @@ export function getSimpleTemplate2024Data({ opportunity, proposal }: GetTemplate
       energyConsumption: `${formatDecimalPlaces(averageEnergyConsumption)} kWh`,
       energyExpense: formatToMoney(monthlyEnergyExpense),
       energyExpenseAnnually: formatToMoney(annualEnergyExpense),
-      energyExpense25years: formatToMoney(twentyFiveYearsEnergyExpense),
+      energyExpenseInScope: formatToMoney(twelveYearsEnergyExpense),
       modules: getModulesStrByProducts(proposal.produtos),
       inverters: getInvertersStrByProducts(proposal.produtos),
       modulesWarranty: `${Math.max(...proposal.produtos.filter((p) => p.categoria == 'MÓDULO').map((x) => (x.garantia ? x.garantia : 0)))} anos`,
@@ -62,7 +62,7 @@ export function getSimpleTemplate2024Data({ opportunity, proposal }: GetTemplate
       generationMonthly: `${formatDecimalPlaces(estimatedGeneration)} kWh/mês`,
       economyMonthly: formatToMoney(monthlySavedValue),
       economyAnually: formatToMoney(annualSavedValue),
-      economy25years: formatToMoney(twentyFiveYearsSavedValue),
+      economyInScope: formatToMoney(twelveYearsSavedValue),
       investment: proposal.valor ? formatToMoney(proposal.valor) : 'R$ N/A',
       proposeId: `#${proposal._id}`,
       paInformation: paInformation,
