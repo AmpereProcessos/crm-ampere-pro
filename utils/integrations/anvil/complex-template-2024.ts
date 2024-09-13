@@ -14,7 +14,7 @@ export function getComplexTemplate2024Data({ opportunity, proposal }: GetTemplat
   const seller = opportunity.responsaveis.find((r) => r.papel == 'VENDEDOR')
   const sdr = opportunity.responsaveis.find((r) => r.papel == 'SDR')
   // Getting the progression array of billing prices, payback, and other stuff
-  const yearsQty = 25
+  const yearsQty = 12
   const Table = getExpenseAndEconomyProgression({ proposal, opportunity, yearsQty })
 
   // Expense related
