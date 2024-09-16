@@ -306,7 +306,7 @@ export const projectActivityTypes = {
   },
 }
 
-export const STANDARD_PROFIT_MARGIN = 0.12
+export const STANDARD_PROFIT_MARGIN = 0.15
 export const STANDARD_TAX = 0.175
 
 export const firebaseServiceAccount = {
