@@ -1,6 +1,6 @@
 import ErrorComponent from '@/components/utils/ErrorComponent'
 import LoadingComponent from '@/components/utils/LoadingComponent'
-import { usePaymentMethods } from '@/utils/queries/payment-methods'
+import { usePaymentMethods, usePaymentMethodsPersonalized } from '@/utils/queries/payment-methods'
 import { TOpportunityDTOWithClient, TOpportunityDTOWithClientAndPartnerAndFunnelReferences } from '@/utils/schemas/opportunity.schema'
 import { TProposal, TProposalPaymentMethodItem } from '@/utils/schemas/proposal.schema'
 import { Session } from 'next-auth'
@@ -20,7 +20,18 @@ type PaymentProps = {
   session: Session
 }
 function Payment({ infoHolder, setInfoHolder, moveToNextStage, moveToPreviousStage, session }: PaymentProps) {
-  const { data: paymentMethods, isLoading, isSuccess, isError } = usePaymentMethods()
+  console.log(infoHolder.kits)
+  const {
+    data: paymentMethods,
+    isLoading,
+    isSuccess,
+    isError,
+  } = usePaymentMethodsPersonalized({
+    kitsIds: infoHolder.kits.map((k) => k.id),
+    plansIds: infoHolder.planos.map((p) => p.id),
+    productsIds: infoHolder.produtos.map((p) => p.id || ''),
+    servicesIds: infoHolder.servicos.map((s) => s.id || ''),
+  })
   const [selectedMethods, setSelectedMethods] = useState<TProposalPaymentMethodItem[]>([])
   const proposalValue = infoHolder.valor
   function addMethod(method: TProposalPaymentMethodItem) {
@@ -29,7 +40,8 @@ function Payment({ infoHolder, setInfoHolder, moveToNextStage, moveToPreviousSta
     setSelectedMethods(methods)
   }
   function handleProceed() {
-    if (selectedMethods.length == 0) return toast.error('Selecione ao menos um método de pagamento a ser aplicável.')
+    if (!paymentMethods) return toast.error('Erro ao buscar métodos de pagamento.')
+    if (paymentMethods.length > 0 && selectedMethods.length == 0) return toast.error('Selecione ao menos um método de pagamento a ser aplicável.')
     setInfoHolder((prev) => ({ ...prev, pagamento: { ...prev.pagamento, metodos: selectedMethods } }))
     return moveToNextStage()
   }
@@ -45,8 +57,9 @@ function Payment({ infoHolder, setInfoHolder, moveToNextStage, moveToPreviousSta
         </div>
         {isLoading ? <LoadingComponent /> : null}
         {isError ? <ErrorComponent msg="Erro ao buscar metodologias de precificação" /> : null}
-        {isSuccess
-          ? paymentMethods.map((method, index) => (
+        {isSuccess ? (
+          paymentMethods.length > 0 ? (
+            paymentMethods.map((method, index) => (
               <PaymentMethodCard
                 index={index}
                 key={method._id}
@@ -61,7 +74,12 @@ function Payment({ infoHolder, setInfoHolder, moveToNextStage, moveToPreviousSta
                 }}
               />
             ))
-          : null}
+          ) : (
+            <p className="flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-gray-500">
+              Nenhum método de pagamento disponível.
+            </p>
+          )
+        ) : null}
         <div className="flex w-full items-center justify-between gap-2 px-1">
           <button onClick={() => moveToPreviousStage()} className="rounded p-2 font-bold text-gray-500 duration-300 hover:scale-105">
             Voltar

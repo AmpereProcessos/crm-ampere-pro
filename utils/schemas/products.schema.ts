@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { PricingMethodologyReferenceSchema, TPricingMethodDTO } from './pricing-method.schema'
-import { ObjectId } from 'mongodb'
 import { AuthorSchema } from './user.schema'
+import { PaymentMethodReferenceSchema } from './payment-methods'
 
 export const GeneralProductSchema = z.object({
   idParceiro: z
@@ -9,6 +9,7 @@ export const GeneralProductSchema = z.object({
     .optional()
     .nullable(),
   idMetodologiaPrecificacao: PricingMethodologyReferenceSchema,
+  idsMetodologiasPagamento: z.array(PaymentMethodReferenceSchema),
   ativo: z.boolean({
     required_error: 'Status de ativação do serviço não informado.',
     invalid_type_error: 'Tipo não válido para o status de ativação do produto.',
@@ -36,6 +37,7 @@ export const InsertProductSchema = z.object({
     .optional()
     .nullable(),
   idMetodologiaPrecificacao: PricingMethodologyReferenceSchema,
+  idsMetodologiasPagamento: z.array(PaymentMethodReferenceSchema),
   ativo: z.boolean({
     required_error: 'Status de ativação do serviço não informado.',
     invalid_type_error: 'Tipo não válido para o status de ativação do produto.',
@@ -58,12 +60,12 @@ export const InsertProductSchema = z.object({
     .datetime({ message: 'Formato inválido para a data de inserção.' }),
 })
 export const ProductSchema = z.object({
-  _id: z.instanceof(ObjectId),
   idParceiro: z
     .string({ required_error: 'ID de referência do parceiro não informado.', invalid_type_error: 'ID de referência do parceiro não informado.' })
     .optional()
     .nullable(),
   idMetodologiaPrecificacao: PricingMethodologyReferenceSchema,
+  idsMetodologiasPagamento: z.array(PaymentMethodReferenceSchema),
   ativo: z.boolean({
     required_error: 'Status de ativação do serviço não informado.',
     invalid_type_error: 'Tipo não válido para o status de ativação do produto.',

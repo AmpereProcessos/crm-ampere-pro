@@ -1,30 +1,17 @@
 import { NextApiHandler } from 'next'
-import { apiHandler, validateAuthenticationWithSession } from '@/utils/api'
+import { apiHandler } from '@/utils/api'
 
 import connectToCRMDatabase from '@/services/mongodb/crm-db-connection'
-import connectToProjectsDatabase from '@/services/mongodb/projects-db-connection'
-import connectToRequestsDatabase from '@/services/mongodb/ampere/resquests-db-connection'
-import AmpereProjects from '@/ampere-migration/main.projects.json'
-import AmpereProposes from '@/ampere-migration/main.proposes.json'
-import { TClient } from '@/utils/schemas/client.schema'
-import { z } from 'zod'
-import { TOpportunity, TOpportunityDTO } from '@/utils/schemas/opportunity.schema'
+
+import { TOpportunity } from '@/utils/schemas/opportunity.schema'
 import { Collection, ObjectId } from 'mongodb'
-import { TSolarSystemPropose } from '@/ampere-migration/proposes-schemas/solar-system.schema'
-import { THomologationPropose } from '@/ampere-migration/proposes-schemas/homologation.schema'
-import { TOeMPropose } from '@/ampere-migration/proposes-schemas/oem.schema'
-import { TMonitoringPropose } from '@/ampere-migration/proposes-schemas/monitoring.schema'
-import { TPricingItem, TProposal } from '@/utils/schemas/proposal.schema'
-import { TKit, TProductItem } from '@/utils/schemas/kits.schema'
-import { TUser } from '@/utils/schemas/user.schema'
-import { TTechnicalAnalysis } from '@/utils/schemas/technical-analysis.schema'
+
 import { TFunnelReference } from '@/utils/schemas/funnel-reference.schema'
-import { TUserGroup } from '@/utils/schemas/user-groups.schema'
-import UserGroup from '@/components/Cards/UserGroup'
-import { UserGroups } from '@/utils/select-options'
-import { getInverterQty, getModulesPeakPotByProducts, getModulesQty } from '@/lib/methods/extracting'
-import { formatDateQuery } from '@/lib/methods/formatting'
-import { TFileReference } from '@/utils/schemas/file-reference.schema'
+import { TKit } from '@/utils/schemas/kits.schema'
+import { TSignaturePlan } from '@/utils/schemas/signature-plans.schema'
+import { TProduct } from '@/utils/schemas/products.schema'
+import { TService } from '@/utils/schemas/service.schema'
+
 type PostResponse = any
 
 const UserGroupEquivalents = {
@@ -54,46 +41,19 @@ const PlansEquivalents = {
 }
 
 const migrate: NextApiHandler<PostResponse> = async (req, res) => {
-  const crmDb = await connectToCRMDatabase(process.env.MONGODB_URI, 'crm')
-  const opportunitiesCollection: Collection<TOpportunity> = crmDb.collection('opportunities')
-  const funnelReferencesCollection: Collection<TFunnelReference> = crmDb.collection('funnel-references')
+  // const crmDb = await connectToCRMDatabase(process.env.MONGODB_URI, 'crm')
 
-  const opportunities = await opportunitiesCollection.find({ 'responsaveis.id': '64c7fbc0cd53f13e52fb534c' }).toArray()
-  const funnelReferences = await funnelReferencesCollection.find({ idFunil: '661eaeb6c387dfeddd9a23c9' }).toArray()
+  // const kitsCollection: Collection<TKit> = crmDb.collection('kits')
+  // const plansCollection: Collection<TSignaturePlan> = crmDb.collection('signature-plans')
+  // const productsCollection: Collection<TProduct> = crmDb.collection('products')
+  // const servicesCollection: Collection<TService> = crmDb.collection('services')
 
-  const toUpdate = funnelReferences
-    .map((p) => {
-      const opportunity = opportunities.find((o) => o._id.toString() == p.idOportunidade)
-      if (!opportunity) return null
+  // await kitsCollection.updateMany({}, { $set: { idsMetodologiasPagamento: ['661ec619e03128a48f94b4db'] } })
+  // await plansCollection.updateMany({}, { $set: { idsMetodologiasPagamento: ['661ec619e03128a48f94b4db'] } })
+  // await productsCollection.updateMany({}, { $set: { idsMetodologiasPagamento: ['661ec619e03128a48f94b4db'] } })
+  // await servicesCollection.updateMany({}, { $set: { idsMetodologiasPagamento: ['661ec619e03128a48f94b4db'] } })
 
-      const opportunityIsWon = !!opportunity.ganho.data
-
-      const stageMap = {
-        '1': 1,
-        '2': 2,
-        '3': 3,
-        '4': 5,
-        '5': 5,
-        '6': 5,
-        '7': 5,
-        '8': 6,
-      }
-      return {
-        updateOne: {
-          filter: { _id: new ObjectId(p._id) },
-          update: {
-            $set: {
-              idFunil: '6682aa86b99e34b5f3581c36',
-              idEstagioFunil: opportunityIsWon ? 7 : stageMap[p.idEstagioFunil.toString()] || 5,
-            },
-          },
-        },
-      }
-    })
-    .filter((f) => !!f)
-
-  const bulkwriteResponse = await funnelReferencesCollection.bulkWrite(toUpdate)
-  return res.json(bulkwriteResponse)
+  return res.json('DESATIVADA')
 }
 export default apiHandler({
   GET: migrate,

@@ -16,6 +16,7 @@ function NewService({ session, closeModal }: NewServiceProps) {
   const [infoHolder, setInfoHolder] = useState<TService>({
     idParceiro: session.user.idParceiro || '',
     idMetodologiaPrecificacao: '',
+    idsMetodologiasPagamento: ['661ec619e03128a48f94b4db'],
     ativo: true,
     descricao: '',
     observacoes: '',

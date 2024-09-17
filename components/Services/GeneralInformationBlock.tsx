@@ -7,6 +7,8 @@ import { usePricingMethods } from '@/utils/queries/pricing-methods'
 import CheckboxInput from '../Inputs/CheckboxInput'
 import SelectWithImages from '../Inputs/SelectWithImages'
 import { usePartnersSimplified } from '@/utils/queries/partners'
+import { usePaymentMethods } from '@/utils/queries/payment-methods'
+import MultipleSelectInput from '../Inputs/MultipleSelectInput'
 
 type GeneralInformationBlockProps = {
   infoHolder: TService
@@ -15,6 +17,8 @@ type GeneralInformationBlockProps = {
 function GeneralInformationBlock({ infoHolder, setInfoHolder }: GeneralInformationBlockProps) {
   const { data: pricingMethods } = usePricingMethods()
   const { data: partners } = usePartnersSimplified()
+  const { data: paymentMethods } = usePaymentMethods()
+
   return (
     <div className="flex w-full flex-col gap-y-2">
       <h1 className="w-full bg-gray-700  p-1 text-center font-medium text-white">INFORMAÇÕES GERAIS</h1>
@@ -50,7 +54,7 @@ function GeneralInformationBlock({ infoHolder, setInfoHolder }: GeneralInformati
         </div>
       </div>
       <div className="flex w-full flex-col items-center justify-center gap-2 lg:flex-row">
-        <div className="w-full lg:w-1/3">
+        <div className="w-full lg:w-1/2">
           <NumberInput
             label="GARANTIA DO SERVIÇO"
             placeholder="Preencha aqui o garantia do serviço."
@@ -59,7 +63,7 @@ function GeneralInformationBlock({ infoHolder, setInfoHolder }: GeneralInformati
             width="100%"
           />
         </div>
-        <div className="w-full lg:w-1/3">
+        <div className="w-full lg:w-1/2">
           <SelectInput
             label="METODOLOGIA DE PRECIFICAÇÃO"
             value={infoHolder.idMetodologiaPrecificacao ? infoHolder.idMetodologiaPrecificacao : null}
@@ -78,7 +82,36 @@ function GeneralInformationBlock({ infoHolder, setInfoHolder }: GeneralInformati
             width="100%"
           />
         </div>
-        <div className="w-full lg:w-1/3">
+      </div>
+      <div className="flex w-full flex-col items-center justify-center gap-2 lg:flex-row">
+        <div className="w-full lg:w-1/2">
+          <MultipleSelectInput
+            label="MÉTODOS DE PAGAMENTO"
+            selected={infoHolder.idsMetodologiasPagamento}
+            options={
+              paymentMethods?.map((type, index) => ({
+                id: type._id,
+                label: type.nome,
+                value: type._id,
+              })) || []
+            }
+            selectedItemLabel="NÃO DEFINIDO"
+            handleChange={(value: string[] | []) =>
+              setInfoHolder((prev) => ({
+                ...prev,
+                idsMetodologiasPagamento: value,
+              }))
+            }
+            onReset={() =>
+              setInfoHolder((prev) => ({
+                ...prev,
+                idsMetodologiasPagamento: [],
+              }))
+            }
+            width="100%"
+          />
+        </div>
+        <div className="w-full lg:w-1/2">
           <SelectWithImages
             label="VISIBILIDADE DE PARCEIRO"
             value={infoHolder.idParceiro || null}

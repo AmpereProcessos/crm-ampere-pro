@@ -13,6 +13,7 @@ import { formatDateInputChange } from '@/lib/methods/formatting'
 import { TNewKit } from '../Modals/Kit/NewKit'
 import { usePartnersSimplified } from '@/utils/queries/partners'
 import SelectWithImages from '../Inputs/SelectWithImages'
+import { usePaymentMethods } from '@/utils/queries/payment-methods'
 
 type GeneralInformationBlockProps = {
   infoHolder: TKit
@@ -20,7 +21,9 @@ type GeneralInformationBlockProps = {
   pricingMethods: TPricingMethodDTO[]
 }
 function GeneralInformationBlock({ infoHolder, setInfoHolder, pricingMethods }: GeneralInformationBlockProps) {
+  console.log('KIT', infoHolder)
   const { data: partners } = usePartnersSimplified()
+  const { data: paymentMethods } = usePaymentMethods()
   return (
     <div className="flex w-full flex-col gap-y-2">
       <h1 className="w-full bg-gray-700  p-1 text-center font-medium text-white">INFORMAÇÕES GERAIS</h1>
@@ -100,23 +103,26 @@ function GeneralInformationBlock({ infoHolder, setInfoHolder, pricingMethods }: 
         <div className="flex w-full flex-col items-center gap-2 lg:flex-row">
           <div className="w-full lg:w-1/2">
             <MultipleSelectInput
-              label="ESTRUTURAS COMPATÍVEIS"
-              selected={infoHolder.estruturasCompativeis}
-              options={StructureTypes.map((type, index) => ({
-                ...type,
-                id: index + 1,
-              }))}
+              label="MÉTODOS DE PAGAMENTO"
+              selected={infoHolder.idsMetodologiasPagamento}
+              options={
+                paymentMethods?.map((type, index) => ({
+                  id: type._id,
+                  label: type.nome,
+                  value: type._id,
+                })) || []
+              }
               selectedItemLabel="NÃO DEFINIDO"
               handleChange={(value: string[] | []) =>
                 setInfoHolder((prev) => ({
                   ...prev,
-                  estruturasCompativeis: value,
+                  idsMetodologiasPagamento: value,
                 }))
               }
               onReset={() =>
                 setInfoHolder((prev) => ({
                   ...prev,
-                  estruturasCompativeis: [],
+                  idsMetodologiasPagamento: [],
                 }))
               }
               width="100%"
@@ -144,12 +150,38 @@ function GeneralInformationBlock({ infoHolder, setInfoHolder, pricingMethods }: 
             />
           </div>
         </div>
-        <div className="flex w-full items-center justify-center">
-          <DateInput
-            label="DATA DE VALIDADE (SE HOUVER)"
-            value={formatDateForInput(infoHolder.dataValidade)}
-            handleChange={(value) => setInfoHolder((prev) => ({ ...prev, dataValidade: formatDateInputChange(value) }))}
-          />
+        <div className="flex w-full flex-col items-center gap-2 lg:flex-row">
+          <div className="w-full lg:w-1/2">
+            <MultipleSelectInput
+              label="ESTRUTURAS COMPATÍVEIS"
+              selected={infoHolder.estruturasCompativeis}
+              options={StructureTypes.map((type, index) => ({
+                ...type,
+                id: index + 1,
+              }))}
+              selectedItemLabel="NÃO DEFINIDO"
+              handleChange={(value: string[] | []) =>
+                setInfoHolder((prev) => ({
+                  ...prev,
+                  estruturasCompativeis: value,
+                }))
+              }
+              onReset={() =>
+                setInfoHolder((prev) => ({
+                  ...prev,
+                  estruturasCompativeis: [],
+                }))
+              }
+              width="100%"
+            />
+          </div>
+          <div className="w-full lg:w-1/2">
+            <DateInput
+              label="DATA DE VALIDADE (SE HOUVER)"
+              value={formatDateForInput(infoHolder.dataValidade)}
+              handleChange={(value) => setInfoHolder((prev) => ({ ...prev, dataValidade: formatDateInputChange(value) }))}
+            />
+          </div>
         </div>
       </div>
     </div>

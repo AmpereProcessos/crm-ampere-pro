@@ -32,6 +32,7 @@ function EditPlan({ signaturePlanId, session, closeModal }: EditPlanProps) {
     nome: '',
     idParceiro: session.user.idParceiro || '',
     idMetodologiaPrecificacao: '660de08225fee32a2237fa37',
+    idsMetodologiasPagamento: ['661ec619e03128a48f94b4db'],
     descricao: '',
     intervalo: {
       tipo: 'MENSAL',

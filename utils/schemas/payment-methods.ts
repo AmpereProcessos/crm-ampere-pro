@@ -1,4 +1,3 @@
-import { ObjectId } from 'mongodb'
 import { z } from 'zod'
 import { AuthorSchema } from './user.schema'
 
@@ -73,7 +72,6 @@ export const InsertPaymentMethodSchema = z.object({
 })
 
 const PaymentMethodEntitySchema = z.object({
-  _id: z.instanceof(ObjectId),
   ativo: z.boolean(),
   descricao: z.string(),
   idParceiro: z.string().optional().nullable(),
@@ -87,3 +85,8 @@ export type TPaymentMethod = z.infer<typeof GeneralPaymentMethodSchema>
 export type TPaymentMethodEntity = z.infer<typeof PaymentMethodEntitySchema>
 
 export type TPaymentMethodDTO = TPaymentMethod & { _id: string }
+
+export const PaymentMethodReferenceSchema = z.string({
+  required_error: 'Referência do método de pagamento não informada.',
+  invalid_type_error: 'Tipo não válido para referência do método de pagamento.',
+})

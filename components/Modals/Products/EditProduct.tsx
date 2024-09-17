@@ -23,6 +23,7 @@ function EditProduct({ productId, session, closeModal }: EditProductProps) {
     _id: 'id-holder',
     idParceiro: session.user.idParceiro || '',
     idMetodologiaPrecificacao: '661400485ce24a96d0c62c30',
+    idsMetodologiasPagamento: ['661ec619e03128a48f94b4db'],
     ativo: true,
     categoria: 'MÓDULO',
     fabricante: '',

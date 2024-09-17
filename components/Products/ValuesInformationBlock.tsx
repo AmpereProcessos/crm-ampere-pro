@@ -3,17 +3,21 @@ import NumberInput from '../Inputs/NumberInput'
 import { TProduct } from '@/utils/schemas/products.schema'
 import { usePricingMethods } from '@/utils/queries/pricing-methods'
 import SelectInput from '../Inputs/SelectInput'
+import { usePaymentMethods } from '@/utils/queries/payment-methods'
+import MultipleSelectInput from '../Inputs/MultipleSelectInput'
 
 type ValuesInformationBlockProps = {
   infoHolder: TProduct
   setInfoHolder: React.Dispatch<React.SetStateAction<TProduct>>
 }
 function ValuesInformationBlock({ infoHolder, setInfoHolder }: ValuesInformationBlockProps) {
+  const { data: paymentMethods } = usePaymentMethods()
+
   return (
     <div className="flex w-full flex-col gap-y-2">
       <h1 className="w-full bg-gray-700  p-1 text-center font-medium text-white">VALORES</h1>
-      <div className="flex w-full flex-col flex-wrap items-center justify-center gap-2 lg:flex-row">
-        <div className="w-full lg:w-1/3">
+      <div className="flex w-full flex-col items-center gap-2 lg:flex-row">
+        <div className="w-full lg:w-1/2">
           <NumberInput
             label="POTÊNCIA"
             placeholder="Preencha a potência do produto, se aplicável."
@@ -22,7 +26,7 @@ function ValuesInformationBlock({ infoHolder, setInfoHolder }: ValuesInformation
             width="100%"
           />
         </div>
-        <div className="w-full lg:w-1/3">
+        <div className="w-full lg:w-1/2">
           <NumberInput
             label="GARANTIA"
             placeholder="Preencha a garantia do produto."
@@ -31,12 +35,41 @@ function ValuesInformationBlock({ infoHolder, setInfoHolder }: ValuesInformation
             width="100%"
           />
         </div>
-        <div className="w-full lg:w-1/3">
+      </div>
+      <div className="flex w-full flex-col items-center gap-2 lg:flex-row">
+        <div className="w-full lg:w-1/2">
           <NumberInput
             label="VALOR DO PRODUTO"
             placeholder="Preencha o valor do produto."
             value={infoHolder.preco || null}
             handleChange={(value) => setInfoHolder((prev) => ({ ...prev, preco: value }))}
+            width="100%"
+          />
+        </div>
+        <div className="w-full lg:w-1/2">
+          <MultipleSelectInput
+            label="MÉTODOS DE PAGAMENTO"
+            selected={infoHolder.idsMetodologiasPagamento}
+            options={
+              paymentMethods?.map((type, index) => ({
+                id: type._id,
+                label: type.nome,
+                value: type._id,
+              })) || []
+            }
+            selectedItemLabel="NÃO DEFINIDO"
+            handleChange={(value: string[] | []) =>
+              setInfoHolder((prev) => ({
+                ...prev,
+                idsMetodologiasPagamento: value,
+              }))
+            }
+            onReset={() =>
+              setInfoHolder((prev) => ({
+                ...prev,
+                idsMetodologiasPagamento: [],
+              }))
+            }
             width="100%"
           />
         </div>

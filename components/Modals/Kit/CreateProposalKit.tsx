@@ -28,6 +28,7 @@ function CreateProposalKit({ proposal, setProposal, opportunity, closeModal, ses
     nome: '',
     idParceiro: session.user.idParceiro || '',
     idMetodologiaPrecificacao: '660dab0b0fcb72da4ed8c35e',
+    idsMetodologiasPagamento: ['661ec619e03128a48f94b4db'],
     ativo: true,
     topologia: 'MICRO-INVERSOR',
     potenciaPico: 0,

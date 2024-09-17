@@ -1,5 +1,6 @@
 import z from 'zod'
 import { PricingMethodologyReferenceSchema, TPricingMethodDTO } from './pricing-method.schema'
+import { PaymentMethodReferenceSchema } from './payment-methods'
 
 export const ModuleSchema = z.object({
   id: z.string({ invalid_type_error: 'Tipo não válido para ID do módulo.' }).optional().nullable(),
@@ -55,6 +56,7 @@ const GeneralNewKitSchema = z.object({
   nome: z.string(),
   idParceiro: z.string().optional().nullable(),
   idMetodologiaPrecificacao: PricingMethodologyReferenceSchema,
+  idsMetodologiasPagamento: z.array(PaymentMethodReferenceSchema),
   ativo: z.boolean(),
   topologia: z.union([z.literal('MICRO-INVERSOR'), z.literal('INVERSOR')]),
   potenciaPico: z.number(),
@@ -76,6 +78,7 @@ export const InsertNewKitSchema = z.object({
     .min(3, 'É necessário que o nome do kit tenha ao menos 3 letras.'),
   idParceiro: z.string({ required_error: 'ID do parceiro não informado.', invalid_type_error: 'Tipo não válido para o ID do parceiro.' }).optional().nullable(),
   idMetodologiaPrecificacao: PricingMethodologyReferenceSchema,
+  idsMetodologiasPagamento: z.array(PaymentMethodReferenceSchema),
   ativo: z.boolean({
     required_error: 'Status de ativação do kit não informado.',
     invalid_type_error: 'Tipo não válido para o status de ativação do kit.',
@@ -112,6 +115,7 @@ export const KitDTOSchema = z.object({
     .min(3, 'É necessário que o nome do kit tenha ao menos 3 letras.'),
   idParceiro: z.string({ required_error: 'ID do parceiro não informado.', invalid_type_error: 'Tipo não válido para o ID do parceiro.' }).optional().nullable(),
   idMetodologiaPrecificacao: PricingMethodologyReferenceSchema,
+  idsMetodologiasPagamento: z.array(PaymentMethodReferenceSchema),
   ativo: z.boolean({
     required_error: 'Status de ativação do kit não informado.',
     invalid_type_error: 'Tipo não válido para o status de ativação do kit.',

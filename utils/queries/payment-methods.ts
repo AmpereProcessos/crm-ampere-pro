@@ -32,3 +32,26 @@ export function usePaymentMethodById({ id }: { id: string }) {
     queryFn: async () => await fetchPaymentMethodById({ id }),
   })
 }
+
+type GetPaymentMethodsPersonalized = {
+  kitsIds: string[]
+  plansIds: string[]
+  productsIds: string[]
+  servicesIds: string[]
+}
+export async function fetchPaymentMethodsPersonalized({ kitsIds, plansIds, productsIds, servicesIds }: GetPaymentMethodsPersonalized) {
+  try {
+    const { data } = await axios.post('/api/payment-methods/personalized', { kitsIds, plansIds, productsIds, servicesIds })
+
+    return data.data as TPaymentMethodDTO[]
+  } catch (error) {
+    throw error
+  }
+}
+
+export function usePaymentMethodsPersonalized({ kitsIds, plansIds, productsIds, servicesIds }: GetPaymentMethodsPersonalized) {
+  return useQuery({
+    queryKey: ['payment-methods-personalized', kitsIds, plansIds, productsIds, servicesIds],
+    queryFn: async () => await fetchPaymentMethodsPersonalized({ kitsIds, plansIds, productsIds, servicesIds }),
+  })
+}

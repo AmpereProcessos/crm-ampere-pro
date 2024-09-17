@@ -21,6 +21,7 @@ function EditService({ serviceId, session, closeModal }: EditServiceProps) {
     _id: 'id-holder',
     idParceiro: session.user.idParceiro || '',
     idMetodologiaPrecificacao: '',
+    idsMetodologiasPagamento: ['661ec619e03128a48f94b4db'],
     ativo: true,
     descricao: '',
     observacoes: '',

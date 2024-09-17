@@ -2,6 +2,7 @@ import { z } from 'zod'
 import { AuthorSchema } from './user.schema'
 import { ProductItemSchema, ServiceItemSchema } from './kits.schema'
 import { PricingMethodologyReferenceSchema, TPricingMethodDTO } from './pricing-method.schema'
+import { PaymentMethodReferenceSchema } from './payment-methods'
 
 export const PlanDescriptiveItemSchema = z.object(
   {
@@ -25,6 +26,7 @@ const GeneralSignaturePlanSchema = z.object({
     .optional()
     .nullable(),
   idMetodologiaPrecificacao: PricingMethodologyReferenceSchema,
+  idsMetodologiasPagamento: z.array(PaymentMethodReferenceSchema),
   descricao: z.string({ description: 'Descrição do plano não informada.', invalid_type_error: 'Tipo não válido para a descrição do plano.' }),
   intervalo: PlanIntervalSchema,
   descritivo: z.array(PlanDescriptiveItemSchema, {
@@ -48,6 +50,7 @@ export const InsertSignaturePlanSchema = z.object({
     .optional()
     .nullable(),
   idMetodologiaPrecificacao: PricingMethodologyReferenceSchema,
+  idsMetodologiasPagamento: z.array(PaymentMethodReferenceSchema),
   descricao: z.string({ description: 'Descrição do plano não informada.', invalid_type_error: 'Tipo não válido para a descrição do plano.' }),
   intervalo: PlanIntervalSchema,
   descritivo: z.array(PlanDescriptiveItemSchema, {

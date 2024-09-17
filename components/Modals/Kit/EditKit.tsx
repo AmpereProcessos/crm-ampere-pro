@@ -35,6 +35,7 @@ function ModalNewKit({ session, kitId, closeModal }: ModalNewKitProps) {
     nome: '',
     idParceiro: session.user.idParceiro || '',
     idMetodologiaPrecificacao: '',
+    idsMetodologiasPagamento: ['661ec619e03128a48f94b4db'],
     ativo: true,
     topologia: 'MICRO-INVERSOR',
     potenciaPico: 0,

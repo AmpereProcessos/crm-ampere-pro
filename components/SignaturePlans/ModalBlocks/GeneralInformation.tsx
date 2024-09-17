@@ -1,8 +1,10 @@
 import CheckboxInput from '@/components/Inputs/CheckboxInput'
+import MultipleSelectInput from '@/components/Inputs/MultipleSelectInput'
 import SelectInput from '@/components/Inputs/SelectInput'
 import SelectWithImages from '@/components/Inputs/SelectWithImages'
 import TextInput from '@/components/Inputs/TextInput'
 import { usePartnersSimplified } from '@/utils/queries/partners'
+import { usePaymentMethods } from '@/utils/queries/payment-methods'
 import { TSignaturePlan } from '@/utils/schemas/signature-plans.schema'
 import { SignaturePlanIntervalTypes } from '@/utils/select-options'
 import React from 'react'
@@ -13,6 +15,8 @@ type GeneralInformationProps = {
 }
 function GeneralInformation({ infoHolder, setInfoHolder }: GeneralInformationProps) {
   const { data: partners } = usePartnersSimplified()
+  const { data: paymentMethods } = usePaymentMethods()
+
   return (
     <div className="flex w-full flex-col gap-1">
       <h1 className="w-full bg-gray-700  p-1 text-center font-medium text-white">INFORMAÇÕES GERAIS</h1>
@@ -58,26 +62,55 @@ function GeneralInformation({ infoHolder, setInfoHolder }: GeneralInformationPro
           />
         </div>
       </div>
-      <div className="w-full">
-        <SelectWithImages
-          label="VISIBILIDADE DE PARCEIRO"
-          value={infoHolder.idParceiro || null}
-          options={partners?.map((p) => ({ id: p._id, value: p._id, label: p.nome, url: p.logo_url || undefined })) || []}
-          selectedItemLabel="TODOS"
-          handleChange={(value) =>
-            setInfoHolder((prev) => ({
-              ...prev,
-              idParceiro: value,
-            }))
-          }
-          onReset={() =>
-            setInfoHolder((prev) => ({
-              ...prev,
-              idParceiro: null,
-            }))
-          }
-          width="100%"
-        />
+      <div className="flex w-full flex-col items-center gap-2 lg:flex-row">
+        <div className="w-full lg:w-1/2">
+          <SelectWithImages
+            label="VISIBILIDADE DE PARCEIRO"
+            value={infoHolder.idParceiro || null}
+            options={partners?.map((p) => ({ id: p._id, value: p._id, label: p.nome, url: p.logo_url || undefined })) || []}
+            selectedItemLabel="TODOS"
+            handleChange={(value) =>
+              setInfoHolder((prev) => ({
+                ...prev,
+                idParceiro: value,
+              }))
+            }
+            onReset={() =>
+              setInfoHolder((prev) => ({
+                ...prev,
+                idParceiro: null,
+              }))
+            }
+            width="100%"
+          />
+        </div>
+        <div className="w-full lg:w-1/2">
+          <MultipleSelectInput
+            label="MÉTODOS DE PAGAMENTO"
+            selected={infoHolder.idsMetodologiasPagamento}
+            options={
+              paymentMethods?.map((type, index) => ({
+                id: type._id,
+                label: type.nome,
+                value: type._id,
+              })) || []
+            }
+            selectedItemLabel="NÃO DEFINIDO"
+            handleChange={(value: string[] | []) =>
+              setInfoHolder((prev) => ({
+                ...prev,
+                idsMetodologiasPagamento: value,
+              }))
+            }
+            onReset={() =>
+              setInfoHolder((prev) => ({
+                ...prev,
+                idsMetodologiasPagamento: [],
+              }))
+            }
+            width="100%"
+          />
+        </div>
       </div>
     </div>
   )

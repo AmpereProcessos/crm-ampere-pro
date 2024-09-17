@@ -32,6 +32,7 @@ function NewPlan({ session, closeModal }: NewPlanProps) {
     produtos: [],
     servicos: [],
     idMetodologiaPrecificacao: '660de08225fee32a2237fa37',
+    idsMetodologiasPagamento: ['661ec619e03128a48f94b4db'],
     preco: 0,
     autor: {
       id: session.user.id,

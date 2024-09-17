@@ -89,7 +89,7 @@ function MultipleSelectInput<T>({
   }
 
   useEffect(() => {
-    // setSelectedIds(getValueID(selected));
+    setSelectedIds(getValueID(selected))
     setItems(options)
   }, [options, selected])
   useEffect(() => {
