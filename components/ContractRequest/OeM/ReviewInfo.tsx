@@ -8,6 +8,7 @@ import { formatDateForInput, formatToCEP, formatToCPForCNPJ, formatToPhone, getP
 
 import { useMutationWithFeedback } from '@/utils/mutations/general-hook'
 import { getOeMPrices } from '@/utils/pricing/oem/methods'
+import { useCreditors } from '@/utils/queries/utils'
 import { TContractRequest } from '@/utils/schemas/integrations/app-ampere/contract-request.schema'
 import { TProposalDTOWithOpportunity } from '@/utils/schemas/proposal.schema'
 import { CustomersAcquisitionChannels, StructureTypes } from '@/utils/select-options'
@@ -48,6 +49,9 @@ function ReviewInfo({
 }: ReviewInfoProps) {
   const [pricing, setPricing] = useState(getOeMPrices({ modulesQty: proposeInfo?.premissas.numModulos || 0, distance }))
   const queryClient = useQueryClient()
+
+  const { data: creditors } = useCreditors()
+
   const { mutate, isPending, isSuccess } = useMutationWithFeedback({
     queryClient: queryClient,
     mutationKey: ['create-oem-contract-request'],
@@ -1588,62 +1592,7 @@ function ReviewInfo({
                         width={'450px'}
                         label={'CREDOR'}
                         editable={true}
-                        options={[
-                          {
-                            label: 'BANCO DO BRASIL',
-                            value: 'BANCO DO BRASIL',
-                          },
-                          {
-                            label: 'BRADESCO',
-                            value: 'BRADESCO',
-                          },
-                          {
-                            label: 'BV FINANCEIRA',
-                            value: 'BV FINANCEIRA',
-                          },
-                          {
-                            label: 'CAIXA',
-                            value: 'CAIXA',
-                          },
-                          {
-                            label: 'COOPACREDI',
-                            value: 'COOPACREDI',
-                          },
-                          {
-                            label: 'CREDICAMPINA',
-                            value: 'CREDICAMPINA',
-                          },
-                          {
-                            label: 'CREDIPONTAL',
-                            value: 'CREDIPONTAL',
-                          },
-                          {
-                            label: 'SANTANDER',
-                            value: 'SANTANDER',
-                          },
-                          {
-                            label: 'SOL FÁCIL',
-                            value: 'SOL FÁCIL',
-                          },
-                          {
-                            label: 'SICRED',
-                            value: 'SICRED',
-                          },
-                          {
-                            label: 'SICOOB ARACOOP',
-                            value: 'SICOOB ARACOOP',
-                          },
-                          {
-                            label: 'SICOOB',
-                            value: 'SICOOB',
-                          },
-                        ].map((creditor, index) => {
-                          return {
-                            id: index + 1,
-                            label: creditor.label,
-                            value: creditor.value,
-                          }
-                        })}
+                        options={creditors?.map((c) => ({ id: c._id, label: c.valor, value: c.valor })) || []}
                         value={requestInfo.credor}
                         handleChange={(value) => setRequestInfo({ ...requestInfo, credor: value })}
                         selectedItemLabel="NÃO DEFINIDO"
