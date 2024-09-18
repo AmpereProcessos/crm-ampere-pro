@@ -300,30 +300,6 @@ function ProposalPage({ proposalId, session }: ProposalPageProps) {
                         </h1>
                       </div>
                     ))}
-                  {/* <div className="flex w-full flex-col items-center justify-between gap-1 lg:flex-row">
-                    <h1 className="text-xs font-medium uppercase leading-none tracking-tight text-gray-500">Consumo de energia mensal</h1>
-                    <h1 className="text-end text-sm font-medium leading-none tracking-tight lg:text-xs">{proposal?.premissas.consumoEnergiaMensal} kWh</h1>
-                  </div>
-                  <div className="flex w-full flex-col items-center justify-between gap-1 lg:flex-row">
-                    <h1 className="text-xs font-medium uppercase leading-none tracking-tight text-gray-500">Tarifa de energia</h1>
-                    <h1 className="text-end text-sm font-medium leading-none tracking-tight lg:text-xs">R$ {proposal?.premissas.tarifaEnergia} R$/kWh</h1>
-                  </div>
-                  <div className="flex w-full flex-col items-center justify-between gap-1 lg:flex-row">
-                    <h1 className="text-xs font-medium uppercase leading-none tracking-tight text-gray-500">Tarifa TUSD</h1>
-                    <h1 className="text-end text-sm font-medium leading-none tracking-tight lg:text-xs">{proposal?.premissas.tarifaFioB} R$/kWh</h1>
-                  </div>
-                  <div className="flex w-full flex-col items-center justify-between gap-1 lg:flex-row">
-                    <h1 className="text-xs font-medium uppercase leading-none tracking-tight text-gray-500">Fator de simultaneidade</h1>
-                    <h1 className="text-end text-sm font-medium leading-none tracking-tight lg:text-xs">{proposal?.premissas.fatorSimultaneidade} %</h1>
-                  </div>
-                  <div className="flex w-full flex-col items-center justify-between gap-1 lg:flex-row">
-                    <h1 className="text-xs font-medium uppercase leading-none tracking-tight text-gray-500">Tipo de estrutura</h1>
-                    <h1 className="text-end text-sm font-medium leading-none tracking-tight lg:text-xs">{proposal?.premissas.tipoEstrutura}</h1>
-                  </div>
-                  <div className="flex w-full flex-col items-center justify-between gap-1 lg:flex-row">
-                    <h1 className="text-xs font-medium uppercase leading-none tracking-tight text-gray-500">Distância</h1>
-                    <h1 className="text-end text-sm font-medium leading-none tracking-tight lg:text-xs">{proposal?.premissas.distancia} km</h1>
-                  </div> */}
                 </div>
               </div>
               <div className="flex h-full w-full flex-col rounded border border-gray-500 bg-[#fff] p-6 shadow-md lg:w-1/4">

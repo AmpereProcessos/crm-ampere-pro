@@ -2,7 +2,10 @@ import CheckboxInput from '@/components/Inputs/CheckboxInput'
 import TextInput from '@/components/Inputs/TextInput'
 import AddPricingItem from '@/components/Proposal/Blocks/AddPricingItem'
 import EditFinalPrice from '@/components/Proposal/Blocks/EditFinalPrice'
+import PaymentMethodCard from '@/components/Proposal/Blocks/PaymentMethodCard'
 import PricingTable from '@/components/Proposal/Blocks/PricingTable'
+import ErrorComponent from '@/components/utils/ErrorComponent'
+import LoadingComponent from '@/components/utils/LoadingComponent'
 import { handleDownload } from '@/lib/methods/download'
 
 import { formatToMoney } from '@/lib/methods/formatting'
@@ -11,8 +14,9 @@ import { useMutationWithFeedback } from '@/utils/mutations/general-hook'
 import { createProposalUpdateRecord } from '@/utils/mutations/proposal-update-records'
 import { editProposal, editProposalPersonalized } from '@/utils/mutations/proposals'
 import { getPricingTotal } from '@/utils/pricing/methods'
+import { usePaymentMethods } from '@/utils/queries/payment-methods'
 import { TProposalUpdateRecord } from '@/utils/schemas/proposal-update-records.schema'
-import { TPricingItem, TProposalDTO, TProposalDTOWithOpportunityAndClient } from '@/utils/schemas/proposal.schema'
+import { TPricingItem, TProposalDTO, TProposalDTOWithOpportunityAndClient, TProposalPaymentMethodItem } from '@/utils/schemas/proposal.schema'
 import { useQueryClient } from '@tanstack/react-query'
 import { Session } from 'next-auth'
 import React, { useState } from 'react'
@@ -38,6 +42,7 @@ function EditProposal({ closeModal, info, userHasPricingViewPermission, userHasP
   const [proposalName, setProposalName] = useState(info.nome)
   const [regenerateFile, setRegenerateFile] = useState<boolean>(false)
   const [pricing, setPricing] = useState<TPricingItem[]>(info.precificacao)
+  const [payment, setPayment] = useState<TProposalDTO['pagamento']>(info.pagamento)
   const [addNewPriceItemModalIsOpen, setAddNewPriceItemModalIsOpen] = useState<boolean>(false)
   const [editFinalPriceModalIsOpen, setEditFinalPriceModalIsOpen] = useState<boolean>(false)
   const pricingTotal = getPricingTotal({ pricing: pricing })
@@ -47,11 +52,13 @@ function EditProposal({ closeModal, info, userHasPricingViewPermission, userHasP
     newPricing,
     previousName,
     previousPricing,
+    payment,
   }: {
     newName: string
     newPricing: TPricingItem[]
     previousName: string
     previousPricing: TPricingItem[]
+    payment: TProposalDTO['pagamento']
   }) {
     try {
       // Creating update registry
@@ -86,7 +93,7 @@ function EditProposal({ closeModal, info, userHasPricingViewPermission, userHasP
 
       const response = await editProposalPersonalized({
         id: info._id,
-        proposal: { ...info, nome: newName, planos: proposalPlans, precificacao: newPricing, valor: newTotal },
+        proposal: { ...info, nome: newName, planos: proposalPlans, precificacao: newPricing, valor: newTotal, pagamento: payment },
         opportunity: info.oportunidadeDados,
         client: info.clienteDados,
         regenerateFile: regenerateFile,
@@ -103,7 +110,6 @@ function EditProposal({ closeModal, info, userHasPricingViewPermission, userHasP
       throw error
     }
   }
-
   const { mutate: handleUpdate, isPending } = useMutationWithFeedback({
     mutationKey: ['update-proposal', info._id],
     mutationFn: handleProposalUpdate,
@@ -132,36 +138,42 @@ function EditProposal({ closeModal, info, userHasPricingViewPermission, userHasP
             handleChange={(value) => setProposalName(value)}
             width="100%"
           />
-          <PricingTable
-            opportunity={info.oportunidadeDados}
-            proposal={info}
-            pricing={pricing}
-            setPricing={setPricing}
-            userHasPricingEditPermission={userHasPricingEditPermission}
-            userHasPricingViewPermission={userHasPricingViewPermission}
-          />
-          {userHasPricingEditPermission ? (
-            <div className="flex w-full items-center justify-center">
-              <button
-                onClick={() => setAddNewPriceItemModalIsOpen(true)}
-                className="flex items-center gap-2 rounded bg-orange-600 px-4 py-2 text-white duration-100 ease-in-out hover:bg-orange-700"
-              >
-                <MdAdd />
-                <h1 className="text-xs font-bold">NOVO CUSTO</h1>
-              </button>
-            </div>
-          ) : null}
-          <div className="flex w-full items-center justify-center gap-2 py-1">
-            <div className="flex gap-2 rounded border border-gray-600 px-2 py-1 font-medium text-gray-600">
-              <p>{formatToMoney(pricingTotal)}</p>
-
+          <div className="flex w-full flex-col gap-2 rounded border border-cyan-500">
+            <h1 className="w-full rounded bg-cyan-500 p-1 text-center text-xs font-bold text-white">PRECIFICAÇÃO</h1>
+            <div className="flex w-full flex-col p-2">
+              <PricingTable
+                opportunity={info.oportunidadeDados}
+                proposal={info}
+                pricing={pricing}
+                setPricing={setPricing}
+                userHasPricingEditPermission={userHasPricingEditPermission}
+                userHasPricingViewPermission={userHasPricingViewPermission}
+              />
               {userHasPricingEditPermission ? (
-                <button onClick={() => setEditFinalPriceModalIsOpen((prev) => !prev)} className="text-md text-gray-400 hover:text-[#fead61]">
-                  <AiFillEdit />
-                </button>
+                <div className="flex w-full items-center justify-center">
+                  <button
+                    onClick={() => setAddNewPriceItemModalIsOpen(true)}
+                    className="flex items-center gap-2 rounded bg-orange-600 px-4 py-2 text-white duration-100 ease-in-out hover:bg-orange-700"
+                  >
+                    <MdAdd />
+                    <h1 className="text-xs font-bold">NOVO CUSTO</h1>
+                  </button>
+                </div>
               ) : null}
+              <div className="flex w-full items-center justify-center gap-2 py-1">
+                <div className="flex gap-2 rounded border border-gray-600 px-2 py-1 font-medium text-gray-600">
+                  <p>{formatToMoney(pricingTotal)}</p>
+
+                  {userHasPricingEditPermission ? (
+                    <button onClick={() => setEditFinalPriceModalIsOpen((prev) => !prev)} className="text-md text-gray-400 hover:text-[#fead61]">
+                      <AiFillEdit />
+                    </button>
+                  ) : null}
+                </div>
+              </div>
             </div>
           </div>
+          <ProposalPaymentMethods proposalValue={pricingTotal} payment={payment} setPayment={setPayment} />
           <div className="flex w-full items-center justify-end gap-2 p-2">
             {info.idModeloAnvil ? (
               <div className="w-fit">
@@ -175,8 +187,10 @@ function EditProposal({ closeModal, info, userHasPricingViewPermission, userHasP
             ) : null}
             <button
               disabled={isPending}
-              // @ts-ignore
-              onClick={() => handleUpdate({ previousName: info.nome, previousPricing: info.precificacao, newName: proposalName, newPricing: pricing })}
+              onClick={() =>
+                // @ts-ignore
+                handleUpdate({ previousName: info.nome, previousPricing: info.precificacao, newName: proposalName, newPricing: pricing, payment: payment })
+              }
               className="h-9 whitespace-nowrap rounded bg-blue-700 px-4 py-2 text-sm font-medium text-white shadow disabled:bg-gray-500 disabled:text-white enabled:hover:bg-blue-600 enabled:hover:text-white"
             >
               ATUALIZAR PROPOSTA
@@ -195,3 +209,49 @@ function EditProposal({ closeModal, info, userHasPricingViewPermission, userHasP
 }
 
 export default EditProposal
+
+type ProposalPaymentMethodsProps = {
+  proposalValue: number
+  payment: TProposalDTO['pagamento']
+  setPayment: React.Dispatch<React.SetStateAction<TProposalDTO['pagamento']>>
+}
+function ProposalPaymentMethods({ proposalValue, payment, setPayment }: ProposalPaymentMethodsProps) {
+  const { data: paymentMethods, isLoading, isError, isSuccess } = usePaymentMethods()
+  function handleAddMethod(method: TProposalPaymentMethodItem) {
+    setPayment((prev) => ({ ...prev, metodos: [...prev.metodos, method] }))
+  }
+  function handleRemoveMethod(id: string) {
+    setPayment((prev) => ({ ...prev, metodos: [...prev.metodos.filter((s) => s.id != id)] }))
+  }
+  return (
+    <div className="flex w-full flex-col gap-2 rounded border border-[#fead41]">
+      <h1 className="w-full rounded bg-[#fead41] p-1 text-center text-xs font-bold text-white">FORMAS DE PAGAMENTO</h1>
+      <p className="my-2 w-full text-center font-medium leading-none tracking-tight text-gray-500">
+        Selecione os métodos de pagamento aplicáveis a essa proposta.
+      </p>
+      <div className="flex w-full flex-col gap-2 p-2">
+        {isLoading ? <LoadingComponent /> : null}
+        {isError ? <ErrorComponent msg="Erro ao buscar metodologias de pagamento" /> : null}
+        {isSuccess ? (
+          paymentMethods.length > 0 ? (
+            paymentMethods.map((method, index) => (
+              <PaymentMethodCard
+                index={index}
+                key={method._id}
+                method={method}
+                proposalValue={proposalValue}
+                selectedMethods={payment.metodos}
+                selectMethod={(method) => handleAddMethod(method)}
+                removeMethod={(id) => handleRemoveMethod(id)}
+              />
+            ))
+          ) : (
+            <p className="flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-gray-500">
+              Nenhum método de pagamento disponível.
+            </p>
+          )
+        ) : null}
+      </div>
+    </div>
+  )
+}

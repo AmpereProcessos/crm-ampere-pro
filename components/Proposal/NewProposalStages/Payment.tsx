@@ -56,7 +56,7 @@ function Payment({ infoHolder, setInfoHolder, moveToNextStage, moveToPreviousSta
           </h1>
         </div>
         {isLoading ? <LoadingComponent /> : null}
-        {isError ? <ErrorComponent msg="Erro ao buscar metodologias de precificação" /> : null}
+        {isError ? <ErrorComponent msg="Erro ao buscar metodologias de pagamento" /> : null}
         {isSuccess ? (
           paymentMethods.length > 0 ? (
             paymentMethods.map((method, index) => (
@@ -69,7 +69,6 @@ function Payment({ infoHolder, setInfoHolder, moveToNextStage, moveToPreviousSta
                 selectMethod={(id) => addMethod(id)}
                 removeMethod={(id) => {
                   const filtered = [...selectedMethods].filter((s) => s.id != id)
-
                   setSelectedMethods(filtered)
                 }}
               />
