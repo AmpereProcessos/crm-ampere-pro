@@ -66,6 +66,7 @@ function Payment({ infoHolder, setInfoHolder, moveToNextStage, moveToPreviousSta
                 method={method}
                 proposalValue={proposalValue}
                 selectedMethods={selectedMethods}
+                updateSelectedMethods={(updatedMethods) => setSelectedMethods(updatedMethods)}
                 selectMethod={(id) => addMethod(id)}
                 removeMethod={(id) => {
                   const filtered = [...selectedMethods].filter((s) => s.id != id)

@@ -241,6 +241,7 @@ function ProposalPaymentMethods({ proposalValue, payment, setPayment }: Proposal
                 method={method}
                 proposalValue={proposalValue}
                 selectedMethods={payment.metodos}
+                updateSelectedMethods={(methodsUpdated) => setPayment((prev) => ({ ...prev, metodos: methodsUpdated }))}
                 selectMethod={(method) => handleAddMethod(method)}
                 removeMethod={(id) => handleRemoveMethod(id)}
               />

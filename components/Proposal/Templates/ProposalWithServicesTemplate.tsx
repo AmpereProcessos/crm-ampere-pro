@@ -94,9 +94,12 @@ function ProposalWithServicesTemplate({ proposal, opportunity, partner }: Propos
                     <div key={itemIndex} className={`flex w-fit min-w-fit items-center gap-1 rounded-md border border-gray-200 p-2 shadow-sm`}>
                       <BsCircleHalf color="#ed174c" />
                       <h1 className="text-[0.55rem] font-medium leading-none tracking-tight">
-                        {fractionnement.maximoParcelas} x{' '}
+                        {fractionnement.parcelas || fractionnement.maximoParcelas} x{' '}
                         <strong>
-                          {formatToMoney(getFractionnementValue({ fractionnement, proposalValue: proposal.valor }) / fractionnement.maximoParcelas)}
+                          {formatToMoney(
+                            getFractionnementValue({ fractionnement, proposalValue: proposal.valor }) /
+                              (fractionnement.parcelas || fractionnement.maximoParcelas)
+                          )}
                         </strong>
                       </h1>
                     </div>
@@ -165,23 +168,6 @@ function ProposalWithServicesTemplate({ proposal, opportunity, partner }: Propos
         </div>
         {partner.slogan ? <h1 className="w-full text-center font-black text-white">{partner.slogan}</h1> : null}
       </div>
-      {/* <div className="mt-4 flex w-full flex-col gap-4 bg-black p-4">
-        <div className="flex w-full items-center justify-around gap-6">
-          <div className="flex items-center gap-1 text-white">
-            <TbWorld size={20} />
-            <p className="text-xs tracking-tight">www.sitedaempresa.com.br</p>
-          </div>
-          <div className="flex items-center gap-1 text-white">
-            <MdEmail size={20} />
-            <p className="text-xs tracking-tight">{partner.contatos.email}</p>
-          </div>
-          <div className="flex items-center gap-1 text-white">
-            <FaPhone size={20} />
-            <p className="text-xs tracking-tight">{partner.contatos.telefonePrimario}</p>
-          </div>
-        </div>
-        <h1 className="w-full text-center font-black text-white">A ENERGIA QUE MOVE O MUNDO, VEM DE VOCÊ !</h1>
-      </div> */}
     </div>
   )
 }

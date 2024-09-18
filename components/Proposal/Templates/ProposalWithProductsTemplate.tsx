@@ -104,9 +104,12 @@ function ProposalWithProductsTemplate({ proposal, opportunity, partner }: Propos
                     <div key={itemIndex} className={`flex w-fit min-w-fit items-center gap-1 rounded-md border border-gray-200 p-2 shadow-sm`}>
                       <BsCircleHalf color="#ed174c" />
                       <h1 className="text-[0.55rem] font-medium leading-none tracking-tight">
-                        {fractionnement.maximoParcelas} x{' '}
+                        {fractionnement.parcelas || fractionnement.maximoParcelas} x{' '}
                         <strong>
-                          {formatToMoney(getFractionnementValue({ fractionnement, proposalValue: proposal.valor }) / fractionnement.maximoParcelas)}
+                          {formatToMoney(
+                            getFractionnementValue({ fractionnement, proposalValue: proposal.valor }) /
+                              (fractionnement.parcelas || fractionnement.maximoParcelas)
+                          )}
                         </strong>
                       </h1>
                     </div>

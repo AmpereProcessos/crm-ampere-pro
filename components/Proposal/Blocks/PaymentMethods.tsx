@@ -20,6 +20,7 @@ function PaymentMethods({ infoHolder, setInfoHolder }: PaymentMethodsProps) {
               proposalValue={infoHolder.valor}
               selectMethod={() => console.log()}
               selectedMethods={[]}
+              updateSelectedMethods={(methods) => setInfoHolder((prev) => ({ ...prev, pagamento: { ...prev.pagamento, metodos: methods } }))}
               isSelectable={false}
               fractionnementWidth="300px"
             />
