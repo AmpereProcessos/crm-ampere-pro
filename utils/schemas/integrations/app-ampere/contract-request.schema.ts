@@ -103,6 +103,7 @@ const GeneralContractRequestSchema = z.object({
   necessidadeNFAdiantada: z.enum(['SIM', 'NÃO']).nullable().optional(),
   necessidadeCodigoFiname: z.enum(['SIM', 'NÃO']).nullable().optional(),
   formaDePagamento: z.string().nullable().optional(),
+  formaDePagamentoId: z.string().nullable().optional(),
   descricaoNegociacao: z.string(),
   possuiDistribuicao: z.enum(['SIM', 'NÃO']).nullable().optional(),
   realizarHomologacao: z.boolean().optional(),

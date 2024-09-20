@@ -161,6 +161,7 @@ function SolarSystemForm({ requestInfo, setRequestInfo, proposeInfo }: SolarSyst
         <PaymentInfo
           requestInfo={requestInfo}
           setRequestInfo={setRequestInfo}
+          paymentMethods={proposeInfo.pagamento.metodos}
           goToPreviousStage={() => setStage((prev) => prev - 1)}
           goToNextStage={() => setStage((prev) => prev + 1)}
         />

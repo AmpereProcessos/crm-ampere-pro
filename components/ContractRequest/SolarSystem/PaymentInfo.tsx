@@ -6,15 +6,17 @@ import { formatToCPForCNPJ, formatToPhone } from '@/utils/methods'
 import { IContractRequest } from '@/utils/models'
 import { useCreditors } from '@/utils/queries/utils'
 import { TContractRequest } from '@/utils/schemas/integrations/app-ampere/contract-request.schema'
+import { TProposalPaymentMethodItem } from '@/utils/schemas/proposal.schema'
 import React, { useState } from 'react'
 import { toast } from 'react-hot-toast'
 type PaymentInfoProps = {
   requestInfo: TContractRequest
   setRequestInfo: React.Dispatch<React.SetStateAction<TContractRequest>>
+  paymentMethods: TProposalPaymentMethodItem[]
   goToPreviousStage: () => void
   goToNextStage: () => void
 }
-function PaymentInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNextStage }: PaymentInfoProps) {
+function PaymentInfo({ requestInfo, setRequestInfo, paymentMethods, goToPreviousStage, goToNextStage }: PaymentInfoProps) {
   const { data: creditors } = useCreditors()
 
   function setPaymentInfoSameAsContract() {
@@ -475,6 +477,26 @@ function PaymentInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNextS
                 }}
               />
             </div>
+            {/* <div className="col-span-3 flex items-center justify-center">
+              <SelectInput
+                width={'450px'}
+                label={'FORMA DE PAGAMENTO'}
+                editable={true}
+                options={paymentMethods.map((m) => ({ id: m.id, value: m.nome, label: m.nome }))}
+                value={requestInfo.formaDePagamento}
+                handleChange={(value) => {
+                  const method = paymentMethods.find((p) => p.nome === value)
+                  setRequestInfo({ ...requestInfo, formaDePagamento: method?.nome || undefined, formaDePagamentoId: method?.id })
+                }}
+                selectedItemLabel="NÃO DEFINIDO"
+                onReset={() => {
+                  setRequestInfo((prev) => ({
+                    ...prev,
+                    formaDePagamento: null,
+                  }))
+                }}
+              />
+            </div> */}
             <div className="col-span-3 flex items-center justify-center">
               <SelectInput
                 width={'450px'}

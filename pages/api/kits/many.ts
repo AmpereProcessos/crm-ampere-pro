@@ -72,6 +72,7 @@ const deleteKits: NextApiHandler<DeleteResponse> = async (req, res) => {
   if (typeof ids != 'string') throw new createHttpError.BadRequest('IDs não válidos.')
 
   const idsArr = ids.split(',')
+  console.log(idsArr)
   const parsedIds = z.array(z.string(), { required_error: 'IDs não fornecidos.', invalid_type_error: 'Tipo não válido para IDs' }).parse(idsArr)
 
   const objectIds = parsedIds.map((id) => new ObjectId(id))
@@ -79,7 +80,7 @@ const deleteKits: NextApiHandler<DeleteResponse> = async (req, res) => {
   const db = await connectToDatabase(process.env.MONGODB_URI, 'crm')
   const kitsCollection: Collection<TKit> = db.collection('kits')
 
-  const deleteResponse = await kitsCollection.deleteMany({ _id: { $in: objectIds }, idParceiro: partnerId || '' })
+  const deleteResponse = await kitsCollection.deleteMany({ _id: { $in: objectIds } })
 
   if (!deleteResponse.acknowledged) return new createHttpError.InternalServerError('Erro ao excluir kits.')
   return res.status(201).json({ data: 'Kits excluídos com sucesso!', message: 'Kits excluídos com sucesso!' })

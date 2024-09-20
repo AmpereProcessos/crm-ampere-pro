@@ -134,6 +134,7 @@ function KitBulkOperation({ session, closeModal }: KitBulkOperationProps) {
           nome: bulkKit.NOME,
           idParceiro: partnerId,
           idMetodologiaPrecificacao: pricingMethodologyId,
+          idsMetodologiasPagamento: ['661ec619e03128a48f94b4db', '661ec635e03128a48f94b4dc', '661ec65ae03128a48f94b4dd'],
           ativo: bulkKit.ATIVO == 'SIM' ? true : false,
           topologia: bulkKit.TOPOLOGIA,
           potenciaPico: modulesTotalPeakPower,
