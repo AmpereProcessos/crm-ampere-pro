@@ -76,7 +76,7 @@ function PeriodDropdownFilter({ initialAfter, initialBefore, setDateParam }: Per
                 onChange={(e) =>
                   setDateFilter((prev) => ({
                     ...prev,
-                    after: e.target.value != '' ? new Date(e.target.value).toISOString() : undefined,
+                    after: e.target.value !== '' ? new Date(e.target.value).toISOString() : undefined,
                   }))
                 }
               />

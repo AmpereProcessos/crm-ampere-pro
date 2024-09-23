@@ -3,6 +3,8 @@ import lodash from 'lodash'
 import { HiCheck } from 'react-icons/hi'
 import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io'
 import { VariableSizeList } from 'react-window'
+import { useMediaQuery } from '@/lib/utils'
+import { Drawer, DrawerContent } from '../ui/drawer'
 
 type SelectOption<T> = {
   id: string | number
@@ -16,6 +18,8 @@ type SelectInputProps<T> = {
   showLabel?: boolean
   selected: (string | number)[] | null
   selectedItemLabel: string
+  editable?: boolean
+
   options: SelectOption<T>[] | null
   handleChange: (value: T[]) => void
   onReset: () => void
@@ -27,6 +31,7 @@ function MultipleSelectInputVirtualized<T>({
   labelClassName = 'font-sans font-bold  text-[#353432] text-start',
   showLabel = true,
   selected,
+  editable = true,
   options,
   selectedItemLabel,
   handleChange,
@@ -44,6 +49,8 @@ function MultipleSelectInputVirtualized<T>({
 
   const ref = useRef<any>(null)
   const [items, setItems] = useState<SelectOption<T>[] | null>(options)
+  const isDesktop = useMediaQuery("(min-width: 768px)")
+
   const [selectMenuIsOpen, setSelectMenuIsOpen] = useState<boolean>(false)
   const [selectedIds, setSelectedIds] = useState<(string | number)[] | null>(getValueID(selected))
 
@@ -97,7 +104,9 @@ function MultipleSelectInputVirtualized<T>({
       {({ index, style }) => (
         <div
           style={style}
-          onClick={() => handleSelect(list[index].id, list[index].value)}
+          onClick={() => {
+            if (editable) handleSelect(list[index].id, list[index].value)
+          }}
           className={`flex w-full cursor-pointer items-center rounded p-1 px-2 hover:bg-gray-100 ${selectedIds?.includes(list[index].id) ? 'bg-gray-100' : ''}`}
         >
           <p className="grow text-sm font-medium text-[#353432]">{list[index].label}</p>
@@ -113,7 +122,7 @@ function MultipleSelectInputVirtualized<T>({
   }, [options, selected])
   useEffect(() => {
     const handleClickOutside = (event: any) => {
-      if (ref.current && !ref.current.contains(event.target)) {
+      if (ref.current && !ref.current.contains(event.target) && isDesktop) {
         onClickOutside()
       }
     }
@@ -122,41 +131,112 @@ function MultipleSelectInputVirtualized<T>({
       document.removeEventListener('click', (e) => handleClickOutside(e), true)
     }
   }, [onClickOutside])
+  if (isDesktop)
+    return (
+      <div ref={ref} className={`relative flex w-full flex-col gap-1 lg:w-[${width ? width : '350px'}]`}>
+        {showLabel ? (
+          <label htmlFor={inputIdentifier} className={labelClassName}>
+            {label}
+          </label>
+        ) : null}
+
+        <div className="flex h-full w-full items-center justify-between rounded-md border border-gray-200 bg-[#fff] p-3 text-sm shadow-sm">
+          {selectMenuIsOpen ? (
+            <input
+              type="text"
+              autoFocus
+              value={searchFilter}
+              onChange={(e) => handleFilter(e.target.value)}
+              placeholder="Filtre o item desejado..."
+              className="h-full w-full text-sm italic outline-none"
+            />
+          ) : (
+            <p
+              onClick={() => {
+                if (editable) setSelectMenuIsOpen((prev) => !prev)
+              }}
+              className="grow cursor-pointer text-[#353432]">
+              {selectedIds && selectedIds.length > 0 && options
+                ? options.filter((item) => selectedIds.includes(item.id)).length > 1
+                  ? 'MÚLTIPLAS SELEÇÕES'
+                  : options.filter((item) => selectedIds.includes(item.id))[0].label
+                : 'NÃO DEFINIDO'}
+            </p>
+          )}
+          {selectMenuIsOpen ? (
+            <IoMdArrowDropup style={{ cursor: 'pointer' }} onClick={() => {
+              if (editable) setSelectMenuIsOpen((prev) => !prev)
+            }} />
+          ) : (
+            <IoMdArrowDropdown style={{ cursor: 'pointer' }} onClick={() => {
+              if (editable) setSelectMenuIsOpen((prev) => !prev)
+            }} />
+          )}
+        </div>
+        {selectMenuIsOpen ? (
+          <div className="absolute top-[75px] z-[100] flex h-[250px] max-h-[250px] w-full flex-col self-center overflow-y-auto overscroll-y-auto rounded-md border border-gray-200 bg-[#fff] p-2 py-1 shadow-sm scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300">
+            <div
+              onClick={() => resetState()}
+              className={`flex w-full cursor-pointer items-center rounded p-1 px-2 hover:bg-gray-100 ${!selectedIds ? 'bg-gray-100' : ''}`}
+            >
+              <p className="grow font-medium text-[#353432]">{selectedItemLabel}</p>
+              {!selectedIds ? <HiCheck style={{ color: '#fead61', fontSize: '20px' }} /> : null}
+            </div>
+            <div className="my-2 h-[1px] w-full bg-gray-200"></div>
+            <div className="flex w-full flex-col gap-y-1">
+              {items ? (
+                <List height={180} width={'100%'} list={items} />
+              ) : (
+                <p className="w-full text-center text-sm italic text-[#353432]">Sem opções disponíveis.</p>
+              )}
+            </div>
+          </div>
+        ) : (
+          false
+        )}
+      </div>
+    )
   return (
-    <div ref={ref} className={`relative flex w-full flex-col gap-1 lg:w-[${width ? width : '350px'}]`}>
+
+    <div ref={ref} draggable={false} className={`relative flex w-full flex-col gap-1 lg:w-[${width ? width : '350px'}]`}>
       {showLabel ? (
         <label htmlFor={inputIdentifier} className={labelClassName}>
           {label}
         </label>
       ) : null}
 
-      <div className="flex h-full w-full items-center justify-between rounded-md border border-gray-200 bg-[#fff] p-3 text-sm shadow-sm">
-        {selectMenuIsOpen ? (
+      <div className="flex h-[47px] w-full items-center justify-between rounded-md border border-gray-200 bg-[#fff] p-3 text-sm shadow-sm">
+
+        <p
+          onClick={() => {
+            if (editable) setSelectMenuIsOpen((prev) => !prev)
+          }}
+          className="grow cursor-pointer text-[#353432]"
+        >
+          {selectedIds && selectedIds.length > 0 && options
+            ? options.filter((item) => selectedIds.includes(item.id)).length > 1
+              ? 'MÚLTIPLAS SELEÇÕES'
+              : options.filter((item) => selectedIds.includes(item.id))[0].label
+            : 'NÃO DEFINIDO'}
+        </p>
+        <IoMdArrowDropup
+          style={{ cursor: 'pointer' }}
+          onClick={() => {
+            if (editable) setSelectMenuIsOpen((prev) => !prev)
+          }}
+        />
+
+      </div>
+      <Drawer open={selectMenuIsOpen} onOpenChange={setSelectMenuIsOpen} dismissible >
+        <DrawerContent className='p-2 gap-2'>
           <input
             type="text"
             autoFocus
             value={searchFilter}
             onChange={(e) => handleFilter(e.target.value)}
             placeholder="Filtre o item desejado..."
-            className="h-full w-full text-sm italic outline-none"
+            className="h-full w-full text-sm italic outline-none p-2"
           />
-        ) : (
-          <p onClick={() => setSelectMenuIsOpen((prev) => !prev)} className="grow cursor-pointer text-[#353432]">
-            {selectedIds && selectedIds.length > 0 && options
-              ? options.filter((item) => selectedIds.includes(item.id)).length > 1
-                ? 'MÚLTIPLAS SELEÇÕES'
-                : options.filter((item) => selectedIds.includes(item.id))[0].label
-              : 'NÃO DEFINIDO'}
-          </p>
-        )}
-        {selectMenuIsOpen ? (
-          <IoMdArrowDropup style={{ cursor: 'pointer' }} onClick={() => setSelectMenuIsOpen((prev) => !prev)} />
-        ) : (
-          <IoMdArrowDropdown style={{ cursor: 'pointer' }} onClick={() => setSelectMenuIsOpen((prev) => !prev)} />
-        )}
-      </div>
-      {selectMenuIsOpen ? (
-        <div className="absolute top-[75px] z-[100] flex h-[250px] max-h-[250px] w-full flex-col self-center overflow-y-auto overscroll-y-auto rounded-md border border-gray-200 bg-[#fff] p-2 py-1 shadow-sm scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300">
           <div
             onClick={() => resetState()}
             className={`flex w-full cursor-pointer items-center rounded p-1 px-2 hover:bg-gray-100 ${!selectedIds ? 'bg-gray-100' : ''}`}
@@ -165,18 +245,18 @@ function MultipleSelectInputVirtualized<T>({
             {!selectedIds ? <HiCheck style={{ color: '#fead61', fontSize: '20px' }} /> : null}
           </div>
           <div className="my-2 h-[1px] w-full bg-gray-200"></div>
-          <div className="flex w-full flex-col gap-y-1">
+          <div className='h-[350px] max-h-[350px] flex flex-col gap-2 overflow-y-auto overscroll-y-auto scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300'>
             {items ? (
               <List height={180} width={'100%'} list={items} />
             ) : (
               <p className="w-full text-center text-sm italic text-[#353432]">Sem opções disponíveis.</p>
             )}
           </div>
-        </div>
-      ) : (
-        false
-      )}
+        </DrawerContent>
+      </Drawer>
+
     </div>
+
   )
 }
 

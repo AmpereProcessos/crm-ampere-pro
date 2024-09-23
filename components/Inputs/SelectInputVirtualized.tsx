@@ -1,8 +1,10 @@
+import { useMediaQuery } from '@/lib/utils'
 import React, { useEffect, useRef, useState } from 'react'
 
 import { HiCheck } from 'react-icons/hi'
 import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io'
 import { VariableSizeList } from 'react-window'
+import { Drawer, DrawerContent } from '../ui/drawer'
 
 type SelectOption<T> = {
   id: string | number
@@ -46,6 +48,8 @@ function SelectInputVirtualized<T>({
 
   const ref = useRef<any>(null)
   const [items, setItems] = useState<SelectOption<T>[] | null>(options)
+  const isDesktop = useMediaQuery("(min-width: 768px)")
+
   const [selectMenuIsOpen, setSelectMenuIsOpen] = useState<boolean>(false)
   const [selectedId, setSelectedId] = useState<number | string | null>(getValueID(value))
 
@@ -112,73 +116,130 @@ function SelectInputVirtualized<T>({
       )}
     </VariableSizeList>
   )
+  if (isDesktop)
+    return (
+      <div ref={ref} className={`relative flex w-full flex-col gap-1 lg:w-[${width ? width : '350px'}]`}>
+        {showLabel ? (
+          <label htmlFor={inputIdentifier} className={labelClassName}>
+            {label}
+          </label>
+        ) : null}
+        <div className="flex h-full min-h-[46.6px] w-full items-center justify-between rounded-md border border-gray-200 bg-[#fff] p-3 text-sm shadow-sm">
+          {selectMenuIsOpen ? (
+            <input
+              type="text"
+              autoFocus
+              value={searchFilter}
+              onChange={(e) => handleFilter(e.target.value)}
+              placeholder="Filtre o item desejado..."
+              className="h-full w-full text-sm italic outline-none"
+            />
+          ) : (
+            <p
+              onClick={() => {
+                if (editable) setSelectMenuIsOpen((prev) => !prev)
+              }}
+              className="grow cursor-pointer text-[#353432]"
+            >
+              {selectedId && options ? options.filter((item) => item.id == selectedId)[0].label : selectedItemLabel}
+            </p>
+          )}
+          {selectMenuIsOpen ? (
+            <IoMdArrowDropup
+              style={{ cursor: 'pointer' }}
+              onClick={() => {
+                if (editable) setSelectMenuIsOpen((prev) => !prev)
+              }}
+            />
+          ) : (
+            <IoMdArrowDropdown
+              style={{ cursor: 'pointer' }}
+              onClick={() => {
+                if (editable) setSelectMenuIsOpen((prev) => !prev)
+              }}
+            />
+          )}
+        </div>
+        {/** overflow-y-auto overscroll-y-auto scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300*/}
+        {selectMenuIsOpen ? (
+          <div className="absolute top-[75px] z-[100] flex h-[250px] max-h-[250px] w-full flex-col self-center rounded-md border border-gray-200 bg-[#fff] p-2 py-1 shadow-sm">
+            <div
+              onClick={() => resetState()}
+              className={`flex w-full cursor-pointer items-center rounded p-1 px-2 hover:bg-gray-100 ${!selectedId ? 'bg-gray-100' : ''}`}
+            >
+              <p className="grow font-medium text-[#353432]">{selectedItemLabel}</p>
+              {!selectedId ? <HiCheck style={{ color: '#fead61', fontSize: '20px' }} /> : null}
+            </div>
+            <div className="my-2 h-[1px] w-full bg-gray-200"></div>
+            <div className="flex w-full flex-col gap-y-1">
+              {items ? (
+                <List height={180} width={'100%'} list={items} />
+              ) : (
+                <p className="w-full text-center text-sm italic text-[#353432]">Sem opções disponíveis.</p>
+              )}
+            </div>
+          </div>
+        ) : (
+          false
+        )}
+      </div>
+    )
 
   return (
-    <div ref={ref} className={`relative flex w-full flex-col gap-1 lg:w-[${width ? width : '350px'}]`}>
-      {showLabel ? (
-        <label htmlFor={inputIdentifier} className={labelClassName}>
-          {label}
-        </label>
-      ) : null}
-      <div className="flex h-full min-h-[46.6px] w-full items-center justify-between rounded-md border border-gray-200 bg-[#fff] p-3 text-sm shadow-sm">
-        {selectMenuIsOpen ? (
-          <input
-            type="text"
-            autoFocus
-            value={searchFilter}
-            onChange={(e) => handleFilter(e.target.value)}
-            placeholder="Filtre o item desejado..."
-            className="h-full w-full text-sm italic outline-none"
-          />
-        ) : (
+    <Drawer open={selectMenuIsOpen} onOpenChange={setSelectMenuIsOpen}>
+      <div ref={ref} className={`relative flex w-full flex-col gap-1 lg:w-[${width ? width : '350px'}]`}>
+        {showLabel ? (
+          <label htmlFor={inputIdentifier} className={labelClassName}>
+            {label}
+          </label>
+        ) : null}
+        <div className="flex h-full min-h-[46.6px] w-full items-center justify-between rounded-md border border-gray-200 bg-[#fff] p-3 text-sm shadow-sm">
+
           <p
             onClick={() => {
               if (editable) setSelectMenuIsOpen((prev) => !prev)
             }}
             className="grow cursor-pointer text-[#353432]"
           >
-            {selectedId && options ? options.filter((item) => item.id == selectedId)[0].label : selectedItemLabel}
+            {selectedId && options ? options.filter((item) => item.id == selectedId)[0]?.label : selectedItemLabel}
           </p>
-        )}
-        {selectMenuIsOpen ? (
-          <IoMdArrowDropup
-            style={{ cursor: 'pointer' }}
-            onClick={() => {
-              if (editable) setSelectMenuIsOpen((prev) => !prev)
-            }}
-          />
-        ) : (
+
           <IoMdArrowDropdown
             style={{ cursor: 'pointer' }}
             onClick={() => {
               if (editable) setSelectMenuIsOpen((prev) => !prev)
             }}
           />
-        )}
-      </div>
-      {/** overflow-y-auto overscroll-y-auto scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300*/}
-      {selectMenuIsOpen ? (
-        <div className="absolute top-[75px] z-[100] flex h-[250px] max-h-[250px] w-full flex-col self-center rounded-md border border-gray-200 bg-[#fff] p-2 py-1 shadow-sm">
+        </div>
+        <DrawerContent className='p-2 gap-2'>
+          <input
+            type="text"
+            autoFocus
+            value={searchFilter}
+            onChange={(e) => handleFilter(e.target.value)}
+            placeholder="Filtre o item desejado..."
+            className="h-full w-full text-sm italic outline-none p-2"
+          />
           <div
             onClick={() => resetState()}
             className={`flex w-full cursor-pointer items-center rounded p-1 px-2 hover:bg-gray-100 ${!selectedId ? 'bg-gray-100' : ''}`}
           >
-            <p className="grow font-medium text-[#353432]">{selectedItemLabel}</p>
+            <p className="grow text-sm font-medium text-[#353432]">{selectedItemLabel}</p>
             {!selectedId ? <HiCheck style={{ color: '#fead61', fontSize: '20px' }} /> : null}
           </div>
           <div className="my-2 h-[1px] w-full bg-gray-200"></div>
-          <div className="flex w-full flex-col gap-y-1">
+          <div className='h-[350px] max-h-[350px] flex flex-col gap-2 overflow-y-auto overscroll-y-auto scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300'>
             {items ? (
               <List height={180} width={'100%'} list={items} />
             ) : (
               <p className="w-full text-center text-sm italic text-[#353432]">Sem opções disponíveis.</p>
             )}
           </div>
-        </div>
-      ) : (
-        false
-      )}
-    </div>
+
+        </DrawerContent>
+      </div>
+    </Drawer>
+
   )
 }
 

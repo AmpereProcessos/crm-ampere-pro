@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from 'react'
 import lodash from 'lodash'
 import { HiCheck } from 'react-icons/hi'
 import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io'
+import { useMediaQuery } from '@/lib/utils'
+import { Drawer, DrawerContent } from '../ui/drawer'
 
 type SelectOption<T> = {
   id: string | number
@@ -45,6 +47,8 @@ function MultipleSelectInput<T>({
 
   const ref = useRef<any>(null)
   const [items, setItems] = useState<SelectOption<T>[] | null>(options)
+  const isDesktop = useMediaQuery("(min-width: 768px)")
+
   const [selectMenuIsOpen, setSelectMenuIsOpen] = useState<boolean>(false)
   const [selectedIds, setSelectedIds] = useState<(string | number)[] | null>(getValueID(selected))
 
@@ -94,7 +98,8 @@ function MultipleSelectInput<T>({
   }, [options, selected])
   useEffect(() => {
     const handleClickOutside = (event: any) => {
-      if (ref.current && !ref.current.contains(event.target)) {
+      if (ref.current && !ref.current.contains(event.target) && isDesktop) {
+        console.log("FUI CHAMADO")
         onClickOutside()
       }
     }
@@ -103,7 +108,89 @@ function MultipleSelectInput<T>({
       document.removeEventListener('click', (e) => handleClickOutside(e), true)
     }
   }, [onClickOutside])
+  if (isDesktop)
+    return (
+      <div ref={ref} draggable={false} className={`relative flex w-full flex-col gap-1 lg:w-[${width ? width : '350px'}]`}>
+        {showLabel ? (
+          <label htmlFor={inputIdentifier} className={labelClassName}>
+            {label}
+          </label>
+        ) : null}
+
+        <div className="flex h-[47px] w-full items-center justify-between rounded-md border border-gray-200 bg-[#fff] p-3 text-sm shadow-sm">
+          {selectMenuIsOpen ? (
+            <input
+              type="text"
+              autoFocus
+              value={searchFilter}
+              onChange={(e) => handleFilter(e.target.value)}
+              placeholder="Filtre o item desejado..."
+              className="h-full w-full text-sm italic outline-none"
+            />
+          ) : (
+            <p
+              onClick={() => {
+                if (editable) setSelectMenuIsOpen((prev) => !prev)
+              }}
+              className="grow cursor-pointer text-[#353432]"
+            >
+              {selectedIds && selectedIds.length > 0 && options
+                ? options.filter((item) => selectedIds.includes(item.id)).length > 1
+                  ? 'MÚLTIPLAS SELEÇÕES'
+                  : options.filter((item) => selectedIds.includes(item.id))[0].label
+                : 'NÃO DEFINIDO'}
+            </p>
+          )}
+          {selectMenuIsOpen ? (
+            <IoMdArrowDropup
+              style={{ cursor: 'pointer' }}
+              onClick={() => {
+                if (editable) setSelectMenuIsOpen((prev) => !prev)
+              }}
+            />
+          ) : (
+            <IoMdArrowDropdown
+              style={{ cursor: 'pointer' }}
+              onClick={() => {
+                if (editable) setSelectMenuIsOpen((prev) => !prev)
+              }}
+            />
+          )}
+        </div>
+        {selectMenuIsOpen ? (
+          <div className="absolute top-[77px] z-[100] flex h-[250px] max-h-[250px] w-full flex-col self-center overflow-y-auto overscroll-y-auto rounded-md border border-gray-200 bg-[#fff] p-2 py-1 shadow-sm scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300">
+            <div
+              onClick={() => resetState()}
+              className={`flex w-full cursor-pointer items-center rounded p-1 px-2 hover:bg-gray-100 ${!selectedIds ? 'bg-gray-100' : ''}`}
+            >
+              <p className="grow font-medium text-[#353432]">{selectedItemLabel}</p>
+              {!selectedIds ? <HiCheck style={{ color: '#fead61', fontSize: '20px' }} /> : null}
+            </div>
+            <div className="my-2 h-[1px] w-full bg-gray-200"></div>
+            {items ? (
+              items.map((item, index) => (
+                <div
+                  onClick={() => {
+                    if (editable) handleSelect(item.id, item.value)
+                  }}
+                  key={item.id ? item.id : index}
+                  className={`flex w-full cursor-pointer items-center rounded p-1 px-2 hover:bg-gray-100 ${selectedIds?.includes(item.id) ? 'bg-gray-100' : ''}`}
+                >
+                  <p className="grow font-medium text-[#353432]">{item.label}</p>
+                  {selectedIds?.includes(item.id) ? <HiCheck style={{ color: '#fead61', fontSize: '20px' }} /> : null}
+                </div>
+              ))
+            ) : (
+              <p className="w-full text-center text-sm italic text-[#353432]">Sem opções disponíveis.</p>
+            )}
+          </div>
+        ) : (
+          false
+        )}
+      </div>
+    )
   return (
+
     <div ref={ref} draggable={false} className={`relative flex w-full flex-col gap-1 lg:w-[${width ? width : '350px'}]`}>
       {showLabel ? (
         <label htmlFor={inputIdentifier} className={labelClassName}>
@@ -112,47 +199,37 @@ function MultipleSelectInput<T>({
       ) : null}
 
       <div className="flex h-[47px] w-full items-center justify-between rounded-md border border-gray-200 bg-[#fff] p-3 text-sm shadow-sm">
-        {selectMenuIsOpen ? (
+
+        <p
+          onClick={() => {
+            if (editable) setSelectMenuIsOpen((prev) => !prev)
+          }}
+          className="grow cursor-pointer text-[#353432]"
+        >
+          {selectedIds && selectedIds.length > 0 && options
+            ? options.filter((item) => selectedIds.includes(item.id)).length > 1
+              ? 'MÚLTIPLAS SELEÇÕES'
+              : options.filter((item) => selectedIds.includes(item.id))[0].label
+            : 'NÃO DEFINIDO'}
+        </p>
+        <IoMdArrowDropup
+          style={{ cursor: 'pointer' }}
+          onClick={() => {
+            if (editable) setSelectMenuIsOpen((prev) => !prev)
+          }}
+        />
+
+      </div>
+      <Drawer open={selectMenuIsOpen} onOpenChange={setSelectMenuIsOpen} dismissible >
+        <DrawerContent className='p-2 gap-2'>
           <input
             type="text"
             autoFocus
             value={searchFilter}
             onChange={(e) => handleFilter(e.target.value)}
             placeholder="Filtre o item desejado..."
-            className="h-full w-full text-sm italic outline-none"
+            className="h-full w-full text-sm italic outline-none p-2"
           />
-        ) : (
-          <p
-            onClick={() => {
-              if (editable) setSelectMenuIsOpen((prev) => !prev)
-            }}
-            className="grow cursor-pointer text-[#353432]"
-          >
-            {selectedIds && selectedIds.length > 0 && options
-              ? options.filter((item) => selectedIds.includes(item.id)).length > 1
-                ? 'MÚLTIPLAS SELEÇÕES'
-                : options.filter((item) => selectedIds.includes(item.id))[0].label
-              : 'NÃO DEFINIDO'}
-          </p>
-        )}
-        {selectMenuIsOpen ? (
-          <IoMdArrowDropup
-            style={{ cursor: 'pointer' }}
-            onClick={() => {
-              if (editable) setSelectMenuIsOpen((prev) => !prev)
-            }}
-          />
-        ) : (
-          <IoMdArrowDropdown
-            style={{ cursor: 'pointer' }}
-            onClick={() => {
-              if (editable) setSelectMenuIsOpen((prev) => !prev)
-            }}
-          />
-        )}
-      </div>
-      {selectMenuIsOpen ? (
-        <div className="absolute top-[77px] z-[100] flex h-[250px] max-h-[250px] w-full flex-col self-center overflow-y-auto overscroll-y-auto rounded-md border border-gray-200 bg-[#fff] p-2 py-1 shadow-sm scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300">
           <div
             onClick={() => resetState()}
             className={`flex w-full cursor-pointer items-center rounded p-1 px-2 hover:bg-gray-100 ${!selectedIds ? 'bg-gray-100' : ''}`}
@@ -161,27 +238,29 @@ function MultipleSelectInput<T>({
             {!selectedIds ? <HiCheck style={{ color: '#fead61', fontSize: '20px' }} /> : null}
           </div>
           <div className="my-2 h-[1px] w-full bg-gray-200"></div>
-          {items ? (
-            items.map((item, index) => (
-              <div
-                onClick={() => {
-                  if (editable) handleSelect(item.id, item.value)
-                }}
-                key={item.id ? item.id : index}
-                className={`flex w-full cursor-pointer items-center rounded p-1 px-2 hover:bg-gray-100 ${selectedIds?.includes(item.id) ? 'bg-gray-100' : ''}`}
-              >
-                <p className="grow font-medium text-[#353432]">{item.label}</p>
-                {selectedIds?.includes(item.id) ? <HiCheck style={{ color: '#fead61', fontSize: '20px' }} /> : null}
-              </div>
-            ))
-          ) : (
-            <p className="w-full text-center text-sm italic text-[#353432]">Sem opções disponíveis.</p>
-          )}
-        </div>
-      ) : (
-        false
-      )}
+          <div className='h-[350px] max-h-[350px] flex flex-col gap-2 overflow-y-auto overscroll-y-auto scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300'>
+            {items ? (
+              items.map((item, index) => (
+                <div
+                  onClick={() => {
+                    if (editable) handleSelect(item.id, item.value)
+                  }}
+                  key={item.id ? item.id : index}
+                  className={`flex w-full cursor-pointer items-center rounded p-1 px-2 hover:bg-gray-100 ${selectedIds?.includes(item.id) ? 'bg-gray-100' : ''}`}
+                >
+                  <p className="grow font-medium text-[#353432]">{item.label}</p>
+                  {selectedIds?.includes(item.id) ? <HiCheck style={{ color: '#fead61', fontSize: '20px' }} /> : null}
+                </div>
+              ))
+            ) : (
+              <p className="w-full text-center text-sm italic text-[#353432]">Sem opções disponíveis.</p>
+            )}
+          </div>
+        </DrawerContent>
+      </Drawer>
+
     </div>
+
   )
 }
 
