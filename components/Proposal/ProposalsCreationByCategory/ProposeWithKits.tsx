@@ -25,6 +25,7 @@ type ProposalWithKitsProps = {
 function ProposalWithKits({ opportunity, infoHolder, setInfoHolder, session, partner }: ProposalWithKitsProps) {
   const { data: projectTypes } = useProjectTypes()
   const [stage, setStage] = useState<number>(1)
+  const [applicablePaymentMethodsIds, setApplicablePaymentMethodsIds] = useState<string[]>([])
   console.log(infoHolder)
   return (
     <div className="m-6 flex h-fit flex-col rounded-md border border-gray-200 bg-[#fff] p-2 shadow-lg">
@@ -67,6 +68,7 @@ function ProposalWithKits({ opportunity, infoHolder, setInfoHolder, session, par
           opportunity={opportunity}
           moveToPreviousStage={() => setStage((prev) => prev - 1)}
           moveToNextStage={() => setStage((prev) => prev + 1)}
+          setApplicablePaymentMethodsIds={setApplicablePaymentMethodsIds}
           session={session}
         />
       ) : null}
@@ -87,6 +89,7 @@ function ProposalWithKits({ opportunity, infoHolder, setInfoHolder, session, par
           opportunity={opportunity}
           moveToPreviousStage={() => setStage((prev) => prev - 1)}
           moveToNextStage={() => setStage((prev) => prev + 1)}
+          applicablePaymentMethodsIds={applicablePaymentMethodsIds}
           session={session}
         />
       ) : null}

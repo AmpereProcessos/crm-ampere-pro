@@ -17,9 +17,10 @@ type PaymentProps = {
   opportunity: TOpportunityDTOWithClientAndPartnerAndFunnelReferences
   moveToNextStage: () => void
   moveToPreviousStage: () => void
+  applicablePaymentMethodsIds: string[]
   session: Session
 }
-function Payment({ infoHolder, setInfoHolder, moveToNextStage, moveToPreviousStage, session }: PaymentProps) {
+function Payment({ infoHolder, setInfoHolder, moveToNextStage, moveToPreviousStage, applicablePaymentMethodsIds, session }: PaymentProps) {
   console.log(infoHolder.kits)
   const {
     data: paymentMethods,
@@ -27,6 +28,7 @@ function Payment({ infoHolder, setInfoHolder, moveToNextStage, moveToPreviousSta
     isSuccess,
     isError,
   } = usePaymentMethodsPersonalized({
+    methodologyIds: applicablePaymentMethodsIds,
     kitsIds: infoHolder.kits.map((k) => k.id),
     plansIds: infoHolder.planos.map((p) => p.id),
     productsIds: infoHolder.produtos.map((p) => p.id || ''),

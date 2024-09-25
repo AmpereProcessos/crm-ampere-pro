@@ -11,6 +11,8 @@ import { TKit } from '@/utils/schemas/kits.schema'
 import { TSignaturePlan } from '@/utils/schemas/signature-plans.schema'
 import { TProduct } from '@/utils/schemas/products.schema'
 import { TService } from '@/utils/schemas/service.schema'
+import { TSaleGoal } from '@/utils/schemas/sale-goal.schema'
+import dayjs from 'dayjs'
 
 type PostResponse = any
 
@@ -41,8 +43,36 @@ const PlansEquivalents = {
 }
 
 const migrate: NextApiHandler<PostResponse> = async (req, res) => {
-  // const crmDb = await connectToCRMDatabase(process.env.MONGODB_URI, 'crm')
+  const crmDb = await connectToCRMDatabase(process.env.MONGODB_URI, 'crm')
 
+  const saleGoalsCollection = crmDb.collection<TSaleGoal>('sale-goals')
+
+  const saleGoals = await saleGoalsCollection.find({}).toArray()
+
+  const bulkwrite = saleGoals.map((goal) => {
+    const period = goal.periodo
+    const splitted = period.split('/')
+    const month = splitted[0]
+    const day = '01'
+    const year = splitted[1]
+
+    const date = [month, day, year].join('/')
+    const periodStart = dayjs(date).startOf('month').subtract(3, 'hours').toISOString()
+    const periodEnd = dayjs(date).endOf('month').subtract(3, 'hours').toISOString()
+    const periodDays = dayjs(periodEnd).daysInMonth()
+    return {
+      updateOne: {
+        filter: { _id: new ObjectId(goal._id) },
+        update: {
+          $set: {
+            periodoInicio: periodStart,
+            periodoFim: periodEnd,
+            periodoDias: periodDays,
+          },
+        },
+      },
+    }
+  })
   // const kitsCollection: Collection<TKit> = crmDb.collection('kits')
   // const plansCollection: Collection<TSignaturePlan> = crmDb.collection('signature-plans')
   // const productsCollection: Collection<TProduct> = crmDb.collection('products')
@@ -53,7 +83,8 @@ const migrate: NextApiHandler<PostResponse> = async (req, res) => {
   // await productsCollection.updateMany({}, { $set: { idsMetodologiasPagamento: ['661ec619e03128a48f94b4db'] } })
   // await servicesCollection.updateMany({}, { $set: { idsMetodologiasPagamento: ['661ec619e03128a48f94b4db'] } })
 
-  return res.json('DESATIVADA')
+  const bkResponse = await saleGoalsCollection.bulkWrite(bulkwrite)
+  return res.json(bkResponse)
 }
 export default apiHandler({
   GET: migrate,

@@ -202,6 +202,16 @@ function EditUser({ closeModal, users, userId, partnerId, session }: EditUserPro
           {isSuccess && userInfo ? (
             <>
               <div className="flex h-full grow flex-col gap-y-2 overflow-y-auto overscroll-y-auto p-2 py-1 scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300">
+                <div className="my-2 flex w-full items-center justify-center">
+                  <div className="w-fit">
+                    <CheckboxInput
+                      labelFalse="USUÁRIO ATIVO"
+                      labelTrue="USUÁRIO ATIVO"
+                      checked={userInfo.ativo}
+                      handleChange={(value) => setUserInfo((prev) => ({ ...prev, ativo: value }))}
+                    />
+                  </div>
+                </div>
                 <div className="flex h-[200px]  flex-col items-center justify-center">
                   {!image && userInfo.avatar_url ? (
                     <div className="relative mb-3 h-[120px] w-[120px] cursor-pointer rounded-full">

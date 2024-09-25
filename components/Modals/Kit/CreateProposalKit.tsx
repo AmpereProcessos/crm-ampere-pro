@@ -19,10 +19,12 @@ type CreateProposalKitProps = {
   setProposal: React.Dispatch<React.SetStateAction<TProposal>>
   opportunity: TOpportunity
   closeModal: () => void
+  setApplicablePaymentMethodsIds: React.Dispatch<React.SetStateAction<string[]>>
+
   session: Session
   goToNextStage: () => void
 }
-function CreateProposalKit({ proposal, setProposal, opportunity, closeModal, session, goToNextStage }: CreateProposalKitProps) {
+function CreateProposalKit({ proposal, setProposal, opportunity, closeModal, setApplicablePaymentMethodsIds, session, goToNextStage }: CreateProposalKitProps) {
   const { data: pricingMethods } = usePricingMethods()
   const [kitInfo, setKitInfo] = useState<TKit>({
     nome: '',
@@ -50,6 +52,8 @@ function CreateProposalKit({ proposal, setProposal, opportunity, closeModal, ses
     const topology = kitInfo.topologia
     const methodology = pricingMethods?.find((p) => p._id == kitInfo.idMetodologiaPrecificacao) as TPricingMethodDTO
     const methodologyId = kitInfo.idMetodologiaPrecificacao
+    const paymentMethodsIds = kitInfo.idsMetodologiasPagamento
+
     const selectedProducts = kitInfo.produtos
     const selectedServices = kitInfo.servicos
 
@@ -98,6 +102,7 @@ function CreateProposalKit({ proposal, setProposal, opportunity, closeModal, ses
       variableData,
     })
     const total = getPricingTotal({ pricing })
+    setApplicablePaymentMethodsIds(paymentMethodsIds)
     setProposal((prev) => ({
       ...prev,
       idMetodologiaPrecificacao: methodologyId,

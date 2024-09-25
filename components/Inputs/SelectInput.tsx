@@ -200,7 +200,6 @@ function SelectInput<T>({
           </label>
         ) : null}
         <div className="flex h-full min-h-[46.6px] w-full items-center justify-between rounded-md border border-gray-200 bg-[#fff] p-3 text-sm shadow-sm">
-
           <p
             onClick={() => {
               if (editable) setSelectMenuIsOpen((prev) => !prev)
@@ -224,7 +223,7 @@ function SelectInput<T>({
             value={searchFilter}
             onChange={(e) => handleFilter(e.target.value)}
             placeholder="Filtre o item desejado..."
-            className="h-full w-full text-sm italic outline-none p-2"
+            className="w-full text-sm italic outline-none p-2"
           />
           <div
             onClick={() => resetState()}

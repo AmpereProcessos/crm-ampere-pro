@@ -35,6 +35,7 @@ import { fetchResultsExports } from '@/utils/queries/stats/exports'
 import { usePartnersSimplified } from '@/utils/queries/partners'
 import { useComercialResultsQueryOptions } from '@/utils/queries/stats'
 import RegionResults from '@/components/Stats/Results/Region'
+import Sellers from '@/components/Stats/Results/Sellers'
 
 const currentDate = new Date()
 const periodStr = dayjs(currentDate).format('MM/YYYY')
@@ -185,13 +186,7 @@ function ComercialResults() {
           partners={queryFilters.partners}
           projectTypes={queryFilters.projectTypes}
         />
-        <RegionResults
-          after={queryFilters.period.after}
-          before={queryFilters.period.before}
-          responsibles={queryFilters.responsibles}
-          partners={queryFilters.partners}
-          projectTypes={queryFilters.projectTypes}
-        />
+
         <InProgressResults
           after={queryFilters.period.after}
           before={queryFilters.period.before}
@@ -215,6 +210,7 @@ function ComercialResults() {
           partners={queryFilters.partners}
           projectTypes={queryFilters.projectTypes}
         />
+        {/* <Sellers after={queryFilters.period.after} before={queryFilters.period.before} /> */}
         <h1 className="mt-4 font-Raleway text-xl font-black text-black">CONTROLE DE EQUIPE</h1>
         <div className="flex grow flex-col flex-wrap justify-around gap-2 py-2 lg:flex-row">
           {queryOptionsSuccess ? (
@@ -292,6 +288,13 @@ function ComercialResults() {
             <LoadingComponent />
           )}
         </div>
+        <RegionResults
+          after={queryFilters.period.after}
+          before={queryFilters.period.before}
+          responsibles={queryFilters.responsibles}
+          partners={queryFilters.partners}
+          projectTypes={queryFilters.projectTypes}
+        />
       </div>
       {editModal.isOpen && editModal.promoter ? (
         <EditPromoter session={session} promoter={editModal.promoter} closeModal={() => setEditModal({ isOpen: false, promoter: null })} />

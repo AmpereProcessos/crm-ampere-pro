@@ -71,9 +71,19 @@ type KitsSelectionProps = {
   setInfoHolder: React.Dispatch<React.SetStateAction<TProposal>>
   moveToNextStage: () => void
   moveToPreviousStage: () => void
+  setApplicablePaymentMethodsIds: React.Dispatch<React.SetStateAction<string[]>>
+
   session: Session
 }
-function KitsSelection({ opportunity, infoHolder, setInfoHolder, moveToNextStage, moveToPreviousStage, session }: KitsSelectionProps) {
+function KitsSelection({
+  opportunity,
+  infoHolder,
+  setInfoHolder,
+  moveToNextStage,
+  moveToPreviousStage,
+  setApplicablePaymentMethodsIds,
+  session,
+}: KitsSelectionProps) {
   const userHasKitEditPermission = session.user.permissoes.kits.editar
   const partnerId = session.user.idParceiro
   const parterScope = session.user.permissoes.parceiros.escopo
@@ -277,6 +287,8 @@ function KitsSelection({ opportunity, infoHolder, setInfoHolder, moveToNextStage
     const proposalKits: TProposal['kits'] = selectedKits.map((s) => ({ id: s._id, nome: s.nome, preco: s.preco, valor: s.valorFinal }))
     const kitIds = selectedKits.map((s) => s._id)
     const kitName = selectedKits.map((s) => s.nome).join(' + ')
+    const paymentMethodsIds = [...new Set(selectedKits.flatMap((x) => x.idsMetodologiasPagamento))]
+
     const topology = selectedKits[0].topologia
     const methodology = selectedKits[0].metodologia
     const methodologyId = selectedKits[0].idMetodologiaPrecificacao
@@ -327,6 +339,7 @@ function KitsSelection({ opportunity, infoHolder, setInfoHolder, moveToNextStage
       conditionData,
       variableData,
     })
+    setApplicablePaymentMethodsIds(paymentMethodsIds)
     setInfoHolder((prev) => ({
       ...prev,
       premissas: {
@@ -460,6 +473,7 @@ function KitsSelection({ opportunity, infoHolder, setInfoHolder, moveToNextStage
           opportunity={opportunity}
           proposal={infoHolder}
           setProposal={setInfoHolder}
+          setApplicablePaymentMethodsIds={setApplicablePaymentMethodsIds}
           closeModal={() => setCreateProposalKitModalIsOpen(false)}
           goToNextStage={() => moveToNextStage()}
         />

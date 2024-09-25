@@ -34,14 +34,15 @@ export function usePaymentMethodById({ id }: { id: string }) {
 }
 
 type GetPaymentMethodsPersonalized = {
+  methodologyIds: string[]
   kitsIds: string[]
   plansIds: string[]
   productsIds: string[]
   servicesIds: string[]
 }
-export async function fetchPaymentMethodsPersonalized({ kitsIds, plansIds, productsIds, servicesIds }: GetPaymentMethodsPersonalized) {
+export async function fetchPaymentMethodsPersonalized({ methodologyIds, kitsIds, plansIds, productsIds, servicesIds }: GetPaymentMethodsPersonalized) {
   try {
-    const { data } = await axios.post('/api/payment-methods/personalized', { kitsIds, plansIds, productsIds, servicesIds })
+    const { data } = await axios.post('/api/payment-methods/personalized', { methodologyIds, kitsIds, plansIds, productsIds, servicesIds })
 
     return data.data as TPaymentMethodDTO[]
   } catch (error) {
@@ -49,9 +50,9 @@ export async function fetchPaymentMethodsPersonalized({ kitsIds, plansIds, produ
   }
 }
 
-export function usePaymentMethodsPersonalized({ kitsIds, plansIds, productsIds, servicesIds }: GetPaymentMethodsPersonalized) {
+export function usePaymentMethodsPersonalized({ methodologyIds, kitsIds, plansIds, productsIds, servicesIds }: GetPaymentMethodsPersonalized) {
   return useQuery({
-    queryKey: ['payment-methods-personalized', kitsIds, plansIds, productsIds, servicesIds],
-    queryFn: async () => await fetchPaymentMethodsPersonalized({ kitsIds, plansIds, productsIds, servicesIds }),
+    queryKey: ['payment-methods-personalized', methodologyIds, kitsIds, plansIds, productsIds, servicesIds],
+    queryFn: async () => await fetchPaymentMethodsPersonalized({ methodologyIds, kitsIds, plansIds, productsIds, servicesIds }),
   })
 }

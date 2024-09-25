@@ -19,9 +19,19 @@ type ServicesSelectionProps = {
   setInfoHolder: React.Dispatch<React.SetStateAction<TProposal>>
   moveToNextStage: () => void
   moveToPreviousStage: () => void
+  setApplicablePaymentMethodsIds: React.Dispatch<React.SetStateAction<string[]>>
+
   session: Session
 }
-function ServicesSelection({ opportunity, infoHolder, setInfoHolder, moveToNextStage, moveToPreviousStage, session }: ServicesSelectionProps) {
+function ServicesSelection({
+  opportunity,
+  infoHolder,
+  setInfoHolder,
+  moveToNextStage,
+  moveToPreviousStage,
+  setApplicablePaymentMethodsIds,
+  session,
+}: ServicesSelectionProps) {
   const [selectedServices, setSelectedServices] = useState<(TServiceDTOWithPricingMethod & { valorFinal: number })[]>([])
   const { data: services, isLoading, isError, isSuccess } = useComercialServicesWithPricingMethod()
   const userHasPricingView = session.user.permissoes.precos.visualizar
@@ -38,6 +48,8 @@ function ServicesSelection({ opportunity, infoHolder, setInfoHolder, moveToNextS
     const topology = infoHolder.premissas.topologia
     const methodology = selectedServices[0].metodologia
     const methodologyId = selectedServices[0].idMetodologiaPrecificacao
+    const paymentMethodsIds = [...new Set(selectedServices.flatMap((x) => x.idsMetodologiasPagamento))]
+
     const selectedServicesFormatted: TProposalService[] = selectedServices.map((service) => ({
       id: service._id,
       descricao: service.descricao,
@@ -86,7 +98,7 @@ function ServicesSelection({ opportunity, infoHolder, setInfoHolder, moveToNextS
       conditionData,
       variableData,
     })
-
+    setApplicablePaymentMethodsIds(paymentMethodsIds)
     setInfoHolder((prev) => ({ ...prev, idMetodologiaPrecificacao: methodologyId, servicos: services, precificacao: pricing }))
     moveToNextStage()
   }

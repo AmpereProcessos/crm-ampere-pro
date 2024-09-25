@@ -4,6 +4,9 @@ import { ObjectId } from 'mongodb'
 
 const GeneralSaleGoalSchema = z.object({
   periodo: z.string(),
+  periodoFim: z.string(),
+  periodoInicio: z.string(),
+  periodoDias: z.number(),
   idParceiro: z.string(),
   usuario: AuthorSchema,
   metas: z.object({
@@ -20,6 +23,9 @@ const GeneralSaleGoalSchema = z.object({
 
 export const InsertSaleGoalSchema = z.object({
   periodo: z.string({ required_error: 'Período de meta não informado.', invalid_type_error: 'Tipo não válido para período de meta.' }),
+  periodoFim: z.string(),
+  periodoInicio: z.string(),
+  periodoDias: z.number(),
   idParceiro: z.string({
     required_error: 'Referência a parceiro não informado.',
     invalid_type_error: 'Tipo não válido para a referência de parceiro.',
@@ -58,6 +64,9 @@ export const InsertSaleGoalSchema = z.object({
 const SaleGoalEntitySchema = z.object({
   _id: z.instanceof(ObjectId),
   periodo: z.string(),
+  periodoFim: z.string(),
+  periodoInicio: z.string(),
+  periodoDias: z.number(),
   idParceiro: z.string(),
   usuario: AuthorSchema,
   metas: z.object({

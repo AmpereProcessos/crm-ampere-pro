@@ -25,9 +25,18 @@ type ProductsSelectionProps = {
   setInfoHolder: React.Dispatch<React.SetStateAction<TProposal>>
   moveToNextStage: () => void
   moveToPreviousStage: () => void
+  setApplicablePaymentMethodsIds: React.Dispatch<React.SetStateAction<string[]>>
   session: Session
 }
-function ProductsSelection({ opportunity, infoHolder, setInfoHolder, moveToNextStage, moveToPreviousStage, session }: ProductsSelectionProps) {
+function ProductsSelection({
+  opportunity,
+  infoHolder,
+  setInfoHolder,
+  moveToNextStage,
+  moveToPreviousStage,
+  setApplicablePaymentMethodsIds,
+  session,
+}: ProductsSelectionProps) {
   const [selectedProducts, setSelectedProducts] = useState<(TProductDTOWithPricingMethod & { qtde: number; valorFinal: number })[]>([])
   const { data: products, isLoading, isError, isSuccess } = useComercialProductsWithPricingMethod()
   const userHasPricingView = session.user.permissoes.precos.visualizar
@@ -166,6 +175,7 @@ function ProductsSelection({ opportunity, infoHolder, setInfoHolder, moveToNextS
     const topology = infoHolder.premissas.topologia
     const methodology = selectedProducts[0].metodologia
     const methodologyId = selectedProducts[0].idMetodologiaPrecificacao
+    const paymentMethodsIds = [...new Set(selectedProducts.flatMap((x) => x.idsMetodologiasPagamento))]
     const selectedProductsFormatted: TProposalProduct[] = selectedProducts.map((product) => ({
       id: product._id,
       categoria: product.categoria,
@@ -220,7 +230,7 @@ function ProductsSelection({ opportunity, infoHolder, setInfoHolder, moveToNextS
       conditionData,
       variableData,
     })
-
+    setApplicablePaymentMethodsIds(paymentMethodsIds)
     setInfoHolder((prev) => ({
       ...prev,
       idMetodologiaPrecificacao: methodologyId,
