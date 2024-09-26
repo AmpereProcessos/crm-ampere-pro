@@ -7,6 +7,81 @@ import { TProposalPremisses } from './schemas/proposal.schema'
 import { easeBackInOut } from 'd3-ease'
 import { TProductItem, TServiceItem } from './schemas/kits.schema'
 
+export const Months = [
+  {
+    id: 1,
+    identificator: '1',
+    label: 'Janeiro',
+    labelAbbreviation: 'Jan',
+  },
+  {
+    id: 2,
+    identificator: '2',
+    label: 'Fevereiro',
+    labelAbbreviation: 'Fev',
+  },
+  {
+    id: 3,
+    identificator: '3',
+    label: 'Março',
+    labelAbbreviation: 'Mar',
+  },
+  {
+    id: 4,
+    identificator: '4',
+    label: 'Abril',
+    labelAbbreviation: 'Abr',
+  },
+  {
+    id: 5,
+    identificator: '5',
+    label: 'Maio',
+    labelAbbreviation: 'Mai',
+  },
+  {
+    id: 6,
+    identificator: '6',
+    label: 'Junho',
+    labelAbbreviation: 'Jun',
+  },
+  {
+    id: 7,
+    identificator: '7',
+    label: 'Julho',
+    labelAbbreviation: 'Jul',
+  },
+  {
+    id: 8,
+    identificator: '8',
+    label: 'Agosto',
+    labelAbbreviation: 'Ago',
+  },
+  {
+    id: 9,
+    identificator: '9',
+    label: 'Setembro',
+    labelAbbreviation: 'Set',
+  },
+  {
+    id: 10,
+    identificator: '10',
+    label: 'Outubro',
+    labelAbbreviation: 'Out',
+  },
+  {
+    id: 11,
+    identificator: '11',
+    label: 'Novembro',
+    labelAbbreviation: 'Nov',
+  },
+  {
+    id: 12,
+    identificator: '12',
+    label: 'Dezembro',
+    labelAbbreviation: 'Dez',
+  },
+]
+
 export type TProjectTypes = {
   id: number
   label: string

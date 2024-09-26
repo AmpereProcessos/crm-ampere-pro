@@ -26,5 +26,6 @@ export function useInProgressResults({ after, before, responsibles, partners, pr
   return useQuery({
     queryKey: ['in-progress-results', after, before, responsibles, partners, projectTypes],
     queryFn: async () => await fetchStats({ after, before, responsibles, partners, projectTypes }),
+    refetchOnMount: false,
   })
 }

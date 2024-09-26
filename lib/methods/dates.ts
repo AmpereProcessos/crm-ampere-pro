@@ -2,6 +2,7 @@ import dayjs from 'dayjs'
 // @ts-ignore
 import dayjsBusinessDays from 'dayjs-business-days'
 import { formatDecimalPlaces } from './formatting'
+import { Months } from '@/utils/constants'
 
 dayjs.extend(dayjsBusinessDays)
 
@@ -99,4 +100,11 @@ export function getTimeFormattedTextFromHours(hours: number) {
     return `${formatDecimalPlaces(days)} ${days > 2 ? 'DIAS' : 'DIA'}`
   }
   return `${formatDecimalPlaces(hours)} ${hours > 2 ? 'HORAS' : 'HORA'}`
+}
+
+export function getMonthLabel(monthNumber: number, abbreviation?: boolean) {
+  const Month = Months.find((m) => m.identificator == monthNumber.toString())
+  if (!Month) return ''
+  if (abbreviation) return Month.labelAbbreviation
+  return Month.label
 }

@@ -113,7 +113,7 @@ const getInProgressResults: NextApiHandler<GetResponse> = async (req, res) => {
 
   // Getting the basic structure of data to work on top of
   const funnelsReduced = getFunnelsReduced({ funnels })
-
+  console.log('FUNNELS REDUCED', funnelsReduced)
   // Iterating through the opportunities and updating the structure based on validations
   const inProgressResults = projects.reduce((acc, current) => {
     // Getting the funnel references that refer to the iterrating opportunity
@@ -149,7 +149,8 @@ const getInProgressResults: NextApiHandler<GetResponse> = async (req, res) => {
 
       // Iterating over the stages information
       Object.entries(funnel.estagios).forEach(([key, stage]) => {
-        const historyStageName = existingFunnel.etapas.find((e) => e.id.toString() == key.toString())?.nome || 'NÃO DEFINIDO'
+        const historyStageName = existingFunnel.etapas.find((e) => e.id.toString() == key.toString())?.nome
+        if (!historyStageName) return acc
         const arrivalDate = stage?.entrada ? new Date(stage.entrada) : null
         const exitDate = stage?.saida ? new Date(stage.saida) : null
         const diff = !!arrivalDate && !!exitDate ? getHoursDiff({ start: arrivalDate.toISOString(), finish: exitDate.toISOString() }) : 0

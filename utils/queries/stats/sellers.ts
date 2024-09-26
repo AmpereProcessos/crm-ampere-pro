@@ -1,5 +1,5 @@
 import { TSellerSalesResults } from '@/pages/api/stats/comercial-results/sales-sellers'
-import { TSalePromotersResults } from '@/pages/api/stats/comercial-results/sellers'
+import { TSalePromoterResultsById, TSalePromotersResults } from '@/pages/api/stats/comercial-results/sellers'
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 
@@ -23,6 +23,7 @@ export function useSalesTeamResults({ after, before, responsibles, partners, pro
   return useQuery({
     queryKey: ['sales-team-results', after, before, responsibles, partners, projectTypes],
     queryFn: async () => await fetchStats({ after, before, responsibles, partners, projectTypes }),
+    refetchOnMount: false,
   })
 }
 
@@ -32,7 +33,7 @@ type FetchSalePromotersResultsParams = {
 }
 async function fetchSalePromotersResults({ after, before }: FetchSalePromotersResultsParams) {
   try {
-    const { data } = await axios.get(`/api/stats/comercial-results/sellers?after=${after}&before=${before}`)
+    const { data } = await axios.post(`/api/stats/comercial-results/sellers?after=${after}&before=${before}`)
 
     return data.data as TSalePromotersResults
   } catch (error) {
@@ -44,5 +45,43 @@ export function useSalePromotersResults({ after, before }: FetchSalePromotersRes
   return useQuery({
     queryKey: ['sale-promoters-results', after, before],
     queryFn: async () => await fetchSalePromotersResults({ after, before }),
+    refetchOnMount: false,
+  })
+}
+
+type UseSalePromoterResultsByIdParams = {
+  id: string
+  firstPeriodAfter: string
+  firstPeriodBefore: string
+  secondPeriodAfter: string
+  secondPeriodBefore: string
+}
+async function fetchSalePromoterResultsById({
+  id,
+  firstPeriodAfter,
+  firstPeriodBefore,
+  secondPeriodAfter,
+  secondPeriodBefore,
+}: UseSalePromoterResultsByIdParams) {
+  try {
+    const { data } = await axios.get(
+      `/api/stats/comercial-results/sellers?id=${id}&firstPeriodAfter=${firstPeriodAfter}&firstPeriodBefore=${firstPeriodBefore}&secondPeriodAfter=${secondPeriodAfter}&secondPeriodBefore=${secondPeriodBefore}`
+    )
+    return data.data as TSalePromoterResultsById
+  } catch (error) {
+    throw error
+  }
+}
+
+export function useSalePromoterResultsById({
+  id,
+  firstPeriodAfter,
+  firstPeriodBefore,
+  secondPeriodAfter,
+  secondPeriodBefore,
+}: UseSalePromoterResultsByIdParams) {
+  return useQuery({
+    queryKey: ['sale-promoter-results-by-id', id, firstPeriodAfter, firstPeriodBefore, secondPeriodAfter, secondPeriodBefore],
+    queryFn: async () => fetchSalePromoterResultsById({ id, firstPeriodAfter, firstPeriodBefore, secondPeriodAfter, secondPeriodBefore }),
   })
 }

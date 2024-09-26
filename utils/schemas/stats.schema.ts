@@ -15,6 +15,32 @@ export const ResponsiblesBodySchema = z.object({
     })
     .nullable(),
 })
+export const QueryPeriodsComparisonSchema = z.object({
+  firstPeriodAfter: z
+    .string({
+      required_error: 'Parâmetros de período não fornecidos ou inválidos.',
+      invalid_type_error: 'Parâmetros de período não fornecidos ou inválidos.',
+    })
+    .datetime({ message: 'Tipo inválido para parâmetro de período.' }),
+  firstPeriodBefore: z
+    .string({
+      required_error: 'Parâmetros de período não fornecidos ou inválidos.',
+      invalid_type_error: 'Parâmetros de período não fornecidos ou inválidos.',
+    })
+    .datetime({ message: 'Tipo inválido para parâmetro de período.' }),
+  secondPeriodAfter: z
+    .string({
+      required_error: 'Parâmetros de período não fornecidos ou inválidos.',
+      invalid_type_error: 'Parâmetros de período não fornecidos ou inválidos.',
+    })
+    .datetime({ message: 'Tipo inválido para parâmetro de período.' }),
+  secondPeriodBefore: z
+    .string({
+      required_error: 'Parâmetros de período não fornecidos ou inválidos.',
+      invalid_type_error: 'Parâmetros de período não fornecidos ou inválidos.',
+    })
+    .datetime({ message: 'Tipo inválido para parâmetro de período.' }),
+})
 export const QueryDatesSchema = z.object({
   after: z
     .string({

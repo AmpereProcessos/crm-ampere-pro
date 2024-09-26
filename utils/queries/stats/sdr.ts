@@ -22,5 +22,6 @@ export function useSDRTeamResults({ after, before, responsibles, partners, proje
   return useQuery({
     queryKey: ['sdr-team-results', after, before, responsibles, partners, projectTypes],
     queryFn: async () => await fetchStats({ after, before, responsibles, partners, projectTypes }),
+    refetchOnMount: false,
   })
 }

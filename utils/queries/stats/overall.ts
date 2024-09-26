@@ -22,5 +22,6 @@ export function useOverallSalesResults({ after, before, responsibles, partners, 
   return useQuery({
     queryKey: ['overall-sales-results', after, before, responsibles, partners, projectTypes],
     queryFn: async () => await fetchStats({ after, before, responsibles, partners, projectTypes }),
+    refetchOnMount: false,
   })
 }
