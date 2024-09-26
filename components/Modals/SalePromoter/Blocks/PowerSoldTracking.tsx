@@ -36,6 +36,7 @@ type PowerSoldTrackingProps = {
   secondPeriodBefore: string
 }
 function PowerSoldTracking({ data, firstPeriodAfter, firstPeriodBefore, secondPeriodAfter, secondPeriodBefore }: PowerSoldTrackingProps) {
+  console.log('POTENCIA VENDIDA')
   const chartData = mergePeriodsData(data.primeiro.potenciaVendida.mensal, data.segundo.potenciaVendida.mensal)
   const chartConfig = {
     mes: {
