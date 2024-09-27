@@ -1,4 +1,4 @@
-import { useMediaQuery } from '@/lib/utils'
+import { cn, useMediaQuery } from '@/lib/utils'
 import React, { useEffect, useRef, useState } from 'react'
 
 import { HiCheck } from 'react-icons/hi'
@@ -14,6 +14,7 @@ type SelectInputProps<T> = {
   width?: string
   label: string
   labelClassName?: string
+  inputClassName?: string
   showLabel?: boolean
   value: T | null
   editable?: boolean
@@ -26,7 +27,8 @@ type SelectInputProps<T> = {
 function SelectInput<T>({
   width,
   label,
-  labelClassName = 'font-sans font-bold  text-[#353432] text-start',
+  labelClassName,
+  inputClassName,
   showLabel = true,
   value,
   editable = true,
@@ -45,7 +47,7 @@ function SelectInput<T>({
 
   const ref = useRef<any>(null)
   const [items, setItems] = useState<SelectOption<T>[] | null>(options)
-  const isDesktop = useMediaQuery("(min-width: 768px)")
+  const isDesktop = useMediaQuery('(min-width: 768px)')
 
   const [selectMenuIsOpen, setSelectMenuIsOpen] = useState<boolean>(false)
   const [selectedId, setSelectedId] = useState<number | string | null>(getValueID(value))
@@ -118,11 +120,16 @@ function SelectInput<T>({
     return (
       <div ref={ref} className={`relative flex w-full flex-col gap-1 lg:w-[${width ? width : '350px'}]`}>
         {showLabel ? (
-          <label htmlFor={inputIdentifier} className={labelClassName}>
+          <label htmlFor={inputIdentifier} className={cn('text-start font-sans  font-bold text-[#353432]', labelClassName)}>
             {label}
           </label>
         ) : null}
-        <div className="flex h-full min-h-[46.6px] w-full items-center justify-between rounded-md border border-gray-200 bg-[#fff] p-3 text-sm shadow-sm">
+        <div
+          className={cn(
+            'flex h-full min-h-[46.6px] w-full items-center justify-between rounded-md border border-gray-200 bg-[#fff] p-3 text-sm shadow-sm',
+            inputClassName
+          )}
+        >
           {selectMenuIsOpen ? (
             <input
               type="text"
@@ -130,7 +137,7 @@ function SelectInput<T>({
               value={searchFilter}
               onChange={(e) => handleFilter(e.target.value)}
               placeholder="Filtre o item desejado..."
-              className="h-full w-full text-sm italic outline-none"
+              className="h-full w-full italic outline-none"
             />
           ) : (
             <p
@@ -160,8 +167,9 @@ function SelectInput<T>({
         </div>
         {selectMenuIsOpen ? (
           <div
-            className={`absolute ${dropdownDirection === 'down' ? 'top-[75px]' : 'bottom-[75px]'
-              } z-[100] flex h-[250px] max-h-[250px] w-full flex-col self-center overflow-y-auto overscroll-y-auto rounded-md border border-gray-200 bg-[#fff] p-2 py-1 shadow-sm scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300`}
+            className={`absolute ${
+              dropdownDirection === 'down' ? 'top-[75px]' : 'bottom-[75px]'
+            } z-[100] flex h-[250px] max-h-[250px] w-full flex-col self-center overflow-y-auto overscroll-y-auto rounded-md border border-gray-200 bg-[#fff] p-2 py-1 shadow-sm scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300`}
           >
             <div
               onClick={() => resetState()}
@@ -195,11 +203,16 @@ function SelectInput<T>({
     <Drawer open={selectMenuIsOpen} onOpenChange={setSelectMenuIsOpen}>
       <div ref={ref} className={`relative flex w-full flex-col gap-1 lg:w-[${width ? width : '350px'}]`}>
         {showLabel ? (
-          <label htmlFor={inputIdentifier} className={labelClassName}>
+          <label htmlFor={inputIdentifier} className={cn('text-start font-sans  font-bold text-[#353432]', labelClassName)}>
             {label}
           </label>
         ) : null}
-        <div className="flex h-full min-h-[46.6px] w-full items-center justify-between rounded-md border border-gray-200 bg-[#fff] p-3 text-sm shadow-sm">
+        <div
+          className={cn(
+            'flex h-full min-h-[46.6px] w-full items-center justify-between rounded-md border border-gray-200 bg-[#fff] p-3 text-sm shadow-sm',
+            inputClassName
+          )}
+        >
           <p
             onClick={() => {
               if (editable) setSelectMenuIsOpen((prev) => !prev)
@@ -216,14 +229,14 @@ function SelectInput<T>({
             }}
           />
         </div>
-        <DrawerContent className='p-2 gap-2'>
+        <DrawerContent className="gap-2 p-2">
           <input
             type="text"
             autoFocus
             value={searchFilter}
             onChange={(e) => handleFilter(e.target.value)}
             placeholder="Filtre o item desejado..."
-            className="w-full text-sm italic outline-none p-2"
+            className="w-full p-2 text-sm italic outline-none"
           />
           <div
             onClick={() => resetState()}
@@ -233,7 +246,7 @@ function SelectInput<T>({
             {!selectedId ? <HiCheck style={{ color: '#fead61', fontSize: '20px' }} /> : null}
           </div>
           <div className="my-2 h-[1px] w-full bg-gray-200"></div>
-          <div className='h-[350px] max-h-[350px] flex flex-col gap-2 overflow-y-auto overscroll-y-auto scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300'>
+          <div className="flex h-[350px] max-h-[350px] flex-col gap-2 overflow-y-auto overscroll-y-auto scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300">
             {items ? (
               items.map((item, index) => (
                 <div
@@ -249,7 +262,6 @@ function SelectInput<T>({
               <p className="w-full text-center text-sm italic text-[#353432]">Sem opções disponíveis.</p>
             )}
           </div>
-
         </DrawerContent>
         {/* {selectMenuIsOpen ? (
           <div
@@ -284,9 +296,7 @@ function SelectInput<T>({
         )} */}
       </div>
     </Drawer>
-
   )
-
 }
 
 export default SelectInput

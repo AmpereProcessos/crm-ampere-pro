@@ -4,7 +4,8 @@ import LoadingComponent from '@/components/utils/LoadingComponent'
 import { formatDecimalPlaces, formatNameAsInitials, formatToMoney } from '@/lib/methods/formatting'
 import { cn } from '@/lib/utils'
 import { useSalePromotersResults } from '@/utils/queries/stats/sellers'
-import { Pencil } from 'lucide-react'
+import { Eye, Pencil } from 'lucide-react'
+import { Session } from 'next-auth'
 import React, { useState } from 'react'
 import { BsFileEarmarkText, BsFillGearFill, BsPatchCheck } from 'react-icons/bs'
 import { FaBolt, FaPercentage } from 'react-icons/fa'
@@ -34,14 +35,15 @@ function renderPerformance({ achieved, goal }: { achieved?: number | null; goal?
 type SellersProps = {
   after: string
   before: string
+  session: Session
 }
-function Sellers({ after, before }: SellersProps) {
+function Sellers({ after, before, session }: SellersProps) {
   const [salePromoterViewModal, setSalePromoterViewModal] = useState<{ id: string | null; isOpen: boolean }>({ id: null, isOpen: false })
   const { data, isSuccess } = useSalePromotersResults({ after, before })
 
   return (
     <div className="flex w-full flex-col">
-      <h1 className="mt-4 rounded-md bg-black text-center text-xl font-black text-white">CONTROLE DE EQUIPE</h1>
+      <h1 className="mt-4 rounded-md bg-black text-center text-xl font-black text-white">PROMOTORES DE VENDA</h1>
       <div className="mt-2 flex grow flex-col flex-wrap justify-around gap-2 py-2 lg:flex-row">
         {isSuccess ? (
           data.map((responsible, index) => {
@@ -111,10 +113,10 @@ function Sellers({ after, before }: SellersProps) {
                 <div className="flex w-full items-center justify-end">
                   <button
                     onClick={() => setSalePromoterViewModal({ id: responsible.id, isOpen: true })}
-                    className="bg-primary text-secondary flex items-center gap-1 rounded-lg px-2 py-1 text-[0.6rem]"
+                    className="flex items-center gap-1 rounded-lg bg-black px-2 py-1 text-[0.6rem] text-white"
                   >
-                    <Pencil width={10} height={10} />
-                    <p>EDITAR</p>
+                    <Eye width={10} height={10} />
+                    <p>VISUALIZAR</p>
                   </button>
                 </div>
               </div>
@@ -125,7 +127,7 @@ function Sellers({ after, before }: SellersProps) {
         )}
       </div>
       {salePromoterViewModal.id && salePromoterViewModal.isOpen ? (
-        <EditSalePromoter promoterId={salePromoterViewModal.id} closeModal={() => setSalePromoterViewModal({ id: null, isOpen: false })} />
+        <EditSalePromoter promoterId={salePromoterViewModal.id} session={session} closeModal={() => setSalePromoterViewModal({ id: null, isOpen: false })} />
       ) : null}
     </div>
   )

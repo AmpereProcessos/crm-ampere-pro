@@ -1,4 +1,4 @@
-import { useMediaQuery } from '@/lib/utils'
+import { cn, useMediaQuery } from '@/lib/utils'
 import React, { useEffect, useRef, useState } from 'react'
 
 import { HiCheck } from 'react-icons/hi'
@@ -27,7 +27,7 @@ type SelectInputVirtualizedProps<T> = {
 function SelectInputVirtualized<T>({
   width,
   label,
-  labelClassName = 'font-sans font-bold  text-[#353432] text-start',
+  labelClassName,
   showLabel = true,
   value,
   editable = true,
@@ -48,7 +48,7 @@ function SelectInputVirtualized<T>({
 
   const ref = useRef<any>(null)
   const [items, setItems] = useState<SelectOption<T>[] | null>(options)
-  const isDesktop = useMediaQuery("(min-width: 768px)")
+  const isDesktop = useMediaQuery('(min-width: 768px)')
 
   const [selectMenuIsOpen, setSelectMenuIsOpen] = useState<boolean>(false)
   const [selectedId, setSelectedId] = useState<number | string | null>(getValueID(value))
@@ -120,7 +120,7 @@ function SelectInputVirtualized<T>({
     return (
       <div ref={ref} className={`relative flex w-full flex-col gap-1 lg:w-[${width ? width : '350px'}]`}>
         {showLabel ? (
-          <label htmlFor={inputIdentifier} className={labelClassName}>
+          <label htmlFor={inputIdentifier} className={cn('text-start font-sans  font-bold text-[#353432]', labelClassName)}>
             {label}
           </label>
         ) : null}
@@ -189,12 +189,11 @@ function SelectInputVirtualized<T>({
     <Drawer open={selectMenuIsOpen} onOpenChange={setSelectMenuIsOpen}>
       <div ref={ref} className={`relative flex w-full flex-col gap-1 lg:w-[${width ? width : '350px'}]`}>
         {showLabel ? (
-          <label htmlFor={inputIdentifier} className={labelClassName}>
+          <label htmlFor={inputIdentifier} className={cn('text-start font-sans  font-bold text-[#353432]', labelClassName)}>
             {label}
           </label>
         ) : null}
         <div className="flex h-full min-h-[46.6px] w-full items-center justify-between rounded-md border border-gray-200 bg-[#fff] p-3 text-sm shadow-sm">
-
           <p
             onClick={() => {
               if (editable) setSelectMenuIsOpen((prev) => !prev)
@@ -211,14 +210,14 @@ function SelectInputVirtualized<T>({
             }}
           />
         </div>
-        <DrawerContent className='p-2 gap-2'>
+        <DrawerContent className="gap-2 p-2">
           <input
             type="text"
             autoFocus
             value={searchFilter}
             onChange={(e) => handleFilter(e.target.value)}
             placeholder="Filtre o item desejado..."
-            className="h-full w-full text-sm italic outline-none p-2"
+            className="h-full w-full p-2 text-sm italic outline-none"
           />
           <div
             onClick={() => resetState()}
@@ -228,18 +227,16 @@ function SelectInputVirtualized<T>({
             {!selectedId ? <HiCheck style={{ color: '#fead61', fontSize: '20px' }} /> : null}
           </div>
           <div className="my-2 h-[1px] w-full bg-gray-200"></div>
-          <div className='h-[350px] max-h-[350px] flex flex-col gap-2 overflow-y-auto overscroll-y-auto scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300'>
+          <div className="flex h-[350px] max-h-[350px] flex-col gap-2 overflow-y-auto overscroll-y-auto scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300">
             {items ? (
               <List height={180} width={'100%'} list={items} />
             ) : (
               <p className="w-full text-center text-sm italic text-[#353432]">Sem opções disponíveis.</p>
             )}
           </div>
-
         </DrawerContent>
       </div>
     </Drawer>
-
   )
 }
 

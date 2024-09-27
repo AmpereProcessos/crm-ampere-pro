@@ -3,9 +3,9 @@ import axios from 'axios'
 import { ISaleGoal } from '../models'
 import { TSaleGoalDTO } from '../schemas/sale-goal.schema'
 
-async function fetchSaleGoalsByPromoter({ promoterId }: { promoterId: string }) {
+async function fetchSaleGoalsByUserId({ userId }: { userId: string }) {
   try {
-    const { data } = await axios.get(`/api/management/sale-goals?id=${promoterId}`)
+    const { data } = await axios.get(`/api/sale-goals?userId=${userId}`)
     return data.data as TSaleGoalDTO[]
   } catch (error) {
     throw error
@@ -15,7 +15,7 @@ async function fetchSaleGoalsByPromoter({ promoterId }: { promoterId: string }) 
 export function usePromoterSaleGoals(id: string) {
   return useQuery({
     queryKey: ['user-sale-goals', id],
-    queryFn: async () => await fetchSaleGoalsByPromoter({ promoterId: id }),
+    queryFn: async () => await fetchSaleGoalsByUserId({ userId: id }),
     refetchOnWindowFocus: false,
   })
 }

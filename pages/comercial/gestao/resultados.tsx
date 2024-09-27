@@ -210,7 +210,7 @@ function ComercialResults() {
           partners={queryFilters.partners}
           projectTypes={queryFilters.projectTypes}
         />
-        <Sellers after={queryFilters.period.after} before={queryFilters.period.before} />
+        <Sellers session={session} after={queryFilters.period.after} before={queryFilters.period.before} />
         {/* <h1 className="mt-4 font-Raleway text-xl font-black text-black">CONTROLE DE EQUIPE</h1>
         <div className="flex grow flex-col flex-wrap justify-around gap-2 py-2 lg:flex-row">
           {queryOptionsSuccess ? (

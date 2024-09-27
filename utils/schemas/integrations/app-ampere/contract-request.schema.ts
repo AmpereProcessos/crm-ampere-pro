@@ -37,6 +37,7 @@ const GeneralContractRequestSchema = z.object({
   telefoneContatoDois: z.string(),
   cuidadosContatoJornada: z.string(),
   nomeTitularProjeto: z.string().optional(),
+  cpf_cnpjTitularProjeto: z.string().optional(),
   tipoDoTitular: z.enum(['PESSOA FISICA', 'PESSOA JURIDICA']).nullable().optional(),
   tipoDaLigacao: z.enum(['NOVA', 'EXISTENTE']).nullable().optional(),
   tipoDaInstalacao: z.enum(['URBANO', 'RURAL']).nullable().optional(),

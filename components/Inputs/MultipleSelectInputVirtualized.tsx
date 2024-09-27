@@ -3,7 +3,7 @@ import lodash from 'lodash'
 import { HiCheck } from 'react-icons/hi'
 import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io'
 import { VariableSizeList } from 'react-window'
-import { useMediaQuery } from '@/lib/utils'
+import { cn, useMediaQuery } from '@/lib/utils'
 import { Drawer, DrawerContent } from '../ui/drawer'
 
 type SelectOption<T> = {
@@ -28,7 +28,7 @@ type SelectInputProps<T> = {
 function MultipleSelectInputVirtualized<T>({
   width,
   label,
-  labelClassName = 'font-sans font-bold  text-[#353432] text-start',
+  labelClassName,
   showLabel = true,
   selected,
   editable = true,
@@ -49,7 +49,7 @@ function MultipleSelectInputVirtualized<T>({
 
   const ref = useRef<any>(null)
   const [items, setItems] = useState<SelectOption<T>[] | null>(options)
-  const isDesktop = useMediaQuery("(min-width: 768px)")
+  const isDesktop = useMediaQuery('(min-width: 768px)')
 
   const [selectMenuIsOpen, setSelectMenuIsOpen] = useState<boolean>(false)
   const [selectedIds, setSelectedIds] = useState<(string | number)[] | null>(getValueID(selected))
@@ -135,7 +135,7 @@ function MultipleSelectInputVirtualized<T>({
     return (
       <div ref={ref} className={`relative flex w-full flex-col gap-1 lg:w-[${width ? width : '350px'}]`}>
         {showLabel ? (
-          <label htmlFor={inputIdentifier} className={labelClassName}>
+          <label htmlFor={inputIdentifier} className={cn('text-start font-sans  font-bold text-[#353432]', labelClassName)}>
             {label}
           </label>
         ) : null}
@@ -155,7 +155,8 @@ function MultipleSelectInputVirtualized<T>({
               onClick={() => {
                 if (editable) setSelectMenuIsOpen((prev) => !prev)
               }}
-              className="grow cursor-pointer text-[#353432]">
+              className="grow cursor-pointer text-[#353432]"
+            >
               {selectedIds && selectedIds.length > 0 && options
                 ? options.filter((item) => selectedIds.includes(item.id)).length > 1
                   ? 'MÚLTIPLAS SELEÇÕES'
@@ -164,13 +165,19 @@ function MultipleSelectInputVirtualized<T>({
             </p>
           )}
           {selectMenuIsOpen ? (
-            <IoMdArrowDropup style={{ cursor: 'pointer' }} onClick={() => {
-              if (editable) setSelectMenuIsOpen((prev) => !prev)
-            }} />
+            <IoMdArrowDropup
+              style={{ cursor: 'pointer' }}
+              onClick={() => {
+                if (editable) setSelectMenuIsOpen((prev) => !prev)
+              }}
+            />
           ) : (
-            <IoMdArrowDropdown style={{ cursor: 'pointer' }} onClick={() => {
-              if (editable) setSelectMenuIsOpen((prev) => !prev)
-            }} />
+            <IoMdArrowDropdown
+              style={{ cursor: 'pointer' }}
+              onClick={() => {
+                if (editable) setSelectMenuIsOpen((prev) => !prev)
+              }}
+            />
           )}
         </div>
         {selectMenuIsOpen ? (
@@ -197,16 +204,14 @@ function MultipleSelectInputVirtualized<T>({
       </div>
     )
   return (
-
     <div ref={ref} draggable={false} className={`relative flex w-full flex-col gap-1 lg:w-[${width ? width : '350px'}]`}>
       {showLabel ? (
-        <label htmlFor={inputIdentifier} className={labelClassName}>
+        <label htmlFor={inputIdentifier} className={cn('text-start font-sans  font-bold text-[#353432]', labelClassName)}>
           {label}
         </label>
       ) : null}
 
       <div className="flex h-[47px] w-full items-center justify-between rounded-md border border-gray-200 bg-[#fff] p-3 text-sm shadow-sm">
-
         <p
           onClick={() => {
             if (editable) setSelectMenuIsOpen((prev) => !prev)
@@ -225,17 +230,16 @@ function MultipleSelectInputVirtualized<T>({
             if (editable) setSelectMenuIsOpen((prev) => !prev)
           }}
         />
-
       </div>
-      <Drawer open={selectMenuIsOpen} onOpenChange={setSelectMenuIsOpen} dismissible >
-        <DrawerContent className='p-2 gap-2'>
+      <Drawer open={selectMenuIsOpen} onOpenChange={setSelectMenuIsOpen} dismissible>
+        <DrawerContent className="gap-2 p-2">
           <input
             type="text"
             autoFocus
             value={searchFilter}
             onChange={(e) => handleFilter(e.target.value)}
             placeholder="Filtre o item desejado..."
-            className="h-full w-full text-sm italic outline-none p-2"
+            className="h-full w-full p-2 text-sm italic outline-none"
           />
           <div
             onClick={() => resetState()}
@@ -245,7 +249,7 @@ function MultipleSelectInputVirtualized<T>({
             {!selectedIds ? <HiCheck style={{ color: '#fead61', fontSize: '20px' }} /> : null}
           </div>
           <div className="my-2 h-[1px] w-full bg-gray-200"></div>
-          <div className='h-[350px] max-h-[350px] flex flex-col gap-2 overflow-y-auto overscroll-y-auto scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300'>
+          <div className="flex h-[350px] max-h-[350px] flex-col gap-2 overflow-y-auto overscroll-y-auto scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300">
             {items ? (
               <List height={180} width={'100%'} list={items} />
             ) : (
@@ -254,9 +258,7 @@ function MultipleSelectInputVirtualized<T>({
           </div>
         </DrawerContent>
       </Drawer>
-
     </div>
-
   )
 }
 

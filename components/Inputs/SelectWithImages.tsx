@@ -3,6 +3,7 @@ import lodash from 'lodash'
 import { HiCheck } from 'react-icons/hi'
 import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io'
 import Avatar from '../utils/Avatar'
+import { cn } from '@/lib/utils'
 
 type SelectOption<T> = {
   id: string | number
@@ -26,7 +27,7 @@ type SelectWithImagesProps<T> = {
 function SelectWithImages<T>({
   width,
   label,
-  labelClassName = 'font-sans font-bold  text-[#353432] text-start',
+  labelClassName,
   showLabel = true,
   value,
   editable = true,
@@ -96,7 +97,7 @@ function SelectWithImages<T>({
   return (
     <div ref={ref} className={`relative flex w-full flex-col gap-1 lg:w-[${width ? width : '350px'}]`}>
       {showLabel ? (
-        <label htmlFor={inputIdentifier} className={labelClassName}>
+        <label htmlFor={inputIdentifier} className={cn('text-start font-sans  font-bold text-[#353432]', labelClassName)}>
           {label}
         </label>
       ) : null}

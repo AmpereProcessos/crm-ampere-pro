@@ -4,7 +4,7 @@ import SelectInput from '@/components/Inputs/SelectInput'
 import TextInput from '@/components/Inputs/TextInput'
 import { cn } from '@/lib/utils'
 import { stateCities } from '@/utils/estados_cidades'
-import { formatToCEP, getCEPInfo } from '@/utils/methods'
+import { formatToCEP, formatToCPForCNPJ, getCEPInfo } from '@/utils/methods'
 import { TContractRequest } from '@/utils/schemas/integrations/app-ampere/contract-request.schema'
 import React, { useState } from 'react'
 import { toast } from 'react-hot-toast'
@@ -175,7 +175,18 @@ function HomologationInfo({ requestInfo, setRequestInfo, sameProjectHolder, setS
               })
             }
           />
-
+          <TextInput
+            label={'CPF/CNPJ DO TITULAR DO PROJETO'}
+            placeholder="Preencha o CPF/CNPJ do titular do projeto junto a concessionária."
+            value={requestInfo.cpf_cnpjTitularProjeto ? requestInfo.cpf_cnpjTitularProjeto : ''}
+            editable={true}
+            handleChange={(value) =>
+              setRequestInfo({
+                ...requestInfo,
+                cpf_cnpjTitularProjeto: formatToCPForCNPJ(value),
+              })
+            }
+          />
           <TextInput
             label={'Nº DA INSTALAÇÃO'}
             editable={true}

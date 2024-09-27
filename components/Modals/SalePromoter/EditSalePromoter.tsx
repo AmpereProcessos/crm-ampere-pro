@@ -13,6 +13,8 @@ import ProjectsSoldTracking from './Blocks/SoldProjectsTrackign'
 import CreatedProjectsTracking from './Blocks/CreatedProjectsTracking'
 import SentProjectsTracking from './Blocks/SentProjectsTracking'
 import SelectInput from '@/components/Inputs/SelectInput'
+import GoalsMenu from './Blocks/GoalsMenu'
+import { Session } from 'next-auth'
 
 const initialFirstPeriodAfter = dayjs().subtract(1, 'year').startOf('year').toISOString() // dayjs().startOf('year').toISOString()
 const initialFirstPeriodBefore = dayjs().subtract(1, 'year').endOf('year').toISOString() //dayjs().endOf('year').toISOString()
@@ -20,9 +22,10 @@ const initialSecondPeriodAfter = dayjs().startOf('year').toISOString()
 const initialSecondPeriodBefore = dayjs().endOf('year').toISOString()
 type EditSalePromoterProps = {
   promoterId: string
+  session: Session
   closeModal: () => void
 }
-function EditSalePromoter({ promoterId, closeModal }: EditSalePromoterProps) {
+function EditSalePromoter({ promoterId, session, closeModal }: EditSalePromoterProps) {
   const [queryParams, setQueryParams] = useState({
     firstPeriodAfter: initialFirstPeriodAfter,
     firstPeriodBefore: initialFirstPeriodBefore,
@@ -52,7 +55,7 @@ function EditSalePromoter({ promoterId, closeModal }: EditSalePromoterProps) {
                 <Avatar height={50} width={50} url={promoter.avatar_url || undefined} fallback={formatNameAsInitials(promoter.nome)} />
                 <h1 className="w-full text-center font-bold leading-none tracking-tight">{promoter.nome}</h1>
               </div>
-              <h1 className="w-full rounded bg-black p-1 text-center text-xs font-medium text-white">RESULTADOS</h1>
+              <h1 className="w-full rounded bg-cyan-500 p-1 text-center text-xs font-medium text-white">RESULTADOS</h1>
               <div className="flex w-full items-center justify-between gap-2">
                 <SelectInput
                   label="ANO DO PRIMEIRO PERÍODO"
@@ -126,6 +129,7 @@ function EditSalePromoter({ promoterId, closeModal }: EditSalePromoterProps) {
                 secondPeriodAfter={queryParams.secondPeriodAfter}
                 secondPeriodBefore={queryParams.secondPeriodBefore}
               />
+              <GoalsMenu promoter={{ id: promoter.id, nome: promoter.nome, avatar_url: promoter.avatar_url }} session={session} />
             </div>
           ) : null}
         </div>
