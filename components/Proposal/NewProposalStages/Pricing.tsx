@@ -22,7 +22,7 @@ type PricingProps = {
 function Pricing({ opportunity, infoHolder, setInfoHolder, moveToNextStage, moveToPreviousStage, session }: PricingProps) {
   const userHasPricingEditPermission = session?.user.permissoes.precos.editar
   const userHasPricingViewPermission = session.user.permissoes.precos.visualizar
-  const alterationLimit = userHasPricingEditPermission ? undefined : infoHolder.idMetodologiaPrecificacao == '66912b265a6c1f632a3970dd' ? 0.05 : 0.02
+  const alterationLimit = userHasPricingEditPermission ? undefined : infoHolder.idMetodologiaPrecificacao == '66912b265a6c1f632a3970dd' ? 0 : 0.02
 
   const [pricing, setPricing] = useState<TPricingItem[]>(infoHolder.precificacao)
   const [addNewPriceItemModalIsOpen, setAddNewPriceItemModalIsOpen] = useState<boolean>(false)
@@ -67,11 +67,11 @@ function Pricing({ opportunity, infoHolder, setInfoHolder, moveToNextStage, move
         <div className="flex gap-2 rounded border border-gray-600 px-2 py-1 font-medium text-gray-600">
           <p>{formatToMoney(pricingTotal)}</p>
           {session?.user.permissoes.precos.editar ? (
-            <button onClick={() => setEditFinalPriceModalIsOpen((prev) => !prev)} className="text-md hover:text-[#fead61] text-gray-400">
+            <button onClick={() => setEditFinalPriceModalIsOpen((prev) => !prev)} className="text-md text-gray-400 hover:text-[#fead61]">
               <AiFillEdit />
             </button>
           ) : (
-            <button onClick={() => setEditFinalPriceModalIsOpen((prev) => !prev)} className="text-md hover:text-[#fead61] text-gray-400">
+            <button onClick={() => setEditFinalPriceModalIsOpen((prev) => !prev)} className="text-md text-gray-400 hover:text-[#fead61]">
               <AiFillEdit />
             </button>
           )}
