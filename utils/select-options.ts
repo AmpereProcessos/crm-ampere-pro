@@ -1129,16 +1129,9 @@ export const ProductItemCategories = [
 ]
 
 export const OpportunityResponsibilityRoles = [
-  {
-    id: 1,
-    label: 'VENDEDOR',
-    value: 'VENDEDOR',
-  },
-  {
-    id: 2,
-    label: 'SDR',
-    value: 'SDR',
-  },
+  { id: 1, label: 'VENDEDOR', value: 'VENDEDOR' },
+  { id: 2, label: 'SDR', value: 'SDR' },
+  { id: 3, label: 'ANALISTA TÉCNICO', value: 'ANALISTA TÉCNICO' },
 ]
 export const OpportunityResponsibilityRolesCombinations = getAllValueCombinations(OpportunityResponsibilityRoles.map((r) => r.value)).map((c) => c.join(' + '))
 export const EnergyDistributorsOptions = [

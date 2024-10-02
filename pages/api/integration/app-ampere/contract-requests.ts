@@ -42,7 +42,7 @@ const createRequest: NextApiHandler<PostResponse> = async (req, res) => {
   var sellerName = SellersInApp.find((x) => calculateStringSimilarity((requestInfo.nomeVendedor || 'NÃO DEFINIDO')?.toUpperCase(), x) > 80)
   var insiderName: string | undefined = undefined
 
-  const sdr = responsaveis.find((r) => r.papel == 'SDR')
+  const sdr = responsaveis.find((r) => r.papel == 'SDR' || r.papel == 'ANALISTA TÉCNICO')
   // In case there is an insider for the opportunity
   if (sdr) {
     insiderName = SellersInApp.find((x) => calculateStringSimilarity((sdr.nome || 'NÃO DEFINIDO')?.toUpperCase(), x) > 80)
