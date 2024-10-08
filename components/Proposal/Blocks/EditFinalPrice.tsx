@@ -61,7 +61,7 @@ function EditFinalPrice({ pricing, setPricing, alterationLimit, closeModal }: Ed
                 width="100%"
               />
             </div>
-            {alterationLimit ? (
+            {alterationLimit != undefined ? (
               <>
                 <p className="text-center text-sm italic text-gray-500">
                   Valor mínimo permitido de R${' '}
@@ -86,7 +86,8 @@ function EditFinalPrice({ pricing, setPricing, alterationLimit, closeModal }: Ed
                 const diff = pricingSuggestedTotal - priceHolder
                 const diffPercentage = diff / pricingSuggestedTotal
                 // In case there is a defined alteration limit, checking if alterations surpass that limit
-                if (alterationLimit && Math.abs(diffPercentage) > Math.abs(alterationLimit)) return toast.error('Alteração ultrapassa o limite permitido.')
+                if (alterationLimit != undefined && Math.abs(diffPercentage) > Math.abs(alterationLimit))
+                  return toast.error('Alteração ultrapassa o limite permitido.')
                 handlePricingCorrection({ diffPercentage: diffPercentage })
                 toast.success('Preços alterados com sucesso !')
                 return closeModal()
