@@ -2,6 +2,7 @@ import SelectInput from '@/components/Inputs/SelectInput'
 import TextInput from '@/components/Inputs/TextInput'
 import Avatar from '@/components/utils/Avatar'
 import { formatDateAsLocale, formatLocation } from '@/lib/methods/formatting'
+import { cn } from '@/lib/utils'
 import { formatToCPForCNPJ, formatToPhone } from '@/utils/methods'
 import { TClient, TSimilarClientSimplifiedDTO } from '@/utils/schemas/client.schema'
 import { TOpportunity } from '@/utils/schemas/opportunity.schema'
@@ -10,7 +11,7 @@ import React from 'react'
 import toast from 'react-hot-toast'
 import { BsCalendarPlus } from 'react-icons/bs'
 import { FaPhone, FaUser } from 'react-icons/fa'
-import { FaRegIdCard } from 'react-icons/fa6'
+import { FaBolt, FaRegIdCard } from 'react-icons/fa6'
 import { MdEmail, MdLocationPin } from 'react-icons/md'
 
 type OpportunityClientInformationBlockProps = {
@@ -109,6 +110,16 @@ function OpportunityClientInformationBlock({
         </div>
       ) : (
         <>
+          <div className="flex w-full items-center justify-center">
+            <button
+              onClick={() => setClient((prev) => ({ ...prev, canalAquisicao: 'FEIRÃO SOLAR' }))}
+              className={cn('flex items-center gap-2 rounded bg-[#15599a] px-3 py-2', client.canalAquisicao == 'FEIRÃO SOLAR' ? 'opacity-100' : 'opacity-50')}
+            >
+              <FaBolt color="#fead41" />
+              <h1 className="text-sm font-black text-white">VEIO POR CONTA DO FEIRÃO SOLAR</h1>
+              <FaBolt color="#fead41" />
+            </button>
+          </div>
           <div className="grid grid-cols-1 grid-rows-2 items-center gap-6 px-2 lg:grid-cols-2 lg:grid-rows-1">
             <TextInput
               label="NOME"
