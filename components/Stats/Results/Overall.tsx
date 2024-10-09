@@ -5,6 +5,7 @@ import { AiOutlineCloseCircle } from 'react-icons/ai'
 import { BsFileEarmarkText, BsPatchCheck, BsTicketPerforated } from 'react-icons/bs'
 import { VscDiffAdded } from 'react-icons/vsc'
 import LossesByReason from '../general/LossesByReason'
+import AcquisitionChannels from '../general/AcquisitionChannels'
 
 type OverallResultsProps = {
   after: string
@@ -95,6 +96,7 @@ function OverallResults({ after, before, responsibles, partners, projectTypes }:
         </div>
       </div>
       <LossesByReason stats={stats} />
+      <AcquisitionChannels stats={stats?.porCanalAquisicao || {}} />
     </div>
   )
 }

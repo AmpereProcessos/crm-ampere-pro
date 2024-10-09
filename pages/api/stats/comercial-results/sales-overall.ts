@@ -1,5 +1,6 @@
 import connectToDatabase from '@/services/mongodb/crm-db-connection'
 import { apiHandler, validateAuthorization } from '@/utils/api'
+import { TClient } from '@/utils/schemas/client.schema'
 import { TOpportunity } from '@/utils/schemas/opportunity.schema'
 
 import { TProposal } from '@/utils/schemas/proposal.schema'
@@ -39,6 +40,12 @@ export type TOverallResults = {
   }
   perdasPorMotivo: {
     [key: string]: number
+  }
+  porCanalAquisicao: {
+    [key: string]: {
+      adquiridos: number
+      ganhos: number
+    }
   }
 }
 type GetResponse = {
@@ -101,6 +108,9 @@ const getOverallResults: NextApiHandler<GetResponse> = async (req, res) => {
 
   const condensedResults = projects.reduce(
     (acc: TOverallResults, current) => {
+      const clientAquisitionOrigin = current.canalAquisicao
+      if (!acc.porCanalAquisicao[clientAquisitionOrigin]) acc.porCanalAquisicao[clientAquisitionOrigin] = { adquiridos: 0, ganhos: 0 }
+
       // Insertion related checkings
       const insertDate = new Date(current.dataInsercao)
       const wasInsertedWithinCurrentPeriod = insertDate >= afterDate && insertDate <= beforeDate
@@ -135,12 +145,14 @@ const getOverallResults: NextApiHandler<GetResponse> = async (req, res) => {
         if (isInbound) acc.projetosCriados.inbound += 1
         if (isOutboundSDR) acc.projetosCriados.outboundSdr += 1
         if (isOutboundSeller) acc.projetosCriados.outboundVendedor += 1
+        acc.porCanalAquisicao[clientAquisitionOrigin].adquiridos += 1
       }
       if (wasSignedWithinCurrentPeriod) {
         acc.projetosGanhos.total += 1
         if (isInbound) acc.projetosGanhos.inbound += 1
         if (isOutboundSDR) acc.projetosGanhos.outboundSdr += 1
         if (isOutboundSeller) acc.projetosGanhos.outboundVendedor += 1
+        acc.porCanalAquisicao[clientAquisitionOrigin].ganhos += 1
       }
       if (wasLostWithinCurrentPeriod) {
         acc.projetosPerdidos.total += 1
@@ -186,6 +198,7 @@ const getOverallResults: NextApiHandler<GetResponse> = async (req, res) => {
         total: 0,
       },
       perdasPorMotivo: {},
+      porCanalAquisicao: {},
     }
   )
   return res.status(200).json({ data: condensedResults })
@@ -207,6 +220,7 @@ type TOverallResultsProject = {
   responsaveis: TOpportunity['responsaveis']
   ganho: TOpportunity['ganho']
   valorProposta: TProposal['valor']
+  canalAquisicao: TClient['canalAquisicao']
   motivoPerda: TOpportunity['perda']['descricaoMotivo']
   dataPerda: TOpportunity['perda']['data']
   dataInsercao: TOpportunity['dataInsercao']
@@ -226,24 +240,28 @@ async function getOpportunities({ opportunitiesCollection, partnerQuery, respons
       ],
       dataExclusao: null,
     }
-    const addFields = { wonProposeObjectId: { $toObjectId: '$ganho.idProposta' } }
-    const lookup = { from: 'proposals', localField: 'wonProposeObjectId', foreignField: '_id', as: 'proposta' }
+    const addFields = { wonProposeObjectId: { $toObjectId: '$ganho.idProposta' }, clientObjectId: { $toObjectId: '$idCliente' } }
+    const proposalLookup = { from: 'proposals', localField: 'wonProposeObjectId', foreignField: '_id', as: 'proposta' }
+    const clientLookup = { from: 'clients', localField: 'clientObjectId', foreignField: '_id', as: 'cliente' }
+
     const projection = {
       idMarketing: 1,
       responsaveis: 1,
       ganho: 1,
       'proposta.valor': 1,
+      'cliente.canalAquisicao': 1,
       perda: 1,
       dataInsercao: 1,
     }
     const result = await opportunitiesCollection
-      .aggregate([{ $match: match }, { $addFields: addFields }, { $lookup: lookup }, { $project: projection }])
+      .aggregate([{ $match: match }, { $addFields: addFields }, { $lookup: proposalLookup }, { $lookup: clientLookup }, { $project: projection }])
       .toArray()
     const projects = result.map((r) => ({
       idMarketing: r.idMarketing,
       responsaveis: r.responsaveis,
       ganho: r.ganho,
       valorProposta: r.proposta[0] ? r.proposta[0].valor : 0,
+      canalAquisicao: r.cliente[0] ? r.cliente[0].canalAquisicao : 'NÃO DEFINIDO',
       dataPerda: r.perda.data,
       motivoPerda: r.perda.descricaoMotivo,
       dataInsercao: r.dataInsercao,
