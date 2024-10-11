@@ -561,6 +561,24 @@ export const AllSellers = [
     comissionAsActive: 0.5,
     comissionWithInside: 0.5,
   },
+  {
+    id: 66,
+    active: true,
+    label: 'DANIELA FRANCISCA',
+    value: 'DANIELA FRANCISCA',
+    qualification: '',
+    comissionAsActive: 1,
+    comissionWithInside: 1,
+  },
+  {
+    id: 67,
+    active: true,
+    label: 'ROBSON VARGAS',
+    value: 'ROBSON VARGAS',
+    qualification: '',
+    comissionAsActive: 1,
+    comissionWithInside: 1,
+  },
 ].sort((a, b) => a.value.localeCompare(b.value))
 export const SellersInApp = AllSellers.map((s) => s.value)
 export const PPSCallTypes = [
