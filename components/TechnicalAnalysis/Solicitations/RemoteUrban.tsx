@@ -101,6 +101,7 @@ function RemoteUrban({
 
       {stage == 7 ? (
         <ReviewInfo
+          session={session}
           infoHolder={infoHolder}
           setInfoHolder={setInfoHolder}
           goToNextStage={() => setStage((prev) => prev + 1)}

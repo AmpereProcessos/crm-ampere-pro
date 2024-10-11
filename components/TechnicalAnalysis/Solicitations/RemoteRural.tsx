@@ -108,6 +108,7 @@ function RemoteRural({
       ) : null}
       {stage == 8 ? (
         <ReviewInfo
+          session={session}
           infoHolder={infoHolder}
           setInfoHolder={setInfoHolder}
           goToNextStage={() => setStage((prev) => prev + 1)}

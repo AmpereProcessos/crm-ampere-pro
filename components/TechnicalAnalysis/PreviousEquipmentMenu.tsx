@@ -2,8 +2,7 @@ import { TInverter, TModule } from '@/utils/schemas/kits.schema'
 import { TEquipment, TTechnicalAnalysis } from '@/utils/schemas/technical-analysis.schema'
 import React, { useState } from 'react'
 import SelectInput from '../Inputs/SelectInput'
-import Inverters from '@/utils/json-files/pvinverters.json'
-import Modules from '@/utils/json-files/pvmodules.json'
+
 import NumberInput from '../Inputs/NumberInput'
 import { ProductItemCategories } from '@/utils/select-options'
 import TextInput from '../Inputs/TextInput'
@@ -14,11 +13,14 @@ import { ImPower } from 'react-icons/im'
 import { renderCategoryIcon } from '@/lib/methods/rendering'
 import { AnimatePresence, motion } from 'framer-motion'
 import { GeneralVisibleHiddenExitMotionVariants } from '@/utils/constants'
+import { useEquipments } from '@/utils/queries/utils'
 type PreviousEquipmentMenuProps = {
   infoHolder: TTechnicalAnalysis
   setInfoHolder: React.Dispatch<React.SetStateAction<TTechnicalAnalysis>>
 }
 function PreviousEquipmentMenu({ infoHolder, setInfoHolder }: PreviousEquipmentMenuProps) {
+  const { data: equipments, isLoading, isError, isSuccess } = useEquipments({ category: null })
+
   const [inverterHolder, setInverterHolder] = useState<TInverter>({
     id: '',
     fabricante: '',
@@ -140,14 +142,14 @@ function PreviousEquipmentMenu({ infoHolder, setInfoHolder }: PreviousEquipmentM
             <div className="w-full lg:w-2/4">
               <SelectInput
                 label="INVERSOR"
-                value={inverterHolder.id ? Inverters.filter((inverter) => inverter.id == inverterHolder.id)[0] : null}
+                value={equipments?.find((e) => e.categoria == 'INVERSOR' && e._id == inverterHolder.id) || null}
                 handleChange={(value) =>
                   setInverterHolder((prev) => ({
                     ...prev,
-                    id: value.id,
+                    id: value._id,
                     fabricante: value.fabricante,
                     modelo: value.modelo,
-                    potencia: value.potenciaNominal,
+                    potencia: value.potencia || 0,
                   }))
                 }
                 onReset={() =>
@@ -161,13 +163,17 @@ function PreviousEquipmentMenu({ infoHolder, setInfoHolder }: PreviousEquipmentM
                   })
                 }
                 selectedItemLabel="NÃO DEFINIDO"
-                options={Inverters.map((inverter) => {
-                  return {
-                    id: inverter.id,
-                    label: `${inverter.fabricante} - ${inverter.modelo}`,
-                    value: inverter,
-                  }
-                })}
+                options={
+                  equipments
+                    ?.filter((e) => e.categoria == 'INVERSOR')
+                    .map((inverter) => {
+                      return {
+                        id: inverter._id,
+                        label: `${inverter.fabricante} - ${inverter.modelo}`,
+                        value: inverter,
+                      }
+                    }) || []
+                }
                 width="100%"
               />
             </div>
@@ -214,14 +220,14 @@ function PreviousEquipmentMenu({ infoHolder, setInfoHolder }: PreviousEquipmentM
             <div className="w-full lg:w-2/4">
               <SelectInput
                 label="MÓDULO"
-                value={moduleHolder.id ? Modules.filter((module) => module.id == moduleHolder.id)[0] : null}
+                value={equipments?.find((e) => e.categoria == 'MÓDULO' && e._id == moduleHolder.id) || null}
                 handleChange={(value) =>
                   setModuleHolder((prev) => ({
                     ...prev,
-                    id: value.id,
+                    id: value._id,
                     fabricante: value.fabricante,
                     modelo: value.modelo,
-                    potencia: value.potencia,
+                    potencia: value.potencia || 0,
                   }))
                 }
                 onReset={() =>
@@ -235,13 +241,17 @@ function PreviousEquipmentMenu({ infoHolder, setInfoHolder }: PreviousEquipmentM
                   })
                 }
                 selectedItemLabel="NÃO DEFINIDO"
-                options={Modules.map((module) => {
-                  return {
-                    id: module.id,
-                    label: `${module.fabricante} - ${module.modelo}`,
-                    value: module,
-                  }
-                })}
+                options={
+                  equipments
+                    ?.filter((e) => e.categoria == 'MÓDULO')
+                    .map((module) => {
+                      return {
+                        id: module._id,
+                        label: `${module.fabricante} - ${module.modelo}`,
+                        value: module,
+                      }
+                    }) || []
+                }
                 width="100%"
               />
             </div>

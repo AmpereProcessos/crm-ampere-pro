@@ -15,13 +15,12 @@ type PostResponse = {
 }
 const createKits: NextApiHandler<PostResponse> = async (req, res) => {
   const session = await validateAuthorization(req, res, 'kits', 'editar', true)
-  const partnerId = null // session.user.idParceiro
 
   const kits = z.array(InsertNewKitSchema).parse(req.body)
   const db = await connectToDatabase(process.env.MONGODB_URI, 'crm')
   const kitsCollection: Collection<TKit> = db.collection('kits')
-
-  const insertResponse = await insertManyKits({ collection: kitsCollection, info: kits, partnerId: partnerId || '' })
+  console.log('KITS INSERTED', kits)
+  const insertResponse = await insertManyKits({ collection: kitsCollection, info: kits })
   if (!insertResponse.acknowledged) throw new createHttpError.InternalServerError('Oops, houve um erro desconhecido na criação do kit.')
   const insertedIds = Object.keys(insertResponse.insertedIds).map((id) => id.toString())
   res.status(201).json({ data: { insertedId: insertedIds }, message: 'Kit criado com sucesso !' })
@@ -41,6 +40,7 @@ const updateKits: NextApiHandler<PutResponse> = async (req, res) => {
   const db = await connectToDatabase(process.env.MONGODB_URI, 'crm')
   const kitsCollection: Collection<TKit> = db.collection('kits')
 
+  console.log('KITS TO INSERT', kits)
   const bulkwriteArr = kits.map((kit) => {
     if (!kit._id || typeof kit._id != 'string' || !ObjectId.isValid(kit._id)) return null
     const setObject = { ...kit, _id: undefined }

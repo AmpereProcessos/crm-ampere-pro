@@ -1,18 +1,14 @@
-import { ModuleType } from '@/utils/models'
 import React from 'react'
 import { AiOutlineSafety, AiOutlineShoppingCart } from 'react-icons/ai'
 import { FaCalendarPlus, FaIndustry, FaSolarPanel, FaTruck } from 'react-icons/fa'
 import { ImPower, ImPriceTag } from 'react-icons/im'
 import { MdAttachMoney, MdDelete, MdOutlineMiscellaneousServices } from 'react-icons/md'
 import { TbTopologyFull, TbTopologyFullHierarchy } from 'react-icons/tb'
-import Modules from '../../utils/json-files/pvmodules.json'
-import { useSession } from 'next-auth/react'
-import { HiBadgeCheck } from 'react-icons/hi'
+
 import { TKit, TKitDTO, TProductItem } from '@/utils/schemas/kits.schema'
 import { formatToMoney } from '@/utils/methods'
-import { BsCalendar3EventFill, BsCalendarFill, BsCalendarPlusFill, BsCart } from 'react-icons/bs'
-import { formatDateAsLocale } from '@/lib/methods/formatting'
-import Avatar from '../utils/Avatar'
+import { BsCart } from 'react-icons/bs'
+
 import dayjs from 'dayjs'
 import { ProductItemCategories } from '@/utils/select-options'
 import { renderIcon } from '@/lib/methods/rendering'
@@ -22,17 +18,7 @@ function renderCategoryIcon(category: TProductItem['categoria']) {
   if (!CategoryInfo) return <BsCart />
   return renderIcon(CategoryInfo.icon)
 }
-function getBarColor({ active, expiryDate }: { active: boolean; expiryDate?: string | null }) {
-  if (!active) return 'bg-gray-500'
-  if (expiryDate && dayjs(expiryDate).isBefore(new Date())) return 'bg-red-500'
-  return 'bg-blue-500'
-}
-function getStatusTag({ active, expiryDate }: { active: boolean; expiryDate?: string | null }) {
-  if (!active) return <h1 className="rounded-full bg-gray-600 px-2 py-1 text-[0.6rem] font-bold text-white lg:text-xs">INATIVO</h1>
-  if (expiryDate && dayjs(expiryDate).isBefore(new Date()))
-    return <h1 className="rounded-full bg-orange-600 px-2 py-1 text-[0.6rem] font-bold text-white lg:text-xs">VENCIDO</h1>
-  return <h1 className="rounded-full bg-blue-600 px-2 py-1 text-[0.6rem] font-bold text-white lg:text-xs">ATIVO</h1>
-}
+
 type KitCardProps = {
   kit: TKitDTO
   selectedId: string | null

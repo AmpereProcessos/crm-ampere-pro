@@ -47,7 +47,6 @@ function KitBulkOperation({ session, closeModal }: KitBulkOperationProps) {
     try {
       // Extracting excel data as JSON
       const data = await getJSONFromExcelFile(file)
-      console.log(data)
       // Parsing the JSON obtained to validate types and values in correct form
       const bulkOperationKits = await z.array(KitsBulkOperationItemSchema).parseAsync(data)
       // Formatting data into TKit schema
@@ -109,6 +108,7 @@ function KitBulkOperation({ session, closeModal }: KitBulkOperationProps) {
         // Finding the equivalent defined partner, if not found, using users partner
         const definedPartner =
           bulkKit['VISIBILIDADE DE PARCEIRO'] != 'N/A' ? partners?.find((p) => p.nome == bulkKit['VISIBILIDADE DE PARCEIRO'])?._id || userPartnerId : null
+        console.log('DEFINED PARTNER', definedPartner)
 
         const partnerId = !!userPartnerScope
           ? !definedPartner // In case user has a defined partner scope and didnt selected a partner:
@@ -118,6 +118,7 @@ function KitBulkOperation({ session, closeModal }: KitBulkOperationProps) {
             : definedPartner // Else, the scope does include the defined partner, so using it
           : definedPartner // Else, user has global scope, so using the defined partner
 
+        console.log('PARTNER ID FOUND', partnerId)
         // Extracting module peak power
         const modulesTotalPeakPower = getModulesPeakPotByProducts(productsArr)
 

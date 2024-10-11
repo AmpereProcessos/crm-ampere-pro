@@ -8,10 +8,7 @@ import { TEquipment, TTechnicalAnalysis } from '@/utils/schemas/technical-analys
 import RoofTiles from '@/utils/images/roofTiles.png'
 import React, { useState } from 'react'
 import toast from 'react-hot-toast'
-import Modules from '@/utils/json-files/pvmodules.json'
-import Inverters from '@/utils/json-files/pvinverters.json'
 
-import { BsClipboardCheckFill } from 'react-icons/bs'
 import { FaIndustry } from 'react-icons/fa'
 import { ImPower } from 'react-icons/im'
 import { MdDelete } from 'react-icons/md'
@@ -24,8 +21,11 @@ import { TbBoxModel2, TbCategory2 } from 'react-icons/tb'
 import { AiOutlineArrowDown, AiOutlineArrowUp } from 'react-icons/ai'
 import CheckboxInput from '@/components/Inputs/CheckboxInput'
 import Image from 'next/image'
+import { Session } from 'next-auth'
+import { useEquipments } from '@/utils/queries/utils'
 
 type ReviewInfoProps = {
+  session: Session
   infoHolder: TTechnicalAnalysis
   setInfoHolder: React.Dispatch<React.SetStateAction<TTechnicalAnalysis>>
   goToNextStage: () => void
@@ -34,7 +34,7 @@ type ReviewInfoProps = {
   setFiles: React.Dispatch<React.SetStateAction<TFileHolder>>
   handleRequestAnalysis: ({ info, files }: { info: TTechnicalAnalysis; files: TFileHolder }) => void
 }
-function ReviewInfo({ infoHolder, setInfoHolder, files, setFiles, goToNextStage, goToPreviousStage, handleRequestAnalysis }: ReviewInfoProps) {
+function ReviewInfo({ session, infoHolder, setInfoHolder, files, setFiles, goToNextStage, goToPreviousStage, handleRequestAnalysis }: ReviewInfoProps) {
   async function setAddressDataByCEP(cep: string) {
     const addressInfo = await getCEPInfo(cep)
     const toastID = toast.loading('Buscando informações sobre o CEP...', {
@@ -59,6 +59,9 @@ function ReviewInfo({ infoHolder, setInfoHolder, files, setFiles, goToNextStage,
       }
     }, 1000)
   }
+
+  const { data: equipments, isLoading, isError, isSuccess } = useEquipments({ category: null })
+
   const [showKits, setShowKits] = useState<boolean>(false)
   const [selectedKitId, setSelectedKitId] = useState<string | null>(null)
   const [inverterHolder, setInverterHolder] = useState<TInverter>({
@@ -348,14 +351,14 @@ function ReviewInfo({ infoHolder, setInfoHolder, files, setFiles, goToNextStage,
             <div className="w-full lg:w-2/4">
               <SelectInput
                 label="INVERSOR"
-                value={inverterHolder.id ? Inverters.filter((inverter) => inverter.id == inverterHolder.id)[0] : null}
+                value={equipments?.find((e) => e.categoria == 'INVERSOR' && e._id == inverterHolder.id) || null}
                 handleChange={(value) =>
                   setInverterHolder((prev) => ({
                     ...prev,
-                    id: value.id,
+                    id: value._id,
                     fabricante: value.fabricante,
                     modelo: value.modelo,
-                    potencia: value.potenciaNominal,
+                    potencia: value.potencia || 0,
                   }))
                 }
                 onReset={() =>
@@ -369,13 +372,17 @@ function ReviewInfo({ infoHolder, setInfoHolder, files, setFiles, goToNextStage,
                   })
                 }
                 selectedItemLabel="NÃO DEFINIDO"
-                options={Inverters.map((inverter) => {
-                  return {
-                    id: inverter.id,
-                    label: `${inverter.fabricante} - ${inverter.modelo}`,
-                    value: inverter,
-                  }
-                })}
+                options={
+                  equipments
+                    ?.filter((e) => e.categoria == 'INVERSOR')
+                    .map((inverter) => {
+                      return {
+                        id: inverter._id,
+                        label: `${inverter.fabricante} - ${inverter.modelo}`,
+                        value: inverter,
+                      }
+                    }) || []
+                }
                 width="100%"
               />
             </div>
@@ -422,14 +429,14 @@ function ReviewInfo({ infoHolder, setInfoHolder, files, setFiles, goToNextStage,
             <div className="w-full lg:w-2/4">
               <SelectInput
                 label="MÓDULO"
-                value={moduleHolder.id ? Modules.filter((module) => module.id == moduleHolder.id)[0] : null}
+                value={equipments?.find((e) => e.categoria == 'MÓDULO' && e._id == moduleHolder.id) || null}
                 handleChange={(value) =>
                   setModuleHolder((prev) => ({
                     ...prev,
-                    id: value.id,
+                    id: value._id,
                     fabricante: value.fabricante,
                     modelo: value.modelo,
-                    potencia: value.potencia,
+                    potencia: value.potencia || 0,
                   }))
                 }
                 onReset={() =>
@@ -443,13 +450,17 @@ function ReviewInfo({ infoHolder, setInfoHolder, files, setFiles, goToNextStage,
                   })
                 }
                 selectedItemLabel="NÃO DEFINIDO"
-                options={Modules.map((module) => {
-                  return {
-                    id: module.id,
-                    label: `${module.fabricante} - ${module.modelo}`,
-                    value: module,
-                  }
-                })}
+                options={
+                  equipments
+                    ?.filter((e) => e.categoria == 'MÓDULO')
+                    .map((module) => {
+                      return {
+                        id: module._id,
+                        label: `${module.fabricante} - ${module.modelo}`,
+                        value: module,
+                      }
+                    }) || []
+                }
                 width="100%"
               />
             </div>
@@ -597,6 +608,7 @@ function ReviewInfo({ infoHolder, setInfoHolder, files, setFiles, goToNextStage,
         </div>
         {showKits ? (
           <KitsSelectionMenu
+            session={session}
             selectedKitId={selectedKitId}
             handleSelect={(kit) => {
               addEquipmentFromKit(kit)

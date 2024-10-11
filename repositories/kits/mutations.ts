@@ -33,11 +33,10 @@ export async function updateKit({ id, collection, changes, query }: UpdateKitPar
 type InsertManyKitsParams = {
   collection: Collection<TKit>
   info: TKit[]
-  partnerId: string
 }
-export async function insertManyKits({ collection, info, partnerId }: InsertManyKitsParams) {
+export async function insertManyKits({ collection, info }: InsertManyKitsParams) {
   try {
-    const fixedKits = info.map((kit) => ({ ...kit, idParceiro: partnerId, dataInsercao: new Date().toISOString() }))
+    const fixedKits = info.map((kit) => ({ ...kit, dataInsercao: new Date().toISOString() }))
     const insertResponse = await collection.insertMany(fixedKits)
     return insertResponse
   } catch (error) {
