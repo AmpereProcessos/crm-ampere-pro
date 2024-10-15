@@ -74,6 +74,7 @@ function OpportunityProposals({
           <>
             <button
               onClick={() => {
+                if (!city || !uf) return toast.error('Por favor, preecha a cidade e o estado do cliente antes de prosseguir para geração de propostas.')
                 router.push(`/comercial/oportunidades/proposta/${opportunityId}`)
               }}
               className="hidden rounded bg-green-600 p-1 text-[0.7rem] font-bold text-white lg:flex"

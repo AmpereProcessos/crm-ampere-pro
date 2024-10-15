@@ -80,7 +80,6 @@ function FunnelList({ stageName, session, items, id }: IFunnelListProps) {
               </div>
             </div>
           </div>
-
           <div ref={provided.innerRef} {...provided.droppableProps} className="my-1 flex flex-col gap-2 ">
             {items.map((item, index) => (
               <FunnelListItem key={item.id} item={item} session={session} index={index} />
