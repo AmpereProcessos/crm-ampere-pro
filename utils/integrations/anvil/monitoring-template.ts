@@ -13,7 +13,7 @@ export function getMonitoringTemplateData({ opportunity, proposal }: GetTemplate
 
   const clientCity = `${opportunity.localizacao.cidade}${opportunity.localizacao.uf ? `(${opportunity.localizacao.uf})` : ''}`
 
-  const monthlyEnergyGeneration = getEstimatedGen(proposal.premissas.potenciaPico || 0, opportunity.localizacao.cidade, opportunity.localizacao.uf, 'NORTE')
+  const monthlyEnergyGeneration = proposal.premissas.valorReferencia || 0
   const dailyEnergyGeneration = monthlyEnergyGeneration / 30
 
   const dailyMonetaryLoss = dailyEnergyGeneration * (proposal.premissas.tarifaEnergia || 1)
@@ -31,7 +31,7 @@ export function getMonitoringTemplateData({ opportunity, proposal }: GetTemplate
       clientAddress: formatLocation({ location: opportunity.localizacao }),
       dailyEnergyGeneration: `${formatDecimalPlaces(dailyEnergyGeneration)} kWh`,
       dailyMonetaryLoss: formatToMoney(dailyMonetaryLoss),
-      signaturePrice: `${formatToMoney(proposal.valor)} / MÊS`,
+      signaturePrice: `${formatToMoney(proposal.valor)}`,
       seller: sellerStr || sdrStr || '',
       opportunityIdentifier: opportunity.identificador || '',
       proposalId: `#${proposal._id}`,
