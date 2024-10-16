@@ -1,5 +1,6 @@
 import EnergyConsortiumForm from '@/components/ContractRequest/EnergyConsortiumForm'
 import HomologationForm from '@/components/ContractRequest/HomologationForm'
+import MonitoringForm from '@/components/ContractRequest/MonitoringForm'
 import OeMForm from '@/components/ContractRequest/OeMForm'
 import SolarSystemForm from '@/components/ContractRequest/SolarSystemForm'
 import SolarSystemInsuranceForm from '@/components/ContractRequest/SolarSystemInsuranceForm'
@@ -261,6 +262,9 @@ function NewContractRequest({ closeModal, proposeInfo, client, session, responsi
             ) : null}
             {proposeInfo?.oportunidadeDados.tipo.titulo == 'CONSÓRCIO DE ENERGIA' ? (
               <EnergyConsortiumForm requestInfo={requestInfo} setRequestInfo={setRequestInfo} proposeInfo={proposeInfo} closeForm={() => closeModal()} />
+            ) : null}
+            {proposeInfo.oportunidadeDados.tipo.titulo == 'MONITORAMENTO' ? (
+              <MonitoringForm requestInfo={requestInfo} setRequestInfo={setRequestInfo} proposeInfo={proposeInfo} closeForm={() => closeModal()} />
             ) : null}
           </div>
         </div>
