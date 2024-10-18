@@ -23,6 +23,10 @@ import { Collection, Document, Filter, MatchKeysAndValues, ObjectId, WithId } fr
 import { NextApiHandler } from 'next'
 import { z } from 'zod'
 
+export const config = {
+  maxDuration: 25,
+}
+
 export type ActivitiesByStatus = {
   [key: string]: number
 }
