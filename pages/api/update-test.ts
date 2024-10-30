@@ -4,7 +4,7 @@ import { apiHandler } from '@/utils/api'
 import connectToCRMDatabase from '@/services/mongodb/crm-db-connection'
 
 import { TOpportunity } from '@/utils/schemas/opportunity.schema'
-import { Collection, ObjectId } from 'mongodb'
+import { Collection, ObjectId, WithId } from 'mongodb'
 
 import { TFunnelReference } from '@/utils/schemas/funnel-reference.schema'
 import { TKit } from '@/utils/schemas/kits.schema'
@@ -13,6 +13,7 @@ import { TProduct } from '@/utils/schemas/products.schema'
 import { TService } from '@/utils/schemas/service.schema'
 import { TSaleGoal } from '@/utils/schemas/sale-goal.schema'
 import dayjs from 'dayjs'
+import { TProposal, TProposalDTO } from '@/utils/schemas/proposal.schema'
 
 type PostResponse = any
 
@@ -43,36 +44,49 @@ const PlansEquivalents = {
 }
 
 const migrate: NextApiHandler<PostResponse> = async (req, res) => {
-  const crmDb = await connectToCRMDatabase(process.env.MONGODB_URI, 'crm')
+  // const dateWith30DaysInterval = dayjs().subtract(30, 'days').toDate()
+  // const crmDb = await connectToCRMDatabase(process.env.MONGODB_URI, 'crm')
 
-  const saleGoalsCollection = crmDb.collection<TSaleGoal>('sale-goals')
+  // const opportunitiesCollection = crmDb.collection<TOpportunity>('opportunities')
 
-  const saleGoals = await saleGoalsCollection.find({}).toArray()
+  // const addFields = { idAsString: { $toString: '$_id' } }
+  // const lookup = { from: 'proposals', localField: 'idAsString', foreignField: 'oportunidade.id', as: 'proposta' }
 
-  const bulkwrite = saleGoals.map((goal) => {
-    const period = goal.periodo
-    const splitted = period.split('/')
-    const month = splitted[0]
-    const day = '01'
-    const year = splitted[1]
+  // const opportunities = await opportunitiesCollection
+  //   .find({
+  //     'perda.data': null,
+  //     'ganho.data': null,
+  //     'responsaveis.papel': 'SDR',
+  //     'responsaveis.nome': { $ne: 'ARTUR MILANE' },
+  //   })
+  //   .toArray()
+  // const opportunities = (await opportunitiesCollection
+  //   .aggregate([{ $match: { 'perda.data': null, 'ganho.data': null } }, { $addFields: addFields }, { $lookup: lookup }])
+  //   .toArray()) as (WithId<TOpportunity> & { propostas: WithId<TProposal>[] })[]
 
-    const date = [month, day, year].join('/')
-    const periodStart = dayjs(date).startOf('month').subtract(3, 'hours').toISOString()
-    const periodEnd = dayjs(date).endOf('month').subtract(3, 'hours').toISOString()
-    const periodDays = dayjs(periodEnd).daysInMonth()
-    return {
-      updateOne: {
-        filter: { _id: new ObjectId(goal._id) },
-        update: {
-          $set: {
-            periodoInicio: periodStart,
-            periodoFim: periodEnd,
-            periodoDias: periodDays,
-          },
-        },
-      },
-    }
-  })
+  // const bulkwrite = opportunities.map((opportunity) => {
+  //   return {
+  //     updateOne: {
+  //       filter: { _id: new ObjectId(opportunity._id) },
+  //       update: {
+  //         $set: {
+  //           responsaveis: [
+  //             {
+  //               id: '649c80b49538973589a33caf',
+  //               nome: 'ALESSANDER IDALECIO',
+  //               papel: 'SDR',
+  //               avatar_url:
+  //                 'https://firebasestorage.googleapis.com/v0/b/sistemaampere.appspot.com/o/usuarios%2Fcrm%2Favatar-alessander_idalecio?alt=media&token=603f5592-c278-43c5-ac1a-6a23ab0e1b29',
+  //               telefone: '(34) 98406-1388',
+  //               dataInsercao: new Date().toISOString(),
+  //             },
+  //           ],
+  //         },
+  //       },
+  //     },
+  //   }
+  // })
+
   // const kitsCollection: Collection<TKit> = crmDb.collection('kits')
   // const plansCollection: Collection<TSignaturePlan> = crmDb.collection('signature-plans')
   // const productsCollection: Collection<TProduct> = crmDb.collection('products')
@@ -82,9 +96,11 @@ const migrate: NextApiHandler<PostResponse> = async (req, res) => {
   // await plansCollection.updateMany({}, { $set: { idsMetodologiasPagamento: ['661ec619e03128a48f94b4db'] } })
   // await productsCollection.updateMany({}, { $set: { idsMetodologiasPagamento: ['661ec619e03128a48f94b4db'] } })
   // await servicesCollection.updateMany({}, { $set: { idsMetodologiasPagamento: ['661ec619e03128a48f94b4db'] } })
+  // const bkResponse = await opportunitiesCollection.bulkWrite(bulkwrite)
+  // console.log(bulkwrite.length)
+  // return res.json(bkResponse)
 
-  const bkResponse = await saleGoalsCollection.bulkWrite(bulkwrite)
-  return res.json(bkResponse)
+  return res.json('DESATIVADA')
 }
 export default apiHandler({
   GET: migrate,

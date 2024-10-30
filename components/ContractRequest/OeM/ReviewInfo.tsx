@@ -1006,7 +1006,7 @@ function ReviewInfo({
             </div>
             <div className="grid w-full grid-cols-1 grid-rows-2 gap-2 lg:grid-cols-2 lg:grid-rows-1">
               <SelectInput
-                label={'NECESSÁRIO CONSTRUÇÃO OU ADEQUAÇÃO DE ESTRUTURA?'}
+                label={'INCLUSO VENDA DE NOVA (OU ADEQUAÇÃO) DE ESTRUTURA'}
                 editable={true}
                 options={[
                   {

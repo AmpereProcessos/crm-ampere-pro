@@ -85,7 +85,7 @@ function StructureInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNex
         </div>
         <div className="grid w-full grid-cols-1 grid-rows-2 gap-2 lg:grid-cols-2 lg:grid-rows-1">
           <SelectInput
-            label={'NECESSÁRIO CONSTRUÇÃO OU ADEQUAÇÃO DE ESTRUTURA?'}
+            label={'INCLUSO VENDA DE NOVA (OU ADEQUAÇÃO) DE ESTRUTURA'}
             editable={true}
             options={[
               {
@@ -105,7 +105,7 @@ function StructureInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNex
             onReset={() => {
               setRequestInfo((prev) => ({
                 ...prev,
-                estruturaAmpere: undefined,
+                estruturaAmpere: 'NÃO',
               }))
             }}
             width="100%"
@@ -136,7 +136,7 @@ function StructureInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNex
             onReset={() =>
               setRequestInfo((prev) => ({
                 ...prev,
-                responsavelEstrutura: undefined,
+                responsavelEstrutura: 'NÃO SE APLICA',
               }))
             }
             width="100%"
