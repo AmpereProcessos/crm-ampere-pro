@@ -30,7 +30,7 @@ type SolarSystemFormProps = {
   proposeInfo: TProposalDTOWithOpportunity
 }
 function SolarSystemForm({ requestInfo, setRequestInfo, proposeInfo }: SolarSystemFormProps) {
-  const [stage, setStage] = useState(9)
+  const [stage, setStage] = useState(1)
   const [sameProjectHolder, setSameProjectHolder] = useState<boolean>(false)
   const [documentsFileHolder, setDocumentsFileHolder] = useState<{ [key: string]: File | string | null }>({})
 
