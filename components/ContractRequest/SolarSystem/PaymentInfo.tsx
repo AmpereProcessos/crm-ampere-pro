@@ -1,14 +1,17 @@
 import NumberInput from '@/components/Inputs/NumberInput'
 import SelectInput from '@/components/Inputs/SelectInput'
 import TextInput from '@/components/Inputs/TextInput'
+import { cn } from '@/lib/utils'
+import { stateCities } from '@/utils/estados_cidades'
 
-import { formatToCPForCNPJ, formatToPhone } from '@/utils/methods'
+import { formatToCEP, formatToCPForCNPJ, formatToPhone, getCEPInfo } from '@/utils/methods'
 import { IContractRequest } from '@/utils/models'
 import { useCreditors } from '@/utils/queries/utils'
 import { TContractRequest } from '@/utils/schemas/integrations/app-ampere/contract-request.schema'
 import { TProposalPaymentMethodItem } from '@/utils/schemas/proposal.schema'
 import React, { useState } from 'react'
 import { toast } from 'react-hot-toast'
+import { MdContentCopy } from 'react-icons/md'
 type PaymentInfoProps = {
   requestInfo: TContractRequest
   setRequestInfo: React.Dispatch<React.SetStateAction<TContractRequest>>
@@ -18,6 +21,7 @@ type PaymentInfoProps = {
 }
 function PaymentInfo({ requestInfo, setRequestInfo, paymentMethods, goToPreviousStage, goToNextStage }: PaymentInfoProps) {
   const { data: creditors } = useCreditors()
+  const [useInstallationLocationInformation, setUseInstallationLocationInformation] = useState<boolean>(false)
 
   function setPaymentInfoSameAsContract() {
     setRequestInfo((prev) => ({
@@ -25,6 +29,40 @@ function PaymentInfo({ requestInfo, setRequestInfo, paymentMethods, goToPrevious
       nomePagador: prev.nomeDoContrato,
       contatoPagador: prev.telefone,
       cpf_cnpjNF: prev.cpf_cnpj,
+    }))
+  }
+  async function setDeliveryAddressDataByCEP(cep: string) {
+    const addressInfo = await getCEPInfo(cep)
+    const toastID = toast.loading('Buscando informações sobre o CEP...', {
+      duration: 2000,
+    })
+    setTimeout(() => {
+      if (addressInfo) {
+        toast.dismiss(toastID)
+        toast.success('Dados do CEP buscados com sucesso.', {
+          duration: 1000,
+        })
+        setRequestInfo((prev) => ({
+          ...prev,
+          enderecoEntrega: addressInfo.logradouro,
+          bairroEntrega: addressInfo.bairro,
+          ufEntrega: addressInfo.uf as keyof typeof stateCities,
+          cidadeEntrega: addressInfo.localidade.toUpperCase(),
+        }))
+      }
+    }, 1000)
+  }
+  function handleUseInstallationLocationInformation() {
+    setRequestInfo((prev) => ({
+      ...prev,
+      cepEntrega: prev.cepInstalacao,
+      ufEntrega: prev.ufInstalacao,
+      cidadeEntrega: prev.cidadeInstalacao,
+      bairroEntrega: prev.bairroInstalacao,
+      enderecoEntrega: prev.enderecoInstalacao,
+      numeroResEntrega: prev.numeroResEntrega,
+      latitudeEntrega: prev.latitude,
+      longitudeEntrega: prev.longitude,
     }))
   }
   function validateFields() {
@@ -96,7 +134,7 @@ function PaymentInfo({ requestInfo, setRequestInfo, paymentMethods, goToPrevious
   return (
     <div className="flex w-full grow flex-col bg-[#fff] pb-2">
       <span className="py-2 text-center text-lg font-bold uppercase text-[#15599a]">DADOS FINANCEIROS E NEGOCIAÇÃO</span>
-      <div className="flex w-full grow flex-col">
+      <div className="flex w-full grow flex-col gap-2">
         <button onClick={() => setPaymentInfoSameAsContract()} className="w-fit self-center rounded bg-[#15599a] p-2 text-xs font-medium text-white">
           Usar mesmas informações preenchidas para contrato
         </button>
@@ -221,111 +259,165 @@ function PaymentInfo({ requestInfo, setRequestInfo, paymentMethods, goToPrevious
           </div>
         </div>
         {requestInfo.tipoDeServico == 'SISTEMA FOTOVOLTAICO' ? (
-          <div className="flex flex-col p-2">
+          <div className="flex flex-col gap-2 p-2">
             <h1 className="col-span-3 py-2 text-center font-bold text-[#fead61]">SOBRE A ENTREGA</h1>
-            <div className="mt-2 flex flex-col gap-2 lg:grid lg:grid-cols-2">
-              <div className="col-span-2 flex items-center justify-center">
-                <SelectInput
-                  width={'450px'}
-                  label={'LOCAL DE ENTREGA'}
-                  options={[
-                    {
-                      id: 1,
-                      label: 'MESMO DO PROJETO',
-                      value: 'MESMO DO PROJETO',
-                    },
-                    {
-                      id: 2,
-                      label: 'LOCAL DIFERENTE DA INSTALAÇÃO (DESCRITO NAS OBSERVAÇÕES)',
-                      value: 'LOCAL DIFERENTE DA INSTALAÇÃO (DESCRITO NAS OBSERVAÇÕES)',
-                    },
-                    {
-                      id: 3,
-                      label: 'ENTREGAR NA AMPÈRE(SOMENTE COM AUTORIZAÇÃO DO GERENTE COMERCIAL)',
-                      value: 'ENTREGAR NA AMPÈRE(SOMENTE COM AUTORIZAÇÃO DO GERENTE COMERCIAL)',
-                    },
-                  ]}
-                  editable={true}
-                  value={requestInfo.localEntrega}
-                  handleChange={(value) => setRequestInfo({ ...requestInfo, localEntrega: value })}
-                  selectedItemLabel="NÃO DEFINIDO"
-                  onReset={() => {
-                    setRequestInfo((prev) => ({ ...prev, localEntrega: null }))
+            <div className="flex w-full items-center justify-end gap-2">
+              {!useInstallationLocationInformation ? (
+                <button
+                  onClick={() => handleUseInstallationLocationInformation()}
+                  className={cn('flex items-center gap-1 rounded-lg bg-cyan-300 px-2 py-1 text-black duration-300 ease-in-out hover:bg-cyan-400')}
+                >
+                  <MdContentCopy size={12} />
+                  <h1 className="text-[0.65rem] font-medium tracking-tight">UTILIZAR LOCALIZAÇÃO DA INSTALAÇÃO</h1>
+                </button>
+              ) : null}
+            </div>
+            <div className="flex w-full flex-col items-center gap-2 lg:flex-row">
+              <div className="w-full lg:w-1/3">
+                <TextInput
+                  label="CEP"
+                  value={requestInfo.cepEntrega || ''}
+                  placeholder="Preencha aqui o CEP da instalação..."
+                  handleChange={(value) => {
+                    if (value.length == 9) {
+                      setDeliveryAddressDataByCEP(value)
+                    }
+                    setRequestInfo((prev) => ({ ...prev, cepEntrega: formatToCEP(value) }))
                   }}
+                  width="100%"
                 />
               </div>
-              <div className="flex items-center justify-center">
+              <div className="w-full lg:w-1/3">
                 <SelectInput
-                  width={'450px'}
-                  label={'END. ENTREGA IGUAL COBRANÇA?'}
-                  editable={true}
-                  value={requestInfo.entregaIgualCobranca}
-                  handleChange={(value) =>
-                    setRequestInfo({
-                      ...requestInfo,
-                      entregaIgualCobranca: value,
-                    })
-                  }
-                  options={[
-                    {
-                      id: 1,
-                      label: 'SIM',
-                      value: 'SIM',
-                    },
-                    {
-                      id: 2,
-                      label: 'NÃO',
-                      value: 'NÃO',
-                    },
-                  ]}
+                  label="ESTADO"
+                  value={requestInfo.ufEntrega}
+                  handleChange={(value) => setRequestInfo((prev) => ({ ...prev, ufEntrega: value }))}
                   selectedItemLabel="NÃO DEFINIDO"
-                  onReset={() =>
-                    setRequestInfo((prev) => ({
-                      ...prev,
-                      entregaIgualCobranca: null,
-                    }))
-                  }
+                  onReset={() => setRequestInfo((prev) => ({ ...prev, ufEntrega: null }))}
+                  options={Object.keys(stateCities).map((state, index) => ({
+                    id: index + 1,
+                    label: state,
+                    value: state,
+                  }))}
+                  width="100%"
                 />
               </div>
-              <div className="flex items-center justify-center">
+              <div className="w-full lg:w-1/3">
                 <SelectInput
-                  width={'450px'}
-                  label={'HÁ RESTRIÇÕES PARA ENTREGA?'}
-                  editable={true}
-                  value={requestInfo.restricoesEntrega}
-                  handleChange={(value) => setRequestInfo({ ...requestInfo, restricoesEntrega: value })}
-                  options={[
-                    {
-                      id: 1,
-                      label: 'SOMENTE HORARIO COMERCIAL',
-                      value: 'SOMENTE HORARIO COMERCIAL',
-                    },
-                    {
-                      id: 2,
-                      label: 'NÃO HÁ RESTRIÇÕES',
-                      value: 'NÃO HÁ RESTRIÇÕES',
-                    },
-                    {
-                      id: 3,
-                      label: 'CASA EM CONSTRUÇÃO',
-                      value: 'CASA EM CONSTRUÇÃO',
-                    },
-                    {
-                      id: 4,
-                      label: 'NÃO PODE RECEBER EM HORARIO COMERCIAL',
-                      value: 'NÃO PODE RECEBER EM HORARIO COMERCIAL',
-                    },
-                  ]}
+                  label="CIDADE"
+                  value={requestInfo.cidadeEntrega}
+                  handleChange={(value) => setRequestInfo((prev) => ({ ...prev, cidadeEntrega: value }))}
+                  options={
+                    requestInfo.ufEntrega
+                      ? stateCities[requestInfo.ufEntrega as keyof typeof stateCities].map((city, index) => ({
+                          id: index + 1,
+                          value: city,
+                          label: city,
+                        }))
+                      : null
+                  }
                   selectedItemLabel="NÃO DEFINIDO"
-                  onReset={() => {
-                    setRequestInfo((prev) => ({
-                      ...prev,
-                      restricoesEntrega: null,
-                    }))
-                  }}
+                  onReset={() => setRequestInfo((prev) => ({ ...prev, cidadeEntrega: null }))}
+                  width="100%"
                 />
               </div>
             </div>
+            <div className="flex w-full flex-col items-center gap-2 lg:flex-row">
+              <div className="w-full lg:w-1/2">
+                <TextInput
+                  label="BAIRRO"
+                  value={requestInfo.bairroEntrega || ''}
+                  placeholder="Preencha aqui o bairro do instalação..."
+                  handleChange={(value) => setRequestInfo((prev) => ({ ...prev, bairroEntrega: value }))}
+                  width="100%"
+                />
+              </div>
+              <div className="w-full lg:w-1/2">
+                <TextInput
+                  label="LOGRADOURO/RUA"
+                  value={requestInfo.enderecoEntrega || ''}
+                  placeholder="Preencha aqui o logradouro da instalação..."
+                  handleChange={(value) => setRequestInfo((prev) => ({ ...prev, enderecoEntrega: value }))}
+                  width="100%"
+                />
+              </div>
+            </div>
+            <div className="flex w-full flex-col items-center gap-2 lg:flex-row">
+              <div className="w-full lg:w-1/2">
+                <TextInput
+                  label="NÚMERO/IDENTIFICADOR"
+                  value={requestInfo.numeroResEntrega || ''}
+                  placeholder="Preencha aqui o número ou identificador da residência da instalação..."
+                  handleChange={(value) => setRequestInfo((prev) => ({ ...prev, numeroResEntrega: value }))}
+                  width="100%"
+                />
+              </div>
+              <div className="w-full lg:w-1/2">
+                <TextInput
+                  label="PONTO DE REFERÊNCIA"
+                  value={requestInfo.pontoDeReferenciaEntrega || ''}
+                  placeholder="Preencha aqui algum complemento do endereço..."
+                  handleChange={(value) => setRequestInfo((prev) => ({ ...prev, pontoDeReferenciaEntrega: value }))}
+                  width="100%"
+                />
+              </div>
+            </div>
+            <div className="flex w-full flex-col items-center gap-2 lg:flex-row">
+              <div className="w-full lg:w-1/2">
+                <TextInput
+                  label="LATITUDE"
+                  value={requestInfo.latitudeEntrega || ''}
+                  placeholder="Preencha aqui a latitude da instalação..."
+                  handleChange={(value) => setRequestInfo((prev) => ({ ...prev, latitudeEntrega: value }))}
+                  width="100%"
+                />
+              </div>
+              <div className="w-full lg:w-1/2">
+                <TextInput
+                  label="LONGITUDE"
+                  value={requestInfo.longitudeEntrega || ''}
+                  placeholder="Preencha aqui a longitude da instalação..."
+                  handleChange={(value) => setRequestInfo((prev) => ({ ...prev, longitudeEntrega: value }))}
+                  width="100%"
+                />
+              </div>
+            </div>
+            <SelectInput
+              width={'100%'}
+              label={'HÁ RESTRIÇÕES PARA ENTREGA?'}
+              editable={true}
+              value={requestInfo.restricoesEntrega}
+              handleChange={(value) => setRequestInfo({ ...requestInfo, restricoesEntrega: value })}
+              options={[
+                {
+                  id: 1,
+                  label: 'SOMENTE HORARIO COMERCIAL',
+                  value: 'SOMENTE HORARIO COMERCIAL',
+                },
+                {
+                  id: 2,
+                  label: 'NÃO HÁ RESTRIÇÕES',
+                  value: 'NÃO HÁ RESTRIÇÕES',
+                },
+                {
+                  id: 3,
+                  label: 'CASA EM CONSTRUÇÃO',
+                  value: 'CASA EM CONSTRUÇÃO',
+                },
+                {
+                  id: 4,
+                  label: 'NÃO PODE RECEBER EM HORARIO COMERCIAL',
+                  value: 'NÃO PODE RECEBER EM HORARIO COMERCIAL',
+                },
+              ]}
+              selectedItemLabel="NÃO DEFINIDO"
+              onReset={() => {
+                setRequestInfo((prev) => ({
+                  ...prev,
+                  restricoesEntrega: null,
+                }))
+              }}
+            />
           </div>
         ) : null}
 
