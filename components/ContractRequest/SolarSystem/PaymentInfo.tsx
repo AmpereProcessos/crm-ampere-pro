@@ -86,20 +86,6 @@ function PaymentInfo({ requestInfo, setRequestInfo, paymentMethods, goToPrevious
       toast.error('Por favor, preencha sobre a necessidade de faturamento por inscrição rural.')
       return false
     }
-    if (requestInfo.tipoDeServico == 'SISTEMA FOTOVOLTAICO') {
-      if (!requestInfo.localEntrega) {
-        toast.error('Por favor, preencha o local de entrega.')
-        return false
-      }
-      if (!requestInfo.entregaIgualCobranca) {
-        toast.error('Por favor, preencha se o endereço de entrega é igual ao de cobrança.')
-        return false
-      }
-      if (!requestInfo.restricoesEntrega) {
-        toast.error('Por favor, preencha as restrições para entrega.')
-        return false
-      }
-    }
 
     if (requestInfo.valorContrato == null || requestInfo.valorContrato == 0) {
       toast.error('Por favor, preencha o valor do contrato fotovoltaico.')
