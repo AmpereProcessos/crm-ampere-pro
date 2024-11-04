@@ -13,6 +13,13 @@ import { AdditionalCostsCategories, Units } from '@/utils/select-options'
 import TextInput from '@/components/Inputs/TextInput'
 import NumberInput from '@/components/Inputs/NumberInput'
 import { formatToMoney } from '@/lib/methods/formatting'
+import { STANDARD_PROFIT_MARGIN, STANDARD_TAX } from '@/utils/constants'
+import { MdAttachMoney } from 'react-icons/md'
+
+function getSaleValue(totalCost: number, addTaxes: boolean) {
+  const saleValue = addTaxes ? totalCost / (1 - (STANDARD_PROFIT_MARGIN + STANDARD_TAX)) : totalCost / (1 - STANDARD_PROFIT_MARGIN)
+  return saleValue
+}
 
 type AdditionalCostsBlockProps = {
   infoHolder: TTechnicalAnalysisDTO
@@ -59,6 +66,8 @@ function AdditionalCostsBlock({ infoHolder, setInfoHolder, changes, setChanges }
       qtde: costHolder.qtde,
       custoUnitario: costHolder.custoUnitario,
       total: costHolder.qtde * costHolder.custoUnitario,
+      totalVendaSimples: getSaleValue(costHolder.qtde * costHolder.custoUnitario, false),
+      totalVendaFaturavel: getSaleValue(costHolder.qtde * costHolder.custoUnitario, true),
     }
     costsList.push(newCost)
     setInfoHolder((prev) => ({ ...prev, custos: costsList }))
@@ -81,6 +90,10 @@ function AdditionalCostsBlock({ infoHolder, setInfoHolder, changes, setChanges }
     toast.success('Custo removido!')
   }
   function saveChanges({ index }: { index: number }) {
+    if (!costHolder.custoUnitario || costHolder.custoUnitario <= 0) {
+      toast.error('Preencha o custo unitário do item de custo.')
+      return
+    }
     const costsList = [...infoHolder.custos]
     const cost = {
       //
@@ -90,6 +103,8 @@ function AdditionalCostsBlock({ infoHolder, setInfoHolder, changes, setChanges }
       qtde: costHolder.qtde,
       custoUnitario: costHolder.custoUnitario,
       total: costHolder.qtde * (costHolder.custoUnitario || 0),
+      totalVendaSimples: getSaleValue(costHolder.qtde * costHolder.custoUnitario, false),
+      totalVendaFaturavel: getSaleValue(costHolder.qtde * costHolder.custoUnitario, true),
     }
     costsList[index] = cost
     setInfoHolder((prev) => ({ ...prev, custos: costsList }))
@@ -144,31 +159,65 @@ function AdditionalCostsBlock({ infoHolder, setInfoHolder, changes, setChanges }
           </div>
         </div>
         <div className="mt-2 flex w-full flex-col items-center gap-2 lg:flex-row">
-          <div className="w-full lg:w-1/3">
+          <div className="w-full lg:w-1/5">
             <NumberInput
               label={'QUANTIDADE'}
               placeholder={'Preencha a quantidade o item de custo...'}
               value={costHolder.qtde}
-              handleChange={(value) => setCostHolder((prev) => ({ ...prev, qtde: value }))}
+              handleChange={(value) =>
+                setCostHolder((prev) => ({
+                  ...prev,
+                  qtde: value,
+                  totalVendaSimples: getSaleValue(value * (prev.custoUnitario || 0), false),
+                  totalVendaFaturavel: getSaleValue(value * (prev.custoUnitario || 0), true),
+                }))
+              }
               width={'100%'}
             />
           </div>
-          <div className="w-full lg:w-1/3">
+          <div className="w-full lg:w-1/5">
             <NumberInput
               label={'PREÇO UNITÁRIO'}
               placeholder={'Preencha a preço unitário do item de custo...'}
               value={costHolder.custoUnitario || null}
-              handleChange={(value) => setCostHolder((prev) => ({ ...prev, custoUnitario: value }))}
+              handleChange={(value) =>
+                setCostHolder((prev) => ({
+                  ...prev,
+                  custoUnitario: value,
+                  totalVendaSimples: getSaleValue(prev.qtde * value, false),
+                  totalVendaFaturavel: getSaleValue(prev.qtde * value, true),
+                }))
+              }
               width={'100%'}
             />
           </div>
-          <div className="w-full lg:w-1/3">
+          <div className="w-full lg:w-1/5">
             <NumberInput
               label={'TOTAL'}
               editable={false}
               placeholder={'Valor total do item de custo...'}
               value={costHolder.qtde && costHolder.custoUnitario ? costHolder.qtde * costHolder.custoUnitario : null}
               handleChange={(value) => console.log('NO')}
+              width={'100%'}
+            />
+          </div>
+          <div className="w-full lg:w-1/5">
+            <NumberInput
+              label={'TOTAL VENDA SIMPLES'}
+              editable={true}
+              placeholder={'Valor total do item de custo...'}
+              value={costHolder.totalVendaSimples || 0}
+              handleChange={(value) => setCostHolder((prev) => ({ ...prev, totalVendaSimples: value }))}
+              width={'100%'}
+            />
+          </div>
+          <div className="w-full lg:w-1/5">
+            <NumberInput
+              label={'TOTAL VENDA FATURÁVEL'}
+              editable={true}
+              placeholder={'Valor total do item de custo...'}
+              value={costHolder.totalVendaFaturavel || 0}
+              handleChange={(value) => setCostHolder((prev) => ({ ...prev, totalVendaFaturavel: value }))}
               width={'100%'}
             />
           </div>
@@ -230,11 +279,23 @@ function AdditionalCostsBlock({ infoHolder, setInfoHolder, changes, setChanges }
                       </p>
                     </div>
                     <div className="flex items-center gap-2 text-green-500">
-                      <ImPriceTag color="rgb(34,197,94)" />
+                      <MdAttachMoney color="rgb(34,197,94)" />
                       <p className="text-sm font-medium text-gray-500">
                         {cost.custoUnitario ? formatToMoney(cost.custoUnitario) : 'R$ 0,00'} / {cost.grandeza}
                       </p>
                     </div>
+                    {cost.totalVendaSimples ? (
+                      <div className="flex items-center gap-2 text-green-500">
+                        <ImPriceTag color="rgb(34,197,94)" />
+                        <p className="text-sm font-medium text-gray-500">VENDA SIMPLES: {formatToMoney(cost.totalVendaSimples)}</p>
+                      </div>
+                    ) : null}
+                    {cost.totalVendaFaturavel ? (
+                      <div className="flex items-center gap-2 text-green-500">
+                        <ImPriceTag color="rgb(34,197,94)" />
+                        <p className="text-sm font-medium text-gray-500">VENDA FATURÁVEL: {formatToMoney(cost.totalVendaFaturavel)}</p>
+                      </div>
+                    ) : null}
                   </div>
                   <div className="flex items-center gap-2">
                     {/* <MdAttachMoney /> */}

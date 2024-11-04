@@ -15,6 +15,8 @@ type LaudoSimplesRuralProps = {
 function LaudoSimplesRural({ analysis }: LaudoSimplesRuralProps) {
   function getAdditionalCostsSum(costs: TTechnicalAnalysisDTO['custos'], addTaxes = false) {
     const sum = costs.reduce((acc, current) => {
+      if (!addTaxes && !!current.totalVendaSimples) return acc + current.totalVendaSimples
+      if (!!addTaxes && !!current.totalVendaFaturavel) return acc + current.totalVendaFaturavel
       const costTotal = current.total || current.qtde * (current.custoUnitario || 0)
       const total = addTaxes ? costTotal / (1 - (STANDARD_PROFIT_MARGIN + STANDARD_TAX)) : costTotal / (1 - STANDARD_PROFIT_MARGIN)
       return acc + total

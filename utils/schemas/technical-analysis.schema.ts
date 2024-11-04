@@ -402,7 +402,9 @@ export const GeneralTechnicalAnalysisSchema = z.object({
       grandeza: z.string({ required_error: 'Grandeza do custo não informada.', invalid_type_error: 'Tipo não válido para a grandeza do custo.' }),
       custoUnitario: z.number({ invalid_type_error: 'Tipo não válido para o custo unitário do item de custo.' }).optional().nullable(),
       total: z.number({ invalid_type_error: 'Tipo não válido para o total do item de custo.' }).optional().nullable(),
-    })
+      totalVendaSimples: z.number({ invalid_type_error: 'Tipo não válido para o total do item para venda simples.' }).optional().nullable(),
+      totalVendaFaturavel: z.number({ invalid_type_error: 'Tipo não válido para o total do item para venda faturável.' }).optional().nullable(),
+      })
   ),
   alocacaoModulos: z.object({
     leste: z.number({ invalid_type_error: 'Tipo não válido para quantidade alocada de modelo para leste.' }).optional().nullable(),
