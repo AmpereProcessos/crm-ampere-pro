@@ -66,8 +66,8 @@ function AdditionalCostsBlock({ infoHolder, setInfoHolder, changes, setChanges }
       qtde: costHolder.qtde,
       custoUnitario: costHolder.custoUnitario,
       total: costHolder.qtde * costHolder.custoUnitario,
-      totalVendaSimples: getSaleValue(costHolder.qtde * costHolder.custoUnitario, false),
-      totalVendaFaturavel: getSaleValue(costHolder.qtde * costHolder.custoUnitario, true),
+      totalVendaSimples: costHolder.totalVendaSimples ? costHolder.totalVendaSimples : getSaleValue(costHolder.qtde * costHolder.custoUnitario, false),
+      totalVendaFaturavel: costHolder.totalVendaFaturavel ? costHolder.totalVendaFaturavel : getSaleValue(costHolder.qtde * costHolder.custoUnitario, true),
     }
     costsList.push(newCost)
     setInfoHolder((prev) => ({ ...prev, custos: costsList }))
@@ -103,8 +103,8 @@ function AdditionalCostsBlock({ infoHolder, setInfoHolder, changes, setChanges }
       qtde: costHolder.qtde,
       custoUnitario: costHolder.custoUnitario,
       total: costHolder.qtde * (costHolder.custoUnitario || 0),
-      totalVendaSimples: getSaleValue(costHolder.qtde * costHolder.custoUnitario, false),
-      totalVendaFaturavel: getSaleValue(costHolder.qtde * costHolder.custoUnitario, true),
+      totalVendaSimples: costHolder.totalVendaSimples ? costHolder.totalVendaSimples : getSaleValue(costHolder.qtde * costHolder.custoUnitario, false),
+      totalVendaFaturavel: costHolder.totalVendaFaturavel ? costHolder.totalVendaFaturavel : getSaleValue(costHolder.qtde * costHolder.custoUnitario, true),
     }
     costsList[index] = cost
     setInfoHolder((prev) => ({ ...prev, custos: costsList }))
