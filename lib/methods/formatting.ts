@@ -63,7 +63,7 @@ export function formatModuleStr(module: TModule, showModel?: boolean) {
 }
 export function formatProductStr(product: TProductItem, showModel?: boolean) {
   if (showModel) return `${product.qtde}x ${product.modelo} (${product.fabricante})`
-  return `${product.qtde}x ${product.fabricante} ${product.potencia}W`
+  return `${product.qtde}x ${product.fabricante}${product.potencia ? ` ${product.potencia}W` : ''}`
 }
 export function formatLocation({ location, includeUf, includeCity }: { location: TOpportunity['localizacao']; includeUf?: boolean; includeCity?: boolean }) {
   var addressStr = ''

@@ -5,7 +5,7 @@ import { Collection, Filter, ObjectId } from 'mongodb'
 
 import dayjs from 'dayjs'
 
-import { formatDateAsLocale } from '@/lib/methods/formatting'
+import { formatDateAsLocale, formatProductStr } from '@/lib/methods/formatting'
 import createHttpError from 'http-errors'
 
 import { TUser } from '@/utils/schemas/user.schema'
@@ -15,6 +15,7 @@ import { TProposal } from '@/utils/schemas/proposal.schema'
 import { z } from 'zod'
 import { GeneralStatsFiltersSchema, ResponsiblesBodySchema } from '@/utils/schemas/stats.schema'
 import { TClient } from '@/utils/schemas/client.schema'
+import { getProductQtyByCategory, getProductsStr, getServicesStr } from '@/lib/methods/extracting'
 
 export type TResultsExportsItem = {
   'NOME DO PROJETO': string
@@ -26,6 +27,14 @@ export type TResultsExportsItem = {
   'DATA DE GANHO': string
   'VALOR VENDA': number
   'POTÊNCIA VENDIDA': number
+  'QTDE MÓDULOS VENDIDOS': number
+  'QTDE INVERSORES VENDIDOS': number
+  'QTDE INSUMOS VENDIDOS': number
+  'QTDE ESTRUTURAS VENDIDOS': number
+  'QTDE PADRÕES VENDIDOS': number
+  'PRODUTOS VENDIDOS': string
+  'QTDE SERVIÇOS VENDIDOS': number
+  'SERVIÇOS VENDIDOS': string
   'CANAL DE AQUISIÇÃO': string
   UF: string
   CIDADE: string
@@ -100,6 +109,8 @@ const exportData: NextApiHandler<PostResponse> = async (req, res) => {
 
     const proposeValue = project.valorProposta
     const proposePower = project.potenciaPicoProposta
+    const proposeProducts = project.produtosProposta
+    const proposeServices = project.servicosProposta
 
     const seller = project.responsaveis.find((r) => r.papel == 'VENDEDOR')
     const sdr = project.responsaveis.find((r) => r.papel == 'SDR')
@@ -129,6 +140,14 @@ const exportData: NextApiHandler<PostResponse> = async (req, res) => {
       SDR: sdr?.nome || 'NÃO DEFINIDO',
       'DATA DE GANHO': formatDateAsLocale(wonDate || undefined) || 'NÃO ASSINADO',
       'POTÊNCIA VENDIDA': proposePower,
+      'QTDE MÓDULOS VENDIDOS': getProductQtyByCategory(proposeProducts, 'MÓDULO'),
+      'QTDE INVERSORES VENDIDOS': getProductQtyByCategory(proposeProducts, 'INVERSOR'),
+      'QTDE INSUMOS VENDIDOS': getProductQtyByCategory(proposeProducts, 'INSUMO'),
+      'QTDE ESTRUTURAS VENDIDOS': getProductQtyByCategory(proposeProducts, 'ESTRUTURA'),
+      'QTDE PADRÕES VENDIDOS': getProductQtyByCategory(proposeProducts, 'PADRÃO'),
+      'PRODUTOS VENDIDOS': getProductsStr(proposeProducts),
+      'QTDE SERVIÇOS VENDIDOS': proposeServices.reduce((acc, current) => acc + 1, 0),
+      'SERVIÇOS VENDIDOS': getServicesStr(proposeServices),
       'VALOR VENDA': proposeValue,
       'CANAL DE AQUISIÇÃO': aquisitionOrigin,
       'DATA DE PERDA': formatDateAsLocale(project.dataPerda || undefined),
@@ -156,6 +175,8 @@ type TResultsExportsOpportunity = {
   ganho: TOpportunity['ganho']
   valorProposta: TProposal['valor']
   potenciaPicoProposta: TProposal['potenciaPico']
+  produtosProposta: TProposal['produtos']
+  servicosProposta: TProposal['servicos']
   telefone: TClient['telefonePrimario']
   canalAquisicao: TClient['canalAquisicao']
   dataPerda: TOpportunity['perda']['data']
@@ -205,6 +226,8 @@ async function getOpportunities({ opportunitiesCollection, partnerQuery, respons
       'localizacao.cidade': 1,
       'proposta.valor': 1,
       'proposta.potenciaPico': 1,
+      'proposta.produtos': 1,
+      'proposta.servicos': 1,
       'cliente.canalAquisicao': 1,
       perda: 1,
       dataInsercao: 1,
@@ -223,6 +246,8 @@ async function getOpportunities({ opportunitiesCollection, partnerQuery, respons
       ganho: r.ganho,
       valorProposta: r.proposta[0] ? r.proposta[0].valor : 0,
       potenciaPicoProposta: r.proposta[0] ? r.proposta[0].potenciaPico : 0,
+      produtosProposta: r.proposta[0] ? r.proposta[0].produtos : [],
+      servicosProposta: r.proposta[0] ? r.proposta[0].servicos : [],
       telefone: r.cliente[0] ? r.cliente[0].telefonePrimario : '',
       canalAquisicao: r.cliente[0] ? r.cliente[0].canalAquisicao : 'NÃO DEFINIDO',
       dataPerda: r.perda.data,

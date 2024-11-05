@@ -1,6 +1,6 @@
 import { orientations } from '@/utils/constants'
 import { IRepresentative, IResponsible, IUsuario } from '@/utils/models'
-import { TInverter, TModule, TProductItem } from '@/utils/schemas/kits.schema'
+import { TInverter, TModule, TProductItem, TServiceItem } from '@/utils/schemas/kits.schema'
 import { TUserEntity, TUserDTOSimplified, TUserDTO } from '@/utils/schemas/user.schema'
 import dayjs from 'dayjs'
 import GenFactors from '@/utils/json-files/generationFactors.json'
@@ -48,6 +48,11 @@ export function getInverterQty(products: TProductItem[] | undefined) {
   const qty = products.filter((p) => p.categoria == 'INVERSOR').reduce((acc, current) => acc + current.qtde, 0)
   return qty
 }
+export function getProductQtyByCategory(products: TProductItem[], category: TProductItem['categoria']) {
+  const productsByCategory = products.filter((p) => p.categoria == category)
+  const qty = productsByCategory.reduce((acc, current) => acc + current.qtde, 0)
+  return qty
+}
 export function getModulesStrByProducts(products: TProductItem[]) {
   const modules = products.filter((p) => p.categoria == 'MÓDULO')
   var str = ''
@@ -56,6 +61,40 @@ export function getModulesStrByProducts(products: TProductItem[]) {
       str = str + `${modules[i].qtde}x ${modules[i].modelo} (${modules[i].potencia}W) & ` // `${modules[i].qtde}x PAINÉIS PROMOCIONAIS DE ${modules[i].potencia}W & `
     } else {
       str = str + `${modules[i].qtde}x ${modules[i].modelo} (${modules[i].potencia}W)` //  `${modules[i].qtde}x PAINÉIS PROMOCIONAIS DE ${modules[i].potencia}W`
+    }
+  }
+  return str
+}
+export function getProductsStr(products: TProductItem[]) {
+  var str = ''
+  for (let i = 0; i < products.length; i++) {
+    if (i < products.length - 1) {
+      str = str + `${products[i].qtde}x ${products[i].modelo}${products[i].potencia ? ` (${products[i].potencia}W)` : ''} & ` // `${products[i].qtde}x PAINÉIS PROMOCIONAIS DE ${products[i].potencia}W & `
+    } else {
+      str = str + `${products[i].qtde}x ${products[i].modelo}${products[i].potencia ? ` (${products[i].potencia}W)` : ''}` //  `${inverters[i].qtde}x PAINÉIS PROMOCIONAIS DE ${inverters[i].potencia}W`
+    }
+  }
+  return str
+}
+export function getServicesStr(services: TServiceItem[]) {
+  var str = ''
+  for (let i = 0; i < services.length; i++) {
+    if (i < services.length - 1) {
+      str = str + `${services[i].descricao} & ` // `${services[i].qtde}x PAINÉIS PROMOCIONAIS DE ${services[i].potencia}W & `
+    } else {
+      str = str + `${services[i].descricao}` //  `${inverters[i].qtde}x PAINÉIS PROMOCIONAIS DE ${inverters[i].potencia}W`
+    }
+  }
+  return str
+}
+export function getProductsStrByCategory(products: TProductItem[], category: TProductItem['categoria']) {
+  const productForCategory = products.filter((p) => p.categoria == category)
+  var str = ''
+  for (let i = 0; i < productForCategory.length; i++) {
+    if (i < productForCategory.length - 1) {
+      str = str + `${productForCategory[i].qtde}x ${productForCategory[i].modelo} (${productForCategory[i].potencia}W) & ` // `${productForCategory[i].qtde}x PAINÉIS PROMOCIONAIS DE ${productForCategory[i].potencia}W & `
+    } else {
+      str = str + `${productForCategory[i].qtde}x ${productForCategory[i].modelo} (${productForCategory[i].potencia}W)` //  `${inverters[i].qtde}x PAINÉIS PROMOCIONAIS DE ${inverters[i].potencia}W`
     }
   }
   return str
@@ -75,7 +114,6 @@ export function getInvertersStrByProducts(products: TProductItem[]) {
 export function getModulesAveragePower(products: TProductItem[]) {
   const modules = products.filter((m) => m.categoria == 'MÓDULO')
   const averagepower = modules.reduce((acc, current) => acc + (current.potencia || 0), 0) / modules.length
-  console.log(averagepower)
   return averagepower
 }
 export function getDateDifference({ dateOne, dateTwo, absolute }: { dateOne?: string | null; dateTwo?: string | null; absolute: boolean }) {
