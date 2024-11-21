@@ -35,10 +35,7 @@ function DocumentAttachment({
     if (!documents['PROPOSTA COMERCIAL']) return toast.error('Por favor, anexe a proposta comercial.')
     if (!documents['COMPROVANTE DE ENDEREÇO']) return toast.error('Por favor, anexe o comprovante de endereço.')
     if (!documents['DOCUMENTO COM FOTO']) return toast.error('Por favor, anexe um documento com foto do titular.')
-    if (!documents['NOTA FISCAL DOS EQUIPAMENTOS']) return toast.error('Por favor, anexe a nota fiscal dos equipamentos.')
-    if (!documents['COMPROVANTE DO SEGURO']) return toast.error('Por favor, anexe o comprovante do seguro.')
-    if (!documents['ÁPOLICE DO SEGURO']) return toast.error('Por favor, anexe a ápolice do seguro.')
-    if (!documents['BOLETO']) return toast.error('Por favor, anexe o boleto de pagamento do seguro.')
+
     return handleRequestContract()
   }
 
@@ -46,10 +43,6 @@ function DocumentAttachment({
     'PROPOSTA COMERCIAL': true,
     'COMPROVANTE DE ENDEREÇO': true,
     'DOCUMENTO COM FOTO': true,
-    'NOTA FISCAL DOS EQUIPAMENTOS': true,
-    'COMPROVANTE DO SEGURO': true,
-    'ÁPOLICE DO SEGURO': true,
-    BOLETO: true,
   }
   return (
     <div className="flex w-full grow flex-col bg-[#fff] pb-2">

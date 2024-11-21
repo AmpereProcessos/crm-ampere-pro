@@ -239,7 +239,7 @@ function NewContractRequest({ closeModal, proposeInfo, client, session, responsi
                 }
               />
             </div>
-            {!['OPERAÇÃO E MANUTENÇÃO', 'HOMOLOGAÇÃO', 'SEGURO DE SISTEMA FOTOVOLTAICO', 'CONSÓRCIO DE ENERGIA'].includes(
+            {!['OPERAÇÃO E MANUTENÇÃO', 'HOMOLOGAÇÃO', 'SEGURO DE SISTEMA FOTOVOLTAICO', 'CONSÓRCIO DE ENERGIA', 'MONITORAMENTO'].includes(
               proposeInfo?.oportunidadeDados.tipo.titulo
             ) ? (
               <SolarSystemForm requestInfo={requestInfo} setRequestInfo={setRequestInfo} proposeInfo={proposeInfo} />

@@ -193,10 +193,10 @@ function PaymentInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNextS
             <div className="col-span-3 flex flex-col items-center justify-center gap-2">
               <NumberInput
                 width={'100%'}
-                label={'VALOR FINAL DO SEGURO'}
+                label={'VALOR FINAL DO CONTRATO'}
                 editable={true}
                 value={requestInfo.valorContrato || null}
-                placeholder={'Preencha aqui o valor final do seguro...'}
+                placeholder={'Preencha aqui o valor final do contrato...'}
                 handleChange={(value) =>
                   setRequestInfo((prev) => ({
                     ...prev,

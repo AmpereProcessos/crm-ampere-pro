@@ -156,6 +156,7 @@ function KitBulkOperation({ session, closeModal }: KitBulkOperationProps) {
       setKitsHolder(kits)
       return toast.success('Kits extraídos com sucesso !')
     } catch (error) {
+      console.log(error)
       const msg = getErrorMessage(error)
       return toast.error(msg)
     }
