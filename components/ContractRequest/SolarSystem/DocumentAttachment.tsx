@@ -37,7 +37,7 @@ function DocumentAttachment({
   const installationType = requestInfo.tipoDaInstalacao
   const ownerType = requestInfo.tipoDoTitular
   const distributions = requestInfo.distribuicoes
-
+  const resourceOrigin = requestInfo.origemRecurso
   function validateDocuments(documents: { [key: string]: File | string | null }) {
     if (!documents['PROPOSTA COMERCIAL']) return toast.error('Por favor, anexe a proposta comercial atualizada.')
     if (!documents['COMPROVANTE DE ENDEREÇO (DA CORRESPONDÊNCIA)']) return toast.error('Por favor, anexe o comprovante de endereço da correspondência.')
@@ -49,6 +49,8 @@ function DocumentAttachment({
     if (!sameProjectHolder && !documents['DOCUMENTO COM FOTO (TITULAR DA INSTALAÇÃO)'])
       return toast.error('Por favor, anexe o documento com foto do atual titular da instalação.')
     if (ownerType == 'PESSOA FISICA' && !documents['DOCUMENTO COM FOTO']) return toast.error('Por favor, anexe o documento com foto.')
+    if (resourceOrigin == 'FINANCIAMENTO' && !documents['DOCUMENTO COM FOTO (TITULAR DO FINANCIAMENTO)'])
+      return toast.error('Por favor, anexe o documento com foto do titular do financiamento.')
     if (ownerType == 'PESSOA JURIDICA') {
       if (!documents['CONTRATO SOCIAL']) return toast.error('Por favor, anexe o contrato social.')
       if (!documents['CARTÃO CNPJ']) return toast.error('Por favor, anexe o cartão CNPJ.')
@@ -66,7 +68,7 @@ function DocumentAttachment({
         arquivo desejado.
       </h1>
       <div className="flex w-full grow flex-wrap items-start justify-center gap-2">
-        {getSolarSystemDocumentation({ ligationType, installationType, ownerType, sameProjectHolder, distributions }).map((document) => (
+        {getSolarSystemDocumentation({ ligationType, installationType, ownerType, resourceOrigin, sameProjectHolder, distributions }).map((document) => (
           <div className="w-full lg:w-[600px]">
             <DocumentFileInput
               label={document}
@@ -106,10 +108,18 @@ type GetSolarSystemDocumentationProps = {
   ligationType: TContractRequest['tipoDaLigacao']
   installationType: TContractRequest['tipoDaInstalacao']
   ownerType: TContractRequest['tipoDoTitular']
+  resourceOrigin: TContractRequest['origemRecurso']
   sameProjectHolder: boolean
   distributions: TContractRequest['distribuicoes']
 }
-function getSolarSystemDocumentation({ ligationType, installationType, ownerType, sameProjectHolder, distributions }: GetSolarSystemDocumentationProps) {
+function getSolarSystemDocumentation({
+  ligationType,
+  installationType,
+  ownerType,
+  resourceOrigin,
+  sameProjectHolder,
+  distributions,
+}: GetSolarSystemDocumentationProps) {
   var documents: { [key: string]: boolean } = {
     'PROPOSTA COMERCIAL': true,
     'COMPROVANTE DE ENDEREÇO (DA CORRESPONDÊNCIA)': true,
@@ -119,6 +129,7 @@ function getSolarSystemDocumentation({ ligationType, installationType, ownerType
     MATRICULA: installationType == 'RURAL',
     IPTU: installationType == 'URBANO',
     'DOCUMENTO COM FOTO': ownerType == 'PESSOA FISICA',
+    'DOCUMENTO COM FOTO (TITULAR DO FINANCIAMENTO)': resourceOrigin == 'FINANCIAMENTO',
     'DOCUMENTO COM FOTO (TITULAR DA INSTALAÇÃO)': !sameProjectHolder,
     'CONTRATO SOCIAL': ownerType == 'PESSOA JURIDICA',
     'CARTÃO CNPJ': ownerType == 'PESSOA JURIDICA',
