@@ -3,6 +3,7 @@ import toast from 'react-hot-toast'
 import { TOpportunity } from '../schemas/opportunity.schema'
 import { TClient } from '../schemas/client.schema'
 import { TFunnelReference } from '../schemas/funnel-reference.schema'
+import { updateAppProject } from './app-projects'
 
 type HandleProjectCreationParams = {
   info: TOpportunity
@@ -74,6 +75,18 @@ export async function setOpportunityActiveProposal({ proposalId, opportunityId }
     })
     if (typeof data.data != 'string') return 'Oportunidade alterada com sucesso !'
     return data.message
+  } catch (error) {
+    throw error
+  }
+}
+
+export async function updateWinningProposal({ proposalId, opportunityId, appProjectId }: { proposalId: string; opportunityId: string; appProjectId?: string }) {
+  try {
+    const { data } = await axios.put(`/api/opportunities?id=${opportunityId}`, {
+      'ganho.idProposta': proposalId,
+    })
+    if (appProjectId) await updateAppProject(appProjectId, { idPropostaCRM: proposalId })
+    return data.message as string
   } catch (error) {
     throw error
   }

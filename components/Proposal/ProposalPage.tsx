@@ -33,7 +33,7 @@ import { renderCategoryIcon } from '@/lib/methods/rendering'
 import { usePricingMethods } from '@/utils/queries/pricing-methods'
 import { TPricingMethodDTO } from '@/utils/schemas/pricing-method.schema'
 import { useMutationWithFeedback } from '@/utils/mutations/general-hook'
-import { setOpportunityActiveProposal } from '@/utils/mutations/opportunities'
+import { setOpportunityActiveProposal, updateWinningProposal } from '@/utils/mutations/opportunities'
 
 import { copyToClipboard } from '@/lib/hooks'
 import { handleDownload } from '@/lib/methods/download'
@@ -41,6 +41,7 @@ import EditProposalFile from '../Modals/Proposal/EditFile'
 import toast from 'react-hot-toast'
 import { formatProposalPremissesLabel, formatProposalPremissesValue } from '@/utils/proposal'
 import { TProposalPremisses } from '@/utils/schemas/proposal.schema'
+import { FaTrophy } from 'react-icons/fa6'
 
 function getPricingMethodById({ methods, id }: { methods?: TPricingMethodDTO[]; id: string }) {
   if (!methods) return 'NÃO DEFINIDO'
@@ -72,6 +73,12 @@ function ProposalPage({ proposalId, session }: ProposalPageProps) {
   } = useMutationWithFeedback({
     mutationKey: ['set-active-proposal', proposalId],
     mutationFn: setOpportunityActiveProposal,
+    queryClient: queryClient,
+    affectedQueryKey: ['proposal-by-id', proposalId],
+  })
+  const { mutate: handleUpdateWinningProposal, isPending: isUpdatingWinningProposal } = useMutationWithFeedback({
+    mutationKey: ['update-winning-proposal', proposalId],
+    mutationFn: updateWinningProposal,
     queryClient: queryClient,
     affectedQueryKey: ['proposal-by-id', proposalId],
   })
@@ -170,6 +177,23 @@ function ProposalPage({ proposalId, session }: ProposalPageProps) {
                 >
                   <h1>USAR COMO PROPOSTA ATIVA</h1>
                   <AiFillStar />
+                </button>
+              ) : null}
+              {proposal.oportunidadeDados.ganho.idProposta && proposalId != proposal.oportunidadeDados.ganho.idProposta ? (
+                <button
+                  // @ts-ignore
+                  onClick={() =>
+                    // @ts-ignore
+                    handleUpdateWinningProposal({
+                      proposalId,
+                      opportunityId: proposal.oportunidade.id,
+                      appProjectId: proposal.oportunidadeDados.ganho.idProjeto,
+                    })
+                  }
+                  className="flex w-fit items-center gap-2 rounded bg-green-700 p-2 text-xs font-black text-white hover:bg-green-800"
+                >
+                  <h1>USAR COMO PROPOSTA GANHA</h1>
+                  <FaTrophy />
                 </button>
               ) : null}
             </div>
