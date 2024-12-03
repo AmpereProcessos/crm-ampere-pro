@@ -77,10 +77,12 @@ function OpportunityPage({ session, opportunityId }: OpportunityPageProps) {
               <OpportunityContractRequestedFlag requestDate={opportunity.ganho.dataSolicitacao} />
               <OpportunityWonFlag wonDate={opportunity.ganho.data} />
             </div>
-            <div className="flex w-full flex-col gap-1 rounded-lg bg-gray-100 p-2">
-              <h1 className="block text-[0.6rem] font-medium tracking-tight lg:hidden">DESCRIÇÃO</h1>
-              <p className="text-center text-xs italic text-gray-500 lg:text-start">{opportunity.descricao}</p>
-            </div>
+            {opportunity.descricao ? (
+              <div className="flex w-full flex-col gap-1 rounded-lg bg-gray-100 p-2">
+                <h1 className="block text-[0.6rem] font-medium tracking-tight lg:hidden">DESCRIÇÃO</h1>
+                <p className="text-center text-xs italic text-gray-500 lg:text-start">{opportunity.descricao}</p>
+              </div>
+            ) : null}
             <div className="flex w-full flex-col items-center justify-between gap-2 lg:flex-row">
               <div className="flex w-full flex-wrap items-center justify-start gap-2 lg:grow">
                 <h1 className="text-primary/80 py-0.5 text-center text-[0.6rem] font-medium italic ">RESPONSÁVEIS</h1>
@@ -92,7 +94,7 @@ function OpportunityPage({ session, opportunityId }: OpportunityPageProps) {
                   </div>
                 ))}
               </div>
-              <div className="flex w-full flex-wrap items-center justify-center gap-2 lg:min-w-fit lg:justify-end">
+              <div className="flex w-full flex-col items-center justify-center gap-2 lg:min-w-fit lg:flex-row lg:justify-end">
                 <div className={`flex items-center gap-2`}>
                   <p className="text-[0.65rem] font-medium text-gray-500">CRIADA EM:</p>
                   <BsCalendarPlus />
