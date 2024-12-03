@@ -3,6 +3,7 @@ import { useMutationWithFeedback } from '@/utils/mutations/general-hook'
 import { winOpportunity } from '@/utils/mutations/opportunities'
 import { updateRDOpportunity } from '@/utils/mutations/rd-opportunities'
 import { useQueryClient } from '@tanstack/react-query'
+import { Trophy } from 'lucide-react'
 import React from 'react'
 import { BsFillCalendarCheckFill } from 'react-icons/bs'
 
@@ -56,9 +57,10 @@ function WinBlock({
     <button
       // @ts-ignore
       onClick={() => handleWin()}
-      className="rounded border border-green-600 px-4 py-2 text-sm font-bold text-green-600 duration-300 ease-in-out hover:bg-green-600 hover:text-white"
+      className="flex w-fit items-center gap-2 rounded bg-green-500 px-2 py-1 ease-in-out hover:bg-green-600"
     >
-      DAR GANHO
+      <h1 className="text-xs font-bold text-white">DAR GANHO NA PROPOSTA</h1>
+      <Trophy size={15} color="white" />
     </button>
   )
   // return (

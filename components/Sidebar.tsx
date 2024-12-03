@@ -215,7 +215,7 @@ export const Sidebar = ({ session }: SidebarProps) => {
             </div>
             <div className="flex items-center justify-center p-2 text-[#264653] duration-300 ease-in hover:scale-105 hover:bg-blue-100">
               <Link href={'/comercial/oportunidades'}>
-                <MdDashboard />
+                <BsFillFunnelFill />
               </Link>
             </div>
             <div className="flex items-center justify-center p-2 text-[#264653] duration-300 ease-in hover:scale-105 hover:bg-blue-100">

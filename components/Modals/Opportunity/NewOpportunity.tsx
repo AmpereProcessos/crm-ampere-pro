@@ -243,15 +243,19 @@ function NewOpportunity({ session, closeModal, opportunityCreators, funnels }: N
               />
             </div>
           </div>
-          <div className="my-2 flex w-full items-center justify-end gap-4 px-4">
+          <div className="my-2 flex w-full flex-col items-center justify-center gap-4 px-4 lg:flex-row lg:justify-end">
             {createdProjectId ? (
               <Link href={`/comercial/oportunidades/id/${createdProjectId}`}>
-                <button className="font-medium text-green-500 duration-300 ease-in-out hover:scale-110">IR PARA O PROJETO CRIADO</button>
+                <button className="rounded bg-green-500 px-2 py-1 text-xs font-medium tracking-tight text-white duration-300 ease-in-out hover:bg-green-600 lg:text-base">
+                  IR PARA O PROJETO CRIADO
+                </button>
               </Link>
             ) : null}
-            <LoadingButton loading={isPending} onClick={() => mutate()}>
-              CRIAR OPORTUNIDADE
-            </LoadingButton>
+            {!createdProjectId ? (
+              <LoadingButton loading={isPending} onClick={() => mutate()}>
+                CRIAR OPORTUNIDADE
+              </LoadingButton>
+            ) : null}
           </div>
         </div>
       </div>

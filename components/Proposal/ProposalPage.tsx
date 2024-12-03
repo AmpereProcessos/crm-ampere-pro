@@ -25,7 +25,7 @@ import EditProposal from '../Modals/Proposal/EditProposal'
 
 import ProposalUpdateRecords from './ProposalUpdateRecords'
 
-import { formatDecimalPlaces, formatNameAsInitials } from '@/lib/methods/formatting'
+import { formatDateAsLocale, formatDecimalPlaces, formatNameAsInitials } from '@/lib/methods/formatting'
 
 import { formatToMoney, getEstimatedGen } from '@/utils/methods'
 
@@ -42,6 +42,7 @@ import toast from 'react-hot-toast'
 import { formatProposalPremissesLabel, formatProposalPremissesValue } from '@/utils/proposal'
 import { TProposalPremisses } from '@/utils/schemas/proposal.schema'
 import { FaTrophy } from 'react-icons/fa6'
+import { BsCalendarPlus, BsFillFunnelFill } from 'react-icons/bs'
 
 function getPricingMethodById({ methods, id }: { methods?: TPricingMethodDTO[]; id: string }) {
   if (!methods) return 'NÃO DEFINIDO'
@@ -105,8 +106,8 @@ function ProposalPage({ proposalId, session }: ProposalPageProps) {
       <div className="flex h-full flex-col md:flex-row">
         <Sidebar session={session} />
         <div className="flex w-full max-w-full grow flex-col overflow-x-hidden bg-[#f8f9fa] p-6">
-          <div className="flex w-full flex-col items-center justify-between border-b border-gray-200 pb-2 lg:flex-row">
-            <div className="flex flex-col gap-1">
+          <div className="flex w-full flex-col items-center justify-between gap-4 border-b border-gray-200 pb-2">
+            <div className="flex w-full flex-col items-center justify-center gap-2 lg:flex-row lg:justify-between">
               <div className="flex items-center gap-2">
                 <h1 className="text-center text-2xl font-bold leading-none tracking-tight text-gray-800 lg:text-start">{proposal?.nome}</h1>
                 <Link href={`/comercial/proposta/documento/${proposal._id}`}>
@@ -115,22 +116,42 @@ function ProposalPage({ proposalId, session }: ProposalPageProps) {
                   </div>
                 </Link>
               </div>
+              <WinBlock
+                opportunityId={proposal.oportunidade.id}
+                proposalId={proposalId}
+                isWon={!!proposal.oportunidadeDados.ganho.data}
+                wonDate={proposal.oportunidadeDados.ganho.data}
+                contractRequestDate={proposal.oportunidadeDados.ganho.dataSolicitacao}
+                wonProposalId={proposal.oportunidadeDados.ganho.idProposta}
+                proposalValue={proposal.valor}
+                idMarketing={proposal.oportunidadeDados.idMarketing}
+                opportunityEmail={proposal.clienteDados?.email}
+                handleWin={() => {
+                  if (proposal.oportunidadeDados.categoriaVenda == 'PLANO' && proposal.planos.length > 1)
+                    return toast.error('Defina o plano a ser vendido para prosseguir com o ganho.')
+                  setNewContractRequestIsOpen(true)
+                }}
+              />
+            </div>
+            <div className="flex w-full flex-col items-center justify-between gap-1 lg:flex-row">
+              <Link href={`/comercial/oportunidades/id/${proposal.oportunidade.id}`}>
+                <div className="flex items-center gap-2 rounded">
+                  <BsFillFunnelFill style={{ color: '#15599a', fontSize: '15px' }} />
+                  <p className="text-[0.65rem] font-medium text-gray-500">{proposal?.oportunidade.nome}</p>
+                </div>
+              </Link>
               <div className="flex items-center gap-2">
-                <Link href={`/comercial/oportunidades/id/${proposal.oportunidade.id}`}>
-                  <div className="flex items-center gap-2">
-                    <RxDashboard style={{ color: '#15599a', fontSize: '15px' }} />
-                    <p className="text-xs">{proposal?.oportunidade.nome}</p>
-                  </div>
-                </Link>
-                <div className="flex items-center gap-2">
-                  <FaUser style={{ color: '#15599a', fontSize: '15px' }} />
-                  <p className="text-xs">Criada por: </p>
+                <div className={`flex items-center gap-2`}>
+                  <p className="text-[0.65rem] font-medium text-gray-500">CRIADA EM:</p>
+                  <BsCalendarPlus />
+                  <p className="text-[0.65rem] font-medium text-gray-500">{formatDateAsLocale(proposal.dataInsercao, true)}</p>
                   <Avatar url={proposal.autor.avatar_url || undefined} fallback={formatNameAsInitials(proposal.autor.nome)} height={25} width={25} />
-                  <p className="text-xs">{proposal?.autor?.nome}</p>
+                  <p className="text-[0.65rem] font-medium text-gray-500">{proposal?.autor?.nome}</p>
                 </div>
               </div>
             </div>
-            {session.user.permissoes.projetos.visualizar ? (
+
+            {/* {session.user.permissoes.projetos.visualizar ? (
               <button
                 // @ts-ignore
                 onClick={() => setTestRequestIsOpen(true)}
@@ -138,24 +159,7 @@ function ProposalPage({ proposalId, session }: ProposalPageProps) {
               >
                 TESTAR GANHO
               </button>
-            ) : null}
-
-            <WinBlock
-              opportunityId={proposal.oportunidade.id}
-              proposalId={proposalId}
-              isWon={!!proposal.oportunidadeDados.ganho.data}
-              wonDate={proposal.oportunidadeDados.ganho.data}
-              contractRequestDate={proposal.oportunidadeDados.ganho.dataSolicitacao}
-              wonProposalId={proposal.oportunidadeDados.ganho.idProposta}
-              proposalValue={proposal.valor}
-              idMarketing={proposal.oportunidadeDados.idMarketing}
-              opportunityEmail={proposal.clienteDados?.email}
-              handleWin={() => {
-                if (proposal.oportunidadeDados.categoriaVenda == 'PLANO' && proposal.planos.length > 1)
-                  return toast.error('Defina o plano a ser vendido para prosseguir com o ganho.')
-                setNewContractRequestIsOpen(true)
-              }}
-            />
+            ) : null} */}
           </div>
           <div className="flex w-full grow flex-col py-2">
             <div className="my-2 flex w-full items-center justify-end gap-2">
@@ -251,18 +255,20 @@ function ProposalPage({ proposalId, session }: ProposalPageProps) {
                   {proposal.urlArquivo ? (
                     <div className="flex w-full flex-col items-center justify-between gap-1 lg:flex-row">
                       <p className="text-xs font-medium leading-none tracking-tight text-gray-500">ARQUIVO</p>
-                      <div className="flex items-center justify-end gap-2">
+                      <div className="flex flex-col items-center justify-center gap-2 lg:flex-row lg:justify-end">
                         <button
                           onClick={() => handleDownload({ fileName: proposal.nome, fileUrl: proposal.urlArquivo || '' })}
                           className="flex w-fit items-center gap-2 self-center rounded-lg border border-blue-500 p-1.5 text-xs text-blue-500"
                         >
                           <TbDownload />
+                          <p className="block font-medium tracking-tight lg:hidden">BAIXAR ARQUIVO</p>
                         </button>
                         <button
                           onClick={() => copyToClipboard(proposal.urlArquivo || '')}
                           className="flex w-fit items-center gap-2 self-center rounded-lg border border-black p-1.5 text-xs text-black"
                         >
                           <MdContentCopy />
+                          <p className="block font-medium tracking-tight lg:hidden">COPIAR LINK</p>
                         </button>
                         {session?.user.permissoes.propostas.editar ? (
                           <button
@@ -270,6 +276,7 @@ function ProposalPage({ proposalId, session }: ProposalPageProps) {
                             className="flex w-fit items-center gap-2 self-center rounded-lg border border-[#fead41] p-1.5 text-xs text-[#fead41]"
                           >
                             <AiFillEdit />
+                            <p className="block font-medium tracking-tight lg:hidden">EDITAR ARQUIVO</p>
                           </button>
                         ) : null}
                       </div>
@@ -311,7 +318,7 @@ function ProposalPage({ proposalId, session }: ProposalPageProps) {
                   <h1 className="w-full text-center font-Raleway text-lg font-bold text-[#15599a]">PREMISSAS</h1>
                   <p className="text-center text-xs italic text-gray-500">Essas são as premissas de dimensionamento dessa proposta.</p>
                 </div>
-                <div className="flex w-full grow flex-col justify-around">
+                <div className="flex w-full grow flex-col justify-around gap-3">
                   {Object.entries(proposal.premissas)
                     .filter(([key, value]) => !!value)
                     .map(([key, value], index) => (

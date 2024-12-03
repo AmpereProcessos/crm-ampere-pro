@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Session } from 'next-auth'
 
 import { ImPower, ImPriceTag } from 'react-icons/im'
@@ -34,6 +34,7 @@ import CheckboxInput from '@/components/Inputs/CheckboxInput'
 import toast from 'react-hot-toast'
 import AccessGrantingWarning from '../Utils/AccessGrantingWarning'
 import TextareaInput from '@/components/Inputs/TextareaInput'
+import { Eye } from 'lucide-react'
 
 function renderProposalPreview({
   proposal,
@@ -93,14 +94,18 @@ function Proposal({ opportunity, projectTypes, infoHolder, setInfoHolder, moveTo
     idAnvil?: string | null
   }) {
     try {
-      if (proposal.nome.trim().length < 3) return toast.error('Preencha um nome de ao menos 3 caractéres para a proposta.')
+      if (proposal.nome.trim().length < 3) {
+        throw new Error('Preencha um nome de ao menos 3 caractéres para a proposta.')
+      }
       const response = await createProposalPersonalized({ proposal, opportunityWithClient, saveAsActive, idAnvil })
       const fileName = proposal.nome
       const fileUrl = response.data?.fileUrl
       if (fileUrl) await handleDownload({ fileName, fileUrl })
 
-      if (typeof response.message != 'string') return 'Proposta criada com sucesso !'
-      return response.message as string
+      return {
+        message: response.message,
+        fileUrl: response.data?.fileUrl,
+      }
     } catch (error) {
       throw error
     }
@@ -111,11 +116,27 @@ function Proposal({ opportunity, projectTypes, infoHolder, setInfoHolder, moveTo
     isPending,
     isSuccess,
     isError,
-  } = useMutationWithFeedback({
+  } = useMutation({
     mutationKey: ['create-proposal'],
     mutationFn: handleCreation,
-    queryClient: queryClient,
-    affectedQueryKey: ['opportunity-proposals', opportunity._id],
+    onMutate: async () => {
+      const loadingToast = toast.loading('Processando...')
+      await queryClient.cancelQueries({ queryKey: ['opportunity-proposals', opportunity._id] })
+      return { loadingToast }
+    },
+    onSuccess: (data, variables, context) => {
+      if (!context) return
+      toast.dismiss(context?.loadingToast)
+      return toast.success(data.message)
+    },
+    onError: (error, variables, context) => {
+      if (!context) return
+      toast.dismiss(context?.loadingToast)
+      toast.error(error.message)
+    },
+    onSettled: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['opportunity-proposals', opportunity._id] })
+    },
   })
 
   return (
@@ -128,18 +149,22 @@ function Proposal({ opportunity, projectTypes, infoHolder, setInfoHolder, moveTo
       ) : null}
       {isSuccess ? (
         <div className="flex min-h-[350px] w-full flex-col items-center justify-center gap-1">
-          <p className="text-center font-bold text-[#15599a]">A proposta foi gerada com sucesso e vinculada ao projeto em questão.</p>
-          <p className="text-center text-gray-500">Você pode voltar a acessá-la no futuro através da área de controle desse projeto</p>
-          <p className="text-center text-gray-500">Se desejar voltar a área de controle:</p>
+          <p className="text-center font-bold text-[#15599a]">A proposta foi gerada com sucesso e vinculada à oportunidade em questão.</p>
+          <p className="text-center text-gray-500">Você pode voltar a acessá-la no futuro através da área de controle da oportunidade.</p>
           <Link href={`/comercial/oportunidades/id/${opportunity._id}`}>
-            <p className="text-sm italic text-blue-300 underline hover:text-blue-500">Clique aqui</p>
+            <button className="flex items-center gap-2 rounded bg-gray-500 px-2 py-1 text-[0.6rem] font-bold tracking-tight text-white duration-300 ease-in-out hover:bg-gray-600">
+              VOLTAR À OPORTUNIDADE
+            </button>
           </Link>
-          {/* <p className="text-center text-gray-500">
-            Para acessar a página da proposta,{' '}
-            <Link href={`/comercial/proposta/documento/${data}`}>
-              <strong className="text-[#fead41]">clique aqui.</strong>{' '}
-            </Link>
-          </p> */}
+          {data?.fileUrl ? (
+            <a
+              href={data.fileUrl}
+              className="flex items-center gap-1 rounded bg-blue-600 px-2 py-1 text-[0.7rem] font-black text-white duration-300 ease-in-out hover:bg-blue-700"
+            >
+              CLIQUE AQUI PARA VISUALIZAR A PROPOSTA
+              <Eye size={18} />
+            </a>
+          ) : null}
         </div>
       ) : null}
       {isError ? (

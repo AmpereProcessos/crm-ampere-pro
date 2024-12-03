@@ -10,7 +10,7 @@ function getCurrentActiveFunnelOptions(funnelId: number | string, funnels: TFunn
     return {
       id: stage.id,
       label: stage.nome,
-      value: stage.id,
+      value: stage.id.toString(),
     }
   })
 }
