@@ -27,6 +27,7 @@ import GeneralInformationBlock from '@/components/Opportunities/Creation/General
 import FunnelReferenceInformationBlock from '@/components/Opportunities/Creation/FunnelReferenceInformationBlock'
 import OpportunityClientInformationBlock from '@/components/Opportunities/Creation/OpportunityClientInformationBlock'
 import AddressInformationBlock from '@/components/Opportunities/Creation/AddressInformationBlock'
+import { LoadingButton } from '@/components/Buttons/loading-button'
 
 type NewOpportunityProps = {
   session: Session
@@ -248,14 +249,9 @@ function NewOpportunity({ session, closeModal, opportunityCreators, funnels }: N
                 <button className="font-medium text-green-500 duration-300 ease-in-out hover:scale-110">IR PARA O PROJETO CRIADO</button>
               </Link>
             ) : null}
-            <button
-              disabled={isPending}
-              // @ts-ignore
-              onClick={() => mutate()}
-              className="h-9 whitespace-nowrap rounded bg-gray-900 px-4 py-2 text-sm font-medium text-white shadow disabled:bg-gray-500 disabled:text-white enabled:hover:bg-gray-800 enabled:hover:text-white"
-            >
+            <LoadingButton loading={isPending} onClick={() => mutate()}>
               CRIAR OPORTUNIDADE
-            </button>
+            </LoadingButton>
           </div>
         </div>
       </div>

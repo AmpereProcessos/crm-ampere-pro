@@ -58,13 +58,15 @@ export function renderPaginationPageItemsIcons({
   activePage,
   selectPage,
   disabled,
+  maxRender = 5,
 }: {
   totalPages: number
   activePage: number
   selectPage: (page: number) => void
   disabled: boolean
+  maxRender?: number
 }) {
-  const MAX_RENDER = 5
+  const MAX_RENDER = maxRender
   var pages: (number | string)[] = []
   if (totalPages <= MAX_RENDER) {
     pages = Array.from({ length: totalPages }, (v, i) => i + 1)

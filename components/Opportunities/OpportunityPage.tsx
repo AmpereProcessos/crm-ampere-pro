@@ -79,7 +79,7 @@ function OpportunityPage({ session, opportunityId }: OpportunityPageProps) {
             </div>
             {opportunity.descricao ? (
               <div className="flex w-full flex-col gap-1 rounded-lg bg-gray-100 p-2">
-                <h1 className="block text-[0.6rem] font-medium tracking-tight lg:hidden">DESCRIÇÃO</h1>
+                <h1 className="block text-[0.6rem] font-medium tracking-tight lg:hidden">ANOTAÇÕES</h1>
                 <p className="text-center text-xs italic text-gray-500 lg:text-start">{opportunity.descricao}</p>
               </div>
             ) : null}
@@ -113,34 +113,42 @@ function OpportunityPage({ session, opportunityId }: OpportunityPageProps) {
             </div>
           </div>
           {/* <div className="flex w-full flex-col items-start gap-6 py-4 lg:flex-row"></div> */}
-          <div className="flex w-full flex-col gap-6 lg:flex-row">
-            <div className="flex w-full flex-col gap-4 lg:w-[40%]">
-              <OpportunityClient client={opportunity.cliente} session={session} opportunityId={opportunityId} responsibles={opportunity.responsaveis} />
-              <OpportunityDetails info={opportunity} session={session} opportunityId={opportunity._id} />
+          <div className="flex w-full flex-col gap-6">
+            <div className="flex w-full flex-col gap-6 lg:flex-row">
+              <div className="w-full lg:w-[40%]">
+                <OpportunityClient client={opportunity.cliente} session={session} opportunityId={opportunityId} responsibles={opportunity.responsaveis} />
+              </div>
+              <div className="w-full lg:w-[60%]">
+                <OpportunityProposals
+                  city={opportunity.localizacao.cidade}
+                  uf={opportunity.localizacao.uf}
+                  session={session}
+                  opportunityId={opportunity._id ? opportunity._id : ''}
+                  idActiveProposal={opportunity.idPropostaAtiva || undefined}
+                  setBlockMode={setBlockMode}
+                  opportunityHasContractRequested={!!opportunity.ganho.dataSolicitacao}
+                  opportunityIsWon={!!opportunity.ganho.data}
+                  opportunityWonProposalId={opportunity.ganho.idProposta}
+                />
+              </div>
             </div>
-
-            <div className="flex w-full flex-col gap-4 lg:w-[60%]">
-              <OpportunityProposals
-                city={opportunity.localizacao.cidade}
-                uf={opportunity.localizacao.uf}
-                session={session}
-                opportunityId={opportunity._id ? opportunity._id : ''}
-                idActiveProposal={opportunity.idPropostaAtiva || undefined}
-                setBlockMode={setBlockMode}
-                opportunityHasContractRequested={!!opportunity.ganho.dataSolicitacao}
-                opportunityIsWon={!!opportunity.ganho.data}
-                opportunityWonProposalId={opportunity.ganho.idProposta}
-              />
-              <OpportunityFiles opportunityId={opportunity._id} clientId={opportunity.idCliente} session={session} />
-              <OpportunityPPSCalls opportunity={opportunity} session={session} />
-              <OpportunityTechnicalAnalysis session={session} opportunity={opportunity} />
-              <OpportunityHomologations opportunity={opportunity} session={session} />
-              <OpportunityHistory
-                opportunityName={opportunity.nome}
-                opportunityId={opportunity._id}
-                opportunityIdentifier={opportunity.identificador || ''}
-                session={session}
-              />
+            <div className="flex w-full flex-col gap-4 lg:w-[40%]"></div>
+            <div className="flex w-full flex-col gap-6 lg:flex-row">
+              <div className="flex w-full flex-col gap-4 lg:w-[40%]">
+                <OpportunityDetails info={opportunity} session={session} opportunityId={opportunity._id} />
+              </div>
+              <div className="flex w-full flex-col gap-4 lg:w-[60%]">
+                <OpportunityFiles opportunityId={opportunity._id} clientId={opportunity.idCliente} session={session} />
+                <OpportunityPPSCalls opportunity={opportunity} session={session} />
+                <OpportunityTechnicalAnalysis session={session} opportunity={opportunity} />
+                <OpportunityHomologations opportunity={opportunity} session={session} />
+                <OpportunityHistory
+                  opportunityName={opportunity.nome}
+                  opportunityId={opportunity._id}
+                  opportunityIdentifier={opportunity.identificador || ''}
+                  session={session}
+                />
+              </div>
             </div>
           </div>
         </div>

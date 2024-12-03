@@ -78,22 +78,21 @@ function NewProposalPage({ session, opportunityId }: NewProposalPageprops) {
       <div className="flex h-full flex-col md:flex-row">
         <Sidebar session={session} />
         <div className="flex w-full max-w-full grow flex-col overflow-x-hidden bg-[#f8f9fa]">
-          <div className="flex h-[70px] w-full items-center bg-black px-2">
-            <div className="flex w-1/3 items-center justify-center">
+          <div className="flex h-fit w-full flex-col items-center gap-2 bg-black px-2 py-4 lg:flex-row">
+            <div className="flex w-full items-center justify-center lg:w-1/3">
               <Link href={`/comercial/oportunidades/id/${opportunityId}`}>
-                <button className="flex items-center gap-1 text-xs text-white">
+                <button className="flex items-center gap-1 rounded bg-white px-2 py-1 text-xs text-black">
                   <FaStepBackward />
                   <p className="font-bold">VOLTAR À OPORTUNIDADE</p>
                 </button>
               </Link>
             </div>
-
-            <div className="flex w-1/3 flex-col items-center">
-              <h1 className="text-sm text-gray-400">NOME DA OPORTUNIDADE</h1>
+            <div className="flex w-full flex-col items-center lg:w-1/3">
+              <h1 className="text-[0.55rem] text-gray-400 lg:text-sm">NOME DA OPORTUNIDADE</h1>
               <h1 className="font-bold text-white">{opportunity.nome}</h1>
             </div>
-            <div className="flex w-1/3 flex-col items-center">
-              <h1 className="text-sm text-gray-400">CÓD. DO PROJETO</h1>
+            <div className="flex w-full flex-col items-center lg:w-1/3">
+              <h1 className="text-[0.55rem] text-gray-400 lg:text-sm">CÓD. DO PROJETO</h1>
               <h1 className="font-bold text-white"># {opportunity.identificador}</h1>
             </div>
           </div>

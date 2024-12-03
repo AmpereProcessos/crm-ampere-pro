@@ -21,7 +21,7 @@ function GeneralInformationBlock({ opportunity, setOpportunity, projectTypes, se
   const vinculationPartners = partners ? (partnersScope ? partners?.filter((p) => partnersScope.includes(p._id)) : partners) : []
   return (
     <div className="flex w-full flex-col gap-2">
-      <h1 className="w-full rounded bg-gray-800 p-1 text-center font-bold text-white">INFORMAÇÕES DO PROJETO</h1>
+      <h1 className="w-full rounded bg-gray-800 p-1 text-center text-sm font-bold text-white lg:text-base">INFORMAÇÕES DO PROJETO</h1>
       <TextInput
         label="NOME DO PROJETO"
         value={opportunity.nome}
@@ -114,7 +114,7 @@ function GeneralInformationBlock({ opportunity, setOpportunity, projectTypes, se
             }))
           }
           placeholder="Descreva aqui peculiaridades do cliente, da negociação, ou outras informações relevantes acerca desse projeto."
-          className="w-full resize-none rounded-sm border border-gray-300 p-2 text-center text-sm text-gray-600 outline-none focus:border-blue-300 focus:ring focus:ring-[1]"
+          className="h-[100px] w-full resize-none rounded-sm border border-gray-300 p-2 text-center text-sm text-gray-600 outline-none focus:border-blue-300 focus:ring focus:ring-[1] lg:h-[50px]"
         />
       </div>
     </div>

@@ -27,7 +27,7 @@ function AccessGrantingWarning({ proposal, opportunity, type, projectTypeId }: A
           <TbAlertTriangleFilled color="#fff" />
           <h1 className="font-bold text-white">AVISO</h1>
         </div>
-        <h1 className="w-full text-center text-sm font-medium leading-none tracking-tight text-white">
+        <h1 className="w-full text-center text-xs font-medium leading-none tracking-tight text-white lg:text-sm">
           Para projetos em MG, levando em conta o consumo médio fornecido ({formatDecimalPlaces(proposal.premissas.consumoEnergiaMensal || 0)} kWh), é estimado
           uma potência de homologação máxima de:
         </h1>
@@ -41,7 +41,7 @@ function AccessGrantingWarning({ proposal, opportunity, type, projectTypeId }: A
           <TbAlertTriangleFilled color="#fff" />
           <h1 className="font-bold text-white">ALERTA</h1>
         </div>
-        <h1 className="w-full text-center font-bold leading-none tracking-tight text-white">
+        <h1 className="w-full text-center text-xs font-medium leading-none tracking-tight text-white lg:text-sm">
           A proposta em questão ultrapassa a estimativa de potência máxima para homologação{' '}
           <strong>({formatDecimalPlaces(extimatedMaxHomologationPower)} kW)</strong>, isso aumenta o risco de pareceres de acesso com redução de potência.
         </h1>

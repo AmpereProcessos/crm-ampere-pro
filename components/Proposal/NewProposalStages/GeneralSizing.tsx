@@ -44,7 +44,7 @@ function GeneralSizing({ opportunity, projectTypes, session, infoHolder, setInfo
       <div className="flex w-full flex-col gap-4 py-4">
         <div className="flex w-full flex-col gap-4">
           <div className="flex w-full items-center justify-center">
-            <h1 className="text-center font-medium italic text-[#fead61]">
+            <h1 className="text-center text-xs font-medium italic text-[#fead61] lg:text-base">
               Nessa etapa, por favor preencha informações que nos possibilitarão a realizar uma análise primária das necessidades e especificidades técnicas do
               projeto.
             </h1>

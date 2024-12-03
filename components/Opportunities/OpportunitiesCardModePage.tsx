@@ -18,6 +18,8 @@ import { TProjectTypeDTOSimplified } from '@/utils/schemas/project-types.schema'
 import NewOpportunity from '../Modals/Opportunity/NewOpportunity'
 import { TFunnelDTO } from '@/utils/schemas/funnel.schema'
 import { AiOutlinePlus } from 'react-icons/ai'
+import { MdFilterList } from 'react-icons/md'
+import { cn } from '@/lib/utils'
 
 type OpportunitiesCardModePageProps = {
   session: Session
@@ -55,17 +57,8 @@ function OpportunitiesCardModePage({
       <Sidebar session={session} />
       <div className="flex w-full max-w-full grow flex-col overflow-x-hidden bg-[#f8f9fa] p-6">
         <div className="flex w-full flex-col gap-2 border-b border-black pb-2">
-          <div className="flex w-full flex-col items-center justify-between gap-2 lg:flex-row">
-            <div className="flex items-center gap-1">
-              {filterMenuIsOpen ? (
-                <div className="cursor-pointer text-gray-600 hover:text-blue-400">
-                  <IoMdArrowDropupCircle style={{ fontSize: '25px' }} onClick={() => setFilterMenuIsOpen(false)} />
-                </div>
-              ) : (
-                <div className="cursor-pointer text-gray-600 hover:text-blue-400">
-                  <IoMdArrowDropdownCircle style={{ fontSize: '25px' }} onClick={() => setFilterMenuIsOpen(true)} />
-                </div>
-              )}
+          <div className="flex w-full flex-col items-center justify-between gap-4 lg:flex-row">
+            <div className="flex flex-col items-center gap-1 lg:flex-row">
               <div className="flex flex-col items-center gap-1">
                 <h1 className="text-xl font-black leading-none tracking-tight md:text-2xl">OPORTUNIDADES</h1>
               </div>
@@ -78,6 +71,15 @@ function OpportunitiesCardModePage({
               </button>
             </div>
             <div className="flex items-center gap-2">
+              <button
+                onClick={() => setFilterMenuIsOpen((prev) => !prev)}
+                className={cn(
+                  'flex h-[46.6px] items-center justify-center gap-2 rounded-md border bg-[#fead41] p-2 px-3 text-sm font-medium text-white shadow-sm duration-300 ease-in-out hover:scale-105 hover:bg-orange-500',
+                  filterMenuIsOpen && 'bg-orange-600'
+                )}
+              >
+                <MdFilterList style={{ fontSize: '18px' }} />
+              </button>
               <button
                 onClick={() => setNewProjectModalIsOpen(true)}
                 className="flex h-[46.6px] items-center justify-center gap-2 rounded-md border bg-[#15599a] p-2 px-3 text-sm font-medium text-white shadow-sm duration-300 ease-in-out hover:scale-105"

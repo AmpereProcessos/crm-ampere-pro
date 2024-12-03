@@ -32,23 +32,23 @@ function ProposalWithKits({ opportunity, infoHolder, setInfoHolder, session, par
       <div className="grid min-h-[50px] w-full grid-cols-1 grid-rows-5 items-center gap-6 border-b border-gray-200 pb-4 lg:grid-cols-5 lg:grid-rows-1 lg:gap-1">
         <div className={`flex items-center justify-center gap-1 ${stage == 1 ? 'text-cyan-500' : 'text-gray-600'} `}>
           <IoMdOptions style={{ fontSize: '23px' }} />
-          <p className="text-sm font-bold lg:text-lg">DIMENSIONAMENTO</p>
+          <p className="text-xs font-bold lg:text-lg">DIMENSIONAMENTO</p>
         </div>
         <div className={`flex items-center justify-center gap-1 ${stage == 2 ? 'text-cyan-500' : 'text-gray-600'} `}>
           <SlEnergy style={{ fontSize: '23px' }} />
-          <p className="text-sm font-bold lg:text-lg">COMPOSIÇÃO</p>
+          <p className="text-xs font-bold lg:text-lg">COMPOSIÇÃO</p>
         </div>
         <div className={`flex items-center justify-center gap-1 ${stage == 3 ? 'text-cyan-500' : 'text-gray-600'} `}>
           <MdSell style={{ fontSize: '23px' }} />
-          <p className="text-sm font-bold lg:text-lg">VENDA</p>
+          <p className="text-xs font-bold lg:text-lg">VENDA</p>
         </div>
         <div className={`flex items-center justify-center gap-1 ${stage == 4 ? 'text-cyan-500' : 'text-gray-600'} `}>
           <MdAttachMoney style={{ fontSize: '23px' }} />
-          <p className="text-sm font-bold lg:text-lg">PAGAMENTO</p>
+          <p className="text-xs font-bold lg:text-lg">PAGAMENTO</p>
         </div>
         <div className={`flex items-center justify-center gap-1 ${stage == 5 ? 'text-cyan-500' : 'text-gray-600'} `}>
           <ImFileEmpty style={{ fontSize: '23px' }} />
-          <p className="text-sm font-bold lg:text-lg">PROPOSTA</p>
+          <p className="text-xs font-bold lg:text-lg">PROPOSTA</p>
         </div>
       </div>
       {stage == 1 ? (

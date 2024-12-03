@@ -38,8 +38,8 @@ function ResponsiblesInformationBlock({ session, opportunity, setOpportunity, op
   return (
     <div className="flex w-full flex-col gap-2">
       <h1 className="w-full rounded bg-gray-800 p-1 text-center font-bold text-white">RESPONSÁVEIS</h1>
-      <div className="flex w-full gap-2">
-        <div className="w-2/3">
+      <div className="flex w-full flex-col items-center gap-2 lg:flex-row">
+        <div className="w-full lg:w-2/3">
           <SelectWithImages
             label="USUÁRIO"
             value={responsibleHolder.id}
@@ -73,7 +73,7 @@ function ResponsiblesInformationBlock({ session, opportunity, setOpportunity, op
             width="100%"
           />
         </div>
-        <div className="w-1/3">
+        <div className="w-full lg:w-1/3">
           <SelectInput
             label="PAPEL"
             value={responsibleHolder.papel}

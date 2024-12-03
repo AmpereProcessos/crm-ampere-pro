@@ -66,16 +66,16 @@ function OpportunityProposal({
         })}`}
       ></div>
       <div className="flex grow flex-col p-3">
-        <div className="flex w-full flex-col items-start justify-between gap-1 lg:flex-row">
+        <div className="flex w-full flex-col items-center justify-between gap-1 lg:flex-row lg:items-start">
           <div className="flex grow flex-col items-center lg:items-start">
             <Link href={`/comercial/proposta/${info._id}`}>
               <h1 className="w-full text-center text-sm font-bold leading-none tracking-tight duration-300 ease-in-out hover:text-cyan-500 lg:text-start">
                 {info.nome}
               </h1>
             </Link>
-            <p className="mt-1 w-full text-center text-[0.6rem] font-medium text-gray-500 lg:text-start">#{info._id}</p>
+            <p className="mt-1 w-full text-center text-[0.5rem] font-medium text-gray-500 lg:text-start lg:text-[0.6rem]">#{info._id}</p>
           </div>
-          <div className="w-full min-w-fit lg:w-fit">
+          <div className="flex w-full min-w-fit items-center justify-center lg:w-fit lg:justify-end">
             {getStatusColor({
               proposalId: info._id,
               opportunityIsWon,
@@ -86,23 +86,23 @@ function OpportunityProposal({
           </div>
         </div>
         <div className="mt-1 flex w-full flex-col items-center justify-between gap-1 lg:flex-row">
-          <div className="flex flex-col items-center gap-1 lg:flex-row lg:gap-4">
+          <div className="flex flex-wrap items-center justify-center gap-2 lg:justify-start lg:gap-4">
             <div className="flex items-center gap-1 text-gray-500">
               <ImPower style={{ fontSize: '20px' }} />
-              <p className="text-xs text-black">{info.potenciaPico} kWp</p>
+              <p className="text-[0.6rem] text-black lg:text-xs">{info.potenciaPico} kWp</p>
             </div>
             <div className="flex items-center gap-1 text-gray-500 ">
               <ImPriceTag style={{ fontSize: '20px' }} />
-              <p className="text-xs text-black">{info.valor ? formatToMoney(info.valor) : '-'} </p>
+              <p className="text-[0.6rem] text-black lg:text-xs">{info.valor ? formatToMoney(info.valor) : '-'} </p>
             </div>
             <div className="flex items-center gap-1 text-gray-500 ">
               <MdAttachMoney style={{ fontSize: '20px' }} />
-              <p className="text-xs text-black">
+              <p className="text-[0.6rem] text-black lg:text-xs">
                 {info.valor && info.potenciaPico ? `${formatDecimalPlaces(info.valor / (1000 * info.potenciaPico))} R$ / Wp` : '-'}{' '}
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center justify-center gap-2 lg:justify-between">
             <div className={`flex items-center gap-1`}>
               <BsCalendarPlus />
               <p className="text-[0.65rem] font-medium text-gray-500">{formatDateAsLocale(info.dataInsercao, true)}</p>

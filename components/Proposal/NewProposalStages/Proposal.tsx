@@ -181,11 +181,11 @@ function Proposal({ opportunity, projectTypes, infoHolder, setInfoHolder, moveTo
                 <div className="flex w-full items-center gap-2 p-3">
                   <div className="flex w-1/2 items-center justify-center gap-2 rounded border border-gray-300 p-1">
                     <ImPower style={{ color: 'rgb(239,68,68)', fontSize: '20px' }} />
-                    <p className="text-xs font-thin text-gray-600">{infoHolder.potenciaPico} kWp</p>
+                    <p className="text-xs font-light text-gray-600">{infoHolder.potenciaPico} kWp</p>
                   </div>
                   <div className="flex w-1/2 items-center justify-center gap-2 rounded border border-gray-300 p-1">
                     <ImPriceTag style={{ color: 'rgb(34,197,94)', fontSize: '20px' }} />
-                    <p className="text-xs font-thin text-gray-600">{formatToMoney(infoHolder.valor)}</p>
+                    <p className="text-xs font-light text-gray-600">{formatToMoney(infoHolder.valor)}</p>
                   </div>
                 </div>
                 <TextInput

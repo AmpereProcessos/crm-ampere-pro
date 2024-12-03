@@ -25,7 +25,7 @@ function OpportunitiesCardPagePagination({
             Um número grande de oportunidades foi encontrado, separamos em páginas para facilitar a visualização. Clique na página desejada para visualizar os
             demais oportunidades.
           </p>
-          <div className="flex items-center justify-center gap-4">
+          <div className="flex flex-col items-center justify-center gap-1 lg:flex-row lg:gap-4">
             <button
               disabled={queryLoading}
               onClick={() => {
@@ -48,7 +48,9 @@ function OpportunitiesCardPagePagination({
               </svg>
               ANTERIOR
             </button>
-            <div className="flex items-center gap-2">{renderPaginationPageItemsIcons({ totalPages, activePage, selectPage, disabled: queryLoading })}</div>
+            <div className="flex items-center gap-2">
+              {renderPaginationPageItemsIcons({ totalPages, activePage, selectPage, disabled: queryLoading, maxRender: 4 })}
+            </div>
             <button
               disabled={queryLoading}
               onClick={() => {

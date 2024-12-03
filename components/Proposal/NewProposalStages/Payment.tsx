@@ -52,7 +52,7 @@ function Payment({ infoHolder, setInfoHolder, moveToNextStage, moveToPreviousSta
       <div className="flex w-full flex-col gap-4 py-4">
         <h1 className="font-Raleway font-bold text-gray-800">MÉTODOS DE PAGAMENTO</h1>
         <div className="flex w-full items-center justify-center">
-          <h1 className="text-center font-medium italic text-[#fead61]">
+          <h1 className="text-center text-xs font-medium italic text-[#fead61] lg:text-base">
             Nessa etapa, você pode escolher os métodos de pagamento aplicáveis para essa proposta. Os métodos escolhidos serão utilizados para compor o
             documento de apresentação das propostas.
           </h1>

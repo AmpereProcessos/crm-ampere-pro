@@ -13,7 +13,7 @@ import { MdAttachMoney, MdOutlineMiscellaneousServices } from 'react-icons/md'
 import { useKitsByQuery } from '@/utils/queries/kits'
 
 import { ImPower, ImSad } from 'react-icons/im'
-import { FaIndustry } from 'react-icons/fa'
+import { FaBolt, FaIndustry } from 'react-icons/fa'
 import { TbTopologyFull } from 'react-icons/tb'
 import { AiOutlineSafety } from 'react-icons/ai'
 
@@ -32,6 +32,8 @@ import { GeneralVisibleHiddenExitMotionVariants, orientations } from '@/utils/co
 import genFactors from '../../../utils/json-files/generationFactors.json'
 import CreateProposalKit from '@/components/Modals/Kit/CreateProposalKit'
 import AccessGrantingWarning from '../Utils/AccessGrantingWarning'
+import { TrendingDown, TrendingUp, Zap } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
 type QueryTypes = 'KITS POR PREMISSA' | 'TODOS OS KITS'
 
@@ -271,9 +273,19 @@ function KitsSelection({
   }
   function renderPowerComparison({ achieved, expected }: { achieved: number; expected: number }) {
     if (achieved > expected)
-      return <h1 className="rounded border border-green-500 p-1 font-bold text-green-500">{formatDecimalPlaces(achieved - expected)} kWp acima do esperado</h1>
+      return (
+        <div className="flex items-center gap-1 rounded-lg bg-green-500 px-2 py-1 lg:py-2">
+          <TrendingUp size={15} color="white" />
+          <h1 className="text-[0.7rem] font-bold text-white">{formatDecimalPlaces(achieved - expected)} kWp acima do esperado</h1>
+        </div>
+      )
 
-    return <h1 className="rounded border border-orange-500 p-1 font-bold text-orange-500">{formatDecimalPlaces(expected - achieved)} kWp abaixo do esperado</h1>
+    return (
+      <div className="flex items-center gap-1 rounded-lg bg-orange-500 px-2 py-1 lg:py-2">
+        <TrendingDown size={15} color="white" />
+        <h1 className="text-[0.7rem] font-bold text-white">{formatDecimalPlaces(expected - achieved)} kWp abaixo do esperado</h1>
+      </div>
+    )
   }
   function getSelectedKitsTotalPower(kits: TKitDTOWithPricingMethod[]) {
     const total = kits.reduce((acc, current) => {
@@ -361,38 +373,39 @@ function KitsSelection({
   return (
     <div className="flex min-h-[400px] w-full flex-col gap-2 py-4">
       <div className="flex w-full items-center justify-center">
-        <h1 className="text-center font-medium italic text-[#fead61]">
+        <h1 className="text-center text-xs font-medium italic text-[#fead61] lg:text-base">
           Nessa etapa por favor escolha o kit que melhor se adeque as necessidades desse projeto.
         </h1>
       </div>
       <div className="flex w-full flex-col items-center justify-center">
-        <h1 className="text-center font-thin italic text-gray-500">
+        <h1 className="text-center font-light italic text-gray-500">
           Calculamos, com base nas premissas preenchidas, que a potência pico ideal para esse projeto é de aproximadamente:
         </h1>
         <h1 className="text-center font-medium italic text-gray-800">{formatDecimalPlaces(ideal)} kWp</h1>
       </div>
       <AccessGrantingWarning proposal={infoHolder} opportunity={opportunity} type="warn" projectTypeId={opportunity.tipo.id} />
       <div className="flex w-full flex-col rounded-md border border-gray-200 p-3">
-        <div className="flex w-full items-center justify-between">
+        <div className="flex w-full flex-col items-center justify-between gap-1 lg:flex-row">
           <h1 className="font-bold leading-none tracking-tight">COMPOSIÇÃO DO SISTEMA</h1>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-col-reverse items-center gap-1 lg:flex-row lg:gap-2">
             {renderPowerComparison({ expected: ideal, achieved: getSelectedKitsTotalPower(selectedKits) })}
-            <h1 className="rounded border border-cyan-500 p-1 font-bold text-cyan-500">
-              {formatDecimalPlaces(getSelectedKitsTotalPower(selectedKits), 2)} kWp
-            </h1>
+            <div className="flex items-center gap-1 rounded-lg bg-cyan-500 px-2 py-1 lg:py-2">
+              <FaBolt size={12} color="white" />
+              <h1 className="text-[0.7rem] font-black text-white">{formatDecimalPlaces(getSelectedKitsTotalPower(selectedKits), 2)} kWp</h1>
+            </div>
           </div>
         </div>
         <div className="mt-2 flex w-full flex-col gap-1">{renderSystemCompostion()}</div>
       </div>
       <div className="flex h-[600px] w-full flex-col rounded-md border border-gray-200 p-3">
         <div className="flex w-full flex-col border-b border-gray-200 pb-2">
-          <div className="flex w-full flex-col items-center justify-between lg:flex-row">
+          <div className="flex w-full flex-col items-center justify-between gap-2 lg:flex-row">
             <h1 className="font-bold leading-none tracking-tight">KITS DISPONÍVEIS ({kits ? kits.length : '...'})</h1>
             <div className="flex w-full flex-col items-center gap-2 lg:w-fit lg:flex-row">
               {userHasKitEditPermission ? (
                 <button
                   onClick={() => setCreateProposalKitModalIsOpen(true)}
-                  className={`w-full rounded border border-black bg-black px-2 py-1  font-medium text-white hover:bg-gray-800 lg:w-fit`}
+                  className={`w-full rounded border border-black bg-black px-2 py-1 font-bold tracking-tight text-white hover:bg-gray-800 lg:w-fit`}
                 >
                   CRIAR KIT PARA PROPOSTA
                 </button>
@@ -400,29 +413,32 @@ function KitsSelection({
 
               <button
                 onClick={() => setQueryType('KITS POR PREMISSA')}
-                className={`${
+                className={cn(
+                  'w-full rounded border border-[#fead61] px-2 py-1 font-bold tracking-tight lg:w-fit',
                   queryType == 'KITS POR PREMISSA'
                     ? 'bg-[#fead61] text-white hover:bg-transparent hover:text-[#fead61]'
                     : 'text-[#fead61] hover:bg-[#fead61] hover:text-white'
-                } w-full rounded border border-[#fead61] px-2  py-1 font-medium lg:w-fit`}
+                )}
               >
                 MOSTRAR KITS IDEAIS
               </button>
               <button
                 onClick={() => setQueryType('TODOS OS KITS')}
-                className={`${
+                className={cn(
+                  'w-full rounded border border-[#15599a] px-2 py-1  font-bold tracking-tight lg:w-fit',
                   queryType == 'TODOS OS KITS'
                     ? 'bg-[#15599a] text-white hover:bg-transparent hover:text-[#15599a]'
                     : 'text-[#15599a] hover:bg-[#15599a] hover:text-white'
-                } w-full rounded border border-[#15599a] px-2  py-1 font-medium lg:w-fit`}
+                )}
               >
                 MOSTRAR TODOS OS KITS
               </button>
               <button
                 onClick={() => setShowFilters((prev) => !prev)}
-                className={`flex w-full items-center justify-center rounded border border-[#15599a] px-2 py-1 lg:w-fit ${
+                className={cn(
+                  'flex w-full items-center justify-center rounded border border-[#15599a] px-2 py-1 lg:w-fit',
                   showFilters ? 'bg-[#15599a] text-white' : 'bg-white text-[#15599a]'
-                } `}
+                )}
               >
                 {showFilters ? <VscFilterFilled style={{ fontSize: '22px' }} /> : <VscFilter style={{ fontSize: '22px' }} />}
               </button>
