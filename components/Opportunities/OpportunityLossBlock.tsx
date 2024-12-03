@@ -4,8 +4,8 @@ import { leadLoseJustification } from '@/utils/constants'
 import { VscChromeClose } from 'react-icons/vsc'
 import { TiCancel } from 'react-icons/ti'
 import { toast } from 'react-hot-toast'
-import axios, { AxiosError } from 'axios'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import * as Dialog from '@radix-ui/react-dialog'
 
 import { AiFillCloseCircle } from 'react-icons/ai'
 import dayjs from 'dayjs'
@@ -13,6 +13,10 @@ import { RxReload } from 'react-icons/rx'
 import { useMutationWithFeedback } from '@/utils/mutations/general-hook'
 import { updateOpportunity } from '@/utils/mutations/opportunities'
 import { updateRDOpportunity } from '@/utils/mutations/rd-opportunities'
+import SelectInput from '../Inputs/SelectInput'
+import { LoadingButton } from '../Buttons/loading-button'
+import { BsCalendarX } from 'react-icons/bs'
+import { formatDateAsLocale } from '@/lib/methods/formatting'
 
 type LoseProjectProps = {
   opportunityId: string
@@ -28,7 +32,7 @@ function OpportunityLossBlock({ opportunityId, opportunityIsLost, opportunityLos
   const queryClient = useQueryClient()
   const [menuIsOpen, setMenuIsOpen] = useState(false)
   const [cause, setCause] = useState<string | null>(null)
-  const { mutate: handleOpportunityUpdate } = useMutationWithFeedback({
+  const { mutate: handleOpportunityUpdate, isPending } = useMutationWithFeedback({
     mutationKey: ['update-opportunity', opportunityId],
     mutationFn: updateOpportunity,
     queryClient: queryClient,
@@ -36,8 +40,7 @@ function OpportunityLossBlock({ opportunityId, opportunityIsLost, opportunityLos
   })
   async function handleLoseProject() {
     // In case opportunity came from RD station TODO
-    if (idMarketing && opportunityEmail)
-      await updateRDOpportunity({ operation: 'OPPORTUNITY_LOST', email: opportunityEmail || '', reason: cause || '' })
+    if (idMarketing && opportunityEmail) await updateRDOpportunity({ operation: 'OPPORTUNITY_LOST', email: opportunityEmail || '', reason: cause || '' })
 
     // @ts-ignore
     handleOpportunityUpdate({ id: opportunityId, changes: { 'perda.data': new Date().toISOString(), 'perda.descricaoMotivo': cause } })
@@ -50,20 +53,20 @@ function OpportunityLossBlock({ opportunityId, opportunityIsLost, opportunityLos
   function ReactivationBlock({ lossDate }: ReactivationBlockProps) {
     return (
       <div className="flex items-center gap-2">
-        <div className="flex w-[80%] min-w-[200px] flex-col items-center rounded-md  bg-red-500 p-2 shadow-md lg:w-fit">
-          <h1 className="text-center font-Raleway text-xs font-bold text-black">PERDIDO</h1>
-
-          <div className="flex items-center justify-center gap-2">
-            <AiFillCloseCircle style={{ color: '#000', fontSize: '15px' }} />
-            <p className="text-center text-xs font-bold text-black">{lossDate ? dayjs(lossDate).add(3, 'hours').format('DD/MM/YYYY') : '-'}</p>
+        <div className="flex items-center gap-4 rounded-lg bg-red-500 px-4 py-1 text-white">
+          <h1 className="text-center font-Raleway text-xs font-bold tracking-tight">PERDIDO</h1>
+          <div className="flex items-center gap-1">
+            <BsCalendarX size={12} />
+            <p className="text-center text-xs font-bold tracking-tight">{formatDateAsLocale(lossDate, true)}</p>
           </div>
         </div>
         <button
+          disabled={isPending}
           onClick={() => handleReactiveProject()}
-          className="flex h-full cursor-pointer flex-col items-center rounded-md bg-cyan-300 p-2 text-black shadow-md duration-300 ease-in-out hover:bg-cyan-500 hover:text-white"
+          className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-1 text-white duration-300 ease-in-out hover:bg-blue-800"
         >
-          <h1 className="text-center font-Raleway text-xs font-bold ">RESETAR</h1>
-          <RxReload size={'15px'} />
+          <h1 className="text-center font-Raleway text-xs font-bold tracking-tight">RESETAR</h1>
+          <RxReload size={12} />
         </button>
       </div>
     )
@@ -71,50 +74,19 @@ function OpportunityLossBlock({ opportunityId, opportunityIsLost, opportunityLos
   function LoseProjectBlock() {
     return (
       <div className="flex w-fit items-center justify-center">
-        {menuIsOpen ? (
-          <div className="flex w-[450ox] items-center gap-1">
-            <div className="grow">
-              <DropdownSelect
-                categoryName="MOTIVO DA PERDA"
-                value={cause ? Object.keys(leadLoseJustification).indexOf(cause) + 1 : null}
-                options={Object.keys(leadLoseJustification).map((justification, index) => {
-                  return {
-                    id: index + 1,
-                    label: justification,
-                    value: justification,
-                  }
-                })}
-                onChange={(value) => {
-                  setCause(value.value)
-                }}
-                onReset={() => {
-                  setCause(null)
-                }}
-                selectedItemLabel="NÃO DEFINIDO"
-                width="250px"
-              />
-            </div>
-            <button
-              onClick={() => {
-                if (cause) return handleLoseProject()
-                else return toast.error('Por favor, preencha o motivo da perda.')
-              }}
-              className="h-[40px] rounded-md bg-red-300 p-1 text-white shadow-sm hover:bg-red-500"
-            >
-              <VscChromeClose />
-            </button>
-            <button onClick={() => setMenuIsOpen(false)} className="h-[40px] rounded-md bg-gray-300 p-1 text-white shadow-sm hover:bg-gray-500">
-              <TiCancel />
-            </button>
-          </div>
-        ) : (
-          <button
-            onClick={() => setMenuIsOpen(true)}
-            className="flex w-fit min-w-[250px] items-center justify-center gap-2  rounded bg-red-300 p-2 font-medium text-white duration-300 hover:scale-[1.02] hover:bg-red-500"
-          >
-            <p className="text-xs">PERDER PROJETO</p>
-            {/* <VscChromeClose /> */}
-          </button>
+        <button
+          onClick={() => setMenuIsOpen(true)}
+          className="flex min-w-fit items-center justify-center gap-2 rounded bg-red-500 px-2 py-0.5 text-[0.6rem] font-medium text-white duration-300 hover:bg-red-700"
+        >
+          PERDER PROJETO
+        </button>
+        {menuIsOpen && (
+          <OpportunityLossMenu
+            opportunityId={opportunityId}
+            idMarketing={idMarketing}
+            opportunityEmail={opportunityEmail}
+            closeModal={() => setMenuIsOpen(false)}
+          />
         )}
       </div>
     )
@@ -124,3 +96,74 @@ function OpportunityLossBlock({ opportunityId, opportunityIsLost, opportunityLos
 }
 
 export default OpportunityLossBlock
+
+type OpportunityLossMenuProps = {
+  opportunityId: string
+  idMarketing?: string | null
+  opportunityEmail?: string | null
+  closeModal: () => void
+}
+function OpportunityLossMenu({ opportunityId, idMarketing, opportunityEmail, closeModal }: OpportunityLossMenuProps) {
+  const queryClient = useQueryClient()
+  const [cause, setCause] = useState<string | null>(null)
+
+  const { mutate: handleOpportunityUpdate, isPending } = useMutationWithFeedback({
+    mutationKey: ['update-opportunity', opportunityId],
+    mutationFn: updateOpportunity,
+    queryClient: queryClient,
+    affectedQueryKey: ['opportunity-by-id', opportunityId],
+  })
+  async function handleLoseProject() {
+    // In case opportunity came from RD station TODO
+    if (idMarketing && opportunityEmail) await updateRDOpportunity({ operation: 'OPPORTUNITY_LOST', email: opportunityEmail || '', reason: cause || '' })
+
+    // @ts-ignore
+    handleOpportunityUpdate({ id: opportunityId, changes: { 'perda.data': new Date().toISOString(), 'perda.descricaoMotivo': cause } })
+  }
+  function handleReactiveProject() {
+    // @ts-ignore
+    handleOpportunityUpdate({ id: opportunityId, changes: { 'perda.data': null, 'perda.descricaoMotivo': null } })
+  }
+
+  return (
+    <div id="defaultModal" className="fixed bottom-0 left-0 right-0 top-0 z-[100] bg-[rgba(0,0,0,.85)]">
+      <div className="fixed left-[50%] top-[50%] z-[100] h-fit w-[90%] translate-x-[-50%] translate-y-[-50%] rounded-md bg-[#fff] p-[10px] lg:w-[30%]">
+        <div className="flex h-full flex-col">
+          <div className="flex flex-col items-center justify-between border-b border-gray-200 px-2 pb-2 text-lg lg:flex-row">
+            <h3 className="text-xl font-bold text-[#353432] dark:text-white ">PERDER OPORTUNIDADE</h3>
+            <button
+              onClick={closeModal}
+              type="button"
+              className="flex items-center justify-center rounded-lg p-1 duration-300 ease-linear hover:scale-105 hover:bg-red-200"
+            >
+              <VscChromeClose style={{ color: 'red' }} />
+            </button>
+          </div>
+
+          <div className="flex h-full flex-col gap-y-2 overflow-y-auto overscroll-y-auto p-2 py-1 scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300">
+            <SelectInput
+              label="MOTIVO DA PERDA"
+              value={cause}
+              options={Object.keys(leadLoseJustification).map((justification, index) => {
+                return {
+                  id: index + 1,
+                  label: justification,
+                  value: justification,
+                }
+              })}
+              handleChange={(value) => setCause(value)}
+              onReset={() => setCause(null)}
+              selectedItemLabel="NÃO DEFINIDO"
+              width="100%"
+            />
+          </div>
+          <div className="mt-2 flex w-full items-center justify-end">
+            <LoadingButton loading={isPending} onClick={() => handleLoseProject()} type="button">
+              PERDER PROJETO
+            </LoadingButton>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}

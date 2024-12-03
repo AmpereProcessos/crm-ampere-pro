@@ -15,7 +15,7 @@ import { Sidebar } from '../Sidebar'
 import { GiPositionMarker } from 'react-icons/gi'
 import { FaCity } from 'react-icons/fa'
 import { HiIdentification } from 'react-icons/hi'
-import { BsFillCalendarCheckFill, BsFillMegaphoneFill, BsTelephoneFill } from 'react-icons/bs'
+import { BsCalendarPlus, BsCode, BsFillCalendarCheckFill, BsFillMegaphoneFill, BsTelephoneFill } from 'react-icons/bs'
 import { MdEmail } from 'react-icons/md'
 import { AiFillEdit, AiOutlineUser } from 'react-icons/ai'
 
@@ -58,12 +58,15 @@ function OpportunityPage({ session, opportunityId }: OpportunityPageProps) {
     return (
       <div className="flex h-full flex-col md:flex-row">
         <Sidebar session={session} />
-        <div className="flex w-full max-w-full grow flex-col overflow-x-hidden bg-[#f8f9fa] p-6">
-          <div className="flex w-full flex-col items-start justify-between border-b border-[#000] pb-2 lg:flex-row">
-            <div className="flex w-full flex-col items-start">
-              <div className="mb-2 flex w-full flex-col items-center gap-0 lg:mb-0 lg:w-fit lg:flex-row lg:gap-2">
-                <h1 className="flex text-center font-Raleway text-2xl font-bold text-[#fead41] lg:text-start">{opportunity.identificador}</h1>
-                <h1 className="flex text-center font-Raleway text-2xl font-bold text-blue-900 lg:text-start">{opportunity.nome}</h1>
+        <div className="flex w-full max-w-full grow flex-col gap-2 overflow-x-hidden bg-[#f8f9fa] p-6">
+          <div className="flex w-full flex-col gap-1 border-b border-gray-800 pb-2">
+            <div className="flex w-full flex-col justify-center gap-2 lg:flex-row lg:justify-between">
+              <div className="flex flex-col items-center gap-1 lg:flex-row">
+                <div className="flex items-center gap-1 rounded bg-[#15599a] px-2 py-1 text-white">
+                  <BsCode />
+                  <h1 className="text-sm font-black">{opportunity.identificador}</h1>
+                </div>
+                <h1 className="flex text-center font-Raleway text-2xl font-bold leading-none tracking-tight text-blue-900 lg:text-start">{opportunity.nome}</h1>
                 {opportunity.idMarketing ? (
                   <div className="flex items-center gap-1 rounded border border-[#3e53b2] p-1 text-[#3e53b2]">
                     <BsFillMegaphoneFill />
@@ -71,32 +74,42 @@ function OpportunityPage({ session, opportunityId }: OpportunityPageProps) {
                   </div>
                 ) : null}
               </div>
-              <p className="w-full text-start text-xs italic text-gray-500">{opportunity.descricao}</p>
-              <div className="mt-1 flex w-full flex-row flex-wrap items-start gap-3">
+              <OpportunityContractRequestedFlag requestDate={opportunity.ganho.dataSolicitacao} />
+              <OpportunityWonFlag wonDate={opportunity.ganho.data} />
+            </div>
+            <div className="flex w-full flex-col gap-1 rounded-lg bg-gray-100 p-2">
+              <h1 className="block text-[0.6rem] font-medium tracking-tight lg:hidden">DESCRIÇÃO</h1>
+              <p className="text-center text-xs italic text-gray-500 lg:text-start">{opportunity.descricao}</p>
+            </div>
+            <div className="flex w-full flex-col items-center justify-between gap-2 lg:flex-row">
+              <div className="flex w-full flex-wrap items-center justify-start gap-2 lg:grow">
+                <h1 className="text-primary/80 py-0.5 text-center text-[0.6rem] font-medium italic ">RESPONSÁVEIS</h1>
                 {opportunity.responsaveis.map((resp) => (
                   <div className="flex items-center gap-1">
                     <Avatar width={20} height={20} url={resp.avatar_url || undefined} fallback={formatNameAsInitials(resp.nome)} />
-                    <p className="text-sm font-medium leading-none tracking-tight text-gray-500">{resp.nome}</p>{' '}
+                    <p className="text-xs font-medium leading-none tracking-tight text-gray-500">{resp.nome}</p>{' '}
                     <p className="ml-1 rounded-md border border-cyan-400 p-1 text-xxs font-bold text-cyan-400">{resp.papel}</p>
                   </div>
                 ))}
               </div>
-            </div>
-            <div className="mt-4 flex w-full flex-col items-center gap-4 lg:mt-0 lg:w-fit lg:flex-row">
-              {!!opportunity.ganho.data ? null : (
-                <OpportunityLossBlock
-                  opportunityId={opportunity._id}
-                  opportunityIsLost={!!opportunity.perda.data}
-                  opportunityLossDate={opportunity.perda.data}
-                  idMarketing={opportunity.idMarketing}
-                  opportunityEmail={opportunity.cliente.email}
-                />
-              )}
-              <OpportunityContractRequestedFlag requestDate={opportunity.ganho.dataSolicitacao} />
-              <OpportunityWonFlag wonDate={opportunity.ganho.data} />
+              <div className="flex w-full flex-wrap items-center justify-center gap-2 lg:min-w-fit lg:justify-end">
+                <div className={`flex items-center gap-2`}>
+                  <p className="text-[0.65rem] font-medium text-gray-500">CRIADA EM:</p>
+                  <BsCalendarPlus />
+                  <p className="text-[0.65rem] font-medium text-gray-500">{formatDateAsLocale(opportunity.dataInsercao, true)}</p>
+                </div>
+                {!!opportunity.ganho.data ? null : (
+                  <OpportunityLossBlock
+                    opportunityId={opportunity._id}
+                    opportunityIsLost={!!opportunity.perda.data}
+                    opportunityLossDate={opportunity.perda.data}
+                    idMarketing={opportunity.idMarketing}
+                    opportunityEmail={opportunity.cliente.email}
+                  />
+                )}
+              </div>
             </div>
           </div>
-
           {/* <div className="flex w-full flex-col items-start gap-6 py-4 lg:flex-row"></div> */}
           <div className="flex w-full flex-col gap-6 lg:flex-row">
             <div className="flex w-full flex-col gap-4 lg:w-[40%]">
