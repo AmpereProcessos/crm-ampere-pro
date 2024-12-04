@@ -12,7 +12,7 @@ import { getScenariosInfo } from '@/utils/proposal'
 import { TPartnerSimplifiedDTO } from '@/utils/schemas/partner.schema'
 import { TbWorld } from 'react-icons/tb'
 import { FaInstagram, FaPhone } from 'react-icons/fa'
-import { FaLocationDot } from 'react-icons/fa6'
+import { FaLocationDot, FaRegIdCard, FaUser } from 'react-icons/fa6'
 import { MdEmail, MdPayment } from 'react-icons/md'
 import { BsCircleHalf } from 'react-icons/bs'
 
@@ -24,35 +24,58 @@ type SolarSystemProposalTemplateProps = {
 function SolarSystemProposalTemplate({ proposal, opportunity, partner }: SolarSystemProposalTemplateProps) {
   return (
     <div className="relative flex h-fit w-full flex-col overflow-hidden bg-white lg:h-[297mm] lg:w-[210mm]">
-      <div className="flex h-fit w-full items-center justify-between rounded-bl-md rounded-br-md bg-black p-4">
-        <div className="flex flex-col gap-1">
-          <div className="flex items-center gap-2">
-            <p className="text-xs font-medium text-white">CLIENTE</p>
-            <p className="text-xs font-medium text-white">{opportunity.nome}</p>
+      <div className="hidden w-full flex-col rounded-bl-md rounded-br-md bg-black p-4 lg:flex">
+        <div className="flex w-full items-center justify-between">
+          <div className="flex flex-col gap-1">
+            <div className="flex items-center gap-2">
+              <p className="text-xs font-medium text-white">CLIENTE</p>
+              <p className="text-xs font-medium text-white">{opportunity.nome}</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <p className="text-xs font-medium text-white">CPF/CNPJ</p>
+              <p className="text-xs font-medium text-white">{opportunity.cliente.cpfCnpj}</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <p className="text-xs font-medium text-white">CIDADE</p>
+              <p className="text-xs font-medium text-white">{opportunity.localizacao.cidade}</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <p className="text-xs font-medium text-white">ENDEREÇO</p>
+              <p className="text-xs font-medium text-white">{formatLocation({ location: opportunity.localizacao })}</p>
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-            <p className="text-xs font-medium text-white">CPF/CNPJ</p>
-            <p className="text-xs font-medium text-white">{opportunity.cliente.cpfCnpj}</p>
-          </div>
-          <div className="flex items-center gap-2">
-            <p className="text-xs font-medium text-white">CIDADE</p>
-            <p className="text-xs font-medium text-white">{opportunity.localizacao.cidade}</p>
-          </div>
-          <div className="flex items-center gap-2">
-            <p className="text-xs font-medium text-white">ENDEREÇO</p>
-            <p className="text-xs font-medium text-white">{formatLocation({ location: opportunity.localizacao })}</p>
-          </div>
-        </div>
-        <div className="flex flex-col items-end">
-          {partner.logo_url ? <Image src={partner.logo_url} width={60} height={60} alt="WHITE LOGO" quality={100} /> : null}
+          <div className="flex flex-col items-end">
+            {partner.logo_url ? <Image src={partner.logo_url} width={60} height={60} alt="WHITE LOGO" quality={100} /> : null}
 
-          <div className="flex items-end gap-1">
-            <p className="text-4xl font-bold text-white">{proposal.potenciaPico || 0}</p>
-            <p className="mb-1 text-sm font-bold text-white">kWp</p>
+            <div className="flex items-end gap-1">
+              <p className="text-4xl font-bold text-white">{proposal.potenciaPico || 0}</p>
+              <p className="mb-1 text-sm font-bold text-white">kWp</p>
+            </div>
           </div>
         </div>
       </div>
-      <div className="px-2 py-2 text-center text-xs font-medium">{partner.descricao}</div>
+      <div className="flex w-full flex-col gap-2 rounded-bl-md rounded-br-md bg-black p-4 lg:hidden">
+        <div className="flex w-full items-center justify-between">
+          {partner.logo_url ? <Image src={partner.logo_url} width={70} height={70} alt="WHITE LOGO" quality={100} /> : null}
+          <div className="flex items-end gap-1">
+            <p className="text-3xl font-bold text-white">{proposal.potenciaPico || 0}</p>
+            <p className="mb-1 text-sm font-bold text-white">kWp</p>
+          </div>
+        </div>
+        <div className="flex items-center justify-center gap-2 self-center">
+          <FaUser color="white" />
+          <p className="text-xs font-medium text-white">{opportunity.nome}</p>
+        </div>
+        <div className="flex items-center justify-center gap-2 self-center">
+          <FaRegIdCard color="white" />
+          <p className="text-xs font-medium text-white">{opportunity.cliente.cpfCnpj}</p>
+        </div>
+        <div className="flex items-center justify-center gap-2 self-center">
+          <FaLocationDot color="white" />
+          <p className="text-[0.65rem] font-medium text-white">{formatLocation({ location: opportunity.localizacao, includeCity: true, includeUf: true })}</p>
+        </div>
+      </div>
+      <div className="px-2 py-2 text-center text-[0.6rem] font-medium lg:text-xs">{partner.descricao}</div>
       <div className="flex w-full flex-col">
         <div className="flex w-full items-center gap-1 rounded-bl-md rounded-br-md bg-black p-3">
           <h1 className="w-1/4 text-center text-[0.7rem] font-bold text-white">CONSUMO MÉDIO (kWh/mês)</h1>
@@ -176,19 +199,19 @@ function SolarSystemProposalTemplate({ proposal, opportunity, partner }: SolarSy
         </div>
       </div>
       <div className="mt-2 flex min-h-[100px] w-full items-end justify-between">
-        <div className="flex w-1/3 flex-col">
+        <div className="flex w-[40%] flex-col lg:w-1/3">
           <div className="mb-1 h-[2px] w-full bg-black"></div>
           <p className="w-full text-center text-[0.7rem] font-bold text-black">{opportunity.cliente.nome.toUpperCase()}</p>
           <p className="w-full text-center text-[0.7rem] font-bold text-black">{opportunity.cliente.cpfCnpj || 'N/A'}</p>
         </div>
-        <div className="flex w-1/3 flex-col">
+        <div className="flex w-[40%] flex-col lg:w-1/3">
           <div className="mb-1 h-[2px] w-full bg-black"></div>
           <p className="w-full text-center text-[0.7rem] font-bold text-black">{partner.nome.toUpperCase()}</p>
           <p className="w-full text-center text-[0.7rem] font-bold text-black">{partner.cpfCnpj || 'N/A'}</p>
         </div>
       </div>
       <div className="mt-4 flex w-full flex-col gap-4 bg-black p-4">
-        <div className="flex w-full items-center justify-center gap-2">
+        <div className="flex w-full flex-wrap items-center justify-center gap-2">
           <div className="flex items-center gap-1 text-white">
             <FaLocationDot size={20} />
             <p className="text-xs tracking-tight">
@@ -200,7 +223,7 @@ function SolarSystemProposalTemplate({ proposal, opportunity, partner }: SolarSy
             <p className="text-xs tracking-tight">{partner.contatos.email}</p>
           </div>
         </div>
-        <div className="flex w-full items-center justify-around gap-6">
+        <div className="flex w-full flex-wrap items-center justify-around gap-6 gap-y-2">
           {partner.midias.website ? (
             <div className="flex items-center gap-1 text-white">
               <TbWorld size={20} />

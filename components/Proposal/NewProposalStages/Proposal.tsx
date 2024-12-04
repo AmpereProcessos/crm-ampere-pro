@@ -103,6 +103,7 @@ function Proposal({ opportunity, projectTypes, infoHolder, setInfoHolder, moveTo
       if (fileUrl) await handleDownload({ fileName, fileUrl })
 
       return {
+        id: response.data.insertedId,
         message: response.message,
         fileUrl: response.data?.fileUrl,
       }
@@ -164,7 +165,14 @@ function Proposal({ opportunity, projectTypes, infoHolder, setInfoHolder, moveTo
               CLIQUE AQUI PARA VISUALIZAR A PROPOSTA
               <Eye size={18} />
             </a>
-          ) : null}
+          ) : (
+            <Link href={`/comercial/proposta/documento/${data.id}`}>
+              <button className="flex items-center gap-1 rounded bg-blue-600 px-2 py-1 text-[0.7rem] font-black text-white duration-300 ease-in-out hover:bg-blue-700">
+                CLIQUE AQUI PARA ACESSAR A PROPOSTA
+                <Eye size={18} />
+              </button>
+            </Link>
+          )}
         </div>
       ) : null}
       {isError ? (

@@ -31,6 +31,7 @@ function ProposalDocumentPage({ proposalJSON, opportunityJSON, partnerJSON, erro
   return (
     <div className="flex w-full items-center justify-center">
       {isSolarSystemSale ? <ProposalWithKitUFVTemplate proposal={proposal} opportunity={opportunity} partner={partner} /> : null}
+      {/* {isSolarSystemSale ? <ProposalWithKitTemplate proposal={proposal} opportunity={opportunity} partner={partner} /> : null} */}
       {isGeneralKitSale ? <ProposalWithKitTemplate proposal={proposal} opportunity={opportunity} partner={partner} /> : null}
       {opportunity.categoriaVenda == 'PLANO' ? <ProposalWithPlanTemplate proposal={proposal} opportunity={opportunity} partner={partner} /> : null}
       {opportunity.categoriaVenda == 'PRODUTOS' ? <ProposalWithProductsTemplate proposal={proposal} opportunity={opportunity} partner={partner} /> : null}

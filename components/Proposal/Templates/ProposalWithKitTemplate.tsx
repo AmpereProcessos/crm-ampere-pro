@@ -47,9 +47,9 @@ function ProposalWithKitTemplate({ proposal, opportunity, partner }: ProposalWit
         </div>
       </div>
       <div className="flex w-full grow flex-col">
-        <div className="px-2 py-2 text-center text-sm font-medium tracking-normal">{partner.descricao}</div>
+        <div className="px-2 py-2 text-center text-[0.6rem] font-medium tracking-normal lg:text-sm">{partner.descricao}</div>
         <h1 className="w-full py-2 text-center text-2xl font-black text-cyan-400">NOSSO ORÇAMENTO</h1>
-        <h1 className="w-full py-2 text-start text-lg font-black">PRODUTOS DESSA PROPOSTA</h1>
+        <h1 className="w-full  py-2 pl-2 text-start text-lg font-black lg:pl-0">PRODUTOS DESSA PROPOSTA</h1>
         <div className="flex w-full flex-col gap-1">
           {proposal.produtos.map((product, index) => (
             <div key={index} className="flex w-full flex-col border border-gray-500 p-2">
@@ -87,7 +87,7 @@ function ProposalWithKitTemplate({ proposal, opportunity, partner }: ProposalWit
             </div>
           ))}
         </div>
-        <h1 className="w-full py-2 text-start text-lg font-black">SERVIÇOS DESSA PROPOSTA</h1>
+        <h1 className="w-full py-2 pl-2 text-start text-lg font-black lg:pl-0">SERVIÇOS DESSA PROPOSTA</h1>
         <div className="flex w-full flex-col gap-1">
           {proposal.servicos.map((service, index) => (
             <div key={index} className="flex w-full flex-col border border-gray-500 p-2">
@@ -118,7 +118,7 @@ function ProposalWithKitTemplate({ proposal, opportunity, partner }: ProposalWit
             </div>
           ))}
         </div>
-        <h1 className="w-full py-2 text-start text-lg font-black">FORMAS DE PAGAMENTO DESSA PROPOSTA</h1>
+        <h1 className="w-full py-2 pl-2 text-start text-lg font-black lg:pl-0">FORMAS DE PAGAMENTO DESSA PROPOSTA</h1>
         <div className="flex w-full flex-col gap-1">
           {proposal.pagamento.metodos.map((method, index) => (
             <div key={index} className="flex w-full flex-col border border-gray-500 p-2">
@@ -161,13 +161,13 @@ function ProposalWithKitTemplate({ proposal, opportunity, partner }: ProposalWit
           </div>
         </div>
         <div className="mt-2 flex min-h-[100px] w-full items-end justify-between">
-          <div className="flex w-1/3 flex-col">
+          <div className="flex w-[45%] flex-col lg:w-1/3">
             <div className="mb-1 h-[2px] w-full bg-black"></div>
             <p className="w-full text-center text-[0.7rem] font-bold text-black">{opportunity.cliente.nome.toUpperCase()}</p>
             <p className="w-full text-center text-[0.7rem] font-bold text-black">{opportunity.cliente.cpfCnpj}</p>
           </div>
 
-          <div className="flex w-1/3 flex-col">
+          <div className="flex w-[45%] flex-col lg:w-1/3">
             <div className="mb-1 h-[2px] w-full bg-black"></div>
             <p className="w-full text-center text-[0.7rem] font-bold text-black">{partner.nome.toUpperCase()}</p>
             <p className="w-full text-center text-[0.7rem] font-bold text-black">{partner.cpfCnpj}</p>
@@ -176,7 +176,7 @@ function ProposalWithKitTemplate({ proposal, opportunity, partner }: ProposalWit
       </div>
 
       <div className="mt-4 flex w-full flex-col gap-4 bg-black p-4">
-        <div className="flex w-full items-center justify-center gap-2">
+        <div className="flex w-full flex-wrap items-center justify-center gap-2">
           <div className="flex items-center gap-1 text-white">
             <FaLocationDot size={20} />
             <p className="text-xs tracking-tight">
@@ -188,7 +188,7 @@ function ProposalWithKitTemplate({ proposal, opportunity, partner }: ProposalWit
             <p className="text-xs tracking-tight">{partner.contatos.email}</p>
           </div>
         </div>
-        <div className="flex w-full items-center justify-around gap-6">
+        <div className="flex w-full flex-wrap items-center justify-around gap-6 gap-y-2">
           {partner.midias.website ? (
             <div className="flex items-center gap-1 text-white">
               <TbWorld size={20} />
