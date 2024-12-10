@@ -169,7 +169,7 @@ function NewClient({ session, partnerId, closeModal }: NewClientModalProps) {
                   handleChange={(value) =>
                     setClientInfo((prev) => ({
                       ...prev,
-                      dataDeNascimento: formatDateInputChange(value),
+                      dataNascimento: formatDateInputChange(value, 'string') as string,
                     }))
                   }
                   width={'100%'}

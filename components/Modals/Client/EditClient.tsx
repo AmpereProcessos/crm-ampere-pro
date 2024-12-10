@@ -95,7 +95,7 @@ function EditClient({ clientId, session, partnerId, closeModal, additionalAffect
       if (additionalAffectedQuery) await queryClient.invalidateQueries({ queryKey: additionalAffectedQuery })
     },
   })
-
+  console.log(clientInfo)
   useEffect(() => {
     if (client) setClientInfo(client)
   }, [client])
@@ -147,14 +147,14 @@ function EditClient({ clientId, session, partnerId, closeModal, additionalAffect
                 <div className="w-full lg:w-1/3">
                   <DateInput
                     label={'DATA DE NASCIMENTO'}
-                    editable={true}
-                    value={clientInfo.dataNascimento ? formatDateForInput(clientInfo.dataNascimento) : undefined}
-                    handleChange={(value) =>
+                    value={formatDateForInput(clientInfo.dataNascimento)}
+                    handleChange={(value) => {
+                      console.log('SELECTED', value)
                       setClientInfo((prev) => ({
                         ...prev,
-                        dataDeNascimento: formatDateInputChange(value),
+                        dataNascimento: formatDateInputChange(value, 'string') as string,
                       }))
-                    }
+                    }}
                     width={'100%'}
                   />
                 </div>

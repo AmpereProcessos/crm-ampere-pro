@@ -13,9 +13,14 @@ export function formatDateAsLocale(date?: string | Date | null, showHours = fals
   if (showHours) return dayjs(date).format('DD/MM/YYYY HH:mm')
   return dayjs(date).add(3, 'hour').format('DD/MM/YYYY')
 }
-export function formatDateInputChange(value: any) {
-  if (isNaN(new Date(value).getMilliseconds())) return undefined
-  return new Date(value).toISOString()
+export function formatDateInputChange(value: any, returnType?: 'date' | 'string', normalizeHours: boolean = true) {
+  if (isNaN(new Date(value).getMilliseconds())) return null
+  if (!returnType || returnType === 'string') {
+    if (!normalizeHours) return new Date(value).toISOString()
+    return dayjs(new Date(value)).add(3, 'hours').toISOString()
+  }
+  if (!normalizeHours) return new Date(value)
+  return dayjs(new Date(value)).add(3, 'hours').toDate()
 }
 export function formatToDateTime(date: string | null) {
   if (!date) return ''

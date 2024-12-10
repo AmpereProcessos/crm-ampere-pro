@@ -178,7 +178,7 @@ export const GeneralProposalSchema = z.object({
   }),
   potenciaPico: z.number().optional().nullable(),
   urlArquivo: z.string().optional().nullable(),
-  autor: z.object({
+  autor: z.object({ 
     id: z.string(),
     nome: z.string(),
     avatar_url: z.string().optional().nullable(),
