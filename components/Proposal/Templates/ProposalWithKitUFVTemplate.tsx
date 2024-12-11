@@ -16,14 +16,15 @@ import { FaLocationDot, FaRegIdCard, FaUser } from 'react-icons/fa6'
 import { MdEmail, MdPayment } from 'react-icons/md'
 import { BsCircleHalf } from 'react-icons/bs'
 
-type SolarSystemProposalTemplateProps = {
+type ProposalWithKitUFVTemplateProps = {
+  proposalDocumentRef: any
   proposal: TProposal
   opportunity: TOpportunityDTOWithClient
   partner: TPartnerSimplifiedDTO
 }
-function SolarSystemProposalTemplate({ proposal, opportunity, partner }: SolarSystemProposalTemplateProps) {
+function ProposalWithKitUFVTemplate({ proposalDocumentRef, proposal, opportunity, partner }: ProposalWithKitUFVTemplateProps) {
   return (
-    <div className="relative flex h-fit w-full flex-col overflow-hidden bg-white lg:h-[297mm] lg:w-[210mm]">
+    <div ref={proposalDocumentRef} className="relative flex h-fit w-full flex-col overflow-hidden bg-white lg:h-[297mm] lg:w-[210mm]">
       <div className="hidden w-full flex-col rounded-bl-md rounded-br-md bg-black p-4 lg:flex">
         <div className="flex w-full items-center justify-between">
           <div className="flex flex-col gap-1">
@@ -193,10 +194,7 @@ function SolarSystemProposalTemplate({ proposal, opportunity, partner }: SolarSy
       </span>
       <div className="flex w-full items-center justify-between gap-1 rounded-bl-md rounded-br-md bg-cyan-500 p-3">
         <h1 className="text-[0.7rem] font-bold text-black">INVESTIMENTO</h1>
-        <div className="flex items-end gap-1">
-          <h1 className="text-sm font-black text-black">{formatToMoney(proposal.valor)}</h1>
-          <h1 className="text-[0.7rem] font-bold text-black">À VISTA</h1>
-        </div>
+        <h1 className="whitespace-nowrap text-sm font-black text-black">{formatToMoney(proposal.valor)} À VISTA</h1>
       </div>
       <div className="mt-2 flex min-h-[100px] w-full items-end justify-between">
         <div className="flex w-[40%] flex-col lg:w-1/3">
@@ -243,10 +241,10 @@ function SolarSystemProposalTemplate({ proposal, opportunity, partner }: SolarSy
             <p className="text-xs tracking-tight">{partner.contatos.telefonePrimario}</p>
           </div>
         </div>
-        {partner.slogan ? <h1 className="w-full text-center font-black text-white">{partner.slogan}</h1> : null}
+        {partner.slogan ? <h1 className="w-full whitespace-nowrap text-center font-black text-white">{partner.slogan}</h1> : null}
       </div>
     </div>
   )
 }
 
-export default SolarSystemProposalTemplate
+export default ProposalWithKitUFVTemplate

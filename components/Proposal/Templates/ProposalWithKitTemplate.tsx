@@ -16,13 +16,14 @@ import { MdEmail, MdOutlineMiscellaneousServices, MdPayment } from 'react-icons/
 import { TbWorld } from 'react-icons/tb'
 
 type ProposalWithKitTemplateProps = {
+  proposalDocumentRef: any
   proposal: TProposal
   opportunity: TOpportunityDTOWithClient
   partner: TPartnerSimplifiedDTO
 }
-function ProposalWithKitTemplate({ proposal, opportunity, partner }: ProposalWithKitTemplateProps) {
+function ProposalWithKitTemplate({ proposalDocumentRef, proposal, opportunity, partner }: ProposalWithKitTemplateProps) {
   return (
-    <div className="relative flex h-fit w-full flex-col overflow-hidden bg-white lg:h-[297mm] lg:w-[210mm]">
+    <div ref={proposalDocumentRef} className="relative flex h-fit w-full flex-col overflow-hidden bg-white lg:h-[297mm] lg:w-[210mm]">
       <div className="flex h-fit w-full items-center justify-between rounded-bl-md rounded-br-md bg-black p-4">
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-2">
@@ -59,7 +60,7 @@ function ProposalWithKitTemplate({ proposal, opportunity, partner }: ProposalWit
                     <div className="flex h-[35px] w-[35px] items-center justify-center rounded-full border border-black p-1 text-[15px]">
                       {renderCategoryIcon(product.categoria, 18)}
                     </div>
-                    <p className="text-sm font-medium leading-none tracking-tight">
+                    <p className="whitespace-nowrap text-sm font-medium leading-none tracking-tight">
                       <strong className="text-[#15599a]">{product.qtde}</strong> x {product.modelo}
                     </p>
                   </div>
@@ -77,7 +78,7 @@ function ProposalWithKitTemplate({ proposal, opportunity, partner }: ProposalWit
                   {product.garantia ? (
                     <div className="flex items-center gap-1">
                       <AiOutlineSafety size={12} />
-                      <p className="text-[0.6rem] font-light text-gray-500 lg:text-xs">
+                      <p className="whitespace-nowrap text-[0.6rem] font-light text-gray-500 lg:text-xs">
                         {product.garantia > 1 ? `${product.garantia} ANOS` : `${product.garantia} ANO`}
                       </p>
                     </div>
@@ -97,7 +98,7 @@ function ProposalWithKitTemplate({ proposal, opportunity, partner }: ProposalWit
                     <div className="flex h-[35px] w-[35px] items-center justify-center rounded-full border border-black p-1 text-[15px]">
                       <MdOutlineMiscellaneousServices size={18} />
                     </div>
-                    <p className="text-sm font-medium leading-none tracking-tight">{service.descricao}</p>
+                    <p className="whitespace-nowrap text-sm font-medium leading-none tracking-tight">{service.descricao}</p>
                   </div>
                 </div>
                 {service.observacoes.trim().length > 0 ? (
@@ -106,9 +107,9 @@ function ProposalWithKitTemplate({ proposal, opportunity, partner }: ProposalWit
 
                 <div className="flex w-full items-center justify-end gap-2 pl-2">
                   {service.garantia ? (
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-1 whitespace-nowrap">
                       <AiOutlineSafety size={12} />
-                      <p className="text-[0.6rem] font-light text-gray-500 lg:text-xs">
+                      <p className="whitespace-nowrap text-[0.6rem] font-light text-gray-500 lg:text-xs">
                         {service.garantia > 1 ? `${service.garantia} ANOS` : `${service.garantia} ANO`}
                       </p>
                     </div>
@@ -154,11 +155,8 @@ function ProposalWithKitTemplate({ proposal, opportunity, partner }: ProposalWit
           PARTES.
         </span>
         <div className="flex w-full items-center justify-between gap-1 rounded-bl-md rounded-br-md bg-black p-3">
-          <h1 className="text-[0.7rem] font-bold text-white">INVESTIMENTO ESPERADO</h1>
-          <div className="flex items-end gap-1">
-            <h1 className="text-sm font-black text-white">{formatToMoney(proposal.valor)}</h1>
-            <h1 className="text-[0.7rem] font-bold text-white">À VISTA</h1>
-          </div>
+          <h1 className="min-w-fit text-[0.7rem] font-bold text-white">INVESTIMENTO ESPERADO</h1>
+          <h1 className="whitespace-nowrap text-sm font-black text-white">{formatToMoney(proposal.valor)} À VISTA</h1>
         </div>
         <div className="mt-2 flex min-h-[100px] w-full items-end justify-between">
           <div className="flex w-[45%] flex-col lg:w-1/3">
@@ -208,7 +206,7 @@ function ProposalWithKitTemplate({ proposal, opportunity, partner }: ProposalWit
             <p className="text-xs tracking-tight">{partner.contatos.telefonePrimario}</p>
           </div>
         </div>
-        {partner.slogan ? <h1 className="w-full text-center font-black text-white">{partner.slogan}</h1> : null}
+        {partner.slogan ? <h1 className="w-full whitespace-nowrap text-center font-black text-white">{partner.slogan}</h1> : null}
       </div>
     </div>
   )

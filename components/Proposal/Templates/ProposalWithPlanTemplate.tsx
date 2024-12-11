@@ -12,13 +12,14 @@ import { MdEmail } from 'react-icons/md'
 import { TbWorld } from 'react-icons/tb'
 
 type ProposalWithPlanTemplateProps = {
+  proposalDocumentRef: any
   proposal: TProposal
   opportunity: TOpportunityDTOWithClient
   partner: TPartnerSimplifiedDTO
 }
-function ProposalWithPlanTemplate({ proposal, opportunity, partner }: ProposalWithPlanTemplateProps) {
+function ProposalWithPlanTemplate({ proposalDocumentRef, proposal, opportunity, partner }: ProposalWithPlanTemplateProps) {
   return (
-    <div className="relative flex h-fit w-full flex-col overflow-hidden bg-white lg:h-[297mm] lg:w-[210mm]">
+    <div ref={proposalDocumentRef} className="relative flex h-fit w-full flex-col overflow-hidden bg-white lg:h-[297mm] lg:w-[210mm]">
       <div className="flex h-fit w-full items-center justify-between rounded-bl-md rounded-br-md bg-black p-4">
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-2">
@@ -120,7 +121,7 @@ function ProposalWithPlanTemplate({ proposal, opportunity, partner }: ProposalWi
             <p className="text-xs tracking-tight">{partner.contatos.telefonePrimario}</p>
           </div>
         </div>
-        {partner.slogan ? <h1 className="w-full text-center font-black text-white">{partner.slogan}</h1> : null}
+        {partner.slogan ? <h1 className="w-full whitespace-nowrap text-center font-black text-white">{partner.slogan}</h1> : null}
       </div>
     </div>
   )
