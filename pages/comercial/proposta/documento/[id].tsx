@@ -80,49 +80,6 @@ function ProposalDocumentPage({ proposalJSON, opportunityJSON, partnerJSON, erro
       console.error('Error generating PDF:', error)
     }
   }
-  // async function generatePDF() {
-  //   const proposalDocument = proposalDocumentRef.current
-  //   if (!proposalDocument) return
-
-  //   // Add filter to ensure proper font rendering
-  //   const filter = (node: HTMLElement) => {
-  //     const exclusionClasses = ['remove-me', 'secret-div']
-  //     return !exclusionClasses.some((classname) => node.classList?.contains(classname))
-  //   }
-
-  //   try {
-  //     const dataUrl = await htmlToImage.toPng(proposalDocument, {
-  //       quality: 1,
-  //       filter,
-  //       fontEmbedCSS: '', // This will embed all used fonts
-  //       pixelRatio: 3, // Increase resolution
-  //       style: {
-  //         // Improve text rendering
-  //         textRendering: 'optimizeLegibility',
-  //       },
-  //     })
-
-  //     const a4Width = 210
-  //     const a4Height = 297
-
-  //     const pdf = new jsPDF({
-  //       orientation: 'portrait',
-  //       unit: 'mm',
-  //       format: [a4Width, a4Height],
-  //       compress: false,
-  //     })
-
-  //     const aspectRatio = a4Width / a4Height
-  //     const imageWidth = a4Width
-  //     const imageHeight = a4Width / aspectRatio
-
-  //     const verticalMargin = (a4Height - imageHeight) / 2
-  //     pdf.addImage(dataUrl, 'PNG', 0, verticalMargin, imageWidth, imageHeight)
-  //     pdf.save(`${proposal.nome}.pdf`)
-  //   } catch (error) {
-  //     console.error('Error generating PDF:', error)
-  //   }
-  // }
 
   return (
     <div className="relative flex w-full items-center justify-center bg-gray-50">

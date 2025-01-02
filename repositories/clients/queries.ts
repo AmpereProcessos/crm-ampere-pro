@@ -13,13 +13,13 @@ import { Collection, Filter, MatchKeysAndValues, ObjectId, WithId } from 'mongod
 type GetClientByIdParams = {
   collection: Collection<TClient>
   id: string
-  partnerId: string
+  query: Filter<TClient>
 }
-export async function getClientById({ collection, id, partnerId }: GetClientByIdParams) {
+export async function getClientById({ collection, id, query }: GetClientByIdParams) {
   try {
     const clientsArr = await collection
       .aggregate([
-        { $match: { _id: new ObjectId(id), idParceiro: partnerId } },
+        { $match: { _id: new ObjectId(id), ...query } },
         {
           $addFields: {
             stringId: { $toString: '$_id' },

@@ -46,6 +46,8 @@ const getPartnerClients: NextApiHandler<GetResponse> = async (req, res) => {
   const session = await validateAuthorization(req, res, 'clientes', 'visualizar', true)
   const partnerId = session.user.idParceiro
   const userScope = session.user.permissoes.clientes.escopo
+  const parterScope = session.user.permissoes.parceiros.escopo
+  const partnerQuery: Filter<TClient> = parterScope ? { idParceiro: { $in: [...parterScope] } } : {}
 
   const db = await connectToDatabase(process.env.MONGODB_URI, 'crm')
   const collection: Collection<TClient> = db.collection('clients')
@@ -55,7 +57,7 @@ const getPartnerClients: NextApiHandler<GetResponse> = async (req, res) => {
   // In case there is an ID, querying for a specific client within the partners clients
   if (id) {
     if (typeof id != 'string' || !ObjectId.isValid(id)) throw new createHttpError.BadRequest('ID inválido.')
-    const client = await getClientById({ collection: collection, id: id, partnerId: partnerId || '' })
+    const client = await getClientById({ collection: collection, id: id, query: partnerQuery })
 
     if (!client) throw new createHttpError.NotFound('Cliente não encontrado.')
 
@@ -89,9 +91,6 @@ const editClients: NextApiHandler<PutResponse> = async (req, res) => {
   const parterScope = session.user.permissoes.parceiros.escopo
   const partnerQuery: Filter<TClient> = parterScope ? { idParceiro: { $in: [...parterScope] } } : {}
 
-  const userId = session.user.id
-  const userScope = session.user.permissoes.oportunidades.escopo
-
   const { id } = req.query
   const changes = InsertClientSchema.partial().parse(req.body)
   // if(session.user.id)
@@ -101,7 +100,7 @@ const editClients: NextApiHandler<PutResponse> = async (req, res) => {
   const db = await connectToDatabase(process.env.MONGODB_URI, 'crm')
   const clientsCollection: Collection<TClient> = db.collection('clients')
 
-  const client = await getClientById({ collection: clientsCollection, id: id, partnerId: partnerId || '' })
+  const client = await getClientById({ collection: clientsCollection, id: id, query: partnerQuery })
   if (!client) throw new createHttpError.NotFound('Cliente não encontrado.')
 
   const updateResponse = await updateClient({ id: id, collection: clientsCollection, changes: changes, query: partnerQuery })

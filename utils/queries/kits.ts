@@ -171,6 +171,7 @@ export function useKits() {
     },
     priceOrder: null,
     powerOrder: null,
+    promo: false,
   })
   function matchSearch(kit: TKitDTO) {
     if (filters.search.trim().length == 0) return true
@@ -200,6 +201,10 @@ export function useKits() {
     if (filters.powerRange.min == null || !filters.powerRange.max) return true
     const kitPower = getModulesPeakPotByProducts(kit.produtos)
     return kitPower >= filters.powerRange.min && kitPower <= filters.powerRange.max
+  }
+  function matchPromo(kit: TKitDTO) {
+    if (!filters.promo) return true
+    return formatWithoutDiacritics(kit.nome, true).includes('PROMO')
   }
   function orderByPrice(kits: TKitDTO[]) {
     var newArr
@@ -241,7 +246,8 @@ export function useKits() {
         matchTopology(kit) &&
         matchPowerRange(kit) &&
         matchModuleManufacturer(kit) &&
-        matchInverterManufacturer(kit)
+        matchInverterManufacturer(kit) &&
+        matchPromo(kit)
     )
   }
 
@@ -278,6 +284,7 @@ export function useActiveKits() {
     },
     priceOrder: null,
     powerOrder: null,
+    promo: false,
   })
   function matchSearch(kit: TKitDTO) {
     if (filters.search.trim().length == 0) return true
@@ -307,6 +314,10 @@ export function useActiveKits() {
     if (filters.powerRange.min == null || !filters.powerRange.max) return true
     const kitPower = getModulesPeakPotByProducts(kit.produtos)
     return kitPower >= filters.powerRange.min && kitPower <= filters.powerRange.max
+  }
+  function matchPromo(kit: TKitDTO) {
+    if (!filters.promo) return true
+    return formatWithoutDiacritics(kit.nome, true).includes('PROMO')
   }
   function orderByPrice(kits: TKitDTO[]) {
     var newArr
@@ -348,7 +359,8 @@ export function useActiveKits() {
         matchTopology(kit) &&
         matchPowerRange(kit) &&
         matchModuleManufacturer(kit) &&
-        matchInverterManufacturer(kit)
+        matchInverterManufacturer(kit) &&
+        matchPromo(kit)
     )
   }
 
