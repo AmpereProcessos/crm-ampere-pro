@@ -26,6 +26,20 @@ export type TOverallResults = {
     outboundSdr: number
     total: number
   }
+  conversao: {
+    criado: {
+      inbound: number
+      outboundVendedor: number
+      outboundSdr: number
+      total: number
+    }
+    ganho: {
+      inbound: number
+      outboundVendedor: number
+      outboundSdr: number
+      total: number
+    }
+  }
   projetosPerdidos: {
     inbound: number
     outboundVendedor: number
@@ -142,9 +156,23 @@ const getOverallResults: NextApiHandler<GetResponse> = async (req, res) => {
       // Increasing ATUAL qtys based on checkings
       if (wasInsertedWithinCurrentPeriod) {
         acc.projetosCriados.total += 1
-        if (isInbound) acc.projetosCriados.inbound += 1
-        if (isOutboundSDR) acc.projetosCriados.outboundSdr += 1
-        if (isOutboundSeller) acc.projetosCriados.outboundVendedor += 1
+        acc.conversao.criado.total += 1
+        if (!!signatureDate) acc.conversao.ganho.total += 1
+        if (isInbound) {
+          acc.projetosCriados.inbound += 1
+          acc.conversao.criado.inbound += 1
+          if (!!signatureDate) acc.conversao.ganho.inbound += 1
+        }
+        if (isOutboundSDR) {
+          acc.projetosCriados.outboundSdr += 1
+          acc.conversao.criado.outboundSdr += 1
+          if (!!signatureDate) acc.conversao.ganho.outboundSdr += 1
+        }
+        if (isOutboundSeller) {
+          acc.projetosCriados.outboundVendedor += 1
+          acc.conversao.criado.outboundVendedor += 1
+          if (!!signatureDate) acc.conversao.ganho.outboundVendedor += 1
+        }
         acc.porCanalAquisicao[clientAquisitionOrigin].adquiridos += 1
       }
       if (wasSignedWithinCurrentPeriod) {
@@ -169,7 +197,6 @@ const getOverallResults: NextApiHandler<GetResponse> = async (req, res) => {
         if (isOutboundSDR) acc.totalVendido.outboundSdr += proposeValue
         if (isOutboundSeller) acc.totalVendido.outboundVendedor += proposeValue
       }
-
       return acc
     },
     {
@@ -184,6 +211,20 @@ const getOverallResults: NextApiHandler<GetResponse> = async (req, res) => {
         outboundVendedor: 0,
         outboundSdr: 0,
         total: 0,
+      },
+      conversao: {
+        criado: {
+          inbound: 0,
+          outboundVendedor: 0,
+          outboundSdr: 0,
+          total: 0,
+        },
+        ganho: {
+          inbound: 0,
+          outboundVendedor: 0,
+          outboundSdr: 0,
+          total: 0,
+        },
       },
       projetosPerdidos: {
         inbound: 0,
