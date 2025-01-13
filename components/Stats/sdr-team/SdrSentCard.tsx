@@ -1,12 +1,14 @@
 import React from 'react'
 import GoalTrackingBar from '../GoalTrackingBar'
-import { formatNameAsInitials } from '@/lib/methods/formatting'
+import { formatDecimalPlaces, formatNameAsInitials } from '@/lib/methods/formatting'
 import { getUserAvatarUrl } from '@/lib/methods/extracting'
 import { IUsuario } from '@/utils/models'
 import Avatar from '@/components/utils/Avatar'
 import { GrSend } from 'react-icons/gr'
 import { TSDRTeamResults } from '@/pages/api/stats/comercial-results/sales-sdr'
 import { TUserDTOWithSaleGoals } from '@/utils/schemas/user.schema'
+import { VscChromeClose } from 'react-icons/vsc'
+import { BsPatchCheck } from 'react-icons/bs'
 type SdrSentCardProps = {
   stats?: TSDRTeamResults
   promoters: TUserDTOWithSaleGoals[]
@@ -78,7 +80,24 @@ function SdrSentCard({ stats, promoters }: SdrSentCardProps) {
             {promoter.porVendedor.map((seller) => (
               <div className="flex w-full justify-between">
                 <p className="pl-4 text-xxs font-medium uppercase tracking-tight text-gray-500 lg:text-xs">{seller.vendedor}</p>
-                <h1 className="text-xs font-medium uppercase tracking-tight">{seller.recebido as number}</h1>
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1 text-blue-700">
+                    <GrSend size={12} />
+                    <h1 className="text-[0.65rem] font-medium uppercase tracking-tight lg:text-xs">{seller.recebido.recebido as number}</h1>
+                  </div>
+                  <div className="flex items-center gap-1 text-green-700">
+                    <BsPatchCheck size={12} />
+                    <h1 className="text-[0.65rem] font-medium uppercase tracking-tight lg:text-xs">
+                      {seller.recebido.ganho as number} ({formatDecimalPlaces((seller.recebido.ganho * 100) / seller.recebido.recebido || 0)}%)
+                    </h1>
+                  </div>
+                  <div className="flex items-center gap-1 text-red-700">
+                    <VscChromeClose size={12} />
+                    <h1 className="text-[0.65rem] font-medium uppercase tracking-tight lg:text-xs">
+                      {seller.recebido.perdido as number} ({formatDecimalPlaces((seller.recebido.perdido * 100) / seller.recebido.recebido || 0)}%)
+                    </h1>
+                  </div>
+                </div>
               </div>
             ))}
           </div>

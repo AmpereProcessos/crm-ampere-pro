@@ -119,7 +119,7 @@ function ComercialResults() {
                     handleChange={(value) =>
                       setQueryFilters((prev) => ({
                         ...prev,
-                        period: { ...prev.period, after: formatDateInputChange(value) || firstDayOfMonth },
+                        period: { ...prev.period, after: formatDateInputChange(value) || (firstDayOfMonth as string) },
                       }))
                     }
                     width="100%"
@@ -133,7 +133,7 @@ function ComercialResults() {
                     handleChange={(value) =>
                       setQueryFilters((prev) => ({
                         ...prev,
-                        period: { ...prev.period, before: formatDateInputChange(value) || lastDayOfMonth },
+                        period: { ...prev.period, before: formatDateInputChange(value) || (lastDayOfMonth as string) },
                       }))
                     }
                     width="100%"

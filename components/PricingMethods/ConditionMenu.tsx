@@ -46,7 +46,7 @@ function ConditionMenu({ resultHolder, setResultHolder, partners }: ConditionMen
       <h1 className="w-full text-start text-xs font-black text-blue-500">VARIÁVEL</h1>
       <div className="my-2 flex flex-wrap items-center gap-2">
         {!!resultHolder.condicao.tipo
-          ? conditionsAlias
+          ? conditionsAlias 
               .filter((c) => c.types.includes(resultHolder.condicao.tipo as TPricingMethodConditionType))
               .map((va, index) => (
                 <button

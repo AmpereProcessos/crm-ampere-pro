@@ -73,7 +73,11 @@ export type TSDRTeamResults = {
     }
 
     'POR VENDEDOR': {
-      [key: string]: number
+      [key: string]: {
+        recebido: 0
+        ganho: 0
+        perdido: 0
+      }
     }
   }
 }
@@ -144,6 +148,7 @@ const getSDRTeamResults: NextApiHandler<GetResponse> = async (req, res) => {
     const proposeValue = current.valorProposta
     const proposePeakPower = current.potenciaPicoProposta || 0
 
+    const lossDate = current.perda?.data ? new Date(current.perda.data) : null
     const sdr = current.responsaveis.find((r) => r.papel == 'SDR')
     if (!sdr) return acc
 
@@ -205,12 +210,12 @@ const getSDRTeamResults: NextApiHandler<GetResponse> = async (req, res) => {
         },
 
         'POR VENDEDOR': {
-          ['NÃO DEFINIDO']: 0,
+          ['NÃO DEFINIDO']: { recebido: 0, ganho: 0, perdido: 0 },
         },
       }
     }
     // Creating info for the current responsible, if non-existent
-    if (isTransfer && !acc[sdr.nome]['POR VENDEDOR'][seller.nome]) acc[sdr.nome]['POR VENDEDOR'][seller.nome] = 0
+    if (isTransfer && !acc[sdr.nome]['POR VENDEDOR'][seller.nome]) acc[sdr.nome]['POR VENDEDOR'][seller.nome] = { recebido: 0, ganho: 0, perdido: 0 }
 
     // Defining goal information, if existent
     if (sdrSaleGoals) {
@@ -228,7 +233,7 @@ const getSDRTeamResults: NextApiHandler<GetResponse> = async (req, res) => {
     }
     if (wasTransferedWithinCurrentPeriod) {
       if (isTransfer) acc[sdr.nome].projetosEnviados.atingido += 1
-      if (isTransfer) acc[sdr.nome]['POR VENDEDOR'][seller.nome] += 1
+      if (isTransfer) acc[sdr.nome]['POR VENDEDOR'][seller.nome].recebido += 1
       if (isTransfer && isInbound) acc[sdr.nome].projetosEnviados.origem['INBOUND'] += 1
       if (isTransfer && !isInbound) acc[sdr.nome].projetosEnviados.origem['OUTBOUND'] += 1
     }
@@ -244,6 +249,9 @@ const getSDRTeamResults: NextApiHandler<GetResponse> = async (req, res) => {
       if (isInbound) acc[sdr.nome].projetosVendidos.origem['INBOUND'] += 1
       if (!isInbound) acc[sdr.nome].projetosVendidos.origem['OUTBOUND'] += 1
     }
+
+    if (!!signatureDate && seller) acc[sdr.nome]['POR VENDEDOR'][seller.nome].ganho += 1
+    if (!!lossDate && seller) acc[sdr.nome]['POR VENDEDOR'][seller.nome].perdido += 1
 
     return acc
   }, {})
@@ -282,6 +290,9 @@ type TSDRResultsProject = {
   idMarketing: TOpportunity['idMarketing']
   responsaveis: TOpportunity['responsaveis']
   ganho: TOpportunity['ganho']
+  perda: {
+    data: TOpportunity['perda']['data']
+  }
   valorProposta: TProposal['valor']
   potenciaPicoProposta: TProposal['potenciaPico']
   canalAquisicao: TClient['canalAquisicao']
@@ -313,6 +324,7 @@ async function getOpportunities({ opportunitiesCollection, responsiblesQuery, pa
       idMarketing: 1,
       responsaveis: 1,
       ganho: 1,
+      'perda.data': 1,
       'proposta.valor': 1,
       'proposta.potenciaPico': 1,
       'cliente.canalAquisicao': 1,
@@ -325,6 +337,7 @@ async function getOpportunities({ opportunitiesCollection, responsiblesQuery, pa
       idMarketing: r.idMarketing,
       responsaveis: r.responsaveis,
       ganho: r.ganho,
+      perda: r.perda,
       valorProposta: r.proposta[0] ? r.proposta[0].valor : 0,
       potenciaPicoProposta: r.proposta[0] ? r.proposta[0].potenciaPico : 0,
       canalAquisicao: r.cliente[0] ? r.cliente[0].canalAquisicao : 'NÃO DEFINIDO',
