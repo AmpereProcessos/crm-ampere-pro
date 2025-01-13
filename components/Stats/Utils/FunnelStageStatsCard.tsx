@@ -1,3 +1,4 @@
+import { getFormattedTextFromHoursAmount } from '@/lib/methods/dates'
 import { formatDecimalPlaces } from '@/lib/methods/formatting'
 import { TByFunnelResults } from '@/pages/api/stats/comercial-results/sales-funnels'
 import { formatToMoney } from '@/utils/methods'
@@ -35,7 +36,9 @@ function FunnelStageStatsCard({ stage }: FunnelStageStatsCardProps) {
           </div>
           <div className="flex items-center gap-1">
             <MdTimer color="rgb(37,99,235)" />
-            <p className="text-sm text-gray-500">{stage.tempoMedio ? `${formatDecimalPlaces(stage.tempoMedio, 0, 2)}h` : '-'}</p>
+            <p className="text-sm text-gray-500">
+              {stage.tempoMedio ? `${getFormattedTextFromHoursAmount({ hours: stage.tempoMedio, onlyComplete: true, reference: 'auto' })}` : '-'}
+            </p>
           </div>
           <div className="flex items-center gap-1">
             <VscChromeClose color="#F31559" />
