@@ -20,6 +20,12 @@ const GeneralOpportunityInteraction = z.object({
     invalid_type_error: 'Tipo não válido para a referência de parceiro.',
   }),
   tipoInteracao: OpportunityInteractionTypesEnum,
+  idProposta: z
+    .string({
+      invalid_type_error: 'Tipo não válido para a referência a proposta.',
+    })
+    .optional()
+    .nullable(),
   categoria: z.literal('INTERAÇÃO', {
     required_error: 'Categoria não informada.',
     invalid_type_error: 'Tipo não válido para a categoria da interação.',

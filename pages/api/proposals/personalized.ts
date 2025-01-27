@@ -87,6 +87,7 @@ const createProposalPersonalized: NextApiHandler<PostResponse> = async (req, res
     idParceiro: opportunityWithClient.idParceiro,
     categoria: 'INTERAÇÃO',
     tipoInteracao: 'ORÇAMENTOS/PROPOSTAS',
+    idProposta: insertResponse.insertedId.toString(),
     conteudo: `Criação de proposta (${proposal.nome}) para o cliente.`,
     autor: {
       id: session.user.id,
