@@ -1,8 +1,10 @@
 import { formatDateQuery } from '@/lib/methods/formatting'
+import { isValidNumber } from '@/lib/methods/validation'
 import connectToDatabase from '@/services/mongodb/crm-db-connection'
 import { apiHandler, validateAuthentication, validateAuthenticationWithSession } from '@/utils/api'
 import {
   PersonalizedOpportunityQuerySchema,
+  SimplifiedOpportunityProjection,
   SimplifiedOpportunityWithProposalProjection,
   TOpportunity,
   TOpportunitySimplifiedDTO,
@@ -17,29 +19,51 @@ const ParamSchema = z.string({
   required_error: 'Parâmetros de busca não informados.',
   invalid_type_error: 'Tipo não válido para os parâmetros de busca.',
 })
+const PageSchema = z.string({
+  required_error: 'Parâmetro de paginação não informado.',
+  invalid_type_error: 'Tipo não válido para o parâmetro de paginação.',
+})
 
+export type TOpportunitiesByFastSearch = {
+  opportunities: TOpportunitySimplifiedDTO[]
+  opportunitiesMatched: number
+  totalPages: number
+}
 type GetResponse = {
-  data: TOpportunity[]
+  data: TOpportunitiesByFastSearch
 }
 
 const getOpportunitiesBySearch: NextApiHandler<GetResponse> = async (req, res) => {
+  const PAGE_SIZE = 100
   await validateAuthentication(req, res)
-  const search = ParamSchema.parse(req.query.param)
+  const searchParam = ParamSchema.parse(req.query.searchParam)
+  const page = PageSchema.parse(req.query.page)
+
+  if (!isValidNumber(Number(page))) throw new createHttpError.BadRequest('Página inválida.')
 
   const db = await connectToDatabase(process.env.MONGODB_URI, 'crm')
   const collection: Collection<TOpportunity> = db.collection('opportunities')
 
-  const opportunities = await collection
-    .find(
-      {
-        dataExclusao: null,
-        $or: [{ nome: { $regex: search, $options: 'i' } }, { identificador: { $regex: search, $options: 'i' } }],
-      },
-      { projection: { nome: 1, identificador: 1, responsavel: 1 } }
-    )
-    .toArray()
-  if (opportunities.length == 0) throw new createHttpError.NotFound('Nenhuma oportunidade encontrada com esse parâmetro.')
-  return res.status(200).json({ data: opportunities })
+  const opportunityNameOrQuery: Filter<TOpportunity>[] = [{ nome: { $regex: searchParam, $options: 'i' } }, { nome: searchParam }]
+  const opportunityIdentificatorOrQuery: Filter<TOpportunity>[] = [{ identificador: { $regex: searchParam, $options: 'i' } }, { identificador: searchParam }]
+
+  const orQueries = [...opportunityNameOrQuery, ...opportunityIdentificatorOrQuery]
+
+  const query = { dataExclusao: null, $or: orQueries }
+  const skip = PAGE_SIZE * (Number(page) - 1)
+  const limit = PAGE_SIZE
+
+  const opportunitiesMatched = await collection.countDocuments(query)
+
+  if (opportunitiesMatched == 0) throw new createHttpError.NotFound('Nenhuma oportunidade encontrada com esse parâmetro.')
+
+  const opportunitiesResult = (await collection
+    .aggregate([{ $sort: { _id: -1 } }, { $match: query }, { $skip: skip }, { $limit: limit }, { $project: SimplifiedOpportunityProjection }])
+    .toArray()) as TOpportunitySimplifiedDTO[]
+
+  const totalPages = Math.ceil(opportunitiesMatched / PAGE_SIZE)
+
+  return res.status(200).json({ data: { opportunities: opportunitiesResult, opportunitiesMatched, totalPages } })
 }
 
 export type TOpportunitiesByFilterResult = {

@@ -45,7 +45,7 @@ type GetExistentClientParams = {
   collection: Collection<TClient>
   email?: string
   cpfCnpj?: string
-  phoneNumber: string
+  phoneNumber?: string
 }
 export async function getExistentClientByProperties({ collection, email, cpfCnpj, phoneNumber }: GetExistentClientParams) {
   try {

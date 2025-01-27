@@ -6,8 +6,6 @@ import connectToDatabase from '@/services/mongodb/crm-db-connection'
 import { Collection, Db, Filter, MatchKeysAndValues, ObjectId } from 'mongodb'
 import createHttpError from 'http-errors'
 
-import { isInvalidMongoId } from '@/lib/methods/validation'
-
 import { InsertClientSchema, TClient } from '@/utils/schemas/client.schema'
 import { getClientById, getClients, getExistentClientByProperties } from '@/repositories/clients/queries'
 import { insertClient, updateClient } from '@/repositories/clients/mutations'
@@ -131,7 +129,7 @@ async function validateEditAuthorization({ clientsCollection, projectsCollection
   console.log('ID REPRESENTATIVE', representativeId)
   // In case of no projectId provided, validating if the requester is the client's representative
   if (requesterId == representativeId) return true
-  if (!projectId || isInvalidMongoId(projectId)) throw new createHttpError.BadRequest('ID de projeto inválido.')
+  if (!projectId || typeof projectId != 'string' || !ObjectId.isValid(projectId)) throw new createHttpError.BadRequest('ID de projeto inválido.')
   // Validating if requester is either the client's representative or the project's responsible
   const responsibleId = await getProjectResponsible({ collection: projectsCollection, projectId: projectId as string })
   console.log('ID RESPONSIBLE', responsibleId)

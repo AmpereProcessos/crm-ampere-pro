@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { InverterFixationOptions, RoofTiles, StructureTypes, TechnicalAnalysisPendencyCategories, TechnicalAnalysisSolicitationTypes } from '../select-options'
+import { TechnicalAnalysisSolicitationTypes } from '../select-options'
 
 const EquipmentSchema = z.object({
   id: z.string({ invalid_type_error: 'Tipo não válido para ID do módulo.' }).optional().nullable(),
@@ -404,7 +404,7 @@ export const GeneralTechnicalAnalysisSchema = z.object({
       total: z.number({ invalid_type_error: 'Tipo não válido para o total do item de custo.' }).optional().nullable(),
       totalVendaSimples: z.number({ invalid_type_error: 'Tipo não válido para o total do item para venda simples.' }).optional().nullable(),
       totalVendaFaturavel: z.number({ invalid_type_error: 'Tipo não válido para o total do item para venda faturável.' }).optional().nullable(),
-      })
+    })
   ),
   alocacaoModulos: z.object({
     leste: z.number({ invalid_type_error: 'Tipo não válido para quantidade alocada de modelo para leste.' }).optional().nullable(),

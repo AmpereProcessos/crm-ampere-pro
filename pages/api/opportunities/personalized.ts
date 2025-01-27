@@ -89,7 +89,7 @@ const createClientOpportunityAndFunnelReferences: NextApiHandler<PostResponse> =
   // First, checking if client already existing in partner's client database
   const email = client.email || undefined
   const cpfCnpj = client.cpfCnpj || undefined
-  const phoneNumber = client.telefonePrimario
+  const phoneNumber = client.telefonePrimario || undefined
   const existingClientInDb = await getExistentClientByProperties({ collection: clientsCollection, email, cpfCnpj, phoneNumber })
   if (!!existingClientInDb) throw new createHttpError.BadRequest('Cliente já existente. Não é permitida a duplicação de clientes.')
 

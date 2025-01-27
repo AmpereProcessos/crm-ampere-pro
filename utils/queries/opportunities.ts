@@ -12,7 +12,7 @@ import {
 } from '../schemas/opportunity.schema'
 import { useQuery } from '@tanstack/react-query'
 import { TResultsExportsItem } from '@/pages/api/stats/comercial-results/results-export'
-import { TOpportunitiesByFilterResult } from '@/pages/api/opportunities/search'
+import { TOpportunitiesByFastSearch, TOpportunitiesByFilterResult } from '@/pages/api/opportunities/search'
 import { useState } from 'react'
 import { TOpportunitiesQueryOptions } from '@/pages/api/opportunities/query-options'
 
@@ -53,20 +53,29 @@ export function useOpportunityById({ opportunityId }: { opportunityId: string })
   })
 }
 
-async function fetchOpportunitiesBySearch({ param }: { param: string }) {
+export type TOpportunitiesByFastSearchParams = {
+  searchParam: string
+  page: number
+}
+async function fetchOpportunitiesBySearch({ searchParam, page }: TOpportunitiesByFastSearchParams): Promise<TOpportunitiesByFastSearch> {
   try {
-    if (param.trim().length < 3) return []
-    const { data } = await axios.get(`/api/opportunities/search?param=${param}`)
-    return data.data as TOpportunityDTO[]
+    if (searchParam.trim().length < 3)
+      return {
+        opportunities: [],
+        opportunitiesMatched: 0,
+        totalPages: 0,
+      }
+    const { data } = await axios.get(`/api/opportunities/search?searchParam=${searchParam}&page=${page}`)
+    return data.data as TOpportunitiesByFastSearch
   } catch (error) {
     throw error
   }
 }
 
-export function useOpportunitiesBySearch({ param }: { param: string }) {
+export function useOpportunitiesBySearch({ searchParam, page }: { searchParam: string; page: number }) {
   return useQuery({
-    queryKey: ['opportunities-by-search', param],
-    queryFn: async () => await fetchOpportunitiesBySearch({ param }),
+    queryKey: ['opportunities-by-search', searchParam],
+    queryFn: async () => await fetchOpportunitiesBySearch({ searchParam, page }),
   })
 }
 

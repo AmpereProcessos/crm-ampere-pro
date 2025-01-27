@@ -44,12 +44,11 @@ export const InsertClientSchema = z.object({
   }),
   cpfCnpj: z.string({ invalid_type_error: 'Tipo não válido para CPF/CNPJ do cliente.' }).optional().nullable(),
   rg: z.string({ invalid_type_error: 'Tipo não válido para RG do cliente.' }).optional().nullable(),
-  telefonePrimario: z
-    .string({
-      required_error: 'Telefone primário do cliente não informado.',
-      invalid_type_error: 'Tipo não válido para nome do cliente.',
-    })
-    .min(14, 'Formato inválido para telefone primáiro. O mínimo de caracteres é 14.'),
+  telefonePrimario: z.string({
+    required_error: 'Telefone primário do cliente não informado.',
+    invalid_type_error: 'Tipo não válido para nome do cliente.',
+  }),
+  // .min(14, 'Formato inválido para telefone primário. O mínimo de caracteres é 14.')
   telefoneSecundario: z.string().optional().nullable(),
   email: z.string({ invalid_type_error: 'Tipo não válido para email do cliente.' }).optional().nullable(),
   cep: z.string({ invalid_type_error: 'Tipo não válido para CEP do cliente.' }).optional().nullable(),

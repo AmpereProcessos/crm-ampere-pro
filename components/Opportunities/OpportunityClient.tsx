@@ -114,7 +114,7 @@ function OpportunityClient({ opportunityId, client, responsibles, session }: Opp
             <div className="flex flex-wrap items-center justify-center gap-2 lg:justify-start">
               <div className="flex items-center gap-1">
                 <FaRing size={15} />
-                <p className="text-[0.75rem] font-medium leading-none tracking-tight">{client.canalAquisicao}</p>
+                <p className="text-[0.75rem] font-medium leading-none tracking-tight">{client.estadoCivil}</p>
               </div>
             </div>
           </div>
@@ -162,50 +162,6 @@ function OpportunityClient({ opportunityId, client, responsibles, session }: Opp
             )}
           </div>
         </div>
-        {/* <div className="flex h-full w-full flex-col items-start justify-around gap-2 lg:w-[50%] lg:items-center">
-          <div className="flex w-full items-start justify-center gap-2 lg:justify-start">
-            <div className="flex h-[25px] min-h-[25px] w-[25px] min-w-[25px] items-center justify-center rounded-full border border-black p-1">
-              <FaUser size={12} />
-            </div>
-            <p className="font-Poppins text-sm text-gray-500">{client.nome}</p>
-          </div>
-          <div className="flex w-full items-start justify-center gap-2 lg:justify-start">
-            <div className="flex h-[25px] min-h-[25px] w-[25px] min-w-[25px] items-center justify-center rounded-full border border-black p-1">
-              <MdEmail size={12} />
-            </div>
-            <p className="break-all font-Poppins text-sm text-gray-500">{client.email || 'NÃO DEFINIDO'}</p>
-          </div>
-          <div className="flex w-full items-start justify-center gap-2 lg:justify-start">
-            <div className="flex h-[25px] min-h-[25px] w-[25px] min-w-[25px] items-center justify-center rounded-full border border-black p-1">
-              <BsTelephoneFill size={12} />
-            </div>
-            <p className="font-Poppins text-sm text-gray-500">{client.telefonePrimario}</p>
-          </div>
-        </div>
-        <div className="flex h-full w-full flex-col items-start justify-around gap-2 lg:w-[50%] lg:items-center">
-          <div className="flex w-full items-center justify-center gap-2 lg:justify-start">
-            <div className="flex h-[25px] min-h-[25px] w-[25px] min-w-[25px] items-center justify-center rounded-full border border-black p-1">
-              <HiIdentification size={12} />
-            </div>
-            <p className="font-Poppins text-sm text-gray-500">{client.cpfCnpj || 'NÃO DEFINIDO'}</p>
-          </div>
-          <div className="flex w-full items-center justify-center gap-2 lg:justify-start">
-            <div className="flex h-[25px] min-h-[25px] w-[25px] min-w-[25px] items-center justify-center rounded-full border border-black p-1">
-              <FaCity size={12} />
-            </div>
-            <p className="font-Poppins text-sm text-gray-500">
-              {client.cidade} ({client.uf})
-            </p>
-          </div>
-          <div className="flex w-full items-center justify-center gap-2 lg:justify-start">
-            <div className="flex h-[25px] min-h-[25px] w-[25px] min-w-[25px] items-center justify-center rounded-full border border-black p-1">
-              <GiPositionMarker size={12} />
-            </div>
-            <p className="font-Poppins text-sm text-gray-500">
-              {client.endereco || 'NÃO DEFINIDO'}, {client.bairro || 'NÃO DEFINIDO'}, Nº {client.numeroOuIdentificador}, CEP: {client.cep || 'NÃO DEFINIDO'}
-            </p>
-          </div>
-        </div> */}
       </div>
       <div className="flex w-full items-center justify-end gap-2">
         <div className={`flex items-center gap-1`}>
