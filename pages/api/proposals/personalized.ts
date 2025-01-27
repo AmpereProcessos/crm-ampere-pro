@@ -6,6 +6,7 @@ import connectToDatabase from '@/services/mongodb/crm-db-connection'
 import { apiHandler, validateAuthorization } from '@/utils/api'
 import { ProposalTemplates, ProposeTemplateOptions, getTemplateData } from '@/utils/integrations/general'
 import { InsertClientSchema, UpdateClientSchema } from '@/utils/schemas/client.schema'
+import { TOpportunityHistory } from '@/utils/schemas/opportunity-history.schema'
 import { InsertOpportunitySchema, OpportunityWithClientSchema, TOpportunity, UpdateOpportunitySchema } from '@/utils/schemas/opportunity.schema'
 import { InsertProposalSchema, TProposal, UpdateProposalSchema } from '@/utils/schemas/proposal.schema'
 import axios from 'axios'
@@ -49,6 +50,7 @@ const createProposalPersonalized: NextApiHandler<PostResponse> = async (req, res
   const db = await connectToDatabase(process.env.MONGODB_URI, 'crm')
   const proposalsCollection: Collection<TProposal> = db.collection('proposals')
   const opportunityCollection: Collection<TOpportunity> = db.collection('opportunities')
+  const opportunityHistoryCollection: Collection<TOpportunityHistory> = db.collection('opportunities-history')
 
   const insertResponse = await insertProposal({ collection: proposalsCollection, info: proposal, partnerId: partnerId || '' })
   if (!insertResponse.acknowledged) throw new createHttpError.InternalServerError('Oops, houve um erro desconhecido na criação da proposta.')
@@ -80,13 +82,29 @@ const createProposalPersonalized: NextApiHandler<PostResponse> = async (req, res
     return res.status(201).json({ data: { insertedId, fileUrl: url }, message: 'Proposta criada com sucesso !' })
   }
 
-  if (saveAsActive)
-    await updateOpportunity({
-      id: opportunityWithClient._id,
-      collection: opportunityCollection,
-      changes: { idPropostaAtiva: insertedId },
-      query: {},
-    })
+  await opportunityHistoryCollection.insertOne({
+    oportunidade: { id: opportunityWithClient._id, nome: opportunityWithClient.nome, identificador: opportunityWithClient.identificador },
+    idParceiro: opportunityWithClient.idParceiro,
+    categoria: 'INTERAÇÃO',
+    tipoInteracao: 'ORÇAMENTOS/PROPOSTAS',
+    conteudo: `Criação de proposta (${proposal.nome}) para o cliente.`,
+    autor: {
+      id: session.user.id,
+      nome: session.user.nome,
+      avatar_url: session.user.avatar_url,
+    },
+    dataInsercao: new Date().toISOString(),
+  })
+
+  await updateOpportunity({
+    id: opportunityWithClient._id,
+    collection: opportunityCollection,
+    changes: saveAsActive
+      ? { ultimaInteracao: { tipo: 'ORÇAMENTOS/PROPOSTAS', data: new Date().toISOString() }, idPropostaAtiva: insertedId }
+      : { ultimaInteracao: { tipo: 'ORÇAMENTOS/PROPOSTAS', data: new Date().toISOString() } },
+    query: {},
+  })
+
   return res.status(201).json({ data: { insertedId, fileUrl: undefined }, message: 'Proposta criada com sucesso !' })
 }
 

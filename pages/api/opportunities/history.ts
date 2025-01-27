@@ -8,6 +8,7 @@ import {
   TOpportunityHistoryEntity,
   UpdateOpportunityHistorySchema,
 } from '@/utils/schemas/opportunity-history.schema'
+import { TOpportunity } from '@/utils/schemas/opportunity.schema'
 import createHttpError from 'http-errors'
 import { Collection, Filter, ObjectId } from 'mongodb'
 import { NextApiHandler } from 'next'
@@ -27,9 +28,18 @@ const createOpportunityHistory: NextApiHandler<PostResponse> = async (req, res) 
 
   const db = await connectToDatabase(process.env.MONGODB_URI, 'crm')
   const opportunityHistoryCollection: Collection<TOpportunityHistory> = db.collection('opportunities-history')
+  const opportunitiesCollection: Collection<TOpportunity> = db.collection('opportunities')
 
   const insertResponse = await insertOpportunityHistory({ collection: opportunityHistoryCollection, info: opportunityHistory, partnerId: partnerId || '' })
   if (!insertResponse.acknowledged) throw new createHttpError.InternalServerError('Oops, houve um erro desconhecido na criação do histórico da oportunidade.')
+  // If opportunity history is an interaction, updating the opportunity with the latest interaction
+  if (opportunityHistory.categoria == 'INTERAÇÃO') {
+    await opportunitiesCollection.updateOne(
+      { _id: new ObjectId(opportunityHistory.oportunidade.id) },
+      { $set: { ultimaInteracao: { tipo: opportunityHistory.tipoInteracao, data: new Date().toISOString() } } }
+    )
+  }
+
   const insertedId = insertResponse.insertedId.toString()
 
   res.status(201).json({ data: { insertedId: insertedId }, message: 'Evento de oportunidade criado com sucesso.' })

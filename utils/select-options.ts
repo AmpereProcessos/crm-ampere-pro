@@ -1,11 +1,15 @@
-import { FaSolarPanel } from 'react-icons/fa'
+import { FaHouseUser, FaSolarPanel } from 'react-icons/fa'
 import {
   MdAssessment,
   MdEast,
   MdElectricMeter,
+  MdEmail,
+  MdHeadsetMic,
+  MdMessage,
   MdNorth,
   MdNorthEast,
   MdNorthWest,
+  MdOutlineFileOpen,
   MdOutlineSettingsInputComponent,
   MdSouth,
   MdSouthEast,
@@ -1671,3 +1675,11 @@ export const OrientationIcons = {
   SUL: MdSouth,
   SUDESTE: MdSouthEast,
 }
+
+export const OpportunityInteractionTypes = [
+  { id: 1, label: 'MENSAGEM', value: 'MENSAGEM', generalContent: 'Troca de mensagens com o cliente.', icon: MdMessage },
+  { id: 2, label: 'EMAIL', value: 'EMAIL', generalContent: 'Envio de e-mail para o cliente.', icon: MdEmail },
+  { id: 3, label: 'REUNIÃO', value: 'REUNIÃO', generalContent: 'Realização de reunião com o cliente.', icon: MdHeadsetMic },
+  { id: 4, label: 'VISITA', value: 'VISITA', generalContent: 'Realização de visita ao cliente.', icon: FaHouseUser },
+  { id: 5, label: 'ORÇAMENTOS/PROPOSTAS', value: 'ORÇAMENTOS/PROPOSTAS', generalContent: 'Criação/envio de proposta para o cliente.', icon: MdOutlineFileOpen },
+]

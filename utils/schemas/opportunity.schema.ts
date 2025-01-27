@@ -6,6 +6,7 @@ import { TActivityDTO } from './activities.schema'
 import { TProposal } from './proposal.schema'
 import { TFunnelReference, TFunnelReferenceDTO } from './funnel-reference.schema'
 import { TPartnerSimplifiedDTO } from './partner.schema'
+import { OpportunityInteractionTypesEnum } from './opportunity-history.schema'
 export const ElectricalInstallationGroupsSchema = z.union([z.literal('RESIDENCIAL'), z.literal('COMERCIAL'), z.literal('INDUSTRIAL'), z.literal('RURAL')], {
   required_error: 'Grupo da instalação elétrica não informado.',
   invalid_type_error: 'Tipo não válido para grupo da instalação elétrica.',
@@ -133,6 +134,17 @@ export const GeneralOpportunitySchema = z.object({
     avatar_url: z.string().optional().nullable(),
   }),
   idMarketing: z.string().optional().nullable(),
+  ultimaInteracao: z
+    .object({
+      tipo: OpportunityInteractionTypesEnum,
+      data: z
+        .string({ invalid_type_error: 'Tipo não válido para data de última interação.' })
+        .datetime({ message: 'Tipo não válido para data de última interação.' })
+        .optional()
+        .nullable(),
+    })
+    .optional()
+    .nullable(),
   dataExclusao: z.string().datetime().optional().nullable(),
   dataInsercao: z.string().datetime(),
   // adicionar contrato e solicitação de contrato futuramente
@@ -457,6 +469,17 @@ export const OpportunityWithClientSchema = z.object({
     .string({
       required_error: 'ID de referência do Lead Marketing não fornecido.',
       invalid_type_error: 'Tipo não válido para o ID de referência do Lead Marketing',
+    })
+    .optional()
+    .nullable(),
+  ultimaInteracao: z
+    .object({
+      tipo: OpportunityInteractionTypesEnum,
+      data: z
+        .string({ invalid_type_error: 'Tipo não válido para data de última interação.' })
+        .datetime({ message: 'Tipo não válido para data de última interação.' })
+        .optional()
+        .nullable(),
     })
     .optional()
     .nullable(),

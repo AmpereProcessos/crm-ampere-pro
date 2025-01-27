@@ -17,6 +17,9 @@ import NewOpportunityNoteMenu from '../OpportunityHistories/NewNoteMenu'
 import { TActivityDTO } from '@/utils/schemas/activities.schema'
 import OpportunityActivity from '../Cards/OpportunityActivity'
 import OpportunityHistoryCard from '../Cards/OpportunityHistory'
+import { AnimatePresence } from 'framer-motion'
+import NewOpportunityInteractionMenu from '../OpportunityHistories/NewInteractionMenu'
+import { AiFillInteraction } from 'react-icons/ai'
 type GetInitialState = {
   type?: 'ATIVIDADE' | 'ANOTAÇÃO'
   project: {
@@ -41,8 +44,11 @@ function OpportunityHistory({ session, opportunityName, opportunityId, opportuni
   // In open activities using activities with no conclusion date defined
   const openActivities = historyAndActivities?.filter((h) => !!(h as TActivityDTO).responsaveis && !(h as TActivityDTO).dataConclusao)
   // In history, considering both opportunity history and closed opportunities
-  const history = historyAndActivities?.filter((h) => (h as TOpportunityHistoryDTO).categoria == 'ANOTAÇÃO' || !!(h as TActivityDTO).dataConclusao)
-  const [view, setView] = useState<'NEW NOTE' | 'NEW ACTIVITY' | null>(null)
+  const history = historyAndActivities?.filter(
+    (h) =>
+      (h as TOpportunityHistoryDTO).categoria == 'ANOTAÇÃO' || (h as TOpportunityHistoryDTO).categoria == 'INTERAÇÃO' || !!(h as TActivityDTO).dataConclusao
+  )
+  const [view, setView] = useState<'NEW NOTE' | 'NEW ACTIVITY' | 'NEW INTERACTION' | null>(null)
   console.log('ACTIVITIES', openActivities)
   console.log('HISTORY', history)
   return (
@@ -50,6 +56,15 @@ function OpportunityHistory({ session, opportunityName, opportunityId, opportuni
       <div className="flex h-fit flex-col items-center justify-between border-b border-gray-200 pb-2 lg:h-[40px] lg:flex-row">
         <h1 className="font-bold text-black">Histórico</h1>
         <div className="mt-2 flex w-full grow flex-col items-center justify-end gap-2 lg:mt-0 lg:w-fit lg:flex-row">
+          <button
+            onClick={() => {
+              setView((prev) => (prev == 'NEW INTERACTION' ? null : 'NEW INTERACTION'))
+            }}
+            className="flex w-full items-center justify-center gap-2 rounded bg-[#15599a] p-1.5 font-medium text-white hover:bg-blue-800 lg:w-fit"
+          >
+            <AiFillInteraction />
+            <p className="text-xs font-normal">Nova Interação</p>
+          </button>
           <button
             onClick={() => {
               setView((prev) => (prev == 'NEW ACTIVITY' ? null : 'NEW ACTIVITY'))
@@ -70,16 +85,26 @@ function OpportunityHistory({ session, opportunityName, opportunityId, opportuni
           </button>
         </div>
       </div>
-      {view == 'NEW ACTIVITY' ? (
-        <NewOpportunityActivityMenu session={session} opportunity={{ id: opportunityId, nome: opportunityName }} closeMenu={() => setView(null)} />
-      ) : null}
-      {view == 'NEW NOTE' ? (
-        <NewOpportunityNoteMenu
-          session={session}
-          opportunity={{ id: opportunityId, nome: opportunityName, identificador: opportunityIdentifier }}
-          closeMenu={() => setView(null)}
-        />
-      ) : null}
+      <AnimatePresence>
+        {view == 'NEW ACTIVITY' ? (
+          <NewOpportunityActivityMenu session={session} opportunity={{ id: opportunityId, nome: opportunityName }} closeMenu={() => setView(null)} />
+        ) : null}
+        {view == 'NEW NOTE' ? (
+          <NewOpportunityNoteMenu
+            session={session}
+            opportunity={{ id: opportunityId, nome: opportunityName, identificador: opportunityIdentifier }}
+            closeMenu={() => setView(null)}
+          />
+        ) : null}
+        {view == 'NEW INTERACTION' ? (
+          <NewOpportunityInteractionMenu
+            session={session}
+            opportunity={{ id: opportunityId, nome: opportunityName, identificador: opportunityIdentifier }}
+            closeMenu={() => setView(null)}
+          />
+        ) : null}
+      </AnimatePresence>
+
       <div className="flex w-full grow flex-col gap-2">
         {isLoading ? <LoadingComponent /> : null}
         {isError ? <ErrorComponent /> : null}

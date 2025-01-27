@@ -1,3 +1,4 @@
+import { GeneralVisibleHiddenExitMotionVariants } from '@/utils/constants'
 import { useMutationWithFeedback } from '@/utils/mutations/general-hook'
 import { createOpportunityHistory } from '@/utils/mutations/opportunity-history'
 import { TOpportunityHistory } from '@/utils/schemas/opportunity-history.schema'
@@ -53,40 +54,38 @@ function NewOpportunityNoteMenu({ session, opportunity, closeMenu }: NewOpportun
     affectedQueryKey: [],
   })
   return (
-    <AnimatePresence>
-      <motion.div variants={variants} initial="hidden" animate="visible" exit="exit" className="flex w-full flex-col gap-2 p-2">
-        <div className="flex w-full flex-col gap-1">
-          <label htmlFor={'opportunity-note'} className={'font-sans font-bold  text-[#353432]'}>
-            ANOTAÇÃO
-          </label>
-          <textarea
-            id={'opportunity-note'}
-            placeholder="Preencha aqui uma anotação sobre a oportunidade..."
-            value={newNoteHolder.conteudo}
-            onChange={(e) => {
-              setNewNoteHolder((prev) => ({ ...prev, conteudo: e.target.value }))
-            }}
-            className="min-h-[80px] w-full resize-none rounded-md border border-gray-200  p-3 text-center text-sm shadow-sm outline-none"
-          />
-        </div>
-        <div className="flex w-full items-center justify-between">
-          <button
-            onClick={() => closeMenu()}
-            className="whitespace-nowrap rounded bg-gray-500 px-4 py-2 text-sm font-medium text-white shadow disabled:bg-gray-500 disabled:text-white enabled:hover:bg-gray-800 enabled:hover:text-white"
-          >
-            FECHAR
-          </button>
-          <button
-            disabled={isPending}
-            // @ts-ignore
-            onClick={() => handleCreateOpportunityHistory({ info: newNoteHolder })}
-            className="whitespace-nowrap rounded bg-gray-900 px-4 py-2 text-sm font-medium text-white shadow disabled:bg-gray-500 disabled:text-white enabled:hover:bg-gray-800 enabled:hover:text-white"
-          >
-            CRIAR ANOTAÇÃO
-          </button>
-        </div>
-      </motion.div>
-    </AnimatePresence>
+    <motion.div variants={GeneralVisibleHiddenExitMotionVariants} initial="hidden" animate="visible" exit="exit" className="flex w-full flex-col gap-2 p-2">
+      <div className="flex w-full flex-col gap-1">
+        <label htmlFor={'opportunity-note'} className={'font-sans font-bold  text-[#353432]'}>
+          ANOTAÇÃO
+        </label>
+        <textarea
+          id={'opportunity-note'}
+          placeholder="Preencha aqui uma anotação sobre a oportunidade..."
+          value={newNoteHolder.conteudo}
+          onChange={(e) => {
+            setNewNoteHolder((prev) => ({ ...prev, conteudo: e.target.value }))
+          }}
+          className="min-h-[80px] w-full resize-none rounded-md border border-gray-200  p-3 text-center text-sm shadow-sm outline-none"
+        />
+      </div>
+      <div className="flex w-full items-center justify-between">
+        <button
+          onClick={() => closeMenu()}
+          className="whitespace-nowrap rounded bg-gray-500 px-4 py-2 text-sm font-medium text-white shadow disabled:bg-gray-500 disabled:text-white enabled:hover:bg-gray-800 enabled:hover:text-white"
+        >
+          FECHAR
+        </button>
+        <button
+          disabled={isPending}
+          // @ts-ignore
+          onClick={() => handleCreateOpportunityHistory({ info: newNoteHolder })}
+          className="whitespace-nowrap rounded bg-gray-900 px-4 py-2 text-sm font-medium text-white shadow disabled:bg-gray-500 disabled:text-white enabled:hover:bg-gray-800 enabled:hover:text-white"
+        >
+          CRIAR ANOTAÇÃO
+        </button>
+      </div>
+    </motion.div>
   )
 }
 
