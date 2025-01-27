@@ -46,8 +46,11 @@ const getOpportunitiesBySearch: NextApiHandler<GetResponse> = async (req, res) =
 
   const opportunityNameOrQuery: Filter<TOpportunity>[] = [{ nome: { $regex: searchParam, $options: 'i' } }, { nome: searchParam }]
   const opportunityIdentificatorOrQuery: Filter<TOpportunity>[] = [{ identificador: { $regex: searchParam, $options: 'i' } }, { identificador: searchParam }]
-
-  const orQueries = [...opportunityNameOrQuery, ...opportunityIdentificatorOrQuery]
+  const opportunityClientPhoneOrQuery: Filter<TOpportunity>[] = [
+    { 'cliente.telefonePrimario': { $regex: searchParam, $options: 'i' } },
+    { 'cliente.telefonePrimario': searchParam },
+  ]
+  const orQueries = [...opportunityNameOrQuery, ...opportunityIdentificatorOrQuery, ...opportunityClientPhoneOrQuery]
 
   const query = { dataExclusao: null, $or: orQueries }
   const skip = PAGE_SIZE * (Number(page) - 1)

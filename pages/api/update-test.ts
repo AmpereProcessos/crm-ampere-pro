@@ -14,41 +14,42 @@ import { TService } from '@/utils/schemas/service.schema'
 import { TSaleGoal } from '@/utils/schemas/sale-goal.schema'
 import dayjs from 'dayjs'
 import { TProposal, TProposalDTO } from '@/utils/schemas/proposal.schema'
+import { TClient } from '@/utils/schemas/client.schema'
 
 type PostResponse = any
 
-const UserGroupEquivalents = {
-  '1': '66562a2a812707dbf9f04830',
-  '2': '66562a2a812707dbf9f04831',
-  '3': '66562a2a812707dbf9f04832',
-  '4': '66562a2a812707dbf9f04833',
-}
-
-const LossReasonsEquivalents = {
-  'NÃO QUER O PRODUTO/SERVIÇO': 'NÃO QUER O PRODUTO/SERVIÇO',
-  'RESCISÃO CONTRATUAL': 'RESCISÃO CONTRATUAL',
-  'COMPROU COM OUTRA EMPRESA': 'FECHOU COM OUTRA EMPRESA (GERAL)',
-  'CLIENTE NÃO RESPONDE': 'CLIENTE NÃO RESPONDE',
-  'OPTOU POR NÃO REALIZAR O PROJETO': 'NÃO QUER O PRODUTO/SERVIÇO',
-  'DEMORA NO ATENDIMENTO': 'DEMORA NO ATENDIMENTO',
-  'FECHOU COM OUTRA EMPRESA (GERAL)': 'FECHOU COM OUTRA EMPRESA (GERAL)',
-  'NÃO GOSTOU DO PORTIFÓLIO (PRODUTOS/SERVIÇOS)': 'NÃO GOSTOU DO PORTIFÓLIO (PRODUTOS/SERVIÇOS)',
-  'ACHOU O PREÇO ALTO': 'ACHOU O PREÇO ALTO',
-  'PROBLEMAS COM LIBERAÇÃO DE CRÉDITO': 'PROBLEMAS COM LIBERAÇÃO DE CRÉDITO',
-}
-
-const PlansEquivalents = {
-  'MANUTENÇÃO SIMPLES': '661d828de3446bbfeff1bcf4',
-  'PLANO SOL': '660efd7cb535065ae08d459f',
-  'PLANO SOL PLUS': '660ff9f61285da49d6dc201e',
-}
-
 const migrate: NextApiHandler<PostResponse> = async (req, res) => {
   // const dateWith30DaysInterval = dayjs().subtract(30, 'days').toDate()
-  // const crmDb = await connectToCRMDatabase(process.env.MONGODB_URI, 'crm')
+  const crmDb = await connectToCRMDatabase(process.env.MONGODB_URI, 'crm')
 
-  // const opportunitiesCollection = crmDb.collection<TOpportunity>('opportunities')
+  const opportunitiesCollection = crmDb.collection<TOpportunity>('opportunities')
+  const clientsCollection = crmDb.collection<TClient>('clients')
 
+  const clients = await clientsCollection.find({}).toArray()
+  const opportunities = await opportunitiesCollection.find({}).toArray()
+
+  const bulkwriteOpportunities = opportunities.map((opportunity, index, arr) => {
+    console.log(`PROCESSANDO ${index + 1} DE ${arr.length}`)
+    const client = clients.find((client) => client._id.toString() === opportunity.idCliente)
+    // if (!client) console.log('OPPORTUNITY WITHOUT CLIENT', opportunity._id.toString(), opportunity.nome, opportunity.idCliente)
+    return {
+      updateOne: {
+        filter: { _id: new ObjectId(opportunity._id) },
+        update: {
+          $set: {
+            cliente: {
+              nome: client?.nome || '',
+              cpfCnpj: client?.cpfCnpj || '',
+              telefonePrimario: client?.telefonePrimario || '',
+              email: client?.email || '',
+              canalAquisicao: client?.canalAquisicao || '',
+            },
+          },
+        },
+      },
+    }
+  })
+  const bulkwriteResponse = await opportunitiesCollection.bulkWrite(bulkwriteOpportunities)
   // const addFields = { idAsString: { $toString: '$_id' } }
   // const lookup = { from: 'proposals', localField: 'idAsString', foreignField: 'oportunidade.id', as: 'proposta' }
 
@@ -100,7 +101,7 @@ const migrate: NextApiHandler<PostResponse> = async (req, res) => {
   // console.log(bulkwrite.length)
   // return res.json(bkResponse)
 
-  return res.json('DESATIVADA')
+  return res.json(bulkwriteResponse)
 }
 export default apiHandler({
   GET: migrate,

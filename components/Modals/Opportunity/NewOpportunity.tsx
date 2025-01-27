@@ -82,6 +82,13 @@ function NewOpportunity({ session, closeModal, opportunityCreators, funnels }: N
     responsaveis: [],
     segmento: 'RESIDENCIAL',
     idCliente: '',
+    cliente: {
+      nome: '',
+      cpfCnpj: '',
+      telefonePrimario: '',
+      email: '',
+      canalAquisicao: CustomersAcquisitionChannels[0].value,
+    },
     localizacao: {
       cep: null,
       uf: '',

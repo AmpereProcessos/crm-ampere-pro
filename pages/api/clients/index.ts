@@ -9,6 +9,7 @@ import createHttpError from 'http-errors'
 import { InsertClientSchema, TClient } from '@/utils/schemas/client.schema'
 import { getClientById, getClients, getExistentClientByProperties } from '@/repositories/clients/queries'
 import { insertClient, updateClient } from '@/repositories/clients/mutations'
+import { TOpportunity } from '@/utils/schemas/opportunity.schema'
 type PostResponse = {
   data: {
     insertedId: string
@@ -97,12 +98,23 @@ const editClients: NextApiHandler<PutResponse> = async (req, res) => {
 
   const db = await connectToDatabase(process.env.MONGODB_URI, 'crm')
   const clientsCollection: Collection<TClient> = db.collection('clients')
-
+  const opportunitiesCollection: Collection<TOpportunity> = db.collection('opportunities')
   const client = await getClientById({ collection: clientsCollection, id: id, query: partnerQuery })
   if (!client) throw new createHttpError.NotFound('Cliente não encontrado.')
 
   const updateResponse = await updateClient({ id: id, collection: clientsCollection, changes: changes, query: partnerQuery })
 
+  const oppportunitiesUpdateArr = Object.entries({
+    'cliente.nome': changes.nome,
+    'cliente.cpfCnpj': changes.cpfCnpj,
+    'cliente.telefonePrimario': changes.telefonePrimario,
+    'cliente.email': changes.email,
+    'cliente.canalAquisicao': changes.canalAquisicao,
+  }).filter(([key, value]) => value != null && value != undefined)
+
+  const oppportunitiesUpdate = oppportunitiesUpdateArr.reduce((acc: { [key: string]: any }, [key, value]) => ({ ...acc, [key]: value }), {})
+  console.log('OPPORTUNITIES UPDATE', oppportunitiesUpdate)
+  if (oppportunitiesUpdateArr.length > 0) await opportunitiesCollection.updateMany({ idCliente: id }, { $set: oppportunitiesUpdate })
   if (!updateResponse.acknowledged) throw new createHttpError.InternalServerError('Oops, houve um erro desconhecido na atualização do cliente.')
   return res.status(201).json({ data: 'Cliente alterado com sucesso !', message: 'Cliente alterado com sucesso !' })
 }

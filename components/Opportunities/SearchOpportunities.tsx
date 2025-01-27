@@ -16,7 +16,8 @@ import { useDebounceMemo } from '@/lib/hooks'
 import { MdDashboard } from 'react-icons/md'
 import Avatar from '../utils/Avatar'
 import { formatNameAsInitials } from '@/lib/methods/formatting'
-import { FaUser } from 'react-icons/fa'
+import { FaPhone, FaUser } from 'react-icons/fa'
+import { useDebounce } from 'usehooks-ts'
 
 function SearchOpportunities() {
   const [searchMenuIsOpen, setSearchMenuIsOpen] = useState<boolean>(false)
@@ -42,15 +43,18 @@ type FilterMenuProps = {
   closeMenu: () => void
 }
 function FilterMenu({ closeMenu }: FilterMenuProps) {
-  const [searchParams, setSearchParams] = useState<TOpportunitiesByFastSearchParams>({ searchParam: '', page: 1 })
-  const debouncedFilter = useDebounceMemo(searchParams, 1000)
-  const { data: opportunitiesResult, isLoading, isError, isSuccess, isFetching, error } = useOpportunitiesBySearch(debouncedFilter)
+  const [queryParams, setSearchParams] = useState<TOpportunitiesByFastSearchParams>({ searchParam: '', page: 1 })
+  const debouncedSearchParam = useDebounce(queryParams.searchParam, 1000)
+  const finalQueryParams = {
+    searchParam: debouncedSearchParam,
+    page: queryParams.page,
+  }
+  const { data: opportunitiesResult, isLoading, isError, isSuccess, isFetching, error } = useOpportunitiesBySearch(finalQueryParams)
 
   const opportunities = opportunitiesResult?.opportunities
   const opportunitiesShowing = opportunities?.length || 0
   const opportunitiesMatched = opportunitiesResult?.opportunitiesMatched || 0
   const totalPages = opportunitiesResult?.totalPages || 0
-
   return (
     <Sheet open onOpenChange={closeMenu}>
       <SheetContent className="sm:max-w-1/2 w-full lg:w-1/2">
@@ -62,13 +66,13 @@ function FilterMenu({ closeMenu }: FilterMenuProps) {
           <TextInput
             label="NOME DO TITULAR"
             showLabel={false}
-            value={searchParams.searchParam}
+            value={queryParams.searchParam}
             placeholder={'Preenha aqui o nome do titular para filtro.'}
             handleChange={(value) => setSearchParams((prev) => ({ ...prev, searchParam: value }))}
             width={'100%'}
           />
           <GeneralQueryPaginationMenu
-            activePage={searchParams.page}
+            activePage={queryParams.page}
             selectPage={(page) => setSearchParams((prev) => ({ ...prev, page }))}
             totalPages={totalPages}
             itemsMatched={opportunitiesMatched}
@@ -129,6 +133,10 @@ function OpportunityCard({ opportunity }: { opportunity: TOpportunitySimplifiedD
           <div className="flex items-center gap-1">
             <MdDashboard size={12} />
             <h1 className="py-0.5 text-center text-[0.6rem] font-medium italic text-primary/80">{opportunity.tipo.titulo}</h1>
+          </div>
+          <div className="flex items-center gap-1">
+            <FaPhone size={12} />
+            <h1 className="py-0.5 text-center text-[0.6rem] font-medium italic text-primary/80">{opportunity.cliente?.telefonePrimario}</h1>
           </div>
           <div className="flex items-center gap-1">
             <FaUser size={12} />

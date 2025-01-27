@@ -74,7 +74,7 @@ async function fetchOpportunitiesBySearch({ searchParam, page }: TOpportunitiesB
 
 export function useOpportunitiesBySearch({ searchParam, page }: { searchParam: string; page: number }) {
   return useQuery({
-    queryKey: ['opportunities-by-search', searchParam],
+    queryKey: ['opportunities-by-search', searchParam, page],
     queryFn: async () => await fetchOpportunitiesBySearch({ searchParam, page }),
   })
 }

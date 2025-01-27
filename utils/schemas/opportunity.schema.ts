@@ -74,8 +74,24 @@ export const GeneralOpportunitySchema = z.object({
     .union([z.literal('RESIDENCIAL'), z.literal('RURAL'), z.literal('COMERCIAL'), z.literal('INDUSTRIAL')])
     .optional()
     .nullable(),
-  idCliente: z.string(),
-  idPropostaAtiva: z.string().optional().nullable(),
+  idCliente: z.string({
+    required_error: 'ID de referência do cliente não informado.',
+    invalid_type_error: 'Tipo não válido para ID de referência do cliente.',
+  }),
+  cliente: z.object({
+    nome: z.string({ required_error: 'Nome do cliente não informado.', invalid_type_error: 'Tipo não válido para nome do cliente.' }),
+    cpfCnpj: z
+      .string({ required_error: 'CPF ou CNPJ do cliente não informado.', invalid_type_error: 'Tipo não válido para CPF ou CNPJ do cliente.' })
+      .optional()
+      .nullable(),
+    telefonePrimario: z.string({ required_error: 'Telefone do cliente não informado.', invalid_type_error: 'Tipo não válido para telefone do cliente.' }),
+    email: z.string({ required_error: 'Email do cliente não informado.', invalid_type_error: 'Tipo não válido para email do cliente.' }).optional().nullable(),
+    canalAquisicao: z.string({
+      required_error: 'Canal de aquisição do cliente não informado.',
+      invalid_type_error: 'Tipo não válido para canal de aquisição do cliente.',
+    }),
+  }),
+  idPropostaAtiva: z.string({ invalid_type_error: 'Tipo não válido para ID de referência da proposta ativa.' }).optional().nullable(),
   localizacao: z.object({
     cep: z.string().optional().nullable(),
     uf: z.string(),
@@ -455,7 +471,7 @@ export const OpportunityWithClientSchema = z.object({
 export type TOpportunity = z.infer<typeof GeneralOpportunitySchema>
 export type TOpportunitySimplified = Pick<
   TOpportunity,
-  'nome' | 'idParceiro' | 'identificador' | 'tipo' | 'idMarketing' | 'responsaveis' | 'ganho' | 'perda' | 'dataInsercao'
+  'nome' | 'idParceiro' | 'identificador' | 'tipo' | 'idMarketing' | 'responsaveis' | 'cliente' | 'ganho' | 'perda' | 'dataInsercao'
 >
 export const SimplifiedOpportunityProjection = {
   _id: 1,
@@ -465,6 +481,7 @@ export const SimplifiedOpportunityProjection = {
   idParceiro: 1,
   idMarketing: 1,
   responsaveis: 1,
+  cliente: 1,
   ganho: 1,
   perda: 1,
   dataInsercao: 1,

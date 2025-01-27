@@ -58,7 +58,17 @@ const createClientOpportunityAndFunnelReferences: NextApiHandler<PostResponse> =
     // Creating opportunity with idCliente referencing the clientId provided
     const insertOpportunityResponse = await insertOpportunity({
       collection: opportunitiesCollection,
-      info: { ...opportunity, idCliente: clientId },
+      info: {
+        ...opportunity,
+        cliente: {
+          nome: client.nome,
+          cpfCnpj: client.cpfCnpj,
+          telefonePrimario: client.telefonePrimario,
+          email: client.email,
+          canalAquisicao: client.canalAquisicao,
+        },
+        idCliente: clientId,
+      },
       partnerId: partnerId || '',
     })
     if (!insertOpportunityResponse.acknowledged) throw new createHttpError.InternalServerError('Oops, houve um erro desconhecido ao criar oportunidade.')
@@ -99,7 +109,17 @@ const createClientOpportunityAndFunnelReferences: NextApiHandler<PostResponse> =
   console.log('ID DO CLIENTE', insertedClientId)
   const insertOpportunityResponse = await insertOpportunity({
     collection: opportunitiesCollection,
-    info: { ...opportunity, idCliente: insertedClientId },
+    info: {
+      ...opportunity,
+      cliente: {
+        nome: client.nome,
+        cpfCnpj: client.cpfCnpj,
+        telefonePrimario: client.telefonePrimario,
+        email: client.email,
+        canalAquisicao: client.canalAquisicao,
+      },
+      idCliente: insertedClientId,
+    },
     partnerId: partnerId || '',
   })
   if (!insertOpportunityResponse.acknowledged) throw new createHttpError.InternalServerError('Oops, houve um erro desconhecido ao criar oportunidade.')
