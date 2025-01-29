@@ -133,6 +133,12 @@ export const GeneralOpportunitySchema = z.object({
     nome: z.string(),
     avatar_url: z.string().optional().nullable(),
   }),
+  idIndicacao: z
+    .string({
+      invalid_type_error: 'Tipo não válido para o ID de referência da indicação.',
+    })
+    .optional()
+    .nullable(),
   idMarketing: z.string().optional().nullable(),
   ultimaInteracao: z
     .object({
@@ -242,6 +248,12 @@ export const InsertOpportunitySchema = z.object({
     }),
     avatar_url: z.string().optional().nullable(),
   }),
+  idIndicacao: z
+    .string({
+      invalid_type_error: 'Tipo não válido para o ID de referência da indicação.',
+    })
+    .optional()
+    .nullable(),
   idMarketing: z
     .string({
       required_error: 'ID de referência do Lead Marketing não fornecido.',
@@ -353,6 +365,12 @@ export const UpdateOpportunitySchema = z.object({
     }),
     avatar_url: z.string().optional().nullable(),
   }),
+  idIndicacao: z
+    .string({
+      invalid_type_error: 'Tipo não válido para o ID de referência da indicação.',
+    })
+    .optional()
+    .nullable(),
   idMarketing: z
     .string({
       required_error: 'ID de referência do Lead Marketing não fornecido.',
@@ -483,6 +501,12 @@ export const OpportunityWithClientSchema = z.object({
     })
     .optional()
     .nullable(),
+  idIndicacao: z
+    .string({
+      invalid_type_error: 'Tipo não válido para o ID de referência da indicação.',
+    })
+    .optional()
+    .nullable(),
   dataExclusao: z
     .string({ invalid_type_error: 'Tipo não válido para data de exclusão.' })
     .datetime({ message: 'Tipo não válido para data de exclusão.' })
@@ -494,7 +518,7 @@ export const OpportunityWithClientSchema = z.object({
 export type TOpportunity = z.infer<typeof GeneralOpportunitySchema>
 export type TOpportunitySimplified = Pick<
   TOpportunity,
-  'nome' | 'idParceiro' | 'identificador' | 'tipo' | 'idMarketing' | 'responsaveis' | 'cliente' | 'ganho' | 'perda' | 'dataInsercao'
+  'nome' | 'idParceiro' | 'identificador' | 'tipo' | 'idMarketing' | 'idIndicacao' | 'responsaveis' | 'cliente' | 'ganho' | 'perda' | 'dataInsercao'
 >
 export const SimplifiedOpportunityProjection = {
   _id: 1,
@@ -503,6 +527,7 @@ export const SimplifiedOpportunityProjection = {
   tipo: 1,
   idParceiro: 1,
   idMarketing: 1,
+  idIndicacao: 1,
   responsaveis: 1,
   cliente: 1,
   ganho: 1,
@@ -564,6 +589,7 @@ export const SimplifiedOpportunityWithProposalProjection = {
   tipo: 1,
   responsaveis: 1,
   idMarketing: 1,
+  idIndicacao: 1,
   'ganho.data': 1,
   'perda.data': 1,
   'proposta.nome': 1,

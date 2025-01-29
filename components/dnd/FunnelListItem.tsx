@@ -16,6 +16,7 @@ import { getDateDifference } from '@/lib/methods/extracting'
 import { Session } from 'next-auth'
 import OpportunityActivitiesModal from '../Activities/OpportunityActivitiesModal'
 import { FaBolt } from 'react-icons/fa'
+import { Share2 } from 'lucide-react'
 
 function getTagColor(activitiesByStatus: TOpportunityDTOWithFunnelReferenceAndActivitiesByStatus['statusAtividades']) {
   const overDue = activitiesByStatus['EM ATRASO']
@@ -42,6 +43,7 @@ interface FunnelListItemProps {
     tipo: string
     responsaveis: TOpportunityDTO['responsaveis']
     idMarketing?: string
+    idIndicacao?: string
     statusAtividades?: TOpportunityDTOWithFunnelReferenceAndActivitiesByStatus['statusAtividades']
     proposta?: {
       nome: string
@@ -97,6 +99,7 @@ function FunnelListItem({ item, session, index }: FunnelListItemProps) {
               <div className="flex items-center gap-1">
                 <h1 className="text-xs font-bold text-[#fead41]">{item.identificador}</h1>
                 {item.idMarketing ? <BsFillMegaphoneFill color="#3e53b2" /> : null}
+                {item.idIndicacao ? <Share2 size={15} color="#06b6d4" /> : null}
               </div>
               <Link href={`/comercial/oportunidades/id/${item.idOportunidade}`}>
                 <h1 className="font-bold text-[#353432] hover:text-blue-400">{item.nome}</h1>

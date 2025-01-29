@@ -19,6 +19,7 @@ interface IFunnelListProps {
     identificador?: string
     tipo: string
     responsaveis: TOpportunityDTO['responsaveis']
+    idIndicacao?: string
     idMarketing?: string
     statusAtividades?: TOpportunityDTOWithFunnelReferenceAndActivitiesByStatus['statusAtividades']
     proposta?: {

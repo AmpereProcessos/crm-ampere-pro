@@ -22,6 +22,7 @@ const GeneralClientSchema = z.object({
   deficiencia: z.string().optional().nullable(),
   canalAquisicao: z.string(),
   dataInsercao: z.string(),
+  idIndicacao: z.string({ invalid_type_error: 'Tipo não válido para o ID de referência da indicação.' }).optional().nullable(),
   idMarketing: z.string().optional().nullable(),
   indicador: z.object({
     nome: z.string().optional().nullable(),
@@ -71,6 +72,7 @@ export const InsertClientSchema = z.object({
   dataInsercao: z
     .string({ required_error: 'Data de inserção não informada.', invalid_type_error: 'Tipo não válido para data de inserção.' })
     .datetime({ message: 'Formato inválido para data de inserção.' }),
+  idIndicacao: z.string({ invalid_type_error: 'Tipo não válido para o ID de referência da indicação.' }).optional().nullable(),
   idMarketing: z.string().optional().nullable(),
   indicador: z.object({
     nome: z.string().optional().nullable(),
@@ -124,6 +126,7 @@ export const UpdateClientSchema = z.object({
   dataInsercao: z
     .string({ required_error: 'Data de inserção não informada.', invalid_type_error: 'Tipo não válido para data de inserção.' })
     .datetime({ message: 'Formato inválido para data de inserção.' }),
+  idIndicacao: z.string({ invalid_type_error: 'Tipo não válido para o ID de referência da indicação.' }).optional().nullable(),
   idMarketing: z.string().optional().nullable(),
   indicador: z.object({
     nome: z.string().optional().nullable(),
@@ -177,6 +180,7 @@ export const ClientDTOSchema = z.object({
   dataInsercao: z
     .string({ required_error: 'Data de inserção não informada.', invalid_type_error: 'Tipo não válido para data de inserção.' })
     .datetime({ message: 'Formato inválido para data de inserção.' }),
+  idIndicacao: z.string({ invalid_type_error: 'Tipo não válido para o ID de referência da indicação.' }).optional().nullable(),
   idMarketing: z.string().optional().nullable(),
   indicador: z.object({
     nome: z.string().optional().nullable(),

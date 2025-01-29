@@ -27,6 +27,7 @@ import { Session } from 'next-auth'
 import OpportunityWonFlag from './OpportunityWonFlag'
 import OpportunityContractRequestedFlag from './OpportunityContractRequestedFlag'
 import OpportunityClient from './OpportunityClient'
+import { Share2 } from 'lucide-react'
 
 export type TOpportunityBlockMode = 'PROPOSES' | 'FILES' | 'TECHNICAL ANALYSIS'
 
@@ -73,6 +74,12 @@ function OpportunityPage({ session, opportunityId }: OpportunityPageProps) {
                     <p className="text-sm font-bold italic leading-none tracking-tight">VINDO DE MARKETING</p>
                   </div>
                 ) : null}
+                {opportunity.idIndicacao ? (
+                  <div className="flex items-center gap-1 rounded border border-cyan-500 p-1 text-cyan-500">
+                    <Share2 size={16} />
+                    <p className="text-sm font-bold italic leading-none tracking-tight">VINDO DE INDICAÇÃO</p>
+                  </div>
+                ) : null}
               </div>
               <OpportunityContractRequestedFlag requestDate={opportunity.ganho.dataSolicitacao} />
               <OpportunityWonFlag wonDate={opportunity.ganho.data} />
@@ -85,7 +92,7 @@ function OpportunityPage({ session, opportunityId }: OpportunityPageProps) {
             ) : null}
             <div className="flex w-full flex-col items-center justify-between gap-2 lg:flex-row">
               <div className="flex w-full flex-wrap items-center justify-start gap-2 lg:grow">
-                <h1 className="text-primary/80 py-0.5 text-center text-[0.6rem] font-medium italic ">RESPONSÁVEIS</h1>
+                <h1 className="py-0.5 text-center text-[0.6rem] font-medium italic text-primary/80 ">RESPONSÁVEIS</h1>
                 {opportunity.responsaveis.map((resp) => (
                   <div className="flex items-center gap-1">
                     <Avatar width={20} height={20} url={resp.avatar_url || undefined} fallback={formatNameAsInitials(resp.nome)} />
