@@ -5,7 +5,9 @@ import { getOpportunitiesByQuery, getOpportunityById } from '@/repositories/oppo
 import { getOpenActivities } from '@/repositories/opportunity-history/queries'
 import connectToDatabase from '@/services/mongodb/crm-db-connection'
 import { apiHandler, validateAuthentication, validateAuthorization } from '@/utils/api'
+import { INDICATION_OPPORTUNITY_WIN_CREDITS_PERCENTAGE } from '@/utils/constants'
 import { TActivity, TActivityDTO } from '@/utils/schemas/activities.schema'
+import { TConectaIndication } from '@/utils/schemas/conecta-indication.schema'
 
 import { TFunnelReference } from '@/utils/schemas/funnel-reference.schema'
 import { TOpportunityHistory } from '@/utils/schemas/opportunity-history.schema'
@@ -16,12 +18,14 @@ import {
   TOpportunityDTOWithClientAndPartnerAndFunnelReferences,
   TOpportunitySimplifiedWithProposalAndActivitiesAndFunnels,
 } from '@/utils/schemas/opportunity.schema'
+import { TProposal } from '@/utils/schemas/proposal.schema'
 import { identifyChanges } from '@/utils/update-tracking/methods'
 import dayjs from 'dayjs'
 import createHttpError from 'http-errors'
 import { Collection, Document, Filter, MatchKeysAndValues, ObjectId, WithId } from 'mongodb'
 import { NextApiHandler } from 'next'
 import { z } from 'zod'
+import { TClient } from '../../../utils/schemas/client.schema'
 
 export const config = {
   maxDuration: 25,
@@ -197,17 +201,69 @@ const editOpportunity: NextApiHandler<PutResponse> = async (req, res) => {
 
   const db = await connectToDatabase(process.env.MONGODB_URI, 'crm')
   const opportunitiesCollection: Collection<TOpportunity> = db.collection('opportunities')
-  const opportunity = await getOpportunityById({ collection: opportunitiesCollection, id: id, query: partnerQuery })
-  if (!opportunity) throw new createHttpError.NotFound('Oportunidade não encontrada.')
+  const proposalsCollection: Collection<TProposal> = db.collection('proposals')
+  const clientsCollection: Collection<TClient> = db.collection('clients')
+  const conectaIndicationsCollection: Collection<TConectaIndication> = db.collection('conecta-indications')
+
+  const previousOpportunity = await getOpportunityById({ collection: opportunitiesCollection, id: id, query: partnerQuery })
+  if (!previousOpportunity) throw new createHttpError.NotFound('Oportunidade não encontrada.')
 
   // Validating if user either: has global opportunity scope, its one of the opportunity responsibles or has one of the opportunity responsibles within his scope
-  const hasEditAuthorizationForOpportunity = !userScope || opportunity.responsaveis.some((opResp) => opResp.id == userId || userScope.includes(opResp.id))
+  const hasEditAuthorizationForOpportunity =
+    !userScope || previousOpportunity.responsaveis.some((opResp) => opResp.id == userId || userScope.includes(opResp.id))
   if (!hasEditAuthorizationForOpportunity) throw new createHttpError.Unauthorized('Você não possui permissão para alterar informações dessa oportunidade.')
 
   // const updatesMade = identifyChanges({ previousData: opportunity, newData: changes })
   // console.log('UPDATES MADE', JSON.stringify(updatesMade))
   const updateResponse = await updateOpportunity({ id: id, collection: opportunitiesCollection, changes: changes, query: partnerQuery })
 
+  // In case opportunity came from indication, checking for possible integration updates
+  if (!!previousOpportunity.idIndicacao) {
+    const updatedOpportunity = await getOpportunityById({ collection: opportunitiesCollection, id: id, query: partnerQuery })
+    if (!updatedOpportunity) throw new createHttpError.NotFound('Oportunidade não encontrada.')
+    // In case opportunity wasnt lost, but changes update this status, updating the indication
+    if (!previousOpportunity.perda.data && !!updatedOpportunity.perda?.data) {
+      console.log(`ADD LOSS - OPPORTUNITY OF ID ${previousOpportunity._id.toString()} UPDATE TO INDICATION ${previousOpportunity.idIndicacao}`)
+
+      await conectaIndicationsCollection.updateOne(
+        { _id: new ObjectId(previousOpportunity.idIndicacao) },
+        { $set: { 'oportunidade.dataPerda': updatedOpportunity.perda?.data } }
+      )
+    }
+    // In case opportunity was lost, but changes update this status, updating the indication
+    if (!!previousOpportunity.perda.data && !updatedOpportunity.perda?.data) {
+      console.log(`REMOVE LOSS - OPPORTUNITY OF ID ${previousOpportunity._id.toString()} UPDATE TO INDICATION ${previousOpportunity.idIndicacao}`)
+
+      await conectaIndicationsCollection.updateOne({ _id: new ObjectId(previousOpportunity.idIndicacao) }, { $set: { 'oportunidade.dataPerda': null } })
+    }
+
+    // In case opportunity wasnt won, but changes update this status, updating the indication
+    if (!previousOpportunity.ganho.data && !!updatedOpportunity.ganho?.data) {
+      console.log(`ADD WIN - OPPORTUNITY OF ID ${previousOpportunity._id.toString()} UPDATE TO INDICATION ${previousOpportunity.idIndicacao}`)
+
+      const winningProposalId = updatedOpportunity.ganho?.idProposta
+      if (!winningProposalId) throw new createHttpError.InternalServerError('Oops, houve um erro desconhecido na atualização da oportunidade.')
+      const winningProposal = await proposalsCollection.findOne({ _id: new ObjectId(winningProposalId) })
+      if (!winningProposal) throw new createHttpError.InternalServerError('Oops, houve um erro desconhecido na atualização da oportunidade.')
+
+      const addIndicationCredits = Math.ceil(winningProposal.valor * INDICATION_OPPORTUNITY_WIN_CREDITS_PERCENTAGE)
+
+      await conectaIndicationsCollection.updateOne(
+        { _id: new ObjectId(previousOpportunity.idIndicacao) },
+        { $set: { 'oportunidade.dataGanho': updatedOpportunity.ganho?.data, creditosRecebidos: addIndicationCredits } }
+      )
+      await clientsCollection.updateOne({ _id: new ObjectId(updatedOpportunity.idCliente) }, { $inc: { 'conecta.creditos': addIndicationCredits } })
+    }
+    // In case opportunity was won, but changes update this status, updating the indication
+    if (previousOpportunity.ganho.data && !updatedOpportunity.ganho?.data) {
+      console.log(`REMOVE WIN - OPPORTUNITY OF ID ${previousOpportunity._id.toString()} UPDATE TO INDICATION ${previousOpportunity.idIndicacao}`)
+
+      await conectaIndicationsCollection.updateOne(
+        { _id: new ObjectId(previousOpportunity.idIndicacao) },
+        { $set: { 'oportunidade.dataGanho': null, creditosRecebidos: 0 } }
+      )
+    }
+  }
   if (!updateResponse.acknowledged) throw new createHttpError.InternalServerError('Oops, houve um erro desconhecido na atualização da oportunidade.')
   return res.status(201).json({ data: 'Oportunidade alterada com sucesso !', message: 'Oportunidade alterada com sucesso !' })
 }

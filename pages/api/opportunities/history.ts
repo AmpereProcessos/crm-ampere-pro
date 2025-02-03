@@ -2,6 +2,7 @@ import { insertOpportunityHistory, updateOpportunityHistory } from '@/repositori
 import { getOpportunityHistory, getOpportunityHistoryById } from '@/repositories/opportunity-history/queries'
 import connectToDatabase from '@/services/mongodb/crm-db-connection'
 import { apiHandler, validateAuthorization } from '@/utils/api'
+import { TConectaIndication } from '@/utils/schemas/conecta-indication.schema'
 import {
   InsertOpportunityHistorySchema,
   TOpportunityHistory,
@@ -29,6 +30,7 @@ const createOpportunityHistory: NextApiHandler<PostResponse> = async (req, res) 
   const db = await connectToDatabase(process.env.MONGODB_URI, 'crm')
   const opportunityHistoryCollection: Collection<TOpportunityHistory> = db.collection('opportunities-history')
   const opportunitiesCollection: Collection<TOpportunity> = db.collection('opportunities')
+  const conectaIndicationsCollection: Collection<TConectaIndication> = db.collection('conecta-indications')
 
   const insertResponse = await insertOpportunityHistory({ collection: opportunityHistoryCollection, info: opportunityHistory, partnerId: partnerId || '' })
   if (!insertResponse.acknowledged) throw new createHttpError.InternalServerError('Oops, houve um erro desconhecido na criação do histórico da oportunidade.')
@@ -37,6 +39,11 @@ const createOpportunityHistory: NextApiHandler<PostResponse> = async (req, res) 
     await opportunitiesCollection.updateOne(
       { _id: new ObjectId(opportunityHistory.oportunidade.id) },
       { $set: { ultimaInteracao: { tipo: opportunityHistory.tipoInteracao, data: new Date().toISOString() } } }
+    )
+    // Updating opportunity s indication (if applicable) in case of first interaction
+    await conectaIndicationsCollection.updateOne(
+      { 'oportunidade.id': opportunityHistory.oportunidade.id, 'oportunidade.dataInteracao': null },
+      { $set: { 'oportunidade.dataInteracao': new Date().toISOString() } }
     )
   }
 

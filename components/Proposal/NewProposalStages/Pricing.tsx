@@ -22,7 +22,7 @@ type PricingProps = {
 function Pricing({ opportunity, infoHolder, setInfoHolder, moveToNextStage, moveToPreviousStage, session }: PricingProps) {
   const userHasPricingEditPermission = session?.user.permissoes.precos.editar
   const userHasPricingViewPermission = session.user.permissoes.precos.visualizar
-  const alterationLimit = userHasPricingEditPermission ? undefined : infoHolder.idMetodologiaPrecificacao == '66912b265a6c1f632a3970dd' ? 0 : 0.02
+  const alterationLimit = userHasPricingEditPermission ? undefined : infoHolder.idMetodologiaPrecificacao == '66912b265a6c1f632a3970dd' ? 0.04 : 0.02
 
   const [pricing, setPricing] = useState<TPricingItem[]>(infoHolder.precificacao)
   const [addNewPriceItemModalIsOpen, setAddNewPriceItemModalIsOpen] = useState<boolean>(false)

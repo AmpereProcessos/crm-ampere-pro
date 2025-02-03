@@ -7,6 +7,8 @@ import { TProposalPremisses } from './schemas/proposal.schema'
 import { easeBackInOut } from 'd3-ease'
 import { TProductItem, TServiceItem } from './schemas/kits.schema'
 
+export const INDICATION_OPPORTUNITY_WIN_CREDITS_PERCENTAGE = 0.01
+
 export const Months = [
   {
     id: 1,

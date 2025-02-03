@@ -6,6 +6,7 @@ import connectToDatabase from '@/services/mongodb/crm-db-connection'
 import { apiHandler, validateAuthorization } from '@/utils/api'
 import { ProposalTemplates, ProposeTemplateOptions, getTemplateData } from '@/utils/integrations/general'
 import { InsertClientSchema, UpdateClientSchema } from '@/utils/schemas/client.schema'
+import { TConectaIndication } from '@/utils/schemas/conecta-indication.schema'
 import { TOpportunityHistory } from '@/utils/schemas/opportunity-history.schema'
 import { InsertOpportunitySchema, OpportunityWithClientSchema, TOpportunity, UpdateOpportunitySchema } from '@/utils/schemas/opportunity.schema'
 import { InsertProposalSchema, TProposal, UpdateProposalSchema } from '@/utils/schemas/proposal.schema'
@@ -51,6 +52,7 @@ const createProposalPersonalized: NextApiHandler<PostResponse> = async (req, res
   const proposalsCollection: Collection<TProposal> = db.collection('proposals')
   const opportunityCollection: Collection<TOpportunity> = db.collection('opportunities')
   const opportunityHistoryCollection: Collection<TOpportunityHistory> = db.collection('opportunities-history')
+  const conectaIndicationsCollection: Collection<TConectaIndication> = db.collection('conecta-indications')
 
   const insertResponse = await insertProposal({ collection: proposalsCollection, info: proposal, partnerId: partnerId || '' })
   if (!insertResponse.acknowledged) throw new createHttpError.InternalServerError('Oops, houve um erro desconhecido na criação da proposta.')
@@ -106,6 +108,12 @@ const createProposalPersonalized: NextApiHandler<PostResponse> = async (req, res
     query: {},
   })
 
+  // Updating indication (if applicable) in case of first interaction
+  if (!!opportunityWithClient.idIndicacao)
+    await conectaIndicationsCollection.updateOne(
+      { _id: new ObjectId(opportunityWithClient.idIndicacao), 'oportunidade.dataInteracao': null },
+      { $set: { 'oportunidade.dataInteracao': new Date().toISOString() } }
+    )
   return res.status(201).json({ data: { insertedId, fileUrl: undefined }, message: 'Proposta criada com sucesso !' })
 }
 

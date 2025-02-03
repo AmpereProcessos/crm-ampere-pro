@@ -25,9 +25,20 @@ const GeneralClientSchema = z.object({
   idIndicacao: z.string({ invalid_type_error: 'Tipo não válido para o ID de referência da indicação.' }).optional().nullable(),
   idMarketing: z.string().optional().nullable(),
   indicador: z.object({
+    id: z.string().optional().nullable(),
     nome: z.string().optional().nullable(),
     contato: z.string().optional().nullable(),
   }),
+  conecta: z
+    .object({
+      usuario: z.string({ required_error: 'Usuário não informado.', invalid_type_error: 'Tipo não válido para o usuário.' }),
+      senha: z.string({ required_error: 'Senha não informada.', invalid_type_error: 'Tipo não válido para a senha.' }),
+      email: z.string({ invalid_type_error: 'Tipo não válido para o email do usuário.' }).optional().nullable(),
+      avatar_url: z.string({ invalid_type_error: 'Tipo não válido para avatar do usuário.' }).optional().nullable(),
+      creditos: z.number({ invalid_type_error: 'Tipo não válido para o número de créditos do usuário.' }).optional().nullable(),
+    })
+    .optional()
+    .nullable(),
   autor: z.object({
     id: z.string(),
     nome: z.string(),
@@ -75,9 +86,20 @@ export const InsertClientSchema = z.object({
   idIndicacao: z.string({ invalid_type_error: 'Tipo não válido para o ID de referência da indicação.' }).optional().nullable(),
   idMarketing: z.string().optional().nullable(),
   indicador: z.object({
+    id: z.string().optional().nullable(),
     nome: z.string().optional().nullable(),
     contato: z.string().optional().nullable(),
   }),
+  conecta: z
+    .object({
+      usuario: z.string({ required_error: 'Usuário não informado.', invalid_type_error: 'Tipo não válido para o usuário.' }),
+      senha: z.string({ required_error: 'Senha não informada.', invalid_type_error: 'Tipo não válido para a senha.' }),
+      email: z.string({ invalid_type_error: 'Tipo não válido para o email do usuário.' }).optional().nullable(),
+      avatar_url: z.string({ invalid_type_error: 'Tipo não válido para avatar do usuário.' }).optional().nullable(),
+      creditos: z.number({ invalid_type_error: 'Tipo não válido para o número de créditos do usuário.' }).optional().nullable(),
+    })
+    .optional()
+    .nullable(),
   autor: z.object({
     id: z.string(),
     nome: z.string(),
@@ -132,6 +154,16 @@ export const UpdateClientSchema = z.object({
     nome: z.string().optional().nullable(),
     contato: z.string().optional().nullable(),
   }),
+  conecta: z
+    .object({
+      usuario: z.string({ required_error: 'Usuário não informado.', invalid_type_error: 'Tipo não válido para o usuário.' }),
+      senha: z.string({ required_error: 'Senha não informada.', invalid_type_error: 'Tipo não válido para a senha.' }),
+      email: z.string({ invalid_type_error: 'Tipo não válido para o email do usuário.' }).optional().nullable(),
+      avatar_url: z.string({ invalid_type_error: 'Tipo não válido para avatar do usuário.' }).optional().nullable(),
+      creditos: z.number({ invalid_type_error: 'Tipo não válido para o número de créditos do usuário.' }).optional().nullable(),
+    })
+    .optional()
+    .nullable(),
   autor: z.object({
     id: z.string(),
     nome: z.string(),
@@ -183,9 +215,20 @@ export const ClientDTOSchema = z.object({
   idIndicacao: z.string({ invalid_type_error: 'Tipo não válido para o ID de referência da indicação.' }).optional().nullable(),
   idMarketing: z.string().optional().nullable(),
   indicador: z.object({
+    id: z.string().optional().nullable(),
     nome: z.string().optional().nullable(),
     contato: z.string().optional().nullable(),
   }),
+  conecta: z
+    .object({
+      usuario: z.string({ required_error: 'Usuário não informado.', invalid_type_error: 'Tipo não válido para o usuário.' }),
+      senha: z.string({ required_error: 'Senha não informada.', invalid_type_error: 'Tipo não válido para a senha.' }),
+      email: z.string({ invalid_type_error: 'Tipo não válido para o email do usuário.' }).optional().nullable(),
+      avatar_url: z.string({ invalid_type_error: 'Tipo não válido para avatar do usuário.' }).optional().nullable(),
+      creditos: z.number({ invalid_type_error: 'Tipo não válido para o número de créditos do usuário.' }).optional().nullable(),
+    })
+    .optional()
+    .nullable(),
   autor: z.object({
     id: z.string(),
     nome: z.string(),

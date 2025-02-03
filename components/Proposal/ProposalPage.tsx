@@ -33,7 +33,7 @@ import { renderCategoryIcon } from '@/lib/methods/rendering'
 import { usePricingMethods } from '@/utils/queries/pricing-methods'
 import { TPricingMethodDTO } from '@/utils/schemas/pricing-method.schema'
 import { useMutationWithFeedback } from '@/utils/mutations/general-hook'
-import { setOpportunityActiveProposal, updateWinningProposal } from '@/utils/mutations/opportunities'
+import { setOpportunityActiveProposal, updateWinningProposal, winOpportunity } from '@/utils/mutations/opportunities'
 
 import { copyToClipboard } from '@/lib/hooks'
 import { handleDownload } from '@/lib/methods/download'
@@ -116,6 +116,16 @@ function ProposalPage({ proposalId, session }: ProposalPageProps) {
                   </div>
                 </Link>
               </div>
+              {/* <button
+                onClick={() =>
+                  winOpportunity({
+                    proposalId,
+                    opportunityId: proposal.oportunidade.id,
+                  })
+                }
+              >
+                DAR GANHO TESTE
+              </button> */}
               <WinBlock
                 opportunityId={proposal.oportunidade.id}
                 proposalId={proposalId}
