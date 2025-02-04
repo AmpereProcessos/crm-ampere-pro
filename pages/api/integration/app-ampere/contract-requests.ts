@@ -42,6 +42,7 @@ const createRequest: NextApiHandler<PostResponse> = async (req, res) => {
   var sellerName = SellersInApp.find((x) => calculateStringSimilarity((requestInfo.nomeVendedor || 'NÃO DEFINIDO')?.toUpperCase(), x) > 80)
   var insiderName: string | undefined = undefined
 
+  
   const sdr = responsaveis.find((r) => r.papel == 'SDR' || r.papel == 'ANALISTA TÉCNICO')
   // In case there is an insider for the opportunity
   if (sdr) {
@@ -58,11 +59,13 @@ const createRequest: NextApiHandler<PostResponse> = async (req, res) => {
   })
   if (!insertContractRequestResponse.acknowledged) throw new createHttpError.BadRequest('Oops, houve um erro desconhecido ao solicitar o contrato')
   const insertedId = insertContractRequestResponse.insertedId.toString()
+
   // Updating the opportunity with the inserted contract request id
-  await crmOpportunitiesCollection.updateOne(
+  const updateOpportunityResponse = await crmOpportunitiesCollection.updateOne(
     { _id: new ObjectId(opportunityId) },
     { $set: { 'ganho.idProposta': requestInfo.idPropostaCRM, 'ganho.idSolicitacao': insertedId, 'ganho.dataSolicitacao': new Date().toISOString() } }
   )
+
   return res.status(201).json({ data: { insertedId }, message: 'Solicitação de contrato criada com sucesso !' })
 }
 

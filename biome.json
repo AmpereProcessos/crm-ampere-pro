@@ -1,0 +1,15 @@
+{
+	"linter": {
+		"rules": {
+			"suspicious": {
+				"noExplicitAny": "warn"
+			},
+			"correctness": {
+				"useExhaustiveDependencies": "warn"
+			},
+			"style": {
+				"useTemplate": "warn"
+			}
+		}
+	}
+}
