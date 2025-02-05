@@ -1,217 +1,289 @@
-import React, { useState } from 'react'
-import { useSession } from 'next-auth/react'
-import toast from 'react-hot-toast'
-import axios from 'axios'
-import dayjs from 'dayjs'
+import React, { useState } from "react";
+import { useSession } from "next-auth/react";
+import toast from "react-hot-toast";
+import axios from "axios";
+import dayjs from "dayjs";
 
-import { Sidebar } from '@/components/Sidebar'
-import Avatar from '@/components/utils/Avatar'
-import LoadingComponent from '@/components/utils/LoadingComponent'
-import LoadingPage from '@/components/utils/LoadingPage'
+import { Sidebar } from "@/components/Sidebar";
+import Avatar from "@/components/utils/Avatar";
+import LoadingComponent from "@/components/utils/LoadingComponent";
+import LoadingPage from "@/components/utils/LoadingPage";
 
-import { GrSend } from 'react-icons/gr'
-import { BsDownload, BsFillGearFill } from 'react-icons/bs'
+import { GrSend } from "react-icons/gr";
+import { BsDownload, BsFillGearFill } from "react-icons/bs";
 
-import { ImPower } from 'react-icons/im'
-import { MdAttachMoney, MdCreate, MdSell } from 'react-icons/md'
-import { FaPercentage } from 'react-icons/fa'
+import { ImPower } from "react-icons/im";
+import { MdAttachMoney, MdCreate, MdSell } from "react-icons/md";
+import { FaPercentage } from "react-icons/fa";
 
-import OverallResults from '@/components/Stats/Results/Overall'
-import InProgressResults from '@/components/Stats/Results/InProgress'
-import SalesTeamResults from '@/components/Stats/Results/SalesTeam'
-import SDRTeamResults from '@/components/Stats/Results/SDRTeam'
-import EditPromoter from '@/components/Modals/EditPromoter'
-import DateInput from '@/components/Inputs/DateInput'
-import MultipleSelectInput from '@/components/Inputs/MultipleSelectInput'
+import OverallResults from "@/components/Stats/Results/Overall";
+import InProgressResults from "@/components/Stats/Results/InProgress";
+import SalesTeamResults from "@/components/Stats/Results/SalesTeam";
+import SDRTeamResults from "@/components/Stats/Results/SDRTeam";
+import EditPromoter from "@/components/Modals/EditPromoter";
+import DateInput from "@/components/Inputs/DateInput";
+import MultipleSelectInput from "@/components/Inputs/MultipleSelectInput";
 
-import { getExcelFromJSON } from '@/lib/methods/excel-utils'
-import { getErrorMessage } from '@/lib/methods/errors'
-import { formatDateInputChange } from '@/lib/methods/formatting'
+import { getExcelFromJSON } from "@/lib/methods/excel-utils";
+import { getErrorMessage } from "@/lib/methods/errors";
+import { formatDateInputChange } from "@/lib/methods/formatting";
 
-import { formatDateForInput, getFirstDayOfMonth, getLastDayOfMonth } from '@/utils/methods'
-import { useSalePromoters } from '@/utils/queries/users'
-import { TUserDTOWithSaleGoals } from '@/utils/schemas/user.schema'
-import { fetchResultsExports } from '@/utils/queries/stats/exports'
-import { usePartnersSimplified } from '@/utils/queries/partners'
-import { useComercialResultsQueryOptions } from '@/utils/queries/stats'
-import RegionResults from '@/components/Stats/Results/Region'
-import Sellers from '@/components/Stats/Results/Sellers'
+import {
+	formatDateForInput,
+	getFirstDayOfMonth,
+	getLastDayOfMonth,
+} from "@/utils/methods";
+import { useSalePromoters } from "@/utils/queries/users";
+import type { TUserDTOWithSaleGoals } from "@/utils/schemas/user.schema";
+import { fetchResultsExports } from "@/utils/queries/stats/exports";
+import { usePartnersSimplified } from "@/utils/queries/partners";
+import { useComercialResultsQueryOptions } from "@/utils/queries/stats";
+import RegionResults from "@/components/Stats/Results/Region";
+import Sellers from "@/components/Stats/Results/Sellers";
 
-const currentDate = new Date()
-const periodStr = dayjs(currentDate).format('MM/YYYY')
-const firstDayOfMonth = getFirstDayOfMonth(currentDate.getFullYear(), currentDate.getMonth()).toISOString()
-const lastDayOfMonth = getLastDayOfMonth(currentDate.getFullYear(), currentDate.getMonth()).toISOString()
+const currentDate = new Date();
+const periodStr = dayjs(currentDate).format("MM/YYYY");
+const firstDayOfMonth = getFirstDayOfMonth(
+	currentDate.getFullYear(),
+	currentDate.getMonth(),
+).toISOString();
+const lastDayOfMonth = getLastDayOfMonth(
+	currentDate.getFullYear(),
+	currentDate.getMonth(),
+).toISOString();
 
 function getSaleGoals(promoter: TUserDTOWithSaleGoals) {
-  const saleGoals = promoter.metas
-  if (!saleGoals || saleGoals.length == 0) return undefined
+	const saleGoals = promoter.metas;
+	if (!saleGoals || saleGoals.length === 0) return undefined;
 
-  const currentPeriodSaleGoals = saleGoals.find((saleGoal) => saleGoal.periodo == periodStr)
-  if (!currentPeriodSaleGoals) return undefined
+	const currentPeriodSaleGoals = saleGoals.find(
+		(saleGoal) => saleGoal.periodo === periodStr,
+	);
+	if (!currentPeriodSaleGoals) return undefined;
 
-  return currentPeriodSaleGoals.metas
+	return currentPeriodSaleGoals.metas;
 }
 
 type TQueryFilters = {
-  period: { after: string; before: string }
-  responsibles: string[] | null
-  partners: string[] | null
-  projectTypes: string[] | null
-}
+	period: { after: string; before: string };
+	responsibles: string[] | null;
+	partners: string[] | null;
+	projectTypes: string[] | null;
+};
 
 function ComercialResults() {
-  const { data: session, status } = useSession({ required: true })
-  const [queryFilters, setQueryFilters] = useState<TQueryFilters>({
-    period: { after: firstDayOfMonth, before: lastDayOfMonth },
-    responsibles: null,
-    partners: null,
-    projectTypes: null,
-  })
+	console.log("TRIGGER");
+	const { data: session, status } = useSession({ required: true });
+	const [queryFilters, setQueryFilters] = useState<TQueryFilters>({
+		period: { after: firstDayOfMonth, before: lastDayOfMonth },
+		responsibles: null,
+		partners: null,
+		projectTypes: null,
+	});
 
-  const [editModal, setEditModal] = useState<{ isOpen: boolean; promoter: TUserDTOWithSaleGoals | null }>({
-    isOpen: false,
-    promoter: null,
-  })
-  const { data: queryOptions, isSuccess: queryOptionsSuccess } = useComercialResultsQueryOptions()
-  async function handleDataExport() {
-    const loadingToastId = toast.loading('Carregando...')
-    try {
-      const results = await fetchResultsExports({
-        after: queryFilters.period.after,
-        before: queryFilters.period.before,
-        responsibles: queryFilters.responsibles,
-        partners: queryFilters.partners,
-        projectTypes: queryFilters.projectTypes,
-      })
-      getExcelFromJSON(results, 'RESULTADOS_COMERCIAIS')
-      toast.dismiss(loadingToastId)
-      return toast.success('Exportação feita com sucesso !')
-    } catch (error) {
-      console.log(error)
-      toast.dismiss(loadingToastId)
-      const msg = getErrorMessage(error)
-      return toast.error(msg)
-    }
-  }
+	const [editModal, setEditModal] = useState<{
+		isOpen: boolean;
+		promoter: TUserDTOWithSaleGoals | null;
+	}>({
+		isOpen: false,
+		promoter: null,
+	});
+	const { data: queryOptions, isSuccess: queryOptionsSuccess } =
+		useComercialResultsQueryOptions();
+	async function handleDataExport() {
+		const loadingToastId = toast.loading("Carregando...");
+		try {
+			const results = await fetchResultsExports({
+				after: queryFilters.period.after,
+				before: queryFilters.period.before,
+				responsibles: queryFilters.responsibles,
+				partners: queryFilters.partners,
+				projectTypes: queryFilters.projectTypes,
+			});
+			getExcelFromJSON(results, "RESULTADOS_COMERCIAIS");
+			toast.dismiss(loadingToastId);
+			return toast.success("Exportação feita com sucesso !");
+		} catch (error) {
+			console.log(error);
+			toast.dismiss(loadingToastId);
+			const msg = getErrorMessage(error);
+			return toast.error(msg);
+		}
+	}
 
-  if (status != 'authenticated') return <LoadingPage />
-  return (
-    <div className="flex h-full flex-col md:flex-row">
-      <Sidebar session={session} />
-      <div className="flex w-full max-w-full grow flex-col overflow-x-hidden bg-[#f8f9fa] p-6">
-        <div className="flex w-full flex-col items-center justify-between gap-4 border-b border-black pb-2 lg:flex-row lg:items-end">
-          <h1 className="text-center font-Raleway text-xl font-black text-black lg:text-start lg:text-2xl">ACOMPANHAMENTO DE RESULTADOS</h1>
-          <div className="flex items-center gap-2">
-            <div className="flex flex-col items-center gap-4 lg:flex-row">
-              <h1 className="text-end text-sm font-medium uppercase tracking-tight">PERÍODO</h1>
-              <button
-                onClick={() => handleDataExport()}
-                className="flex h-[46.6px] items-center justify-center gap-2 rounded-md border bg-[#2c6e49] p-2 px-3 text-sm font-medium text-white shadow-sm duration-300 ease-in-out hover:scale-105"
-              >
-                <BsDownload style={{ fontSize: '18px' }} />
-              </button>
-              <div className="flex w-full flex-col items-center gap-2 md:flex-row lg:w-fit">
-                <div className="w-full md:w-[150px]">
-                  <DateInput
-                    showLabel={false}
-                    label="PERÍODO"
-                    value={formatDateForInput(queryFilters.period.after)}
-                    handleChange={(value) =>
-                      setQueryFilters((prev) => ({
-                        ...prev,
-                        period: { ...prev.period, after: (formatDateInputChange(value) || firstDayOfMonth) as string },
-                      }))
-                    }
-                    width="100%"
-                  />
-                </div>
-                <div className="w-full md:w-[150px]">
-                  <DateInput
-                    showLabel={false}
-                    label="PERÍODO"
-                    value={formatDateForInput(queryFilters.period.before)}
-                    handleChange={(value) =>
-                      setQueryFilters((prev) => ({
-                        ...prev,
-                        period: { ...prev.period, before: (formatDateInputChange(value) || lastDayOfMonth) as string },
-                      }))
-                    }
-                    width="100%"
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="w-full md:w-[250px]">
-              <MultipleSelectInput
-                label="USUÁRIOS"
-                showLabel={false}
-                options={queryOptions?.salePromoters?.map((promoter) => ({ id: promoter._id || '', label: promoter.nome, value: promoter._id })) || null}
-                selected={queryFilters.responsibles}
-                handleChange={(value) => setQueryFilters((prev) => ({ ...prev, responsibles: value as string[] }))}
-                selectedItemLabel="TODOS"
-                onReset={() => setQueryFilters((prev) => ({ ...prev, responsibles: null }))}
-                width="100%"
-              />
-            </div>
-            <div className="w-full md:w-[250px]">
-              <MultipleSelectInput
-                label="PARCEIROS"
-                showLabel={false}
-                options={queryOptions?.partners?.map((partner) => ({ id: partner._id || '', label: partner.nome, value: partner._id })) || null}
-                selected={queryFilters.partners}
-                handleChange={(value) => setQueryFilters((prev) => ({ ...prev, partners: value as string[] }))}
-                selectedItemLabel="TODOS"
-                onReset={() => setQueryFilters((prev) => ({ ...prev, partners: null }))}
-                width="100%"
-              />
-            </div>
-            <div className="w-full lg:w-[300px]">
-              <MultipleSelectInput
-                selectedItemLabel="TODOS OS PROJETOS"
-                selected={queryFilters.projectTypes}
-                options={queryOptions?.projectTypes?.map((resp) => ({ id: resp._id || '', label: resp.nome || '', value: resp._id || '' })) || null}
-                handleChange={(value) => setQueryFilters((prev) => ({ ...prev, projectTypes: value as string[] }))}
-                onReset={() => setQueryFilters((prev) => ({ ...prev, projectTypes: null }))}
-                showLabel={false}
-                label="TIPOS DE PROJETO"
-                width="100%"
-              />
-            </div>
-          </div>
-        </div>
-        <OverallResults
-          after={queryFilters.period.after}
-          before={queryFilters.period.before}
-          responsibles={queryFilters.responsibles}
-          partners={queryFilters.partners}
-          projectTypes={queryFilters.projectTypes}
-        />
+	if (status != "authenticated") return <LoadingPage />;
+	return (
+		<div className="flex h-full flex-col md:flex-row">
+			<Sidebar session={session} />
+			<div className="flex w-full max-w-full grow flex-col overflow-x-hidden bg-[#f8f9fa] p-6">
+				<div className="flex w-full flex-col items-center justify-between gap-4 border-b border-black pb-2 lg:flex-row lg:items-end">
+					<h1 className="text-center font-Raleway text-xl font-black text-black lg:text-start lg:text-2xl">
+						ACOMPANHAMENTO DE RESULTADOS
+					</h1>
+					<div className="flex items-center gap-2">
+						<div className="flex flex-col items-center gap-4 lg:flex-row">
+							<h1 className="text-end text-sm font-medium uppercase tracking-tight">
+								PERÍODO
+							</h1>
+							<button
+								onClick={() => handleDataExport()}
+								className="flex h-[46.6px] items-center justify-center gap-2 rounded-md border bg-[#2c6e49] p-2 px-3 text-sm font-medium text-white shadow-sm duration-300 ease-in-out hover:scale-105"
+							>
+								<BsDownload style={{ fontSize: "18px" }} />
+							</button>
+							<div className="flex w-full flex-col items-center gap-2 md:flex-row lg:w-fit">
+								<div className="w-full md:w-[150px]">
+									<DateInput
+										showLabel={false}
+										label="PERÍODO"
+										value={formatDateForInput(queryFilters.period.after)}
+										handleChange={(value) =>
+											setQueryFilters((prev) => ({
+												...prev,
+												period: {
+													...prev.period,
+													after: (formatDateInputChange(value) ||
+														firstDayOfMonth) as string,
+												},
+											}))
+										}
+										width="100%"
+									/>
+								</div>
+								<div className="w-full md:w-[150px]">
+									<DateInput
+										showLabel={false}
+										label="PERÍODO"
+										value={formatDateForInput(queryFilters.period.before)}
+										handleChange={(value) =>
+											setQueryFilters((prev) => ({
+												...prev,
+												period: {
+													...prev.period,
+													before: (formatDateInputChange(value) ||
+														lastDayOfMonth) as string,
+												},
+											}))
+										}
+										width="100%"
+									/>
+								</div>
+							</div>
+						</div>
+						<div className="w-full md:w-[250px]">
+							<MultipleSelectInput
+								label="USUÁRIOS"
+								showLabel={false}
+								options={
+									queryOptions?.salePromoters?.map((promoter) => ({
+										id: promoter._id || "",
+										label: promoter.nome,
+										value: promoter._id,
+									})) || null
+								}
+								selected={queryFilters.responsibles}
+								handleChange={(value) =>
+									setQueryFilters((prev) => ({
+										...prev,
+										responsibles: value as string[],
+									}))
+								}
+								selectedItemLabel="TODOS"
+								onReset={() =>
+									setQueryFilters((prev) => ({ ...prev, responsibles: null }))
+								}
+								width="100%"
+							/>
+						</div>
+						<div className="w-full md:w-[250px]">
+							<MultipleSelectInput
+								label="PARCEIROS"
+								showLabel={false}
+								options={
+									queryOptions?.partners?.map((partner) => ({
+										id: partner._id || "",
+										label: partner.nome,
+										value: partner._id,
+									})) || null
+								}
+								selected={queryFilters.partners}
+								handleChange={(value) =>
+									setQueryFilters((prev) => ({
+										...prev,
+										partners: value as string[],
+									}))
+								}
+								selectedItemLabel="TODOS"
+								onReset={() =>
+									setQueryFilters((prev) => ({ ...prev, partners: null }))
+								}
+								width="100%"
+							/>
+						</div>
+						<div className="w-full lg:w-[300px]">
+							<MultipleSelectInput
+								selectedItemLabel="TODOS OS PROJETOS"
+								selected={queryFilters.projectTypes}
+								options={
+									queryOptions?.projectTypes?.map((resp) => ({
+										id: resp._id || "",
+										label: resp.nome || "",
+										value: resp._id || "",
+									})) || null
+								}
+								handleChange={(value) =>
+									setQueryFilters((prev) => ({
+										...prev,
+										projectTypes: value as string[],
+									}))
+								}
+								onReset={() =>
+									setQueryFilters((prev) => ({ ...prev, projectTypes: null }))
+								}
+								showLabel={false}
+								label="TIPOS DE PROJETO"
+								width="100%"
+							/>
+						</div>
+					</div>
+				</div>
+				<OverallResults
+					after={queryFilters.period.after}
+					before={queryFilters.period.before}
+					responsibles={queryFilters.responsibles}
+					partners={queryFilters.partners}
+					projectTypes={queryFilters.projectTypes}
+				/>
 
-        <InProgressResults
-          after={queryFilters.period.after}
-          before={queryFilters.period.before}
-          responsibles={queryFilters.responsibles}
-          partners={queryFilters.partners}
-          projectTypes={queryFilters.projectTypes}
-        />
-        <SalesTeamResults
-          after={queryFilters.period.after}
-          before={queryFilters.period.before}
-          responsibles={queryFilters.responsibles}
-          promoters={queryOptions?.salePromoters}
-          partners={queryFilters.partners}
-          projectTypes={queryFilters.projectTypes}
-        />
-        <SDRTeamResults
-          after={queryFilters.period.after}
-          before={queryFilters.period.before}
-          responsibles={queryFilters.responsibles}
-          promoters={queryOptions?.salePromoters}
-          partners={queryFilters.partners}
-          projectTypes={queryFilters.projectTypes}
-        />
-        <Sellers session={session} after={queryFilters.period.after} before={queryFilters.period.before} />
-        {/* <h1 className="mt-4 font-Raleway text-xl font-black text-black">CONTROLE DE EQUIPE</h1>
+				<InProgressResults
+					after={queryFilters.period.after}
+					before={queryFilters.period.before}
+					responsibles={queryFilters.responsibles}
+					partners={queryFilters.partners}
+					projectTypes={queryFilters.projectTypes}
+				/>
+				<SalesTeamResults
+					after={queryFilters.period.after}
+					before={queryFilters.period.before}
+					responsibles={queryFilters.responsibles}
+					promoters={queryOptions?.salePromoters}
+					partners={queryFilters.partners}
+					projectTypes={queryFilters.projectTypes}
+				/>
+				<SDRTeamResults
+					after={queryFilters.period.after}
+					before={queryFilters.period.before}
+					responsibles={queryFilters.responsibles}
+					promoters={queryOptions?.salePromoters}
+					partners={queryFilters.partners}
+					projectTypes={queryFilters.projectTypes}
+				/>
+				<Sellers
+					session={session}
+					after={queryFilters.period.after}
+					before={queryFilters.period.before}
+				/>
+				{/* <h1 className="mt-4 font-Raleway text-xl font-black text-black">CONTROLE DE EQUIPE</h1>
         <div className="flex grow flex-col flex-wrap justify-around gap-2 py-2 lg:flex-row">
           {queryOptionsSuccess ? (
             queryOptions.salePromoters?.map((responsible, index) => (
@@ -288,19 +360,23 @@ function ComercialResults() {
             <LoadingComponent />
           )}
         </div> */}
-        <RegionResults
-          after={queryFilters.period.after}
-          before={queryFilters.period.before}
-          responsibles={queryFilters.responsibles}
-          partners={queryFilters.partners}
-          projectTypes={queryFilters.projectTypes}
-        />
-      </div>
-      {editModal.isOpen && editModal.promoter ? (
-        <EditPromoter session={session} promoter={editModal.promoter} closeModal={() => setEditModal({ isOpen: false, promoter: null })} />
-      ) : null}
-    </div>
-  )
+				<RegionResults
+					after={queryFilters.period.after}
+					before={queryFilters.period.before}
+					responsibles={queryFilters.responsibles}
+					partners={queryFilters.partners}
+					projectTypes={queryFilters.projectTypes}
+				/>
+			</div>
+			{editModal.isOpen && editModal.promoter ? (
+				<EditPromoter
+					session={session}
+					promoter={editModal.promoter}
+					closeModal={() => setEditModal({ isOpen: false, promoter: null })}
+				/>
+			) : null}
+		</div>
+	);
 }
 
-export default ComercialResults
+export default ComercialResults;
