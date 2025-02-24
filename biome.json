@@ -1,6 +1,9 @@
 {
 	"linter": {
 		"rules": {
+			"performance": {
+				"noDelete": "warn"
+			},
 			"suspicious": {
 				"noExplicitAny": "warn"
 			},
