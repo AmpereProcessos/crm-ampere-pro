@@ -1,11 +1,9 @@
 {
 	"linter": {
 		"rules": {
-			"performance": {
-				"noDelete": "warn"
-			},
 			"suspicious": {
-				"noExplicitAny": "warn"
+				"noExplicitAny": "warn",
+				"noMisleadingCharacterClass": "warn"
 			},
 			"correctness": {
 				"useExhaustiveDependencies": "warn"
@@ -14,5 +12,11 @@
 				"useTemplate": "warn"
 			}
 		}
+	},
+	"formatter": {
+		"indentStyle": "tab",
+		"indentWidth": 1,
+		"lineWidth": 180,
+		"lineEnding": "lf"
 	}
 }
