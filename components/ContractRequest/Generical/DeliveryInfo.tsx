@@ -7,7 +7,7 @@ import TextInput from "@/components/Inputs/TextInput";
 import { BrazilianCitiesOptionsFromUF, BrazilianStatesOptions } from "@/utils/estados_cidades";
 import { formatToCEP, formatToCPForCNPJ, formatToPhone, getCEPInfo } from "@/utils/methods";
 import toast from "react-hot-toast";
-import { Truck } from "lucide-react";
+import { ChevronRight, Truck } from "lucide-react";
 type DeliveryInfoProps = {
 	requestInfo: TContractRequest;
 	setRequestInfo: Dispatch<SetStateAction<TContractRequest>>;
@@ -72,7 +72,10 @@ function DeliveryInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNext
 				</div>
 				{isDeliveryNecessary ? (
 					<>
-						<h1 className="text-sm tracking-tight font-medium text-start">LOCALIZAÇÃO DE ENTREGA</h1>
+						<div className="flex items-center gap-2 bg-primary/20 px-2 py-1 rounded w-fit">
+							<ChevronRight size={15} />
+							<h1 className="text-xs tracking-tight font-medium text-start w-fit">LOCALIZAÇÃO DE ENTREGA</h1>
+						</div>
 						<div className="flex w-full items-center justify-end">
 							<button type="button" onClick={() => useExecutionLocationForDelivery()} className="rounded-lg border border-cyan-500 bg-cyan-50 px-2 py-1 text-xs font-medium text-cyan-500">
 								USAR LOCALIZAÇÃO DE EXECUÇÃO
@@ -176,7 +179,10 @@ function DeliveryInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNext
 								/>
 							</div>
 						</div>
-						<h1 className="text-sm tracking-tight font-medium text-start">OUTROS DETALHES</h1>
+						<div className="flex items-center gap-2 bg-primary/20 px-2 py-1 rounded w-fit">
+							<ChevronRight size={15} />
+							<h1 className="text-xs tracking-tight font-medium text-start w-fit">OUTROS DETALHES</h1>
+						</div>
 						<SelectInput
 							width={"100%"}
 							label={"HÁ RESTRIÇÕES PARA ENTREGA?"}

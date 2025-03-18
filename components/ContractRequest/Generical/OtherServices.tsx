@@ -3,7 +3,7 @@ import NumberInput from "@/components/Inputs/NumberInput";
 import SelectInput from "@/components/Inputs/SelectInput";
 import { structureTypes } from "@/utils/constants";
 import type { TContractRequest } from "@/utils/schemas/integrations/app-ampere/contract-request.schema";
-import { Hammer } from "lucide-react";
+import { ChevronRight, Hammer } from "lucide-react";
 import React, { type Dispatch, type SetStateAction } from "react";
 import toast from "react-hot-toast";
 
@@ -73,7 +73,10 @@ function OtherServices({ requestInfo, setRequestInfo, showActions, goToPreviousS
 			<div className="w-full flex flex-col grow gap-4">
 				{/** STRUCTURE INFORMATION */}
 				<div className="w-full flex flex-col gap-4">
-					<h1 className="text-sm tracking-tight font-medium text-start">INFORMAÇÕES DA ESTRUTURA</h1>
+					<div className="flex items-center gap-2 bg-primary/20 px-2 py-1 rounded w-fit">
+						<ChevronRight size={15} />
+						<h1 className="text-xs tracking-tight font-medium text-start w-fit">INFORMAÇÕES DA ESTRUTURA</h1>
+					</div>
 					<div className="w-full flex items-center justify-center">
 						<div className="w-fit">
 							<CheckboxInput
@@ -156,7 +159,10 @@ function OtherServices({ requestInfo, setRequestInfo, showActions, goToPreviousS
 									width="100%"
 								/>
 							</div>
-							<h1 className="text-sm tracking-tight font-medium text-start">INFORMAÇÕES DE PAGAMENTO DA ESTRUTURA</h1>
+							<div className="flex items-center gap-2 bg-primary/20 px-2 py-1 rounded w-fit">
+								<ChevronRight size={15} />
+								<h1 className="text-xs tracking-tight font-medium text-start w-fit">INFORMAÇÕES DE PAGAMENTO DA ESTRUTURA</h1>
+							</div>
 
 							<div className="w-full flex items-center gap-2 flex-col lg:flex-row">
 								<div className="w-full lg:w-1/2">
@@ -223,7 +229,10 @@ function OtherServices({ requestInfo, setRequestInfo, showActions, goToPreviousS
 				</div>
 				{/** ENERGIA PA INFORMATION */}
 				<div className="w-full flex flex-col gap-4">
-					<h1 className="text-sm tracking-tight font-medium text-start">INFORMAÇÕES DO PADRÃO DE ENERGIA</h1>
+					<div className="flex items-center gap-2 bg-primary/20 px-2 py-1 rounded w-fit">
+						<ChevronRight size={15} />
+						<h1 className="text-xs tracking-tight font-medium text-start w-fit">INFORMAÇÕES DO PADRÃO DE ENERGIA</h1>
+					</div>
 
 					<div className="w-full flex items-center justify-center">
 						<div className="w-fit">
@@ -368,7 +377,10 @@ function OtherServices({ requestInfo, setRequestInfo, showActions, goToPreviousS
 									/>
 								</div>
 							</div>
-							<h1 className="text-sm tracking-tight font-medium text-start">INFORMAÇÕES DE PAGAMENTO DO PADRÃO</h1>
+							<div className="flex items-center gap-2 bg-primary/20 px-2 py-1 rounded w-fit">
+								<ChevronRight size={15} />
+								<h1 className="text-xs tracking-tight font-medium text-start w-fit">INFORMAÇÕES DE PAGAMENTO DO PADRÃO</h1>
+							</div>
 							<div className="w-full flex items-center gap-2 flex-col lg:flex-row">
 								<div className="w-full lg:w-1/2">
 									<SelectInput

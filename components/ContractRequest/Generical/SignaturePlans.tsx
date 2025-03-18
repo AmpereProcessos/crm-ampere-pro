@@ -8,7 +8,7 @@ import type { TProposalDTOWithOpportunity } from "@/utils/schemas/proposal.schem
 import CheckboxInput from "@/components/Inputs/CheckboxInput";
 import NumberInput from "@/components/Inputs/NumberInput";
 import SelectInput from "@/components/Inputs/SelectInput";
-import { Tag } from "lucide-react";
+import { ChevronRight, Tag } from "lucide-react";
 
 type SignaturePlansProps = {
 	proposal: TProposalDTOWithOpportunity;
@@ -28,12 +28,18 @@ function SignaturePlans({ proposal, requestInfo, setRequestInfo, showActions, go
 			<div className="w-full flex flex-col grow gap-4">
 				{/** O&M INFORMATION */}
 				<div className="w-full flex flex-col gap-4">
-					<h1 className="text-sm tracking-tight font-medium text-start">OPERAÇÃO E MANUTENÇÃO</h1>
+					<div className="flex items-center gap-2 bg-primary/20 px-2 py-1 rounded w-fit">
+						<ChevronRight size={15} />
+						<h1 className="text-xs tracking-tight font-medium text-start w-fit">OPERAÇÃO E MANUTENÇÃO</h1>
+					</div>
 					<OeMData proposal={proposal} requestInfo={requestInfo} setRequestInfo={setRequestInfo} />
 				</div>
 				{/** INSURANCE INFORMATION */}
 				<div className="w-full flex flex-col gap-4">
-					<h1 className="text-sm tracking-tight font-medium text-start">SEGURO SOLAR</h1>
+					<div className="flex items-center gap-2 bg-primary/20 px-2 py-1 rounded w-fit">
+						<ChevronRight size={15} />
+						<h1 className="text-xs tracking-tight font-medium text-start w-fit">SEGURO SOLAR</h1>
+					</div>
 					<InsuranceData requestInfo={requestInfo} setRequestInfo={setRequestInfo} />
 				</div>
 			</div>

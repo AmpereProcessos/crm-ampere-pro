@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { formatToCPForCNPJ } from "@/utils/methods";
 import type { TContractRequest } from "@/utils/schemas/integrations/app-ampere/contract-request.schema";
-import { Share2 } from "lucide-react";
+import { ChevronRight, Share2 } from "lucide-react";
 import { useState, type Dispatch, type SetStateAction } from "react";
 import toast from "react-hot-toast";
 import { FaCode } from "react-icons/fa";
@@ -91,7 +91,10 @@ function HomologationInfo({ requestInfo, setRequestInfo, showActions, goToPrevio
 					{requestInfo.realizarHomologacao ? (
 						<>
 							<div className="w-full flex flex-col gap-2">
-								<h1 className="text-sm tracking-tight font-medium text-start">MODALIDADE DE HOMOLOGAÇÃO</h1>
+								<div className="flex items-center gap-2 bg-primary/20 px-2 py-1 rounded w-fit">
+									<ChevronRight size={15} />
+									<h1 className="text-xs tracking-tight font-medium text-start w-fit">MODALIDADE DE HOMOLOGAÇÃO</h1>
+								</div>
 								<div className="w-full rounded border border-blue-800 bg-blue-50 p-2">
 									<div className="flex w-full items-center justify-between gap-2">
 										<h1 className="text-sm font-bold text-blue-800">HOMOLOGAÇÃO CONVENCIONAL</h1>
@@ -137,7 +140,10 @@ function HomologationInfo({ requestInfo, setRequestInfo, showActions, goToPrevio
 								</button>
 							</div>
 							<div className="w-full flex flex-col gap-4">
-								<h1 className="text-sm tracking-tight font-medium text-start">INFORMAÇÕES DO TITULAR DA INSTALAÇÃO</h1>
+								<div className="flex items-center gap-2 bg-primary/20 px-2 py-1 rounded w-fit">
+									<ChevronRight size={15} />
+									<h1 className="text-xs tracking-tight font-medium text-start w-fit">INFORMAÇÕES DO TITULAR DA INSTALAÇÃO</h1>
+								</div>
 								<div className="w-full flex items-center gap-2 flex-col lg:flex-row">
 									<div className="w-full lg:w-1/3">
 										<TextInput
@@ -193,7 +199,10 @@ function HomologationInfo({ requestInfo, setRequestInfo, showActions, goToPrevio
 										/>
 									</div>
 								</div>
-								<h1 className="text-sm tracking-tight font-medium text-start">INFORMAÇÕES DA INSTALAÇÃO</h1>
+								<div className="flex items-center gap-2 bg-primary/20 px-2 py-1 rounded w-fit">
+									<ChevronRight size={15} />
+									<h1 className="text-xs tracking-tight font-medium text-start w-fit">INFORMAÇÕES DA INSTALAÇÃO</h1>
+								</div>
 								<div className="w-full flex items-center gap-2 flex-col lg:flex-row">
 									<div className="w-full lg:w-1/3">
 										<TextInput
@@ -257,7 +266,10 @@ function HomologationInfo({ requestInfo, setRequestInfo, showActions, goToPrevio
 										/>
 									</div>
 								</div>
-								<h1 className="text-sm tracking-tight font-medium text-start">CREDENCIAIS DO APP DA CONCESSIONÁRIA</h1>
+								<div className="flex items-center gap-2 bg-primary/20 px-2 py-1 rounded w-fit">
+									<ChevronRight size={15} />
+									<h1 className="text-xs tracking-tight font-medium text-start w-fit">CREDENCIAIS DO APP DA CONCESSIONÁRIA</h1>
+								</div>
 								<div className="w-full flex items-center gap-2 flex-col lg:flex-row">
 									<div className="w-full lg:w-1/2">
 										<TextInput
@@ -282,7 +294,10 @@ function HomologationInfo({ requestInfo, setRequestInfo, showActions, goToPrevio
 								</div>
 							</div>
 							<div className="w-full flex flex-col gap-4">
-								<h1 className="text-sm tracking-tight font-medium text-start">DISTRIBUIÇÕES DE CRÉDITO</h1>
+								<div className="flex items-center gap-2 bg-primary/20 px-2 py-1 rounded w-fit">
+									<ChevronRight size={15} />
+									<h1 className="text-xs tracking-tight font-medium text-start w-fit">DISTRIBUIÇÕES DE CRÉDITO</h1>
+								</div>
 								<div className="flex w-full items-center justify-center">
 									<div className="w-fit">
 										<CheckboxInput

@@ -17,7 +17,7 @@ import toast from "react-hot-toast";
 import SelectInputVirtualized from "@/components/Inputs/SelectInputVirtualized";
 import { useEquipments } from "@/utils/queries/utils";
 import { Button } from "@/components/ui/button";
-import { Settings } from "lucide-react";
+import { ChevronRight, Settings } from "lucide-react";
 type ProductsAndServicesProps = {
 	editable: boolean;
 	requestInfo: TContractRequest;
@@ -159,7 +159,10 @@ function ProductsAndServices({ editable, requestInfo, setRequestInfo, showAction
 					{newScopeItemMenuState === "service" ? <NewServiceMenu addSaleService={addService} /> : null}
 				</AnimatePresence>
 				<div className="w-full flex flex-col gap-2">
-					<h1 className="w-full text-start text-xs text-primary/80">PRODUTOS</h1>
+					<div className="flex items-center gap-2 bg-primary/20 px-2 py-1 rounded w-fit">
+						<ChevronRight size={15} />
+						<h1 className="text-xs tracking-tight font-medium text-start w-fit">PRODUTOS</h1>
+					</div>
 					{requestInfo.produtos.length > 0 ? (
 						requestInfo.produtos.map((product, index) => (
 							<ProductItem
@@ -175,7 +178,10 @@ function ProductsAndServices({ editable, requestInfo, setRequestInfo, showAction
 					)}
 				</div>
 				<div className="w-full flex flex-col gap-2">
-					<h1 className="w-full text-start text-xs text-primary/80">SERVIÇOS</h1>
+					<div className="flex items-center gap-2 bg-primary/20 px-2 py-1 rounded w-fit">
+						<ChevronRight size={15} />
+						<h1 className="text-xs tracking-tight font-medium text-start w-fit">SERVIÇOS</h1>
+					</div>
 					{requestInfo.servicos.length > 0 ? (
 						requestInfo.servicos.map((service, index) => (
 							<ServiceItem

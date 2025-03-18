@@ -7,7 +7,7 @@ import { BrazilianCitiesOptionsFromUF, BrazilianStatesOptions } from "@/utils/es
 import { formatToCEP, formatToCPForCNPJ, formatToPhone, getCEPInfo } from "@/utils/methods";
 import { useCreditors } from "@/utils/queries/utils";
 import type { TContractRequest } from "@/utils/schemas/integrations/app-ampere/contract-request.schema";
-import { BadgeDollarSign } from "lucide-react";
+import { BadgeDollarSign, ChevronRight } from "lucide-react";
 import { useState, type Dispatch, type SetStateAction } from "react";
 import toast from "react-hot-toast";
 
@@ -77,7 +77,10 @@ function PaymentInfo({ requestInfo, setRequestInfo, showActions, goToPreviousSta
 			<div className="w-full flex flex-col gap-4 grow">
 				{/** PAYER INFORMATION */}
 				<div className="w-full flex flex-col gap-4">
-					<h1 className="text-sm tracking-tight font-medium text-start">INFORMAÇÕES DO PAGADOR</h1>
+					<div className="flex items-center gap-2 bg-primary/20 px-2 py-1 rounded w-fit">
+						<ChevronRight size={15} />
+						<h1 className="text-xs tracking-tight font-medium text-start w-fit">INFORMAÇÕES DO PAGADOR</h1>
+					</div>
 					<div className="flex w-full items-center justify-end">
 						<button type="button" onClick={() => usePaymentInfoFromContract()} className="rounded-lg border border-cyan-500 bg-cyan-50 px-2 py-1 text-xs font-medium text-cyan-500">
 							USAR DADOS DO TITULAR DO CONTRATO
@@ -128,7 +131,10 @@ function PaymentInfo({ requestInfo, setRequestInfo, showActions, goToPreviousSta
 				</div>
 				{/** NEGOTIATION & PAYMENT INFORMATION */}
 				<div className="w-full flex flex-col gap-4">
-					<h1 className="text-sm tracking-tight font-medium text-start">DETALHES DO PAGAMENTO</h1>
+					<div className="flex items-center gap-2 bg-primary/20 px-2 py-1 rounded w-fit">
+						<ChevronRight size={15} />
+						<h1 className="text-xs tracking-tight font-medium text-start w-fit">DETALHES DO PAGAMENTO</h1>
+					</div>
 					<SelectInput
 						width={"100%"}
 						label={"FORMA DE PAGAMENTO"}
@@ -265,7 +271,10 @@ function PaymentInfo({ requestInfo, setRequestInfo, showActions, goToPreviousSta
 				</div>
 				{/** FISCAL INFORMATION */}
 				<div className="w-full flex flex-col gap-4">
-					<h1 className="text-sm tracking-tight font-medium text-start">INFORMAÇÕES SOBRE A NOTA FISCAL</h1>
+					<div className="flex items-center gap-2 bg-primary/20 px-2 py-1 rounded w-fit">
+						<ChevronRight size={15} />
+						<h1 className="text-xs tracking-tight font-medium text-start w-fit">INFORMAÇÕES SOBRE A NOTA FISCAL</h1>
+					</div>
 					<div className="w-full flex items-center justify-center gap-2 flex-wrap">
 						<div className="w-fit">
 							<CheckboxInput

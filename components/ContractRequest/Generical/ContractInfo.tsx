@@ -11,7 +11,7 @@ import { CustomersAcquisitionChannels } from "@/utils/select-options";
 import { BrazilianCitiesOptionsFromUF, BrazilianStatesOptions } from "@/utils/estados_cidades";
 import { formatDateInputChange } from "@/lib/methods/formatting";
 import TextareaInput from "@/components/Inputs/TextareaInput";
-import { BookText } from "lucide-react";
+import { BookText, ChevronRight } from "lucide-react";
 
 type ContractInfoProps = {
 	requestInfo: TContractRequest;
@@ -141,7 +141,10 @@ function ContractInfo({ requestInfo, setRequestInfo, showActions, goToNextStage 
 			<div className="w-full flex flex-col gap-4 grow">
 				{/** CLIENT INFORMATION */}
 				<div className="w-full flex flex-col gap-4">
-					<h1 className="text-sm tracking-tight font-medium text-start">INFORMAÇÕES PESSOAIS</h1>
+					<div className="flex items-center gap-2 bg-primary/20 px-2 py-1 rounded w-fit">
+						<ChevronRight size={15} />
+						<h1 className="text-xs tracking-tight font-medium text-start  w-fit">INFORMAÇÕES PESSOAIS</h1>
+					</div>
 					<div className="w-full flex items-center gap-2 flex-col lg:flex-row">
 						<div className="w-full lg:w-1/3">
 							<TextInput
@@ -184,7 +187,10 @@ function ContractInfo({ requestInfo, setRequestInfo, showActions, goToNextStage 
 							/>
 						</div>
 					</div>
-					<h1 className="text-sm tracking-tight font-medium text-start">CONTATOS PESSOAIS</h1>
+					<div className="flex items-center gap-2 bg-primary/20 px-2 py-1 rounded w-fit">
+						<ChevronRight size={15} />
+						<h1 className="text-xs tracking-tight font-medium text-start  w-fit">CONTATOS PESSOAIS</h1>
+					</div>
 					<div className="w-full flex items-center gap-2 flex-col lg:flex-row">
 						<div className="w-full lg:w-1/2">
 							<TextInput
@@ -212,7 +218,10 @@ function ContractInfo({ requestInfo, setRequestInfo, showActions, goToNextStage 
 							/>
 						</div>
 					</div>
-					<h1 className="text-sm tracking-tight font-medium text-start">OUTRAS INFORMAÇÕES</h1>
+					<div className="flex items-center gap-2 bg-primary/20 px-2 py-1 rounded w-fit">
+						<ChevronRight size={15} />
+						<h1 className="text-xs tracking-tight font-medium text-start  w-fit">OUTRAS INFORMAÇÕES</h1>
+					</div>
 					<div className="w-full flex items-center gap-2 flex-col lg:flex-row">
 						<div className="w-full lg:w-1/3">
 							<SelectInput
@@ -384,7 +393,10 @@ function ContractInfo({ requestInfo, setRequestInfo, showActions, goToNextStage 
 							</div>
 						)}
 					</div>
-					<h1 className="text-sm tracking-tight font-medium text-start">LOCALIZAÇÃO DE CORRESPODÊNCIA</h1>
+					<div className="flex items-center gap-2 bg-primary/20 px-2 py-1 rounded w-fit">
+						<ChevronRight size={15} />
+						<h1 className="text-xs tracking-tight font-medium text-start  w-fit">LOCALIZAÇÃO DE CORRESPODÊNCIA</h1>
+					</div>
 					<div className="w-full flex items-center gap-2 flex-col lg:flex-row">
 						<div className="w-full lg:w-1/3">
 							<TextInput
@@ -501,7 +513,10 @@ function ContractInfo({ requestInfo, setRequestInfo, showActions, goToNextStage 
 				</div>
 				{/** SALE INFORMATION */}
 				<div className="w-full flex flex-col gap-4">
-					<h1 className="text-sm tracking-tight font-medium text-start">INFORMAÇÕES DA VENDA</h1>
+					<div className="flex items-center gap-2 bg-primary/20 px-2 py-1 rounded w-fit">
+						<ChevronRight size={15} />
+						<h1 className="text-xs tracking-tight font-medium text-start  w-fit">INFORMAÇÕES DA VENDA</h1>
+					</div>
 					<div className="w-full flex items-center gap-2 flex-col lg:flex-row">
 						<div className="w-full lg:w-1/3">
 							<SelectInput
@@ -621,7 +636,10 @@ function ContractInfo({ requestInfo, setRequestInfo, showActions, goToNextStage 
 							"Preencha aqui, se houver, observações acerca desse contrato. Peculiaridades desse serviço (ex: somente instalação/equipamentos), detalhes e esclarecimentos para financiamento, entre outras informações relevantes."
 						}
 					/>
-					<h1 className="text-sm tracking-tight font-medium text-start">LOCALIZAÇÃO DE EXECUÇÃO DO SERVIÇO</h1>
+					<div className="flex items-center gap-2 bg-primary/20 px-2 py-1 rounded w-fit">
+						<ChevronRight size={15} />
+						<h1 className="text-xs tracking-tight font-medium text-start  w-fit">LOCALIZAÇÃO DE EXECUÇÃO DO SERVIÇO</h1>
+					</div>
 					<div className="flex w-full items-center justify-end">
 						<button type="button" onClick={() => useClientLocationForExecution()} className="rounded-lg border border-cyan-500 bg-cyan-50 px-2 py-1 text-xs font-medium text-cyan-500">
 							USAR LOCALIZAÇÃO DE CORRESPONDÊNCIA
@@ -774,7 +792,10 @@ function ContractInfo({ requestInfo, setRequestInfo, showActions, goToNextStage 
 					</div>
 				</div>
 				<div className="w-full flex flex-col gap-4">
-					<h1 className="text-sm tracking-tight font-medium text-start">INFORMAÇÕES PARA JORNADA</h1>
+					<div className="flex items-center gap-2 bg-primary/20 px-2 py-1 rounded w-fit">
+						<ChevronRight size={15} />
+						<h1 className="text-xs tracking-tight font-medium text-start w-fit">INFORMAÇÕES PARA JORNADA</h1>
+					</div>
 					<div className="w-full flex items-center gap-2 flex-col lg:flex-row">
 						<div className="w-full lg:w-1/2">
 							<TextInput
