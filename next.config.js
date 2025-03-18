@@ -8,6 +8,7 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   images: {
+    minimumCacheTTL: 2678400, // 1 minute
     // domains: [
     //   "avatars.githubusercontent.com",
     //   "firebasestorage.googleapis.com",
