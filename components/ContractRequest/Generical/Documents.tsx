@@ -67,16 +67,18 @@ function Documents({ opportunityId, documentsFile, setDocumentsFile, requestInfo
 			</div>
 			<div className="w-full flex flex-col gap-4 grow">
 				<div className="flex w-full flex-wrap items-start justify-center gap-2">
-					{Object.keys(documentationMap).map((document) => (
-						<div key={document} className="w-full lg:w-[600px]">
-							<DocumentFileInput
-								label={document}
-								value={documentsFile[document]}
-								handleChange={(value) => setDocumentsFile((prev) => ({ ...prev, [document]: value }))}
-								fileReferences={fileReferences}
-							/>
-						</div>
-					))}
+					{Object.entries(documentationMap)
+						.filter(([key, value]) => value)
+						.map(([key, value]) => (
+							<div key={key} className="w-full lg:w-[600px]">
+								<DocumentFileInput
+									label={key}
+									value={documentsFile[key]}
+									handleChange={(value) => setDocumentsFile((prev) => ({ ...prev, [key]: value }))}
+									fileReferences={fileReferences}
+								/>
+							</div>
+						))}
 				</div>
 				<AttachmentsMenu
 					requiredDocumentsKeys={documentationMapKeys}
