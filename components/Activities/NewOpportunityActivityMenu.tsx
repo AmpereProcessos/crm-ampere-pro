@@ -106,7 +106,7 @@ function NewOpportunityActivityMenu({ session, opportunity, closeMenu }: NewOppo
           <DateTimeInput
             label="DATA DE VENCIMENTO"
             value={formatDateTime(newActivityHolder.dataVencimento)}
-            handleChange={(value) => setNewActivityHolder((prev) => ({ ...prev, dataVencimento: formatDateInputChange(value, 'string') as string }))}
+            handleChange={(value) => setNewActivityHolder((prev) => ({ ...prev, dataVencimento: formatDateInputChange(value, 'string', false) as string }))}
             width="100%"
           />
         </div>
