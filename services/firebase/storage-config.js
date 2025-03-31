@@ -6,12 +6,12 @@ import { getStorage } from "firebase/storage";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: process.env.FIREBASE_APIKEY,
-  authDomain: "sistemaampere.firebaseapp.com",
-  projectId: "sistemaampere",
-  storageBucket: "sistemaampere.appspot.com",
-  messagingSenderId: "496303969093",
-  appId: process.env.FIREBASE_APPID,
+	apiKey: process.env.FIREBASE_APIKEY,
+	authDomain: "sistemaampere.firebaseapp.com",
+	projectId: "sistemaampere",
+	storageBucket: "sistemaampere.appspot.com",
+	messagingSenderId: "496303969093",
+	appId: process.env.FIREBASE_APPID,
 };
 
 // Initialize Firebase

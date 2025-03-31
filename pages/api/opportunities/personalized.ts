@@ -1,21 +1,13 @@
 import { insertClient } from "@/repositories/clients/mutations";
 import { getExistentClientByProperties } from "@/repositories/clients/queries";
 import { insertFunnelReference } from "@/repositories/funnel-references/mutations";
-import {
-	insertOpportunity,
-	insertOpportunityWithExistingClient,
-} from "@/repositories/opportunities/mutations";
+import { insertOpportunity } from "@/repositories/opportunities/mutations";
 import connectToDatabase from "@/services/mongodb/crm-db-connection";
+import { apiHandler, validateAuthenticationWithSession } from "@/utils/api";
 import {
-	apiHandler,
-	validateAuthenticationWithSession,
-	validateAuthorization,
-} from "@/utils/api";
-import {
-	InsertClientSchema,
+	GeneralClientSchema,
 	type TClient,
 } from "@/utils/schemas/client.schema";
-import { InsertFileReferenceSchema } from "@/utils/schemas/file-reference.schema";
 import {
 	InsertFunnelReferenceSchema,
 	type TFunnelReference,
@@ -47,7 +39,7 @@ const CreateClientOpportunityAndFunnelReferencesSchema = z.object({
 				"Tipo não válido para ID de referência do cliente para vinculação.",
 		})
 		.nullable(),
-	client: InsertClientSchema,
+	client: GeneralClientSchema,
 	opportunity: InsertOpportunitySchema,
 	funnelReference: InsertFunnelReferenceSchema,
 });

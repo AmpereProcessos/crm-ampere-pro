@@ -1,54 +1,66 @@
-import z from 'zod'
-import { ClientDTOSchema, InsertClientSchema, TClientDTO } from './client.schema'
+import z from "zod";
+import { GeneralClientSchema, type TClientDTO } from "./client.schema";
 
-import { ActivitiesByStatus } from '@/pages/api/opportunities'
-import { TActivityDTO } from './activities.schema'
-import { TProposal } from './proposal.schema'
-import { TFunnelReference, TFunnelReferenceDTO } from './funnel-reference.schema'
-import { TPartnerSimplifiedDTO } from './partner.schema'
-import { OpportunityInteractionTypesEnum } from './opportunity-history.schema'
-export const ElectricalInstallationGroupsSchema = z.union([z.literal('RESIDENCIAL'), z.literal('COMERCIAL'), z.literal('INDUSTRIAL'), z.literal('RURAL')], {
-  required_error: 'Grupo da instalação elétrica não informado.',
-  invalid_type_error: 'Tipo não válido para grupo da instalação elétrica.',
-})
-export type TElectricalInstallationGroups = z.infer<typeof ElectricalInstallationGroupsSchema>
+import type { ActivitiesByStatus } from "@/pages/api/opportunities";
+import type { TActivityDTO } from "./activities.schema";
+import type { TProposal } from "./proposal.schema";
+import type { TFunnelReference, TFunnelReferenceDTO } from "./funnel-reference.schema";
+import type { TPartnerSimplifiedDTO } from "./partner.schema";
+import { OpportunityInteractionTypesEnum } from "./opportunity-history.schema";
+export const ElectricalInstallationGroupsSchema = z.union([z.literal("RESIDENCIAL"), z.literal("COMERCIAL"), z.literal("INDUSTRIAL"), z.literal("RURAL")], {
+	required_error: "Grupo da instalação elétrica não informado.",
+	invalid_type_error: "Tipo não válido para grupo da instalação elétrica.",
+});
+export type TElectricalInstallationGroups = z.infer<typeof ElectricalInstallationGroupsSchema>;
 
-const ElectricalInstallationLigationTypesSchema = z.union([z.literal('NOVA'), z.literal('EXISTENTE')], {
-  required_error: 'Tipo da ligação da instalação não informado.',
-  invalid_type_error: 'Tipo não válido para o tipo da ligação da instalação.',
-})
+const ElectricalInstallationLigationTypesSchema = z.union([z.literal("NOVA"), z.literal("EXISTENTE")], {
+	required_error: "Tipo da ligação da instalação não informado.",
+	invalid_type_error: "Tipo não válido para o tipo da ligação da instalação.",
+});
 
-const ElectricalInstallationOwnerTypeSchema = z.union([z.literal('PESSOA FÍSICA'), z.literal('PESSOA JURÍDICA')])
-export type TElectricalInstallationOwnerTypes = z.infer<typeof ElectricalInstallationOwnerTypeSchema>
-export type TElectricalInstallationLigationTypes = z.infer<typeof ElectricalInstallationLigationTypesSchema>
-export const SaleCategorySchema = z.enum(['KIT', 'PLANO', 'PRODUTOS', 'SERVIÇOS'], {
-  required_error: 'Categoria de venda não fornecida.',
-  invalid_type_error: 'Tipo não válido para categoria de venda.',
-})
+const ElectricalInstallationOwnerTypeSchema = z.union([z.literal("PESSOA FÍSICA"), z.literal("PESSOA JURÍDICA")]);
+export type TElectricalInstallationOwnerTypes = z.infer<typeof ElectricalInstallationOwnerTypeSchema>;
+export type TElectricalInstallationLigationTypes = z.infer<typeof ElectricalInstallationLigationTypesSchema>;
+export const SaleCategorySchema = z.enum(["KIT", "PLANO", "PRODUTOS", "SERVIÇOS"], {
+	required_error: "Categoria de venda não fornecida.",
+	invalid_type_error: "Tipo não válido para categoria de venda.",
+});
 const OpportunityResponsibleSchema = z.object({
-  id: z.string({ required_error: 'ID do responsável da oportunidade não informado.', invalid_type_error: 'Tipo não válido para o ID do responsável.' }),
-  nome: z.string({ required_error: 'Nome do responsável da oportunidade não informado.', invalid_type_error: 'Tipo não válido para o nome do responsável.' }),
-  papel: z.string({
-    required_error: 'Papel do responsável da oportunidade não informado.',
-    invalid_type_error: 'Tipo não válido para o papel do responsável.',
-  }),
-  avatar_url: z
-    .string({ required_error: 'Avatar do responsável da oportunidade não informado.', invalid_type_error: 'Tipo não válido para o avatar do responsável.' })
-    .optional()
-    .nullable(),
-  telefone: z
-    .string({ required_error: 'Telefone do responsável da oportunidade não informado.', invalid_type_error: 'Tipo não válido para o Telefone do responsável.' })
-    .optional()
-    .nullable(),
-  dataInsercao: z
-    .string({
-      required_error: 'Data de inserção do responsável da oportunidade não informado.',
-      invalid_type_error: 'Tipo não válido para a data de inserção do responsável.',
-    })
-    .datetime(),
-})
-export type TOpportunityResponsible = z.infer<typeof OpportunityResponsibleSchema>
-export type TSaleCategory = z.infer<typeof SaleCategorySchema>
+	id: z.string({
+		required_error: "ID do responsável da oportunidade não informado.",
+		invalid_type_error: "Tipo não válido para o ID do responsável.",
+	}),
+	nome: z.string({
+		required_error: "Nome do responsável da oportunidade não informado.",
+		invalid_type_error: "Tipo não válido para o nome do responsável.",
+	}),
+	papel: z.string({
+		required_error: "Papel do responsável da oportunidade não informado.",
+		invalid_type_error: "Tipo não válido para o papel do responsável.",
+	}),
+	avatar_url: z
+		.string({
+			required_error: "Avatar do responsável da oportunidade não informado.",
+			invalid_type_error: "Tipo não válido para o avatar do responsável.",
+		})
+		.optional()
+		.nullable(),
+	telefone: z
+		.string({
+			required_error: "Telefone do responsável da oportunidade não informado.",
+			invalid_type_error: "Tipo não válido para o Telefone do responsável.",
+		})
+		.optional()
+		.nullable(),
+	dataInsercao: z
+		.string({
+			required_error: "Data de inserção do responsável da oportunidade não informado.",
+			invalid_type_error: "Tipo não válido para a data de inserção do responsável.",
+		})
+		.datetime(),
+});
+export type TOpportunityResponsible = z.infer<typeof OpportunityResponsibleSchema>;
+export type TSaleCategory = z.infer<typeof SaleCategorySchema>;
 
 export const GeneralOpportunitySchema = z.object({
   nome: z.string(),
@@ -573,117 +585,175 @@ export const OpportunityWithClientSchema = z.object({
   dataInsercao: z.string().datetime(),
 })
 
-export type TOpportunity = z.infer<typeof GeneralOpportunitySchema>
+export type TOpportunity = z.infer<typeof GeneralOpportunitySchema>;
 export type TOpportunitySimplified = Pick<
-  TOpportunity,
-  'nome' | 'idParceiro' | 'identificador' | 'tipo' | 'idMarketing' | 'idIndicacao' | 'responsaveis' | 'cliente' | 'ganho' | 'perda' | 'dataInsercao'
->
+	TOpportunity,
+	"nome" | "idParceiro" | "identificador" | "tipo" | "idMarketing" | "idIndicacao" | "responsaveis" | "cliente" | "ganho" | "perda" | "dataInsercao"
+>;
 export const SimplifiedOpportunityProjection = {
-  _id: 1,
-  nome: 1,
-  identificador: 1,
-  tipo: 1,
-  idParceiro: 1,
-  idMarketing: 1,
-  idIndicacao: 1,
-  responsaveis: 1,
-  cliente: 1,
-  ganho: 1,
-  perda: 1,
-  dataInsercao: 1,
-}
+	_id: 1,
+	nome: 1,
+	identificador: 1,
+	tipo: 1,
+	idParceiro: 1,
+	idMarketing: 1,
+	idIndicacao: 1,
+	responsaveis: 1,
+	cliente: 1,
+	ganho: 1,
+	perda: 1,
+	dataInsercao: 1,
+};
 
 export type TOpportunitySimplifiedWithProposalAndActivitiesAndFunnels = TOpportunitySimplified & {
-  proposta: { nome: TProposal['nome']; valor: TProposal['valor']; potenciaPico: TProposal['potenciaPico'] }
-  statusAtividades?: ActivitiesByStatus
-  funil: { id: string; idFunil: TFunnelReference['idFunil']; idEstagio: TFunnelReference['idEstagioFunil'] }
-}
+	proposta: {
+		nome: TProposal["nome"];
+		valor: TProposal["valor"];
+		potenciaPico: TProposal["potenciaPico"];
+	};
+	statusAtividades?: ActivitiesByStatus;
+	funil: {
+		id: string;
+		idFunil: TFunnelReference["idFunil"];
+		idEstagio: TFunnelReference["idEstagioFunil"];
+	};
+};
 
 export type TOpportunityWithFunnelReferenceAndActivitiesByStatus = TOpportunity & {
-  funil: { id: string; idFunil: string; idEstagio: string }
-  statusAtividades: ActivitiesByStatus
-}
+	funil: { id: string; idFunil: string; idEstagio: string };
+	statusAtividades: ActivitiesByStatus;
+};
 export type TOpportunityWithFunnelReferenceAndActivities = TOpportunity & {
-  funil: { id: string; idFunil: string; idEstagio: string }
-  atividades: TActivityDTO[]
-}
+	funil: { id: string; idFunil: string; idEstagio: string };
+	atividades: TActivityDTO[];
+};
 
 // export type TOpportunityEntity = TOpportunity & {_id: ObjectId}
 // export type TOpportunityEntityWithFunnelReference = TOpportunityEntity & { funil: { id: string; idFunil: string; idEstagio: string } }
 
-export type TOpportunityDTO = TOpportunity & { _id: string }
-export type TOpportunitySimplifiedDTO = TOpportunitySimplified & { _id: string }
+export type TOpportunityDTO = TOpportunity & { _id: string };
+export type TOpportunitySimplifiedDTO = TOpportunitySimplified & {
+	_id: string;
+};
 
 export type TOpportunitySimplifiedDTOWithProposal = TOpportunitySimplifiedDTO & {
-  proposta: { nome: TProposal['nome']; valor: TProposal['valor']; potenciaPico: TProposal['potenciaPico'] }
-}
+	proposta: {
+		nome: TProposal["nome"];
+		valor: TProposal["valor"];
+		potenciaPico: TProposal["potenciaPico"];
+	};
+};
 
 export type TOpportunitySimplifiedDTOWithProposalAndActivitiesAndFunnels = TOpportunitySimplifiedDTO & {
-  proposta: { nome: TProposal['nome']; valor: TProposal['valor']; potenciaPico: TProposal['potenciaPico'] }
-  statusAtividades?: ActivitiesByStatus
-  funil: { id: string; idFunil: TFunnelReference['idFunil']; idEstagio: TFunnelReference['idEstagioFunil'] }
-}
+	proposta: {
+		nome: TProposal["nome"];
+		valor: TProposal["valor"];
+		potenciaPico: TProposal["potenciaPico"];
+	};
+	statusAtividades?: ActivitiesByStatus;
+	funil: {
+		id: string;
+		idFunil: TFunnelReference["idFunil"];
+		idEstagio: TFunnelReference["idEstagioFunil"];
+	};
+};
 
-export type TOpportunityDTOWithClient = TOpportunityDTO & { cliente: TClientDTO }
+export type TOpportunityDTOWithClient = TOpportunityDTO & {
+	cliente: TClientDTO;
+};
 export type TOpportunityDTOWithClientAndPartnerAndFunnelReferences = TOpportunityDTO & {
-  cliente: TClientDTO
-  parceiro: TPartnerSimplifiedDTO
-  referenciasFunil: TFunnelReferenceDTO[]
-}
+	cliente: TClientDTO;
+	parceiro: TPartnerSimplifiedDTO;
+	referenciasFunil: TFunnelReferenceDTO[];
+};
 
 export type TOpportunityDTOWithFunnelReferenceAndActivitiesByStatus = TOpportunityDTO & {
-  funil: { id: string; idFunil: string; idEstagio: string }
-  statusAtividades: ActivitiesByStatus
-}
+	funil: { id: string; idFunil: string; idEstagio: string };
+	statusAtividades: ActivitiesByStatus;
+};
 export type TOpportunityDTOWithFunnelReferenceAndActivities = TOpportunityDTO & {
-  funil: { id: string; idFunil: string; idEstagio: string }
-  atividades: TActivityDTO[]
-}
+	funil: { id: string; idFunil: string; idEstagio: string };
+	atividades: TActivityDTO[];
+};
 
 export const SimplifiedOpportunityWithProposalProjection = {
-  _id: 1,
-  nome: 1,
-  identificador: 1,
-  tipo: 1,
-  responsaveis: 1,
-  idMarketing: 1,
-  idIndicacao: 1,
-  'ganho.data': 1,
-  'perda.data': 1,
-  'proposta.nome': 1,
-  'proposta.valor': 1,
-  'proposta.potenciaPico': 1,
-  dataInsercao: 1,
-}
+	_id: 1,
+	nome: 1,
+	identificador: 1,
+	tipo: 1,
+	responsaveis: 1,
+	idMarketing: 1,
+	idIndicacao: 1,
+	"ganho.data": 1,
+	"perda.data": 1,
+	"proposta.nome": 1,
+	"proposta.valor": 1,
+	"proposta.potenciaPico": 1,
+	dataInsercao: 1,
+};
 
-const PersonalizedFieldsFilter = z.enum(['dataInsercao', 'ganho.data', 'perda.data'], {
-  required_error: 'Filtro de campo de período não informado.',
-  invalid_type_error: 'Tipo não válido para o campo de filtro de período.',
-})
+const PersonalizedFieldsFilter = z.enum(["dataInsercao", "ganho.data", "perda.data"], {
+	required_error: "Filtro de campo de período não informado.",
+	invalid_type_error: "Tipo não válido para o campo de filtro de período.",
+});
 const OpportunityPersonalizedFiltersSchema = z.object({
-  name: z.string({ required_error: 'Filtro de nome não informado.', invalid_type_error: 'Tipo não válido para o filtro de nome.' }),
-  city: z.array(z.string({ required_error: 'Cidade de filtro não informada.', invalid_type_error: 'Tipo não válido para cidade de filtro.' }), {
-    required_error: 'Lista de cidades de filtro não informada.',
-    invalid_type_error: 'Tipo não válido para lista de cidades de filtro.',
-  }),
-  period: z.object({
-    after: z
-      .string({ required_error: 'Filtro de depois de não informado.', invalid_type_error: 'Tipo não válido para o filtro de depois de.' })
-      .optional()
-      .nullable(),
-    before: z
-      .string({ required_error: 'Filtro de antes de não informado.', invalid_type_error: 'Tipo não válido para o filtro de antes de.' })
-      .optional()
-      .nullable(),
-    field: PersonalizedFieldsFilter.optional().nullable(),
-  }),
-})
-export type TPersonalizedOpportunitiesFilter = z.infer<typeof OpportunityPersonalizedFiltersSchema>
+	name: z.string({
+		required_error: "Filtro de nome não informado.",
+		invalid_type_error: "Tipo não válido para o filtro de nome.",
+	}),
+	city: z.array(
+		z.string({
+			required_error: "Cidade de filtro não informada.",
+			invalid_type_error: "Tipo não válido para cidade de filtro.",
+		}),
+		{
+			required_error: "Lista de cidades de filtro não informada.",
+			invalid_type_error: "Tipo não válido para lista de cidades de filtro.",
+		},
+	),
+	period: z.object({
+		after: z
+			.string({
+				required_error: "Filtro de depois de não informado.",
+				invalid_type_error: "Tipo não válido para o filtro de depois de.",
+			})
+			.optional()
+			.nullable(),
+		before: z
+			.string({
+				required_error: "Filtro de antes de não informado.",
+				invalid_type_error: "Tipo não válido para o filtro de antes de.",
+			})
+			.optional()
+			.nullable(),
+		field: PersonalizedFieldsFilter.optional().nullable(),
+	}),
+});
+export type TPersonalizedOpportunitiesFilter = z.infer<typeof OpportunityPersonalizedFiltersSchema>;
 export const PersonalizedOpportunityQuerySchema = z.object({
-  responsibles: z.array(z.string({ required_error: 'Autores não informados ou inválidos.', invalid_type_error: 'Autores inválidos.' })).nullable(),
-  partners: z.array(z.string({ required_error: 'Parceiros não informados ou inválidos.', invalid_type_error: 'Parceiros inválidos.' })).nullable(),
-  projectTypes: z
-    .array(z.string({ required_error: 'Tipos de projeto não informados ou inválidos.', invalid_type_error: 'Tipos de projeto inválidos.' }))
-    .nullable(),
-  filters: OpportunityPersonalizedFiltersSchema,
-})
+	responsibles: z
+		.array(
+			z.string({
+				required_error: "Autores não informados ou inválidos.",
+				invalid_type_error: "Autores inválidos.",
+			}),
+		)
+		.nullable(),
+	partners: z
+		.array(
+			z.string({
+				required_error: "Parceiros não informados ou inválidos.",
+				invalid_type_error: "Parceiros inválidos.",
+			}),
+		)
+		.nullable(),
+	projectTypes: z
+		.array(
+			z.string({
+				required_error: "Tipos de projeto não informados ou inválidos.",
+				invalid_type_error: "Tipos de projeto inválidos.",
+			}),
+		)
+		.nullable(),
+	filters: OpportunityPersonalizedFiltersSchema,
+});
