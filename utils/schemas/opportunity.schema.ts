@@ -140,6 +140,14 @@ export const GeneralOpportunitySchema = z.object({
     .optional()
     .nullable(),
   idMarketing: z.string().optional().nullable(),
+  interacoesConfiguracao: z.object({
+    taxaValor: z.number({
+      invalid_type_error: 'Tipo não válido para a taxa de valor.',
+    }).optional().nullable(),
+    taxaMedida: z.enum(['DIAS', 'SEMANAS', 'MESES'], {
+      invalid_type_error: 'Tipo não válido para a taxa de medida.',
+    }).optional().nullable(),
+  }).optional().nullable(),
   ultimaInteracao: z
     .object({
       tipo: OpportunityInteractionTypesEnum,
@@ -151,6 +159,7 @@ export const GeneralOpportunitySchema = z.object({
     })
     .optional()
     .nullable(),
+  proximaInteracao: z.string().datetime().optional().nullable(),
   dataExclusao: z.string().datetime().optional().nullable(),
   dataInsercao: z.string().datetime(),
   // adicionar contrato e solicitação de contrato futuramente
@@ -261,6 +270,26 @@ export const InsertOpportunitySchema = z.object({
     })
     .optional()
     .nullable(),
+     interacoesConfiguracao: z.object({
+    taxaValor: z.number({
+      invalid_type_error: 'Tipo não válido para a taxa de valor.',
+    }).optional().nullable(),
+    taxaMedida: z.enum(['DIAS', 'SEMANAS', 'MESES'], {
+      invalid_type_error: 'Tipo não válido para a taxa de medida.',
+    }).optional().nullable(),
+  }).optional().nullable(),
+  ultimaInteracao: z
+    .object({
+      tipo: OpportunityInteractionTypesEnum,
+      data: z
+        .string({ invalid_type_error: 'Tipo não válido para data de última interação.' })
+        .datetime({ message: 'Tipo não válido para data de última interação.' })
+        .optional()
+        .nullable(),
+    })
+    .optional()
+    .nullable(),
+  proximaInteracao: z.string().datetime().optional().nullable(),
   dataExclusao: z
     .string({ invalid_type_error: 'Tipo não válido para data de exclusão.' })
     .datetime({ message: 'Tipo não válido para data de exclusão.' })
@@ -378,6 +407,26 @@ export const UpdateOpportunitySchema = z.object({
     })
     .optional()
     .nullable(),
+     interacoesConfiguracao: z.object({
+    taxaValor: z.number({
+      invalid_type_error: 'Tipo não válido para a taxa de valor.',
+    }).optional().nullable(),
+    taxaMedida: z.enum(['DIAS', 'SEMANAS', 'MESES'], {
+      invalid_type_error: 'Tipo não válido para a taxa de medida.',
+    }).optional().nullable(),
+  }).optional().nullable(),
+  ultimaInteracao: z
+    .object({
+      tipo: OpportunityInteractionTypesEnum,
+      data: z
+        .string({ invalid_type_error: 'Tipo não válido para data de última interação.' })
+        .datetime({ message: 'Tipo não válido para data de última interação.' })
+        .optional()
+        .nullable(),
+    })
+    .optional()
+    .nullable(),
+  proximaInteracao: z.string().datetime().optional().nullable(),
   dataExclusao: z
     .string({ invalid_type_error: 'Tipo não válido para data de exclusão.' })
     .datetime({ message: 'Tipo não válido para data de exclusão.' })
@@ -490,6 +539,14 @@ export const OpportunityWithClientSchema = z.object({
     })
     .optional()
     .nullable(),
+ interacoesConfiguracao: z.object({
+    taxaValor: z.number({
+      invalid_type_error: 'Tipo não válido para a taxa de valor.',
+    }).optional().nullable(),
+    taxaMedida: z.enum(['DIAS', 'SEMANAS', 'MESES'], {
+      invalid_type_error: 'Tipo não válido para a taxa de medida.',
+    }).optional().nullable(),
+  }).optional().nullable(),
   ultimaInteracao: z
     .object({
       tipo: OpportunityInteractionTypesEnum,
@@ -501,6 +558,7 @@ export const OpportunityWithClientSchema = z.object({
     })
     .optional()
     .nullable(),
+  proximaInteracao: z.string().datetime().optional().nullable(),
   idIndicacao: z
     .string({
       invalid_type_error: 'Tipo não válido para o ID de referência da indicação.',
