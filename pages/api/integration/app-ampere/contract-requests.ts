@@ -1,93 +1,110 @@
-import connectToRequestsDatabase from '@/services/mongodb/ampere/resquests-db-connection'
-import connectoToCRMDatabase from '@/services/mongodb/crm-db-connection'
-import { apiHandler, validateAuthentication, validateAuthenticationWithSession, validateAuthorization } from '@/utils/api'
-import { calculateStringSimilarity } from '@/utils/methods'
-import { NextApiHandler } from 'next'
-import { Collection, ObjectId } from 'mongodb'
+import connectToRequestsDatabase from "@/services/mongodb/ampere/resquests-db-connection";
+import connectoToCRMDatabase from "@/services/mongodb/crm-db-connection";
+import { apiHandler, validateAuthentication, validateAuthenticationWithSession, validateAuthorization } from "@/utils/api";
+import { calculateStringSimilarity } from "@/utils/methods";
+import type { NextApiHandler } from "next";
+import { type Collection, ObjectId } from "mongodb";
 
-import createHttpError from 'http-errors'
-import { TContractRequest } from '@/utils/schemas/integrations/app-ampere/contract-request.schema'
-import { TOpportunity } from '@/utils/schemas/opportunity.schema'
-import { SellersInApp } from '@/utils/select-options'
-import { TPartner } from '@/utils/schemas/partner.schema'
+import createHttpError from "http-errors";
+import type { TContractRequest } from "@/utils/schemas/integrations/app-ampere/contract-request.schema";
+import type { TOpportunity } from "@/utils/schemas/opportunity.schema";
+import { SellersInApp } from "@/utils/select-options";
+import type { TPartner } from "@/utils/schemas/partner.schema";
+import type { TClient } from "@/utils/schemas/client.schema";
 
 type PostResponse = {
-  data: { insertedId: string }
-  message: string
-}
+	data: { insertedId: string };
+	message: string;
+};
 
 const createRequest: NextApiHandler<PostResponse> = async (req, res) => {
-  // await validateAuthentication(req)
-  const requestInfo = req.body as TContractRequest
-  if (!requestInfo) return 'Ooops, solicitação inválida.'
+	// await validateAuthentication(req)
+	const requestInfo = req.body as TContractRequest;
+	if (!requestInfo) return "Ooops, solicitação inválida.";
 
-  const opportunityId = requestInfo.idProjetoCRM
-  if (!opportunityId || typeof opportunityId != 'string' || !ObjectId.isValid(opportunityId))
-    throw new createHttpError.BadRequest('Referência da oportunidade não encontrada ou inválida, não é possível prosseguir com a solicitação.')
+	const opportunityId = requestInfo.idProjetoCRM;
+	if (!opportunityId || typeof opportunityId !== "string" || !ObjectId.isValid(opportunityId))
+		throw new createHttpError.BadRequest("Referência da oportunidade não encontrada ou inválida, não é possível prosseguir com a solicitação.");
 
-  const crmDb = await connectoToCRMDatabase(process.env.MONGODB_URI, 'crm')
-  const crmOpportunitiesCollection: Collection<TOpportunity> = crmDb.collection('opportunities')
+	const crmDb = await connectoToCRMDatabase();
+	const crmOpportunitiesCollection: Collection<TOpportunity> = crmDb.collection("opportunities");
 
-  const db = await connectToRequestsDatabase(process.env.OPERATIONAL_MONGODB_URI)
-  const collection: Collection<TContractRequest> = db.collection('contrato')
-  const partnersCollection: Collection<TPartner> = crmDb.collection('partners')
-  // Getting CRM project informations
-  const crmOpportunity = await crmOpportunitiesCollection.findOne({ _id: new ObjectId(opportunityId) })
+	const db = await connectToRequestsDatabase(process.env.OPERATIONAL_MONGODB_URI);
+	const collection: Collection<TContractRequest> = db.collection("contrato");
+	const partnersCollection: Collection<TPartner> = crmDb.collection("partners");
+	const clientsCollection: Collection<TClient> = crmDb.collection("clients");
+	// Getting CRM project informations
+	const crmOpportunity = await crmOpportunitiesCollection.findOne({ _id: new ObjectId(opportunityId) });
 
-  if (!crmOpportunity) throw new createHttpError.BadRequest('Projeto não encontrado.')
+	if (!crmOpportunity) throw new createHttpError.BadRequest("Projeto não encontrado.");
 
-  const partner = await partnersCollection.findOne({ _id: new ObjectId(crmOpportunity.idParceiro) })
-  const { responsaveis, idMarketing } = crmOpportunity
+	const partner = await partnersCollection.findOne({ _id: new ObjectId(crmOpportunity.idParceiro) });
+	const { responsaveis, idMarketing } = crmOpportunity;
 
-  var sellerName = SellersInApp.find((x) => calculateStringSimilarity((requestInfo.nomeVendedor || 'NÃO DEFINIDO')?.toUpperCase(), x) > 80)
-  var insiderName: string | undefined = undefined
+	const sellerName = SellersInApp.find((x) => calculateStringSimilarity((requestInfo.nomeVendedor || "NÃO DEFINIDO")?.toUpperCase(), x) > 80);
+	let insiderName: string | undefined = undefined;
 
-  
-  const sdr = responsaveis.find((r) => r.papel == 'SDR' || r.papel == 'ANALISTA TÉCNICO')
-  // In case there is an insider for the opportunity
-  if (sdr) {
-    insiderName = SellersInApp.find((x) => calculateStringSimilarity((sdr.nome || 'NÃO DEFINIDO')?.toUpperCase(), x) > 80)
-  }
-  const insertContractRequestResponse = await collection.insertOne({
-    ...requestInfo,
-    nomeParceiro: partner?.nome,
-    nomeVendedor: sellerName,
-    idOportunidade: idMarketing,
-    insider: insiderName,
-    canalVenda: insiderName ? 'INSIDE SALES' : requestInfo.canalVenda,
-    dataSolicitacao: new Date().toISOString(),
-  })
-  if (!insertContractRequestResponse.acknowledged) throw new createHttpError.BadRequest('Oops, houve um erro desconhecido ao solicitar o contrato')
-  const insertedId = insertContractRequestResponse.insertedId.toString()
+	const sdr = responsaveis.find((r) => r.papel === "SDR" || r.papel === "ANALISTA TÉCNICO");
+	// In case there is an insider for the opportunity
+	if (sdr) {
+		insiderName = SellersInApp.find((x) => calculateStringSimilarity((sdr.nome || "NÃO DEFINIDO")?.toUpperCase(), x) > 80);
+	}
+	const insertContractRequestResponse = await collection.insertOne({
+		...requestInfo,
+		nomeParceiro: partner?.nome,
+		nomeVendedor: sellerName,
+		idOportunidade: idMarketing,
+		insider: insiderName,
+		canalVenda: insiderName ? "INSIDE SALES" : requestInfo.canalVenda,
+		dataSolicitacao: new Date().toISOString(),
+	});
+	if (!insertContractRequestResponse.acknowledged) throw new createHttpError.BadRequest("Oops, houve um erro desconhecido ao solicitar o contrato");
+	const insertedId = insertContractRequestResponse.insertedId.toString();
 
-  // Updating the opportunity with the inserted contract request id
-  const updateOpportunityResponse = await crmOpportunitiesCollection.updateOne(
-    { _id: new ObjectId(opportunityId) },
-    { $set: { 'ganho.idProposta': requestInfo.idPropostaCRM, 'ganho.idSolicitacao': insertedId, 'ganho.dataSolicitacao': new Date().toISOString() } }
-  )
+	// Updating the client registry
+	const clientUpdates: Partial<TClient> = {
+		email: requestInfo.email || undefined,
+		cep: requestInfo.cepInstalacao || undefined,
+		uf: requestInfo.uf || undefined,
+		cidade: requestInfo.cidade || undefined,
+		bairro: requestInfo.bairro || undefined,
+		endereco: requestInfo.enderecoCobranca || undefined,
+		numeroOuIdentificador: requestInfo.numeroResCobranca || undefined,
+		complemento: requestInfo.pontoDeReferencia || undefined,
+		dataNascimento: requestInfo.dataDeNascimento || undefined,
+		profissao: requestInfo.profissao || undefined,
+		ondeTrabalha: requestInfo.ondeTrabalha || undefined,
+		canalAquisicao: requestInfo.canalVenda || undefined,
+	};
+	await clientsCollection.updateOne({ _id: new ObjectId(crmOpportunity.idCliente) }, { $set: clientUpdates });
+	// Updating the opportunity with the inserted contract request id
+	const updateOpportunityResponse = await crmOpportunitiesCollection.updateOne(
+		{ _id: new ObjectId(opportunityId) },
+		{ $set: { "ganho.idProposta": requestInfo.idPropostaCRM, "ganho.idSolicitacao": insertedId, "ganho.dataSolicitacao": new Date().toISOString() } },
+	);
 
-  return res.status(201).json({ data: { insertedId }, message: 'Solicitação de contrato criada com sucesso !' })
-}
+	return res.status(201).json({ data: { insertedId }, message: "Solicitação de contrato criada com sucesso !" });
+};
 
 type GetResponse = {
-  data: TContractRequest | TContractRequest[]
-}
+	data: TContractRequest | TContractRequest[];
+};
 
 const projection = {
-  _id: 1,
-  nomeDoContrato: 1,
-  codigoSVB: 1,
-  nomeVendedor: 1,
-  tipoDeServico: 1,
-  cidade: 1,
-  idVisitaTecnica: 1,
-  idProjetoCRM: 1,
-  idPropostaCRM: 1,
-  confeccionado: 1,
-  aprovacao: 1,
-  dataSolicitacao: 1,
-  dataAprovacao: 1,
-}
+	_id: 1,
+	nomeDoContrato: 1,
+	codigoSVB: 1,
+	nomeVendedor: 1,
+	tipoDeServico: 1,
+	cidade: 1,
+	idVisitaTecnica: 1,
+	idProjetoCRM: 1,
+	idPropostaCRM: 1,
+	confeccionado: 1,
+	aprovacao: 1,
+	dataSolicitacao: 1,
+	dataAprovacao: 1,
+};
 // const getRequests: NextApiHandler<GetResponse> = async (req, res) => {
 //   const session = await validateAuthenticationWithSession(req, res)
 //   const visibility = session.user.visibilidade
@@ -135,11 +152,11 @@ const projection = {
 //   return res.status(200).json({ data: requests })
 // }
 export default apiHandler({
-  // GET: getRequests,
-  POST: createRequest,
-})
+	// GET: getRequests,
+	POST: createRequest,
+});
 
 function findEquivalentUser(user: string) {
-  const equivalent = SellersInApp.find((x) => calculateStringSimilarity(user.toUpperCase(), x) > 80)
-  return equivalent
+	const equivalent = SellersInApp.find((x) => calculateStringSimilarity(user.toUpperCase(), x) > 80);
+	return equivalent;
 }
