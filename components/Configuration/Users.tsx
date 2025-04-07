@@ -14,6 +14,7 @@ import { formatDateAsLocale, formatNameAsInitials } from "@/lib/methods/formatti
 import { ListFilter, Mail, Pencil, Phone } from "lucide-react";
 import { BsCalendarMinus, BsCalendarPlus } from "react-icons/bs";
 import { Button } from "../ui/button";
+import ConfigUsersFilterMenu from "../Users/ConfigUsersFilterMenu";
 type UsersProps = {
 	session: Session;
 };
@@ -64,6 +65,7 @@ function Users({ session }: UsersProps) {
 			{editUserModal.isOpen && editUserModal.userId ? (
 				<EditUser userId={editUserModal.userId} closeModal={() => setEditUserModal({ isOpen: false, userId: null })} partnerId={session.user.idParceiro} session={session} />
 			) : null}
+			{filterMenuIsOpen ? <ConfigUsersFilterMenu queryParams={queryParams} updateQueryParams={updateQueryParams} closeMenu={() => setFilterMenuIsOpen(false)} /> : null}
 		</div>
 	);
 }
