@@ -443,75 +443,63 @@ const ComissionSchema = z.object({
 	),
 });
 export type TUserComission = z.infer<typeof ComissionSchema>;
-const GeneralUserSchema = z.object({
-	nome: z.string(),
-	administrador: z.boolean(),
-	telefone: z.string().optional().nullable(),
-	email: z.string().email(),
-	senha: z.string(),
-	avatar_url: z.string().optional().nullable(),
-	idParceiro: z.string(),
-	idGrupo: z.string(),
-	permissoes: PermissionsSchema,
-	comissoes: z.object({
-		semSDR: z.number().optional().nullable(),
-		comSDR: z.number().optional().nullable(),
+export const GeneralUserSchema = z.object({
+	nome: z.string({
+		required_error: "Nome do usuário não informado.",
+		invalid_type_error: "Tipo não válido para o nome do usuário.",
 	}),
-	comissionamento: ComissionSchema,
-	codigoIndicacaoConecta: z
+	administrador: z.boolean({
+		required_error: "Permissão de administrador não informada.",
+		invalid_type_error: "Tipo não válido para permissão de administrador.",
+	}),
+	telefone: z
 		.string({
-			invalid_type_error: "Tipo não válido para o código de indicação do Conecta.",
+			invalid_type_error: "Tipo não válido para o telefone do usuário.",
 		})
 		.optional()
 		.nullable(),
-	ativo: z.boolean(),
-	dataInsercao: z.string().datetime().optional().nullable(),
-	dataAlteracao: z.string().datetime().optional().nullable(),
-});
-
-export const InsertUserSchema = z.object({
-	nome: z
-		.string({
-			required_error: "Nome do usuário não informado.",
-			invalid_type_error: "Tipo não válido para nome do usuário.",
-		})
-		.min(3, "É necessário que o nome do usuário tenha ao menos 3 letras."),
-	administrador: z.boolean({
-		required_error: "Tag de administrador não informada.",
-		invalid_type_error: "Tipo não válido para tag de administrador.",
-	}),
-	telefone: z.string().optional().nullable(),
 	email: z
 		.string({
 			required_error: "Email do usuário não informado.",
-			invalid_type_error: "Tipo não válido para email do usuário.",
+			invalid_type_error: "Tipo não válido para o email do usuário.",
 		})
-		.email({ message: "Formato inválido de email." }),
-	senha: z
-		.string({
-			required_error: "Senha do usuário não informada.",
-			invalid_type_error: "Tipo não válido para senha do usuário.",
-		})
-		.min(5, "É necessário que a senha do usuário tenha ao menos 5 caracteres."),
+		.email({
+			message: "Email do usuário não válido.",
+		}),
+	senha: z.string({
+		required_error: "Senha do usuário não informada.",
+		invalid_type_error: "Tipo não válido para a senha do usuário.",
+	}),
 	avatar_url: z
 		.string({
-			invalid_type_error: "Tipo não válido para URL do avatar do usuário.",
+			invalid_type_error: "Tipo não válido para a URL do avatar do usuário.",
 		})
 		.optional()
 		.nullable(),
 	idParceiro: z.string({
-		invalid_type_error: "Tipo não válido para ID do parceiro do usuário.",
+		required_error: "ID do parceiro não informado.",
+		invalid_type_error: "Tipo não válido para o ID do parceiro.",
 	}),
-	idGrupo: z
-		.string({
-			required_error: "Grupo do usuário não informado.",
-			invalid_type_error: "Tipo não válido para o grupo do usuário.",
-		})
-		.min(15, "ID de grupo de usuário inválido."),
+	idGrupo: z.string({
+		required_error: "ID do grupo não informado.",
+		invalid_type_error: "Tipo não válido para o ID do grupo.",
+	}),
 	permissoes: PermissionsSchema,
 	comissoes: z.object({
-		semSDR: z.number().optional().nullable(),
-		comSDR: z.number().optional().nullable(),
+		semSDR: z
+			.number({
+				required_error: "Comissão sem SDR não informada.",
+				invalid_type_error: "Tipo não válido para a comissão sem SDR.",
+			})
+			.optional()
+			.nullable(),
+		comSDR: z
+			.number({
+				required_error: "Comissão com SDR não informada.",
+				invalid_type_error: "Tipo não válido para a comissão com SDR.",
+			})
+			.optional()
+			.nullable(),
 	}),
 	comissionamento: ComissionSchema,
 	codigoIndicacaoConecta: z
@@ -520,9 +508,37 @@ export const InsertUserSchema = z.object({
 		})
 		.optional()
 		.nullable(),
-	ativo: z.boolean(),
-	dataInsercao: z.string().datetime().optional().nullable(),
-	dataAlteracao: z.string().datetime().optional().nullable(),
+	ativo: z.boolean({
+		required_error: "Status de ativo do usuário não informado.",
+		invalid_type_error: "Tipo não válido para o status de ativo do usuário.",
+	}),
+	dataInsercao: z
+		.string({
+			invalid_type_error: "Tipo não válido para a data de inserção do usuário.",
+		})
+		.datetime({
+			message: "Data de inserção do usuário não válida.",
+		})
+		.optional()
+		.nullable(),
+	dataAlteracao: z
+		.string({
+			invalid_type_error: "Tipo não válido para a data de alteração do usuário.",
+		})
+		.datetime({
+			message: "Data de alteração do usuário não válida.",
+		})
+		.optional()
+		.nullable(),
+	dataExclusao: z
+		.string({
+			invalid_type_error: "Tipo não válido para a data de exclusão do usuário.",
+		})
+		.datetime({
+			message: "Data de exclusão do usuário não válida.",
+		})
+		.optional()
+		.nullable(),
 });
 
 export type TUser = z.infer<typeof GeneralUserSchema>;
@@ -533,7 +549,7 @@ export type TUserDTOWithSaleGoals = TUserDTO & { metas: TSaleGoalDTO[] };
 export type TUserEntity = TUser;
 
 export type TUserSimplified = Pick<TUser, "nome" | "email" | "telefone" | "avatar_url">;
-export type TUserDTOSimplified = Pick<TUserDTO, "_id" | "nome" | "email" | "telefone" | "avatar_url">;
+export type TUserDTOSimplified = Pick<TUserDTO, "_id" | "ativo" | "nome" | "email" | "telefone" | "avatar_url" | "dataInsercao" | "dataAlteracao" | "dataExclusao">;
 
 export type TSessionUser = Pick<TUser, "administrador" | "nome" | "telefone" | "email" | "nome" | "avatar_url" | "idParceiro" | "idGrupo" | "permissoes"> & {
 	id: string;
@@ -543,8 +559,55 @@ export type TSessionUser = Pick<TUser, "administrador" | "nome" | "telefone" | "
 	};
 };
 export const simplifiedProjection = {
+	ativo: true,
 	nome: true,
 	email: true,
 	telefone: true,
 	avatar_url: true,
+	dataInsercao: true,
+	dataAlteracao: true,
+	dataExclusao: true,
 };
+
+export const UsersQueryFiltersSchema = z.object({
+	page: z
+		.number({
+			required_error: "Página não informada.",
+			invalid_type_error: "Tipo não válido para a página.",
+		})
+		.min(1, "Página não pode ser menor que 1."),
+	name: z.string({
+		required_error: "Nome do usuário para filtro não informado.",
+		invalid_type_error: "Tipo não válido para o nome do usuário para filtro.",
+	}),
+	email: z.string({
+		required_error: "Email do usuário para filtro não informado.",
+		invalid_type_error: "Tipo não válido para o email do usuário para filtro.",
+	}),
+	period: z.object({
+		field: z.enum(["dataInsercao", "dataAlteracao", "dataExclusao"]).optional().nullable(),
+		after: z
+			.string({
+				required_error: "Data depois da qual o filtro deve ser aplicado não informada.",
+				invalid_type_error: "Tipo não válido para a data depois da qual o filtro deve ser aplicado.",
+			})
+			.optional()
+			.nullable(),
+		before: z
+			.string({
+				required_error: "Data antes da qual o filtro deve ser aplicado não informada.",
+				invalid_type_error: "Tipo não válido para a data antes da qual o filtro deve ser aplicado.",
+			})
+			.optional()
+			.nullable(),
+	}),
+	activeOnly: z.boolean({
+		required_error: "Filtrar somente usuários ativos não informado.",
+		invalid_type_error: "Tipo não válido para o filtro de somente usuários ativos.",
+	}),
+	nonDeletedOnly: z.boolean({
+		required_error: "Filtrar somente usuários não deletados não informado.",
+		invalid_type_error: "Tipo não válido para o filtro de somente usuários não deletados.",
+	}),
+});
+export type TUsersQueryFilters = z.infer<typeof UsersQueryFiltersSchema>;

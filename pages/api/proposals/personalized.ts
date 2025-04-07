@@ -1,29 +1,15 @@
 import { uploadFile, uploadFileAsPDF } from "@/lib/methods/firebase";
 import { getPDFByAnvil } from "@/repositories/integrations/anvil";
 import { updateOpportunity } from "@/repositories/opportunities/mutations";
-import {
-	insertProposal,
-	updateProposal,
-} from "@/repositories/proposals/mutations";
+import { insertProposal, updateProposal } from "@/repositories/proposals/mutations";
 import connectToDatabase from "@/services/mongodb/crm-db-connection";
 import { apiHandler, validateAuthorization } from "@/utils/api";
-import {
-	ProposalTemplates,
-	type ProposeTemplateOptions,
-	getTemplateData,
-} from "@/utils/integrations/general";
+import { ProposalTemplates, type ProposeTemplateOptions, getTemplateData } from "@/utils/integrations/general";
 import { GeneralClientSchema } from "@/utils/schemas/client.schema";
 import type { TConectaIndication } from "@/utils/schemas/conecta-indication.schema";
 import type { TOpportunityHistory } from "@/utils/schemas/opportunity-history.schema";
-import {
-	OpportunityWithClientSchema,
-	type TOpportunity,
-	UpdateOpportunitySchema,
-} from "@/utils/schemas/opportunity.schema";
-import {
-	InsertProposalSchema,
-	type TProposal,
-} from "@/utils/schemas/proposal.schema";
+import { OpportunityWithClientSchema, type TOpportunity, UpdateOpportunitySchema } from "@/utils/schemas/opportunity.schema";
+import { InsertProposalSchema, type TProposal } from "@/utils/schemas/proposal.schema";
 import createHttpError from "http-errors";
 import { type Collection, type Filter, ObjectId } from "mongodb";
 import type { NextApiHandler } from "next";
@@ -40,69 +26,43 @@ const PersonalizedProposalCreationSchema = z.object({
 	proposal: InsertProposalSchema,
 	opportunityWithClient: OpportunityWithClientSchema,
 	saveAsActive: z.boolean({
-		required_error:
-			"Necessidade de salvamento como proposta ativa não informada.",
-		invalid_type_error:
-			"Tipo não válido para a necessidade de salvamento como proposta ativa.",
+		required_error: "Necessidade de salvamento como proposta ativa não informada.",
+		invalid_type_error: "Tipo não válido para a necessidade de salvamento como proposta ativa.",
 	}),
 	idAnvil: z
 		.string({
 			required_error: "ID de referência do template não informado.",
-			invalid_type_error:
-				"Tipo não válido para o ID de referência do template.",
+			invalid_type_error: "Tipo não válido para o ID de referência do template.",
 		})
 		.optional()
 		.nullable(),
 });
 
-const createProposalPersonalized: NextApiHandler<PostResponse> = async (
-	req,
-	res,
-) => {
-	const session = await validateAuthorization(
-		req,
-		res,
-		"propostas",
-		"criar",
-		true,
-	);
+const createProposalPersonalized: NextApiHandler<PostResponse> = async (req, res) => {
+	const session = await validateAuthorization(req, res, "propostas", "criar", true);
 	const partnerId = session.user.idParceiro;
 	const parterScope = session.user.permissoes.parceiros.escopo;
-	const partnerQuery: Filter<TProposal> = parterScope
-		? { idParceiro: { $in: [...parterScope] } }
-		: {};
+	const partnerQuery: Filter<TProposal> = parterScope ? { idParceiro: { $in: [...parterScope] } } : {};
 
-	const { proposal, opportunityWithClient, saveAsActive, idAnvil } =
-		PersonalizedProposalCreationSchema.parse(req.body);
+	const { proposal, opportunityWithClient, saveAsActive, idAnvil } = PersonalizedProposalCreationSchema.parse(req.body);
 
-	const db = await connectToDatabase(process.env.MONGODB_URI, "crm");
+	const db = await connectToDatabase();
 	const proposalsCollection: Collection<TProposal> = db.collection("proposals");
-	const opportunityCollection: Collection<TOpportunity> =
-		db.collection("opportunities");
-	const opportunityHistoryCollection: Collection<TOpportunityHistory> =
-		db.collection("opportunities-history");
-	const conectaIndicationsCollection: Collection<TConectaIndication> =
-		db.collection("conecta-indications");
+	const opportunityCollection: Collection<TOpportunity> = db.collection("opportunities");
+	const opportunityHistoryCollection: Collection<TOpportunityHistory> = db.collection("opportunities-history");
+	const conectaIndicationsCollection: Collection<TConectaIndication> = db.collection("conecta-indications");
 
 	const insertResponse = await insertProposal({
 		collection: proposalsCollection,
 		info: proposal,
-		partnerId: partnerId || "",
+		partnerId: opportunityWithClient.idParceiro || "",
 	});
-	if (!insertResponse.acknowledged)
-		throw new createHttpError.InternalServerError(
-			"Oops, houve um erro desconhecido na criação da proposta.",
-		);
+	if (!insertResponse.acknowledged) throw new createHttpError.InternalServerError("Oops, houve um erro desconhecido na criação da proposta.");
 	const insertedId = insertResponse.insertedId.toString();
 	// In case there is a specified anvil ID
 	if (idAnvil) {
-		const tag = opportunityWithClient?.nome
-			.replaceAll("/", "")
-			.replaceAll("?", "")
-			.replaceAll("&", "");
-		const template =
-			ProposalTemplates.find((t) => t.idAnvil === idAnvil) ||
-			ProposalTemplates[0];
+		const tag = opportunityWithClient?.nome.replaceAll("/", "").replaceAll("?", "").replaceAll("&", "");
+		const template = ProposalTemplates.find((t) => t.idAnvil === idAnvil) || ProposalTemplates[0];
 		const anvilTemplateData = getTemplateData({
 			opportunity: opportunityWithClient,
 			proposal: { _id: insertedId, ...proposal },
@@ -212,55 +172,35 @@ const PersonalizedProposalUpdateSchema = z.object({
 	opportunity: UpdateOpportunitySchema,
 	regenerateFile: z.boolean({
 		required_error: "Necessidade de geração de novo arquivo não informada.",
-		invalid_type_error:
-			"Tipo não válido para a necessidade de geração de novo arquivo.",
+		invalid_type_error: "Tipo não válido para a necessidade de geração de novo arquivo.",
 	}),
 	idAnvil: z
 		.string({
 			required_error: "ID de referência do template não informado.",
-			invalid_type_error:
-				"Tipo não válido para o ID de referência do template.",
+			invalid_type_error: "Tipo não válido para o ID de referência do template.",
 		})
 		.optional()
 		.nullable(),
 });
 
-const updateProposalPersonalized: NextApiHandler<PutResponse> = async (
-	req,
-	res,
-) => {
-	const session = await validateAuthorization(
-		req,
-		res,
-		"propostas",
-		"editar",
-		true,
-	);
+const updateProposalPersonalized: NextApiHandler<PutResponse> = async (req, res) => {
+	const session = await validateAuthorization(req, res, "propostas", "editar", true);
 	const partnerId = session.user.idParceiro;
 	const parterScope = session.user.permissoes.parceiros.escopo;
-	const partnerQuery: Filter<TProposal> = parterScope
-		? { idParceiro: { $in: [...parterScope] } }
-		: {};
+	const partnerQuery: Filter<TProposal> = parterScope ? { idParceiro: { $in: [...parterScope] } } : {};
 
 	const { id } = req.query;
-	if (!id || typeof id !== "string" || !ObjectId.isValid(id))
-		throw new createHttpError.BadRequest("ID inválido.");
+	if (!id || typeof id !== "string" || !ObjectId.isValid(id)) throw new createHttpError.BadRequest("ID inválido.");
 
-	const { proposal, client, opportunity, regenerateFile, idAnvil } =
-		PersonalizedProposalUpdateSchema.parse(req.body);
+	const { proposal, client, opportunity, regenerateFile, idAnvil } = PersonalizedProposalUpdateSchema.parse(req.body);
 
 	const db = await connectToDatabase(process.env.MONGODB_URI, "crm");
 	const proposalsCollection: Collection<TProposal> = db.collection("proposals");
 
 	if (regenerateFile) {
 		if (idAnvil) {
-			const tag = opportunity?.nome
-				.replaceAll("/", "")
-				.replaceAll("?", "")
-				.replaceAll("&", "");
-			const template =
-				ProposalTemplates.find((t) => t.idAnvil === idAnvil) ||
-				ProposalTemplates[0];
+			const tag = opportunity?.nome.replaceAll("/", "").replaceAll("?", "").replaceAll("&", "");
+			const template = ProposalTemplates.find((t) => t.idAnvil === idAnvil) || ProposalTemplates[0];
 			const anvilTemplateData = getTemplateData({
 				opportunity: { ...opportunity, cliente: client },
 				proposal: { _id: id, ...proposal },
@@ -284,14 +224,8 @@ const updateProposalPersonalized: NextApiHandler<PutResponse> = async (
 				changes: { ...proposal, urlArquivo: url },
 				query: partnerQuery,
 			});
-			if (!updateResponse.acknowledged)
-				throw new createHttpError.InternalServerError(
-					"Oops, houve um erro desconhecido ao atualizar proposta.",
-				);
-			if (updateResponse.matchedCount === 0)
-				throw new createHttpError.NotFound(
-					"Nenhum proposta foi encontrada para atualização.",
-				);
+			if (!updateResponse.acknowledged) throw new createHttpError.InternalServerError("Oops, houve um erro desconhecido ao atualizar proposta.");
+			if (updateResponse.matchedCount === 0) throw new createHttpError.NotFound("Nenhum proposta foi encontrada para atualização.");
 
 			return res.status(201).json({
 				data: { fileUrl: url },
@@ -306,14 +240,8 @@ const updateProposalPersonalized: NextApiHandler<PutResponse> = async (
 		changes: { ...proposal },
 		query: partnerQuery,
 	});
-	if (!updateResponse.acknowledged)
-		throw new createHttpError.InternalServerError(
-			"Oops, houve um erro desconhecido ao atualizar proposta.",
-		);
-	if (updateResponse.matchedCount === 0)
-		throw new createHttpError.NotFound(
-			"Nenhum proposta foi encontrada para atualização.",
-		);
+	if (!updateResponse.acknowledged) throw new createHttpError.InternalServerError("Oops, houve um erro desconhecido ao atualizar proposta.");
+	if (updateResponse.matchedCount === 0) throw new createHttpError.NotFound("Nenhum proposta foi encontrada para atualização.");
 	return res.status(201).json({
 		data: { fileUrl: undefined },
 		message: "Proposta atualizada com sucesso !",

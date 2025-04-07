@@ -16,7 +16,7 @@ import { storage } from "@/services/firebase/storage-config";
 import { createUser, editUser } from "@/utils/mutations/users";
 import { formatToPhone } from "@/utils/methods";
 import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
-import { useUserById } from "@/utils/queries/users";
+import { useUserById, useUsers } from "@/utils/queries/users";
 import LoadingComponent from "../../utils/LoadingComponent";
 import ErrorComponent from "../../utils/ErrorComponent";
 import PermissionsPannel from "../../Users/PermissionsPannel";
@@ -26,16 +26,17 @@ import SelectWithImages from "@/components/Inputs/SelectWithImages";
 import { useUserGroups } from "@/utils/queries/user-groups";
 import SelectInput from "@/components/Inputs/SelectInput";
 import ComissionPannel from "@/components/Users/ComissionPannel";
+import { LoadingButton } from "@/components/Buttons/loading-button";
 type EditUserProps = {
-	users?: TUserDTO[];
 	closeModal: () => void;
 	userId: string;
 	partnerId: string;
 	session: Session;
 };
 
-function EditUser({ closeModal, users, userId, partnerId, session }: EditUserProps) {
+function EditUser({ closeModal, userId, partnerId, session }: EditUserProps) {
 	const queryClient = useQueryClient();
+	const { data: users } = useUsers();
 	const { data: user, isLoading, isError, isSuccess } = useUserById({ id: userId });
 	const { data: partners } = usePartnersSimplified();
 	const { data: groups } = useUserGroups();
@@ -495,15 +496,15 @@ function EditUser({ closeModal, users, userId, partnerId, session }: EditUserPro
 								<ComissionPannel infoHolder={userInfo} setInfoHolder={setUserInfo as Dispatch<SetStateAction<TUser>>} />
 							</div>
 							<div className="mt-1 flex w-full items-end justify-end">
-								<button
-									type="button"
-									disabled={isPending}
-									//@ts-ignore
-									onClick={() => mutate()}
-									className="h-9 whitespace-nowrap rounded bg-gray-900 px-4 py-2 text-sm font-medium text-white shadow disabled:bg-gray-500 disabled:text-white enabled:hover:bg-gray-800 enabled:hover:text-white"
+								<LoadingButton
+									loading={isPending}
+									onClick={() =>
+										// @ts-ignore
+										mutate()
+									}
 								>
-									SALVAR ALTERAÇÕES
-								</button>
+									ATUALIZAR USUÁRIO
+								</LoadingButton>
 							</div>
 						</>
 					) : null}
