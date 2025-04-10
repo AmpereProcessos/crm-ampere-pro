@@ -1,11 +1,6 @@
-import EnergyConsortiumForm from "@/components/ContractRequest/EnergyConsortiumForm";
 import GenericForm from "@/components/ContractRequest/GenericForm";
-import HomologationForm from "@/components/ContractRequest/HomologationForm";
-import MonitoringForm from "@/components/ContractRequest/MonitoringForm";
-import OeMForm from "@/components/ContractRequest/OeMForm";
-import SolarSystemForm from "@/components/ContractRequest/SolarSystemForm";
-import SolarSystemInsuranceForm from "@/components/ContractRequest/SolarSystemInsuranceForm";
-import SelectInput from "@/components/Inputs/SelectInput";
+
+import SelectWithImages from "@/components/Inputs/SelectWithImages";
 import TextInput from "@/components/Inputs/TextInput";
 import { formatToPhone } from "@/utils/methods";
 import { useOpportunityCreators } from "@/utils/queries/users";
@@ -29,7 +24,9 @@ function getRequestObjectByProjectType({ propose, projectType, responsible, clie
 	const seller = propose.oportunidadeDados?.responsaveis.find((r) => r.papel === "VENDEDOR");
 	const sdr = propose.oportunidadeDados?.responsaveis.find((r) => r.papel === "SDR");
 	return {
+		idVendedor: seller?.id || sdr?.id || "",
 		nomeVendedor: seller?.nome || sdr?.nome || "",
+		avatarVendedor: seller?.avatar_url || sdr?.avatar_url || "",
 		nomeDoProjeto: propose.oportunidadeDados?.nome ? propose.oportunidadeDados?.nome : "",
 		idParceiro: propose.oportunidadeDados?.idParceiro,
 		telefoneVendedor: seller?.telefone || sdr?.telefone || "",
@@ -204,7 +201,7 @@ function NewContractRequest({ closeModal, proposeInfo, client, session, responsi
 
 					<div className="flex h-full flex-col gap-y-2 overflow-y-auto overscroll-y-auto p-2 py-1 scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300">
 						<div className="my-1 flex w-full flex-wrap items-center justify-center gap-2">
-							<SelectInput
+							<SelectWithImages
 								label="VENDEDOR"
 								value={requestInfo.nomeVendedor}
 								options={
@@ -213,15 +210,29 @@ function NewContractRequest({ closeModal, proposeInfo, client, session, responsi
 											id: index + 1,
 											value: responsible.nome,
 											label: responsible.nome,
+											url: responsible.avatar_url || undefined,
 										};
 									}) || []
 								}
-								handleChange={(value) => setRequestInfo((prev) => ({ ...prev, nomeVendedor: value }))}
+								handleChange={(value) => {
+									const selectedResponsible = responsibles?.find((responsible) => responsible.nome === value);
+									console.log("SELECTED RESPONSIBLE", selectedResponsible);
+									setRequestInfo((prev) => ({
+										...prev,
+										idVendedor: selectedResponsible?._id || "",
+										nomeVendedor: selectedResponsible?.nome || "",
+										telefoneVendedor: selectedResponsible?.telefone || "",
+										avatarVendedor: selectedResponsible?.avatar_url || "",
+									}));
+								}}
 								selectedItemLabel="NÃO DEFINIDO"
 								onReset={() =>
 									setRequestInfo((prev) => ({
 										...prev,
-										nomeVendedor: undefined,
+										nomeVendedor: "",
+										idVendedor: null,
+										telefoneVendedor: "",
+										avatarVendedor: null,
 									}))
 								}
 							/>
@@ -238,31 +249,6 @@ function NewContractRequest({ closeModal, proposeInfo, client, session, responsi
 							/>
 						</div>
 						<GenericForm requestInfo={requestInfo} setRequestInfo={setRequestInfo} proposal={proposeInfo} />
-						{/* {!["OPERAÇÃO E MANUTENÇÃO", "HOMOLOGAÇÃO", "SEGURO DE SISTEMA FOTOVOLTAICO", "CONSÓRCIO DE ENERGIA", "MONITORAMENTO"].includes(proposeInfo?.oportunidadeDados.tipo.titulo) ? (
-							<GenericForm requestInfo={requestInfo} setRequestInfo={setRequestInfo} proposal={proposeInfo} />
-						) : null}
-						{proposeInfo?.oportunidadeDados.tipo.titulo === "OPERAÇÃO E MANUTENÇÃO" ? (
-							<OeMForm requestInfo={requestInfo} setRequestInfo={setRequestInfo} proposeInfo={proposeInfo} />
-						) : null}
-						{proposeInfo?.oportunidadeDados.tipo.titulo === "HOMOLOGAÇÃO" ? (
-							<HomologationForm
-								requestInfo={requestInfo}
-								setRequestInfo={setRequestInfo}
-								proposeInfo={proposeInfo}
-								// @ts-ignore
-								session={session}
-								client={client}
-							/>
-						) : null}
-						{proposeInfo.oportunidadeDados.tipo.titulo === "SEGURO DE SISTEMA FOTOVOLTAICO" ? (
-							<SolarSystemInsuranceForm requestInfo={requestInfo} setRequestInfo={setRequestInfo} proposeInfo={proposeInfo} closeForm={() => closeModal()} />
-						) : null}
-						{proposeInfo?.oportunidadeDados.tipo.titulo === "CONSÓRCIO DE ENERGIA" ? (
-							<EnergyConsortiumForm requestInfo={requestInfo} setRequestInfo={setRequestInfo} proposeInfo={proposeInfo} closeForm={() => closeModal()} />
-						) : null}
-						{proposeInfo.oportunidadeDados.tipo.titulo === "MONITORAMENTO" ? (
-							<MonitoringForm requestInfo={requestInfo} setRequestInfo={setRequestInfo} proposeInfo={proposeInfo} closeForm={() => closeModal()} />
-						) : null} */}
 					</div>
 				</div>
 			</div>
