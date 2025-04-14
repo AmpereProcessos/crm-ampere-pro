@@ -97,7 +97,7 @@ function GenericForm({ requestInfo, setRequestInfo, proposal }: GenericFormProps
 			{stage === 1 ? <ContractInfo requestInfo={requestInfo} setRequestInfo={setRequestInfo} showActions={true} goToNextStage={() => setStage(2)} /> : null}
 			{stage === 2 ? (
 				<ProductsAndServices
-					editable={["6620196df708ce12429f4379", "66633bafd006577d39c57086", "672e23ce3c78559552162c31"].includes(proposal.oportunidadeDados.tipo.id)}
+					editable={["6620196df708ce12429f4379", "66633bafd006577d39c57086", "672e23ce3c78559552162c31", '6627b8c19440d7db1e618594'].includes(proposal.oportunidadeDados.tipo.id)}
 					requestInfo={requestInfo}
 					setRequestInfo={setRequestInfo}
 					showActions={true}
