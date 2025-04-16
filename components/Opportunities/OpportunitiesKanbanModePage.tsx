@@ -240,8 +240,8 @@ export default function OpportunitiesKanbanModePage({ session, funnelsOptions, r
                     setResponsible(null)
                     localStorage.removeItem('responsible')
                   } else {
-                    setResponsible([session.user.id])
-                    localStorage.setItem('responsible', JSON.stringify([session.user.id]))
+                    setResponsible(session.user.permissoes.oportunidades.escopo)
+                    localStorage.setItem('responsible', JSON.stringify(session.user.permissoes.oportunidades.escopo))
                   }
                 }}
                 width="100%"

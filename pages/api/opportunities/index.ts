@@ -113,11 +113,12 @@ const getOpportunities: NextApiHandler<GetResponse> = async (req, res) => {
 	const isPeriodDefined = after !== "undefined" && before !== "undefined";
 	const statusOption = statusOptionsQueries[status as keyof typeof statusOptionsQueries] || {};
 
+	const responsibleArr = responsible !== "null" ? responsible.split(",") : null;
 	// Validing user scope visibility
-	if (!!userScope && !userScope.includes(responsible)) throw new createHttpError.BadRequest("Seu escopo de visibilidade não contempla esse usuário.");
+	if (!!userScope && responsibleArr?.some(r => !userScope.includes(r))) throw new createHttpError.BadRequest("Seu escopo de visibilidade não contempla esse usuário.");
 
 	// Defining the responsible query parameters. If specified, filtering opportunities in the provided responsible scope
-	const queryResponsible: Filter<TOpportunity> = responsible !== "null" ? { "responsaveis.id": {$in: responsible.split(',')} } : {};
+	const queryResponsible: Filter<TOpportunity> = responsibleArr ? { "responsaveis.id": {$in: responsible.split(',')} } : {};
 	// Defining, if provided, period query parameters for date of insertion
 	const queryInsertion: Filter<TOpportunity> = isPeriodDefined ? { $and: [{ dataInsercao: { $gte: after } }, { dataInsercao: { $lte: before } }] } : {};
 	// Defining, if provided, won/lost query parameters
