@@ -17,24 +17,24 @@ import { useState } from 'react'
 import { TOpportunitiesQueryOptions } from '@/pages/api/opportunities/query-options'
 
 type UseOpportunitiesParams = {
-  responsible: string | null
+  responsibles: string[] | null
   funnel: string | null
   after: string | undefined
   before: string | undefined
   status: 'GANHOS' | 'PERDIDOS' | undefined
 }
-async function fetchOpportunities({ responsible, funnel, after, before, status }: UseOpportunitiesParams) {
+async function fetchOpportunities({ responsibles, funnel, after, before, status }: UseOpportunitiesParams) {
   try {
-    const { data } = await axios.get(`/api/opportunities?responsible=${responsible}&funnel=${funnel}&after=${after}&before=${before}&status=${status}`)
+    const { data } = await axios.get(`/api/opportunities?responsible=${responsibles}&funnel=${funnel}&after=${after}&before=${before}&status=${status}`)
     return data.data as TOpportunitySimplifiedDTOWithProposalAndActivitiesAndFunnels[]
   } catch (error) {
     throw error
   }
 }
-export function useOpportunities({ responsible, funnel, after, before, status }: UseOpportunitiesParams) {
+export function useOpportunities({ responsibles, funnel, after, before, status }: UseOpportunitiesParams) {
   return useQuery({
-    queryKey: ['opportunities', responsible, funnel, after, before, status],
-    queryFn: async () => await fetchOpportunities({ responsible, funnel, after, before, status }),
+    queryKey: ['opportunities', responsibles, funnel, after, before, status],
+    queryFn: async () => await fetchOpportunities({ responsibles, funnel, after, before, status }),
   })
 }
 
@@ -79,9 +79,9 @@ export function useOpportunitiesBySearch({ searchParam, page }: { searchParam: s
   })
 }
 
-export async function fetchOpportunityExport({ responsible, funnel, after, before, status }: UseOpportunitiesParams) {
+export async function fetchOpportunityExport({ responsibles, funnel, after, before, status }: UseOpportunitiesParams) {
   try {
-    const { data } = await axios.get(`/api/opportunities/export?responsible=${responsible}&funnel=${funnel}&after=${after}&before=${before}&status=${status}`)
+    const { data } = await axios.get(`/api/opportunities/export?responsible=${responsibles}&funnel=${funnel}&after=${after}&before=${before}&status=${status}`)
     return data.data as TResultsExportsItem[]
   } catch (error) {
     throw error

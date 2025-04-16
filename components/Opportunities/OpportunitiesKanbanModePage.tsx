@@ -30,9 +30,10 @@ import { getExcelFromJSON } from '@/lib/methods/excel-utils'
 import { formatDateAsLocale } from '@/lib/methods/formatting'
 import { TOpportunitiesPageModes } from '@/pages/comercial/oportunidades'
 import { FaRotate } from 'react-icons/fa6'
+import MultipleSelectInput from '../Inputs/MultipleSelectInput'
 
 type Options = {
-  activeResponsible: string | null
+  activeResponsible: string[] | null
   activeFunnel: string | null
   responsibleOptions:
     | {
@@ -89,8 +90,8 @@ function getOptions({ session, responsiblesOptions, funnelsOptions }: GetOptions
   if (!session.user.permissoes.oportunidades.escopo) {
     options.activeResponsible = null
     // If defined in local storage, using the stored option instead of null
-    if (responsibleFilterPreference) options.activeResponsible = responsibleFilterPreference
-
+    if (responsibleFilterPreference) options.activeResponsible = JSON.parse(responsibleFilterPreference) as string[]
+ 
     options.responsibleOptions = responsiblesOptions.map((resp) => {
       return {
         id: resp._id.toString(),
@@ -105,7 +106,7 @@ function getOptions({ session, responsiblesOptions, funnelsOptions }: GetOptions
     const visibleUsers = session.user.permissoes.oportunidades.escopo
     var filteredresponsibles = responsiblesOptions.filter((responsible) => visibleUsers.includes(responsible._id.toString()))
 
-    options.activeResponsible = session.user.id
+    options.activeResponsible = [session.user.id]
 
     options.responsibleOptions = filteredresponsibles.map((resp) => ({
       id: resp._id.toString(),
@@ -132,7 +133,7 @@ export default function OpportunitiesKanbanModePage({ session, funnelsOptions, r
   const [newProjectModalIsOpen, setNewProjectModalIsOpen] = useState<boolean>(false)
 
   const [funnel, setFunnel] = useState<string | null>(getOptions({ session, responsiblesOptions, funnelsOptions }).activeFunnel)
-  const [responsible, setResponsible] = useState<string | null>(getOptions({ session, responsiblesOptions, funnelsOptions }).activeResponsible)
+  const [responsible, setResponsible] = useState<string[] | null>(getOptions({ session, responsiblesOptions, funnelsOptions }).activeResponsible)
   const [dateParam, setDateParam] = useState<DateFilterType>({
     after: undefined,
     before: undefined,
@@ -143,7 +144,7 @@ export default function OpportunitiesKanbanModePage({ session, funnelsOptions, r
   })
 
   const { data: projects } = useOpportunities({
-    responsible: responsible,
+    responsibles: responsible,
     funnel: funnel,
     after: dateParam.after,
     before: dateParam.before,
@@ -170,7 +171,7 @@ export default function OpportunitiesKanbanModePage({ session, funnelsOptions, r
 
   async function handleExportData() {
     const results = await fetchOpportunityExport({
-      responsible: responsible,
+      responsibles: responsible,
       funnel: funnel,
       after: dateParam.after,
       before: dateParam.before,
@@ -224,23 +225,23 @@ export default function OpportunitiesKanbanModePage({ session, funnelsOptions, r
               />
             </div>
             <div className="w-full lg:w-[200px]">
-              <SelectInput
+              <MultipleSelectInput
                 label="Usuários"
                 showLabel={false}
                 selectedItemLabel="Todos"
-                value={responsible}
+                selected={responsible}
                 options={getOptions({ session, responsiblesOptions, funnelsOptions }).responsibleOptions}
                 handleChange={(selected) => {
-                  localStorage.setItem('responsible', selected)
-                  setResponsible(selected)
+                  localStorage.setItem('responsible', JSON.stringify(selected as string[]))
+                  setResponsible(selected as string[])
                 }}
                 onReset={() => {
                   if (!session.user.permissoes.oportunidades.escopo) {
                     setResponsible(null)
                     localStorage.removeItem('responsible')
                   } else {
-                    setResponsible(session.user.id)
-                    localStorage.setItem('responsible', session.user.id)
+                    setResponsible([session.user.id])
+                    localStorage.setItem('responsible', JSON.stringify([session.user.id]))
                   }
                 }}
                 width="100%"

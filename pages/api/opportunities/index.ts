@@ -94,7 +94,6 @@ const getOpportunities: NextApiHandler<GetResponse> = async (req, res) => {
 	const opportunityActivitiesCollection: Collection<TActivity> = db.collection("activities");
 
 	const { id, responsible, funnel, after, before, status } = req.query;
-
 	// There are two possible query dynamics, query by ID or query by funnel-status
 
 	// In case of query by ID, looking for the requested opportunity within the partners scope
@@ -118,7 +117,7 @@ const getOpportunities: NextApiHandler<GetResponse> = async (req, res) => {
 	if (!!userScope && !userScope.includes(responsible)) throw new createHttpError.BadRequest("Seu escopo de visibilidade não contempla esse usuário.");
 
 	// Defining the responsible query parameters. If specified, filtering opportunities in the provided responsible scope
-	const queryResponsible: Filter<TOpportunity> = responsible !== "null" ? { "responsaveis.id": responsible } : {};
+	const queryResponsible: Filter<TOpportunity> = responsible !== "null" ? { "responsaveis.id": {$in: responsible.split(',')} } : {};
 	// Defining, if provided, period query parameters for date of insertion
 	const queryInsertion: Filter<TOpportunity> = isPeriodDefined ? { $and: [{ dataInsercao: { $gte: after } }, { dataInsercao: { $lte: before } }] } : {};
 	// Defining, if provided, won/lost query parameters

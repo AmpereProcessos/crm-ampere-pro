@@ -3,6 +3,10 @@ import { AuthorSchema } from '../user.schema'
 
 const EquipmentSchema = z.object({
   identificador: z.literal('EQUIPMENT'),
+  idMaterial: z.string({
+    required_error: "ID do material não informado.",
+    invalid_type_error: 'Tipo não válido para o ID do material.',
+  }).optional().nullable(),
   categoria: z.union([z.literal('MÓDULO'), z.literal('INVERSOR')]),
   fabricante: z.string({
     required_error: 'Fabricante do produto não informado.',
