@@ -41,9 +41,9 @@ const createRequest: NextApiHandler<PostResponse> = async (req, res) => {
 	const partner = await partnersCollection.findOne({ _id: new ObjectId(crmOpportunity.idParceiro) });
 	const { responsaveis, idMarketing } = crmOpportunity;
 
-	const sellerName = SellersInApp.find((x) => calculateStringSimilarity((requestInfo.nomeVendedor || "NÃO DEFINIDO")?.toUpperCase(), x) > 80);
 	let insiderName: string | undefined = undefined;
 
+	const seller = responsaveis.find((r) => r.papel === "VENDEDOR");
 	const sdr = responsaveis.find((r) => r.papel === "SDR" || r.papel === "ANALISTA TÉCNICO");
 	// In case there is an insider for the opportunity
 	if (sdr) {
@@ -52,7 +52,9 @@ const createRequest: NextApiHandler<PostResponse> = async (req, res) => {
 	const insertContractRequestResponse = await collection.insertOne({
 		...requestInfo,
 		nomeParceiro: partner?.nome,
-		nomeVendedor: sellerName,
+		idVendedor: seller?.id,
+		nomeVendedor: seller?.nome,
+		avatarVendedor: seller?.avatar_url,
 		idOportunidade: idMarketing,
 		insider: insiderName,
 		canalVenda: insiderName ? "INSIDE SALES" : requestInfo.canalVenda,
