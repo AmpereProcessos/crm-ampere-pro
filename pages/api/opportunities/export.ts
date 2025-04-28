@@ -35,65 +35,39 @@ type TResultsExportsOpportunity = {
 type GetResponse = {
 	data: TResultsExportsItem[];
 };
-const getOpportunitiesExport: NextApiHandler<GetResponse> = async (
-	req,
-	res,
-) => {
-	const session = await validateAuthorization(
-		req,
-		res,
-		"oportunidades",
-		"visualizar",
-		true,
-	);
+const getOpportunitiesExport: NextApiHandler<GetResponse> = async (req, res) => {
+	const session = await validateAuthorization(req, res, "oportunidades", "visualizar", true);
 	const partnerId = session.user.idParceiro;
 	const parterScope = session.user.permissoes.parceiros.escopo;
-	const partnerQuery: Filter<TOpportunity> = parterScope
-		? { idParceiro: { $in: [...parterScope] } }
-		: {};
+	const partnerQuery: Filter<TOpportunity> = parterScope ? { idParceiro: { $in: [...parterScope] } } : {};
 
 	const userScope = session.user.permissoes.oportunidades.escopo;
 
 	const db = await connectToDatabase(process.env.MONGODB_URI, "crm");
-	const opportunitiesCollection: Collection<TOpportunity> =
-		db.collection("opportunities");
+	const opportunitiesCollection: Collection<TOpportunity> = db.collection("opportunities");
 
 	const { id, responsible, funnel, after, before, status } = req.query;
 
-	if (typeof responsible != "string")
-		throw new createHttpError.BadRequest("Responsável inválido");
-	if (typeof funnel != "string" || funnel == "null")
-		throw new createHttpError.BadRequest("Funil inválido");
-	if (typeof after != "string" || typeof before != "string")
-		throw new createHttpError.BadRequest("Parâmetros de período inválidos.");
+	if (typeof responsible != "string") throw new createHttpError.BadRequest("Responsável inválido");
+	if (typeof funnel != "string" || funnel == "null") throw new createHttpError.BadRequest("Funil inválido");
+	if (typeof after != "string" || typeof before != "string") throw new createHttpError.BadRequest("Parâmetros de período inválidos.");
 
 	const isPeriodDefined = after != "undefined" && before != "undefined";
-	const statusOption =
-		statusOptionsQueries[status as keyof typeof statusOptionsQueries] || {};
+	const statusOption = statusOptionsQueries[status as keyof typeof statusOptionsQueries] || {};
 
 	// Validing user scope visibility
-	if (!!userScope && !userScope.includes(responsible))
-		throw new createHttpError.BadRequest(
-			"Seu escopo de visibilidade não contempla esse usuário.",
-		);
+	if (!!userScope && !userScope.includes(responsible)) throw new createHttpError.BadRequest("Seu escopo de visibilidade não contempla esse usuário.");
 
 	// Defining the responsible query parameters. If specified, filtering opportunities in the provided responsible scope
-	const queryResponsible: Filter<TOpportunity> =
-		responsible != "null" ? { "responsaveis.id": responsible } : {};
+	const queryResponsible: Filter<TOpportunity> = responsible != "null" ? { "responsaveis.id": responsible } : {};
 	// Defining, if provided, period query parameters for date of insertion
 	const queryInsertion: Filter<TOpportunity> = isPeriodDefined
 		? {
-				$and: [
-					{ dataInsercao: { $gte: after } },
-					{ dataInsercao: { $lte: before } },
-				],
+				$and: [{ dataInsercao: { $gte: after } }, { dataInsercao: { $lte: before } }],
 			}
 		: {};
 	// Defining, if provided, won/lost query parameters
-	const queryStatus: Filter<TOpportunity> =
-		status != "undefined"
-			? statusOption
-			: { "perda.data": null, "ganho.data": null };
+	const queryStatus: Filter<TOpportunity> = status != "undefined" ? statusOption : { "perda.data": null, "ganho.data": null };
 
 	const query = {
 		...partnerQuery,
@@ -114,12 +88,7 @@ const getOpportunitiesExport: NextApiHandler<GetResponse> = async (
 		foreignField: "_id",
 		as: "proposta",
 	};
-	const clientLookup = {
-		from: "clients",
-		localField: "clientObjectId",
-		foreignField: "_id",
-		as: "cliente",
-	};
+
 	const projection = {
 		nome: 1,
 		identificador: 1,
@@ -127,25 +96,18 @@ const getOpportunitiesExport: NextApiHandler<GetResponse> = async (
 		idMarketing: 1,
 		responsaveis: 1,
 		ganho: 1,
+		cliente: 1,
 		"localizacao.uf": 1,
 		"localizacao.cidade": 1,
 		"proposta.valor": 1,
 		"proposta.potenciaPico": 1,
-		"cliente.canalAquisicao": 1,
 		perda: 1,
 		dataInsercao: 1,
 	};
-	const result = await opportunitiesCollection
-		.aggregate([
-			{ $match: query },
-			{ $addFields: addFields },
-			{ $lookup: proposeLookup },
-			{ $lookup: clientLookup },
-			{ $project: projection },
-		])
-		.toArray();
+	const result = await opportunitiesCollection.aggregate([{ $match: query }, { $addFields: addFields }, { $lookup: proposeLookup }, { $project: projection }]).toArray();
 
 	const exportation = result.map((project) => {
+		console.log("PROJECT.CLIENTE", project.cliente);
 		const info = {
 			nome: project.nome,
 			identificador: project.identificador,
@@ -156,13 +118,9 @@ const getOpportunitiesExport: NextApiHandler<GetResponse> = async (
 			responsaveis: project.responsaveis,
 			ganho: project.ganho,
 			valorProposta: project.proposta[0] ? project.proposta[0].valor : 0,
-			potenciaPicoProposta: project.proposta[0]
-				? project.proposta[0].potenciaPico
-				: 0,
-			telefone: project.cliente[0] ? project.cliente[0].telefonePrimario : "",
-			canalAquisicao: project.cliente[0]
-				? project.cliente[0].canalAquisicao
-				: "NÃO DEFINIDO",
+			potenciaPicoProposta: project.proposta[0] ? project.proposta[0].potenciaPico : 0,
+			telefone: project.cliente?.telefonePrimario,
+			canalAquisicao: project.cliente?.canalAquisicao || "NÃO DEFINIDO",
 			dataPerda: project.perda.data,
 			motivoPerda: project.perda.descricaoMotivo,
 			dataInsercao: project.dataInsercao,
@@ -198,15 +156,14 @@ const getOpportunitiesExport: NextApiHandler<GetResponse> = async (
 			"NOME DO PROJETO": project.nome,
 			IDENTIFICADOR: project.identificador || "",
 			TIPO: project.tipo,
-			TELEFONE: project?.telefone,
+			TELEFONE: info?.telefone,
 			VENDEDOR: seller?.nome || "NÃO DEFINIDO",
 			SDR: sdr?.nome || "NÃO DEFINIDO",
 			UF: uf,
 			CIDADE: city,
 			"CANAL DE AQUISIÇÃO": aquisitionOrigin,
 			CLASSIFICAÇÃO: classification || "NÃO DEFINIDO",
-			"DATA DE GANHO":
-				formatDateAsLocale(wonDate || undefined) || "NÃO ASSINADO",
+			"DATA DE GANHO": formatDateAsLocale(wonDate || undefined) || "NÃO ASSINADO",
 			"POTÊNCIA VENDIDA": proposePower,
 			"VALOR VENDA": proposeValue,
 			"DATA DE PERDA": formatDateAsLocale(project.dataPerda || undefined),

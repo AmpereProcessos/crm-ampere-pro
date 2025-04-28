@@ -4,18 +4,9 @@ import { insertFunnelReference } from "@/repositories/funnel-references/mutation
 import { insertOpportunity } from "@/repositories/opportunities/mutations";
 import connectToDatabase from "@/services/mongodb/crm-db-connection";
 import { apiHandler, validateAuthenticationWithSession } from "@/utils/api";
-import {
-	GeneralClientSchema,
-	type TClient,
-} from "@/utils/schemas/client.schema";
-import {
-	InsertFunnelReferenceSchema,
-	type TFunnelReference,
-} from "@/utils/schemas/funnel-reference.schema";
-import {
-	InsertOpportunitySchema,
-	type TOpportunity,
-} from "@/utils/schemas/opportunity.schema";
+import { GeneralClientSchema, type TClient } from "@/utils/schemas/client.schema";
+import { InsertFunnelReferenceSchema, type TFunnelReference } from "@/utils/schemas/funnel-reference.schema";
+import { InsertOpportunitySchema, type TOpportunity } from "@/utils/schemas/opportunity.schema";
 import createHttpError from "http-errors";
 import { type Collection, ObjectId } from "mongodb";
 import type { NextApiHandler } from "next";
@@ -33,10 +24,8 @@ type PostResponse = {
 const CreateClientOpportunityAndFunnelReferencesSchema = z.object({
 	clientId: z
 		.string({
-			required_error:
-				"ID de referência do cliente para vinculação não fornecido.",
-			invalid_type_error:
-				"Tipo não válido para ID de referência do cliente para vinculação.",
+			required_error: "ID de referência do cliente para vinculação não fornecido.",
+			invalid_type_error: "Tipo não válido para ID de referência do cliente para vinculação.",
 		})
 		.nullable(),
 	client: GeneralClientSchema,
@@ -44,42 +33,26 @@ const CreateClientOpportunityAndFunnelReferencesSchema = z.object({
 	funnelReference: InsertFunnelReferenceSchema,
 });
 
-const createClientOpportunityAndFunnelReferences: NextApiHandler<
-	PostResponse
-> = async (req, res) => {
+const createClientOpportunityAndFunnelReferences: NextApiHandler<PostResponse> = async (req, res) => {
 	const session = await validateAuthenticationWithSession(req, res);
 	const partnerId = session.user.idParceiro;
-	const hasGeneralClientScope =
-		session.user.permissoes.clientes.criar &&
-		!session.user.permissoes.clientes.escopo;
+	const hasGeneralClientScope = session.user.permissoes.clientes.criar && !session.user.permissoes.clientes.escopo;
 	// Validating creation permissions
-	const userHasClientCreationPermission =
-		session.user.permissoes.clientes.criar;
-	const userHasOpportunityCreationPermission =
-		session.user.permissoes.oportunidades.criar;
-	if (!userHasClientCreationPermission)
-		throw new createHttpError.BadRequest(
-			"Usuário não possui permissão para criação de cliente.",
-		);
-	if (!userHasOpportunityCreationPermission)
-		throw new createHttpError.BadRequest(
-			"Usuário não possui permissão para criação de oportunidade.",
-		);
+	const userHasClientCreationPermission = session.user.permissoes.clientes.criar;
+	const userHasOpportunityCreationPermission = session.user.permissoes.oportunidades.criar;
+	if (!userHasClientCreationPermission) throw new createHttpError.BadRequest("Usuário não possui permissão para criação de cliente.");
+	if (!userHasOpportunityCreationPermission) throw new createHttpError.BadRequest("Usuário não possui permissão para criação de oportunidade.");
 
-	const { clientId, client, opportunity, funnelReference } =
-		CreateClientOpportunityAndFunnelReferencesSchema.parse(req.body);
+	const { clientId, client, opportunity, funnelReference } = CreateClientOpportunityAndFunnelReferencesSchema.parse(req.body);
 
-	const db = await connectToDatabase(process.env.MONGODB_URI, "crm");
-	const opportunitiesCollection: Collection<TOpportunity> =
-		db.collection("opportunities");
+	const db = await connectToDatabase();
+	const opportunitiesCollection: Collection<TOpportunity> = db.collection("opportunities");
 	const clientsCollection: Collection<TClient> = db.collection("clients");
-	const funnelReferencesCollection: Collection<TFunnelReference> =
-		db.collection("funnel-references");
+	const funnelReferencesCollection: Collection<TFunnelReference> = db.collection("funnel-references");
 	if (clientId) {
 		console.log("PASSOU PELO CAMINHO DE VINCULAÇÃO DE CLIENTE EXISTENTE");
 		// If there is a client ID, then the opportunity will be reference to an existing client, therefore, there is no need to create a new client
-		if (typeof clientId !== "string" || !ObjectId.isValid(clientId))
-			throw new createHttpError.BadRequest("ID de cliente inválido.");
+		if (typeof clientId !== "string" || !ObjectId.isValid(clientId)) throw new createHttpError.BadRequest("ID de cliente inválido.");
 
 		// Creating opportunity with idCliente referencing the clientId provided
 		const insertOpportunityResponse = await insertOpportunity({
@@ -97,16 +70,9 @@ const createClientOpportunityAndFunnelReferences: NextApiHandler<
 			},
 			partnerId: partnerId || "",
 		});
-		if (!insertOpportunityResponse.acknowledged)
-			throw new createHttpError.InternalServerError(
-				"Oops, houve um erro desconhecido ao criar oportunidade.",
-			);
-		const insertedOpportunityId =
-			insertOpportunityResponse.insertedId.toString();
-		console.log(
-			"CLIENTE EXISTENTE - ID DA OPORTUNIDADE",
-			insertedOpportunityId,
-		);
+		if (!insertOpportunityResponse.acknowledged) throw new createHttpError.InternalServerError("Oops, houve um erro desconhecido ao criar oportunidade.");
+		const insertedOpportunityId = insertOpportunityResponse.insertedId.toString();
+		console.log("CLIENTE EXISTENTE - ID DA OPORTUNIDADE", insertedOpportunityId);
 		// Creating funnel reference referencing the inserted opportunity id
 		const insertFunnelReferenceResponse = await insertFunnelReference({
 			collection: funnelReferencesCollection,
@@ -121,16 +87,9 @@ const createClientOpportunityAndFunnelReferences: NextApiHandler<
 			},
 			partnerId: partnerId || "",
 		});
-		if (!insertFunnelReferenceResponse.acknowledged)
-			throw new createHttpError.InternalServerError(
-				"Oops, houve um erro desconhecido ao criar oportunidade.",
-			);
-		const insertedFunnelReferenceId =
-			insertFunnelReferenceResponse.insertedId.toString();
-		console.log(
-			"CLIENTE EXISTENTE - ID DA REFERÊNCIA DE FUNIL",
-			insertedOpportunityId,
-		);
+		if (!insertFunnelReferenceResponse.acknowledged) throw new createHttpError.InternalServerError("Oops, houve um erro desconhecido ao criar oportunidade.");
+		const insertedFunnelReferenceId = insertFunnelReferenceResponse.insertedId.toString();
+		console.log("CLIENTE EXISTENTE - ID DA REFERÊNCIA DE FUNIL", insertedOpportunityId);
 		return res.status(200).json({
 			data: {
 				insertedClientId: clientId,
@@ -154,20 +113,14 @@ const createClientOpportunityAndFunnelReferences: NextApiHandler<
 		cpfCnpj,
 		phoneNumber,
 	});
-	if (existingClientInDb)
-		throw new createHttpError.BadRequest(
-			"Cliente já existente. Não é permitida a duplicação de clientes.",
-		);
+	if (existingClientInDb) throw new createHttpError.BadRequest("Cliente já existente. Não é permitida a duplicação de clientes.");
 
 	const insertClientResponse = await insertClient({
 		collection: clientsCollection,
 		info: client,
 		partnerId: partnerId || "",
 	});
-	if (!insertClientResponse.acknowledged)
-		throw new createHttpError.InternalServerError(
-			"Oops, houve um erro desconhecido ao criar cliente.",
-		);
+	if (!insertClientResponse.acknowledged) throw new createHttpError.InternalServerError("Oops, houve um erro desconhecido ao criar cliente.");
 	const insertedClientId = insertClientResponse.insertedId.toString();
 	console.log("ID DO CLIENTE", insertedClientId);
 	const insertOpportunityResponse = await insertOpportunity({
@@ -185,10 +138,7 @@ const createClientOpportunityAndFunnelReferences: NextApiHandler<
 		},
 		partnerId: partnerId || "",
 	});
-	if (!insertOpportunityResponse.acknowledged)
-		throw new createHttpError.InternalServerError(
-			"Oops, houve um erro desconhecido ao criar oportunidade.",
-		);
+	if (!insertOpportunityResponse.acknowledged) throw new createHttpError.InternalServerError("Oops, houve um erro desconhecido ao criar oportunidade.");
 	const insertedOpportunityId = insertOpportunityResponse.insertedId.toString();
 	console.log("ID DA OPORTUNIDADE", insertedOpportunityId);
 	const insertFunnelReferenceResponse = await insertFunnelReference({
@@ -204,12 +154,8 @@ const createClientOpportunityAndFunnelReferences: NextApiHandler<
 		},
 		partnerId: partnerId || "",
 	});
-	if (!insertFunnelReferenceResponse.acknowledged)
-		throw new createHttpError.InternalServerError(
-			"Oops, houve um erro desconhecido ao criar oportunidade.",
-		);
-	const insertedFunnelReferenceId =
-		insertFunnelReferenceResponse.insertedId.toString();
+	if (!insertFunnelReferenceResponse.acknowledged) throw new createHttpError.InternalServerError("Oops, houve um erro desconhecido ao criar oportunidade.");
+	const insertedFunnelReferenceId = insertFunnelReferenceResponse.insertedId.toString();
 	console.log("ID DA REFERÊNCIA DO FUNIL", insertedFunnelReferenceId);
 	return res.status(201).json({
 		data: {

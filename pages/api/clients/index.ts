@@ -1,29 +1,13 @@
 import type { NextApiHandler } from "next";
 import type { ISession } from "../../../utils/models";
 
-import {
-	apiHandler,
-	validateAuthentication,
-	validateAuthorization,
-} from "@/utils/api";
+import { apiHandler, validateAuthentication, validateAuthorization } from "@/utils/api";
 import connectToDatabase from "@/services/mongodb/crm-db-connection";
-import {
-	type Collection,
-	type Filter,
-	type MatchKeysAndValues,
-	ObjectId,
-} from "mongodb";
+import { type Collection, type Filter, type MatchKeysAndValues, ObjectId } from "mongodb";
 import createHttpError from "http-errors";
 
-import {
-	GeneralClientSchema,
-	type TClient,
-} from "@/utils/schemas/client.schema";
-import {
-	getClientById,
-	getClients,
-	getExistentClientByProperties,
-} from "@/repositories/clients/queries";
+import { GeneralClientSchema, type TClient } from "@/utils/schemas/client.schema";
+import { getClientById, getClients, getExistentClientByProperties } from "@/repositories/clients/queries";
 import { insertClient, updateClient } from "@/repositories/clients/mutations";
 import type { TOpportunity } from "@/utils/schemas/opportunity.schema";
 type PostResponse = {
@@ -34,16 +18,10 @@ type PostResponse = {
 };
 
 const createClient: NextApiHandler<PostResponse> = async (req, res) => {
-	const session = await validateAuthorization(
-		req,
-		res,
-		"clientes",
-		"criar",
-		true,
-	);
+	const session = await validateAuthorization(req, res, "clientes", "criar", true);
 	const partnerId = session.user.idParceiro;
 	const client = GeneralClientSchema.parse(req.body);
-	const db = await connectToDatabase(process.env.MONGODB_URI, "crm");
+	const db = await connectToDatabase();
 	const collection: Collection<TClient> = db.collection("clients");
 	const email = client.email || undefined;
 	const cpfCnpj = client.cpfCnpj || undefined;
@@ -55,9 +33,7 @@ const createClient: NextApiHandler<PostResponse> = async (req, res) => {
 		phoneNumber,
 	});
 	if (existingClientInDb) {
-		throw new createHttpError.BadRequest(
-			"Cliente com essas informações já foi criado.",
-		);
+		throw new createHttpError.BadRequest("Cliente com essas informações já foi criado.");
 	}
 	const insertResponse = await insertClient({
 		collection: collection,
@@ -65,10 +41,7 @@ const createClient: NextApiHandler<PostResponse> = async (req, res) => {
 		partnerId: partnerId || "",
 	});
 
-	if (!insertResponse.acknowledged)
-		throw new createHttpError.InternalServerError(
-			"Oops, houve um erro desconhecido na criação do cliente.",
-		);
+	if (!insertResponse.acknowledged) throw new createHttpError.InternalServerError("Oops, houve um erro desconhecido na criação do cliente.");
 	const insertedId = insertResponse.insertedId.toString();
 	return res.status(201).json({
 		data: { insertedId: insertedId },
@@ -81,29 +54,20 @@ type GetResponse = {
 };
 
 const getPartnerClients: NextApiHandler<GetResponse> = async (req, res) => {
-	const session = await validateAuthorization(
-		req,
-		res,
-		"clientes",
-		"visualizar",
-		true,
-	);
+	const session = await validateAuthorization(req, res, "clientes", "visualizar", true);
 	const partnerId = session.user.idParceiro;
 	const userScope = session.user.permissoes.clientes.escopo;
 	const parterScope = session.user.permissoes.parceiros.escopo;
-	const partnerQuery: Filter<TClient> = parterScope
-		? { idParceiro: { $in: [...parterScope] } }
-		: {};
+	const partnerQuery: Filter<TClient> = parterScope ? { idParceiro: { $in: [...parterScope] } } : {};
 
-	const db = await connectToDatabase(process.env.MONGODB_URI, "crm");
+	const db = await connectToDatabase();
 	const collection: Collection<TClient> = db.collection("clients");
 
 	const { id, author } = req.query;
 
 	// In case there is an ID, querying for a specific client within the partners clients
 	if (id) {
-		if (typeof id !== "string" || !ObjectId.isValid(id))
-			throw new createHttpError.BadRequest("ID inválido.");
+		if (typeof id !== "string" || !ObjectId.isValid(id)) throw new createHttpError.BadRequest("ID inválido.");
 		const client = await getClientById({
 			collection: collection,
 			id: id,
@@ -122,10 +86,7 @@ const getPartnerClients: NextApiHandler<GetResponse> = async (req, res) => {
 	if (typeof author !== "string") throw "ID de representante inválido.";
 
 	// Validing user scope visibility
-	if (!!userScope && !userScope.includes(author))
-		throw new createHttpError.BadRequest(
-			"Seu escopo de visibilidade não contempla esse usuário.",
-		);
+	if (!!userScope && !userScope.includes(author)) throw new createHttpError.BadRequest("Seu escopo de visibilidade não contempla esse usuário.");
 
 	if (author !== "null") queryParam = { "autor.id": author };
 	console.log(queryParam);
@@ -144,30 +105,20 @@ type PutResponse = {
 };
 
 const editClients: NextApiHandler<PutResponse> = async (req, res) => {
-	const session = await validateAuthorization(
-		req,
-		res,
-		"clientes",
-		"editar",
-		true,
-	);
+	const session = await validateAuthorization(req, res, "clientes", "editar", true);
 	const partnerId = session.user.idParceiro;
 	const parterScope = session.user.permissoes.parceiros.escopo;
-	const partnerQuery: Filter<TClient> = parterScope
-		? { idParceiro: { $in: [...parterScope] } }
-		: {};
+	const partnerQuery: Filter<TClient> = parterScope ? { idParceiro: { $in: [...parterScope] } } : {};
 
 	const { id } = req.query;
 	const changes = GeneralClientSchema.partial().parse(req.body);
 	// if(session.user.id)
 
-	if (!id || typeof id !== "string" || !ObjectId.isValid(id))
-		throw new createHttpError.BadRequest("ID de cliente inválido.");
+	if (!id || typeof id !== "string" || !ObjectId.isValid(id)) throw new createHttpError.BadRequest("ID de cliente inválido.");
 
-	const db = await connectToDatabase(process.env.MONGODB_URI, "crm");
+	const db = await connectToDatabase();
 	const clientsCollection: Collection<TClient> = db.collection("clients");
-	const opportunitiesCollection: Collection<TOpportunity> =
-		db.collection("opportunities");
+	const opportunitiesCollection: Collection<TOpportunity> = db.collection("opportunities");
 	const client = await getClientById({
 		collection: clientsCollection,
 		id: id,
@@ -190,23 +141,13 @@ const editClients: NextApiHandler<PutResponse> = async (req, res) => {
 		"cliente.canalAquisicao": changes.canalAquisicao,
 	}).filter(([key, value]) => value !== null && value !== undefined);
 
-	const oppportunitiesUpdate = oppportunitiesUpdateArr.reduce(
-		(acc: { [key: string]: any }, [key, value]) => {
-			acc[key] = value;
-			return acc;
-		},
-		{},
-	);
+	const oppportunitiesUpdate = oppportunitiesUpdateArr.reduce((acc: { [key: string]: any }, [key, value]) => {
+		acc[key] = value;
+		return acc;
+	}, {});
 	console.log("OPPORTUNITIES UPDATE", oppportunitiesUpdate);
-	if (oppportunitiesUpdateArr.length > 0)
-		await opportunitiesCollection.updateMany(
-			{ idCliente: id },
-			{ $set: oppportunitiesUpdate },
-		);
-	if (!updateResponse.acknowledged)
-		throw new createHttpError.InternalServerError(
-			"Oops, houve um erro desconhecido na atualização do cliente.",
-		);
+	if (oppportunitiesUpdateArr.length > 0) await opportunitiesCollection.updateMany({ idCliente: id }, { $set: oppportunitiesUpdate });
+	if (!updateResponse.acknowledged) throw new createHttpError.InternalServerError("Oops, houve um erro desconhecido na atualização do cliente.");
 	return res.status(201).json({
 		data: "Cliente alterado com sucesso !",
 		message: "Cliente alterado com sucesso !",
@@ -225,15 +166,8 @@ type ValidateEditAuthorizationParams = {
 	projectId: string | string[] | undefined;
 };
 
-async function validateEditAuthorization({
-	clientsCollection,
-	projectsCollection,
-	session,
-	clientId,
-	projectId,
-}: ValidateEditAuthorizationParams) {
-	const requesterHasGeneralEditPermission =
-		session.user.permissoes.clientes.editar;
+async function validateEditAuthorization({ clientsCollection, projectsCollection, session, clientId, projectId }: ValidateEditAuthorizationParams) {
+	const requesterHasGeneralEditPermission = session.user.permissoes.clientes.editar;
 	console.log("USER HAS OVERALL PERMISSION", requesterHasGeneralEditPermission);
 	// If requester has overall edit permission, return pass
 	if (requesterHasGeneralEditPermission) return true;
@@ -245,12 +179,7 @@ async function validateEditAuthorization({
 	console.log("ID REPRESENTATIVE", representativeId);
 	// In case of no projectId provided, validating if the requester is the client's representative
 	if (requesterId === representativeId) return true;
-	if (
-		!projectId ||
-		typeof projectId !== "string" ||
-		!ObjectId.isValid(projectId)
-	)
-		throw new createHttpError.BadRequest("ID de projeto inválido.");
+	if (!projectId || typeof projectId !== "string" || !ObjectId.isValid(projectId)) throw new createHttpError.BadRequest("ID de projeto inválido.");
 	// Validating if requester is either the client's representative or the project's responsible
 	const responsibleId = await getProjectResponsible({
 		collection: projectsCollection,
@@ -264,17 +193,10 @@ type GetProjectResponsibleAndRepresentativeParams = {
 	collection: Collection;
 	projectId: string | undefined;
 };
-async function getProjectResponsible({
-	collection,
-	projectId,
-}: GetProjectResponsibleAndRepresentativeParams) {
+async function getProjectResponsible({ collection, projectId }: GetProjectResponsibleAndRepresentativeParams) {
 	try {
-		const projectSimplified = await collection.findOne(
-			{ _id: new ObjectId(projectId) },
-			{ projection: { responsavel: 1 } },
-		);
-		if (!projectSimplified)
-			throw new createHttpError.NotFound("Projeto não encontrado.");
+		const projectSimplified = await collection.findOne({ _id: new ObjectId(projectId) }, { projection: { responsavel: 1 } });
+		if (!projectSimplified) throw new createHttpError.NotFound("Projeto não encontrado.");
 		return projectSimplified.responsavel.id as string;
 	} catch (error) {
 		console.log("Error running getProjectResponsible", error);
@@ -285,17 +207,10 @@ type GetClientRepresentativeParams = {
 	collection: Collection;
 	clientId: string;
 };
-async function getClientRepresentative({
-	collection,
-	clientId,
-}: GetClientRepresentativeParams) {
+async function getClientRepresentative({ collection, clientId }: GetClientRepresentativeParams) {
 	try {
-		const clienteSimplified = await collection.findOne(
-			{ _id: new ObjectId(clientId) },
-			{ projection: { representante: 1 } },
-		);
-		if (!clienteSimplified)
-			throw new createHttpError.NotFound("Cliente não encontrado.");
+		const clienteSimplified = await collection.findOne({ _id: new ObjectId(clientId) }, { projection: { representante: 1 } });
+		if (!clienteSimplified) throw new createHttpError.NotFound("Cliente não encontrado.");
 		return clienteSimplified.representante.id as string;
 	} catch (error) {
 		console.log("Error running getClientRepresentative", error);

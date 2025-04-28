@@ -1,6 +1,8 @@
+import { formatDateAsLocale } from "@/lib/methods/formatting";
 import connectToDatabase from "@/services/mongodb/crm-db-connection";
 import { apiHandler } from "@/utils/api";
 import { TOpportunity } from "@/utils/schemas/opportunity.schema";
+import { AnyBulkWriteOperation } from "mongodb";
 import { NextApiHandler } from "next";
 
 const interval = {
@@ -10,38 +12,34 @@ const interval = {
 
 type GetResponse = any;
 const getManualTesting: NextApiHandler<GetResponse> = async (req, res) => {
-	const db = await connectToDatabase(process.env.MONGODB_URI, "crm");
+	// const db = await connectToDatabase();
 
-	const opportunitiesCollection = db.collection<TOpportunity>("opportunities");
+	// const opportunitiesCollection = db.collection<TOpportunity>("opportunities");
+	// const clientsCollection = db.collection("clients");
 
-	const specificSellerOpportunities = await opportunitiesCollection
-		.find({
-			"responsaveis.id": "65b54b8cc7f0cebdc92e7ffb",
-			dataInsercao: {
-				$gte: interval.start,
-				$lte: interval.end,
-			},
-		})
-		.toArray();
+	// const clients = await clientsCollection.find({}).toArray();
 
-	const opportunitiesSent = specificSellerOpportunities.filter((opportunity) => {
-		// If opportunity has less the 2 responsaveis, return false
-		if (opportunity.responsaveis.length < 2) return false;
-
-		const opportunitySDR = opportunity.responsaveis.find((responsavel) => responsavel.papel === "SDR");
-		if (!opportunitySDR) return false;
-
-		// If specific user is not the opportunitie s SDR, return false
-		if (opportunitySDR.id !== "65b54b8cc7f0cebdc92e7ffb") return false;
-
-		const opportunitiySeller = opportunity.responsaveis.find((responsavel) => responsavel.papel === "VENDEDOR");
-		if (!opportunitiySeller) return false;
-
-		return true;
-	});
-
-	console.log(opportunitiesSent.length);
-	return res.status(200).json(opportunitiesSent);
+	// console.log("Creating bulk write operations for clients...", formatDateAsLocale(new Date(), true));
+	// const bulkwriteOpportunities: AnyBulkWriteOperation<TOpportunity>[] = clients.map((client) => {
+	// 	return {
+	// 		updateOne: {
+	// 			filter: { idCliente: client._id.toString() },
+	// 			update: {
+	// 				$set: {
+	// 					"cliente.nome": client.nome,
+	// 					"cliente.cpfCnpj": client.cpfCnpj,
+	// 					"cliente.telefonePrimario": client.telefonePrimario,
+	// 					"cliente.email": client.email,
+	// 					"cliente.canalAquisicao": client.canalAquisicao,
+	// 				},
+	// 			},
+	// 		},
+	// 	};
+	// });
+	// console.log("Bulk write operations created. Executing bulk write...", formatDateAsLocale(new Date(), true));
+	// const bulkWriteResponse = await opportunitiesCollection.bulkWrite(bulkwriteOpportunities);
+	// console.log("Bulk write executed", formatDateAsLocale(new Date(), true));
+	return res.status(200).json("DESATIVADA");
 };
 
 export default apiHandler({ GET: getManualTesting });
