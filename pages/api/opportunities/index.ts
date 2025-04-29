@@ -115,10 +115,10 @@ const getOpportunities: NextApiHandler<GetResponse> = async (req, res) => {
 
 	const responsibleArr = responsible !== "null" ? responsible.split(",") : null;
 	// Validing user scope visibility
-	if (!!userScope && responsibleArr?.some(r => !userScope.includes(r))) throw new createHttpError.BadRequest("Seu escopo de visibilidade não contempla esse usuário.");
+	if (!!userScope && responsibleArr?.some((r) => !userScope.includes(r))) throw new createHttpError.BadRequest("Seu escopo de visibilidade não contempla esse usuário.");
 
 	// Defining the responsible query parameters. If specified, filtering opportunities in the provided responsible scope
-	const queryResponsible: Filter<TOpportunity> = responsibleArr ? { "responsaveis.id": {$in: responsible.split(',')} } : {};
+	const queryResponsible: Filter<TOpportunity> = responsibleArr ? { "responsaveis.id": { $in: responsible.split(",") } } : {};
 	// Defining, if provided, period query parameters for date of insertion
 	const queryInsertion: Filter<TOpportunity> = isPeriodDefined ? { $and: [{ dataInsercao: { $gte: after } }, { dataInsercao: { $lte: before } }] } : {};
 	// Defining, if provided, won/lost query parameters
@@ -206,8 +206,16 @@ const editOpportunity: NextApiHandler<PutResponse> = async (req, res) => {
 	const hasEditAuthorizationForOpportunity = !userScope || previousOpportunity.responsaveis.some((opResp) => opResp.id === userId || userScope.includes(opResp.id));
 	if (!hasEditAuthorizationForOpportunity) throw new createHttpError.Unauthorized("Você não possui permissão para alterar informações dessa oportunidade.");
 
-	// const updatesMade = identifyChanges({ previousData: opportunity, newData: changes })
-	// console.log('UPDATES MADE', JSON.stringify(updatesMade))
+	if (changes["tipo.id"] || changes?.tipo?.id) {
+		console.log("Attemp to change opportunity type", changes["tipo.id"], changes.tipo?.id);
+		console.log(`New: ${changes["tipo.id"] || changes?.tipo.id} - Previous: ${previousOpportunity.tipo.id}`);
+		if (changes["tipo.id"] !== previousOpportunity.tipo.id || changes.tipo?.id !== previousOpportunity.tipo.id) {
+			// In case update attemps to change the opportunity type, checking if type update is allowed
+			const opportunityProposals = await proposalsCollection.find({ "oportunidade.id": id }, { projection: { _id: 1 } }).toArray();
+			// In case there are proposals linked to the opportunity, type update is not allowed
+			if (opportunityProposals.length > 0) throw new createHttpError.BadRequest("Não é possível alterar o tipo de oportunidade, pois já existem propostas vinculadas a ela.");
+		}
+	}
 	const updateResponse = await updateOpportunity({ id: id, collection: opportunitiesCollection, changes: changes, query: partnerQuery });
 
 	// In case opportunity came from indication, checking for possible integration updates

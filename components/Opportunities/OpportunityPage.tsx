@@ -141,7 +141,7 @@ function OpportunityPage({ session, opportunityId }: OpportunityPageProps) {
 										opportunityIsLost={!!opportunity.perda.data}
 										opportunityLossDate={opportunity.perda.data}
 										idMarketing={opportunity.idMarketing}
-										opportunityEmail={opportunity.cliente.email}
+										opportunityEmail={opportunity.cliente?.email}
 									/>
 								)}
 							</div>

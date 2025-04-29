@@ -179,6 +179,7 @@ function NewOpportunity({ session, closeModal, opportunityCreators, funnels }: N
 			setCreateProjectId(insertedOpportunityId);
 			return "Oportunidade criada com sucesso !";
 		} catch (error) {
+			console.log("Error creating the opportunity");
 			throw error;
 		}
 	}
