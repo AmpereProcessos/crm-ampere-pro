@@ -1,9 +1,5 @@
 import { getErrorMessage } from "@/lib/methods/errors";
-import {
-	type QueryClient,
-	useMutation,
-	type UseMutationOptions,
-} from "@tanstack/react-query";
+import { type QueryClient, useMutation, type UseMutationOptions } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
 type UseMutationWithFeedbackParams<TData, TVariables> = {
@@ -12,10 +8,7 @@ type UseMutationWithFeedbackParams<TData, TVariables> = {
 	mutationFn: (variables: TVariables) => Promise<TData>;
 	callbackFn?: () => void;
 	affectedQueryKey: any[];
-	options?: Omit<
-		UseMutationOptions<TData, Error, TVariables>,
-		"mutationKey" | "mutationFn"
-	>;
+	options?: Omit<UseMutationOptions<TData, Error, TVariables>, "mutationKey" | "mutationFn">;
 };
 
 export function useMutationWithFeedback<TData = unknown, TVariables = unknown>({
@@ -46,8 +39,7 @@ export function useMutationWithFeedback<TData = unknown, TVariables = unknown>({
 			const { loadingToast } = context;
 			toast.dismiss();
 			console.log("SUCCESS");
-			const msg =
-				typeof data === "string" ? data : "Atualização feita com sucesso !";
+			const msg = typeof data === "string" ? data : "Atualização feita com sucesso !";
 			toast.success(msg);
 		},
 		onSettled: async (data, error) => {

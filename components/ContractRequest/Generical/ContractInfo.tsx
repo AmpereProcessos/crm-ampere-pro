@@ -12,7 +12,7 @@ import { BrazilianCitiesOptionsFromUF, BrazilianStatesOptions } from "@/utils/es
 import { formatDateInputChange } from "@/lib/methods/formatting";
 import TextareaInput from "@/components/Inputs/TextareaInput";
 import { BookText, ChevronRight } from "lucide-react";
-
+import { useAcquisitionChannels } from "@/utils/queries/utils";
 type ContractInfoProps = {
 	requestInfo: TContractRequest;
 	setRequestInfo: Dispatch<SetStateAction<TContractRequest>>;
@@ -20,6 +20,7 @@ type ContractInfoProps = {
 	goToNextStage: () => void;
 };
 function ContractInfo({ requestInfo, setRequestInfo, showActions, goToNextStage }: ContractInfoProps) {
+	const { data: acquisitionChannels } = useAcquisitionChannels();
 	async function setAddressDataByCEP(cep: string, type: "cobranca" | "instalacao" = "cobranca") {
 		const addressInfo = await getCEPInfo(cep);
 		const toastID = toast.loading("Buscando informações sobre o CEP...", {
@@ -567,7 +568,7 @@ function ContractInfo({ requestInfo, setRequestInfo, showActions, goToNextStage 
 								editable={true}
 								value={requestInfo.canalVenda}
 								handleChange={(value) => setRequestInfo({ ...requestInfo, canalVenda: value })}
-								options={CustomersAcquisitionChannels.map((value) => value)}
+								options={acquisitionChannels?.map((acquisitionChannel) => ({ id: acquisitionChannel._id, label: acquisitionChannel.valor, value: acquisitionChannel.valor })) || null}
 								selectedItemLabel="NÃO DEFINIDO"
 								onReset={() => {
 									setRequestInfo((prev) => ({

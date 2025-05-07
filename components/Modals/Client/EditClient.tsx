@@ -15,12 +15,13 @@ import type { Session } from "next-auth";
 import SelectInput from "@/components/Inputs/SelectInput";
 import DateInput from "@/components/Inputs/DateInput";
 import { formatDateInputChange } from "@/lib/methods/formatting";
-import { CustomersAcquisitionChannels, MaritalStatus } from "@/utils/select-options";
+import { MaritalStatus } from "@/utils/select-options";
 import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
 import { createClient, updateClient } from "@/utils/mutations/clients";
 import { useClientById } from "@/utils/queries/clients";
 import LoadingComponent from "@/components/utils/LoadingComponent";
 import ErrorComponent from "@/components/utils/ErrorComponent";
+import { useAcquisitionChannels } from "@/utils/queries/utils";
 
 type EditClientModalProps = {
 	clientId: string;
@@ -33,6 +34,7 @@ type EditClientModalProps = {
 function EditClient({ clientId, session, partnerId, closeModal, additionalAffectedQuery }: EditClientModalProps) {
 	const queryClient = useQueryClient();
 	const { data: client, isSuccess, isError, isLoading } = useClientById({ id: clientId });
+	const { data: acquisitionChannels } = useAcquisitionChannels();
 	const [clientInfo, setClientInfo] = useState<TClient>({
 		nome: "",
 		idParceiro: partnerId,
@@ -195,7 +197,7 @@ function EditClient({ clientId, session, partnerId, closeModal, additionalAffect
 									<SelectInput
 										label="CANAL DE AQUISIÇÃO"
 										value={clientInfo.canalAquisicao}
-										options={CustomersAcquisitionChannels}
+										options={acquisitionChannels?.map((acquisitionChannel) => ({ id: acquisitionChannel._id, label: acquisitionChannel.valor, value: acquisitionChannel.valor })) || null}
 										handleChange={(value) =>
 											setClientInfo((prev) => ({
 												...prev,

@@ -22,6 +22,7 @@ import SelectWithImages from "../Inputs/SelectWithImages";
 import { usePartnersSimplified } from "@/utils/queries/partners";
 import OpportunityFunnelReferencesBlock from "./OpportunityFunnelReferencesBlock";
 import { useProjectTypes } from "@/utils/queries/project-types";
+import { useAcquisitionChannels } from "@/utils/queries/utils";
 type DetailsBlockType = {
 	info: TOpportunityDTOWithClientAndPartnerAndFunnelReferences;
 	session: Session;
@@ -32,13 +33,7 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 	const queryClient = useQueryClient();
 	const partnersScope = session.user.permissoes.parceiros.escopo;
 	const [infoHolder, setInfoHolder] = useState<TOpportunityDTOWithClientAndPartnerAndFunnelReferences>({ ...info });
-	const [newFunnelHolder, setNewFunnelHolder] = useState<{
-		id: number | null;
-		etapaId: number | null;
-	}>({
-		id: null,
-		etapaId: null,
-	});
+
 	const { data: partners } = usePartnersSimplified();
 	const { data: projectTypes } = useProjectTypes();
 
@@ -55,6 +50,8 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 		queryClient: queryClient,
 		affectedQueryKey: ["opportunity-by-id", opportunityId],
 	});
+
+	const { data: acquisitionChannels } = useAcquisitionChannels();
 
 	useEffect(() => {
 		setInfoHolder(info);
@@ -573,8 +570,7 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 							<SelectInput
 								label="CANAL DE AQUISIÇÃO"
 								value={infoHolder?.cliente ? infoHolder?.cliente.canalAquisicao : null}
-								// editable={session?.user.id === infoHolder?.responsavel?.id || session?.user.permissoes.projetos.editar}
-								options={customersAcquisitionChannels.map((value) => value)}
+								options={acquisitionChannels?.map((acquisitionChannel) => ({ id: acquisitionChannel._id, label: acquisitionChannel.valor, value: acquisitionChannel.valor })) || null}
 								handleChange={(value) => {
 									if (infoHolder)
 										setInfoHolder((prev: any) => ({

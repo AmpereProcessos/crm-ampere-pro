@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { Session } from "next-auth";
+import type { Session } from "next-auth";
 import Link from "next/link";
 import { toast } from "react-hot-toast";
 import { useQueryClient } from "@tanstack/react-query";
 
 import { VscChromeClose } from "react-icons/vsc";
-import { stateCities } from "../../../utils/estados_cidades";
+import type { stateCities } from "../../../utils/estados_cidades";
 
 import { useSearchClients } from "@/utils/queries/clients";
 import { CustomersAcquisitionChannels } from "@/utils/select-options";
 import { getCEPInfo } from "@/utils/methods";
 
-import { TUserDTOSimplified } from "@/utils/schemas/user.schema";
-import { TClient, TSimilarClientSimplifiedDTO } from "@/utils/schemas/client.schema";
-import { TOpportunity } from "@/utils/schemas/opportunity.schema";
-import { TFunnelDTO } from "@/utils/schemas/funnel.schema";
-import { TFunnelReference } from "@/utils/schemas/funnel-reference.schema";
+import type { TUserDTOSimplified } from "@/utils/schemas/user.schema";
+import type { TClient, TSimilarClientSimplifiedDTO } from "@/utils/schemas/client.schema";
+import type { TOpportunity } from "@/utils/schemas/opportunity.schema";
+import type { TFunnelDTO } from "@/utils/schemas/funnel.schema";
+import type { TFunnelReference } from "@/utils/schemas/funnel-reference.schema";
 
 import { createClientOpportunityAndFunnelReference } from "@/utils/mutations/opportunities";
 import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
@@ -146,27 +146,7 @@ function NewOpportunity({ session, closeModal, opportunityCreators, funnels }: N
 		enabled: false,
 	});
 	const [createdProjectId, setCreateProjectId] = useState<string | null>(null);
-	async function setAddressDataByCEP(cep: string) {
-		const addressInfo = await getCEPInfo(cep);
-		const toastID = toast.loading("Buscando informações sobre o CEP...", {
-			duration: 2000,
-		});
-		setTimeout(() => {
-			if (addressInfo) {
-				toast.dismiss(toastID);
-				toast.success("Dados do CEP buscados com sucesso.", {
-					duration: 1000,
-				});
-				setNewClient((prev) => ({
-					...prev,
-					endereco: addressInfo.logradouro,
-					bairro: addressInfo.bairro,
-					uf: addressInfo.uf as keyof typeof stateCities,
-					cidade: addressInfo.localidade.toUpperCase(),
-				}));
-			}
-		}, 1000);
-	}
+
 	async function handleOpportunityCreation() {
 		try {
 			const insertedOpportunityId = await createClientOpportunityAndFunnelReference({
@@ -245,13 +225,19 @@ function NewOpportunity({ session, closeModal, opportunityCreators, funnels }: N
 					<div className="my-2 flex w-full flex-col items-center justify-center gap-4 px-4 lg:flex-row lg:justify-end">
 						{createdProjectId ? (
 							<Link href={`/comercial/oportunidades/id/${createdProjectId}`}>
-								<button className="rounded bg-green-500 px-2 py-1 text-xs font-medium tracking-tight text-white duration-300 ease-in-out hover:bg-green-600 lg:text-base">
+								<button type="button" className="rounded bg-green-500 px-2 py-1 text-xs font-medium tracking-tight text-white duration-300 ease-in-out hover:bg-green-600 lg:text-base">
 									IR PARA O PROJETO CRIADO
 								</button>
 							</Link>
 						) : null}
 						{!createdProjectId ? (
-							<LoadingButton loading={isPending} onClick={() => mutate()}>
+							<LoadingButton
+								loading={isPending}
+								onClick={() =>
+									// @ts-ignore
+									mutate()
+								}
+							>
 								CRIAR OPORTUNIDADE
 							</LoadingButton>
 						) : null}
