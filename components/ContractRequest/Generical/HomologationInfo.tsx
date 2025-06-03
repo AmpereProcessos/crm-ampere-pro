@@ -193,7 +193,7 @@ function HomologationInfo({ requestInfo, setRequestInfo, showActions, goToPrevio
 													value: "PESSOA JURIDICA",
 												},
 											]}
-											selectedItemLabel="NÃO DEFINIDO"
+											resetOptionLabel="NÃO DEFINIDO"
 											onReset={() => setRequestInfo((prev) => ({ ...prev, tipoDoTitular: undefined }))}
 											width="100%"
 										/>
@@ -232,7 +232,7 @@ function HomologationInfo({ requestInfo, setRequestInfo, showActions, goToPrevio
 													value: "EXISTENTE",
 												},
 											]}
-											selectedItemLabel="NÃO DEFINIDO"
+											resetOptionLabel="NÃO DEFINIDO"
 											onReset={() => setRequestInfo((prev) => ({ ...prev, tipoDaLigacao: undefined }))}
 											width="100%"
 										/>
@@ -255,7 +255,7 @@ function HomologationInfo({ requestInfo, setRequestInfo, showActions, goToPrevio
 													value: "URBANO",
 												},
 											]}
-											selectedItemLabel="NÃO DEFINIDO"
+											resetOptionLabel="NÃO DEFINIDO"
 											onReset={() =>
 												setRequestInfo((prev) => ({
 													...prev,

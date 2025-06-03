@@ -230,7 +230,7 @@ export default function OpportunitiesKanbanModePage({ session, funnelsOptions, r
 							<SelectInput
 								showLabel={false}
 								label="STATUS"
-								selectedItemLabel="EM ANDAMENTO"
+								resetOptionLabel="EM ANDAMENTO"
 								value={params.status}
 								options={[
 									{ id: 1, label: "GANHOS", value: "GANHOS" },
@@ -247,7 +247,7 @@ export default function OpportunitiesKanbanModePage({ session, funnelsOptions, r
 							<MultipleSelectInput
 								label="Usuários"
 								showLabel={false}
-								selectedItemLabel="Todos"
+								resetOptionLabel="Todos"
 								selected={responsible}
 								options={getOptions({ session, responsiblesOptions, funnelsOptions }).responsibleOptions}
 								handleChange={(selected) => {
@@ -270,7 +270,7 @@ export default function OpportunitiesKanbanModePage({ session, funnelsOptions, r
 							<SelectInput
 								label="Funis"
 								showLabel={false}
-								selectedItemLabel="NÃO DEFINIDO"
+								resetOptionLabel="NÃO DEFINIDO"
 								value={funnel}
 								options={getOptions({ session, responsiblesOptions, funnelsOptions }).funnelOptions}
 								handleChange={(selected) => {

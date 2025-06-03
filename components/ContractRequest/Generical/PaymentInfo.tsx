@@ -168,7 +168,7 @@ function PaymentInfo({ requestInfo, setRequestInfo, showActions, goToPreviousSta
 						]}
 						value={requestInfo.formaDePagamento}
 						handleChange={(value) => setRequestInfo({ ...requestInfo, formaDePagamento: value })}
-						selectedItemLabel="NÃO DEFINIDO"
+						resetOptionLabel="NÃO DEFINIDO"
 						onReset={() => {
 							setRequestInfo((prev) => ({
 								...prev,
@@ -196,7 +196,7 @@ function PaymentInfo({ requestInfo, setRequestInfo, showActions, goToPreviousSta
 										value: "CAPITAL PRÓPRIO",
 									},
 								]}
-								selectedItemLabel="NÃO DEFINIDO"
+								resetOptionLabel="NÃO DEFINIDO"
 								onReset={() => {
 									setRequestInfo((prev) => ({ ...prev, origemRecurso: null }));
 								}}
@@ -228,7 +228,7 @@ function PaymentInfo({ requestInfo, setRequestInfo, showActions, goToPreviousSta
 									options={creditors?.map((c) => ({ id: c._id, label: c.valor, value: c.valor })) || []}
 									value={requestInfo.credor}
 									handleChange={(value) => setRequestInfo({ ...requestInfo, credor: value })}
-									selectedItemLabel="NÃO DEFINIDO"
+									resetOptionLabel="NÃO DEFINIDO"
 									onReset={() => {
 										setRequestInfo((prev) => ({ ...prev, credor: null }));
 									}}

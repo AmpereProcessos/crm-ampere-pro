@@ -1,6 +1,7 @@
 import type { TInverter, TModule, TProductItem } from "@/utils/schemas/kits.schema";
 import type { TOpportunity } from "@/utils/schemas/opportunity.schema";
 import dayjs from "dayjs";
+import { isValidNumber } from "./validation";
 
 export function formatDateTime(value: any) {
 	if (!value) return undefined;
@@ -107,4 +108,9 @@ export function formatToSlug(value: string) {
 		.replace(/\s+/g, "-") // Replace spaces with hyphens
 		.replace(/-+/g, "-") // Replace multiple hyphens with single hyphen
 		.trim();
+}
+
+export function formatAsValidNumber(value: number | null | undefined) {
+	if (isValidNumber(value)) return value as number;
+	return null;
 }

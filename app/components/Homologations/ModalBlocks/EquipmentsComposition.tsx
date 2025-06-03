@@ -158,7 +158,7 @@ function EquipmentsComposition({ infoHolder, setInfoHolder, activeProposalId }: 
                   potencia: 0,
                 })
               }
-              selectedItemLabel="NÃO DEFINIDO"
+              resetOptionLabel="NÃO DEFINIDO"
               options={
                 equipments
                   ?.filter((e) => e.categoria == 'INVERSOR')
@@ -222,7 +222,7 @@ function EquipmentsComposition({ infoHolder, setInfoHolder, activeProposalId }: 
                   garantia: 10,
                 })
               }
-              selectedItemLabel="NÃO DEFINIDO"
+              resetOptionLabel="NÃO DEFINIDO"
               options={
                 equipments
                   ?.filter((e) => e.categoria == 'MÓDULO')
@@ -266,7 +266,7 @@ function EquipmentsComposition({ infoHolder, setInfoHolder, activeProposalId }: 
           <div className="w-full lg:w-[20%]">
             <SelectInput
               label="CATEGORIA"
-              selectedItemLabel="NÃO DEFINIDO"
+              resetOptionLabel="NÃO DEFINIDO"
               options={[
                 { id: 1, label: 'INVERSOR', value: 'INVERSOR' },
                 { id: 2, label: 'MÓDULO', value: 'MÓDULO' },

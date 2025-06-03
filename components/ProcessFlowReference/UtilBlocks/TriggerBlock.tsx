@@ -1,207 +1,195 @@
-import MultipleSelectInput from '@/components/Inputs/MultipleSelectInput'
-import NumberInput from '@/components/Inputs/NumberInput'
-import SelectInput from '@/components/Inputs/SelectInput'
+import MultipleSelectInput from "@/components/Inputs/MultipleSelectInput";
+import NumberInput from "@/components/Inputs/NumberInput";
+import SelectInput from "@/components/Inputs/SelectInput";
 import {
-  getActiveProcessAutomationReference,
-  getProcessAutomationComparationMethods,
-  TProcessFlowReferenceNode,
-  useProjectProcessFlowReferencesStore,
-} from '@/utils/process-settings'
-import { getProcessAutomationConditionOptions, TProcessAutomationConditionData } from '@/utils/process-settings/helpers'
-import React from 'react'
+	getActiveProcessAutomationReference,
+	getProcessAutomationComparationMethods,
+	TProcessFlowReferenceNode,
+	useProjectProcessFlowReferencesStore,
+} from "@/utils/process-settings";
+import { getProcessAutomationConditionOptions, TProcessAutomationConditionData } from "@/utils/process-settings/helpers";
+import React from "react";
 
 function TriggerBlock(node: TProcessFlowReferenceNode) {
-  const { id, data } = node
-  const activationAutomationReference = getActiveProcessAutomationReference(data.ativacao.referencia.identificacao)
-  const updateNodeData = useProjectProcessFlowReferencesStore((state) => state.updateNodeData)
+	const { id, data } = node;
+	const activationAutomationReference = getActiveProcessAutomationReference(data.ativacao.referencia.identificacao);
+	const updateNodeData = useProjectProcessFlowReferencesStore((state) => state.updateNodeData);
 
-  return (
-    <div className="flex w-full flex-col gap-2">
-      <h1 className="w-full rounded p-1 text-center text-xs font-bold text-blue-500">GATILHO</h1>
-      <div className="flex w-full flex-col gap-2 p-2">
-        <h1 className="w-full text-xs font-light tracking-tight text-gray-500">VARIÁVEL</h1>
-        <div className="flex flex-wrap items-center gap-2">
-          {activationAutomationReference.triggerConditions.map((c, index) => (
-            <button
-              disabled={!!data.dataExecucao}
-              draggable={false}
-              key={index}
-              onClick={() => {
-                updateNodeData(id, {
-                  ...data,
-                  ativacao: {
-                    ...data.ativacao,
-                    gatilho: { ...data.ativacao.gatilho, variavel: c.value, igual: null, entre: null, maiorQue: null, menorQue: null, inclui: null },
-                  },
-                })
-              }}
-              className={`grow ${
-                c.value == data.ativacao.gatilho.variavel ? 'bg-blue-700  text-white' : 'text-blue-700 '
-              } rounded border border-blue-700  p-1 text-xs font-medium  duration-300 ease-in-out hover:bg-blue-700  hover:text-white`}
-            >
-              {c.label}
-            </button>
-          ))}
-        </div>
-        <h1 className="w-full text-xs font-light tracking-tight text-gray-500">COMPARAÇÃO</h1>
-        <div className="flex flex-wrap items-center gap-2">
-          {getProcessAutomationComparationMethods({ entity: activationAutomationReference, variable: data.ativacao.gatilho.variavel }).map((method) => (
-            <button
-              disabled={!!data.dataExecucao}
-              draggable={false}
-              key={method.id}
-              onClick={() => {
-                updateNodeData(id, {
-                  ...data,
-                  ativacao: {
-                    ...data.ativacao,
-                    gatilho: {
-                      ...data.ativacao.gatilho,
-                      tipo: method.value,
-                      igual: undefined,
-                      maiorQue: undefined,
-                      menorQue: undefined,
-                      entre: undefined,
-                      inclui: undefined,
-                    },
-                  },
-                })
-              }}
-              className={`grow ${
-                method.value == data.ativacao.gatilho.tipo ? 'bg-orange-700  text-white' : 'text-orange-700 '
-              } rounded border border-orange-700  p-1 text-xs font-medium  duration-300 ease-in-out hover:bg-orange-700  hover:text-white`}
-            >
-              {method.label}
-            </button>
-          ))}
-        </div>
-        {data.ativacao.gatilho.tipo == 'IGUAL_TEXTO' ? (
-          <SelectInput
-            editable={!data.dataExecucao}
-            label="IGUAL A:"
-            labelClassName="w-full text-start text-xs font-light tracking-tight text-gray-500"
-            value={data.ativacao.gatilho.igual}
-            // options={options[infoHolder.gatilho.variavel as keyof typeof options]?.map((op, index) => ({ id: index + 1, label: op, value: op })) || []}
-            options={getProcessAutomationConditionOptions({
-              variable: data.ativacao.gatilho.variavel as keyof TProcessAutomationConditionData,
-            })}
-            handleChange={(value) => updateNodeData(id, { ...data, ativacao: { ...data.ativacao, gatilho: { ...data.ativacao.gatilho, igual: value } } })}
-            selectedItemLabel="NÃO DEFINIDO"
-            onReset={() => updateNodeData(id, { ...data, ativacao: { ...data.ativacao, gatilho: { ...data.ativacao.gatilho, igual: null } } })}
-            width="100%"
-          />
-        ) : null}
-        {data.ativacao.gatilho.tipo == 'IGUAL_NÚMERICO' ? (
-          <NumberInput
-            editable={!data.dataExecucao}
-            label="IGUAL A:"
-            labelClassName="w-full text-start text-xs font-light tracking-tight text-gray-500"
-            placeholder="Preencha o valor para comparação."
-            value={data.ativacao.gatilho.igual != null && data.ativacao.gatilho.igual != undefined ? Number(data.ativacao.gatilho.igual) : null}
-            handleChange={(value) =>
-              updateNodeData(id, { ...data, ativacao: { ...data.ativacao, gatilho: { ...data.ativacao.gatilho, igual: value.toString() } } })
-            }
-            width="100%"
-          />
-        ) : null}
-        {data.ativacao.gatilho.tipo == 'MAIOR_QUE_NÚMERICO' ? (
-          <NumberInput
-            editable={!data.dataExecucao}
-            label="MAIOR QUE:"
-            labelClassName="w-full text-start text-xs font-light tracking-tight text-gray-500"
-            placeholder="Preencha o valor para comparação."
-            value={data.ativacao.gatilho.maiorQue != null && data.ativacao.gatilho.maiorQue != undefined ? Number(data.ativacao.gatilho.maiorQue) : null}
-            handleChange={(value) => updateNodeData(id, { ...data, ativacao: { ...data.ativacao, gatilho: { ...data.ativacao.gatilho, maiorQue: value } } })}
-            width="100%"
-          />
-        ) : null}
-        {data.ativacao.gatilho.tipo == 'MENOR_QUE_NÚMERICO' ? (
-          <NumberInput
-            editable={!data.dataExecucao}
-            label="MENOR QUE:"
-            labelClassName="w-full text-start text-xs font-light tracking-tight text-gray-500"
-            placeholder="Preencha o valor para comparação."
-            value={data.ativacao.gatilho.menorQue != null && data.ativacao.gatilho.menorQue != undefined ? Number(data.ativacao.gatilho.menorQue) : null}
-            handleChange={(value) => updateNodeData(id, { ...data, ativacao: { ...data.ativacao, gatilho: { ...data.ativacao.gatilho, menorQue: value } } })}
-            width="100%"
-          />
-        ) : null}
-        {data.ativacao.gatilho.tipo == 'INTERVALO_NÚMERICO' ? (
-          <div className="flex w-full flex-col gap-2 lg:flex-row">
-            <div className="w-full lg:w-1/2">
-              <NumberInput
-                editable={!data.dataExecucao}
-                label="MAIOR QUE:"
-                labelClassName="w-full text-start text-xs font-light tracking-tight text-gray-500"
-                placeholder="Preencha o valor mínimo do intervalo."
-                value={
-                  data.ativacao.gatilho.entre?.minimo != null && data.ativacao.gatilho.entre?.minimo != undefined
-                    ? Number(data.ativacao.gatilho.entre?.minimo)
-                    : null
-                }
-                handleChange={(value) =>
-                  updateNodeData(id, {
-                    ...data,
-                    ativacao: {
-                      ...data.ativacao,
-                      gatilho: {
-                        ...data.ativacao.gatilho,
-                        entre: data.ativacao.gatilho.entre ? { ...data.ativacao.gatilho.entre, minimo: value } : { minimo: value, maximo: 0 },
-                      },
-                    },
-                  })
-                }
-                width="100%"
-              />
-            </div>
-            <div className="w-full lg:w-1/2">
-              <NumberInput
-                editable={!data.dataExecucao}
-                label="MENOR QUE:"
-                labelClassName="w-full text-start text-xs font-light tracking-tight text-gray-500"
-                placeholder="Preencha o valor máximo do intervalo."
-                value={
-                  data.ativacao.gatilho.entre?.maximo != null && data.ativacao.gatilho.entre?.maximo != undefined
-                    ? Number(data.ativacao.gatilho.entre?.maximo)
-                    : null
-                }
-                handleChange={(value) =>
-                  updateNodeData(id, {
-                    ...data,
-                    ativacao: {
-                      ...data.ativacao,
-                      gatilho: {
-                        ...data.ativacao.gatilho,
-                        entre: data.ativacao.gatilho.entre ? { ...data.ativacao.gatilho.entre, maximo: value } : { minimo: 0, maximo: value },
-                      },
-                    },
-                  })
-                }
-                width="100%"
-              />
-            </div>
-          </div>
-        ) : null}
-        {data.ativacao.gatilho.tipo == 'INCLUI_LISTA' ? (
-          <MultipleSelectInput
-            editable={!data.dataExecucao}
-            label="INCLUSO EM:"
-            labelClassName="w-full text-start text-xs font-light tracking-tight text-gray-500"
-            selected={data.ativacao.gatilho.inclui || null}
-            options={getProcessAutomationConditionOptions({
-              variable: data.ativacao.gatilho.variavel as keyof TProcessAutomationConditionData,
-            })}
-            handleChange={(value) =>
-              updateNodeData(id, { ...data, ativacao: { ...data.ativacao, gatilho: { ...data.ativacao.gatilho, inclui: value as string[] } } })
-            }
-            onReset={() => updateNodeData(id, { ...data, ativacao: { ...data.ativacao, gatilho: { ...data.ativacao.gatilho, inclui: [] } } })}
-            selectedItemLabel="NÃO DEFINIDO"
-            width="100%"
-          />
-        ) : null}
-      </div>
-    </div>
-  )
+	return (
+		<div className="flex w-full flex-col gap-2">
+			<h1 className="w-full rounded p-1 text-center text-xs font-bold text-blue-500">GATILHO</h1>
+			<div className="flex w-full flex-col gap-2 p-2">
+				<h1 className="w-full text-xs font-light tracking-tight text-gray-500">VARIÁVEL</h1>
+				<div className="flex flex-wrap items-center gap-2">
+					{activationAutomationReference.triggerConditions.map((c, index) => (
+						<button
+							disabled={!!data.dataExecucao}
+							draggable={false}
+							key={index}
+							onClick={() => {
+								updateNodeData(id, {
+									...data,
+									ativacao: {
+										...data.ativacao,
+										gatilho: { ...data.ativacao.gatilho, variavel: c.value, igual: null, entre: null, maiorQue: null, menorQue: null, inclui: null },
+									},
+								});
+							}}
+							className={`grow ${
+								c.value == data.ativacao.gatilho.variavel ? "bg-blue-700  text-white" : "text-blue-700 "
+							} rounded border border-blue-700  p-1 text-xs font-medium  duration-300 ease-in-out hover:bg-blue-700  hover:text-white`}
+						>
+							{c.label}
+						</button>
+					))}
+				</div>
+				<h1 className="w-full text-xs font-light tracking-tight text-gray-500">COMPARAÇÃO</h1>
+				<div className="flex flex-wrap items-center gap-2">
+					{getProcessAutomationComparationMethods({ entity: activationAutomationReference, variable: data.ativacao.gatilho.variavel }).map((method) => (
+						<button
+							disabled={!!data.dataExecucao}
+							draggable={false}
+							key={method.id}
+							onClick={() => {
+								updateNodeData(id, {
+									...data,
+									ativacao: {
+										...data.ativacao,
+										gatilho: {
+											...data.ativacao.gatilho,
+											tipo: method.value,
+											igual: undefined,
+											maiorQue: undefined,
+											menorQue: undefined,
+											entre: undefined,
+											inclui: undefined,
+										},
+									},
+								});
+							}}
+							className={`grow ${
+								method.value == data.ativacao.gatilho.tipo ? "bg-orange-700  text-white" : "text-orange-700 "
+							} rounded border border-orange-700  p-1 text-xs font-medium  duration-300 ease-in-out hover:bg-orange-700  hover:text-white`}
+						>
+							{method.label}
+						</button>
+					))}
+				</div>
+				{data.ativacao.gatilho.tipo == "IGUAL_TEXTO" ? (
+					<SelectInput
+						editable={!data.dataExecucao}
+						label="IGUAL A:"
+						labelClassName="w-full text-start text-xs font-light tracking-tight text-gray-500"
+						value={data.ativacao.gatilho.igual}
+						// options={options[infoHolder.gatilho.variavel as keyof typeof options]?.map((op, index) => ({ id: index + 1, label: op, value: op })) || []}
+						options={getProcessAutomationConditionOptions({
+							variable: data.ativacao.gatilho.variavel as keyof TProcessAutomationConditionData,
+						})}
+						handleChange={(value) => updateNodeData(id, { ...data, ativacao: { ...data.ativacao, gatilho: { ...data.ativacao.gatilho, igual: value } } })}
+						resetOptionLabel="NÃO DEFINIDO"
+						onReset={() => updateNodeData(id, { ...data, ativacao: { ...data.ativacao, gatilho: { ...data.ativacao.gatilho, igual: null } } })}
+						width="100%"
+					/>
+				) : null}
+				{data.ativacao.gatilho.tipo == "IGUAL_NÚMERICO" ? (
+					<NumberInput
+						editable={!data.dataExecucao}
+						label="IGUAL A:"
+						labelClassName="w-full text-start text-xs font-light tracking-tight text-gray-500"
+						placeholder="Preencha o valor para comparação."
+						value={data.ativacao.gatilho.igual != null && data.ativacao.gatilho.igual != undefined ? Number(data.ativacao.gatilho.igual) : null}
+						handleChange={(value) => updateNodeData(id, { ...data, ativacao: { ...data.ativacao, gatilho: { ...data.ativacao.gatilho, igual: value.toString() } } })}
+						width="100%"
+					/>
+				) : null}
+				{data.ativacao.gatilho.tipo == "MAIOR_QUE_NÚMERICO" ? (
+					<NumberInput
+						editable={!data.dataExecucao}
+						label="MAIOR QUE:"
+						labelClassName="w-full text-start text-xs font-light tracking-tight text-gray-500"
+						placeholder="Preencha o valor para comparação."
+						value={data.ativacao.gatilho.maiorQue != null && data.ativacao.gatilho.maiorQue != undefined ? Number(data.ativacao.gatilho.maiorQue) : null}
+						handleChange={(value) => updateNodeData(id, { ...data, ativacao: { ...data.ativacao, gatilho: { ...data.ativacao.gatilho, maiorQue: value } } })}
+						width="100%"
+					/>
+				) : null}
+				{data.ativacao.gatilho.tipo == "MENOR_QUE_NÚMERICO" ? (
+					<NumberInput
+						editable={!data.dataExecucao}
+						label="MENOR QUE:"
+						labelClassName="w-full text-start text-xs font-light tracking-tight text-gray-500"
+						placeholder="Preencha o valor para comparação."
+						value={data.ativacao.gatilho.menorQue != null && data.ativacao.gatilho.menorQue != undefined ? Number(data.ativacao.gatilho.menorQue) : null}
+						handleChange={(value) => updateNodeData(id, { ...data, ativacao: { ...data.ativacao, gatilho: { ...data.ativacao.gatilho, menorQue: value } } })}
+						width="100%"
+					/>
+				) : null}
+				{data.ativacao.gatilho.tipo == "INTERVALO_NÚMERICO" ? (
+					<div className="flex w-full flex-col gap-2 lg:flex-row">
+						<div className="w-full lg:w-1/2">
+							<NumberInput
+								editable={!data.dataExecucao}
+								label="MAIOR QUE:"
+								labelClassName="w-full text-start text-xs font-light tracking-tight text-gray-500"
+								placeholder="Preencha o valor mínimo do intervalo."
+								value={data.ativacao.gatilho.entre?.minimo != null && data.ativacao.gatilho.entre?.minimo != undefined ? Number(data.ativacao.gatilho.entre?.minimo) : null}
+								handleChange={(value) =>
+									updateNodeData(id, {
+										...data,
+										ativacao: {
+											...data.ativacao,
+											gatilho: {
+												...data.ativacao.gatilho,
+												entre: data.ativacao.gatilho.entre ? { ...data.ativacao.gatilho.entre, minimo: value } : { minimo: value, maximo: 0 },
+											},
+										},
+									})
+								}
+								width="100%"
+							/>
+						</div>
+						<div className="w-full lg:w-1/2">
+							<NumberInput
+								editable={!data.dataExecucao}
+								label="MENOR QUE:"
+								labelClassName="w-full text-start text-xs font-light tracking-tight text-gray-500"
+								placeholder="Preencha o valor máximo do intervalo."
+								value={data.ativacao.gatilho.entre?.maximo != null && data.ativacao.gatilho.entre?.maximo != undefined ? Number(data.ativacao.gatilho.entre?.maximo) : null}
+								handleChange={(value) =>
+									updateNodeData(id, {
+										...data,
+										ativacao: {
+											...data.ativacao,
+											gatilho: {
+												...data.ativacao.gatilho,
+												entre: data.ativacao.gatilho.entre ? { ...data.ativacao.gatilho.entre, maximo: value } : { minimo: 0, maximo: value },
+											},
+										},
+									})
+								}
+								width="100%"
+							/>
+						</div>
+					</div>
+				) : null}
+				{data.ativacao.gatilho.tipo == "INCLUI_LISTA" ? (
+					<MultipleSelectInput
+						editable={!data.dataExecucao}
+						label="INCLUSO EM:"
+						labelClassName="w-full text-start text-xs font-light tracking-tight text-gray-500"
+						selected={data.ativacao.gatilho.inclui || null}
+						options={getProcessAutomationConditionOptions({
+							variable: data.ativacao.gatilho.variavel as keyof TProcessAutomationConditionData,
+						})}
+						handleChange={(value) => updateNodeData(id, { ...data, ativacao: { ...data.ativacao, gatilho: { ...data.ativacao.gatilho, inclui: value as string[] } } })}
+						onReset={() => updateNodeData(id, { ...data, ativacao: { ...data.ativacao, gatilho: { ...data.ativacao.gatilho, inclui: [] } } })}
+						resetOptionLabel="NÃO DEFINIDO"
+						width="100%"
+					/>
+				) : null}
+			</div>
+		</div>
+	);
 }
 
-export default TriggerBlock
+export default TriggerBlock;

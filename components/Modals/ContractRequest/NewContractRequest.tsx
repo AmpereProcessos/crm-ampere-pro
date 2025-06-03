@@ -226,7 +226,7 @@ function NewContractRequest({ closeModal, proposeInfo, client, session, responsi
 										avatarVendedor: selectedResponsible?.avatar_url || "",
 									}));
 								}}
-								selectedItemLabel="NÃO DEFINIDO"
+								resetOptionLabel="NÃO DEFINIDO"
 								onReset={() =>
 									setRequestInfo((prev) => ({
 										...prev,

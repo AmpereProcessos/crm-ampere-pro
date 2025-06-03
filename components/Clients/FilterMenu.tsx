@@ -91,7 +91,7 @@ function FilterMenu({
 							label="CIDADE"
 							selected={filtersHolder.city}
 							options={AllCities}
-							selectedItemLabel="NÃO DEFINIDO"
+							resetOptionLabel="NÃO DEFINIDO"
 							handleChange={(value) => {
 								setFiltersHolder((prev) => ({
 									...prev,
@@ -113,7 +113,7 @@ function FilterMenu({
 							label="CANAL DE AQUISIÇÃO"
 							selected={filtersHolder.acquisitionChannel}
 							options={acquisitionChannels?.map((acquisitionChannel) => ({ id: acquisitionChannel._id, label: acquisitionChannel.valor, value: acquisitionChannel.valor })) || null}
-							selectedItemLabel="NÃO DEFINIDO"
+							resetOptionLabel="NÃO DEFINIDO"
 							handleChange={(value) => {
 								setFiltersHolder((prev) => ({
 									...prev,
@@ -136,7 +136,7 @@ function FilterMenu({
 							options={authorSelectableOptions?.map((promoter) => ({ id: promoter._id || "", label: promoter.nome, value: promoter._id })) || null}
 							selected={selectedAuthors}
 							handleChange={(value) => setAuthors(value as string[])}
-							selectedItemLabel="TODOS"
+							resetOptionLabel="TODOS"
 							onReset={() => setAuthors(null)}
 							labelClassName="text-xs font-medium tracking-tight text-black"
 							width="100%"
@@ -148,7 +148,7 @@ function FilterMenu({
 							options={partnersSelectableOptions?.map((promoter) => ({ id: promoter._id || "", label: promoter.nome, value: promoter._id })) || null}
 							selected={selectedPartners}
 							handleChange={(value) => setPartners(value as string[])}
-							selectedItemLabel="TODOS"
+							resetOptionLabel="TODOS"
 							onReset={() => setPartners(null)}
 							labelClassName="text-xs font-medium tracking-tight text-black"
 							width="100%"

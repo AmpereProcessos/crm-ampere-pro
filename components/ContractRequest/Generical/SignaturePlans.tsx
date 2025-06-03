@@ -143,7 +143,7 @@ function InsuranceData({ requestInfo, setRequestInfo }: InsuranceDataProps) {
 								{ id: 2, value: "NÃO SE APLICA", label: "NÃO SE APLICA" },
 							]}
 							handleChange={(value) => setRequestInfo((prev) => ({ ...prev, tempoSegurado: value }))}
-							selectedItemLabel="NÃO DEFINIDO"
+							resetOptionLabel="NÃO DEFINIDO"
 							onReset={() => setRequestInfo((prev) => ({ ...prev, tempoSegurado: "NÃO SE APLICA" }))}
 							width="100%"
 						/>

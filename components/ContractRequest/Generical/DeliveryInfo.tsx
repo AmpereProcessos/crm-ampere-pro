@@ -101,7 +101,7 @@ function DeliveryInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNext
 									label="ESTADO"
 									value={requestInfo.ufEntrega}
 									handleChange={(value) => setRequestInfo((prev) => ({ ...prev, ufEntrega: value, cidadeEntrega: BrazilianCitiesOptionsFromUF(value || "")[0]?.value }))}
-									selectedItemLabel="NÃO DEFINIDO"
+									resetOptionLabel="NÃO DEFINIDO"
 									onReset={() => setRequestInfo((prev) => ({ ...prev, ufEntrega: null, cidadeEntrega: null }))}
 									options={BrazilianStatesOptions}
 									width="100%"
@@ -113,7 +113,7 @@ function DeliveryInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNext
 									value={requestInfo.cidadeEntrega}
 									handleChange={(value) => setRequestInfo((prev) => ({ ...prev, cidadeEntrega: value }))}
 									options={BrazilianCitiesOptionsFromUF(requestInfo.uf || "")}
-									selectedItemLabel="NÃO DEFINIDO"
+									resetOptionLabel="NÃO DEFINIDO"
 									onReset={() => setRequestInfo((prev) => ({ ...prev, cidadeEntrega: null }))}
 									width="100%"
 								/>
@@ -211,7 +211,7 @@ function DeliveryInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNext
 									value: "NÃO PODE RECEBER EM HORARIO COMERCIAL",
 								},
 							]}
-							selectedItemLabel="NÃO DEFINIDO"
+							resetOptionLabel="NÃO DEFINIDO"
 							onReset={() => {
 								setRequestInfo((prev) => ({
 									...prev,

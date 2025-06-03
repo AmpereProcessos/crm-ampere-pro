@@ -193,7 +193,7 @@ function PaymentInfo({ requestInfo, setRequestInfo, paymentMethods, goToPrevious
 									necessidadeNFAdiantada: value,
 								})
 							}
-							selectedItemLabel="NÃO DEFINIDO"
+							resetOptionLabel="NÃO DEFINIDO"
 							onReset={() => {
 								setRequestInfo((prev) => ({
 									...prev,
@@ -224,7 +224,7 @@ function PaymentInfo({ requestInfo, setRequestInfo, paymentMethods, goToPrevious
 									value: "SIM",
 								},
 							]}
-							selectedItemLabel="NÃO DEFINIDO"
+							resetOptionLabel="NÃO DEFINIDO"
 							onReset={() => {
 								setRequestInfo((prev) => ({
 									...prev,
@@ -278,7 +278,7 @@ function PaymentInfo({ requestInfo, setRequestInfo, paymentMethods, goToPrevious
 									label="ESTADO"
 									value={requestInfo.ufEntrega}
 									handleChange={(value) => setRequestInfo((prev) => ({ ...prev, ufEntrega: value }))}
-									selectedItemLabel="NÃO DEFINIDO"
+									resetOptionLabel="NÃO DEFINIDO"
 									onReset={() => setRequestInfo((prev) => ({ ...prev, ufEntrega: null }))}
 									options={Object.keys(stateCities).map((state, index) => ({
 										id: index + 1,
@@ -302,7 +302,7 @@ function PaymentInfo({ requestInfo, setRequestInfo, paymentMethods, goToPrevious
 												}))
 											: null
 									}
-									selectedItemLabel="NÃO DEFINIDO"
+									resetOptionLabel="NÃO DEFINIDO"
 									onReset={() => setRequestInfo((prev) => ({ ...prev, cidadeEntrega: null }))}
 									width="100%"
 								/>
@@ -396,7 +396,7 @@ function PaymentInfo({ requestInfo, setRequestInfo, paymentMethods, goToPrevious
 									value: "NÃO PODE RECEBER EM HORARIO COMERCIAL",
 								},
 							]}
-							selectedItemLabel="NÃO DEFINIDO"
+							resetOptionLabel="NÃO DEFINIDO"
 							onReset={() => {
 								setRequestInfo((prev) => ({
 									...prev,
@@ -442,7 +442,7 @@ function PaymentInfo({ requestInfo, setRequestInfo, paymentMethods, goToPrevious
 										value: "CAPITAL PRÓPRIO",
 									},
 								]}
-								selectedItemLabel="NÃO DEFINIDO"
+								resetOptionLabel="NÃO DEFINIDO"
 								onReset={() => {
 									setRequestInfo((prev) => ({ ...prev, origemRecurso: null }));
 								}}
@@ -458,7 +458,7 @@ function PaymentInfo({ requestInfo, setRequestInfo, paymentMethods, goToPrevious
 										options={creditors?.map((c) => ({ id: c._id, label: c.valor, value: c.valor })) || []}
 										value={requestInfo.credor}
 										handleChange={(value) => setRequestInfo({ ...requestInfo, credor: value })}
-										selectedItemLabel="NÃO DEFINIDO"
+										resetOptionLabel="NÃO DEFINIDO"
 										onReset={() => {
 											setRequestInfo((prev) => ({ ...prev, credor: null }));
 										}}
@@ -546,7 +546,7 @@ function PaymentInfo({ requestInfo, setRequestInfo, paymentMethods, goToPrevious
 										necessidadeCodigoFiname: value,
 									})
 								}
-								selectedItemLabel="NÃO DEFINIDO"
+								resetOptionLabel="NÃO DEFINIDO"
 								onReset={() => {
 									setRequestInfo((prev) => ({
 										...prev,
@@ -566,7 +566,7 @@ function PaymentInfo({ requestInfo, setRequestInfo, paymentMethods, goToPrevious
                   const method = paymentMethods.find((p) => p.nome === value)
                   setRequestInfo({ ...requestInfo, formaDePagamento: method?.nome || undefined, formaDePagamentoId: method?.id })
                 }}
-                selectedItemLabel="NÃO DEFINIDO"
+                resetOptionLabel="NÃO DEFINIDO"
                 onReset={() => {
                   setRequestInfo((prev) => ({
                     ...prev,
@@ -609,7 +609,7 @@ function PaymentInfo({ requestInfo, setRequestInfo, paymentMethods, goToPrevious
 								]}
 								value={requestInfo.formaDePagamento}
 								handleChange={(value) => setRequestInfo({ ...requestInfo, formaDePagamento: value })}
-								selectedItemLabel="NÃO DEFINIDO"
+								resetOptionLabel="NÃO DEFINIDO"
 								onReset={() => {
 									setRequestInfo((prev) => ({
 										...prev,

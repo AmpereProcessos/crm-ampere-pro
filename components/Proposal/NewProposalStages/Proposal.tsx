@@ -230,7 +230,7 @@ function Proposal({ opportunity, projectTypes, infoHolder, setInfoHolder, moveTo
 									<SelectInput
 										label="TEMPLATE DA PROPOSTA"
 										value={infoHolder.idModeloAnvil || null}
-										selectedItemLabel="TEMPLATE PADRÃO"
+										resetOptionLabel="TEMPLATE PADRÃO"
 										options={ProposalTemplateOptions.map((t, index) => ({ id: index + 1, label: t.titulo, value: t.idAnvil }))}
 										handleChange={(value) => setInfoHolder((prev) => ({ ...prev, idModeloAnvil: value }))}
 										onReset={() => setInfoHolder((prev) => ({ ...prev, idModeloAnvil: undefined }))}

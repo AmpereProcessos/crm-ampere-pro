@@ -28,11 +28,7 @@ import { getExcelFromJSON } from "@/lib/methods/excel-utils";
 import { getErrorMessage } from "@/lib/methods/errors";
 import { formatDateInputChange } from "@/lib/methods/formatting";
 
-import {
-	formatDateForInput,
-	getFirstDayOfMonth,
-	getLastDayOfMonth,
-} from "@/utils/methods";
+import { formatDateForInput, getFirstDayOfMonth, getLastDayOfMonth } from "@/utils/methods";
 import { useSalePromoters } from "@/utils/queries/users";
 import type { TUserDTOWithSaleGoals } from "@/utils/schemas/user.schema";
 import { fetchResultsExports } from "@/utils/queries/stats/exports";
@@ -43,22 +39,14 @@ import Sellers from "@/components/Stats/Results/Sellers";
 
 const currentDate = new Date();
 const periodStr = dayjs(currentDate).format("MM/YYYY");
-const firstDayOfMonth = getFirstDayOfMonth(
-	currentDate.getFullYear(),
-	currentDate.getMonth(),
-).toISOString();
-const lastDayOfMonth = getLastDayOfMonth(
-	currentDate.getFullYear(),
-	currentDate.getMonth(),
-).toISOString();
+const firstDayOfMonth = getFirstDayOfMonth(currentDate.getFullYear(), currentDate.getMonth()).toISOString();
+const lastDayOfMonth = getLastDayOfMonth(currentDate.getFullYear(), currentDate.getMonth()).toISOString();
 
 function getSaleGoals(promoter: TUserDTOWithSaleGoals) {
 	const saleGoals = promoter.metas;
 	if (!saleGoals || saleGoals.length === 0) return undefined;
 
-	const currentPeriodSaleGoals = saleGoals.find(
-		(saleGoal) => saleGoal.periodo === periodStr,
-	);
+	const currentPeriodSaleGoals = saleGoals.find((saleGoal) => saleGoal.periodo === periodStr);
 	if (!currentPeriodSaleGoals) return undefined;
 
 	return currentPeriodSaleGoals.metas;
@@ -88,8 +76,7 @@ function ComercialResults() {
 		isOpen: false,
 		promoter: null,
 	});
-	const { data: queryOptions, isSuccess: queryOptionsSuccess } =
-		useComercialResultsQueryOptions();
+	const { data: queryOptions, isSuccess: queryOptionsSuccess } = useComercialResultsQueryOptions();
 	async function handleDataExport() {
 		const loadingToastId = toast.loading("Carregando...");
 		try {
@@ -111,141 +98,138 @@ function ComercialResults() {
 		}
 	}
 
-	if (status != "authenticated") return <LoadingPage />;
+	if (status !== "authenticated") return <LoadingPage />;
 	return (
 		<div className="flex h-full flex-col md:flex-row">
 			<Sidebar session={session} />
 			<div className="flex w-full max-w-full grow flex-col overflow-x-hidden bg-[#f8f9fa] p-6">
-				<div className="flex w-full flex-col items-center justify-between gap-4 border-b border-black pb-2 lg:flex-row lg:items-end">
-					<h1 className="text-center font-Raleway text-xl font-black text-black lg:text-start lg:text-2xl">
-						ACOMPANHAMENTO DE RESULTADOS
-					</h1>
-					<div className="flex items-center gap-2">
-						<div className="flex flex-col items-center gap-4 lg:flex-row">
-							<h1 className="text-end text-sm font-medium uppercase tracking-tight">
-								PERÍODO
-							</h1>
-							<button
-								onClick={() => handleDataExport()}
-								className="flex h-[46.6px] items-center justify-center gap-2 rounded-md border bg-[#2c6e49] p-2 px-3 text-sm font-medium text-white shadow-sm duration-300 ease-in-out hover:scale-105"
-							>
-								<BsDownload style={{ fontSize: "18px" }} />
-							</button>
-							<div className="flex w-full flex-col items-center gap-2 md:flex-row lg:w-fit">
-								<div className="w-full md:w-[150px]">
-									<DateInput
-										showLabel={false}
-										label="PERÍODO"
-										value={formatDateForInput(queryFilters.period.after)}
-										handleChange={(value) =>
-											setQueryFilters((prev) => ({
-												...prev,
-												period: {
-													...prev.period,
-													after: (formatDateInputChange(value) ||
-														firstDayOfMonth) as string,
-												},
-											}))
-										}
-										width="100%"
-									/>
-								</div>
-								<div className="w-full md:w-[150px]">
-									<DateInput
-										showLabel={false}
-										label="PERÍODO"
-										value={formatDateForInput(queryFilters.period.before)}
-										handleChange={(value) =>
-											setQueryFilters((prev) => ({
-												...prev,
-												period: {
-													...prev.period,
-													before: (formatDateInputChange(value) ||
-														lastDayOfMonth) as string,
-												},
-											}))
-										}
-										width="100%"
-									/>
-								</div>
+				<h1 className="text-center font-Raleway text-xl font-black text-black lg:text-start lg:text-2xl">ACOMPANHAMENTO DE RESULTADOS</h1>
+				<div className="flex items-center gap-2 flex-col lg:flex-row w-full justify-end">
+					<div className="flex flex-col items-center gap-y-2 gap-4 lg:flex-row w-full lg:w-fit">
+						<h1 className="text-end text-sm font-medium uppercase tracking-tight">PERÍODO</h1>
+						<div className="flex w-full flex-col items-center gap-2 md:flex-row lg:w-fit">
+							<div className="w-full md:w-[150px]">
+								<DateInput
+									showLabel={false}
+									label="PERÍODO"
+									labelClassName="text-[0.6rem]"
+									holderClassName="text-xs p-2 min-h-[34px]"
+									value={formatDateForInput(queryFilters.period.after)}
+									handleChange={(value) =>
+										setQueryFilters((prev) => ({
+											...prev,
+											period: {
+												...prev.period,
+												after: (formatDateInputChange(value) || firstDayOfMonth) as string,
+											},
+										}))
+									}
+									width="100%"
+								/>
+							</div>
+							<div className="w-full md:w-[150px]">
+								<DateInput
+									showLabel={false}
+									label="PERÍODO"
+									labelClassName="text-[0.6rem]"
+									holderClassName="text-xs p-2 min-h-[34px]"
+									value={formatDateForInput(queryFilters.period.before)}
+									handleChange={(value) =>
+										setQueryFilters((prev) => ({
+											...prev,
+											period: {
+												...prev.period,
+												before: (formatDateInputChange(value) || lastDayOfMonth) as string,
+											},
+										}))
+									}
+									width="100%"
+								/>
 							</div>
 						</div>
-						<div className="w-full md:w-[250px]">
-							<MultipleSelectInput
-								label="USUÁRIOS"
-								showLabel={false}
-								options={
-									queryOptions?.salePromoters?.map((promoter) => ({
-										id: promoter._id || "",
-										label: promoter.nome,
-										value: promoter._id,
-									})) || null
-								}
-								selected={queryFilters.responsibles}
-								handleChange={(value) =>
-									setQueryFilters((prev) => ({
-										...prev,
-										responsibles: value as string[],
-									}))
-								}
-								selectedItemLabel="TODOS"
-								onReset={() =>
-									setQueryFilters((prev) => ({ ...prev, responsibles: null }))
-								}
-								width="100%"
-							/>
-						</div>
-						<div className="w-full md:w-[250px]">
-							<MultipleSelectInput
-								label="PARCEIROS"
-								showLabel={false}
-								options={
-									queryOptions?.partners?.map((partner) => ({
-										id: partner._id || "",
-										label: partner.nome,
-										value: partner._id,
-									})) || null
-								}
-								selected={queryFilters.partners}
-								handleChange={(value) =>
-									setQueryFilters((prev) => ({
-										...prev,
-										partners: value as string[],
-									}))
-								}
-								selectedItemLabel="TODOS"
-								onReset={() =>
-									setQueryFilters((prev) => ({ ...prev, partners: null }))
-								}
-								width="100%"
-							/>
-						</div>
-						<div className="w-full lg:w-[300px]">
-							<MultipleSelectInput
-								selectedItemLabel="TODOS OS PROJETOS"
-								selected={queryFilters.projectTypes}
-								options={
-									queryOptions?.projectTypes?.map((resp) => ({
-										id: resp._id || "",
-										label: resp.nome || "",
-										value: resp._id || "",
-									})) || null
-								}
-								handleChange={(value) =>
-									setQueryFilters((prev) => ({
-										...prev,
-										projectTypes: value as string[],
-									}))
-								}
-								onReset={() =>
-									setQueryFilters((prev) => ({ ...prev, projectTypes: null }))
-								}
-								showLabel={false}
-								label="TIPOS DE PROJETO"
-								width="100%"
-							/>
-						</div>
 					</div>
+					<div className="w-full md:w-[250px]">
+						<MultipleSelectInput
+							label="USUÁRIOS"
+							labelClassName="text-[0.6rem]"
+							holderClassName="text-xs p-2 min-h-[34px]"
+							showLabel={false}
+							options={
+								queryOptions?.salePromoters?.map((promoter) => ({
+									id: promoter._id || "",
+									label: promoter.nome,
+									value: promoter._id,
+								})) || null
+							}
+							selected={queryFilters.responsibles}
+							handleChange={(value) =>
+								setQueryFilters((prev) => ({
+									...prev,
+									responsibles: value as string[],
+								}))
+							}
+							resetOptionLabel="TODOS"
+							onReset={() => setQueryFilters((prev) => ({ ...prev, responsibles: null }))}
+							width="100%"
+						/>
+					</div>
+					<div className="w-full md:w-[250px]">
+						<MultipleSelectInput
+							label="PARCEIROS"
+							labelClassName="text-[0.6rem]"
+							holderClassName="text-xs p-2 min-h-[34px]"
+							showLabel={false}
+							options={
+								queryOptions?.partners?.map((partner) => ({
+									id: partner._id || "",
+									label: partner.nome,
+									value: partner._id,
+								})) || null
+							}
+							selected={queryFilters.partners}
+							handleChange={(value) =>
+								setQueryFilters((prev) => ({
+									...prev,
+									partners: value as string[],
+								}))
+							}
+							resetOptionLabel="TODOS"
+							onReset={() => setQueryFilters((prev) => ({ ...prev, partners: null }))}
+							width="100%"
+						/>
+					</div>
+					<div className="w-full lg:w-[300px]">
+						<MultipleSelectInput
+							resetOptionLabel="TODOS OS PROJETOS"
+							selected={queryFilters.projectTypes}
+							options={
+								queryOptions?.projectTypes?.map((resp) => ({
+									id: resp._id || "",
+									label: resp.nome || "",
+									value: resp._id || "",
+								})) || null
+							}
+							handleChange={(value) =>
+								setQueryFilters((prev) => ({
+									...prev,
+									projectTypes: value as string[],
+								}))
+							}
+							onReset={() => setQueryFilters((prev) => ({ ...prev, projectTypes: null }))}
+							showLabel={false}
+							label="TIPOS DE PROJETO"
+							labelClassName="text-[0.6rem]"
+							holderClassName="text-xs p-2 min-h-[34px]"
+							width="100%"
+						/>
+					</div>
+					<button
+						type="button"
+						onClick={() => handleDataExport()}
+						className="flex w-full lg:w-fit min-h-[34px] items-center justify-center gap-2 rounded-md border bg-[#2c6e49] p-2 px-3 text-sm font-medium text-white shadow-sm duration-300 ease-in-out hover:scale-[1.02]"
+					>
+						<BsDownload className="w-3.5 h-3.5" />
+					</button>
 				</div>
 				<OverallResults
 					after={queryFilters.period.after}
@@ -278,11 +262,7 @@ function ComercialResults() {
 					partners={queryFilters.partners}
 					projectTypes={queryFilters.projectTypes}
 				/>
-				<Sellers
-					session={session}
-					after={queryFilters.period.after}
-					before={queryFilters.period.before}
-				/>
+				<Sellers session={session} after={queryFilters.period.after} before={queryFilters.period.before} />
 				{/* <h1 className="mt-4 font-Raleway text-xl font-black text-black">CONTROLE DE EQUIPE</h1>
         <div className="flex grow flex-col flex-wrap justify-around gap-2 py-2 lg:flex-row">
           {queryOptionsSuccess ? (
@@ -369,11 +349,7 @@ function ComercialResults() {
 				/>
 			</div>
 			{editModal.isOpen && editModal.promoter ? (
-				<EditPromoter
-					session={session}
-					promoter={editModal.promoter}
-					closeModal={() => setEditModal({ isOpen: false, promoter: null })}
-				/>
+				<EditPromoter session={session} promoter={editModal.promoter} closeModal={() => setEditModal({ isOpen: false, promoter: null })} />
 			) : null}
 		</div>
 	);

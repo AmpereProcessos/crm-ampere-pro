@@ -53,7 +53,7 @@ function StructureInfo({ infoHolder, setInfoHolder, files, setFiles, goToNextSta
 							width="100%"
 							value={infoHolder.detalhes?.tipoEstrutura}
 							options={StructureTypes}
-							selectedItemLabel="NÃO DEFINIDO"
+							resetOptionLabel="NÃO DEFINIDO"
 							handleChange={(value) =>
 								setInfoHolder((prev) => ({
 									...prev,
@@ -83,7 +83,7 @@ function StructureInfo({ infoHolder, setInfoHolder, files, setFiles, goToNextSta
 								{ id: 1, label: "MADEIRA", value: "MADEIRA" },
 								{ id: 2, label: "FERRO", value: "FERRO" },
 							]}
-							selectedItemLabel="NÃO DEFINIDO"
+							resetOptionLabel="NÃO DEFINIDO"
 							handleChange={(value) =>
 								setInfoHolder((prev) => ({
 									...prev,
@@ -123,7 +123,7 @@ function StructureInfo({ infoHolder, setInfoHolder, files, setFiles, goToNextSta
 								{ id: 9, label: "CAPE E BICA", value: "CAPE E BICA" },
 								{ id: 10, label: "ESTRUTURA DE SOLO", value: "ESTRUTURA DE SOLO" },
 							]}
-							selectedItemLabel="NÃO DEFINIDO"
+							resetOptionLabel="NÃO DEFINIDO"
 							handleChange={(value) =>
 								setInfoHolder((prev) => ({
 									...prev,
@@ -153,7 +153,7 @@ function StructureInfo({ infoHolder, setInfoHolder, files, setFiles, goToNextSta
 								{ id: 1, label: "SIM", value: "SIM" },
 								{ id: 3, label: "NÃO", value: "NÃO" },
 							]}
-							selectedItemLabel="NÃO DEFINIDO"
+							resetOptionLabel="NÃO DEFINIDO"
 							handleChange={(value) =>
 								setInfoHolder((prev) => ({
 									...prev,

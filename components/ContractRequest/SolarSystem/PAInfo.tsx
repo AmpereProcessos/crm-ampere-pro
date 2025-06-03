@@ -65,7 +65,7 @@ function PAInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNextStage 
 						]}
 						value={requestInfo.aumentoDeCarga}
 						handleChange={(value) => setRequestInfo({ ...requestInfo, aumentoDeCarga: value })}
-						selectedItemLabel="NÃO DEFINIDO"
+						resetOptionLabel="NÃO DEFINIDO"
 						onReset={() => setRequestInfo((prev) => ({ ...prev, aumentoDeCarga: null }))}
 					/>
 				</div>
@@ -93,7 +93,7 @@ function PAInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNextStage 
 									value: "NÃO SE APLICA",
 								},
 							]}
-							selectedItemLabel="NÃO DEFINIDO"
+							resetOptionLabel="NÃO DEFINIDO"
 							onReset={() => {
 								setRequestInfo((prev) => ({
 									...prev,
@@ -173,7 +173,7 @@ function PAInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNextStage 
 										value: type.value,
 									};
 								})}
-								selectedItemLabel="NÃO DEFINIDO"
+								resetOptionLabel="NÃO DEFINIDO"
 								onReset={() => {
 									setRequestInfo((prev) => ({
 										...prev,
@@ -201,7 +201,7 @@ function PAInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNextStage 
 										value: "NÃO",
 									},
 								]}
-								selectedItemLabel="NÃO DEFINIDO"
+								resetOptionLabel="NÃO DEFINIDO"
 								onReset={() => {
 									setRequestInfo((prev) => ({
 										...prev,
@@ -229,7 +229,7 @@ function PAInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNextStage 
 								]}
 								value={requestInfo.caixaConjugada}
 								handleChange={(value) => setRequestInfo({ ...requestInfo, caixaConjugada: value })}
-								selectedItemLabel="NÃO DEFINIDO"
+								resetOptionLabel="NÃO DEFINIDO"
 								onReset={() => {
 									setRequestInfo((prev) => ({ ...prev, caixaConjugada: null }));
 								}}
@@ -270,7 +270,7 @@ function PAInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNextStage 
 										formaPagamentoPadrao: value,
 									});
 								}}
-								selectedItemLabel="NÃO DEFINIDO"
+								resetOptionLabel="NÃO DEFINIDO"
 								onReset={() =>
 									setRequestInfo((prev) => ({
 										...prev,

@@ -10,6 +10,9 @@
 			},
 			"style": {
 				"useTemplate": "warn"
+			},
+			"a11y": {
+				"noAutofocus": "warn"
 			}
 		}
 	},

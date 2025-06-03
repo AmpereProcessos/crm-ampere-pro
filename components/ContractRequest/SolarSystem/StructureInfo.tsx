@@ -58,7 +58,7 @@ function StructureInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNex
 						})}
 						value={requestInfo.tipoEstrutura}
 						handleChange={(value) => setRequestInfo({ ...requestInfo, tipoEstrutura: value })}
-						selectedItemLabel="NÃO DEFINIDO"
+						resetOptionLabel="NÃO DEFINIDO"
 						onReset={() => {
 							setRequestInfo((prev) => ({ ...prev, tipoEstrutura: "" }));
 						}}
@@ -73,7 +73,7 @@ function StructureInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNex
 						]}
 						value={requestInfo.materialEstrutura}
 						handleChange={(value) => setRequestInfo({ ...requestInfo, materialEstrutura: value })}
-						selectedItemLabel="NÃO DEFINIDO"
+						resetOptionLabel="NÃO DEFINIDO"
 						onReset={() => setRequestInfo((prev) => ({ ...prev, materialEstrutura: null }))}
 						width="100%"
 					/>
@@ -96,7 +96,7 @@ function StructureInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNex
 						]}
 						value={requestInfo.estruturaAmpere}
 						handleChange={(value) => setRequestInfo({ ...requestInfo, estruturaAmpere: value })}
-						selectedItemLabel="NÃO DEFINIDO"
+						resetOptionLabel="NÃO DEFINIDO"
 						onReset={() => {
 							setRequestInfo((prev) => ({
 								...prev,
@@ -127,7 +127,7 @@ function StructureInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNex
 						]}
 						value={requestInfo.responsavelEstrutura}
 						handleChange={(value) => setRequestInfo({ ...requestInfo, responsavelEstrutura: value })}
-						selectedItemLabel="NÃO DEFINIDO"
+						resetOptionLabel="NÃO DEFINIDO"
 						onReset={() =>
 							setRequestInfo((prev) => ({
 								...prev,
@@ -173,7 +173,7 @@ function StructureInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNex
 										formaPagamentoEstrutura: value,
 									})
 								}
-								selectedItemLabel="NÃO DEFINIDO"
+								resetOptionLabel="NÃO DEFINIDO"
 								onReset={() =>
 									setRequestInfo((prev) => ({
 										...prev,

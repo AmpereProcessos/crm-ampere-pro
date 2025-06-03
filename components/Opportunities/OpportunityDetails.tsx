@@ -115,7 +115,7 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 										categoriaVenda: saleCategory as TOpportunity["categoriaVenda"],
 									}));
 								}}
-								selectedItemLabel="NÃO DEFINIDO"
+								resetOptionLabel="NÃO DEFINIDO"
 								onReset={() =>
 									setInfoHolder((prev) => ({
 										...prev,
@@ -161,7 +161,7 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 								label="VÍNCULO DE PARCEIRO"
 								value={infoHolder.idParceiro || null}
 								options={vinculationPartners?.map((p) => ({ id: p._id, value: p._id, label: p.nome, url: p.logo_url || undefined })) || []}
-								selectedItemLabel="TODOS"
+								resetOptionLabel="TODOS"
 								handleChange={(value) =>
 									setInfoHolder((prev) => ({
 										...prev,
@@ -211,7 +211,7 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 									}))}
 									value={infoHolder.localizacao?.uf}
 									handleChange={(value) => setInfoHolder((prev) => ({ ...prev, localizacao: { ...(prev.localizacao || {}), uf: value } }))}
-									selectedItemLabel="NÃO DEFINIDO"
+									resetOptionLabel="NÃO DEFINIDO"
 									onReset={() => {
 										setInfoHolder((prev) => ({ ...prev, localizacao: { ...(prev.localizacao || {}), uf: "" } }));
 									}}
@@ -235,7 +235,7 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 									}
 									value={infoHolder.localizacao?.cidade}
 									handleChange={(value) => setInfoHolder((prev) => ({ ...prev, localizacao: { ...(prev.localizacao || {}), cidade: value } }))}
-									selectedItemLabel="NÃO DEFINIDO"
+									resetOptionLabel="NÃO DEFINIDO"
 									onReset={() => {
 										setInfoHolder((prev) => ({ ...prev, localizacao: { ...(prev.localizacao || {}), cidade: "" } }));
 									}}
@@ -508,7 +508,7 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 											cliente: { ...prev?.cliente, estadoCivil: null },
 										}));
 								}}
-								selectedItemLabel="NÃO DEFINIDO"
+								resetOptionLabel="NÃO DEFINIDO"
 								width="100%"
 							/>
 						</div>
@@ -585,7 +585,7 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 											cliente: { ...prev?.cliente, canalAquisicao: null },
 										}));
 								}}
-								selectedItemLabel="NÃO DEFINIDO"
+								resetOptionLabel="NÃO DEFINIDO"
 								width="100%"
 							/>
 						</div>
@@ -708,7 +708,7 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 											},
 										}));
 								}}
-								selectedItemLabel="NÃO DEFINIDO"
+								resetOptionLabel="NÃO DEFINIDO"
 								width="100%"
 							/>
 						</div>
@@ -764,7 +764,7 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 											tipoLigacao: null,
 										}));
 								}}
-								selectedItemLabel="NÃO DEFINIDO"
+								resetOptionLabel="NÃO DEFINIDO"
 								width="100%"
 							/>
 						</div>
@@ -812,7 +812,7 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 											},
 										}));
 								}}
-								selectedItemLabel="NÃO DEFINIDO"
+								resetOptionLabel="NÃO DEFINIDO"
 								width="100%"
 							/>
 						</div>

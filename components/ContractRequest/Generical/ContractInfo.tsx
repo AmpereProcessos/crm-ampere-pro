@@ -243,7 +243,7 @@ function ContractInfo({ requestInfo, setRequestInfo, showActions, goToNextStage 
 										value: "PESSOA JURIDICA",
 									},
 								]}
-								selectedItemLabel="NÃO DEFINIDO"
+								resetOptionLabel="NÃO DEFINIDO"
 								onReset={() => {
 									setRequestInfo((prev) => ({
 										...prev,
@@ -297,7 +297,7 @@ function ContractInfo({ requestInfo, setRequestInfo, showActions, goToNextStage 
 										estadoCivil: undefined,
 									}));
 								}}
-								selectedItemLabel="NÃO DEFINIDO"
+								resetOptionLabel="NÃO DEFINIDO"
 							/>
 						</div>
 						<div className="w-full lg:w-1/3">
@@ -367,7 +367,7 @@ function ContractInfo({ requestInfo, setRequestInfo, showActions, goToNextStage 
 										value: "NÃO",
 									},
 								]}
-								selectedItemLabel="NÃO DEFINIDO"
+								resetOptionLabel="NÃO DEFINIDO"
 								onReset={() =>
 									setRequestInfo((prev) => ({
 										...prev,
@@ -425,7 +425,7 @@ function ContractInfo({ requestInfo, setRequestInfo, showActions, goToNextStage 
 								options={BrazilianStatesOptions}
 								value={requestInfo.uf}
 								handleChange={(value) => setRequestInfo({ ...requestInfo, uf: value, cidade: BrazilianCitiesOptionsFromUF(value)[0]?.value })}
-								selectedItemLabel="NÃO DEFINIDO"
+								resetOptionLabel="NÃO DEFINIDO"
 								onReset={() => {
 									setRequestInfo((prev) => ({ ...prev, uf: null, cidade: undefined }));
 								}}
@@ -445,7 +445,7 @@ function ContractInfo({ requestInfo, setRequestInfo, showActions, goToNextStage 
 										cidade: undefined,
 									}));
 								}}
-								selectedItemLabel="NÃO DEFINIDO"
+								resetOptionLabel="NÃO DEFINIDO"
 							/>
 						</div>
 					</div>
@@ -532,7 +532,7 @@ function ContractInfo({ requestInfo, setRequestInfo, showActions, goToNextStage 
 									{ id: 4, label: "INDUSTRIAL", value: "INDUSTRIAL" },
 								]}
 								handleChange={(value) => setRequestInfo({ ...requestInfo, segmento: value })}
-								selectedItemLabel="NÃO DEFINIDO"
+								resetOptionLabel="NÃO DEFINIDO"
 								onReset={() => {
 									setRequestInfo((prev) => ({
 										...prev,
@@ -552,7 +552,7 @@ function ContractInfo({ requestInfo, setRequestInfo, showActions, goToNextStage 
 									{ id: 2, label: "DIGITAL", value: "DIGITAL" },
 								]}
 								handleChange={(value) => setRequestInfo({ ...requestInfo, formaAssinatura: value })}
-								selectedItemLabel="NÃO DEFINIDO"
+								resetOptionLabel="NÃO DEFINIDO"
 								onReset={() => {
 									setRequestInfo((prev) => ({
 										...prev,
@@ -569,7 +569,7 @@ function ContractInfo({ requestInfo, setRequestInfo, showActions, goToNextStage 
 								value={requestInfo.canalVenda}
 								handleChange={(value) => setRequestInfo({ ...requestInfo, canalVenda: value })}
 								options={acquisitionChannels?.map((acquisitionChannel) => ({ id: acquisitionChannel._id, label: acquisitionChannel.valor, value: acquisitionChannel.valor })) || null}
-								selectedItemLabel="NÃO DEFINIDO"
+								resetOptionLabel="NÃO DEFINIDO"
 								onReset={() => {
 									setRequestInfo((prev) => ({
 										...prev,
@@ -673,7 +673,7 @@ function ContractInfo({ requestInfo, setRequestInfo, showActions, goToNextStage 
 								options={BrazilianStatesOptions}
 								value={requestInfo.ufInstalacao}
 								handleChange={(value) => setRequestInfo({ ...requestInfo, ufInstalacao: value, cidade: BrazilianCitiesOptionsFromUF(value)[0]?.value })}
-								selectedItemLabel="NÃO DEFINIDO"
+								resetOptionLabel="NÃO DEFINIDO"
 								onReset={() => {
 									setRequestInfo((prev) => ({ ...prev, ufInstalacao: null, cidade: undefined }));
 								}}
@@ -693,7 +693,7 @@ function ContractInfo({ requestInfo, setRequestInfo, showActions, goToNextStage 
 										cidadeInstalacao: undefined,
 									}));
 								}}
-								selectedItemLabel="NÃO DEFINIDO"
+								resetOptionLabel="NÃO DEFINIDO"
 							/>
 						</div>
 					</div>

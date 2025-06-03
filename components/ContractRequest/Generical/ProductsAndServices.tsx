@@ -122,7 +122,7 @@ function ProductsAndServices({ editable, requestInfo, setRequestInfo, showAction
 					onReset={() => {
 						setRequestInfo((prev) => ({ ...prev, topologia: null }));
 					}}
-					selectedItemLabel="NÃO DEFINIDO"
+					resetOptionLabel="NÃO DEFINIDO"
 					width="100%"
 				/>
 				{editable ? (
@@ -315,7 +315,7 @@ function NewProductMenu({ addProduct }: NewProductMenuProps) {
 										potencia: 0,
 									})
 								}
-								selectedItemLabel="NÃO DEFINIDO"
+								resetOptionLabel="NÃO DEFINIDO"
 								options={inverterOptions}
 								width="100%"
 							/>
@@ -383,7 +383,7 @@ function NewProductMenu({ addProduct }: NewProductMenuProps) {
 										potencia: 0,
 									})
 								}
-								selectedItemLabel="NÃO DEFINIDO"
+								resetOptionLabel="NÃO DEFINIDO"
 								options={modulesOptions}
 								width="100%"
 							/>
@@ -428,7 +428,7 @@ function NewProductMenu({ addProduct }: NewProductMenuProps) {
 						<div className="w-full lg:w-[20%]">
 							<SelectInput
 								label="CATEGORIA"
-								selectedItemLabel="NÃO DEFINIDO"
+								resetOptionLabel="NÃO DEFINIDO"
 								options={ProductItemCategories}
 								value={personalizedProductHolder.categoria}
 								handleChange={(value) =>
@@ -596,7 +596,7 @@ function ProductItem({
 									label="CATEGORIA"
 									labelClassName="text-[0.6rem]"
 									inputClassName="text-xs p-2 min-h-[34px]"
-									selectedItemLabel="NÃO DEFINIDO"
+									resetOptionLabel="NÃO DEFINIDO"
 									options={ProductItemCategories.map((item) => ({
 										id: item.id,
 										label: item.label,

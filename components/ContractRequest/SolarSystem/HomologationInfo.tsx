@@ -184,7 +184,7 @@ function HomologationInfo({ requestInfo, setRequestInfo, sameProjectHolder, setS
 								value: "PESSOA JURIDICA",
 							},
 						]}
-						selectedItemLabel="NÃO DEFINIDO"
+						resetOptionLabel="NÃO DEFINIDO"
 						onReset={() => setRequestInfo((prev) => ({ ...prev, tipoDoTitular: undefined }))}
 					/>
 				</div>
@@ -206,7 +206,7 @@ function HomologationInfo({ requestInfo, setRequestInfo, sameProjectHolder, setS
 								value: "EXISTENTE",
 							},
 						]}
-						selectedItemLabel="NÃO DEFINIDO"
+						resetOptionLabel="NÃO DEFINIDO"
 						onReset={() => setRequestInfo((prev) => ({ ...prev, tipoDaLigacao: undefined }))}
 					/>
 				</div>
@@ -228,7 +228,7 @@ function HomologationInfo({ requestInfo, setRequestInfo, sameProjectHolder, setS
 								value: "URBANO",
 							},
 						]}
-						selectedItemLabel="NÃO DEFINIDO"
+						resetOptionLabel="NÃO DEFINIDO"
 						onReset={() =>
 							setRequestInfo((prev) => ({
 								...prev,
@@ -309,7 +309,7 @@ function HomologationInfo({ requestInfo, setRequestInfo, sameProjectHolder, setS
 						}))}
 						value={requestInfo.ufInstalacao}
 						handleChange={(value) => setRequestInfo({ ...requestInfo, ufInstalacao: value })}
-						selectedItemLabel="NÃO DEFINIDO"
+						resetOptionLabel="NÃO DEFINIDO"
 						onReset={() => {
 							setRequestInfo((prev) => ({ ...prev, ufInstalacao: null }));
 						}}
@@ -332,7 +332,7 @@ function HomologationInfo({ requestInfo, setRequestInfo, sameProjectHolder, setS
 								: null
 						}
 						handleChange={(value) => setRequestInfo({ ...requestInfo, cidadeInstalacao: value })}
-						selectedItemLabel="NÃO DEFINIDO"
+						resetOptionLabel="NÃO DEFINIDO"
 						onReset={() =>
 							setRequestInfo((prev) => ({
 								...prev,

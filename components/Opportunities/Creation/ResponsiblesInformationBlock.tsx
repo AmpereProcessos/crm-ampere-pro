@@ -60,7 +60,7 @@ function ResponsiblesInformationBlock({ session, opportunity, setOpportunity, op
 								telefone: equivalentUser?.telefone || "",
 							}));
 						}}
-						selectedItemLabel="NÃO DEFINIDO"
+						resetOptionLabel="NÃO DEFINIDO"
 						onReset={() =>
 							setResponsibleHolder({
 								nome: "",
@@ -80,7 +80,7 @@ function ResponsiblesInformationBlock({ session, opportunity, setOpportunity, op
 						value={responsibleHolder.papel}
 						options={OpportunityResponsibilityRoles}
 						handleChange={(value) => setResponsibleHolder((prev) => ({ ...prev, papel: value }))}
-						selectedItemLabel="NÃO DEFINIDO"
+						resetOptionLabel="NÃO DEFINIDO"
 						onReset={() => setResponsibleHolder((prev) => ({ ...prev, papel: OpportunityResponsibilityRoles[0].value }))}
 						width="100%"
 					/>

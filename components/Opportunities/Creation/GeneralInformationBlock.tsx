@@ -33,7 +33,7 @@ function GeneralInformationBlock({ opportunity, setOpportunity, projectTypes, se
 				label="VÍNCULO DE PARCEIRO"
 				value={opportunity.idParceiro || null}
 				options={vinculationPartners?.map((p) => ({ id: p._id, value: p._id, label: p.nome, url: p.logo_url || undefined })) || []}
-				selectedItemLabel="TODOS"
+				resetOptionLabel="TODOS"
 				handleChange={(value) =>
 					setOpportunity((prev) => ({
 						...prev,
@@ -67,7 +67,7 @@ function GeneralInformationBlock({ opportunity, setOpportunity, projectTypes, se
 								categoriaVenda: saleCategory as TOpportunity["categoriaVenda"],
 							}));
 						}}
-						selectedItemLabel="NÃO DEFINIDO"
+						resetOptionLabel="NÃO DEFINIDO"
 						onReset={() =>
 							setOpportunity((prev) => ({
 								...prev,
@@ -92,7 +92,7 @@ function GeneralInformationBlock({ opportunity, setOpportunity, projectTypes, se
 								segmento: value as TOpportunity["segmento"],
 							}));
 						}}
-						selectedItemLabel="NÃO DEFINIDO"
+						resetOptionLabel="NÃO DEFINIDO"
 						onReset={() =>
 							setOpportunity((prev) => ({
 								...prev,

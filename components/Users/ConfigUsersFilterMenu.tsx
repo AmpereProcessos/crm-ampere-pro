@@ -87,7 +87,7 @@ function ConfigUsersFilterMenu({ queryParams, updateQueryParams, closeMenu }: Co
 									{ id: 6, label: "DATA DE CONCLUSÃO", value: "dataEfetivacao" },
 								]}
 								handleChange={(value) => setQueryParamsHolder((prev) => ({ ...prev, period: { ...prev.period, field: value } }))}
-								selectedItemLabel="NÃO DEFINIDO"
+								resetOptionLabel="NÃO DEFINIDO"
 								onReset={() => setQueryParamsHolder((prev) => ({ ...prev, period: { ...prev.period, field: null } }))}
 								width={"100%"}
 							/>

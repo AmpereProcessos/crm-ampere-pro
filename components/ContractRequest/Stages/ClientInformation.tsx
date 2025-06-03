@@ -4,22 +4,12 @@ import TextInput from "@/components/Inputs/TextInput";
 import { getErrorMessage } from "@/lib/methods/errors";
 import { formatDateInputChange } from "@/lib/methods/formatting";
 import { stateCities } from "@/utils/estados_cidades";
-import {
-	formatDateForInput,
-	formatToCEP,
-	formatToCPForCNPJ,
-	formatToPhone,
-	getCEPInfo,
-} from "@/utils/methods";
+import { formatDateForInput, formatToCEP, formatToCPForCNPJ, formatToPhone, getCEPInfo } from "@/utils/methods";
 import { Optional } from "@/utils/models";
 import { updateClient } from "@/utils/mutations/clients";
 import type { TClientDTO } from "@/utils/schemas/client.schema";
 import type { TProject } from "@/utils/schemas/project.schema";
-import {
-	ComercialSegments,
-	CustomersAcquisitionChannels,
-	MaritalStatus,
-} from "@/utils/select-options";
+import { ComercialSegments, CustomersAcquisitionChannels, MaritalStatus } from "@/utils/select-options";
 import { useState, type Dispatch, type SetStateAction } from "react";
 import toast from "react-hot-toast";
 
@@ -29,12 +19,7 @@ type ClientInformationProps = {
 	setRequestInfo: Dispatch<SetStateAction<TProject>>;
 	goToNextState: () => void;
 };
-function ClientInformation({
-	client,
-	requestInfo,
-	setRequestInfo,
-	goToNextState,
-}: ClientInformationProps) {
+function ClientInformation({ client, requestInfo, setRequestInfo, goToNextState }: ClientInformationProps) {
 	const [clientInfo, setClientInfo] = useState(client);
 
 	async function setAddressDataByCEP(cep: string) {
@@ -60,19 +45,12 @@ function ClientInformation({
 	}
 	async function validateAndProceed() {
 		try {
-			if (!clientInfo.cpfCnpj || clientInfo.cpfCnpj.trim().length < 11)
-				return toast.error("CPF ou CNPJ inválido.");
-			if (!clientInfo.email || clientInfo.email.trim().length < 6)
-				return toast.error("Email inválido ou não fornecido.");
-			if (!clientInfo.dataNascimento)
-				return toast.error("Data de nascimento inválido ou não fornecido.");
-			if (!clientInfo.profissao || clientInfo.profissao.trim().length < 3)
-				return toast.error("Profissão inválida ou não fornecido.");
-			if (!clientInfo.estadoCivil)
-				return toast.error("Estado civil inválido ou não fornecido.");
-			const loadingEditClientId = toast.loading(
-				"Atualizando informações do cliente.",
-			);
+			if (!clientInfo.cpfCnpj || clientInfo.cpfCnpj.trim().length < 11) return toast.error("CPF ou CNPJ inválido.");
+			if (!clientInfo.email || clientInfo.email.trim().length < 6) return toast.error("Email inválido ou não fornecido.");
+			if (!clientInfo.dataNascimento) return toast.error("Data de nascimento inválido ou não fornecido.");
+			if (!clientInfo.profissao || clientInfo.profissao.trim().length < 3) return toast.error("Profissão inválida ou não fornecido.");
+			if (!clientInfo.estadoCivil) return toast.error("Estado civil inválido ou não fornecido.");
+			const loadingEditClientId = toast.loading("Atualizando informações do cliente.");
 			const updateObject = { ...clientInfo };
 			// @ts-ignore
 			delete updateObject._id;
@@ -87,18 +65,14 @@ function ClientInformation({
 	return (
 		<div className="flex w-full grow flex-col gap-2">
 			<div className="flex w-full grow flex-col gap-2">
-				<h1 className="w-full rounded-md bg-[#fead41] p-1 text-center text-sm font-medium text-white">
-					DADOS DO CLIENTE
-				</h1>
+				<h1 className="w-full rounded-md bg-[#fead41] p-1 text-center text-sm font-medium text-white">DADOS DO CLIENTE</h1>
 				<div className="flex w-full flex-col items-center gap-2 lg:flex-row">
 					<div className="w-full lg:w-1/3">
 						<TextInput
 							label="NOME DO CLIENTE"
 							placeholder="Preencha aqui o nome do cliente..."
 							value={clientInfo.nome}
-							handleChange={(value) =>
-								setClientInfo((prev) => ({ ...prev, nome: value }))
-							}
+							handleChange={(value) => setClientInfo((prev) => ({ ...prev, nome: value }))}
 							width="100%"
 						/>
 					</div>
@@ -121,9 +95,7 @@ function ClientInformation({
 							label="RG"
 							placeholder="Preencha aqui o RG do cliente..."
 							value={clientInfo.rg || ""}
-							handleChange={(value) =>
-								setClientInfo((prev) => ({ ...prev, rg: value }))
-							}
+							handleChange={(value) => setClientInfo((prev) => ({ ...prev, rg: value }))}
 							width="100%"
 						/>
 					</div>
@@ -162,9 +134,7 @@ function ClientInformation({
 							label="EMAIL"
 							placeholder="Preencha aqui o email do cliente..."
 							value={clientInfo.email || ""}
-							handleChange={(value) =>
-								setClientInfo((prev) => ({ ...prev, email: value }))
-							}
+							handleChange={(value) => setClientInfo((prev) => ({ ...prev, email: value }))}
 							width="100%"
 						/>
 					</div>
@@ -173,18 +143,11 @@ function ClientInformation({
 					<div className="w-full lg:w-1/3">
 						<DateInput
 							label="DATA DE NASCIMENTO DO CLIENTE"
-							value={
-								clientInfo.dataNascimento
-									? formatDateForInput(clientInfo.dataNascimento)
-									: undefined
-							}
+							value={clientInfo.dataNascimento ? formatDateForInput(clientInfo.dataNascimento) : undefined}
 							handleChange={(value) =>
 								setClientInfo((prev) => ({
 									...prev,
-									dataNascimento: formatDateInputChange(
-										value,
-										"string",
-									) as string,
+									dataNascimento: formatDateInputChange(value, "string") as string,
 								}))
 							}
 							width="100%"
@@ -195,9 +158,7 @@ function ClientInformation({
 							label="PROFISSÃO DO CLIENTE"
 							placeholder="Preencha aqui a profissão do cliente..."
 							value={clientInfo.profissao || ""}
-							handleChange={(value) =>
-								setClientInfo((prev) => ({ ...prev, profissao: value }))
-							}
+							handleChange={(value) => setClientInfo((prev) => ({ ...prev, profissao: value }))}
 							width="100%"
 						/>
 					</div>
@@ -205,14 +166,10 @@ function ClientInformation({
 						<SelectInput
 							label="ESTADO CIVIL"
 							value={clientInfo.estadoCivil}
-							selectedItemLabel="NÃO DEFINIDO"
+							resetOptionLabel="NÃO DEFINIDO"
 							options={MaritalStatus}
-							handleChange={(value) =>
-								setClientInfo((prev) => ({ ...prev, estadoCivil: value }))
-							}
-							onReset={() =>
-								setClientInfo((prev) => ({ ...prev, estadoCivil: undefined }))
-							}
+							handleChange={(value) => setClientInfo((prev) => ({ ...prev, estadoCivil: value }))}
+							onReset={() => setClientInfo((prev) => ({ ...prev, estadoCivil: undefined }))}
 							width="100%"
 						/>
 					</div>
@@ -222,11 +179,9 @@ function ClientInformation({
 						<SelectInput
 							label="CANAL DE AQUISIÇÃO"
 							value={clientInfo.canalAquisicao}
-							selectedItemLabel="NÃO DEFINIDO"
+							resetOptionLabel="NÃO DEFINIDO"
 							options={CustomersAcquisitionChannels}
-							handleChange={(value) =>
-								setClientInfo((prev) => ({ ...prev, canalAquisicao: value }))
-							}
+							handleChange={(value) => setClientInfo((prev) => ({ ...prev, canalAquisicao: value }))}
 							onReset={() =>
 								setClientInfo((prev) => ({
 									...prev,
@@ -270,21 +225,15 @@ function ClientInformation({
 						<SelectInput
 							label="SEGMENTO"
 							value={requestInfo.segmento}
-							selectedItemLabel="NÃO DEFINIDO"
+							resetOptionLabel="NÃO DEFINIDO"
 							options={ComercialSegments}
-							handleChange={(value) =>
-								setRequestInfo((prev) => ({ ...prev, segmento: value }))
-							}
-							onReset={() =>
-								setRequestInfo((prev) => ({ ...prev, segmento: "RESIDENCIAL" }))
-							}
+							handleChange={(value) => setRequestInfo((prev) => ({ ...prev, segmento: value }))}
+							onReset={() => setRequestInfo((prev) => ({ ...prev, segmento: "RESIDENCIAL" }))}
 							width="100%"
 						/>
 					</div>
 				</div>
-				<h1 className="w-full rounded-md bg-gray-800 p-0.5 text-center text-xs font-medium text-white">
-					ENDEREÇO
-				</h1>
+				<h1 className="w-full rounded-md bg-gray-800 p-0.5 text-center text-xs font-medium text-white">ENDEREÇO</h1>
 				<div className="flex w-full flex-col items-center gap-2 lg:flex-row">
 					<div className="w-full lg:w-1/3">
 						<TextInput
@@ -311,15 +260,11 @@ function ClientInformation({
 								setClientInfo((prev) => ({
 									...prev,
 									uf: value,
-									cidade: stateCities[
-										value as keyof typeof stateCities
-									][0] as string,
+									cidade: stateCities[value as keyof typeof stateCities][0] as string,
 								}))
 							}
-							selectedItemLabel="NÃO DEFINIDO"
-							onReset={() =>
-								setClientInfo((prev) => ({ ...prev, uf: "", cidade: "" }))
-							}
+							resetOptionLabel="NÃO DEFINIDO"
+							onReset={() => setClientInfo((prev) => ({ ...prev, uf: "", cidade: "" }))}
 							options={Object.keys(stateCities).map((state, index) => ({
 								id: index + 1,
 								label: state,
@@ -332,21 +277,17 @@ function ClientInformation({
 						<SelectInput
 							label="CIDADE"
 							value={clientInfo.cidade}
-							handleChange={(value) =>
-								setClientInfo((prev) => ({ ...prev, cidade: value }))
-							}
+							handleChange={(value) => setClientInfo((prev) => ({ ...prev, cidade: value }))}
 							options={
 								clientInfo.uf
-									? stateCities[clientInfo.uf as keyof typeof stateCities].map(
-											(city, index) => ({
-												id: index + 1,
-												value: city,
-												label: city,
-											}),
-										)
+									? stateCities[clientInfo.uf as keyof typeof stateCities].map((city, index) => ({
+											id: index + 1,
+											value: city,
+											label: city,
+										}))
 									: null
 							}
-							selectedItemLabel="NÃO DEFINIDO"
+							resetOptionLabel="NÃO DEFINIDO"
 							onReset={() => setClientInfo((prev) => ({ ...prev, cidade: "" }))}
 							width="100%"
 						/>
@@ -358,9 +299,7 @@ function ClientInformation({
 							label="BAIRRO"
 							value={clientInfo.bairro || ""}
 							placeholder="Preencha aqui o bairro do cliente."
-							handleChange={(value) =>
-								setClientInfo((prev) => ({ ...prev, bairro: value }))
-							}
+							handleChange={(value) => setClientInfo((prev) => ({ ...prev, bairro: value }))}
 							width="100%"
 						/>
 					</div>
@@ -369,9 +308,7 @@ function ClientInformation({
 							label="LOGRADOURO/RUA"
 							value={clientInfo.endereco || ""}
 							placeholder="Preencha aqui o logradouro do cliente."
-							handleChange={(value) =>
-								setClientInfo((prev) => ({ ...prev, endereco: value }))
-							}
+							handleChange={(value) => setClientInfo((prev) => ({ ...prev, endereco: value }))}
 							width="100%"
 						/>
 					</div>
@@ -408,11 +345,7 @@ function ClientInformation({
 				</div>
 			</div>
 			<div className="flex w-full items-center justify-end">
-				<button
-					type="button"
-					onClick={() => validateAndProceed()}
-					className="rounded bg-black px-4 py-1 text-sm font-medium text-white duration-300 ease-in-out hover:bg-gray-700"
-				>
+				<button type="button" onClick={() => validateAndProceed()} className="rounded bg-black px-4 py-1 text-sm font-medium text-white duration-300 ease-in-out hover:bg-gray-700">
 					PROSSEGUIR
 				</button>
 			</div>

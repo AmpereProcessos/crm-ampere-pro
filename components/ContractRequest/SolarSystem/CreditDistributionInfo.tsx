@@ -67,7 +67,7 @@ function CreditDistributionInfo({ requestInfo, setRequestInfo, goToPreviousStage
 							},
 						]}
 						handleChange={(value) => setRequestInfo({ ...requestInfo, possuiDistribuicao: value })}
-						selectedItemLabel="NÃO DEFINIDO"
+						resetOptionLabel="NÃO DEFINIDO"
 						onReset={() => {
 							setRequestInfo((prev) => ({ ...prev, possuiDistribuicao: null }));
 						}}

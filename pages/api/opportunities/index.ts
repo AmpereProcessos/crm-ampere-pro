@@ -90,7 +90,7 @@ const PeriodQuerySchema = z.object({
 			invalid_type_error: "Tipo inválido para data de fim do período.",
 		})
 		.datetime(),
-	periodField: z.enum(["dataInsercao", "dataGanho", "dataPerda"], {
+	periodField: z.enum(["dataInsercao", "dataGanho", "dataPerda", "ultimaInteracao.data"], {
 		required_error: "Campo de período não informado.",
 		invalid_type_error: "Tipo inválido para campo de período.",
 	}),

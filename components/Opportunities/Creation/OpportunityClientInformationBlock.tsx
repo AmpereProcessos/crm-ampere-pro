@@ -176,7 +176,7 @@ function OpportunityClientInformationBlock({
 								if (value === "SMBOT") setOpportunity((prev) => ({ ...prev, idMarketing: "SMBOT" }));
 							}}
 							options={acquisitionChannels?.map((channel) => ({ id: channel._id, label: channel.valor, value: channel.valor })) || []}
-							selectedItemLabel="NÃO DEFINIDO"
+							resetOptionLabel="NÃO DEFINIDO"
 							onReset={() => setClient((prev) => ({ ...prev, canalAquisicao: CustomersAcquisitionChannels[0].value }))}
 							width="100%"
 						/>

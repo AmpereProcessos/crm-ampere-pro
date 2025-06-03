@@ -205,7 +205,7 @@ function NewClient({ session, partnerId, closeModal }: NewClientModalProps) {
 											estadoCivil: null,
 										}))
 									}
-									selectedItemLabel="NÃO DEFINIDO"
+									resetOptionLabel="NÃO DEFINIDO"
 									width="100%"
 								/>
 							</div>
@@ -228,7 +228,7 @@ function NewClient({ session, partnerId, closeModal }: NewClientModalProps) {
 											canalAquisicao: "",
 										}))
 									}
-									selectedItemLabel="NÃO DEFINIDO"
+									resetOptionLabel="NÃO DEFINIDO"
 									width="100%"
 								/>
 							</div>
@@ -312,7 +312,7 @@ function NewClient({ session, partnerId, closeModal }: NewClientModalProps) {
 								label="ESTADO"
 								value={clientInfo.uf}
 								handleChange={(value) => setClientInfo((prev) => ({ ...prev, uf: value, cidade: stateCities[value as keyof typeof stateCities][0] as string }))}
-								selectedItemLabel="NÃO DEFINIDO"
+								resetOptionLabel="NÃO DEFINIDO"
 								onReset={() => setClientInfo((prev) => ({ ...prev, uf: "", cidade: "" }))}
 								options={Object.keys(stateCities).map((state, index) => ({
 									id: index + 1,
@@ -326,7 +326,7 @@ function NewClient({ session, partnerId, closeModal }: NewClientModalProps) {
 								value={clientInfo.cidade}
 								handleChange={(value) => setClientInfo((prev) => ({ ...prev, cidade: value }))}
 								options={clientInfo.uf ? stateCities[clientInfo.uf as keyof typeof stateCities].map((city, index) => ({ id: index + 1, value: city, label: city })) : null}
-								selectedItemLabel="NÃO DEFINIDO"
+								resetOptionLabel="NÃO DEFINIDO"
 								onReset={() => setClientInfo((prev) => ({ ...prev, cidade: "" }))}
 								width="100%"
 							/>

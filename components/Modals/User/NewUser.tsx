@@ -469,7 +469,7 @@ function NewUserModal({ closeModal, userId, partnerId, session }: NewUserModalPr
 									value={userInfo.idParceiro}
 									handleChange={(value) => setUserInfo((prev) => ({ ...prev, idParceiro: value }))}
 									options={partners?.map((p) => ({ id: p._id, label: p.nome, value: p._id, url: p.logo_url || undefined })) || []}
-									selectedItemLabel="NÃO DEFINIDO"
+									resetOptionLabel="NÃO DEFINIDO"
 									onReset={() => setUserInfo((prev) => ({ ...prev, idParceiro: partners ? partners[0]._id : "" }))}
 									width="100%"
 								/>
@@ -485,7 +485,7 @@ function NewUserModal({ closeModal, userId, partnerId, session }: NewUserModalPr
 										};
 									}) || []
 								}
-								selectedItemLabel="NÃO DEFINIDO"
+								resetOptionLabel="NÃO DEFINIDO"
 								value={userInfo.idGrupo}
 								handleChange={(value) => {
 									const group = groups?.find((g) => g._id === value);

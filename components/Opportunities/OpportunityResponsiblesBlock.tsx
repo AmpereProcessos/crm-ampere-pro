@@ -142,7 +142,7 @@ function OpportunityResponsiblesBlock({ infoHolder, setInfoHolder, handleUpdateO
 									respList[index].papel = value;
 									setInfoHolder((prev) => ({ ...prev, responsaveis: respList }));
 								}}
-								selectedItemLabel="NÃO DEFINIDO"
+								resetOptionLabel="NÃO DEFINIDO"
 								onReset={() => console.log()}
 								width="100%"
 							/>
@@ -190,7 +190,7 @@ function OpportunityResponsiblesBlock({ infoHolder, setInfoHolder, handleUpdateO
 											avatar_url: equivalentUser?.avatar_url || null,
 										}));
 									}}
-									selectedItemLabel="NÃO DEFINIDO"
+									resetOptionLabel="NÃO DEFINIDO"
 									onReset={() =>
 										setNewOpportunityResponsible({
 											nome: "",
@@ -208,7 +208,7 @@ function OpportunityResponsiblesBlock({ infoHolder, setInfoHolder, handleUpdateO
 									value={newOpportunityResponsible.papel}
 									options={OpportunityResponsibilityRoles}
 									handleChange={(value) => setNewOpportunityResponsible((prev) => ({ ...prev, papel: value }))}
-									selectedItemLabel="NÃO DEFINIDO"
+									resetOptionLabel="NÃO DEFINIDO"
 									onReset={() => setNewOpportunityResponsible((prev) => ({ ...prev, papel: null }))}
 									width="100%"
 								/>

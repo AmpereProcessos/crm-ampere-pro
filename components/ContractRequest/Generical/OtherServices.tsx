@@ -103,7 +103,7 @@ function OtherServices({ requestInfo, setRequestInfo, showActions, goToPreviousS
 										})}
 										value={requestInfo.tipoEstrutura}
 										handleChange={(value) => setRequestInfo({ ...requestInfo, tipoEstrutura: value })}
-										selectedItemLabel="NÃO DEFINIDO"
+										resetOptionLabel="NÃO DEFINIDO"
 										onReset={() => {
 											setRequestInfo((prev) => ({ ...prev, tipoEstrutura: "" }));
 										}}
@@ -120,7 +120,7 @@ function OtherServices({ requestInfo, setRequestInfo, showActions, goToPreviousS
 										]}
 										value={requestInfo.materialEstrutura}
 										handleChange={(value) => setRequestInfo({ ...requestInfo, materialEstrutura: value })}
-										selectedItemLabel="NÃO DEFINIDO"
+										resetOptionLabel="NÃO DEFINIDO"
 										onReset={() => setRequestInfo((prev) => ({ ...prev, materialEstrutura: null }))}
 										width="100%"
 									/>
@@ -149,7 +149,7 @@ function OtherServices({ requestInfo, setRequestInfo, showActions, goToPreviousS
 									]}
 									value={requestInfo.responsavelEstrutura}
 									handleChange={(value) => setRequestInfo({ ...requestInfo, responsavelEstrutura: value })}
-									selectedItemLabel="NÃO DEFINIDO"
+									resetOptionLabel="NÃO DEFINIDO"
 									onReset={() =>
 										setRequestInfo((prev) => ({
 											...prev,
@@ -198,7 +198,7 @@ function OtherServices({ requestInfo, setRequestInfo, showActions, goToPreviousS
 												formaPagamentoEstrutura: value,
 											})
 										}
-										selectedItemLabel="NÃO DEFINIDO"
+										resetOptionLabel="NÃO DEFINIDO"
 										onReset={() =>
 											setRequestInfo((prev) => ({
 												...prev,
@@ -314,7 +314,7 @@ function OtherServices({ requestInfo, setRequestInfo, showActions, goToPreviousS
 												value: type.value,
 											};
 										})}
-										selectedItemLabel="NÃO DEFINIDO"
+										resetOptionLabel="NÃO DEFINIDO"
 										onReset={() => {
 											setRequestInfo((prev) => ({
 												...prev,
@@ -342,7 +342,7 @@ function OtherServices({ requestInfo, setRequestInfo, showActions, goToPreviousS
 												value: "NÃO",
 											},
 										]}
-										selectedItemLabel="NÃO DEFINIDO"
+										resetOptionLabel="NÃO DEFINIDO"
 										onReset={() => {
 											setRequestInfo((prev) => ({
 												...prev,
@@ -370,7 +370,7 @@ function OtherServices({ requestInfo, setRequestInfo, showActions, goToPreviousS
 										]}
 										value={requestInfo.caixaConjugada}
 										handleChange={(value) => setRequestInfo({ ...requestInfo, caixaConjugada: value })}
-										selectedItemLabel="NÃO DEFINIDO"
+										resetOptionLabel="NÃO DEFINIDO"
 										onReset={() => {
 											setRequestInfo((prev) => ({ ...prev, caixaConjugada: null }));
 										}}
@@ -416,7 +416,7 @@ function OtherServices({ requestInfo, setRequestInfo, showActions, goToPreviousS
 												formaPagamentoPadrao: value,
 											});
 										}}
-										selectedItemLabel="NÃO DEFINIDO"
+										resetOptionLabel="NÃO DEFINIDO"
 										onReset={() =>
 											setRequestInfo((prev) => ({
 												...prev,
