@@ -112,6 +112,7 @@ function OpportunityPage({ session, opportunityId }: OpportunityPageProps) {
 							<OpportunityContractRequestedFlag requestDate={opportunity.ganho.dataSolicitacao} />
 							<OpportunityWonFlag wonDate={opportunity.ganho.data} />
 						</div>
+
 						{opportunity.descricao ? (
 							<div className="flex w-full flex-col gap-1 rounded-lg bg-gray-100 p-2">
 								<h1 className="block text-[0.6rem] font-medium tracking-tight lg:hidden">ANOTAÇÕES</h1>
@@ -146,6 +147,12 @@ function OpportunityPage({ session, opportunityId }: OpportunityPageProps) {
 								)}
 							</div>
 						</div>
+						{opportunity.perda.descricaoMotivo ? (
+							<div className="w-fit self-center flex flex-col items-center justify-center border-[#F31559] bg-[#F31559]/20 p-2 rounded-lg gap-1">
+								<h3 className="text-[0.65rem] leading-none tracking-tight">MOTIVO DA PERDA</h3>
+								<h1 className="w-full text-center font-bold text-[#F31559] text-xs tracking-tight leading-none">{opportunity.perda.descricaoMotivo}</h1>
+							</div>
+						) : null}
 					</div>
 					{/* <div className="flex w-full flex-col items-start gap-6 py-4 lg:flex-row"></div> */}
 					<div className="flex w-full flex-col gap-6">

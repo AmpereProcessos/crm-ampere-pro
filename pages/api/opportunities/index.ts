@@ -22,6 +22,7 @@ import createHttpError from "http-errors";
 import { type Collection, type Filter, ObjectId, type WithId } from "mongodb";
 import type { NextApiHandler } from "next";
 import type { TClient } from "../../../utils/schemas/client.schema";
+import { z } from "zod";
 
 export const config = {
 	maxDuration: 25,
@@ -76,6 +77,25 @@ const statusOptionsQueries = {
 	PERDIDOS: { "perda.data": { $ne: null } },
 };
 
+const PeriodQuerySchema = z.object({
+	periodAfter: z
+		.string({
+			required_error: "Data de início do período não informada.",
+			invalid_type_error: "Tipo inválido para data de início do período.",
+		})
+		.datetime(),
+	periodBefore: z
+		.string({
+			required_error: "Data de fim do período não informada.",
+			invalid_type_error: "Tipo inválido para data de fim do período.",
+		})
+		.datetime(),
+	periodField: z.enum(["dataInsercao", "dataGanho", "dataPerda"], {
+		required_error: "Campo de período não informado.",
+		invalid_type_error: "Tipo inválido para campo de período.",
+	}),
+});
+
 type GetResponse = {
 	data: TOpportunitySimplifiedWithProposalAndActivitiesAndFunnels[] | TOpportunityDTOWithClientAndPartnerAndFunnelReferences;
 };
@@ -93,7 +113,7 @@ const getOpportunities: NextApiHandler<GetResponse> = async (req, res) => {
 	const funnelReferencesCollection: Collection<TFunnelReference> = db.collection("funnel-references");
 	const opportunityActivitiesCollection: Collection<TActivity> = db.collection("activities");
 
-	const { id, responsible, funnel, after, before, status } = req.query;
+	const { id, responsibles, funnel, periodAfter, periodBefore, periodField, status } = req.query;
 	// There are two possible query dynamics, query by ID or query by funnel-status
 
 	// In case of query by ID, looking for the requested opportunity within the partners scope
@@ -106,25 +126,33 @@ const getOpportunities: NextApiHandler<GetResponse> = async (req, res) => {
 		return res.status(200).json({ data: opportunity });
 	}
 
-	if (typeof responsible !== "string") throw new createHttpError.BadRequest("Responsável inválido");
-	if (typeof funnel !== "string" || funnel === "null") throw new createHttpError.BadRequest("Funil inválido");
-	if (typeof after !== "string" || typeof before !== "string") throw new createHttpError.BadRequest("Parâmetros de período inválidos.");
+	if (!funnel || typeof funnel !== "string" || funnel === "null") throw new createHttpError.BadRequest("Funil inválido");
 
-	const isPeriodDefined = after !== "undefined" && before !== "undefined";
+	const isResponsibleDefined = responsibles && typeof responsibles === "string";
+	const isPeriodDefined = periodField && periodAfter && periodBefore;
+	const periodParams = isPeriodDefined ? PeriodQuerySchema.parse({ periodAfter, periodBefore, periodField }) : null;
+
 	const statusOption = statusOptionsQueries[status as keyof typeof statusOptionsQueries] || {};
 
-	const responsibleArr = responsible !== "null" ? responsible.split(",") : null;
+	const responsibleArr = isResponsibleDefined ? responsibles.split(",") : null;
 	// Validing user scope visibility
 	if (!!userScope && responsibleArr?.some((r) => !userScope.includes(r))) throw new createHttpError.BadRequest("Seu escopo de visibilidade não contempla esse usuário.");
 
 	// Defining the responsible query parameters. If specified, filtering opportunities in the provided responsible scope
-	const queryResponsible: Filter<TOpportunity> = responsibleArr ? { "responsaveis.id": { $in: responsible.split(",") } } : {};
+	const queryResponsible: Filter<TOpportunity> = responsibleArr ? { "responsaveis.id": { $in: responsibleArr } } : {};
+	console.log("queryResponsible", queryResponsible);
 	// Defining, if provided, period query parameters for date of insertion
-	const queryInsertion: Filter<TOpportunity> = isPeriodDefined ? { $and: [{ dataInsercao: { $gte: after } }, { dataInsercao: { $lte: before } }] } : {};
+	const queryInsertion: Filter<TOpportunity> = periodParams
+		? {
+				$and: [{ [periodParams.periodField]: { $gte: periodParams.periodAfter } }, { [periodParams.periodField]: { $lte: periodParams.periodBefore } }],
+			}
+		: {};
+	console.log("queryInsertion", queryInsertion);
 	// Defining, if provided, won/lost query parameters
-	const queryStatus: Filter<TOpportunity> = status !== "undefined" ? statusOption : { "perda.data": null, "ganho.data": null };
-
+	const queryStatus: Filter<TOpportunity> = status ? statusOption : { "perda.data": null, "ganho.data": null };
+	console.log("queryStatus", queryStatus);
 	const query = { ...partnerQuery, ...queryResponsible, ...queryInsertion, ...queryStatus };
+	console.log("FINAL QUERY", JSON.stringify(query));
 	// if (responsible !== 'null') queryParam = { 'responsaveis.id': responsible, 'perda.data': null }
 	// else queryParam = { 'perda.data': null }
 	// // Defining, if provided, period query parameters for date of insertion
@@ -136,6 +164,7 @@ const getOpportunities: NextApiHandler<GetResponse> = async (req, res) => {
 	// if (status == 'GANHOS') queryParam = { ...queryParam, 'ganho.idProjeto': { $ne: null } }
 
 	const opportunities = await getOpportunitiesByQuery({ collection: opportunitiesCollection, query: query });
+	console.log("OPPORTUNITIES FOUND", opportunities.length);
 	// Looking for the funnel references
 	const funnelReferences = await getFunnelReferences({
 		collection: funnelReferencesCollection,

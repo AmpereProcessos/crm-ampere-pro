@@ -19,22 +19,36 @@ import { TOpportunitiesQueryOptions } from "@/pages/api/opportunities/query-opti
 type UseOpportunitiesParams = {
 	responsibles: string[] | null;
 	funnel: string | null;
-	after: string | undefined;
-	before: string | undefined;
+	periodAfter: string | undefined;
+	periodBefore: string | undefined;
+	periodField: string | undefined;
 	status: "GANHOS" | "PERDIDOS" | undefined;
 };
-async function fetchOpportunities({ responsibles, funnel, after, before, status }: UseOpportunitiesParams) {
+async function fetchOpportunities({ responsibles, funnel, periodAfter, periodBefore, periodField, status }: UseOpportunitiesParams) {
 	try {
-		const { data } = await axios.get(`/api/opportunities?responsible=${responsibles}&funnel=${funnel}&after=${after}&before=${before}&status=${status}`);
+		const queryParamsArr = [
+			{ key: "responsibles", value: responsibles },
+			{ key: "funnel", value: funnel },
+			{ key: "periodAfter", value: periodAfter },
+			{ key: "periodBefore", value: periodBefore },
+			{ key: "periodField", value: periodField },
+			{ key: "status", value: status },
+		];
+		const queryParams = queryParamsArr
+			.filter((q) => !!q.value)
+			.map((q) => `${q.key}=${q.value}`)
+			.join("&");
+		const { data } = await axios.get(`/api/opportunities?${queryParams}`);
 		return data.data as TOpportunitySimplifiedDTOWithProposalAndActivitiesAndFunnels[];
 	} catch (error) {
+		console.log("Error fetching opportunities", error);
 		throw error;
 	}
 }
-export function useOpportunities({ responsibles, funnel, after, before, status }: UseOpportunitiesParams) {
+export function useOpportunities({ responsibles, funnel, periodAfter, periodBefore, periodField, status }: UseOpportunitiesParams) {
 	return useQuery({
-		queryKey: ["opportunities", responsibles, funnel, after, before, status],
-		queryFn: async () => await fetchOpportunities({ responsibles, funnel, after, before, status }),
+		queryKey: ["opportunities", responsibles, funnel, periodAfter, periodBefore, periodField, status],
+		queryFn: async () => await fetchOpportunities({ responsibles, funnel, periodAfter, periodBefore, periodField, status }),
 		gcTime: 1000 * 60 * 5, // 5 minutes
 	});
 }
@@ -80,9 +94,30 @@ export function useOpportunitiesBySearch({ searchParam, page }: { searchParam: s
 	});
 }
 
-export async function fetchOpportunityExport({ responsibles, funnel, after, before, status }: UseOpportunitiesParams) {
+type TExportOpportunitiesParams = {
+	responsibles: string[] | null;
+	periodAfter?: string | null;
+	periodBefore?: string | null;
+	periodField?: string | null;
+	status: "GANHOS" | "PERDIDOS" | undefined;
+};
+export async function fetchOpportunityExport({ responsibles, periodAfter, periodBefore, periodField, status }: TExportOpportunitiesParams) {
 	try {
-		const { data } = await axios.get(`/api/opportunities/export?responsible=${responsibles}&funnel=${funnel}&after=${after}&before=${before}&status=${status}`);
+		const queryParamsArr = [
+			{ key: "responsibles", value: responsibles },
+			{ key: "periodAfter", value: periodAfter },
+			{ key: "periodBefore", value: periodBefore },
+			{ key: "periodField", value: periodField },
+			{ key: "status", value: status },
+		];
+
+		const queryParams = queryParamsArr
+			.filter((param) => !!param.value)
+			.map((param) => `${param.key}=${param.value}`)
+			.join("&");
+
+		console.log(queryParams);
+		const { data } = await axios.get(`/api/opportunities/export?${queryParams}`);
 		return data.data as TResultsExportsItem[];
 	} catch (error) {
 		throw error;
