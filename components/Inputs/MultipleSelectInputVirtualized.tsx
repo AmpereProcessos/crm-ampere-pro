@@ -153,7 +153,7 @@ function MultipleSelectInputVirtualized<T>({
 
 				<div
 					className={cn(
-						"flex h-full min-h-[46.6px] w-full items-center justify-between rounded-md border bg-[#fff] p-3 text-sm shadow-sm duration-500 ease-in-out dark:bg-[#121212]",
+						"flex h-full min-h-[46.6px] w-full items-center justify-between rounded-md border bg-[#fff] p-3 text-sm shadow-sm duration-500 ease-in-out",
 						selectMenuIsOpen ? "border-primary" : "border-primary/20",
 						holderClassName,
 					)}
@@ -165,7 +165,7 @@ function MultipleSelectInputVirtualized<T>({
 							value={searchFilter}
 							onChange={(e) => handleFilter(e.target.value)}
 							placeholder="Filtre o item desejado..."
-							className="h-full w-full text-sm italic outline-none dark:bg-[#121212]"
+							className="h-full w-full text-sm italic outline-none"
 						/>
 					) : (
 						<button type="button" onClick={() => setSelectMenuIsOpen((prev) => !prev)} className="grow cursor-pointer text-primary">
@@ -186,7 +186,7 @@ function MultipleSelectInputVirtualized<T>({
 					<div
 						className={`absolute ${
 							dropdownDirection === "down" ? "top-[75px]" : "bottom-[75px]"
-						} z-[100] flex h-[250px] max-h-[250px] w-full flex-col self-center overflow-y-auto overscroll-y-auto rounded-md border border-primary/20 bg-[#fff] p-2 py-1 shadow-sm scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300 dark:bg-[#121212]`}
+						} z-[100] flex h-[250px] max-h-[250px] w-full flex-col self-center overflow-y-auto overscroll-y-auto rounded-md border border-primary/20 bg-[#fff] p-2 py-1 shadow-sm scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300`}
 					>
 						<button
 							type="button"
@@ -217,7 +217,7 @@ function MultipleSelectInputVirtualized<T>({
 
 				<div
 					className={cn(
-						"flex h-full min-h-[46.6px] w-full items-center justify-between rounded-md border bg-[#fff] p-3 text-sm shadow-sm duration-500 ease-in-out dark:bg-[#121212]",
+						"flex h-full min-h-[46.6px] w-full items-center justify-between rounded-md border bg-[#fff] p-3 text-sm shadow-sm duration-500 ease-in-out",
 						selectMenuIsOpen ? "border-primary" : "border-primary/20",
 						holderClassName,
 					)}
@@ -248,7 +248,7 @@ function MultipleSelectInputVirtualized<T>({
 						value={searchFilter}
 						onChange={(e) => handleFilter(e.target.value)}
 						placeholder="Filtre o item desejado..."
-						className="w-full bg-transparent p-2 text-sm italic outline-none dark:bg-[#121212]"
+						className="w-full bg-transparent p-2 text-sm italic outline-none"
 					/>
 
 					<button

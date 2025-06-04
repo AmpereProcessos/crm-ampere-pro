@@ -27,7 +27,7 @@ export function PeriodByFieldFilter({ className, value, handleChange, fieldOptio
 					<Button
 						id="date"
 						variant={"outline"}
-						className={cn("w-full justify-start min-h-[46.6px] text-left font-normal px-3 flex items-center gap-2", !value && "text-muted-foreground")}
+						className={cn("w-full justify-start min-h-[46.6px] text-left font-normal px-3 flex items-center gap-2 bg-[#fff] darK:bg-[#fff]", !value && "text-muted-foreground")}
 					>
 						<CalendarIcon className="w-4 h-4 min-w-4 min-h-4" />
 						{value?.after ? (
