@@ -1,0 +1,82 @@
+import connectToDatabase from "@/services/mongodb/crm-db-connection";
+import { novu } from "@/services/novu";
+import { NOVU_WORKFLOW_IDS } from "@/services/novu/workflows";
+import { apiHandler, validateAuthorization } from "@/utils/api";
+import type { TOpportunity } from "@/utils/schemas/opportunity.schema";
+import type { TUser } from "@/utils/schemas/user.schema";
+import createHttpError from "http-errors";
+import { ObjectId } from "mongodb";
+import type { NextApiHandler } from "next";
+import { z } from "zod";
+
+const AddResponsibleToOpportunitySchema = z.object({
+	opportunityId: z.string({
+		required_error: "ID da oportunidade não fornecido.",
+		invalid_type_error: "Tipo não válido para ID da oportunidade.",
+	}),
+	responsibleId: z.string({
+		required_error: "ID do responsável não fornecido.",
+	}),
+});
+export type TAddResponsibleToOpportunityInput = z.infer<typeof AddResponsibleToOpportunitySchema>;
+export type TAddResponsibleToOpportunityOutput = {
+	message: string;
+};
+const handleAddResponsibleToOpportunity: NextApiHandler<TAddResponsibleToOpportunityOutput> = async (req, res) => {
+	const session = await validateAuthorization(req, res, "oportunidades", "editar", true);
+
+	const { opportunityId, responsibleId } = AddResponsibleToOpportunitySchema.parse(req.body);
+
+	const db = await connectToDatabase();
+	const usersCollection = db.collection<TUser>("users");
+	const opportunitiesCollection = db.collection<TOpportunity>("opportunities");
+
+	const user = await usersCollection.findOne({ _id: new ObjectId(responsibleId) });
+
+	if (!user) throw new createHttpError.NotFound("Usuário não encontrado.");
+
+	const newResponsible: TOpportunity["responsaveis"][number] = {
+		nome: user.nome,
+		id: user._id.toString(),
+		papel: "responsável",
+		avatar_url: user.avatar_url,
+		telefone: user.telefone,
+		dataInsercao: new Date().toISOString(),
+	};
+
+	const opportunity = await opportunitiesCollection.findOne({ _id: new ObjectId(opportunityId) });
+	if (!opportunity) throw new createHttpError.NotFound("Oportunidade não encontrada.");
+
+	// Checking for duplicate responsible
+	const isDuplicate = opportunity.responsaveis.some((responsible) => responsible.id === newResponsible.id);
+	if (isDuplicate) throw new createHttpError.BadRequest("Responsável já adicionado à oportunidade.");
+
+	const opportunityResponsibles = [...opportunity.responsaveis, newResponsible];
+
+	const updatedOpportunity = await opportunitiesCollection.updateOne({ _id: new ObjectId(opportunityId) }, { $set: { responsaveis: opportunityResponsibles } });
+
+	if (!updatedOpportunity.acknowledged) throw new createHttpError.InternalServerError("Erro ao adicionar responsável à oportunidade.");
+
+	// Notifying the new opportunity responsible
+	const novuTriggerResponse = await novu.trigger({
+		to: responsibleId,
+		workflowId: NOVU_WORKFLOW_IDS.NOTIFY_NEW_OPPORTUNITY_TO_RESPONSIBLES,
+		payload: {
+			oportunidade: {
+				id: opportunity._id.toString(),
+				nome: opportunity.nome,
+				identificador: opportunity.identificador,
+			},
+			autor: {
+				id: session.user.id,
+				nome: session.user.nome,
+				avatar_url: session.user.avatar_url,
+			},
+		},
+	});
+
+	console.log("[NOVU] - new responsible notification response", novuTriggerResponse.result);
+	res.status(200).json({ message: "Responsável adicionado com sucesso." });
+};
+
+export default apiHandler({ POST: handleAddResponsibleToOpportunity });

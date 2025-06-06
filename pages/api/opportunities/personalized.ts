@@ -1,3 +1,4 @@
+import type { TUserSession } from "@/lib/auth/session";
 import { insertClient } from "@/repositories/clients/mutations";
 import { getExistentClientByProperties } from "@/repositories/clients/queries";
 import { insertFunnelReference } from "@/repositories/funnel-references/mutations";
@@ -92,6 +93,14 @@ const createClientOpportunityAndFunnelReferences: NextApiHandler<PostResponse> =
 		if (!insertFunnelReferenceResponse.acknowledged) throw new createHttpError.InternalServerError("Oops, houve um erro desconhecido ao criar oportunidade.");
 		const insertedFunnelReferenceId = insertFunnelReferenceResponse.insertedId.toString();
 		console.log("CLIENTE EXISTENTE - ID DA REFERÊNCIA DE FUNIL", insertedOpportunityId);
+		await createNovuTopicAndSubscribeResponsibles({
+			opportunityId: insertedOpportunityId,
+			opportunityName: opportunity.nome,
+			opportunityIdentifier: insertOpportunityResponse.identifier,
+			opportunityResponsibles: opportunity.responsaveis,
+			session,
+		});
+
 		return res.status(200).json({
 			data: {
 				insertedClientId: clientId,
@@ -160,36 +169,12 @@ const createClientOpportunityAndFunnelReferences: NextApiHandler<PostResponse> =
 	const insertedFunnelReferenceId = insertFunnelReferenceResponse.insertedId.toString();
 	// Creating Novu topic for the opportunity and adding the responsibles as subscribers
 
-	const novuTopicKey = `opportunity:${insertedOpportunityId}`;
-	await novu.topics.create({
-		key: novuTopicKey,
-		name: `${insertOpportunityResponse.identifier} - ${opportunity.nome}`,
-	});
-	await novu.topics.subscriptions.create(
-		{
-			subscriberIds: opportunity.responsaveis.map((r) => r.id),
-		},
-		novuTopicKey,
-	);
-	// Notifying users other than the author that they have a new opportunity to attend
-	await novu.triggerBulk({
-		events: opportunity.responsaveis
-			.filter((r) => r.id !== session.user.id)
-			.map((r) => ({
-				to: r.id,
-				workflowId: NOVU_WORKFLOW_IDS.NOTIFY_NEW_OPPORTUNITY_TO_RESPONSIBLES,
-				payload: {
-					autor: {
-						nome: session.user.nome,
-						avatar_url: session.user.avatar_url,
-					},
-					oportunidade: {
-						id: insertedOpportunityId,
-						identificador: insertOpportunityResponse.identifier,
-						nome: opportunity.nome,
-					},
-				},
-			})),
+	await createNovuTopicAndSubscribeResponsibles({
+		opportunityId: insertedOpportunityId,
+		opportunityName: opportunity.nome,
+		opportunityIdentifier: insertOpportunityResponse.identifier,
+		opportunityResponsibles: opportunity.responsaveis,
+		session,
 	});
 	return res.status(201).json({
 		data: {
@@ -202,3 +187,59 @@ const createClientOpportunityAndFunnelReferences: NextApiHandler<PostResponse> =
 };
 
 export default apiHandler({ POST: createClientOpportunityAndFunnelReferences });
+
+type CreateNovuTopicAndSubscribeResponsiblesProps = {
+	opportunityId: string;
+	opportunityName: string;
+	opportunityIdentifier: string;
+	opportunityResponsibles: TOpportunity["responsaveis"];
+	session: TUserSession;
+};
+async function createNovuTopicAndSubscribeResponsibles({
+	opportunityId,
+	opportunityName,
+	opportunityIdentifier,
+	opportunityResponsibles,
+	session,
+}: CreateNovuTopicAndSubscribeResponsiblesProps) {
+	try {
+		console.log("[NOVU] - running NOVU API calls");
+		const novuTopicKey = `opportunity:${opportunityId}`;
+		const novuTopicCreationResponse = await novu.topics.create({
+			key: novuTopicKey,
+			name: `${opportunityIdentifier} - ${opportunityName}`,
+		});
+		console.log("[NOVU] - topic creation response", novuTopicCreationResponse.result);
+		const novuTopicSubscriptionResponse = await novu.topics.subscriptions.create(
+			{
+				subscriberIds: opportunityResponsibles.map((r) => r.id),
+			},
+			novuTopicKey,
+		);
+		console.log("[NOVU] - topic subscription response", novuTopicSubscriptionResponse.result);
+		// Notifying users other than the author that they have a new opportunity to attend
+		const novuTriggerBulkResponse = await novu.trigger({
+			to: {
+				type: "Topic",
+				topicKey: novuTopicKey,
+			},
+			workflowId: NOVU_WORKFLOW_IDS.NOTIFY_NEW_OPPORTUNITY_TO_RESPONSIBLES,
+			payload: {
+				autor: {
+					nome: session.user.nome,
+					avatar_url: session.user.avatar_url,
+				},
+				oportunidade: {
+					id: opportunityId,
+					identificador: opportunityIdentifier,
+					nome: opportunityName,
+				},
+			},
+		});
+		console.log("[NOVU] - bulk trigger response", novuTriggerBulkResponse.result);
+		return null;
+	} catch (error) {
+		console.log("[NOVU] - error", error);
+		return null;
+	}
+}

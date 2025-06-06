@@ -1,21 +1,9 @@
 import React, { useState } from "react";
 
 import { TTechnicalAnalysisDTO } from "@/utils/schemas/technical-analysis.schema";
-import { useUsers } from "@/utils/queries/users";
-import SelectInput from "@/components/Inputs/SelectInput";
-import { TechnicalAnalysisPendencyCategories } from "@/utils/select-options";
-import TextInput from "@/components/Inputs/TextInput";
-import SelectWithImages from "@/components/Inputs/SelectWithImages";
-import CheckboxInput from "@/components/Inputs/CheckboxInput";
-import Avatar from "@/components/utils/Avatar";
-import { formatDateAsLocale, formatNameAsInitials } from "@/lib/methods/formatting";
-import toast from "react-hot-toast";
+
 import type { TUserSession } from "@/lib/auth/session";
 
-import { createOpportunityHistory } from "@/utils/mutations/opportunity-history";
-import { TNotification } from "@/utils/schemas/notification.schema";
-import { createNotification } from "@/utils/mutations/notifications";
-import { TActivity } from "@/utils/schemas/activities.schema";
 import { useActivitiesByTechnicalAnalysisId } from "@/utils/queries/activities";
 import NewActivityMenu from "@/components/Activities/NewActivityMenu";
 import LoadingComponent from "@/components/utils/LoadingComponent";

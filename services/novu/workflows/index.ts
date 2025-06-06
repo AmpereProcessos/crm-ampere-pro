@@ -9,15 +9,15 @@ export const notfiyNewOpportunityToResponsibles = workflow(
 	async ({ step, payload }) => {
 		await step.inApp("inbox", async () => {
 			return {
-				subject: "Nova oportunidade de negócio",
-				body: "Você tem uma nova oportunidade de negócio para atender.",
+				subject: "Nova oportunidade de negócio !",
+				body: `Você foi atribuído a uma nova oportunidade de negócio: ${payload.oportunidade.identificador} - ${payload.oportunidade.nome}.`,
 				avatar: payload.autor.avatar_url,
 				redirect: {
 					url: `${process.env.NEXT_PUBLIC_APP_URL}/comercial/oportunidades/id/${payload.oportunidade.id}`,
 					target: "_blank",
 				},
 				primaryAction: {
-					label: "CONFEFIR",
+					label: "CONFIRA JÁ",
 					redirect: {
 						url: `${process.env.NEXT_PUBLIC_APP_URL}/comercial/oportunidades/id/${payload.oportunidade.id}`,
 						target: "_self",

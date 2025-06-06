@@ -4,6 +4,7 @@ import type { TOpportunity } from "../schemas/opportunity.schema";
 import type { TClient } from "../schemas/client.schema";
 import type { TFunnelReference } from "../schemas/funnel-reference.schema";
 import { updateAppProject } from "./app-projects";
+import { TAddResponsibleToOpportunityInput } from "@/pages/api/opportunities/responsibles";
 
 type HandleProjectCreationParams = {
 	info: TOpportunity;
@@ -105,6 +106,18 @@ export async function deleteOpportunity({ id }: { id: string }) {
 		return data.message as string;
 	} catch (error) {
 		console.log("Error running deleteOpportunity", error);
+		throw error;
+	}
+}
+
+type AddResponsibleToOpportunityParams = TAddResponsibleToOpportunityInput;
+export async function addResponsibleToOpportunity({ opportunityId, responsibleId }: AddResponsibleToOpportunityParams) {
+	try {
+		const { data } = await axios.post("/api/opportunities/responsibles", { opportunityId, responsibleId });
+		if (typeof data.message !== "string") return "Responsável adicionado com sucesso !";
+		return data.message as string;
+	} catch (error) {
+		console.log("Error running addResponsibleToOpportunity", error);
 		throw error;
 	}
 }

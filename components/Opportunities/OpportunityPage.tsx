@@ -25,7 +25,7 @@ import { MdDelete } from "react-icons/md";
 import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
 import { useQueryClient } from "@tanstack/react-query";
 import { deleteOpportunity } from "@/utils/mutations/opportunities";
-import { Sidebar } from "@/app/components/Sidebar";
+import { Sidebar } from "../Sidebar";
 
 export type TOpportunityBlockMode = "PROPOSES" | "FILES" | "TECHNICAL ANALYSIS";
 

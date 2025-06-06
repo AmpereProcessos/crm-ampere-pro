@@ -194,7 +194,13 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 							/>
 						</button>
 					</div>
-					<OpportunityResponsiblesBlock infoHolder={infoHolder} setInfoHolder={setInfoHolder} session={session} handleUpdateOpportunity={handleUpdateOpportunity} />
+					<OpportunityResponsiblesBlock
+						opportunityId={opportunityId}
+						infoHolder={infoHolder}
+						setInfoHolder={setInfoHolder}
+						session={session}
+						handleUpdateOpportunity={handleUpdateOpportunity}
+					/>
 					<OpportunityFunnelReferencesBlock opportunity={infoHolder} setOpportunity={setInfoHolder} />
 					<h1 className="w-full rounded-md bg-[#fead41] p-1 text-center text-sm font-medium text-white">DADOS DA LOCALIZAÇÃO</h1>
 					<div className="flex w-full gap-2">

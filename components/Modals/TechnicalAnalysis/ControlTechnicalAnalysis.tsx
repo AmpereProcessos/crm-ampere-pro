@@ -23,7 +23,6 @@ import LoadingComponent from "@/components/utils/LoadingComponent";
 import { getErrorMessage } from "@/lib/methods/errors";
 import { formatDateAsLocale } from "@/lib/methods/formatting";
 import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
-import { createNotification } from "@/utils/mutations/notifications";
 import { editTechnicalAnalysis } from "@/utils/mutations/technical-analysis";
 import { useTechnicalAnalysisById } from "@/utils/queries/technical-analysis";
 import { useTechnicalAnalysts } from "@/utils/queries/users";

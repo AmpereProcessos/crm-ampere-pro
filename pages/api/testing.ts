@@ -1,7 +1,9 @@
 import { formatDateAsLocale } from "@/lib/methods/formatting";
 import connectToDatabase from "@/services/mongodb/crm-db-connection";
+import { novu } from "@/services/novu";
 import { apiHandler } from "@/utils/api";
 import { TOpportunity } from "@/utils/schemas/opportunity.schema";
+import { TUser } from "@/utils/schemas/user.schema";
 import { AnyBulkWriteOperation } from "mongodb";
 import { NextApiHandler } from "next";
 
@@ -12,8 +14,29 @@ const interval = {
 
 type GetResponse = any;
 const getManualTesting: NextApiHandler<GetResponse> = async (req, res) => {
-	// const db = await connectToDatabase();
+	const db = await connectToDatabase();
 
+	const usersCollection = db.collection<TUser>("users");
+	const users = await usersCollection
+		.find({
+			email: {
+				$not: {
+					$regex: "inativo",
+				},
+			},
+		})
+		.toArray();
+
+	await novu.subscribers.createBulk({
+		subscribers: users.map((user, index) => {
+			console.log(user.nome, user.email, index);
+			return {
+				subscriberId: user._id.toString(),
+				email: user.email,
+				firstName: user.nome,
+			};
+		}),
+	});
 	// const opportunitiesCollection = db.collection<TOpportunity>("opportunities");
 	// const clientsCollection = db.collection("clients");
 

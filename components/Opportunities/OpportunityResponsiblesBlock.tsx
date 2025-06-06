@@ -2,7 +2,7 @@ import type { TOpportunityDTOWithClientAndPartnerAndFunnelReferences, TOpportuni
 import React, { useState, type Dispatch, type SetStateAction } from "react";
 import Avatar from "../utils/Avatar";
 import { formatDateAsLocale, formatNameAsInitials } from "@/lib/methods/formatting";
-import { UseMutateFunction } from "@tanstack/react-query";
+import { UseMutateFunction, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { MdDelete } from "react-icons/md";
 import { AiOutlineCheck } from "react-icons/ai";
@@ -14,13 +14,17 @@ import { useOpportunityCreators } from "@/utils/queries/users";
 import type { TNotification } from "@/utils/schemas/notification.schema";
 import { createNotification } from "@/utils/mutations/notifications";
 import { BsCalendarPlus } from "react-icons/bs";
+import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
+import { addResponsibleToOpportunity } from "@/utils/mutations/opportunities";
 type OpportunityResponsiblesBlockProps = {
+	opportunityId: string;
 	infoHolder: TOpportunityDTOWithClientAndPartnerAndFunnelReferences;
 	setInfoHolder: Dispatch<SetStateAction<TOpportunityDTOWithClientAndPartnerAndFunnelReferences>>;
 	handleUpdateOpportunity: any;
 	session: TUserSession;
 };
-function OpportunityResponsiblesBlock({ infoHolder, setInfoHolder, handleUpdateOpportunity, session }: OpportunityResponsiblesBlockProps) {
+function OpportunityResponsiblesBlock({ opportunityId, infoHolder, setInfoHolder, handleUpdateOpportunity, session }: OpportunityResponsiblesBlockProps) {
+	const queryClient = useQueryClient();
 	const { data: opportunityCreators } = useOpportunityCreators();
 	const [newResponsibleMenuIsOpen, setNewResponsibleMenuIsOpen] = useState<boolean>(false);
 	const [newOpportunityResponsible, setNewOpportunityResponsible] = useState<{
@@ -54,42 +58,14 @@ function OpportunityResponsiblesBlock({ infoHolder, setInfoHolder, handleUpdateO
 		// @ts-ignore
 		return handleUpdateOpportunity({ id: infoHolder._id, changes: { responsaveis: newResponsibles } });
 	}
-	async function handleResponsibleAddition({
-		responsibles,
-		responsibleToAdd,
-	}: {
-		responsibles: TOpportunityDTOWithClientAndPartnerAndFunnelReferences["responsaveis"];
-		responsibleToAdd: TOpportunityDTOWithClientAndPartnerAndFunnelReferences["responsaveis"][number];
-	}) {
-		if (!responsibleToAdd.nome || !responsibleToAdd.id) return toast.error("Responsável inválido ou não preenchido.");
-		if (!responsibleToAdd.papel) return toast.error("Papel de responsável inválido.");
-		const opportunityResponsibles = [...responsibles];
-		const responsible: TOpportunityResponsible = {
-			nome: responsibleToAdd.nome,
-			id: responsibleToAdd.id,
-			papel: responsibleToAdd.papel,
-			avatar_url: responsibleToAdd.avatar_url,
-			dataInsercao: new Date().toISOString(),
-		};
-		opportunityResponsibles.push(responsible);
-		// @ts-ignore
-		handleUpdateOpportunity({ id: infoHolder._id, changes: { responsaveis: opportunityResponsibles } });
-		// Notifying the new opportunity responsible
-		const newNotification: TNotification = {
-			remetente: { id: null, nome: "SISTEMA" },
-			idParceiro: infoHolder.idParceiro,
-			destinatarios: [{ id: responsibleToAdd.id, nome: responsibleToAdd.nome, avatar_url: responsibleToAdd.avatar_url }],
-			oportunidade: {
-				id: infoHolder._id,
-				nome: infoHolder.nome,
-				identificador: infoHolder.identificador,
-			},
-			mensagem: `${session.user.nome} adicionou você como responsável (com o papel de ${responsibleToAdd.papel}) da oportunidade ${infoHolder.nome}.`,
-			recebimentos: [],
-			dataInsercao: new Date().toISOString(),
-		};
-		await createNotification({ info: newNotification });
-	}
+
+	const { mutate: handleAddResponsibleToOpportunity, isPending: isAddingResponsible } = useMutationWithFeedback({
+		mutationKey: ["add-responsible-to-opportunity"],
+		mutationFn: addResponsibleToOpportunity,
+		affectedQueryKey: ["opportunity-by-id", opportunityId],
+		queryClient: queryClient,
+	});
+
 	return (
 		<div className=" flex w-full flex-col gap-2">
 			<h1 className="w-full rounded-md bg-[#fead41] p-1 text-center text-sm font-medium text-white">RESPONSÁVEIS DA OPORTUNIDADE</h1>
@@ -217,10 +193,11 @@ function OpportunityResponsiblesBlock({ infoHolder, setInfoHolder, handleUpdateO
 						<div className="flex w-full items-center justify-end">
 							<button
 								type="button"
-								// @ts-ignore
-								onClick={() => handleResponsibleAddition({ responsibles: infoHolder.responsaveis, responsibleToAdd: newOpportunityResponsible })}
-								className={`rounded bg-green-500
-               p-1  px-4 text-xs font-medium text-white duration-300 ease-in-out hover:bg-green-600 `}
+								onClick={() => {
+									if (!newOpportunityResponsible.id || !newOpportunityResponsible.papel) return toast.error("Preencha todos os campos para adicionar um responsável.");
+									handleAddResponsibleToOpportunity({ opportunityId, responsibleId: newOpportunityResponsible.id });
+								}}
+								className={"rounded bg-green-500 p-1  px-4 text-xs font-medium text-white duration-300 ease-in-out hover:bg-green-600"}
 							>
 								ADICIONAR
 							</button>
