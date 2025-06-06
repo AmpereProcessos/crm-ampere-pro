@@ -29,7 +29,7 @@ import { useTechnicalAnalysts } from "@/utils/queries/users";
 import { TTechnicalAnalysisDTO } from "@/utils/schemas/technical-analysis.schema";
 import { TechnicalAnalysisComplexity, TechnicalAnalysisReportTypes, TechnicalAnalysisSolicitationTypes, TechnicalAnalysisStatus } from "@/utils/select-options";
 import { useQueryClient } from "@tanstack/react-query";
-import { Session } from "next-auth";
+import type { TUserSession } from "@/lib/auth/session";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { BsCalendarCheckFill, BsCalendarFill, BsCode } from "react-icons/bs";
@@ -38,7 +38,7 @@ import { VscChromeClose } from "react-icons/vsc";
 
 type PartialControlTechnicalAnalysisProps = {
 	analysisId: string;
-	session: Session;
+	session: TUserSession;
 	closeModal: () => void;
 };
 export default function PartialControlTechnicalAnalysis({ analysisId, session, closeModal }: PartialControlTechnicalAnalysisProps) {

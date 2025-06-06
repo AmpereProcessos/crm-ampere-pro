@@ -4,7 +4,7 @@ import LoadingComponent from "../utils/LoadingComponent";
 import ErrorComponent from "../utils/ErrorComponent";
 import CardUserControl from "../Cards/User";
 import EditUser from "../Modals/User/EditUser";
-import type { Session } from "next-auth";
+import type { TUserSession } from "@/lib/auth/session";
 import NewUserModal from "../Modals/User/NewUser";
 import GeneralQueryPaginationMenu from "../utils/GeneralQueryPaginationMenu";
 import type { TUsersWithFiltersResponse } from "@/pages/api/users/personalized";
@@ -16,7 +16,7 @@ import { BsCalendarMinus, BsCalendarPlus } from "react-icons/bs";
 import { Button } from "../ui/button";
 import ConfigUsersFilterMenu from "../Users/ConfigUsersFilterMenu";
 type UsersProps = {
-	session: Session;
+	session: TUserSession;
 };
 function Users({ session }: UsersProps) {
 	const { data: usersResult, isSuccess, isLoading, isError, queryParams, updateQueryParams } = useUsersWithFilters({ filters: {} });

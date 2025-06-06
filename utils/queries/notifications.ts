@@ -1,14 +1,11 @@
 import axios from "axios";
-import { TNotificationDTO } from "../schemas/notification.schema";
+import type { TNotificationDTO } from "../schemas/notification.schema";
 import { useQuery } from "@tanstack/react-query";
+import type { TGetNotificationsRouteOutput } from "@/app/api/notifications/route";
 
 async function fetchNotificationsByRecipientId({ recipientId }: { recipientId: string }) {
-	try {
-		const { data } = await axios.get(`/api/notifications?recipientId=${recipientId}`);
-		return data.data as TNotificationDTO[];
-	} catch (error) {
-		throw error;
-	}
+	const { data }: { data: TGetNotificationsRouteOutput } = await axios.get(`/api/notifications?recipientId=${recipientId}`);
+	return data.data.byRecipientId;
 }
 
 export function useNotificationsByRecipient({ recipientId }: { recipientId: string }) {
@@ -20,12 +17,8 @@ export function useNotificationsByRecipient({ recipientId }: { recipientId: stri
 }
 
 async function fetchNotificationsByOpportunityId({ opportunityId }: { opportunityId: string }) {
-	try {
-		const { data } = await axios.get(`/api/notifications?opportunityId=${opportunityId}`);
-		return data.data as TNotificationDTO;
-	} catch (error) {
-		throw error;
-	}
+	const { data }: { data: TGetNotificationsRouteOutput } = await axios.get(`/api/notifications?opportunityId=${opportunityId}`);
+	return data.data.byOpportunityId;
 }
 
 export function useNotificationsByOpportunity({ opportunityId }: { opportunityId: string }) {

@@ -14,7 +14,7 @@ import CreatedProjectsTracking from "./Blocks/CreatedProjectsTracking";
 import SentProjectsTracking from "./Blocks/SentProjectsTracking";
 import SelectInput from "@/components/Inputs/SelectInput";
 import GoalsMenu from "./Blocks/GoalsMenu";
-import { Session } from "next-auth";
+import type { TUserSession } from "@/lib/auth/session";
 
 const initialFirstPeriodAfter = dayjs().subtract(1, "year").startOf("year").toISOString(); // dayjs().startOf('year').toISOString()
 const initialFirstPeriodBefore = dayjs().subtract(1, "year").endOf("year").toISOString(); //dayjs().endOf('year').toISOString()
@@ -22,7 +22,7 @@ const initialSecondPeriodAfter = dayjs().startOf("year").toISOString();
 const initialSecondPeriodBefore = dayjs().endOf("year").toISOString();
 type EditSalePromoterProps = {
 	promoterId: string;
-	session: Session;
+	session: TUserSession;
 	closeModal: () => void;
 };
 function EditSalePromoter({ promoterId, session, closeModal }: EditSalePromoterProps) {

@@ -6,7 +6,7 @@ import CreditorUtil from "../Cards/CreditorUtil";
 import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
 import { useQueryClient } from "@tanstack/react-query";
 import { createUtil } from "@/utils/mutations/utils";
-import type { Session } from "next-auth";
+import type { TUserSession } from "@/lib/auth/session";
 import type { TAcquisitionChannel, TAcquisitionChannelDTO, TCreditor } from "@/utils/schemas/utils";
 import { Barcode, Megaphone } from "lucide-react";
 import { BsCalendarPlus } from "react-icons/bs";
@@ -14,7 +14,7 @@ import { formatDateAsLocale, formatToSlug } from "@/lib/methods/formatting";
 import Avatar from "../utils/Avatar";
 
 type AcquisitionChannelsBlockProps = {
-	session: Session;
+	session: TUserSession;
 };
 function AcquisitionChannelsBlock({ session }: AcquisitionChannelsBlockProps) {
 	const queryClient = useQueryClient();

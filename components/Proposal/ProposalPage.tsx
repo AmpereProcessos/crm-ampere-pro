@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import type { Session } from "next-auth";
+import type { TUserSession } from "@/lib/auth/session";
 import Link from "next/link";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -52,7 +52,7 @@ function getPricingMethodById({ methods, id }: { methods?: TPricingMethodDTO[]; 
 }
 type ProposalPageProps = {
 	proposalId: string;
-	session: Session;
+	session: TUserSession;
 };
 function ProposalPage({ proposalId, session }: ProposalPageProps) {
 	const queryClient = useQueryClient();

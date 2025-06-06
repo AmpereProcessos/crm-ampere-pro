@@ -9,7 +9,7 @@ import { usePartnersSimplified } from "@/utils/queries/partners";
 import { usePaymentMethodById } from "@/utils/queries/payment-methods";
 import { TFractionnementItem, TPaymentMethod, TPaymentMethodDTO } from "@/utils/schemas/payment-methods";
 import { useQueryClient } from "@tanstack/react-query";
-import { Session } from "next-auth";
+import type { TUserSession } from "@/lib/auth/session";
 import React, { useEffect, useState } from "react";
 import { BsCircleHalf } from "react-icons/bs";
 import { FaPercentage } from "react-icons/fa";
@@ -18,7 +18,7 @@ import { VscChromeClose } from "react-icons/vsc";
 
 type EditPaymentMethodProps = {
 	paymentMethodId: string;
-	session: Session;
+	session: TUserSession;
 	closeModal: () => void;
 };
 function EditPaymentMethod({ paymentMethodId, session, closeModal }: EditPaymentMethodProps) {

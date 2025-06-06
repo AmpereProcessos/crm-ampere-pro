@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from "react";
 
 import OpportunityDetails from "./OpportunityDetails";
@@ -9,14 +10,13 @@ import OpportunityTechnicalAnalysis from "./OpportunityTechnicalAnalysis";
 import OpportunityHomologations from "./OpportunityHomologations";
 import LoadingComponent from "../utils/LoadingComponent";
 import Avatar from "../utils/Avatar";
-import { Sidebar } from "../Sidebar";
 
 import { BsCalendarPlus, BsCalendarX, BsCode, BsFillMegaphoneFill } from "react-icons/bs";
 
 import { useOpportunityById } from "@/utils/queries/opportunities";
 import OpportunityLossBlock from "./OpportunityLossBlock";
 import { formatDateAsLocale, formatNameAsInitials } from "@/lib/methods/formatting";
-import type { Session } from "next-auth";
+import type { TUserSession } from "@/lib/auth/session";
 import OpportunityWonFlag from "./OpportunityWonFlag";
 import OpportunityContractRequestedFlag from "./OpportunityContractRequestedFlag";
 import OpportunityClient from "./OpportunityClient";
@@ -25,11 +25,12 @@ import { MdDelete } from "react-icons/md";
 import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
 import { useQueryClient } from "@tanstack/react-query";
 import { deleteOpportunity } from "@/utils/mutations/opportunities";
+import { Sidebar } from "@/app/components/Sidebar";
 
 export type TOpportunityBlockMode = "PROPOSES" | "FILES" | "TECHNICAL ANALYSIS";
 
 type OpportunityPageProps = {
-	session: Session;
+	session: TUserSession;
 	opportunityId: string;
 };
 function OpportunityPage({ session, opportunityId }: OpportunityPageProps) {

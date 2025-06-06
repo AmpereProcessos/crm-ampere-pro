@@ -1,13 +1,15 @@
+import { getCurrentSession } from "@/lib/auth/session";
 import { getPartnerFunnels } from "@/repositories/funnels/queries";
 import { getPartnersSimplified } from "@/repositories/partner-simplified/query";
 import { getProjectTypesSimplified } from "@/repositories/project-type/queries";
 import { getOpportunityCreators } from "@/repositories/users/queries";
 import connectToDatabase from "@/services/mongodb/crm-db-connection";
-import { apiHandler, validateAuthenticationWithSession } from "@/utils/api";
+import { apiHandler, validateAuthentication } from "@/utils/api";
 import type { TFunnel, TFunnelDTO } from "@/utils/schemas/funnel.schema";
 import type { TPartner, TPartnerSimplifiedDTO } from "@/utils/schemas/partner.schema";
 import type { TProjectType, TProjectTypeDTOSimplified } from "@/utils/schemas/project-types.schema";
 import type { TUser, TUserDTOSimplified } from "@/utils/schemas/user.schema";
+import createHttpError from "http-errors";
 import type { Collection, Filter } from "mongodb";
 import type { NextApiHandler } from "next";
 
@@ -22,7 +24,10 @@ type GetResponse = {
 };
 
 const getOpportunitiesQueryOptions: NextApiHandler<GetResponse> = async (req, res) => {
-	const session = await validateAuthenticationWithSession(req, res);
+	const session = await validateAuthentication(req, res);
+	if (!session.user || !session.session) {
+		throw new createHttpError.Unauthorized("Usuário não autenticado");
+	}
 	const partnerScope = session.user.permissoes.parceiros.escopo;
 
 	const partnerQuery = partnerScope ? { idParceiro: { $in: [...partnerScope, null] } } : {};

@@ -1,12 +1,12 @@
 import React from "react";
 import CreditorsBlock from "../Personalization/CreditorsBlock";
-import type { Session } from "next-auth";
+import type { TUserSession } from "@/lib/auth/session";
 import EquipmentsBlock from "../Personalization/EquipmentsBlock";
 import ProjectJourneyTypesBlock from "../Personalization/ProjectJourneyTypesBlock";
 import AcquisitionChannelsBlock from "../Personalization/AcquisitionChannelsBlock";
 
 type PersonalizationProps = {
-	session: Session;
+	session: TUserSession;
 };
 function Personalization({ session }: PersonalizationProps) {
 	return (

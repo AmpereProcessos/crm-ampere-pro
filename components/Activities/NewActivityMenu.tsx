@@ -8,7 +8,7 @@ import DateTimeInput from "../Inputs/DateTimeInput";
 import { formatDateInputChange, formatDateTime, formatNameAsInitials } from "@/lib/methods/formatting";
 import { useUsers } from "@/utils/queries/users";
 import { useQueryClient } from "@tanstack/react-query";
-import { Session } from "next-auth";
+import type { TUserSession } from "@/lib/auth/session";
 import Avatar from "../utils/Avatar";
 import SelectWithImages from "../Inputs/SelectWithImages";
 import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
@@ -36,7 +36,7 @@ const variants = {
 };
 
 type NewActivityMenuProps = {
-	session: Session;
+	session: TUserSession;
 	opportunity: { id?: string | null; nome?: string | null };
 	project:
 		| {

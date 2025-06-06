@@ -1,10 +1,10 @@
+"use client";
 import DateInput from "@/components/Inputs/DateInput";
 import { Sidebar } from "@/components/Sidebar";
 import { formatDateInputChange, formatDecimalPlaces, formatToMoney } from "@/lib/methods/formatting";
 import { formatDateForInput, getFirstDayOfMonth, getLastDayOfMonth } from "@/utils/methods";
 import { usePartnersSimplified } from "@/utils/queries/partners";
 import { useOpportunityCreators } from "@/utils/queries/users";
-import { Session } from "next-auth";
 import Link from "next/link";
 import React, { useState } from "react";
 import { AiOutlineCloseCircle, AiOutlineTeam } from "react-icons/ai";
@@ -18,6 +18,7 @@ import MultipleSelectInput from "@/components/Inputs/MultipleSelectInput";
 import { useStats, useStatsQueryOptions } from "@/utils/queries/stats";
 import { FaListCheck } from "react-icons/fa6";
 import { FaBolt } from "react-icons/fa";
+import type { TUserSession } from "@/lib/auth/session";
 
 const currentDate = new Date();
 const firstDayOfMonth = getFirstDayOfMonth(currentDate.getFullYear(), currentDate.getMonth()).toISOString();
@@ -31,7 +32,7 @@ type TQueryFilters = {
 };
 
 type MainDashboardPageProps = {
-	session: Session;
+	session: TUserSession;
 };
 function MainDashboardPage({ session }: MainDashboardPageProps) {
 	const userOpportunitiesScope = session.user.permissoes.oportunidades.escopo || null;
@@ -141,7 +142,7 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
 												...prev,
 												period: {
 													...prev.period,
-													after: formatDateInputChange(value) || firstDayOfMonth,
+													after: formatDateInputChange(value, "string") || firstDayOfMonth,
 												},
 											}))
 										}
@@ -158,7 +159,7 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
 												...prev,
 												period: {
 													...prev.period,
-													before: formatDateInputChange(value) || lastDayOfMonth,
+													before: formatDateInputChange(value, "string") || lastDayOfMonth,
 												},
 											}))
 										}

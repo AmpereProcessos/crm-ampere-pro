@@ -9,7 +9,7 @@ import { createUser } from "@/utils/mutations/users";
 import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
 import { formatToPhone } from "@/utils/methods";
 import type { TUser } from "@/utils/schemas/user.schema";
-import type { Session } from "next-auth";
+import type { TUserSession } from "@/lib/auth/session";
 import { usePartners, usePartnersSimplified } from "@/utils/queries/partners";
 import { useUserGroups } from "@/utils/queries/user-groups";
 import { useUsers } from "@/utils/queries/users";
@@ -225,7 +225,7 @@ type NewUserModalProps = {
 	closeModal: () => void;
 	userId: string;
 	partnerId: string;
-	session: Session;
+	session: TUserSession;
 };
 function NewUserModal({ closeModal, userId, partnerId, session }: NewUserModalProps) {
 	const queryClient = useQueryClient();

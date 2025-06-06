@@ -8,12 +8,12 @@ import { formatDateForInput, formatToCEP, formatToCPForCNPJ, formatToPhone } fro
 import { useClientById } from "@/utils/queries/clients";
 import { TClientDTO } from "@/utils/schemas/client.schema";
 import { CustomersAcquisitionChannels, MaritalStatus } from "@/utils/select-options";
-import { Session } from "next-auth";
+import type { TUserSession } from "@/lib/auth/session";
 import React, { useEffect, useState } from "react";
 
 type ReviewClientBlockProps = {
 	clientId: string;
-	session: Session;
+	session: TUserSession;
 };
 function ReviewClientBlock({ clientId, session }: ReviewClientBlockProps) {
 	const { data: client, isLoading, isError, isSuccess } = useClientById({ id: clientId });

@@ -1,6 +1,6 @@
 import TextInput from "@/components/Inputs/TextInput";
 import type { TFileReference } from "@/utils/schemas/file-reference.schema";
-import type { Session } from "next-auth";
+import type { TUserSession } from "@/lib/auth/session";
 import React, { useState } from "react";
 import { VscChromeClose } from "react-icons/vsc";
 import { BsCloudUploadFill } from "react-icons/bs";
@@ -17,15 +17,10 @@ import { useQueryClient } from "@tanstack/react-query";
 type NewFileReferenceProps = {
 	opportunityId: string;
 	clientId: string;
-	session: Session;
+	session: TUserSession;
 	closeModal: () => void;
 };
-function NewFileReference({
-	opportunityId,
-	clientId,
-	session,
-	closeModal,
-}: NewFileReferenceProps) {
+function NewFileReference({ opportunityId, clientId, session, closeModal }: NewFileReferenceProps) {
 	const queryClient = useQueryClient();
 	const [fileHolder, setFileHolder] = useState<File | null>(null);
 	const [infoHolder, setInfoHolder] = useState<TFileReference>({
@@ -86,17 +81,10 @@ function NewFileReference({
 		try {
 			// Validating file attachment and fields
 			if (!fileHolder) return toast.error("Anexe o arquivo desejado.");
-			if (!infoHolder.idCliente && !infoHolder.idOportunidade)
-				return toast.error(
-					"Escolha ao menos uma opção de vínculo para o arquivo.",
-				);
-			if (infoHolder.titulo.trim().length < 2)
-				return toast.error("Preencha um titulo de ao menos 2 letras.");
-			const formattedFileName = infoHolder.titulo
-				.toLowerCase()
-				.replaceAll(" ", "_");
-			const vinculationId =
-				infoHolder.idOportunidade || infoHolder.idCliente || "naodefinido";
+			if (!infoHolder.idCliente && !infoHolder.idOportunidade) return toast.error("Escolha ao menos uma opção de vínculo para o arquivo.");
+			if (infoHolder.titulo.trim().length < 2) return toast.error("Preencha um titulo de ao menos 2 letras.");
+			const formattedFileName = infoHolder.titulo.toLowerCase().replaceAll(" ", "_");
+			const vinculationId = infoHolder.idOportunidade || infoHolder.idCliente || "naodefinido";
 			// Uploading file to Firebase and getting url and format
 			const { url, format } = await uploadFile({
 				file: fileHolder,
@@ -122,19 +110,12 @@ function NewFileReference({
 	console.log("FILE", fileHolder);
 	console.log("INFO", infoHolder);
 	return (
-		<div
-			id="newCost"
-			className="fixed bottom-0 left-0 right-0 top-0 z-[100] bg-[rgba(0,0,0,.85)]"
-		>
+		<div id="newCost" className="fixed bottom-0 left-0 right-0 top-0 z-[100] bg-[rgba(0,0,0,.85)]">
 			<div className="fixed left-[50%] top-[50%] z-[100] h-[60%] w-[90%] translate-x-[-50%] translate-y-[-50%] rounded-md bg-[#fff] dark:bg-[#121212] p-[10px] lg:w-[40%]">
 				<div className="flex h-full flex-col">
 					<div className="flex flex-wrap items-center justify-between border-b border-gray-200 px-2 pb-2 text-lg">
 						<h3 className="text-xl font-bold text-primary">ANEXAR ARQUIVO</h3>
-						<button
-							onClick={() => closeModal()}
-							type="button"
-							className="flex items-center justify-center rounded-lg p-1 duration-300 ease-linear hover:scale-105 hover:bg-red-200"
-						>
+						<button onClick={() => closeModal()} type="button" className="flex items-center justify-center rounded-lg p-1 duration-300 ease-linear hover:scale-105 hover:bg-red-200">
 							<VscChromeClose style={{ color: "red" }} />
 						</button>
 					</div>
@@ -144,9 +125,7 @@ function NewFileReference({
 								label="TITULO DO ARQUIVO"
 								placeholder="Preencha aqui o nome a ser dado ao arquivo..."
 								value={infoHolder.titulo}
-								handleChange={(value) =>
-									setInfoHolder((prev) => ({ ...prev, titulo: value }))
-								}
+								handleChange={(value) => setInfoHolder((prev) => ({ ...prev, titulo: value }))}
 								width="100%"
 							/>
 						</div>
@@ -159,15 +138,10 @@ function NewFileReference({
 									<BsCloudUploadFill color={"rgb(31,41,55)"} size={50} />
 
 									{fileHolder ? (
-										<p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-											{fileHolder.name}
-										</p>
+										<p className="mb-2 text-sm text-gray-500 dark:text-gray-400">{fileHolder.name}</p>
 									) : (
 										<p className="mb-2 px-2 text-center text-sm text-gray-500 dark:text-gray-400">
-											<span className="font-semibold">
-												Clique para escolher um arquivo
-											</span>{" "}
-											ou o arraste para a àrea demarcada
+											<span className="font-semibold">Clique para escolher um arquivo</span> ou o arraste para a àrea demarcada
 										</p>
 									)}
 								</div>

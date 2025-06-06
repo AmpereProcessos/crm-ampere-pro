@@ -1,15 +1,9 @@
-import type { TCreateConectaInviteRouteOutput } from "@/pages/api/conecta-invites";
+import type { TCreateConectaInviteRouteOutput } from "@/app/api/conecta-invites/route";
 import axios from "axios";
 
 export async function createConectaInvite({ clientId }: { clientId: string }) {
-	try {
-		const { data }: { data: TCreateConectaInviteRouteOutput } =
-			await axios.post("/api/conecta-invites", {
-				clienteId: clientId,
-			});
-		return data;
-	} catch (error) {
-		console.log("Erro running createConectaInvite", error);
-		throw error;
-	}
+	const { data }: { data: TCreateConectaInviteRouteOutput } = await axios.post("/api/conecta-invites", {
+		clienteId: clientId,
+	});
+	return data;
 }

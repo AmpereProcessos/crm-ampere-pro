@@ -9,7 +9,7 @@ import { AiOutlineCheck } from "react-icons/ai";
 import SelectInput from "../Inputs/SelectInput";
 import { OpportunityResponsibilityRoles } from "@/utils/select-options";
 import SelectWithImages from "../Inputs/SelectWithImages";
-import type { Session } from "next-auth";
+import type { TUserSession } from "@/lib/auth/session";
 import { useOpportunityCreators } from "@/utils/queries/users";
 import type { TNotification } from "@/utils/schemas/notification.schema";
 import { createNotification } from "@/utils/mutations/notifications";
@@ -18,7 +18,7 @@ type OpportunityResponsiblesBlockProps = {
 	infoHolder: TOpportunityDTOWithClientAndPartnerAndFunnelReferences;
 	setInfoHolder: Dispatch<SetStateAction<TOpportunityDTOWithClientAndPartnerAndFunnelReferences>>;
 	handleUpdateOpportunity: any;
-	session: Session;
+	session: TUserSession;
 };
 function OpportunityResponsiblesBlock({ infoHolder, setInfoHolder, handleUpdateOpportunity, session }: OpportunityResponsiblesBlockProps) {
 	const { data: opportunityCreators } = useOpportunityCreators();

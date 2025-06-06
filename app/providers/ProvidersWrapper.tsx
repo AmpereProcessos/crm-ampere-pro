@@ -1,24 +1,24 @@
-'use client'
-import React from 'react'
-import AuthProvider from './AuthProvider'
-import TanstackProvider from './TanstackProvicer'
-import FullScreenWrapper from '@/components/Wrappers/FullScreenWrapper'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import { Toaster } from 'react-hot-toast'
+"use client";
+import type React from "react";
+import TanstackProvider from "./TanstackProvicer";
+import FullScreenWrapper from "@/components/Wrappers/FullScreenWrapper";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { Toaster } from "react-hot-toast";
+import { SessionProvider } from "./SessionProvider";
 
-function ProvidersWrapper({ children, session }: { children: React.ReactNode; session: any }) {
-  return (
-    <AuthProvider session={session}>
-      <TanstackProvider>
-        <FullScreenWrapper>
-          {children}
-          <Toaster />
-          {/* <Notifications /> */}
-        </FullScreenWrapper>
-        <ReactQueryDevtools initialIsOpen={true} />
-      </TanstackProvider>
-    </AuthProvider>
-  )
+function ProvidersWrapper({ children }: { children: React.ReactNode }) {
+	return (
+		<TanstackProvider>
+			<SessionProvider>
+				<FullScreenWrapper>
+					{children}
+					<Toaster />
+					{/* <Notifications /> */}
+				</FullScreenWrapper>
+				<ReactQueryDevtools initialIsOpen={true} />
+			</SessionProvider>
+		</TanstackProvider>
+	);
 }
 
-export default ProvidersWrapper
+export default ProvidersWrapper;

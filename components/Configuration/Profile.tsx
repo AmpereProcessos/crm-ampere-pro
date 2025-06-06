@@ -1,7 +1,5 @@
 import { useUserById } from "@/utils/queries/users";
-import { Session } from "next-auth";
-import { useSession } from "next-auth/react";
-import Image from "next/image";
+import type { TUserSession } from "@/lib/auth/session";
 import React from "react";
 import LoadingComponent from "../utils/LoadingComponent";
 import ErrorComponent from "../utils/ErrorComponent";
@@ -12,7 +10,7 @@ import { formatDateAsLocale, formatNameAsInitials } from "@/lib/methods/formatti
 import { MdOutlineEmail } from "react-icons/md";
 import { BsCalendar4Event, BsCalendarPlus, BsTelephone } from "react-icons/bs";
 type ProfileProps = {
-	session: Session;
+	session: TUserSession;
 };
 function Profile({ session }: ProfileProps) {
 	const { data: user, isSuccess, isLoading, isError } = useUserById({ id: session.user.id });

@@ -6,14 +6,14 @@ import { TOpportunity } from "@/utils/schemas/opportunity.schema";
 import { TProjectTypeDTO } from "@/utils/schemas/project-types.schema";
 import { TUser } from "@/utils/schemas/user.schema";
 import { ComercialSegments } from "@/utils/select-options";
-import { Session } from "next-auth";
+import type { TUserSession } from "@/lib/auth/session";
 import React from "react";
 
 type GeneralInformationBlockProps = {
 	opportunity: TOpportunity;
 	setOpportunity: React.Dispatch<React.SetStateAction<TOpportunity>>;
 	projectTypes?: TProjectTypeDTO[];
-	session: Session;
+	session: TUserSession;
 };
 function GeneralInformationBlock({ opportunity, setOpportunity, projectTypes, session }: GeneralInformationBlockProps) {
 	const partnersScope = session.user.permissoes.parceiros.escopo;

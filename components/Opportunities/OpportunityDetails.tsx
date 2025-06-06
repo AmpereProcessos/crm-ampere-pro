@@ -9,7 +9,7 @@ import { useQueryClient } from "@tanstack/react-query";
 
 import { customersAcquisitionChannels } from "@/utils/constants";
 
-import type { Session } from "next-auth";
+import type { TUserSession } from "@/lib/auth/session";
 import type { TOpportunity, TOpportunityDTOWithClientAndPartnerAndFunnelReferences } from "@/utils/schemas/opportunity.schema";
 import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
 import { updateOpportunity } from "@/utils/mutations/opportunities";
@@ -25,7 +25,7 @@ import { useProjectTypes } from "@/utils/queries/project-types";
 import { useAcquisitionChannels } from "@/utils/queries/utils";
 type DetailsBlockType = {
 	info: TOpportunityDTOWithClientAndPartnerAndFunnelReferences;
-	session: Session;
+	session: TUserSession;
 	opportunityId: string;
 };
 

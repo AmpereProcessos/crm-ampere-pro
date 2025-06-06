@@ -8,7 +8,7 @@ import { GiPositionMarker } from "react-icons/gi";
 import { HiIdentification } from "react-icons/hi";
 import { MdEmail } from "react-icons/md";
 import Avatar from "../utils/Avatar";
-import type { Session } from "next-auth";
+import type { TUserSession } from "@/lib/auth/session";
 import EditClient from "../Modals/Client/EditClient";
 import type { TOpportunity } from "@/utils/schemas/opportunity.schema";
 import { Accessibility, BriefcaseBusiness, Building2, Cake, Filter, Phone, User, UserRound } from "lucide-react";
@@ -18,7 +18,7 @@ type OpportunityClientProps = {
 	opportunityId: string;
 	client: TClientDTO;
 	responsibles: TOpportunity["responsaveis"];
-	session: Session;
+	session: TUserSession;
 };
 function OpportunityClient({ opportunityId, client, responsibles, session }: OpportunityClientProps) {
 	const [editModalIsOpen, setEditModalIsOpen] = useState<boolean>(false);

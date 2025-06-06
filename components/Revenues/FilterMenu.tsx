@@ -2,7 +2,7 @@ import { GeneralVisibleHiddenExitMotionVariants } from "@/utils/constants";
 import { TPartnerSimplifiedDTO } from "@/utils/schemas/partner.schema";
 import { TPersonalizedRevenuesFilters } from "@/utils/schemas/revenues.schema";
 import { AnimatePresence, motion } from "framer-motion";
-import { Session } from "next-auth";
+import type { TUserSession } from "@/lib/auth/session";
 import React, { useState } from "react";
 import TextInput from "../Inputs/TextInput";
 import NumberInput from "../Inputs/NumberInput";
@@ -18,7 +18,7 @@ type RevenuesFilterMenuProps = {
 	selectedPartners: string[] | null;
 	setSelectedPartners: (partners: string[] | null) => void;
 	partnersOptions?: TPartnerSimplifiedDTO[];
-	session: Session;
+	session: TUserSession;
 	queryLoading: boolean;
 	resetSelectedPage: () => void;
 };

@@ -1,15 +1,15 @@
-import TechnicalAnalysisPage from '@/components/TechnicalAnalysis/TechnicalAnalysisPage'
+import TechnicalAnalysisPage from "@/components/TechnicalAnalysis/TechnicalAnalysisPage";
 
-import LoadingPage from '@/components/utils/LoadingPage'
+import LoadingPage from "@/components/utils/LoadingPage";
 
-import { useSession } from 'next-auth/react'
-import React from 'react'
+import React from "react";
+import { useSession } from "@/app/providers/SessionProvider";
 
 function TechnicalAnalysis() {
-  const { data: session, status } = useSession({ required: true })
+	const { session, status } = useSession({ required: true });
 
-  if (status != 'authenticated') return <LoadingPage />
-  return <TechnicalAnalysisPage session={session} />
+	if (status !== "authenticated") return <LoadingPage />;
+	return <TechnicalAnalysisPage session={session} />;
 }
 
-export default TechnicalAnalysis
+export default TechnicalAnalysis;

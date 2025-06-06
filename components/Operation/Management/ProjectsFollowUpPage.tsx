@@ -5,7 +5,7 @@ import LoadingComponent from "@/components/utils/LoadingComponent";
 import { formatDateAsLocale, formatDecimalPlaces } from "@/lib/methods/formatting";
 import { AllProcessTracked } from "@/utils/process-tracking";
 import { useProjectsFollowUp } from "@/utils/queries/project";
-import { Session } from "next-auth";
+import type { TUserSession } from "@/lib/auth/session";
 import Link from "next/link";
 import React from "react";
 import { BsCalendarCheck, BsCheckCircleFill, BsCode } from "react-icons/bs";
@@ -14,7 +14,7 @@ import { MdDashboard } from "react-icons/md";
 import ProjectFollowUpCard from "./Utils/ProjectFollowUpCard";
 
 type ProjectsFollowUpPageProps = {
-	session: Session;
+	session: TUserSession;
 };
 function ProjectsFollowUpPage({ session }: ProjectsFollowUpPageProps) {
 	const { data: projects, isLoading, isError, isSuccess, filters, setFilters } = useProjectsFollowUp();

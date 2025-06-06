@@ -6,7 +6,7 @@ import { createPaymentMethod } from "@/utils/mutations/payment-methods";
 import { usePartnersSimplified } from "@/utils/queries/partners";
 import { TFractionnementItem, TPaymentMethod } from "@/utils/schemas/payment-methods";
 import { useQueryClient } from "@tanstack/react-query";
-import { Session } from "next-auth";
+import type { TUserSession } from "@/lib/auth/session";
 import React, { useState } from "react";
 import { BsCircleHalf } from "react-icons/bs";
 import { FaPercentage } from "react-icons/fa";
@@ -14,7 +14,7 @@ import { MdDelete, MdPayment } from "react-icons/md";
 import { VscChromeClose } from "react-icons/vsc";
 
 type NewPaymentMethodProps = {
-	session: Session;
+	session: TUserSession;
 	closeModal: () => void;
 };
 function NewPaymentMethod({ session, closeModal }: NewPaymentMethodProps) {

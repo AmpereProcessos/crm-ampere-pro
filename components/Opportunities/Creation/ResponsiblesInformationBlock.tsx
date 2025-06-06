@@ -4,13 +4,13 @@ import Avatar from "@/components/utils/Avatar";
 import type { TOpportunity, TOpportunityResponsible } from "@/utils/schemas/opportunity.schema";
 import type { TUserDTOSimplified } from "@/utils/schemas/user.schema";
 import { OpportunityResponsibilityRoles } from "@/utils/select-options";
-import type { Session } from "next-auth";
+import type { TUserSession } from "@/lib/auth/session";
 import React, { useState, type Dispatch, type SetStateAction } from "react";
 import toast from "react-hot-toast";
 import { MdDelete } from "react-icons/md";
 
 type ResponsiblesInformationBlockProps = {
-	session: Session;
+	session: TUserSession;
 	opportunity: TOpportunity;
 	setOpportunity: Dispatch<SetStateAction<TOpportunity>>;
 	opportunityCreators: TUserDTOSimplified[];

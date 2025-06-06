@@ -18,7 +18,7 @@ import { MdDelete } from "react-icons/md";
 import KitsSelectionMenu from "../KitsSelectionMenu";
 import CheckboxInput from "@/components/Inputs/CheckboxInput";
 import PreviousEquipmentMenu from "../PreviousEquipmentMenu";
-import { Session } from "next-auth";
+import type { TUserSession } from "@/lib/auth/session";
 import { TProposal } from "@/utils/schemas/proposal.schema";
 import { TOpportunity } from "@/utils/schemas/opportunity.schema";
 import UseActiveProposalProducts from "../UseActiveProposalProducts";
@@ -29,7 +29,7 @@ type SystemInfoProps = {
 	goToNextStage: () => void;
 	goToPreviousStage: () => void;
 	activeProposalId: TOpportunity["idPropostaAtiva"];
-	session: Session;
+	session: TUserSession;
 };
 function SystemInfo({ infoHolder, setInfoHolder, goToNextStage, goToPreviousStage, activeProposalId, session }: SystemInfoProps) {
 	const { data: equipments, isLoading, isError, isSuccess } = useEquipments({ category: null });

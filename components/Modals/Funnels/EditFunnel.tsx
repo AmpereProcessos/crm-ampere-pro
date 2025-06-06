@@ -4,7 +4,7 @@ import TextInput from "../../Inputs/TextInput";
 
 import { VscChromeClose } from "react-icons/vsc";
 import { TFunnel, TFunnelDTO } from "@/utils/schemas/funnel.schema";
-import { Session } from "next-auth";
+import type { TUserSession } from "@/lib/auth/session";
 import toast from "react-hot-toast";
 import { MdDelete } from "react-icons/md";
 import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
@@ -17,7 +17,7 @@ import LoadingComponent from "@/components/utils/LoadingComponent";
 import ErrorComponent from "@/components/utils/ErrorComponent";
 
 type EditFunnelProps = {
-	session: Session;
+	session: TUserSession;
 	funnelId: string;
 	closeModal: () => void;
 };

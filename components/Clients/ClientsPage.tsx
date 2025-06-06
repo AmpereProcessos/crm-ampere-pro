@@ -1,7 +1,8 @@
+"use client";
 import { useClientsByPersonalizedFilters } from "@/utils/queries/clients";
 import { usePartnersSimplified } from "@/utils/queries/partners";
 import { useUsers } from "@/utils/queries/users";
-import type { Session } from "next-auth";
+import type { TUserSession } from "@/lib/auth/session";
 import React, { useState } from "react";
 import { Sidebar } from "../Sidebar";
 import { IoMdArrowDropdownCircle, IoMdArrowDropupCircle } from "react-icons/io";
@@ -13,9 +14,10 @@ import ClientCard from "./ClientCard";
 import NewClient from "../Modals/Client/NewClient";
 import EditClient from "../Modals/Client/EditClient";
 import { useQueryClient } from "@tanstack/react-query";
+import type { TUserSession } from "@/lib/auth/session";
 
 type ClientsPageProps = {
-	session: Session;
+	session: TUserSession;
 };
 function ClientsPage({ session }: ClientsPageProps) {
 	const queryClient = useQueryClient();
@@ -38,41 +40,24 @@ function ClientsPage({ session }: ClientsPageProps) {
 	const [partners, setPartners] = useState<string[] | null>(userPartnersScope);
 	const { data: authorOptions } = useUsers();
 	const { data: partnersOptions } = usePartnersSimplified();
-	const { data, isLoading, isError, isSuccess, filters, updateFilters } =
-		useClientsByPersonalizedFilters({
-			after: period.after,
-			before: period.before,
-			authors: authors,
-			partners: partners,
-			page: page,
-		});
+	const { data, isLoading, isError, isSuccess, filters, updateFilters } = useClientsByPersonalizedFilters({
+		after: period.after,
+		before: period.before,
+		authors: authors,
+		partners: partners,
+		page: page,
+	});
 	const clients = data?.clients;
 	const clientsMatched = data?.clientsMatched;
 	const totalPages = data?.totalPages;
 
 	const handleOnMutate = async () =>
 		await queryClient.cancelQueries({
-			queryKey: [
-				"clients-by-personalized-filters",
-				period.after,
-				period.before,
-				page,
-				authors,
-				partners,
-				filters,
-			],
+			queryKey: ["clients-by-personalized-filters", period.after, period.before, page, authors, partners, filters],
 		});
 	const handleOnSettle = async () =>
 		await queryClient.invalidateQueries({
-			queryKey: [
-				"clients-by-personalized-filters",
-				period.after,
-				period.before,
-				page,
-				authors,
-				partners,
-				filters,
-			],
+			queryKey: ["clients-by-personalized-filters", period.after, period.before, page, authors, partners, filters],
 		});
 	return (
 		<div className="flex h-full flex-col md:flex-row">
@@ -83,23 +68,15 @@ function ClientsPage({ session }: ClientsPageProps) {
 						<div className="flex items-center gap-1">
 							{filterMenuIsOpen ? (
 								<div className="cursor-pointer text-gray-600 hover:text-blue-400">
-									<IoMdArrowDropupCircle
-										style={{ fontSize: "25px" }}
-										onClick={() => setFilterMenuIsOpen(false)}
-									/>
+									<IoMdArrowDropupCircle style={{ fontSize: "25px" }} onClick={() => setFilterMenuIsOpen(false)} />
 								</div>
 							) : (
 								<div className="cursor-pointer text-gray-600 hover:text-blue-400">
-									<IoMdArrowDropdownCircle
-										style={{ fontSize: "25px" }}
-										onClick={() => setFilterMenuIsOpen(true)}
-									/>
+									<IoMdArrowDropdownCircle style={{ fontSize: "25px" }} onClick={() => setFilterMenuIsOpen(true)} />
 								</div>
 							)}
 							<div className="flex flex-col gap-1">
-								<h1 className="text-xl font-black leading-none tracking-tight md:text-2xl">
-									BANCO DE CLIENTES
-								</h1>
+								<h1 className="text-xl font-black leading-none tracking-tight md:text-2xl">BANCO DE CLIENTES</h1>
 							</div>
 						</div>
 						<div className="flex items-center gap-2">
@@ -139,9 +116,7 @@ function ClientsPage({ session }: ClientsPageProps) {
 				/>
 				<div className="flex flex-wrap justify-between gap-2 py-2">
 					{isLoading ? <LoadingComponent /> : null}
-					{isError ? (
-						<ErrorComponent msg="Houve um erro ao buscar clientes." />
-					) : null}
+					{isError ? <ErrorComponent msg="Houve um erro ao buscar clientes." /> : null}
 					{isSuccess && clients ? (
 						clients.length > 0 ? (
 							clients.map((client) => (
@@ -156,27 +131,14 @@ function ClientsPage({ session }: ClientsPageProps) {
 								/>
 							))
 						) : (
-							<p className="w-full text-center italic text-gray-500">
-								Nenhum cliente encontrado...
-							</p>
+							<p className="w-full text-center italic text-gray-500">Nenhum cliente encontrado...</p>
 						)
 					) : null}
 				</div>
 			</div>
-			{newClientModalIsOpen ? (
-				<NewClient
-					session={session}
-					partnerId={session.user.idParceiro || ""}
-					closeModal={() => setNewClientModalIsOpen(false)}
-				/>
-			) : null}
+			{newClientModalIsOpen ? <NewClient session={session} partnerId={session.user.idParceiro || ""} closeModal={() => setNewClientModalIsOpen(false)} /> : null}
 			{editClient.isOpen && editClient.id ? (
-				<EditClient
-					clientId={editClient.id}
-					session={session}
-					partnerId={session.user.idParceiro || ""}
-					closeModal={() => setEditClient({ isOpen: false, id: null })}
-				/>
+				<EditClient clientId={editClient.id} session={session} partnerId={session.user.idParceiro || ""} closeModal={() => setEditClient({ isOpen: false, id: null })} />
 			) : null}
 		</div>
 	);

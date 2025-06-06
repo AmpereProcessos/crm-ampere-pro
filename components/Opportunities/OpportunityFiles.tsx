@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { MdAdd } from "react-icons/md";
 import NewFileReference from "../Modals/FileReference/NewFileReference";
-import type { Session } from "next-auth";
+import type { TUserSession } from "@/lib/auth/session";
 import { useFileReferencesByOpportunityId } from "@/utils/queries/file-references";
 import LoadingComponent from "../utils/LoadingComponent";
 import ErrorComponent from "../utils/ErrorComponent";
@@ -10,7 +10,7 @@ import { TOpportunityBlockMode } from "./OpportunityPage";
 import { IoMdArrowDropdownCircle, IoMdArrowDropupCircle } from "react-icons/io";
 import ControlFileReference from "../Modals/FileReference/ControlFileReference";
 type OpportunityFilesProps = {
-	session: Session;
+	session: TUserSession;
 	opportunityId: string;
 	clientId: string;
 };

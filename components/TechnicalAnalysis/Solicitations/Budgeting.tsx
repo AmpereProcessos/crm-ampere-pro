@@ -30,13 +30,13 @@ import KitsSelectionMenu from "../KitsSelectionMenu";
 import { MdDelete } from "react-icons/md";
 import { renderCategoryIcon } from "@/lib/methods/rendering";
 import DocumentFileInput from "@/components/Inputs/DocumentFileInput";
-import { Session } from "next-auth";
+import type { TUserSession } from "@/lib/auth/session";
 import { TOpportunity } from "@/utils/schemas/opportunity.schema";
 import UseActiveProposalProducts from "../UseActiveProposalProducts";
 import { useEquipments } from "@/utils/queries/utils";
 
 type BudgetingProps = {
-	session: Session;
+	session: TUserSession;
 	infoHolder: TTechnicalAnalysis;
 	setInfoHolder: React.Dispatch<React.SetStateAction<TTechnicalAnalysis>>;
 	resetSolicitationType: () => void;

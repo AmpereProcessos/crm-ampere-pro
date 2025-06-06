@@ -18,16 +18,21 @@ type PeriodByFieldFilterProps = {
 	value: PeriodByFieldFilterValue;
 	handleChange: (value: PeriodByFieldFilterValue) => void;
 	fieldOptions: { id: number; label: string; value: string }[];
+	holderClassName?: string;
 };
-export function PeriodByFieldFilter({ className, value, handleChange, fieldOptions }: HTMLAttributes<HTMLDivElement> & PeriodByFieldFilterProps) {
+export function PeriodByFieldFilter({ value, handleChange, fieldOptions, holderClassName }: PeriodByFieldFilterProps) {
 	return (
-		<div className={cn("grid gap-2", className)}>
+		<div className={cn("grid gap-2")}>
 			<Popover>
 				<PopoverTrigger asChild>
 					<Button
 						id="date"
 						variant={"outline"}
-						className={cn("w-full justify-start min-h-[46.6px] text-left font-normal px-3 flex items-center gap-2 bg-[#fff] darK:bg-[#fff]", !value && "text-muted-foreground")}
+						className={cn(
+							"w-full justify-start min-h-[46.6px] text-left font-normal px-3 flex items-center gap-2 bg-[#fff] darK:bg-[#fff]",
+							!value && "text-muted-foreground",
+							holderClassName,
+						)}
 					>
 						<CalendarIcon className="w-4 h-4 min-w-4 min-h-4" />
 						{value?.after ? (

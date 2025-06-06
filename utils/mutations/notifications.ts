@@ -1,5 +1,6 @@
-import axios from 'axios'
-import { TNotification, TNotificationDTO } from '../schemas/notification.schema'
+import axios from "axios";
+import type { TNotification, TNotificationDTO } from "../schemas/notification.schema";
+import type { TCreateNotificationRouteInput, TCreateNotificationRouteOutput, TUpdateNotificationRouteInput, TUpdateNotificationRouteOutput } from "@/app/api/notifications/route";
 
 // type NotifyOnResponsibleChangeParams = {
 //   previousResponsible: {
@@ -33,22 +34,12 @@ import { TNotification, TNotificationDTO } from '../schemas/notification.schema'
 //   }
 // }
 
-export async function createNotification({ info }: { info: TNotification }) {
-  try {
-    const { data } = await axios.post('/api/notifications', info)
-    if (typeof data.message != 'string') return 'Notificação criada com sucesso !'
-    return data.message as string
-  } catch (error) {
-    throw error
-  }
+export async function createNotification({ info }: { info: TCreateNotificationRouteInput }) {
+	const { data }: { data: TCreateNotificationRouteOutput } = await axios.post("/api/notifications", info);
+	return data.message;
 }
 
-export async function editNotification({ id, changes }: { id: string; changes: Partial<TNotificationDTO> }) {
-  try {
-    const { data } = await axios.put(`/api/notifications?id=${id}`, changes)
-    if (typeof data.message != 'string') return 'Notificação atualizada com sucesso !'
-    return data.message as string
-  } catch (error) {
-    throw error
-  }
+export async function editNotification({ id, changes }: { id: string; changes: TUpdateNotificationRouteInput }) {
+	const { data }: { data: TUpdateNotificationRouteOutput } = await axios.put(`/api/notifications?id=${id}`, changes);
+	return data.message;
 }

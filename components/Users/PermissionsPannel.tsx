@@ -3,7 +3,7 @@ import { useState, type Dispatch } from "react";
 import CheckboxInput from "../Inputs/CheckboxInput";
 import type { TUser, TUserDTO, TUserEntity } from "@/utils/schemas/user.schema";
 import ScopeSelection from "./ScopeSelection";
-import type { Session } from "next-auth";
+import type { TUserSession } from "@/lib/auth/session";
 import { usePartners, usePartnersSimplified } from "@/utils/queries/partners";
 import { AnimatePresence, motion } from "framer-motion";
 import { IoMdArrowDropdownCircle } from "react-icons/io";
@@ -14,7 +14,7 @@ type PermissionsPannelProps = {
 	setUserInfo: Dispatch<React.SetStateAction<TUser>>;
 	users?: TUserDTO[];
 	referenceId: string | null;
-	session: Session;
+	session: TUserSession;
 };
 function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session }: PermissionsPannelProps) {
 	const [pannelIsOpen, setPannelIsOpen] = useState<boolean>(true);

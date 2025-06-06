@@ -6,11 +6,11 @@ import CreditorUtil from "../Cards/CreditorUtil";
 import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
 import { useQueryClient } from "@tanstack/react-query";
 import { createUtil } from "@/utils/mutations/utils";
-import type { Session } from "next-auth";
+import type { TUserSession } from "@/lib/auth/session";
 import type { TCreditor } from "@/utils/schemas/utils";
 
 type CreditorsBlockProps = {
-	session: Session;
+	session: TUserSession;
 };
 function CreditorsBlock({ session }: CreditorsBlockProps) {
 	const queryClient = useQueryClient();

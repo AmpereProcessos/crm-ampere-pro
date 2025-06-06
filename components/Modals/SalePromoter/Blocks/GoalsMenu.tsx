@@ -17,7 +17,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import { AnimatePresence, motion } from "framer-motion";
 import { Goal, Pencil } from "lucide-react";
-import { Session } from "next-auth";
+import type { TUserSession } from "@/lib/auth/session";
 import React, { useState } from "react";
 import { BsCalendarPlus, BsFileEarmarkText, BsPatchCheck } from "react-icons/bs";
 import { FaBolt, FaPercentage } from "react-icons/fa";
@@ -30,7 +30,7 @@ type GoalsMenuProps = {
 		nome: string;
 		avatar_url?: string | null;
 	};
-	session: Session;
+	session: TUserSession;
 };
 function GoalsMenu({ promoter, session }: GoalsMenuProps) {
 	const [newSaleGoalMenuIsOpen, setNewSaleGoalMenuIsOpen] = useState<boolean>(false);
@@ -75,7 +75,7 @@ type NewSaleGoalMenuProps = {
 		nome: string;
 		avatar_url?: string | null;
 	};
-	session: Session;
+	session: TUserSession;
 	closeMenu: () => void;
 };
 function NewSaleGoalMenu({ promoter, session, closeMenu }: NewSaleGoalMenuProps) {

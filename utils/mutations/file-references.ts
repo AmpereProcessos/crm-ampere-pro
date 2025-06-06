@@ -1,27 +1,24 @@
 import axios from "axios";
 import type { TFileReference } from "../schemas/file-reference.schema";
+import type {
+	TCreateFileReferenceRouteInput,
+	TCreateFileReferenceRouteOutput,
+	TUpdateFileReferenceRouteInput,
+	TUpdateFileReferenceRouteOutput,
+	TDeleteFileReferenceRouteOutput,
+} from "@/app/api/file-references/route";
+import type { TCreateManyFileReferencesRouteInput, TCreateManyFileReferencesRouteOutput } from "@/app/api/file-references/many/route";
 
-export async function createFileReference({ info }: { info: TFileReference }) {
-	try {
-		const { data } = await axios.post("/api/file-references", info);
-		if (typeof data.data !== "string") return "Arquivo anexado com sucesso !";
-		return data.data as string;
-	} catch (error) {
-		console.log("Error running 'createFileReference':", error);
-		throw error;
-	}
+export async function createFileReference({ info }: { info: TCreateFileReferenceRouteInput }) {
+	const { data }: { data: TCreateFileReferenceRouteOutput } = await axios.post("/api/file-references", info);
+	return data.message;
 }
 
-export async function createManyFileReferences({ info }: { info: TFileReference[] }) {
-	try {
-		if (info.length === 0) return;
-		const { data } = await axios.post("/api/file-references/many", info);
-		if (typeof data.data !== "string") return "Arquivos anexados com sucesso !";
-		return data.data as string;
-	} catch (error) {
-		console.log("Error running 'createManyFileReferences':", error);
-		throw error;
-	}
+export async function createManyFileReferences({ info }: { info: TCreateManyFileReferencesRouteInput }) {
+	if (info.length === 0) return "Nenhum arquivo para anexar";
+
+	const { data }: { data: TCreateManyFileReferencesRouteOutput } = await axios.post("/api/file-references/many", info);
+	return data.message;
 }
 
 export async function updateFileReference({ changes, id }: { changes: Partial<TFileReference>; id: string }) {

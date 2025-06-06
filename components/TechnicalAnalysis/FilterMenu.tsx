@@ -11,7 +11,7 @@ import { TPersonalizedTechnicalAnalysisFilter } from "@/utils/schemas/technical-
 import { TPartnerSimplifiedDTO } from "@/utils/schemas/partner.schema";
 import StatesAndCities from "@/utils/json-files/cities.json";
 
-import { Session } from "next-auth";
+import type { TUserSession } from "@/lib/auth/session";
 import SelectInput from "../Inputs/SelectInput";
 import MultipleSelectInputVirtualized from "../Inputs/MultipleSelectInputVirtualized";
 import CheckboxInput from "../Inputs/CheckboxInput";
@@ -26,7 +26,7 @@ type FilterMenuProps = {
 	setAnalysts: (authors: string[] | null) => void;
 	applicantsOptions?: TUserDTO[];
 	analystsOptions?: TUserDTOSimplified[];
-	session: Session;
+	session: TUserSession;
 	queryLoading: boolean;
 	resetSelectedPage: () => void;
 };

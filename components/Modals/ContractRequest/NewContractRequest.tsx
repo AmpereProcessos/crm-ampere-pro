@@ -9,7 +9,7 @@ import type { TContractRequest } from "@/utils/schemas/integrations/app-ampere/c
 import type { TOpportunity } from "@/utils/schemas/opportunity.schema";
 import type { TProposalDTOWithOpportunity } from "@/utils/schemas/proposal.schema";
 import type { TUserDTOSimplified } from "@/utils/schemas/user.schema";
-import type { Session } from "next-auth";
+import type { TUserSession } from "@/lib/auth/session";
 import React, { useEffect, useState } from "react";
 import { VscChromeClose } from "react-icons/vsc";
 import { TypeAcquisition } from "typescript";
@@ -175,7 +175,7 @@ type ContractRequestProps = {
 	proposeInfo: TProposalDTOWithOpportunity;
 	client: TClientDTO;
 	responsible: TUserDTOSimplified;
-	session: Session;
+	session: TUserSession;
 	closeModal: () => void;
 };
 function NewContractRequest({ closeModal, proposeInfo, client, session, responsible }: ContractRequestProps) {

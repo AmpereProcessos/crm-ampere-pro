@@ -21,11 +21,11 @@ import { TbBoxModel2, TbCategory2 } from "react-icons/tb";
 import { AiOutlineArrowDown, AiOutlineArrowUp } from "react-icons/ai";
 import CheckboxInput from "@/components/Inputs/CheckboxInput";
 import Image from "next/image";
-import { Session } from "next-auth";
+import type { TUserSession } from "@/lib/auth/session";
 import { useEquipments } from "@/utils/queries/utils";
 
 type ReviewInfoProps = {
-	session: Session;
+	session: TUserSession;
 	infoHolder: TTechnicalAnalysis;
 	setInfoHolder: React.Dispatch<React.SetStateAction<TTechnicalAnalysis>>;
 	goToNextStage: () => void;

@@ -8,12 +8,12 @@ import { formatCondition, formatFormulaItem } from "@/utils/pricing/helpers";
 import { usePartnersSimplified } from "@/utils/queries/partners";
 import { TPricingMethod } from "@/utils/schemas/pricing-method.schema";
 import { useQueryClient } from "@tanstack/react-query";
-import { Session } from "next-auth";
+import type { TUserSession } from "@/lib/auth/session";
 import React, { useState } from "react";
 import { VscChromeClose } from "react-icons/vsc";
 
 type NewPricingMethodProps = {
-	session: Session;
+	session: TUserSession;
 	closeModal: () => void;
 };
 function NewPricingMethod({ session, closeModal }: NewPricingMethodProps) {

@@ -13,7 +13,7 @@ import StatesAndCities from "@/utils/json-files/cities.json";
 
 import MultipleSelectInputVirtualized from "../Inputs/MultipleSelectInputVirtualized";
 import type { TPersonalizedClientsFilter } from "@/utils/schemas/client.schema";
-import type { Session } from "next-auth";
+import type { TUserSession } from "@/lib/auth/session";
 import type { TUserDTO } from "@/utils/schemas/user.schema";
 import type { TPartnerSimplifiedDTO } from "@/utils/schemas/partner.schema";
 import { formatToPhone } from "@/utils/methods";
@@ -27,7 +27,7 @@ type FilterMenuProps = {
 	setPartners: (partners: string[] | null) => void;
 	authorsOptions?: TUserDTO[];
 	partnersOptions?: TPartnerSimplifiedDTO[];
-	session: Session;
+	session: TUserSession;
 	queryLoading: boolean;
 	resetSelectedPage: () => void;
 };

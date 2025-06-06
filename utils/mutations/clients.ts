@@ -1,27 +1,17 @@
 import axios from "axios";
 import type { TClient } from "../schemas/client.schema";
+import type { TCreateClientRouteOutput, TUpdateClientRouteOutput } from "@/app/api/clients/route";
 
 export async function createClient({ info }: { info: TClient }) {
-	try {
-		const { data } = await axios.post("/api/clients", info);
-		if (typeof data.message !== "string") return "Cliente criado com sucesso !";
-		return data.message;
-	} catch (error) {
-		console.log("Error creating client");
-		throw error;
-	}
+	const { data }: { data: TCreateClientRouteOutput } = await axios.post("/api/clients", info);
+	return data.message;
 }
 type UpdateClientParams = {
 	id: string;
-	changes: any;
+	changes: Partial<TClient>;
 };
+
 export async function updateClient({ id, changes }: UpdateClientParams) {
-	try {
-		const { data } = await axios.put(`/api/clients?id=${id}`, changes);
-		if (typeof data.data !== "string") return "Cliente alterado com sucesso !";
-		return;
-	} catch (error) {
-		console.log("Error updating client");
-		throw error;
-	}
+	const { data }: { data: TUpdateClientRouteOutput } = await axios.put(`/api/clients?id=${id}`, changes);
+	return data.message;
 }

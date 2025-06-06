@@ -5,17 +5,15 @@ import { projectActivityTypes } from "@/utils/constants";
 import dayjs from "dayjs";
 import { ProjectActivity } from "@/utils/models";
 import SelectWithImages from "../Inputs/SelectWithImages";
-import { useResponsibles } from "@/utils/methods";
-import { useSession } from "next-auth/react";
-import { useCreateActivity } from "@/utils/mutations/project-events";
+
 import { UseMutateFunction, useQueryClient } from "@tanstack/react-query";
 import { getErrorMessage } from "@/lib/methods/errors";
 import toast from "react-hot-toast";
 import { TOpportunityActivity, TOpportunityHistory } from "@/utils/schemas/opportunity-history.schema";
 import { useOpportunityCreators } from "@/utils/queries/users";
-import { Session } from "next-auth";
+import type { TUserSession } from "@/lib/auth/session";
 type NewActivityProps = {
-	session: Session;
+	session: TUserSession;
 	opportunityId: string;
 	newEvent: TOpportunityActivity;
 	setNewEvent: React.Dispatch<React.SetStateAction<TOpportunityActivity>>;

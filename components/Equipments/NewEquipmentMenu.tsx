@@ -1,4 +1,4 @@
-import { Session } from "next-auth";
+import type { TUserSession } from "@/lib/auth/session";
 import React, { useState } from "react";
 import SelectInput from "../Inputs/SelectInput";
 import { TEquipment } from "@/utils/schemas/utils";
@@ -9,7 +9,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { createUtil } from "@/utils/mutations/utils";
 
 type NewEquipmentMenuProps = {
-	session: Session;
+	session: TUserSession;
 	affectQueryKey: (string | null)[];
 };
 function NewEquipmentMenu({ session, affectQueryKey }: NewEquipmentMenuProps) {

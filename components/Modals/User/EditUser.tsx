@@ -20,7 +20,7 @@ import { useUserById, useUsers } from "@/utils/queries/users";
 import LoadingComponent from "../../utils/LoadingComponent";
 import ErrorComponent from "../../utils/ErrorComponent";
 import PermissionsPannel from "../../Users/PermissionsPannel";
-import type { Session } from "next-auth";
+import type { TUserSession } from "@/lib/auth/session";
 import { usePartnersSimplified } from "@/utils/queries/partners";
 import SelectWithImages from "@/components/Inputs/SelectWithImages";
 import { useUserGroups } from "@/utils/queries/user-groups";
@@ -31,7 +31,7 @@ type EditUserProps = {
 	closeModal: () => void;
 	userId: string;
 	partnerId: string;
-	session: Session;
+	session: TUserSession;
 };
 
 function EditUser({ closeModal, userId, partnerId, session }: EditUserProps) {

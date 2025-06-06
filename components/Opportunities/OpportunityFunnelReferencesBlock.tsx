@@ -10,7 +10,7 @@ import SelectInput from "../Inputs/SelectInput";
 import { createFunnelReference, deleteFunnelReference, updateFunnelReference } from "@/utils/mutations/funnel-references";
 import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
 import { useQueryClient } from "@tanstack/react-query";
-import { Session } from "next-auth";
+import type { TUserSession } from "@/lib/auth/session";
 import toast from "react-hot-toast";
 import OpportunityFunnelReference from "../Cards/OpportunityFunnelReference";
 

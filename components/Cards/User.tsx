@@ -1,8 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { MdOutlineSecurity } from "react-icons/md";
 import { FaUser } from "react-icons/fa";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { TUserDTO, TUserEntity } from "@/utils/schemas/user.schema";
 import { BsFillCalendarFill } from "react-icons/bs";

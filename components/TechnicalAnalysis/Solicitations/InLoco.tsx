@@ -16,13 +16,13 @@ import { MdDelete } from "react-icons/md";
 import NumberInput from "@/components/Inputs/NumberInput";
 import { ProductItemCategories } from "@/utils/select-options";
 import KitsSelectionMenu from "../KitsSelectionMenu";
-import { Session } from "next-auth";
+import type { TUserSession } from "@/lib/auth/session";
 import { TOpportunity } from "@/utils/schemas/opportunity.schema";
 import UseActiveProposalProducts from "../UseActiveProposalProducts";
 import { useEquipments } from "@/utils/queries/utils";
 
 type InlocoProps = {
-	session: Session;
+	session: TUserSession;
 	infoHolder: TTechnicalAnalysis;
 	setInfoHolder: React.Dispatch<React.SetStateAction<TTechnicalAnalysis>>;
 	resetSolicitationType: () => void;

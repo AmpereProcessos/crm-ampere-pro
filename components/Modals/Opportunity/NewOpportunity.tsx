@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import type { Session } from "next-auth";
+import type { TUserSession } from "@/lib/auth/session";
 import Link from "next/link";
 import { toast } from "react-hot-toast";
 import { useQueryClient } from "@tanstack/react-query";
@@ -30,7 +30,7 @@ import AddressInformationBlock from "@/components/Opportunities/Creation/Address
 import { LoadingButton } from "@/components/Buttons/loading-button";
 
 type NewOpportunityProps = {
-	session: Session;
+	session: TUserSession;
 	opportunityCreators: TUserDTOSimplified[];
 	funnels: TFunnelDTO[];
 	closeModal: () => void;

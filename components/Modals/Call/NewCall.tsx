@@ -18,8 +18,7 @@ import { TOpportunityDTOWithClient, TOpportunityDTOWithClientAndPartnerAndFunnel
 import { PPSCallTypes } from "@/utils/select-options";
 import dayjs from "dayjs";
 import { UploadResult, getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { Session } from "next-auth";
-import { useSession } from "next-auth/react";
+import type { TUserSession } from "@/lib/auth/session";
 import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 import { BsCalendarFill } from "react-icons/bs";
@@ -36,7 +35,7 @@ const filesIdentifier = {
 
 type NewCallProps = {
 	opportunity?: TOpportunityDTOWithClient;
-	session: Session;
+	session: TUserSession;
 	closeModal: () => void;
 };
 function NewCall({ opportunity, session, closeModal }: NewCallProps) {

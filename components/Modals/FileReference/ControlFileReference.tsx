@@ -1,6 +1,6 @@
 import TextInput from "@/components/Inputs/TextInput";
 import type { TFileReference, TFileReferenceVinculations } from "@/utils/schemas/file-reference.schema";
-import type { Session } from "next-auth";
+import type { TUserSession } from "@/lib/auth/session";
 import React, { useEffect, useState } from "react";
 import { VscChromeClose } from "react-icons/vsc";
 import FileReferencesVinculations from "./Blocks/Vinculations";
@@ -23,7 +23,7 @@ type TAttachmentHolder = {
 type ControlFileReferenceProps = {
 	fileReferenceId: string;
 	vinculations: TFileReferenceVinculations;
-	session: Session;
+	session: TUserSession;
 	affectedQueryKey: any[];
 	closeModal: () => void;
 };

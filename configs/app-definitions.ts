@@ -1,3 +1,4 @@
+export const SESSION_COOKIE_NAME = "crm-ampere-session";
 export const DATABASE_COLLECTION_NAMES = {
 	CRM: {
 		ACTIVITIES: "activities",

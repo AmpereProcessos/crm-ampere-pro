@@ -11,7 +11,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 import { toast } from "react-hot-toast";
 import type { TClient } from "@/utils/schemas/client.schema";
-import type { Session } from "next-auth";
 import SelectInput from "@/components/Inputs/SelectInput";
 import DateInput from "@/components/Inputs/DateInput";
 import { formatDateInputChange } from "@/lib/methods/formatting";
@@ -19,9 +18,10 @@ import { CustomersAcquisitionChannels, MaritalStatus } from "@/utils/select-opti
 import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
 import { createClient } from "@/utils/mutations/clients";
 import { useAcquisitionChannels } from "@/utils/queries/utils";
+import type { TUserSession } from "@/lib/auth/session";
 
 type NewClientModalProps = {
-	session: Session;
+	session: TUserSession;
 	partnerId: string;
 	closeModal: () => void;
 };

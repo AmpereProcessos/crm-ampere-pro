@@ -6,7 +6,7 @@ import { stateCities } from "@/utils/estados_cidades";
 import { formatToCEP, formatToPhone, getCEPInfo } from "@/utils/methods";
 import { TChangesControl, TProject, TProjectDTOWithReferences } from "@/utils/schemas/project.schema";
 import { ComercialSegments, SigningForms } from "@/utils/select-options";
-import { Session } from "next-auth";
+import type { TUserSession } from "@/lib/auth/session";
 import React from "react";
 import toast from "react-hot-toast";
 
@@ -15,7 +15,7 @@ type GeneralInformationBlockProps = {
 	setInfoHolder: React.Dispatch<React.SetStateAction<TProjectDTOWithReferences>>;
 	changes: TChangesControl;
 	setChanges: React.Dispatch<React.SetStateAction<TChangesControl>>;
-	session: Session;
+	session: TUserSession;
 };
 function GeneralInformationBlock({ infoHolder, setInfoHolder, changes, setChanges, session }: GeneralInformationBlockProps) {
 	async function setAddressDataByCEP(cep: string) {

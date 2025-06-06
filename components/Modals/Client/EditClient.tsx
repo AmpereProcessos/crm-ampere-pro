@@ -11,7 +11,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 import { toast } from "react-hot-toast";
 import type { TClient } from "@/utils/schemas/client.schema";
-import type { Session } from "next-auth";
+import type { TUserSession } from "@/lib/auth/session";
 import SelectInput from "@/components/Inputs/SelectInput";
 import DateInput from "@/components/Inputs/DateInput";
 import { formatDateInputChange } from "@/lib/methods/formatting";
@@ -25,7 +25,7 @@ import { useAcquisitionChannels } from "@/utils/queries/utils";
 
 type EditClientModalProps = {
 	clientId: string;
-	session: Session;
+	session: TUserSession;
 	partnerId: string;
 	closeModal: () => void;
 	additionalAffectedQuery?: string[];

@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useState } from "react";
 
 import { Sidebar } from "@/components/Sidebar";
@@ -6,7 +7,7 @@ import LoadingPage from "@/components/utils/LoadingPage";
 
 import { useOpportunityById } from "@/utils/queries/opportunities";
 import type { TProposal } from "@/utils/schemas/proposal.schema";
-import type { Session } from "next-auth";
+import type { TUserSession } from "@/lib/auth/session";
 import ErrorComponent from "../utils/ErrorComponent";
 
 import ProposalWithKits from "./ProposalsCreationByCategory/ProposeWithKits";
@@ -17,7 +18,7 @@ import { useOpportunityTechnicalAnalysis } from "@/utils/queries/technical-analy
 import { FaStepBackward } from "react-icons/fa";
 import Link from "next/link";
 type NewProposalPageprops = {
-	session: Session;
+	session: TUserSession;
 	opportunityId: string;
 };
 function NewProposalPage({ session, opportunityId }: NewProposalPageprops) {

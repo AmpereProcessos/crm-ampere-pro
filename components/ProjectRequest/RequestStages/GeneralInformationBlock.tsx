@@ -4,7 +4,7 @@ import { TProject } from "@/utils/schemas/project.schema";
 import { ComercialSegments, SigningForms } from "@/utils/select-options";
 import React from "react";
 import ProjectObservations from "./Utils/ProjectObservations";
-import { Session } from "next-auth";
+import type { TUserSession } from "@/lib/auth/session";
 import { formatToCEP, formatToPhone, getCEPInfo } from "@/utils/methods";
 import TextareaInput from "@/components/Inputs/TextareaInput";
 import toast from "react-hot-toast";
@@ -14,7 +14,7 @@ type GeneralInformationBlockProps = {
 	infoHolder: TProject;
 	setInfoHolder: React.Dispatch<React.SetStateAction<TProject>>;
 	moveToNextStage: () => void;
-	session: Session;
+	session: TUserSession;
 };
 function GeneralInformationBlock({ infoHolder, setInfoHolder, session, moveToNextStage }: GeneralInformationBlockProps) {
 	function validateAndProceed() {

@@ -13,13 +13,13 @@ import { createPurchase } from "@/utils/mutations/purchases";
 import DateInput from "@/components/Inputs/DateInput";
 import { formatDateInputChange } from "@/lib/methods/formatting";
 import TextareaInput from "@/components/Inputs/TextareaInput";
-import { Session } from "next-auth";
+import type { TUserSession } from "@/lib/auth/session";
 import CheckboxInput from "@/components/Inputs/CheckboxInput";
 import { stateCities } from "@/utils/estados_cidades";
 import toast from "react-hot-toast";
 
 type NewPurchaseMenuProps = {
-	session: Session;
+	session: TUserSession;
 	project: TProjectDTO;
 	closeMenu: () => void;
 };

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Session } from "next-auth";
+import type { TUserSession } from "@/lib/auth/session";
 
 import { ImPower, ImPriceTag } from "react-icons/im";
 
@@ -69,7 +69,7 @@ type ProposalProps = {
 	opportunity: TOpportunityDTOWithClientAndPartnerAndFunnelReferences;
 	moveToNextStage: () => void;
 	moveToPreviousStage: () => void;
-	session: Session;
+	session: TUserSession;
 	partner: TPartnerSimplifiedDTO;
 };
 function Proposal({ opportunity, projectTypes, infoHolder, setInfoHolder, moveToNextStage, moveToPreviousStage, session, partner }: ProposalProps) {

@@ -4,7 +4,7 @@ import TextInput from "../../Inputs/TextInput";
 
 import { VscChromeClose } from "react-icons/vsc";
 import { TFunnel } from "@/utils/schemas/funnel.schema";
-import { Session } from "next-auth";
+import type { TUserSession } from "@/lib/auth/session";
 import toast from "react-hot-toast";
 import { MdDelete } from "react-icons/md";
 import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
@@ -14,7 +14,7 @@ import SelectWithImages from "../../Inputs/SelectWithImages";
 import { usePartnersSimplified } from "@/utils/queries/partners";
 
 type NewFunnelProps = {
-	session: Session;
+	session: TUserSession;
 	closeModal: () => void;
 };
 function NewFunnel({ session, closeModal }: NewFunnelProps) {

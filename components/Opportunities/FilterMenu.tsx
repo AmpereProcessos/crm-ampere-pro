@@ -2,7 +2,7 @@ import { GeneralVisibleHiddenExitMotionVariants } from "@/utils/constants";
 import { TPersonalizedOpportunitiesFilter } from "@/utils/schemas/opportunity.schema";
 import { AnimatePresence, motion } from "framer-motion";
 import StatesAndCities from "@/utils/json-files/cities.json";
-import { Session } from "next-auth";
+import type { TUserSession } from "@/lib/auth/session";
 import React, { useState } from "react";
 import TextInput from "../Inputs/TextInput";
 import MultipleSelectInputVirtualized from "../Inputs/MultipleSelectInputVirtualized";
@@ -26,7 +26,7 @@ type OpportunitiesFiltersMenuProps = {
 	selectedProjectTypes: string[] | null;
 	setProjectTypes: (types: string[] | null) => void;
 	projectTypesOptions: TProjectTypeDTOSimplified[];
-	session: Session;
+	session: TUserSession;
 	queryLoading: boolean;
 	resetSelectedPage: () => void;
 };

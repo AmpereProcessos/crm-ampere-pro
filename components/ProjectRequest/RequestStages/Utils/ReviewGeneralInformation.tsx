@@ -7,13 +7,13 @@ import TextInput from "@/components/Inputs/TextInput";
 import SelectInput from "@/components/Inputs/SelectInput";
 import { ComercialSegments, SigningForms } from "@/utils/select-options";
 import ProjectObservations from "./ProjectObservations";
-import { Session } from "next-auth";
+import type { TUserSession } from "@/lib/auth/session";
 import TextareaInput from "@/components/Inputs/TextareaInput";
 
 type ReviewGeneralInformationProps = {
 	infoHolder: TProject;
 	setInfoHolder: React.Dispatch<React.SetStateAction<TProject>>;
-	session: Session;
+	session: TUserSession;
 };
 function ReviewGeneralInformation({ infoHolder, setInfoHolder, session }: ReviewGeneralInformationProps) {
 	async function setGeneralInformationAddressDataByCEP(cep: string) {

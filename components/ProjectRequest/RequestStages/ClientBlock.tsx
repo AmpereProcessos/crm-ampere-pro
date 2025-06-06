@@ -13,7 +13,7 @@ import { TClient, TClientDTO } from "@/utils/schemas/client.schema";
 import { TProject } from "@/utils/schemas/project.schema";
 import { CustomersAcquisitionChannels, MaritalStatus } from "@/utils/select-options";
 import { useQueryClient } from "@tanstack/react-query";
-import { Session } from "next-auth";
+import type { TUserSession } from "@/lib/auth/session";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
@@ -23,7 +23,7 @@ type ClientBlockProps = {
 	moveToNextStage: () => void;
 	moveToPreviousStage: () => void;
 	clientId: string;
-	session: Session;
+	session: TUserSession;
 };
 function ClientBlock({ infoHolder, setInfoHolder, moveToNextStage, moveToPreviousStage, clientId, session }: ClientBlockProps) {
 	const queryClient = useQueryClient();

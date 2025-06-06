@@ -1,5 +1,5 @@
 import axios from "axios";
-import {
+import type {
 	TOpportunityDTO,
 	TOpportunityDTOWithClient,
 	TOpportunityDTOWithClientAndPartnerAndFunnelReferences,
@@ -11,10 +11,10 @@ import {
 	TPersonalizedOpportunitiesFilter,
 } from "../schemas/opportunity.schema";
 import { useQuery } from "@tanstack/react-query";
-import { TResultsExportsItem } from "@/pages/api/stats/comercial-results/results-export";
-import { TOpportunitiesByFastSearch, TOpportunitiesByFilterResult } from "@/pages/api/opportunities/search";
+import type { TResultsExportsItem } from "@/app/api/stats/comercial-results/exports/route";
+import type { TOpportunitiesByFastSearch, TOpportunitiesByFilterResult } from "@/pages/api/opportunities/search";
 import { useState } from "react";
-import { TOpportunitiesQueryOptions } from "@/pages/api/opportunities/query-options";
+import type { TOpportunitiesQueryOptions } from "@/pages/api/opportunities/query-options";
 
 type UseOpportunitiesParams = {
 	responsibles: string[] | null;
@@ -58,6 +58,7 @@ async function fetchOpportunity({ opportunityId }: { opportunityId: string }) {
 		const { data } = await axios.get(`/api/opportunities?id=${opportunityId}`);
 		return data.data as TOpportunityDTOWithClientAndPartnerAndFunnelReferences;
 	} catch (error) {
+		console.log("Error fetching opportunity", error);
 		throw error;
 	}
 }
@@ -83,6 +84,7 @@ async function fetchOpportunitiesBySearch({ searchParam, page }: TOpportunitiesB
 		const { data } = await axios.get(`/api/opportunities/search?searchParam=${searchParam}&page=${page}`);
 		return data.data as TOpportunitiesByFastSearch;
 	} catch (error) {
+		console.log("Error fetching opportunities by search", error);
 		throw error;
 	}
 }
@@ -120,6 +122,7 @@ export async function fetchOpportunityExport({ responsibles, periodAfter, period
 		const { data } = await axios.get(`/api/opportunities/export?${queryParams}`);
 		return data.data as TResultsExportsItem[];
 	} catch (error) {
+		console.log("Error fetching opportunities by personalized filters", error);
 		throw error;
 	}
 }
@@ -136,6 +139,7 @@ async function fetchOpportunitiesByPersonalizedFilters({ page, responsibles, par
 		const { data } = await axios.post(`/api/opportunities/search?page=${page}`, { responsibles, partners, projectTypes, filters });
 		return data.data as TOpportunitiesByFilterResult;
 	} catch (error) {
+		console.log("Error fetching opportunities by personalized filters", error);
 		throw error;
 	}
 }
@@ -173,6 +177,7 @@ async function fetchOpportunitiesQueryOptions() {
 		const { data } = await axios.get("/api/opportunities/query-options");
 		return data.data as TOpportunitiesQueryOptions;
 	} catch (error) {
+		console.log("Error fetching opportunities ultra simplified", error);
 		throw error;
 	}
 }
@@ -190,6 +195,7 @@ async function fetchOpportunitiesUltraSimplified() {
 		const { data } = await axios.get("/api/opportunities/simplified");
 		return data.data as TOpportunitySimplifiedDTO[];
 	} catch (error) {
+		console.log("Error fetching opportunities query options", error);
 		throw error;
 	}
 }

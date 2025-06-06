@@ -1,3 +1,4 @@
+import { useSession } from "@/app/providers/SessionProvider";
 import Funnels from "@/components/Configuration/Funnels";
 import Integrations from "@/components/Configuration/Integrations";
 import Partner from "@/components/Configuration/Partner";
@@ -12,7 +13,6 @@ import Users from "@/components/Configuration/Users";
 import { Sidebar } from "@/components/Sidebar";
 import LoadingPage from "@/components/utils/LoadingPage";
 import type { NextPageContext } from "next";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 
@@ -32,12 +32,12 @@ type Modes =
 function ConfigurationMain() {
 	const router = useRouter();
 	const { initialMode } = router.query;
-	const { data: session, status } = useSession({ required: true });
+	const { session, status } = useSession({ required: true });
 	const [mode, setMode] = useState<Modes>((initialMode as Modes) || "profile");
 	useEffect(() => {
 		if (initialMode && typeof initialMode === "string") setMode(initialMode as Modes);
 	}, [initialMode]);
-	if (status !== "authenticated") return <LoadingPage />;
+	if (status !== "authenticated" || !session) return <LoadingPage />;
 	return (
 		<div className="flex h-full flex-col font-Inter md:flex-row">
 			<Sidebar session={session} />

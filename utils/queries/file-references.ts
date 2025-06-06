@@ -1,16 +1,12 @@
 import axios from "axios";
-
 import { useQuery } from "@tanstack/react-query";
 import type { TFileReferenceDTO, TFileReferencesQueryParams } from "../schemas/file-reference.schema";
+import type { TGetFileReferencesRouteOutput } from "@/app/api/file-references/route";
+import type { TGetMultipleSourcesFileReferencesRouteOutput } from "@/app/api/file-references/many/route";
 
 async function fetchFileReferenceById({ id }: { id: string }) {
-	try {
-		const { data } = await axios.get(`/api/file-references?id=${id}`);
-		return data.data as TFileReferenceDTO;
-	} catch (error) {
-		console.log("Error running fetchFileReferenceById: ", error);
-		throw error;
-	}
+	const { data }: { data: TGetFileReferencesRouteOutput } = await axios.get(`/api/file-references?id=${id}`);
+	return data.data.byId;
 }
 export function useFileReferenceById({ id }: { id: string }) {
 	return useQuery({
@@ -23,13 +19,8 @@ type UseFileReferencesByOpportunityIdParams = {
 	opportunityId: string;
 };
 async function fetchFileReferencesByOpportunityId({ opportunityId }: UseFileReferencesByOpportunityIdParams) {
-	try {
-		const { data } = await axios.get(`/api/file-references?opportunityId=${opportunityId}`);
-		return data.data as TFileReferenceDTO[];
-	} catch (error) {
-		console.log("Error running fetchFileReferencesByOpportunityId: ", error);
-		throw error;
-	}
+	const { data }: { data: TGetFileReferencesRouteOutput } = await axios.get(`/api/file-references?opportunityId=${opportunityId}`);
+	return data.data.byOpportunityId;
 }
 
 export function useFileReferencesByOpportunityId({ opportunityId }: UseFileReferencesByOpportunityIdParams) {
@@ -40,13 +31,8 @@ export function useFileReferencesByOpportunityId({ opportunityId }: UseFileRefer
 }
 
 async function fetchFileReferencesByAnalysisId({ analysisId }: { analysisId: string }) {
-	try {
-		const { data } = await axios.get(`/api/file-references?analysisId=${analysisId}`);
-		return data.data as TFileReferenceDTO[];
-	} catch (error) {
-		console.log("Error running fetchFileReferencesByAnalysisId: ", error);
-		throw error;
-	}
+	const { data }: { data: TGetFileReferencesRouteOutput } = await axios.get(`/api/file-references?analysisId=${analysisId}`);
+	return data.data.byAnalysisId;
 }
 
 export function useFileReferencesByAnalysisId({ analysisId }: { analysisId: string }) {
@@ -57,13 +43,8 @@ export function useFileReferencesByAnalysisId({ analysisId }: { analysisId: stri
 }
 
 async function fetchFileReferencesByClientId({ clientId }: { clientId: string }) {
-	try {
-		const { data } = await axios.get(`/api/file-references?clientId=${clientId}`);
-		return data.data as TFileReferenceDTO[];
-	} catch (error) {
-		console.log("Error running fetchFileReferencesByClientId: ", error);
-		throw error;
-	}
+	const { data }: { data: TGetFileReferencesRouteOutput } = await axios.get(`/api/file-references?clientId=${clientId}`);
+	return data.data.byClientId;
 }
 
 export function useFileReferencesByClientId({ clientId }: { clientId: string }) {
@@ -74,13 +55,8 @@ export function useFileReferencesByClientId({ clientId }: { clientId: string }) 
 }
 
 async function fetchFileReferencesByHomologationId({ homologationId }: { homologationId: string }) {
-	try {
-		const { data } = await axios.get(`/api/file-references?homologationId=${homologationId}`);
-		return data.data as TFileReferenceDTO[];
-	} catch (error) {
-		console.log("Error running fetchFileReferencesByHomologationId: ", error);
-		throw error;
-	}
+	const { data }: { data: TGetFileReferencesRouteOutput } = await axios.get(`/api/file-references?homologationId=${homologationId}`);
+	return data.data.byHomologationId;
 }
 
 export function useFileReferencesByHomologationId({ homologationId }: { homologationId: string }) {
@@ -101,27 +77,23 @@ async function fetchFileReferencesByQuery({
 	expenseId,
 	serviceOrderId,
 }: TFileReferencesQueryParams) {
-	try {
-		const clientParam = clientId ? `clientId=${clientId}` : null;
-		const opportunityParam = opportunityId ? `opportunityId=${opportunityId}` : null;
-		const analysisParam = analysisId ? `analysisId=${analysisId}` : null;
-		const homologationParam = homologationId ? `homologationId=${homologationId}` : null;
-		const projectParam = projectId ? `projectId=${projectId}` : null;
-		const purchaseParam = purchaseId ? `purchaseId=${purchaseId}` : null;
-		const revenueParam = revenueId ? `revenueId=${revenueId}` : null;
-		const expenseParam = expenseId ? `expenseId=${expenseId}` : null;
-		const serviceOrderParam = serviceOrderId ? `serviceOrderId=${serviceOrderId}` : null;
-		const param = [clientParam, opportunityParam, analysisParam, homologationParam, projectParam, purchaseParam, revenueParam, expenseParam, serviceOrderParam]
-			.filter((q) => !!q)
-			.join("&");
-		if (!param) return [];
+	const clientParam = clientId ? `clientId=${clientId}` : null;
+	const opportunityParam = opportunityId ? `opportunityId=${opportunityId}` : null;
+	const analysisParam = analysisId ? `analysisId=${analysisId}` : null;
+	const homologationParam = homologationId ? `homologationId=${homologationId}` : null;
+	const projectParam = projectId ? `projectId=${projectId}` : null;
+	const purchaseParam = purchaseId ? `purchaseId=${purchaseId}` : null;
+	const revenueParam = revenueId ? `revenueId=${revenueId}` : null;
+	const expenseParam = expenseId ? `expenseId=${expenseId}` : null;
+	const serviceOrderParam = serviceOrderId ? `serviceOrderId=${serviceOrderId}` : null;
+	const param = [clientParam, opportunityParam, analysisParam, homologationParam, projectParam, purchaseParam, revenueParam, expenseParam, serviceOrderParam]
+		.filter((q) => !!q)
+		.join("&");
 
-		const { data } = await axios.get(`/api/file-references/many?${param}`);
-		return data.data as TFileReferenceDTO[];
-	} catch (error) {
-		console.log("Error running fetchFileReferencesByQuery: ", error);
-		throw error;
-	}
+	if (!param) return [];
+
+	const { data }: { data: TGetMultipleSourcesFileReferencesRouteOutput } = await axios.get(`/api/file-references/many?${param}`);
+	return data.data.fileReferences;
 }
 
 export function useFileReferences({ clientId, opportunityId, analysisId, homologationId, projectId, purchaseId, revenueId, serviceOrderId }: TFileReferencesQueryParams) {

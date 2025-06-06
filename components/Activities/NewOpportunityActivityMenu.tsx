@@ -6,7 +6,7 @@ import { TActivity } from "@/utils/schemas/activities.schema";
 import { TUserDTO } from "@/utils/schemas/user.schema";
 import { useQueryClient } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "framer-motion";
-import { Session } from "next-auth";
+import type { TUserSession } from "@/lib/auth/session";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import Avatar from "../utils/Avatar";
@@ -38,7 +38,7 @@ const variants = {
 };
 
 type NewOpportunityActivityMenuProps = {
-	session: Session;
+	session: TUserSession;
 	opportunity: { id: string; nome: string };
 	closeMenu: () => void;
 };

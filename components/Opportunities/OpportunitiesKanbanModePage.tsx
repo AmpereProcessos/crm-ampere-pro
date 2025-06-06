@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import type { Session } from "next-auth";
+import type { TUserSession } from "@/lib/auth/session";
 import { DragDropContext, type DropResult } from "react-beautiful-dnd";
 
 import { AiOutlinePlus } from "react-icons/ai";
@@ -27,7 +27,7 @@ import { useFunnelReferenceUpdate } from "@/utils/mutations/funnel-references";
 
 import { getExcelFromJSON } from "@/lib/methods/excel-utils";
 import { formatDateAsLocale } from "@/lib/methods/formatting";
-import type { TOpportunitiesPageModes } from "@/pages/comercial/oportunidades";
+import type { TOpportunitiesPageModes } from "@/app/comercial/oportunidades/opportunities-main";
 import { FaRotate } from "react-icons/fa6";
 import MultipleSelectInput from "../Inputs/MultipleSelectInput";
 import { PeriodByFieldFilter } from "../Inputs/PeriodByFieldFilter";
@@ -75,7 +75,7 @@ function getStageOpportunities({ opportunities, stageId }: GetStageOpportunities
 	return [];
 }
 type GetOptionsParams = {
-	session: Session | null;
+	session: TUserSession | null;
 	responsiblesOptions: TUserDTOSimplified[] | undefined;
 	funnelsOptions: TFunnelDTO[] | undefined;
 };
@@ -127,7 +127,7 @@ function getOptions({ session, responsiblesOptions, funnelsOptions }: GetOptions
 	return options;
 }
 type OpportunitiesKanbanModePageProps = {
-	session: Session;
+	session: TUserSession;
 	funnelsOptions: TFunnelDTO[];
 	responsiblesOptions: TUserDTOSimplified[];
 	handleSetMode: (mode: TOpportunitiesPageModes) => void;
@@ -200,16 +200,37 @@ export default function OpportunitiesKanbanModePage({ session, funnelsOptions, r
 		<div className="flex h-full flex-col md:flex-row">
 			<Sidebar session={session} />
 			<div className="flex w-full max-w-full grow flex-col overflow-x-hidden bg-[#f8f9fa] p-6">
-				<div className="flex flex-col items-center border-b border-[#000] pb-2 xl:flex-row gap-2">
-					<div className="flex items-center gap-1">
-						<div className="text-xl font-black leading-none tracking-tight md:text-2xl">OPORTUNIDADES</div>
-						<button type="button" onClick={() => handleSetMode("card")} className="flex items-center gap-1 px-2 text-xs text-gray-500 duration-300 ease-out hover:text-gray-800">
-							<FaRotate />
-							<h1 className="font-medium">ALTERAR MODO</h1>
-						</button>
+				<div className="flex flex-col items-center border-b border-[#000] pb-2 gap-1">
+					<div className="w-full flex items-center justify-between gap-2 flex-col lg:flex-row">
+						<div className="flex items-center gap-1">
+							<div className="text-xl font-black leading-none tracking-tight md:text-2xl">OPORTUNIDADES</div>
+							<button type="button" onClick={() => handleSetMode("card")} className="flex items-center gap-1 px-2 text-xs text-gray-500 duration-300 ease-out hover:text-gray-800">
+								<FaRotate />
+								<h1 className="font-medium">ALTERAR MODO</h1>
+							</button>
+						</div>
+
+						<div className="flex grow flex-col items-center justify-end  gap-2 xl:flex-row">
+							<button
+								type="button"
+								onClick={() => handleExportData()}
+								className="flex h-[46.6px] items-center justify-center gap-2 rounded-md border bg-[#2c6e49] p-2 px-3 text-sm font-medium text-white shadow-sm duration-300 ease-in-out hover:scale-105"
+							>
+								<BsDownload style={{ fontSize: "18px" }} />
+							</button>
+
+							<SearchOpportunities />
+							<button
+								type="button"
+								onClick={() => setNewProjectModalIsOpen(true)}
+								className="flex h-[46.6px] items-center justify-center gap-2 rounded-md border bg-[#15599a] p-2 px-3 text-sm font-medium text-white shadow-sm duration-300 ease-in-out hover:scale-105"
+							>
+								<AiOutlinePlus style={{ fontSize: "18px" }} />
+							</button>
+						</div>
 					</div>
 
-					<div className="flex grow flex-col items-center justify-end  gap-2 xl:flex-row">
+					<div className="w-full flex items-center justify-end flex-wrap gap-2">
 						<PeriodByFieldFilter
 							value={dateParam}
 							handleChange={(v) =>
@@ -219,6 +240,7 @@ export default function OpportunitiesKanbanModePage({ session, funnelsOptions, r
 									field: v?.field as DateFilterType["field"],
 								})
 							}
+							holderClassName="text-xs p-2 max-h-[36px] min-h-[36px]"
 							fieldOptions={[
 								{ id: 1, label: "DATA DE INSERÇÃO", value: "dataInsercao" },
 								{ id: 2, label: "DATA DE GANHO", value: "dataGanho" },
@@ -226,10 +248,12 @@ export default function OpportunitiesKanbanModePage({ session, funnelsOptions, r
 								{ id: 4, label: "DATA DA ÚLTIMA INTERAÇÃO", value: "ultimaInteracao.data" },
 							]}
 						/>
-						<div className="w-full lg:w-[200px]">
+						<div className="w-full lg:w-[250px]">
 							<SelectInput
 								showLabel={false}
 								label="STATUS"
+								labelClassName="text-[0.6rem]"
+								holderClassName="text-xs p-2 min-h-[34px]"
 								resetOptionLabel="EM ANDAMENTO"
 								value={params.status}
 								options={[
@@ -243,9 +267,11 @@ export default function OpportunitiesKanbanModePage({ session, funnelsOptions, r
 								width="100%"
 							/>
 						</div>
-						<div className="w-full lg:w-[200px]">
+						<div className="w-full lg:w-[250px]">
 							<MultipleSelectInput
 								label="Usuários"
+								labelClassName="text-[0.6rem]"
+								holderClassName="text-xs p-2 min-h-[34px]"
 								showLabel={false}
 								resetOptionLabel="Todos"
 								selected={responsible}
@@ -266,9 +292,11 @@ export default function OpportunitiesKanbanModePage({ session, funnelsOptions, r
 								width="100%"
 							/>
 						</div>
-						<div className="w-full lg:w-[200px]">
+						<div className="w-full lg:w-[250px]">
 							<SelectInput
 								label="Funis"
+								labelClassName="text-[0.6rem]"
+								holderClassName="text-xs p-2 min-h-[34px]"
 								showLabel={false}
 								resetOptionLabel="NÃO DEFINIDO"
 								value={funnel}
@@ -283,23 +311,6 @@ export default function OpportunitiesKanbanModePage({ session, funnelsOptions, r
 								width="100%"
 							/>
 						</div>
-
-						<button
-							type="button"
-							onClick={() => handleExportData()}
-							className="flex h-[46.6px] items-center justify-center gap-2 rounded-md border bg-[#2c6e49] p-2 px-3 text-sm font-medium text-white shadow-sm duration-300 ease-in-out hover:scale-105"
-						>
-							<BsDownload style={{ fontSize: "18px" }} />
-						</button>
-
-						<SearchOpportunities />
-						<button
-							type="button"
-							onClick={() => setNewProjectModalIsOpen(true)}
-							className="flex h-[46.6px] items-center justify-center gap-2 rounded-md border bg-[#15599a] p-2 px-3 text-sm font-medium text-white shadow-sm duration-300 ease-in-out hover:scale-105"
-						>
-							<AiOutlinePlus style={{ fontSize: "18px" }} />
-						</button>
 					</div>
 				</div>
 				<DragDropContext onDragEnd={(e) => onDragEnd(e)}>

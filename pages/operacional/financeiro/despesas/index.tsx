@@ -1,13 +1,13 @@
-import ExpensesPage from '@/components/Expenses/ExpensesPage'
-import LoadingPage from '@/components/utils/LoadingPage'
-import { useSession } from 'next-auth/react'
-import React from 'react'
+import ExpensesPage from "@/components/Expenses/ExpensesPage";
+import LoadingPage from "@/components/utils/LoadingPage";
+import React from "react";
+import { useSession } from "@/app/providers/SessionProvider";
 
 function MainExpensesPage() {
-  const { data: session, status } = useSession()
+	const { session, status } = useSession({ required: true });
 
-  if (status != 'authenticated') return <LoadingPage />
-  return <ExpensesPage session={session} />
+	if (status !== "authenticated") return <LoadingPage />;
+	return <ExpensesPage session={session} />;
 }
 
-export default MainExpensesPage
+export default MainExpensesPage;
