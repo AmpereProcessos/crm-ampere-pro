@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { getCurrentSession } from "@/lib/auth/session";
 import { redirect } from "next/navigation";
 import OpportunitiesMainPage from "./opportunities-main";

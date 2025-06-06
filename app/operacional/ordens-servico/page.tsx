@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import ServiceOrdersPage from "@/components/ServiceOrders/ServiceOrdersPage";
 import { getCurrentSession } from "@/lib/auth/session";
 import { redirect } from "next/navigation";

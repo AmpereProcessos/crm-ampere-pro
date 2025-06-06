@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { redirect } from "next/navigation";
 import React from "react";
 import Login from "./login-page";
@@ -10,9 +11,9 @@ type LoginPageProps = {
 };
 
 async function LoginPage({ searchParams }: LoginPageProps) {
+	const awaitedSearchParams = await searchParams;
 	const { session, user } = await getCurrentSession();
 	if (session || user) return redirect("/");
-	const awaitedSearchParams = await searchParams;
 	return <Login searchParams={awaitedSearchParams} />;
 }
 

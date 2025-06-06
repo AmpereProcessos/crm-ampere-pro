@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import NewProposalPage from "@/components/Proposal/NewProposalPage";
 import ErrorComponent from "@/components/utils/ErrorComponent";
 import { getCurrentSession } from "@/lib/auth/session";

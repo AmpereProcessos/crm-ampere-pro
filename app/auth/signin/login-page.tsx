@@ -1,14 +1,12 @@
+"use server";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import FullScreenWrapper from "@/components/Wrappers/FullScreenWrapper";
 import { login } from "@/lib/auth/actions";
 import { cn } from "@/lib/utils";
 
-import Link from "next/link";
 import React from "react";
-import { SubmitButton } from "@/components/Buttons/submit-button";
 import Image from "next/image";
 import AmpereWhiteLogo from "@/utils/svgs/blue-logo-borders-only.svg";
 import AmpereHorizontalLogo from "@/utils/svgs/horizontal-blue-logo-with-text.svg";
@@ -46,6 +44,7 @@ function Login({ searchParams }: LoginProps) {
 										</div>
 										<Input id="password" name="password" type="password" required />
 									</div>
+									{searchParams?.error && <p className="text-red-500 w-full text-center">{searchParams.error}</p>}
 									<Button type="submit" className="w-full font-bold">
 										Acessar
 									</Button>

@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import MainDashboardPage from "@/components/Stats/MainDashboard/MainDashboardPage";
 import { getCurrentSession } from "@/lib/auth/session";
 import { redirect } from "next/navigation";

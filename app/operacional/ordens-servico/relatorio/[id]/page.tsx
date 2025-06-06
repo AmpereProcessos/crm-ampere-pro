@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import ErrorComponent from "@/components/utils/ErrorComponent";
 import { ObjectId } from "mongodb";
 import React from "react";

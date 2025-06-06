@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import ErrorComponent from "@/components/utils/ErrorComponent";
 import { formatLocation } from "@/lib/methods/formatting";
 import { fetchHomologationById } from "@/utils/queries/homologations";

@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import OpportunityPage from "@/components/Opportunities/OpportunityPage";
 import ErrorComponent from "@/components/utils/ErrorComponent";
 import { getCurrentSession } from "@/lib/auth/session";

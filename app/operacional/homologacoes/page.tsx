@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import HomologationsControlPage from "@/app/components/Homologations/Page/HomologationPage";
 import { getCurrentSession } from "@/lib/auth/session";
 import { redirect } from "next/navigation";
