@@ -115,11 +115,11 @@ async function getSalesTeamResults(request: NextRequest) {
 	const opportunitiesCollection: Collection<TOpportunity> = db.collection("opportunities");
 	const saleGoalsCollection: Collection<TSaleGoal> = db.collection("sale-goals");
 
-	const saleGoals = await getSaleGoals({ saleGoalsCollection, currentPeriod, userSaleGoalQuery, partnerQuery });
+	const saleGoals = await getSaleGoals({ saleGoalsCollection, currentPeriod, userSaleGoalQuery, partnerQuery: partnerQuery as Filter<TSaleGoal> });
 	const projects = await getOpportunities({
 		opportunitiesCollection,
 		responsiblesQuery,
-		partnerQuery,
+		partnerQuery: partnerQuery as Filter<TOpportunity>,
 		projectTypesQuery,
 		afterDate,
 		beforeDate,
@@ -133,11 +133,13 @@ async function getSalesTeamResults(request: NextRequest) {
 		const sellerSaleGoals = saleGoals.find((goals) => goals.usuario?.id === seller.id && goals.periodo === currentPeriod);
 
 		const sdr = current.responsaveis.find((r) => r.papel === "SDR");
+
 		const sdrName = sdr?.nome || "NÃO DEFINIDO";
+
 		const clientAquisitionOrigin = current.canalAquisicao;
 
 		// In case there's no info accumulated for the seller
-		if (!acc[seller.nome]) {
+		if (!acc[seller.nome])
 			acc[seller.nome] = {
 				potenciaPico: {
 					objetivo: 0,
@@ -172,8 +174,6 @@ async function getSalesTeamResults(request: NextRequest) {
 					},
 				},
 			};
-		}
-
 		// Insertion related checkings
 		const insertDate = new Date(current.dataInsercao);
 		const wasInsertedWithinCurrentPeriod = insertDate >= afterDate && insertDate <= beforeDate;
@@ -202,48 +202,62 @@ async function getSalesTeamResults(request: NextRequest) {
 		if (wasInsertedWithinCurrentPeriod) acc[seller.nome].projetosCriados.atingido += 1;
 
 		// Increasing qtys based on projects origin
-		const insertionPeriod: "ATUAL" | "ANTERIOR" = wasInsertedWithinCurrentPeriod ? "ATUAL" : wasInsertedWithinPreviousPeriod ? "ANTERIOR" : "ATUAL";
-		const signingPeriod: "ATUAL" | "ANTERIOR" = wasSignedWithinCurrentPeriod ? "ATUAL" : wasSignedWithinPreviousPeriod ? "ANTERIOR" : "ATUAL";
+		let insertionPeriod: "ATUAL" | "ANTERIOR" = "ATUAL"; // will define wether or not it was inserted within the two period of analysis
+		if (wasInsertedWithinCurrentPeriod) insertionPeriod = "ATUAL";
+		if (wasInsertedWithinPreviousPeriod) insertionPeriod = "ANTERIOR";
+
+		let signingPeriod: "ATUAL" | "ANTERIOR" = "ATUAL"; // will define wether or not it was signed within the two period of analysis
+		if (wasSignedWithinCurrentPeriod) signingPeriod = "ATUAL";
+		if (wasSignedWithinPreviousPeriod) signingPeriod = "ANTERIOR";
 
 		if (cameFromInsideSales) {
 			// In case the project came from inside sales, computing major indicators based on inside name
 			if (signingPeriod) {
 				if (!acc[seller.nome].potenciaPico.origem.interno[sdrName]) acc[seller.nome].potenciaPico.origem.interno[sdrName] = 0;
+
 				acc[seller.nome].potenciaPico.origem.interno[sdrName] += proposePeakPower;
 			}
 			if (signingPeriod) {
 				if (!acc[seller.nome].valorVendido.origem.interno[sdrName]) acc[seller.nome].valorVendido.origem.interno[sdrName] = 0;
+
 				acc[seller.nome].valorVendido.origem.interno[sdrName] += proposeValue;
 			}
 			if (signingPeriod) {
 				if (!acc[seller.nome].projetosVendidos.origem.interno[sdrName]) acc[seller.nome].projetosVendidos.origem.interno[sdrName] = 0;
+
 				acc[seller.nome].projetosVendidos.origem.interno[sdrName] += 1;
 			}
 			if (insertionPeriod) {
 				if (!acc[seller.nome].projetosCriados.origem.interno[sdrName]) acc[seller.nome].projetosCriados.origem.interno[sdrName] = 0;
+
 				acc[seller.nome].projetosCriados.origem.interno[sdrName] += 1;
 			}
 		} else {
 			// Validating if there's the aquisition origin added
 			if (!clientAquisitionOrigin) return acc;
-			// In case the project came from a valid origin, computing major indicators based on origin name
+			// In case the project came from an valid origin, computing major indicators based on origin name
 			if (signingPeriod) {
 				if (!acc[seller.nome].potenciaPico.origem.externo[clientAquisitionOrigin]) acc[seller.nome].potenciaPico.origem.externo[clientAquisitionOrigin] = 0;
+
 				acc[seller.nome].potenciaPico.origem.externo[clientAquisitionOrigin] += proposePeakPower;
 			}
 			if (signingPeriod) {
 				if (!acc[seller.nome].valorVendido.origem.externo[clientAquisitionOrigin]) acc[seller.nome].valorVendido.origem.externo[clientAquisitionOrigin] = 0;
+
 				acc[seller.nome].valorVendido.origem.externo[clientAquisitionOrigin] += proposeValue;
 			}
 			if (signingPeriod) {
 				if (!acc[seller.nome].projetosVendidos.origem.externo[clientAquisitionOrigin]) acc[seller.nome].projetosVendidos.origem.externo[clientAquisitionOrigin] = 0;
+
 				acc[seller.nome].projetosVendidos.origem.externo[clientAquisitionOrigin] += 1;
 			}
 			if (insertionPeriod) {
 				if (!acc[seller.nome].projetosCriados.origem.externo[clientAquisitionOrigin]) acc[seller.nome].projetosCriados.origem.externo[clientAquisitionOrigin] = 0;
+
 				acc[seller.nome].projetosCriados.origem.externo[clientAquisitionOrigin] += 1;
 			}
 		}
+
 		return acc;
 	}, {});
 
@@ -262,22 +276,25 @@ async function getSaleGoals({
 	saleGoalsCollection: Collection<TSaleGoal>;
 	currentPeriod: string;
 	userSaleGoalQuery: Filter<TSaleGoal>;
-	partnerQuery: any;
+	partnerQuery: Filter<TSaleGoal>;
 }) {
-	const match = { periodo: currentPeriod, ...userSaleGoalQuery, ...partnerQuery };
-	const saleGoals = await saleGoalsCollection.find(match).toArray();
-	return saleGoals;
+	try {
+		const saleGoals = await saleGoalsCollection.find({ periodo: currentPeriod, ...partnerQuery, ...userSaleGoalQuery }).toArray();
+		return saleGoals;
+	} catch (error) {
+		console.error("[ERROR] Error running getSaleGoals", error);
+		throw error;
+	}
 }
 
 type GetProjectsParams = {
 	opportunitiesCollection: Collection<TOpportunity>;
 	responsiblesQuery: Filter<TOpportunity>;
-	partnerQuery: any;
+	partnerQuery: Filter<TOpportunity>;
 	projectTypesQuery: Filter<TOpportunity>;
 	afterDate: Date;
 	beforeDate: Date;
 };
-
 type TPromotersResultsProject = {
 	idMarketing: TOpportunity["idMarketing"];
 	responsaveis: TOpportunity["responsaveis"];
@@ -287,49 +304,54 @@ type TPromotersResultsProject = {
 	canalAquisicao: TClient["canalAquisicao"];
 	dataInsercao: string;
 };
-
 async function getOpportunities({ opportunitiesCollection, responsiblesQuery, partnerQuery, projectTypesQuery, afterDate, beforeDate }: GetProjectsParams) {
-	const afterDateStr = afterDate.toISOString();
-	const beforeDateStr = beforeDate.toISOString();
-	const match = {
-		...partnerQuery,
-		...responsiblesQuery,
-		...projectTypesQuery,
-		$or: [
-			{ $and: [{ "responsaveis.dataInsercao": { $gte: afterDateStr } }, { "responsaveis.dataInsercao": { $lte: beforeDateStr } }] },
-			{ $and: [{ dataInsercao: { $gte: afterDateStr } }, { dataInsercao: { $lte: beforeDateStr } }] },
-			{ $and: [{ "perda.data": { $gte: afterDateStr } }, { "perda.data": { $lte: beforeDateStr } }] },
-			{ $and: [{ "ganho.data": { $gte: afterDateStr } }, { "ganho.data": { $lte: beforeDateStr } }] },
-		],
-		dataExclusao: null,
-	};
-	const addFields = { activeProposeObjectID: { $toObjectId: "$ganho.idProposta" }, clientObjectId: { $toObjectId: "$idCliente" } };
-	const proposeLookup = { from: "proposals", localField: "activeProposeObjectID", foreignField: "_id", as: "proposta" };
-	const clientLookup = { from: "clients", localField: "clientObjectId", foreignField: "_id", as: "cliente" };
-	const projection = {
-		idMarketing: 1,
-		responsaveis: 1,
-		ganho: 1,
-		"proposta.valor": 1,
-		"proposta.potenciaPico": 1,
-		"cliente.canalAquisicao": 1,
-		dataInsercao: 1,
-	};
-	const result = await opportunitiesCollection
-		.aggregate([{ $match: match }, { $addFields: addFields }, { $lookup: proposeLookup }, { $lookup: clientLookup }, { $project: projection }])
-		.toArray();
-
-	const opportunities = result.map((r: any) => ({
-		idMarketing: r.idMarketing,
-		responsaveis: r.responsaveis,
-		ganho: r.ganho,
-		valorProposta: r.proposta[0] ? r.proposta[0].valor : 0,
-		potenciaPicoProposta: r.proposta[0] ? r.proposta[0].potenciaPico : 0,
-		canalAquisicao: r.cliente[0] ? r.cliente[0].canalAquisicao : "NÃO DEFINIDO",
-		dataInsercao: r.dataInsercao,
-	}));
-
-	return opportunities as TPromotersResultsProject[];
+	try {
+		const afterDateStr = afterDate.toISOString();
+		const beforeDateStr = beforeDate.toISOString();
+		const match = {
+			...partnerQuery,
+			...responsiblesQuery,
+			...projectTypesQuery,
+			$or: [
+				{ $and: [{ dataInsercao: { $gte: afterDateStr } }, { dataInsercao: { $lte: beforeDateStr } }] },
+				{ $and: [{ "ganho.data": { $gte: afterDateStr } }, { "ganho.data": { $lte: beforeDateStr } }] },
+			],
+			dataExclusao: null,
+		};
+		const addFields = {
+			activeProposeObjectID: {
+				$toObjectId: "$ganho.idProposta",
+			},
+			clientObjectId: { $toObjectId: "$idCliente" },
+		};
+		const proposeLookup = { from: "proposals", localField: "activeProposeObjectID", foreignField: "_id", as: "proposta" };
+		const clientLookup = { from: "clients", localField: "clientObjectId", foreignField: "_id", as: "cliente" };
+		const projection = {
+			idMarketing: 1,
+			responsaveis: 1,
+			ganho: 1,
+			"proposta.valor": 1,
+			"proposta.potenciaPico": 1,
+			"cliente.canalAquisicao": 1,
+			dataInsercao: 1,
+		};
+		const result = await opportunitiesCollection
+			.aggregate([{ $match: match }, { $addFields: addFields }, { $lookup: proposeLookup }, { $lookup: clientLookup }, { $project: projection }])
+			.toArray();
+		const projects = result.map((r) => ({
+			idMarketing: r.idMarketing,
+			responsaveis: r.responsaveis,
+			ganho: r.ganho,
+			valorProposta: r.proposta[0] ? r.proposta[0].valor : 0,
+			potenciaPicoProposta: r.proposta[0] ? r.proposta[0].potenciaPico : 0,
+			canalAquisicao: r.cliente[0] ? r.cliente[0].canalAquisicao : "NÃO DEFINIDO",
+			dataInsercao: r.dataInsercao,
+		})) as TPromotersResultsProject[];
+		return projects;
+	} catch (error) {
+		console.error("[ERROR] Error running getOpportunities", error);
+		throw error;
+	}
 }
 
 export type TSalesTeamResultsRouteOutput = UnwrapNextResponse<Awaited<ReturnType<typeof getSalesTeamResults>>>;

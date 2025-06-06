@@ -34,7 +34,11 @@ export async function insertOpportunity({ collection, info, partnerId }: CreateO
 			idParceiro: partnerId || "",
 			dataInsercao: new Date().toISOString(),
 		});
-		return insertResponse;
+		return {
+			acknowledged: insertResponse.acknowledged,
+			insertedId: insertResponse.insertedId?.toString(),
+			identifier: newIdentifier,
+		};
 	} catch (error) {
 		console.log(error);
 		throw error;

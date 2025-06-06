@@ -34,8 +34,11 @@ export const Sidebar = ({ session }: SidebarProps) => {
 					ease: "easeInOut",
 					delay: 0.1,
 				}}
-				style={{ maxHeight: "100vh" }}
-				className={`overscroll-y sticky top-0 z-[90] hidden flex-col overflow-y-auto border-r border-gray-200 bg-[#fff] px-2  py-4 scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300 md:flex ${
+				style={{
+					maxHeight: "100vh",
+					overflow: "visible",
+				}}
+				className={`sticky top-0 z-[90] hidden flex-col border-r border-gray-200 bg-[#fff] px-2 py-4 scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300 md:flex ${
 					sidebarExtended ? "w-[210px] min-w-[210px]" : "w-[70px] min-w-[70px]"
 				}`}
 			>
@@ -44,7 +47,7 @@ export const Sidebar = ({ session }: SidebarProps) => {
 						<Image src={Logo} alt="LOGO" title="LOGO" fill={true} />
 					</div>
 				</div>
-				<div className="flex w-full grow flex-col">
+				<div className="flex w-full grow flex-col overflow-y-auto scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300">
 					<motion.div
 						animate={sidebarExtended ? "active" : "inactive"}
 						variants={{
@@ -88,7 +91,9 @@ export const Sidebar = ({ session }: SidebarProps) => {
 						false
 					)}
 				</div>
-				<NotificationBlock sidebarExtended={sidebarExtended} session={session} />
+				<div className="flex w-full items-center justify-center py-2" style={{ position: "relative", zIndex: 100 }}>
+					<NotificationBlock sidebarExtended={sidebarExtended} session={session} />
+				</div>
 				{session?.user.avatar_url ? (
 					<div className="flex w-full items-center justify-center">
 						<Link href={`/auth/perfil?id=${session.user.id}`}>
@@ -122,7 +127,9 @@ export const Sidebar = ({ session }: SidebarProps) => {
 								</div>
 							</div>
 						) : null}
-						<NotificationBlock sidebarExtended={sidebarExtended} session={session} />
+						<div style={{ position: "relative", zIndex: 100 }}>
+							<NotificationBlock sidebarExtended={sidebarExtended} session={session} />
+						</div>
 						<Link href={"/configuracoes"}>
 							<button
 								type="button"

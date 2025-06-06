@@ -16,7 +16,6 @@ function getPromoterListOrdenatedByKeyStat({ stats, statKey }: { stats?: TSeller
 	if (!stats) return [];
 	const statsAsList = Object.entries(stats).map(([key, value]) => {
 		const promoterName = key;
-
 		const statByKey = value[statKey as keyof typeof value];
 
 		const goal = statByKey.objetivo;

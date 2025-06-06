@@ -112,6 +112,7 @@ function Sellers({ after, before, session }: SellersProps) {
 								</div>
 								<div className="flex w-full items-center justify-end">
 									<button
+										type="button"
 										onClick={() => setSalePromoterViewModal({ id: responsible.id, isOpen: true })}
 										className="flex items-center gap-1 rounded-lg bg-black px-2 py-1 text-[0.6rem] text-white"
 									>

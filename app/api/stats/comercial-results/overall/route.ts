@@ -107,7 +107,7 @@ async function getOverallResults(request: NextRequest) {
 	const projects = await getOpportunities({
 		opportunitiesCollection,
 		responsiblesQuery,
-		partnerQuery,
+		partnerQuery: partnerQuery as Filter<TOpportunity>,
 		projectTypesQuery,
 		afterDate,
 		beforeDate,
@@ -116,9 +116,7 @@ async function getOverallResults(request: NextRequest) {
 	const condensedResults = projects.reduce(
 		(acc: TOverallResults, current) => {
 			const clientAquisitionOrigin = current.canalAquisicao;
-			if (!acc.porCanalAquisicao[clientAquisitionOrigin]) {
-				acc.porCanalAquisicao[clientAquisitionOrigin] = { adquiridos: 0, ganhos: 0 };
-			}
+			if (!acc.porCanalAquisicao[clientAquisitionOrigin]) acc.porCanalAquisicao[clientAquisitionOrigin] = { adquiridos: 0, ganhos: 0 };
 
 			// Insertion related checkings
 			const insertDate = new Date(current.dataInsercao);
@@ -195,14 +193,44 @@ async function getOverallResults(request: NextRequest) {
 			return acc;
 		},
 		{
-			projetosCriados: { inbound: 0, outboundVendedor: 0, outboundSdr: 0, total: 0 },
-			projetosGanhos: { inbound: 0, outboundVendedor: 0, outboundSdr: 0, total: 0 },
-			conversao: {
-				criado: { inbound: 0, outboundVendedor: 0, outboundSdr: 0, total: 0 },
-				ganho: { inbound: 0, outboundVendedor: 0, outboundSdr: 0, total: 0 },
+			projetosCriados: {
+				inbound: 0,
+				outboundVendedor: 0,
+				outboundSdr: 0,
+				total: 0,
 			},
-			projetosPerdidos: { inbound: 0, outboundVendedor: 0, outboundSdr: 0, total: 0 },
-			totalVendido: { inbound: 0, outboundVendedor: 0, outboundSdr: 0, total: 0 },
+			projetosGanhos: {
+				inbound: 0,
+				outboundVendedor: 0,
+				outboundSdr: 0,
+				total: 0,
+			},
+			conversao: {
+				criado: {
+					inbound: 0,
+					outboundVendedor: 0,
+					outboundSdr: 0,
+					total: 0,
+				},
+				ganho: {
+					inbound: 0,
+					outboundVendedor: 0,
+					outboundSdr: 0,
+					total: 0,
+				},
+			},
+			projetosPerdidos: {
+				inbound: 0,
+				outboundVendedor: 0,
+				outboundSdr: 0,
+				total: 0,
+			},
+			totalVendido: {
+				inbound: 0,
+				outboundVendedor: 0,
+				outboundSdr: 0,
+				total: 0,
+			},
 			perdasPorMotivo: {},
 			porCanalAquisicao: {},
 		},
@@ -217,12 +245,11 @@ async function getOverallResults(request: NextRequest) {
 type GetProjectsParams = {
 	opportunitiesCollection: Collection<TOpportunity>;
 	responsiblesQuery: Filter<TOpportunity>;
-	partnerQuery: any;
+	partnerQuery: Filter<TOpportunity>;
 	projectTypesQuery: Filter<TOpportunity>;
 	afterDate: Date;
 	beforeDate: Date;
 };
-
 type TOverallResultsProject = {
 	idMarketing: TOpportunity["idMarketing"];
 	responsaveis: TOpportunity["responsaveis"];
@@ -233,7 +260,6 @@ type TOverallResultsProject = {
 	dataPerda: TOpportunity["perda"]["data"];
 	dataInsercao: TOpportunity["dataInsercao"];
 };
-
 async function getOpportunities({ opportunitiesCollection, partnerQuery, responsiblesQuery, projectTypesQuery, afterDate, beforeDate }: GetProjectsParams) {
 	try {
 		const afterDateStr = afterDate.toISOString();
@@ -250,8 +276,9 @@ async function getOpportunities({ opportunitiesCollection, partnerQuery, respons
 			dataExclusao: null,
 		};
 		const addFields = { wonProposeObjectId: { $toObjectId: "$ganho.idProposta" }, clientObjectId: { $toObjectId: "$idCliente" } };
-		const proposeLookup = { from: "proposals", localField: "wonProposeObjectId", foreignField: "_id", as: "proposta" };
+		const proposalLookup = { from: "proposals", localField: "wonProposeObjectId", foreignField: "_id", as: "proposta" };
 		const clientLookup = { from: "clients", localField: "clientObjectId", foreignField: "_id", as: "cliente" };
+
 		const projection = {
 			idMarketing: 1,
 			responsaveis: 1,
@@ -262,25 +289,23 @@ async function getOpportunities({ opportunitiesCollection, partnerQuery, respons
 			dataInsercao: 1,
 		};
 		const result = await opportunitiesCollection
-			.aggregate([{ $match: match }, { $addFields: addFields }, { $lookup: proposeLookup }, { $lookup: clientLookup }, { $project: projection }])
+			.aggregate([{ $match: match }, { $addFields: addFields }, { $lookup: proposalLookup }, { $lookup: clientLookup }, { $project: projection }])
 			.toArray();
-
-		const opportunities = result.map((r: any) => ({
+		const projects = result.map((r) => ({
 			idMarketing: r.idMarketing,
 			responsaveis: r.responsaveis,
 			ganho: r.ganho,
 			valorProposta: r.proposta[0] ? r.proposta[0].valor : 0,
 			canalAquisicao: r.cliente[0] ? r.cliente[0].canalAquisicao : "NÃO DEFINIDO",
-			motivoPerda: r.perda?.descricaoMotivo || null,
-			dataPerda: r.perda?.data || null,
+			dataPerda: r.perda.data,
+			motivoPerda: r.perda.descricaoMotivo,
 			dataInsercao: r.dataInsercao,
-		}));
-
-		return opportunities as TOverallResultsProject[];
+		})) as TOverallResultsProject[];
+		return projects;
 	} catch (error) {
-		throw new createHttpError.InternalServerError(`Erro ao buscar oportunidades: ${error}`);
+		console.error("[getOpportunities] Error fetching opportunities", error);
+		throw error;
 	}
 }
-
 export type TOverallResultsRouteOutput = UnwrapNextResponse<Awaited<ReturnType<typeof getOverallResults>>>;
 export const POST = apiHandler({ POST: getOverallResults });

@@ -27,7 +27,6 @@ function getPromoterListOrdenatedByKeyStat({ stats, promoters }: { stats?: TSDRT
 		const numerator: number = Object.values(value["POR VENDEDOR"]).reduce((acc: number, current) => {
 			return acc + current.ganho;
 		}, 0);
-		console.log("VALUE", value);
 		// @ts-ignore
 		const denominator: number = Object.values(value["POR VENDEDOR"]).reduce((acc: number, current) => {
 			return acc + current.recebido;

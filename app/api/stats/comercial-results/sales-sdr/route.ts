@@ -76,8 +76,13 @@ async function getSalesSDRResults(request: NextRequest) {
 	const partnerScope = user.permissoes.parceiros.escopo;
 	const userScope = user.permissoes.resultados.escopo;
 
+	const searchParams = request.nextUrl.searchParams;
+	const searchParamsObject = {
+		after: searchParams.get("after"),
+		before: searchParams.get("before"),
+	};
 	const payload = await request.json();
-	const { after, before } = QueryDatesSchema.parse(payload);
+	const { after, before } = QueryDatesSchema.parse(searchParamsObject);
 	const { responsibles, partners, projectTypes } = GeneralStatsFiltersSchema.parse(payload);
 
 	if (!!userScope && !responsibles)
@@ -250,7 +255,6 @@ async function getSalesSDRResults(request: NextRequest) {
 
 		return acc;
 	}, {});
-
 	return NextResponse.json({
 		data: sdrResults,
 		message: "Resultados por SDR recuperados com sucesso",
@@ -258,7 +262,7 @@ async function getSalesSDRResults(request: NextRequest) {
 }
 
 export type TSDRTeamResultsRouteOutput = UnwrapNextResponse<Awaited<ReturnType<typeof getSalesSDRResults>>>;
-export default apiHandler({ POST: getSalesSDRResults });
+export const POST = apiHandler({ POST: getSalesSDRResults });
 async function getSaleGoals({
 	saleGoalsCollection,
 	currentPeriod,

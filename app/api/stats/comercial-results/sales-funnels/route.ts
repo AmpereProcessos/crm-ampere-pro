@@ -57,9 +57,14 @@ async function getInProgressResults(request: NextRequest) {
 	const userScope = user.permissoes.resultados.escopo;
 
 	const searchParams = request.nextUrl.searchParams;
-
+	const searchParamsObject = {
+		after: searchParams.get("after"),
+		before: searchParams.get("before"),
+	};
+	console.log("[sales-funnels] searchParams", searchParamsObject);
 	const payload = await request.json();
-	const { after, before } = QueryDatesSchema.parse(searchParams);
+	console.log("[sales-funnels] payload", payload);
+	const { after, before } = QueryDatesSchema.parse(searchParamsObject);
 	const { responsibles, partners, projectTypes } = GeneralStatsFiltersSchema.parse(payload);
 
 	if (!!userScope && !responsibles)
@@ -111,25 +116,25 @@ async function getInProgressResults(request: NextRequest) {
 		},
 	});
 
-	// Getting the basic structure of data to work on top of
+	console.log("[sales-funnels] projects found", projects.length);
+	console.log("[sales-funnels] funnels found", funnels.length);
+	console.log("[sales-funnels] funnelsReferences found", funnelsReferences.length);
 	const funnelsReduced = getFunnelsReduced({ funnels });
-	console.log("FUNNELS REDUCED", funnelsReduced);
-	// Iterating through the opportunities and updating the structure based on validations
+	// Getting the basic structure of data to work on top of
 	const inProgressResults = projects.reduce((acc, current) => {
 		// Getting the funnel references that refer to the iterrating opportunity
-		const currentProjectFunnels = funnelsReferences.filter((f) => f.idOportunidade === current._id);
+		const currentProjectFunnels = funnelsReferences.filter((f) => f.idOportunidade == current._id);
 		const proposeValue = current.valorProposta;
 		const isInProgress = !current.dataPerda;
 
 		const lossDate = current.dataPerda ? new Date(current.dataPerda) : null;
 		const lossReason = current.dataPerda ? current.motivoPerda : null;
 		// Itarating through the funnel references
-
 		currentProjectFunnels?.forEach((funnel, index: number) => {
 			const funnelStageId = funnel.idEstagioFunil;
-			const existingFunnel = funnels.find((f) => f._id.toString() === funnel.idFunil);
+			const existingFunnel = funnels.find((f) => f._id.toString() == funnel.idFunil);
 			if (!existingFunnel) return acc;
-			const existingStage = existingFunnel.etapas.find((stage) => stage.id === funnelStageId);
+			const existingStage = existingFunnel.etapas.find((stage) => stage.id == funnelStageId);
 			if (!existingStage) return acc;
 			const funnelName = existingFunnel.nome;
 			const stageId = existingStage.id;
@@ -149,23 +154,20 @@ async function getInProgressResults(request: NextRequest) {
 			}
 
 			// Iterating over the stages information
-			const stageEntries = Object.entries(funnel.estagios);
-			for (const [key, stage] of stageEntries) {
-				const historyStageName = existingFunnel.etapas.find((e) => e.id.toString() === key.toString())?.nome;
+			Object.entries(funnel.estagios).forEach(([key, stage]) => {
+				const historyStageName = existingFunnel.etapas.find((e) => e.id.toString() == key.toString())?.nome;
 				if (!historyStageName) return acc;
 				const arrivalDate = stage?.entrada ? new Date(stage.entrada) : null;
 				const exitDate = stage?.saida ? new Date(stage.saida) : null;
 				const diff = !!arrivalDate && !!exitDate ? getHoursDiff({ start: arrivalDate.toISOString(), finish: exitDate.toISOString() }) : 0;
 				const hasArrivedInCurrentPeriod = !!arrivalDate && arrivalDate >= afterDate && arrivalDate <= beforeDate;
 				const hasExitedInCurrentPeriod = !!exitDate && exitDate >= afterDate && exitDate <= beforeDate;
-				if (hasArrivedInCurrentPeriod)
-					// Updating the entradas number based on the arrival of the opportunity in the iterrating funnel stage
-					acc[funnelName][historyStageName].entradas += 1;
-				if (hasExitedInCurrentPeriod)
-					// Upating th saidas number based on the exit of the opportunity from the iterrating funnel stage
-					acc[funnelName][historyStageName].saidas += 1;
+				// Updating the entradas number based on the arrival of the opportunity in the iterrating funnel stage
+				if (hasArrivedInCurrentPeriod) acc[funnelName][historyStageName].entradas += 1;
+				// Upating th saidas number based on the exit of the opportunity from the iterrating funnel stage
+				if (hasExitedInCurrentPeriod) acc[funnelName][historyStageName].saidas += 1;
 				acc[funnelName][historyStageName].tempoTotal += diff;
-			}
+			});
 		});
 		return acc;
 	}, funnelsReduced);
@@ -291,7 +293,7 @@ async function getOpportunities({ opportunitiesCollection, responsiblesQuery, af
 		})) as TInProgressResultsProject[];
 		return projects;
 	} catch (error) {
-		console.log("[ERROR] Error running getOpportunities", error);
+		console.error("[ERROR] Error running getOpportunities", error);
 		throw error;
 	}
 }

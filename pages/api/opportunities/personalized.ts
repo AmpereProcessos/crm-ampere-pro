@@ -3,6 +3,8 @@ import { getExistentClientByProperties } from "@/repositories/clients/queries";
 import { insertFunnelReference } from "@/repositories/funnel-references/mutations";
 import { insertOpportunity } from "@/repositories/opportunities/mutations";
 import connectToDatabase from "@/services/mongodb/crm-db-connection";
+import { novu } from "@/services/novu";
+import { NOVU_WORKFLOW_IDS } from "@/services/novu/workflows";
 import { apiHandler, validateAuthenticationWithSession } from "@/utils/api";
 import { GeneralClientSchema, type TClient } from "@/utils/schemas/client.schema";
 import { InsertFunnelReferenceSchema, type TFunnelReference } from "@/utils/schemas/funnel-reference.schema";
@@ -156,7 +158,39 @@ const createClientOpportunityAndFunnelReferences: NextApiHandler<PostResponse> =
 	});
 	if (!insertFunnelReferenceResponse.acknowledged) throw new createHttpError.InternalServerError("Oops, houve um erro desconhecido ao criar oportunidade.");
 	const insertedFunnelReferenceId = insertFunnelReferenceResponse.insertedId.toString();
-	console.log("ID DA REFERÊNCIA DO FUNIL", insertedFunnelReferenceId);
+	// Creating Novu topic for the opportunity and adding the responsibles as subscribers
+
+	const novuTopicKey = `opportunity:${insertedOpportunityId}`;
+	await novu.topics.create({
+		key: novuTopicKey,
+		name: `${insertOpportunityResponse.identifier} - ${opportunity.nome}`,
+	});
+	await novu.topics.subscriptions.create(
+		{
+			subscriberIds: opportunity.responsaveis.map((r) => r.id),
+		},
+		novuTopicKey,
+	);
+	// Notifying users other than the author that they have a new opportunity to attend
+	await novu.triggerBulk({
+		events: opportunity.responsaveis
+			.filter((r) => r.id !== session.user.id)
+			.map((r) => ({
+				to: r.id,
+				workflowId: NOVU_WORKFLOW_IDS.NOTIFY_NEW_OPPORTUNITY_TO_RESPONSIBLES,
+				payload: {
+					autor: {
+						nome: session.user.nome,
+						avatar_url: session.user.avatar_url,
+					},
+					oportunidade: {
+						id: insertedOpportunityId,
+						identificador: insertOpportunityResponse.identifier,
+						nome: opportunity.nome,
+					},
+				},
+			})),
+	});
 	return res.status(201).json({
 		data: {
 			insertedClientId,

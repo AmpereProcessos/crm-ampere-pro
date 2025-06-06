@@ -12,7 +12,7 @@ type UseSalesTeamResultsParams = {
 };
 async function fetchStats({ after, before, responsibles, partners, projectTypes }: UseSalesTeamResultsParams) {
 	try {
-		const { data } = await axios.post(`/api/stats/comercial-results/sellers?after=${after}&before=${before}`, { responsibles, partners, projectTypes });
+		const { data } = await axios.post(`/api/stats/comercial-results/sales-sellers?after=${after}&before=${before}`, { responsibles, partners, projectTypes });
 		return data.data as TSellerSalesResults;
 	} catch (error) {
 		throw new Error("Erro ao buscar resultados do time de vendas");

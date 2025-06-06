@@ -3,7 +3,7 @@ import { getValidCurrentSessionUncached } from "@/lib/auth/session";
 import { redirect } from "next/navigation";
 import ManagementComercialResults from "./resultados";
 
-export async function ManagementResults() {
+export default async function ManagementResults() {
 	const session = await getValidCurrentSessionUncached();
 
 	if (!session.user || !session.session) {

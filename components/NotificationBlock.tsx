@@ -1,47 +1,55 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { MdNotifications, MdNotificationsActive } from "react-icons/md";
-import Notifications from "./Modals/Notifications";
-import { useNotificationsByRecipient } from "@/utils/queries/notifications";
-import type { TNotificationDTO } from "@/utils/schemas/notification.schema";
 import type { TUserSession } from "@/lib/auth/session";
-
+import { NOVU_APPLICATION_IDENTIFIER } from "@/services/novu/config";
+import { Inbox } from "@novu/nextjs";
 function NotificationBlock({ sidebarExtended, session }: { sidebarExtended: boolean; session: TUserSession }) {
-	const { data: notifications } = useNotificationsByRecipient({ recipientId: session.user.id });
-	const [notificationModalIsOpen, setNotificationModalIsOpen] = useState<boolean>(false);
-	function countUnreadNotifications(notifications?: TNotificationDTO[]) {
-		if (!notifications) return 0;
-		// Filtering notifications by the unexistence of the userId in the recebimentos list of ids
-		const unreadArr = notifications.filter((n) => !n.recebimentos.map((r) => r.id).includes(session.user.id));
-		return unreadArr.length;
-	}
-	useEffect(() => {
-		if (notificationModalIsOpen) setNotificationModalIsOpen((prev) => !prev);
-	}, [sidebarExtended]);
 	return (
-		<>
-			<button
-				type="button"
-				onClick={() => {
-					setNotificationModalIsOpen((prev) => !prev);
-				}}
-				className={"relative mb-0 flex cursor-pointer items-center justify-center rounded p-2 duration-300  ease-in  hover:bg-blue-100 md:mb-2"}
-			>
-				{countUnreadNotifications(notifications) > 0 ? (
-					<>
-						<MdNotificationsActive style={{ fontSize: "20px", color: "rgb(239,68,68)" }} />
-						<div className="absolute top-1 ml-6 flex h-[17px] w-[17px] items-center justify-center rounded-full bg-red-500  text-center text-xs font-bold text-white">
-							<p className="h-full w-full">{countUnreadNotifications(notifications)}</p>
-						</div>
-					</>
-				) : (
-					<MdNotifications style={{ fontSize: "20px", color: "#264653" }} />
-				)}
-			</button>
-			{notificationModalIsOpen ? (
-				<Notifications notifications={notifications} session={session} sidebarExtended={sidebarExtended} closeModal={() => setNotificationModalIsOpen(false)} />
-			) : null}
-		</>
+		<div className="flex items-center justify-center w-full p-1" style={{ position: "relative" }}>
+			<div className="relative">
+				<Inbox
+					applicationIdentifier={NOVU_APPLICATION_IDENTIFIER}
+					subscriber={session.user.id}
+					localization={{
+						"inbox.filters.dropdownOptions.unread": "Não lidas",
+						"inbox.filters.dropdownOptions.default": "Lidas e não lidas",
+						"inbox.filters.dropdownOptions.archived": "Arquivadas",
+
+						"inbox.filters.labels.unread": "Não lidas",
+						"inbox.filters.labels.default": "Lidas e não lidas",
+						"inbox.filters.labels.archived": "Arquivadas",
+
+						"notifications.emptyNotice": "Não há notificações.",
+						"notifications.actions.readAll": "Marcar todas como lidas",
+						"notifications.actions.archiveAll": "Arquivar todas",
+						"notifications.actions.archiveRead": "Arquivar lidas",
+						"notifications.newNotifications": ({ notificationCount }: { notificationCount: number }) =>
+							`${notificationCount > 99 ? "99+" : notificationCount} new ${notificationCount === 1 ? "notification" : "notifications"}`,
+
+						// Individual notification actions
+						"notification.actions.read.tooltip": "Marcar como lida",
+						"notification.actions.unread.tooltip": "Marcar como não lida",
+						"notification.actions.archive.tooltip": "Arquivar",
+						"notification.actions.unarchive.tooltip": "Desarquivar",
+
+						// Preferences section
+						"preferences.title": "Preferências",
+						"preferences.emptyNotice": "Não há preferências específicas para esta notificação.",
+						"preferences.global": "Preferências globais",
+						"preferences.workflow.disabled.notice": "Contate o administrador para habilitar a gerenciamento de assinaturas para esta notificação crítica.",
+						"preferences.workflow.disabled.tooltip": "Contate o administrador para editar",
+
+						locale: "pt-BR",
+					}}
+					appearance={{
+						variables: {
+							colorPrimary: "#264653",
+							colorPrimaryForeground: "#ffffff",
+							fontSize: "14px",
+							borderRadius: "8px",
+						},
+					}}
+				/>
+			</div>
+		</div>
 	);
 }
-
 export default NotificationBlock;
