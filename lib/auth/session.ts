@@ -5,7 +5,6 @@ import dayjs from "dayjs";
 import { cookies } from "next/headers";
 import { SESSION_COOKIE_NAME } from "@/configs/app-definitions";
 import { cache } from "react";
-import createHttpError from "http-errors";
 
 import type { TUser } from "@/utils/schemas/user.schema";
 import type { TPartner } from "@/utils/schemas/partner.schema";
@@ -185,16 +184,16 @@ export const getValidCurrentSessionUncached = async () => {
 		const cookieStore = await cookies();
 
 		const token = cookieStore.get(SESSION_COOKIE_NAME)?.value ?? null;
-		if (token === null) throw new createHttpError.Unauthorized("Você não está autenticado.");
+		if (token === null) throw new Error("Você não está autenticado.");
 
 		const sessionResult = await validateSession(token);
 
-		if (!sessionResult.session || !sessionResult.user) throw new createHttpError.Unauthorized("Você não está autenticado.");
+		if (!sessionResult.session || !sessionResult.user) throw new Error("Você não está autenticado.");
 
 		return sessionResult;
 	} catch (error) {
 		console.log("Error accessing cookies in getValidCurrentSessionUncached:", error);
-		throw new createHttpError.Unauthorized("Você não está autenticado.");
+		throw new Error("Você não está autenticado.");
 	}
 };
 
