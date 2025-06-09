@@ -446,22 +446,6 @@ export function useClients(representative: string | null | undefined, enabled: b
 	});
 }
 
-export function useNotifications(userId?: string | null): UseQueryResult<Notification[], Error> {
-	return useQuery({
-		queryKey: ["notifications", userId],
-		queryFn: async (): Promise<Notification[]> => {
-			try {
-				const { data } = await axios.get(`/api/notifications?recipient=${userId}`);
-				return data.data;
-			} catch (error) {
-				toast.error("Houve um erro na busca das notificações.");
-				return [];
-			}
-		},
-		enabled: !!userId,
-	});
-}
-
 export function extractErrorMessage(error: unknown) {
 	var errorMsg = "Oops, um erro não identificado ocorreu.";
 	if (error instanceof AxiosError) {

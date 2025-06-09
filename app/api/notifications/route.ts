@@ -2,7 +2,7 @@ import { apiHandler, type UnwrapNextResponse } from "@/lib/api";
 import { getValidCurrentSessionUncached } from "@/lib/auth/session";
 import connectToDatabase from "@/services/mongodb/crm-db-connection";
 import { NextResponse, type NextRequest } from "next/server";
-import { GetNotificationsQueryParams } from "./inputs";
+import { CreateNotificationInput, GetNotificationsQueryParams } from "./inputs";
 import type { z } from "zod";
 import createHttpError from "http-errors";
 import type { Collection } from "mongodb";
@@ -10,6 +10,8 @@ import { InsertNotificationSchema, type TNotification } from "@/utils/schemas/no
 import { getNotificationById, getNotificationByOpportunityId, getNotificationByRecipientId } from "@/repositories/notifications/queries";
 import { insertNotification, updateNotification } from "@/repositories/notifications/mutations";
 import { ObjectId } from "mongodb";
+import { novu } from "@/services/novu";
+import { NOVU_WORKFLOW_IDS } from "@/services/novu/workflows";
 
 async function getNotifications(request: NextRequest) {
 	const { user } = await getValidCurrentSessionUncached();
@@ -94,33 +96,83 @@ export type TGetNotificationsRouteOutputDataByOpportunityId = TGetNotificationsR
 
 export const GET = apiHandler({ GET: getNotifications });
 
-export type TCreateNotificationRouteInput = z.infer<typeof InsertNotificationSchema>;
+export type TCreateNotificationRouteInput = z.infer<typeof CreateNotificationInput>;
 async function createNotification(request: NextRequest) {
 	const { user } = await getValidCurrentSessionUncached();
 	const partnerId = user.idParceiro;
 
-	const payload = await request.json();
-	const notification = InsertNotificationSchema.parse(payload);
+	const searchParams = request.nextUrl.searchParams;
+	const apiKey = searchParams.get("apiKey");
 
-	const db = await connectToDatabase();
-	const collection: Collection<TNotification> = db.collection("notifications");
-
-	const insertResponse = await insertNotification({
-		collection,
-		info: notification,
-		partnerId: partnerId || "",
-	});
-
-	if (!insertResponse.acknowledged) {
-		throw new createHttpError.InternalServerError("Oops, houve um erro desconhecido ao criar notificação.");
+	if (!user) {
+		// If there is no session, we need to validate the api key
+		if (!apiKey) {
+			throw new createHttpError.BadRequest("API key não fornecida.");
+		}
+		if (apiKey !== process.env.SECRET_INTERNAL_COMMUNICATION_API_TOKEN) {
+			throw new createHttpError.Unauthorized("API key inválida.");
+		}
 	}
 
-	return NextResponse.json({
-		data: {
-			insertedId: insertResponse.insertedId.toString(),
+	const payload = await request.json();
+	const { tipo, payload: notificationPayload } = CreateNotificationInput.parse(payload);
+
+	if (tipo === "TECHNICAL_ANALYSIS_CONCLUDED") {
+		const novuTopicKey = `opportunity:${notificationPayload.oportunidade.id}`;
+		const novuTriggerBulkResponse = await novu.trigger({
+			to: {
+				type: "Topic",
+				topicKey: novuTopicKey,
+			},
+			workflowId: NOVU_WORKFLOW_IDS.NOTIFY_OPPORTUNITY_TOPIC_ON_TECHNICAL_ANALYSIS_CONCLUDED,
+			payload: {
+				autor: {
+					nome: notificationPayload.autor.nome,
+					avatar_url: notificationPayload.autor.avatar_url,
+				},
+				oportunidade: {
+					id: notificationPayload.oportunidade.id,
+					identificador: notificationPayload.oportunidade.identificador,
+					nome: notificationPayload.oportunidade.nome,
+				},
+			},
+		});
+		console.log("[NOVU] - Notifications sent on new interaction", novuTriggerBulkResponse.result);
+	}
+	if (tipo === "NEW_INTERACTION_TO_RESPONSIBLES") {
+		const novuTopicKey = `opportunity:${notificationPayload.oportunidade.id}`;
+		const novuTriggerBulkResponse = await novu.trigger({
+			to: {
+				type: "Topic",
+				topicKey: novuTopicKey,
+			},
+			workflowId: NOVU_WORKFLOW_IDS.NOTIFY_NEW_INTERACTION_TO_RESPONSIBLES,
+			payload: {
+				autor: {
+					nome: notificationPayload.autor.nome,
+					avatar_url: notificationPayload.autor.avatar_url,
+				},
+				oportunidade: {
+					id: notificationPayload.oportunidade.id,
+					identificador: notificationPayload.oportunidade.identificador,
+					nome: notificationPayload.oportunidade.nome,
+				},
+				interacao: {
+					tipo: notificationPayload.interacao.tipo,
+				},
+			},
+		});
+		console.log("[NOVU] - Notifications sent on new interaction", novuTriggerBulkResponse.result);
+	}
+
+	return NextResponse.json(
+		{
+			message: "Notificação criada com sucesso!",
 		},
-		message: "Notificação criada com sucesso!",
-	});
+		{
+			status: 201,
+		},
+	);
 }
 
 export type TCreateNotificationRouteOutput = UnwrapNextResponse<Awaited<ReturnType<typeof createNotification>>>;
