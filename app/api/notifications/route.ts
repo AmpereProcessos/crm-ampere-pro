@@ -1,5 +1,5 @@
 import { apiHandler, type UnwrapNextResponse } from "@/lib/api";
-import { getValidCurrentSessionUncached } from "@/lib/auth/session";
+import { getCurrentSessionUncached, getValidCurrentSessionUncached } from "@/lib/auth/session";
 import connectToDatabase from "@/services/mongodb/crm-db-connection";
 import { NextResponse, type NextRequest } from "next/server";
 import { CreateNotificationInput, GetNotificationsQueryParams } from "./inputs";
@@ -98,8 +98,7 @@ export const GET = apiHandler({ GET: getNotifications });
 
 export type TCreateNotificationRouteInput = z.infer<typeof CreateNotificationInput>;
 async function createNotification(request: NextRequest) {
-	const { user } = await getValidCurrentSessionUncached();
-	const partnerId = user.idParceiro;
+	const { user } = await getCurrentSessionUncached();
 
 	const searchParams = request.nextUrl.searchParams;
 	const apiKey = searchParams.get("apiKey");
