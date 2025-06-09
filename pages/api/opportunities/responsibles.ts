@@ -17,6 +17,7 @@ const AddResponsibleToOpportunitySchema = z.object({
 	responsibleId: z.string({
 		required_error: "ID do responsável não fornecido.",
 	}),
+	responsibleRole: z.enum(["VENDEDOR", "SDR", "ANALISTA TÉCNICO"]),
 });
 export type TAddResponsibleToOpportunityInput = z.infer<typeof AddResponsibleToOpportunitySchema>;
 export type TAddResponsibleToOpportunityOutput = {
@@ -25,7 +26,7 @@ export type TAddResponsibleToOpportunityOutput = {
 const handleAddResponsibleToOpportunity: NextApiHandler<TAddResponsibleToOpportunityOutput> = async (req, res) => {
 	const session = await validateAuthorization(req, res, "oportunidades", "editar", true);
 
-	const { opportunityId, responsibleId } = AddResponsibleToOpportunitySchema.parse(req.body);
+	const { opportunityId, responsibleId, responsibleRole } = AddResponsibleToOpportunitySchema.parse(req.body);
 
 	const db = await connectToDatabase();
 	const usersCollection = db.collection<TUser>("users");
@@ -38,7 +39,7 @@ const handleAddResponsibleToOpportunity: NextApiHandler<TAddResponsibleToOpportu
 	const newResponsible: TOpportunity["responsaveis"][number] = {
 		nome: user.nome,
 		id: user._id.toString(),
-		papel: "responsável",
+		papel: responsibleRole,
 		avatar_url: user.avatar_url,
 		telefone: user.telefone,
 		dataInsercao: new Date().toISOString(),

@@ -329,7 +329,7 @@ type GetPendingWinsParams = {
 async function getPendingWins({ opportunitiesCollection, query }: GetPendingWinsParams) {
 	const match: Filter<TOpportunity> = {
 		...query,
-		$and: [{ "ganho.idProposta": { $ne: null } }, { "ganho.data": { $eq: null } }],
+		$and: [{ "ganho.idProposta": { $ne: null } }, { "ganho.data": { $eq: null } }, { "perda.data": { $eq: null } }],
 	};
 
 	const addFields = { wonProposeObjectId: { $toObjectId: "$ganho.idProposta" } };

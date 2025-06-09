@@ -25,7 +25,7 @@ export const SaleCategorySchema = z.enum(["KIT", "PLANO", "PRODUTOS", "SERVIÇOS
 	required_error: "Categoria de venda não fornecida.",
 	invalid_type_error: "Tipo não válido para categoria de venda.",
 });
-const OpportunityResponsibleSchema = z.object({
+export const OpportunityResponsibleSchema = z.object({
 	id: z.string({
 		required_error: "ID do responsável da oportunidade não informado.",
 		invalid_type_error: "Tipo não válido para o ID do responsável.",

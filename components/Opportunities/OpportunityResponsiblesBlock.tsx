@@ -11,8 +11,7 @@ import { OpportunityResponsibilityRoles } from "@/utils/select-options";
 import SelectWithImages from "../Inputs/SelectWithImages";
 import type { TUserSession } from "@/lib/auth/session";
 import { useOpportunityCreators } from "@/utils/queries/users";
-import type { TNotification } from "@/utils/schemas/notification.schema";
-import { createNotification } from "@/utils/mutations/notifications";
+
 import { BsCalendarPlus } from "react-icons/bs";
 import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
 import { addResponsibleToOpportunity } from "@/utils/mutations/opportunities";
@@ -195,7 +194,11 @@ function OpportunityResponsiblesBlock({ opportunityId, infoHolder, setInfoHolder
 								type="button"
 								onClick={() => {
 									if (!newOpportunityResponsible.id || !newOpportunityResponsible.papel) return toast.error("Preencha todos os campos para adicionar um responsável.");
-									handleAddResponsibleToOpportunity({ opportunityId, responsibleId: newOpportunityResponsible.id });
+									handleAddResponsibleToOpportunity({
+										opportunityId,
+										responsibleId: newOpportunityResponsible.id,
+										responsibleRole: newOpportunityResponsible.papel as "VENDEDOR" | "SDR" | "ANALISTA TÉCNICO",
+									});
 								}}
 								className={"rounded bg-green-500 p-1  px-4 text-xs font-medium text-white duration-300 ease-in-out hover:bg-green-600"}
 							>

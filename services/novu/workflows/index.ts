@@ -8,6 +8,8 @@ export const notfiyNewOpportunityToResponsibles = workflow(
 	NOVU_WORKFLOW_IDS.NOTIFY_NEW_OPPORTUNITY_TO_RESPONSIBLES,
 	async ({ step, payload }) => {
 		await step.inApp("inbox", async () => {
+			console.log("[NOVU WORKFLOW] Notifying new opportunity to responsible...");
+			console.log("[NOVU WORKFLOW] Primary Action URL: ", `${process.env.NEXT_PUBLIC_APP_URL}/comercial/oportunidades/id/${payload.oportunidade.id}`);
 			return {
 				subject: "Nova oportunidade de negócio !",
 				body: `Você foi atribuído a uma nova oportunidade de negócio: ${payload.oportunidade.identificador} - ${payload.oportunidade.nome}.`,

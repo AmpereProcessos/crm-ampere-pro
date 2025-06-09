@@ -4,7 +4,7 @@ import type { TOpportunity } from "../schemas/opportunity.schema";
 import type { TClient } from "../schemas/client.schema";
 import type { TFunnelReference } from "../schemas/funnel-reference.schema";
 import { updateAppProject } from "./app-projects";
-import { TAddResponsibleToOpportunityInput } from "@/pages/api/opportunities/responsibles";
+import type { TAddResponsibleToOpportunityInput } from "@/pages/api/opportunities/responsibles";
 
 type HandleProjectCreationParams = {
 	info: TOpportunity;
