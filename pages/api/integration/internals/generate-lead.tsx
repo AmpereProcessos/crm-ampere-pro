@@ -16,6 +16,7 @@ const NewLeadQueryInputSchema = z.object({
 	uf: z.string({ invalid_type_error: "UF deve ser uma string" }).min(2, "UF deve ter pelo menos 2 caracteres").optional().nullable(),
 	cidade: z.string({ invalid_type_error: "Cidade deve ser uma string" }).min(3, "Cidade deve ter pelo menos 3 caracteres").optional().nullable(),
 	canalAquisicao: z.string({ invalid_type_error: "Canal de aquisição deve ser uma string" }).optional().nullable(),
+	valorFaturaEnergia: z.string({ invalid_type_error: "Valor da fatura de energia deve ser um número" }).optional().nullable(),
 });
 
 type TSuccessResponse = {
@@ -70,7 +71,7 @@ async function handleLeadGeneration(newLead: z.infer<typeof NewLeadQueryInputSch
 			titulo: "SISTEMA FOTOVOLTAICO",
 		},
 		categoriaVenda: "KIT",
-		descricao: "",
+		descricao: `Valor da fatura de energia: ${newLead.valorFaturaEnergia}`,
 		identificador: newIdentifier,
 		responsaveis: [
 			{
@@ -130,7 +131,8 @@ async function handleLeadGeneration(newLead: z.infer<typeof NewLeadQueryInputSch
 	};
 	await funnelReferencesCollection.insertOne(funnelReferenceToInsert);
 
-	return { data: { insertedId: insertedOpportunityId }, message: "Lead gerado com sucesso" };
+	const whatsappRedirectMessage = formatWhatsappRedirectMessage({ receiverPhoneNumber: newLeadReceiver.telefone ?? undefined, opportunityName: newLead.nome, opportunityIdentifier: newIdentifier, opportunityEnergyBillValue: newLead.valorFaturaEnergia || "Não informado" });
+	return { data: { insertedId: insertedOpportunityId, whatsappRedirectMessage }, message: "Lead gerado com sucesso" };
 }
 
 type GetNewLeadReceiverParams = {
@@ -157,7 +159,7 @@ async function getNewLeadReceiver({ opportunitiesCollection, usersCollection }: 
 		// Getting the information about the new receiver
 		const newReceiverUser = leadReceivers[newReceiverIndex];
 
-		return { id: newReceiverUser._id.toString(), idParceiro: newReceiverUser.idParceiro, nome: newReceiverUser.nome, avatar_url: newReceiverUser.avatar_url };
+		return { id: newReceiverUser._id.toString(), idParceiro: newReceiverUser.idParceiro, nome: newReceiverUser.nome, telefone: newReceiverUser.telefone, avatar_url: newReceiverUser.avatar_url };
 	} catch (error) {
 		console.log("[ERROR] [generate-lead] Error getting new lead receiver", error);
 		throw error;
@@ -176,3 +178,27 @@ export default apiHandler({
 		return res.status(200).json(leadGenerationResponse);
 	},
 });
+
+
+
+export function formatPhoneNumberForWhatsapp(
+	phoneNumber: string,
+	prefix = "55",
+) {
+	return `${prefix}${phoneNumber.replace(/\D/g, "")}`;
+}
+
+type TFormatWhatsappRedirectMessageParams = {
+	receiverPhoneNumber?: string;
+	opportunityName: string;
+	opportunityIdentifier: string;
+	opportunityEnergyBillValue: string;
+}
+function formatWhatsappRedirectMessage({ receiverPhoneNumber = "(34) 3700-7001", opportunityName, opportunityIdentifier, opportunityEnergyBillValue }: TFormatWhatsappRedirectMessageParams) {
+	const message = `
+	Olá, me chamo ${opportunityName} e estou interessante em saber mais sobre energia solar.
+	Meu atendimento é o ${opportunityIdentifier} e o valor da fatura de energia é de ${opportunityEnergyBillValue}.
+	`;
+
+return `https://api.whatsapp.com/send?phone=${formatPhoneNumberForWhatsapp(receiverPhoneNumber)}&text=${encodeURIComponent(message.trim())}`;
+}
