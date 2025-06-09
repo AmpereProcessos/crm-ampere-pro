@@ -197,10 +197,14 @@ type TFormatWhatsappRedirectMessageParams = {
 	opportunityEnergyBillValue: string;
 }
 function formatWhatsappRedirectMessage({ receiverPhoneNumber = "(34) 3700-7001", opportunityName, opportunityIdentifier, opportunityEnergyBillValue }: TFormatWhatsappRedirectMessageParams) {
-	const message = `
-	Olá, me chamo ${opportunityName} e estou interessante em saber mais sobre energia solar.
-	Meu atendimento é o ${opportunityIdentifier} e o valor da fatura de energia é de ${opportunityEnergyBillValue}.
-	`;
+	const message = `Olá! 👋
+
+Me chamo ${opportunityName} e estou interessado(a) em saber mais sobre energia solar ☀️
+
+📋 Meu atendimento é o ${opportunityIdentifier}
+💰 Valor da fatura de energia: ${opportunityEnergyBillValue}
+
+Aguardo seu contato! 🙏`;
 
 	const formattedPhoneNumber = formatPhoneNumberForWhatsapp(receiverPhoneNumber);
 	console.log("[GENERATE-LEAD] Sending lead in formatted phone number", formattedPhoneNumber);
