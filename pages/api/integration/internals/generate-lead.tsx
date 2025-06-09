@@ -33,6 +33,7 @@ async function handleLeadGeneration(newLead: z.infer<typeof NewLeadQueryInputSch
 	const funnelReferencesCollection = db.collection<TFunnelReference>("funnel-references");
 
 	const newLeadReceiver = await getNewLeadReceiver({ opportunitiesCollection, usersCollection });
+	console.log("[generate-lead] New lead receiver", newLeadReceiver);
 	let clientId: string | null = null;
 	const client = await clientsCollection.findOne({ telefonePrimario: newLead.telefone });
 
@@ -79,7 +80,7 @@ async function handleLeadGeneration(newLead: z.infer<typeof NewLeadQueryInputSch
 				nome: newLeadReceiver.nome,
 				papel: "VENDEDOR",
 				avatar_url: newLeadReceiver.avatar_url,
-				telefone: newLead.telefone,
+				telefone: newLeadReceiver.telefone,
 				dataInsercao: new Date().toISOString(),
 			},
 		],
@@ -185,6 +186,7 @@ export function formatPhoneNumberForWhatsapp(
 	phoneNumber: string,
 	prefix = "55",
 ) {
+	// This function should transform number such as (34) 99662-6855 into 5534996626855
 	return `${prefix}${phoneNumber.replace(/\D/g, "")}`;
 }
 
@@ -200,5 +202,7 @@ function formatWhatsappRedirectMessage({ receiverPhoneNumber = "(34) 3700-7001",
 	Meu atendimento é o ${opportunityIdentifier} e o valor da fatura de energia é de ${opportunityEnergyBillValue}.
 	`;
 
-return `https://api.whatsapp.com/send?phone=${formatPhoneNumberForWhatsapp(receiverPhoneNumber)}&text=${encodeURIComponent(message.trim())}`;
+	const formattedPhoneNumber = formatPhoneNumberForWhatsapp(receiverPhoneNumber);
+	console.log("[GENERATE-LEAD] Sending lead in formatted phone number", formattedPhoneNumber);
+	return `https://api.whatsapp.com/send?phone=${formattedPhoneNumber}&text=${encodeURIComponent(message.trim())}`;
 }
