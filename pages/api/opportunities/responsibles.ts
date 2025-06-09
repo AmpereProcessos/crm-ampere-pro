@@ -76,6 +76,14 @@ const handleAddResponsibleToOpportunity: NextApiHandler<TAddResponsibleToOpportu
 		},
 	});
 
+	// adding new user as subscripter to the opportunity topic
+	const novuTopicKey = `opportunity:${opportunityId}`;
+	await novu.topics.subscriptions.create(
+		{
+			subscriberIds: [responsibleId],
+		},
+		novuTopicKey,
+	);
 	console.log("[NOVU] - new responsible notification response", novuTriggerResponse.result);
 	res.status(200).json({ message: "Responsável adicionado com sucesso." });
 };
