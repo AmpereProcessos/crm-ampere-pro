@@ -3,6 +3,8 @@ import { getPDFByAnvil } from "@/repositories/integrations/anvil";
 import { updateOpportunity } from "@/repositories/opportunities/mutations";
 import { insertProposal, updateProposal } from "@/repositories/proposals/mutations";
 import connectToDatabase from "@/services/mongodb/crm-db-connection";
+import { novu } from "@/services/novu";
+import { NOVU_WORKFLOW_IDS } from "@/services/novu/workflows";
 import { apiHandler, validateAuthorization } from "@/utils/api";
 import { ProposalTemplates, type ProposeTemplateOptions, getTemplateData } from "@/utils/integrations/general";
 import { GeneralClientSchema } from "@/utils/schemas/client.schema";
@@ -140,6 +142,30 @@ const createProposalPersonalized: NextApiHandler<PostResponse> = async (req, res
 		query: {},
 	});
 
+	const novuTopicKey = `opportunity:${opportunityWithClient._id.toString()}`;
+	// Notifying users of the new interaction
+	const novuTriggerBulkResponse = await novu.trigger({
+		to: {
+			type: "Topic",
+			topicKey: novuTopicKey,
+		},
+		workflowId: NOVU_WORKFLOW_IDS.NOTIFY_NEW_INTERACTION_TO_RESPONSIBLES,
+		payload: {
+			autor: {
+				nome: session.user.nome,
+				avatar_url: session.user.avatar_url,
+			},
+			oportunidade: {
+				id: opportunityWithClient._id.toString(),
+				identificador: opportunityWithClient.identificador,
+				nome: opportunityWithClient.nome,
+			},
+			interacao: {
+				tipo: "ORÇAMENTOS/PROPOSTAS",
+			},
+		},
+	});
+	console.log("[NOVU] - Notifications sent on new interaction", novuTriggerBulkResponse.result);
 	// Updating indication (if applicable) in case of first interaction
 	if (opportunityWithClient.idIndicacao)
 		await conectaIndicationsCollection.updateOne(

@@ -1,4 +1,4 @@
-import { TOpportunityHistory, TOpportunityInteraction, TOpportunityInteractionTypeEnum } from "@/utils/schemas/opportunity-history.schema";
+import type { TOpportunityHistory, TOpportunityInteraction, TOpportunityInteractionTypeEnum } from "@/utils/schemas/opportunity-history.schema";
 import { OpportunityInteractionTypes } from "@/utils/select-options";
 import type { TUserSession } from "@/lib/auth/session";
 import React, { useState } from "react";
@@ -44,6 +44,7 @@ function NewOpportunityInteractionMenu({ session, opportunity, closeMenu }: NewO
 				<div className="flex w-full flex-wrap items-center justify-start gap-x-4 gap-y-1">
 					{OpportunityInteractionTypes.map((interactionType) => (
 						<button
+							key={interactionType.value}
 							onClick={() =>
 								setNewInteractionHolder((prev) => ({
 									...prev,
@@ -53,7 +54,7 @@ function NewOpportunityInteractionMenu({ session, opportunity, closeMenu }: NewO
 							}
 							type="button"
 							className={cn("flex items-center gap-1 rounded border border-black px-2 py-1 text-black", {
-								"bg-black text-white": interactionType.value == (newInteractionHolder as TOpportunityInteraction).tipoInteracao,
+								"bg-black text-white": interactionType.value === (newInteractionHolder as TOpportunityInteraction).tipoInteracao,
 							})}
 						>
 							{renderIcon(interactionType.icon)}
@@ -74,12 +75,14 @@ function NewOpportunityInteractionMenu({ session, opportunity, closeMenu }: NewO
 			</div>
 			<div className="flex w-full items-center justify-between">
 				<button
+					type="button"
 					onClick={() => closeMenu()}
 					className="whitespace-nowrap rounded bg-gray-500 px-4 py-2 text-sm font-medium text-white shadow disabled:bg-gray-500 disabled:text-white enabled:hover:bg-gray-800 enabled:hover:text-white"
 				>
 					FECHAR
 				</button>
 				<button
+					type="button"
 					disabled={isPending}
 					// @ts-ignore
 					onClick={() => handleCreateOpportunityHistory({ info: newInteractionHolder })}

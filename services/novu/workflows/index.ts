@@ -83,7 +83,7 @@ export const notifyNewInteractionToResponsibles = workflow(
 
 				data: {
 					customData: "customValue",
-					text: `Você foi atribuído a uma nova oportunidade de negócio: ${payload.oportunidade.identificador} - ${payload.oportunidade.nome}.`,
+					text: `O ${payload.autor.nome} adicionou uma nova interação a oportunidade do tipo ${payload.interacao.tipo}.`,
 				},
 			};
 		});
@@ -107,6 +107,11 @@ export const notifyNewInteractionToResponsibles = workflow(
 				}),
 				nome: z.string({
 					required_error: "O nome da oportunidade é obrigatório",
+				}),
+			}),
+			interacao: z.object({
+				tipo: z.string({
+					required_error: "O tipo da interação é obrigatório",
 				}),
 			}),
 		}),
