@@ -88,4 +88,46 @@ const handleAddResponsibleToOpportunity: NextApiHandler<TAddResponsibleToOpportu
 	res.status(200).json({ message: "Responsável adicionado com sucesso." });
 };
 
-export default apiHandler({ POST: handleAddResponsibleToOpportunity });
+const RemoveResponsibleFromOpportunitySchema = z.object({
+	opportunityId: z.string({
+		required_error: "ID da oportunidade não fornecido.",
+		invalid_type_error: "Tipo não válido para ID da oportunidade.",
+	}),
+	responsibleId: z.string({
+		required_error: "ID do responsável não fornecido.",
+	}),
+});
+export type TRemoveResponsibleFromOpportunityInput = z.infer<typeof RemoveResponsibleFromOpportunitySchema>;
+
+export type TRemoveResponsibleFromOpportunityOutput = {
+	message: string;
+};
+
+export const handleRemoveResponsibleFromOpportunity: NextApiHandler<TRemoveResponsibleFromOpportunityOutput> = async (req, res) => {
+	const session = await validateAuthorization(req, res, "oportunidades", "editar", true);
+
+	const { opportunityId, responsibleId } = RemoveResponsibleFromOpportunitySchema.parse(req.query);
+
+	const db = await connectToDatabase();
+	const opportunitiesCollection = db.collection<TOpportunity>("opportunities");
+
+	const opportunity = await opportunitiesCollection.findOne({ _id: new ObjectId(opportunityId) });
+	if (!opportunity) throw new createHttpError.NotFound("Oportunidade não encontrada.");
+
+	const newResponsiblesArr = opportunity.responsaveis.filter((responsible) => responsible.id !== responsibleId);
+
+	await opportunitiesCollection.updateOne({ _id: new ObjectId(opportunityId) }, { $set: { responsaveis: newResponsiblesArr } });
+
+	// Removing responsible subscription from the opportunity topic
+	const novuTopicKey = `opportunity:${opportunityId}`;
+	await novu.topics.subscriptions.delete(
+		{
+			subscriberIds: [responsibleId],
+		},
+		novuTopicKey,
+	);
+
+	res.status(200).json({ message: "Responsável removido com sucesso." });
+};
+
+export default apiHandler({ POST: handleAddResponsibleToOpportunity, DELETE: handleRemoveResponsibleFromOpportunity });

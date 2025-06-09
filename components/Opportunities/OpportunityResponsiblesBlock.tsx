@@ -14,7 +14,7 @@ import { useOpportunityCreators } from "@/utils/queries/users";
 
 import { BsCalendarPlus } from "react-icons/bs";
 import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
-import { addResponsibleToOpportunity } from "@/utils/mutations/opportunities";
+import { addResponsibleToOpportunity, removeResponsibleFromOpportunity } from "@/utils/mutations/opportunities";
 type OpportunityResponsiblesBlockProps = {
 	opportunityId: string;
 	infoHolder: TOpportunityDTOWithClientAndPartnerAndFunnelReferences;
@@ -38,25 +38,12 @@ function OpportunityResponsiblesBlock({ opportunityId, infoHolder, setInfoHolder
 		avatar_url: session.user.avatar_url,
 	});
 
-	function handleResponsibleRemoval({
-		responsibles,
-		responsibleToRemoveIndex,
-	}: {
-		responsibles: TOpportunityDTOWithClientAndPartnerAndFunnelReferences["responsaveis"];
-		responsibleToRemoveIndex: number;
-	}) {
-		// Validating scope for removal
-		const responsibleToRemove = responsibles[responsibleToRemoveIndex];
-		const responsibleToRemoveId = responsibleToRemove.id;
-		if (!!session.user.permissoes.oportunidades.escopo && !session.user.permissoes.oportunidades.escopo.includes(responsibleToRemoveId))
-			return toast.error("Você não possui permissão para remover esse responsável.");
-		if (responsibles.length === 1) return toast.error("Não é possível remover o único responsável da oportunidade.");
-		const newResponsibles = [...responsibles];
-		newResponsibles.splice(responsibleToRemoveIndex, 1);
-
-		// @ts-ignore
-		return handleUpdateOpportunity({ id: infoHolder._id, changes: { responsaveis: newResponsibles } });
-	}
+	const { mutate: handleResponsibleRemoval, isPending: isRemovingResponsible } = useMutationWithFeedback({
+		mutationKey: ["remove-responsible-from-opportunity"],
+		mutationFn: removeResponsibleFromOpportunity,
+		affectedQueryKey: ["opportunity-by-id", opportunityId],
+		queryClient: queryClient,
+	});
 
 	const { mutate: handleAddResponsibleToOpportunity, isPending: isAddingResponsible } = useMutationWithFeedback({
 		mutationKey: ["add-responsible-to-opportunity"],
@@ -78,8 +65,9 @@ function OpportunityResponsiblesBlock({ opportunityId, infoHolder, setInfoHolder
 							</div>
 							<div className="flex grow items-center justify-end gap-2">
 								<button
+									disabled={isRemovingResponsible}
 									type="button"
-									onClick={() => handleResponsibleRemoval({ responsibles: infoHolder.responsaveis, responsibleToRemoveIndex: index })}
+									onClick={() => handleResponsibleRemoval({ opportunityId, responsibleId: resp.id })}
 									className="flex items-center justify-center gap-2 rounded-lg p-1 duration-300 ease-linear hover:scale-105 hover:bg-red-200"
 								>
 									<MdDelete style={{ color: "red" }} size={15} />
@@ -192,6 +180,7 @@ function OpportunityResponsiblesBlock({ opportunityId, infoHolder, setInfoHolder
 						<div className="flex w-full items-center justify-end">
 							<button
 								type="button"
+								disabled={isAddingResponsible}
 								onClick={() => {
 									if (!newOpportunityResponsible.id || !newOpportunityResponsible.papel) return toast.error("Preencha todos os campos para adicionar um responsável.");
 									handleAddResponsibleToOpportunity({

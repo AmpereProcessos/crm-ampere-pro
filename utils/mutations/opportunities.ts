@@ -4,7 +4,7 @@ import type { TOpportunity } from "../schemas/opportunity.schema";
 import type { TClient } from "../schemas/client.schema";
 import type { TFunnelReference } from "../schemas/funnel-reference.schema";
 import { updateAppProject } from "./app-projects";
-import type { TAddResponsibleToOpportunityInput } from "@/pages/api/opportunities/responsibles";
+import type { TAddResponsibleToOpportunityInput, TRemoveResponsibleFromOpportunityInput } from "@/pages/api/opportunities/responsibles";
 
 type HandleProjectCreationParams = {
 	info: TOpportunity;
@@ -111,13 +111,25 @@ export async function deleteOpportunity({ id }: { id: string }) {
 }
 
 type AddResponsibleToOpportunityParams = TAddResponsibleToOpportunityInput;
-export async function addResponsibleToOpportunity({ opportunityId, responsibleId }: AddResponsibleToOpportunityParams) {
+export async function addResponsibleToOpportunity({ opportunityId, responsibleId, responsibleRole }: AddResponsibleToOpportunityParams) {
 	try {
-		const { data } = await axios.post("/api/opportunities/responsibles", { opportunityId, responsibleId });
+		const { data } = await axios.post("/api/opportunities/responsibles", { opportunityId, responsibleId, responsibleRole });
 		if (typeof data.message !== "string") return "Responsável adicionado com sucesso !";
 		return data.message as string;
 	} catch (error) {
 		console.log("Error running addResponsibleToOpportunity", error);
+		throw error;
+	}
+}
+
+type RemoveResponsibleFromOpportunityParams = TRemoveResponsibleFromOpportunityInput;
+export async function removeResponsibleFromOpportunity({ opportunityId, responsibleId }: RemoveResponsibleFromOpportunityParams) {
+	try {
+		const { data } = await axios.delete(`/api/opportunities/responsibles?opportunityId=${opportunityId}&responsibleId=${responsibleId}`);
+		if (typeof data.message !== "string") return "Responsável removido com sucesso !";
+		return data.message as string;
+	} catch (error) {
+		console.log("Error running removeResponsibleFromOpportunity", error);
 		throw error;
 	}
 }
