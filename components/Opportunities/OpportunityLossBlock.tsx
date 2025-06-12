@@ -61,6 +61,7 @@ function OpportunityLossBlock({ opportunityId, opportunityIsLost, opportunityLos
 					</div>
 				</div>
 				<button
+					type="button"
 					disabled={isPending}
 					onClick={() => handleReactiveProject()}
 					className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-1 text-white duration-300 ease-in-out hover:bg-blue-800"
@@ -75,6 +76,7 @@ function OpportunityLossBlock({ opportunityId, opportunityIsLost, opportunityLos
 		return (
 			<div className="flex w-fit items-center justify-center">
 				<button
+					type="button"
 					onClick={() => setMenuIsOpen(true)}
 					className="flex min-w-fit items-center justify-center gap-2 rounded bg-red-500 px-2 py-0.5 text-[0.6rem] font-medium text-white duration-300 hover:bg-red-700"
 				>
@@ -85,7 +87,7 @@ function OpportunityLossBlock({ opportunityId, opportunityIsLost, opportunityLos
 		);
 	}
 	if (!opportunityLossDate) return <LoseProjectBlock />;
-	else return <ReactivationBlock lossDate={opportunityLossDate} />;
+	return <ReactivationBlock lossDate={opportunityLossDate} />;
 }
 
 export default OpportunityLossBlock;
@@ -119,17 +121,20 @@ function OpportunityLossMenu({ opportunityId, idMarketing, opportunityEmail, clo
 	}
 
 	return (
-		<div id="defaultModal" className="fixed bottom-0 left-0 right-0 top-0 z-[100] bg-[rgba(0,0,0,.85)]">
-			<div className="fixed left-[50%] top-[50%] z-[100] h-fit w-[90%] translate-x-[-50%] translate-y-[-50%] rounded-md bg-[#fff] p-[10px] lg:w-[30%]">
+		<Dialog.Root open onOpenChange={closeModal}>
+			<Dialog.Overlay className="fixed inset-0 z-[100] bg-[rgba(0,0,0,.85)] backdrop-blur-sm" />
+			<Dialog.Content className="fixed left-[50%] top-[50%] z-[100] h-fit w-[80%] translate-x-[-50%] translate-y-[-50%] rounded-md bg-[#fff] p-[10px] lg:w-[40%]">
 				<div className="flex h-full flex-col">
 					<div className="flex flex-col items-center justify-between border-b border-gray-200 px-2 pb-2 text-lg lg:flex-row">
 						<h3 className="text-xl font-bold text-[#353432] dark:text-white ">PERDER OPORTUNIDADE</h3>
-						<button onClick={closeModal} type="button" className="flex items-center justify-center rounded-lg p-1 duration-300 ease-linear hover:scale-105 hover:bg-red-200">
-							<VscChromeClose style={{ color: "red" }} />
-						</button>
+						<Dialog.Close asChild>
+							<button type="button" className="flex items-center justify-center rounded-lg p-1 duration-300 ease-linear hover:scale-105 hover:bg-red-200">
+								<VscChromeClose style={{ color: "red" }} />
+							</button>
+						</Dialog.Close>
 					</div>
 
-					<div className="flex h-full flex-col gap-y-2 overflow-y-auto overscroll-y-auto p-2 py-1 scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300">
+					<div className="flex grow flex-col gap-y-2 pb-36 overflow-y-auto overscroll-y-auto px-2  scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300">
 						<SelectInput
 							label="MOTIVO DA PERDA"
 							value={cause}
@@ -152,7 +157,7 @@ function OpportunityLossMenu({ opportunityId, idMarketing, opportunityEmail, clo
 						</LoadingButton>
 					</div>
 				</div>
-			</div>
-		</div>
+			</Dialog.Content>
+		</Dialog.Root>
 	);
 }
