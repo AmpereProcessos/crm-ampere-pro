@@ -7,6 +7,7 @@ import createHttpError from "http-errors";
 import { type Collection, type Filter, ObjectId } from "mongodb";
 import { GeneralUserSchema, type TUser, type TUserEntity } from "@/utils/schemas/user.schema";
 import { getAllUsers, getPartnerUsers, getUserById } from "@/repositories/users/queries";
+import { novu } from "@/services/novu";
 
 // POST RESPONSE
 type PostResponse = {
@@ -60,6 +61,8 @@ const createUser: NextApiHandler<PostResponse> = async (req, res) => {
 	await collection.updateOne({ _id: insertResponse.insertedId }, updates);
 	// Returning successful insertion
 	if (insertResponse.acknowledged) res.status(201).json({ data: { insertedId: insertedIdAsString }, message: "Usuário adicionado!" });
+
+	// Inserting user in novu 
 	else throw new createHttpError.InternalServerError("Oops, houve um erro desconhecido na criação do usuário.");
 };
 

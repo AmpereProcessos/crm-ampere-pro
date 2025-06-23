@@ -1,3 +1,4 @@
+import { TResultsExportsItem } from "@/app/api/stats/comercial-results/exports/route";
 import { formatDateAsLocale } from "@/lib/methods/formatting";
 import connectToDatabase from "@/services/mongodb/crm-db-connection";
 import { apiHandler, validateAuthorization } from "@/utils/api";
@@ -7,7 +8,6 @@ import type { TProposal } from "@/utils/schemas/proposal.schema";
 import createHttpError from "http-errors";
 import type { Collection, Filter } from "mongodb";
 import type { NextApiHandler } from "next";
-import type { TResultsExportsItem } from "../stats/comercial-results/results-export";
 import { z } from "zod";
 
 const statusOptionsQueries = {
@@ -165,6 +165,8 @@ const getOpportunitiesExport: NextApiHandler<GetResponse> = async (req, res) => 
 		const isLead = isTransfer && isFromInsider;
 		const isSDROwn = !isTransfer && isFromInsider;
 
+		const transferDate = isTransfer && seller?.dataInsercao ? new Date(seller.dataInsercao).toISOString() : null;
+
 		const isOutboundSDR = !isInbound && (isLead || isSDROwn);
 		const isOutboundSeller = !isInbound && !isOutboundSDR;
 
@@ -173,6 +175,26 @@ const getOpportunitiesExport: NextApiHandler<GetResponse> = async (req, res) => 
 		if (isOutboundSDR) classification = "OUTBOUND SDR";
 		if (isOutboundSeller) classification = "OUTBOUND VENDEDOR";
 		console.log("PROJECT TYPE", project.tipo);
+
+		const exportation: TResultsExportsItem = {
+			"NOME DO PROJETO": project.nome,
+			IDENTIFICADOR: project.identificador || "",
+			TIPO: info.tipo,
+			TELEFONE: info?.telefone,
+			VENDEDOR: seller?.nome || "NÃO DEFINIDO",
+			SDR: sdr?.nome || "NÃO DEFINIDO",
+			UF: uf,
+			CIDADE: city,
+			"CANAL DE AQUISIÇÃO": aquisitionOrigin,
+			CLASSIFICAÇÃO: classification || "NÃO DEFINIDO",
+			"DATA DE GANHO": formatDateAsLocale(wonDate || undefined) || "NÃO ASSINADO",
+			"POTÊNCIA VENDIDA": proposePower || 0,
+			"VALOR VENDA": proposeValue,
+			"DATA DE PERDA": formatDateAsLocale(info.dataPerda || undefined) || "N/A",
+			"MOTIVO DA PERDA": info.motivoPerda || "N/A",
+			"DATA DE ENVIO": isTransfer ? formatDateAsLocale(transferDate || undefined) || "N/A" : "N/A",
+			"DATA DE CRIAÇÃO": formatDateAsLocale(project.dataInsercao || undefined) || "N/A",
+		};
 		return {
 			"NOME DO PROJETO": project.nome,
 			IDENTIFICADOR: project.identificador || "",
@@ -189,6 +211,7 @@ const getOpportunitiesExport: NextApiHandler<GetResponse> = async (req, res) => 
 			"VALOR VENDA": proposeValue,
 			"DATA DE PERDA": formatDateAsLocale(info.dataPerda || undefined),
 			"MOTIVO DA PERDA": info.motivoPerda,
+			"DATA DE ENVIO": isTransfer ? formatDateAsLocale(transferDate || undefined) : "N/A",
 			"DATA DE CRIAÇÃO": formatDateAsLocale(project.dataInsercao || undefined),
 		} as TResultsExportsItem;
 	});
