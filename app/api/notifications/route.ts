@@ -118,6 +118,7 @@ async function createNotification(request: NextRequest) {
 
 	if (tipo === "TECHNICAL_ANALYSIS_CONCLUDED") {
 		const novuTopicKey = `opportunity:${notificationPayload.oportunidade.id}`;
+		console.log("[NOVU] [TECHNICAL_ANALYSIS_CONCLUDED] - Topic key", novuTopicKey);
 		const novuTriggerBulkResponse = await novu.trigger({
 			to: {
 				type: "Topic",
@@ -136,10 +137,11 @@ async function createNotification(request: NextRequest) {
 				},
 			},
 		});
-		console.log("[NOVU] - Notifications sent on new interaction", novuTriggerBulkResponse.result);
+		console.log("[NOVU] - Notifications sent on technical analysis concluded", novuTriggerBulkResponse.result);
 	}
 	if (tipo === "NEW_INTERACTION_TO_RESPONSIBLES") {
 		const novuTopicKey = `opportunity:${notificationPayload.oportunidade.id}`;
+		console.log("[NOVU] [NEW_INTERACTION_TO_RESPONSIBLES] - Topic key", novuTopicKey);
 		const novuTriggerBulkResponse = await novu.trigger({
 			to: {
 				type: "Topic",
@@ -161,7 +163,7 @@ async function createNotification(request: NextRequest) {
 				},
 			},
 		});
-		console.log("[NOVU] - Notifications sent on new interaction", novuTriggerBulkResponse.result);
+		console.log("[NOVU] - Notifications sent on new interaction to responsibles", novuTriggerBulkResponse.result);
 	}
 
 	return NextResponse.json(

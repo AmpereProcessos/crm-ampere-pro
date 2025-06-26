@@ -15,7 +15,7 @@ export const notfiyNewOpportunityToResponsibles = workflow(
 			return {
 				subject: "Nova oportunidade de negócio !",
 				body: `Você foi atribuído a uma nova oportunidade de negócio: ${payload.oportunidade.identificador} - ${payload.oportunidade.nome}.`,
-				avatar: payload.autor.avatar_url,
+				avatar: payload.autor.avatar_url || undefined,
 				redirect: {
 					url: `${process.env.NEXT_PUBLIC_APP_URL}/comercial/oportunidades/id/${payload.oportunidade.id}`,
 					target: "_blank",
@@ -41,9 +41,13 @@ export const notfiyNewOpportunityToResponsibles = workflow(
 				nome: z.string({
 					required_error: "O nome do autor é obrigatório",
 				}),
-				avatar_url: z.string({
-					required_error: "A URL do avatar do autor é obrigatória",
-				}),
+				avatar_url: z
+					.string({
+						required_error: "A URL do avatar do autor é obrigatória",
+						invalid_type_error: "A URL do avatar do autor deve ser uma string",
+					})
+					.optional()
+					.nullable(),
 			}),
 			oportunidade: z.object({
 				id: z.string({
@@ -69,7 +73,7 @@ export const notifyNewInteractionToResponsibles = workflow(
 			return {
 				subject: `Novidades na Oportunidade ${payload.oportunidade.identificador} - ${payload.oportunidade.nome} !`,
 				body: `Uma nova interação foi adicionada a oportunidade ${payload.oportunidade.identificador} - ${payload.oportunidade.nome}.`,
-				avatar: payload.autor.avatar_url,
+				avatar: payload.autor.avatar_url || undefined,
 				redirect: {
 					url: `${process.env.NEXT_PUBLIC_APP_URL}/comercial/oportunidades/id/${payload.oportunidade.id}`,
 					target: "_blank",
@@ -95,9 +99,13 @@ export const notifyNewInteractionToResponsibles = workflow(
 				nome: z.string({
 					required_error: "O nome do autor é obrigatório",
 				}),
-				avatar_url: z.string({
-					required_error: "A URL do avatar do autor é obrigatória",
-				}),
+				avatar_url: z
+					.string({
+						required_error: "A URL do avatar do autor é obrigatória",
+						invalid_type_error: "A URL do avatar do autor deve ser uma string",
+					})
+					.optional()
+					.nullable(),
 			}),
 			oportunidade: z.object({
 				id: z.string({

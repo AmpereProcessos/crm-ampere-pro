@@ -14,9 +14,13 @@ export const NotificationOpportunityTopicOnTechnicalAnalysisConcludedInputSchema
 			nome: z.string({
 				required_error: "O nome do autor é obrigatório",
 			}),
-			avatar_url: z.string({
-				required_error: "A URL do avatar do autor é obrigatória",
-			}),
+			avatar_url: z
+				.string({
+					required_error: "A URL do avatar do autor é obrigatória",
+					invalid_type_error: "A URL do avatar do autor deve ser uma string",
+				})
+				.optional()
+				.nullable(),
 		}),
 		oportunidade: z.object({
 			id: z.string({
@@ -38,9 +42,13 @@ export const NotificationOpportunityNewInteractionToResponsiblesInputSchema = z.
 			nome: z.string({
 				required_error: "O nome do autor é obrigatório",
 			}),
-			avatar_url: z.string({
-				required_error: "A URL do avatar do autor é obrigatória",
-			}),
+			avatar_url: z
+				.string({
+					required_error: "A URL do avatar do autor é obrigatória",
+					invalid_type_error: "A URL do avatar do autor deve ser uma string",
+				})
+				.optional()
+				.nullable(),
 		}),
 		oportunidade: z.object({
 			id: z.string({
