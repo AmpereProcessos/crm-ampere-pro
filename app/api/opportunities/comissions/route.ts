@@ -159,7 +159,18 @@ type GetProjectsParams = {
 	userName: string;
 };
 export async function getProjects({ projectsCollection, afterDateStr, beforeDateStr, userName }: GetProjectsParams) {
-	const responsiblesQuery: Filter<TAppProject> = userName ? { "vendedor.nome": { $in: [userName] } } : {};
+	const responsiblesQuery: Filter<TAppProject> = userName
+		? {
+				$or: [
+					{
+						"vendedor.nome": { $in: [userName] },
+					},
+					{
+						insider: { $in: [userName] },
+					},
+				],
+			}
+		: {};
 	const signedQueryFilter: Filter<TAppProject> = {
 		"contrato.status": "ASSINADO",
 	};
@@ -171,13 +182,14 @@ export async function getProjects({ projectsCollection, afterDateStr, beforeDate
 		tipoDeServico: { $nin: ["SISTEMA FOTOVOLTAICO", "AUMENTO DE SISTEMA FOTOVOLTAICO"] },
 		$and: [{ "contrato.dataAssinatura": { $gte: afterDateStr } }, { "contrato.dataAssinatura": { $lte: beforeDateStr } }],
 	};
-	const orQueryFilter: Filter<TAppProject> = {
+	const typeQueryFilter: Filter<TAppProject> = {
 		$or: [photovoltaicQueryFilter, nonPhotovoltaicQueryFilter],
 	};
+
 	const query: Filter<TAppProject> = {
 		...responsiblesQuery,
 		...signedQueryFilter,
-		...orQueryFilter,
+		...{ $and: [typeQueryFilter, responsiblesQuery] },
 	};
 
 	const result = await projectsCollection.find(query, { projection: AppProjectComissionSimplifiedProjection }).toArray();
