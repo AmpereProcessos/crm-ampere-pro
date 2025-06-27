@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { MdDashboard, MdLogout, MdNotifications, MdNotificationsActive, MdOutlineMiscellaneousServices } from "react-icons/md";
-import { FaProjectDiagram, FaTag, FaUser, FaUsers } from "react-icons/fa";
+import { FaPercent, FaProjectDiagram, FaTag, FaUser, FaUsers } from "react-icons/fa";
 import { TfiAngleRight } from "react-icons/tfi";
 import { BsBookmarksFill, BsCart, BsFillClipboardDataFill, BsFillFunnelFill, BsFillGearFill, BsGraphUpArrow, BsPatchCheckFill } from "react-icons/bs";
 import SidebarItem from "./SidebarItem";
@@ -15,6 +15,7 @@ import { IoMdSettings } from "react-icons/io";
 import NotificationBlock from "./NotificationBlock";
 import type { TUserSession } from "@/lib/auth/session";
 import { usePathname, useRouter } from "next/navigation";
+import { Percent } from "lucide-react";
 
 //react-icons.github.io/react-icons
 
@@ -66,6 +67,7 @@ export const Sidebar = ({ session }: SidebarProps) => {
 					{sidebarExtended ? <h2 className="h-[18px] text-xs text-gray-500">PRINCIPAL</h2> : <div className="h-[18px] w-full " />}
 					<SidebarItem text="Dashboard" isOpen={sidebarExtended} url="/" icon={<BiStats style={{ fontSize: "12px", color: "#264653" }} />} />
 					<SidebarItem text="Oportunidades" isOpen={sidebarExtended} url="/comercial/oportunidades" icon={<BsFillFunnelFill style={{ fontSize: "12px", color: "#264653" }} />} />
+					<SidebarItem text="Comissões" isOpen={sidebarExtended} url="/comercial/oportunidades/comissoes" icon={<FaPercent style={{ fontSize: "12px", color: "#264653" }} />} />
 					<SidebarItem text="Clientes" isOpen={sidebarExtended} url="/clientes" icon={<FaUser style={{ fontSize: "12px", color: "#264653" }} />} />
 					{sidebarExtended ? <h2 className="mt-2 h-[18px] text-xs text-gray-500">COMPOSIÇÕES</h2> : <div className="mt-2 h-[18px]" />}
 					<SidebarItem text="Kits" isOpen={sidebarExtended} url="/kits" icon={<FaTag style={{ fontSize: "12px", color: "#264653" }} />} />

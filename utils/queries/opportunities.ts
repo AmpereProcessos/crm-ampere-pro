@@ -15,6 +15,9 @@ import type { TResultsExportsItem } from "@/app/api/stats/comercial-results/expo
 import type { TOpportunitiesByFastSearch, TOpportunitiesByFilterResult } from "@/pages/api/opportunities/search";
 import { useState } from "react";
 import type { TOpportunitiesQueryOptions } from "@/pages/api/opportunities/query-options";
+import type { TGetComissionsRouteInput, TGetComissionsRouteOutput } from "@/app/api/opportunities/comissions/route";
+import dayjs from "dayjs";
+import { useDebounceMemo } from "@/lib/hooks";
 
 type UseOpportunitiesParams = {
 	responsibles: string[] | null;
@@ -205,4 +208,36 @@ export function useOpportunitiesUltraSimplified() {
 		queryKey: ["opportunities-ultra-simplified"],
 		queryFn: fetchOpportunitiesUltraSimplified,
 	});
+}
+
+async function fetchOwnComissions({ after, before }: TGetComissionsRouteInput) {
+	try {
+		const { data }: { data: TGetComissionsRouteOutput } = await axios.get(`/api/opportunities/comissions?after=${after}&before=${before}`);
+		return data.data;
+	} catch (error) {
+		console.log("Error fetching own comissions", error);
+		throw error;
+	}
+}
+
+export function useOwnComissions() {
+	const monthStart = dayjs().startOf("month");
+	const monthEnd = dayjs().endOf("month");
+	const [queryParams, setQueryParams] = useState<TGetComissionsRouteInput>({
+		after: monthStart.toISOString(),
+		before: monthEnd.toISOString(),
+	});
+
+	function updateQueryParams(queryParams: Partial<TGetComissionsRouteInput>) {
+		setQueryParams((prev) => ({ ...prev, ...queryParams }));
+	}
+	const debouncedParams = useDebounceMemo(queryParams, 500);
+	return {
+		...useQuery({
+			queryKey: ["own-comissions", debouncedParams],
+			queryFn: async () => await fetchOwnComissions(debouncedParams),
+		}),
+		queryParams,
+		updateQueryParams,
+	};
 }

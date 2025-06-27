@@ -5,6 +5,7 @@ import type { TClient } from "../schemas/client.schema";
 import type { TFunnelReference } from "../schemas/funnel-reference.schema";
 import { updateAppProject } from "./app-projects";
 import type { TAddResponsibleToOpportunityInput, TRemoveResponsibleFromOpportunityInput } from "@/pages/api/opportunities/responsibles";
+import type { TBulkUpdateComissionsRouteInput, TBulkUpdateComissionsRouteOutput } from "@/app/api/opportunities/comissions/route";
 
 type HandleProjectCreationParams = {
 	info: TOpportunity;
@@ -130,6 +131,17 @@ export async function removeResponsibleFromOpportunity({ opportunityId, responsi
 		return data.message as string;
 	} catch (error) {
 		console.log("Error running removeResponsibleFromOpportunity", error);
+		throw error;
+	}
+}
+
+export async function bulkUpdateComissions({ comissions }: { comissions: TBulkUpdateComissionsRouteInput }) {
+	try {
+		const { data }: { data: TBulkUpdateComissionsRouteOutput } = await axios.post("/api/opportunities/comissions", comissions);
+		if (typeof data.message !== "string") return "Comissões atualizadas com sucesso !";
+		return data.message as string;
+	} catch (error) {
+		console.log("Error running bulkUpdateComissions", error);
 		throw error;
 	}
 }
