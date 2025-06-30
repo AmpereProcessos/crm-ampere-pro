@@ -22,7 +22,7 @@ function DateIntervalInput({ label, labelClassName, className, value, handleChan
 						id="date"
 						variant={"outline"}
 						className={cn(
-							"w-full justify-start rounded-md border border-primary/20 bg-[#fff] text-left text-sm font-normal ease-in-out focus:border-primary dark:bg-[#121212]",
+							"w-full justify-start rounded-md border border-black/20 bg-[#fff] dark:bg-[#fff] text-left text-sm font-normal ease-in-out focus:border-black",
 							!value.after && !value.before && "text-muted-foreground",
 							className,
 						)}

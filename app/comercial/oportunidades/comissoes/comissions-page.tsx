@@ -121,11 +121,11 @@ function ComissionsPage({ session }: ComissionsPageProps) {
 								</div>
 							</div>
 							<div className="w-full flex items-center justify-center gap-2 flex-wrap">
-								<div className={cn("flex items-center gap-1 rounded-lg bg-secondary px-2 py-0.5 text-center text-[0.5rem] font-bold italic text-primary/80 bg-green-100 text-green-700")}>
+								<div className={cn("flex items-center gap-1 rounded-lg bg-secondary px-2 py-0.5 text-center text-[0.5rem] font-bold italic text-black/80 bg-green-100 text-green-700")}>
 									<BadgeCheck className={cn("w-4 h-4 min-w-4 min-h-4")} />
 									<p className={cn("font-medium text-sm")}>{stats.totalComissionsValidated} validadas</p>
 								</div>
-								<div className={cn("flex items-center gap-1 rounded-lg bg-secondary px-2 py-0.5 text-center text-[0.5rem] font-bold italic text-primary/80 bg-orange-100 text-orange-700")}>
+								<div className={cn("flex items-center gap-1 rounded-lg bg-secondary px-2 py-0.5 text-center text-[0.5rem] font-bold italic text-black/80 bg-orange-100 text-orange-700")}>
 									<BadgeCheck className={cn("w-4 h-4 min-w-4 min-h-4")} />
 									<p className={cn("font-medium text-sm")}>{stats.totalComissionsNotValidated} não validadas</p>
 								</div>
@@ -198,27 +198,27 @@ function ComissionCard({ opportunity, queryClient, affectedQueryKey }: Comission
 		affectedQueryKey,
 	});
 	return (
-		<div className="flex w-full flex-col gap-1 rounded border border-primary bg-[#fff] p-2 shadow-sm dark:bg-[#121212]">
+		<div className="flex w-full flex-col gap-1 rounded border border-primary bg-[#fff] p-2 shadow-sm">
 			<div className="flex w-full flex-col items-center justify-between gap-2 lg:flex-row">
 				<div className="flex items-center gap-2 flex-wrap">
-					<div className="flex items-center gap-1 text-center text-xs font-bold italic text-primary/80">
+					<div className="flex items-center gap-1 text-center text-xs font-bold italic text-black/80">
 						<MdDashboard size={12} />
 						<p className="text-xs">{opportunity.appIdentificador}</p>
 					</div>
 					<p className="text-sm font-bold leading-none tracking-tight">{opportunity.appNome}</p>
 					<Link href={`/comercial/oportunidades/id/${opportunity._id}`} target="_blank" rel="noreferrer">
-						<div className="flex items-center gap-1 rounded-lg bg-secondary px-2 py-0.5 text-center text-[0.5rem] font-bold italic text-primary/80">
+						<div className="flex items-center gap-1 rounded-lg bg-secondary px-2 py-0.5 text-center text-[0.5rem] font-bold italic text-black/80">
 							<BsFunnel size={12} />
 							<p>{opportunity.identificador}</p>
 						</div>
 					</Link>
-					<div className="flex items-center gap-1 rounded-lg bg-secondary px-2 py-0.5 text-center text-[0.5rem] font-bold italic text-primary/80">
+					<div className="flex items-center gap-1 rounded-lg bg-secondary px-2 py-0.5 text-center text-[0.5rem] font-bold italic text-black/80">
 						<FaDiamond size={12} />
 						<p>{opportunity.appTipo}</p>
 					</div>
 					<HoverCard>
 						<HoverCardTrigger asChild>
-							<div className="flex items-center gap-1  text-center text-[0.57rem] font-bold italic text-primary/80">
+							<div className="flex items-center gap-1  text-center text-[0.57rem] font-bold italic text-black/80">
 								<Calendar className="w-3.5 h-3.5 min-w-3.5 min-h-3.5" />
 								<p>{formatDateAsLocale(getDateParams(opportunity))}</p>
 							</div>
@@ -226,12 +226,12 @@ function ComissionCard({ opportunity, queryClient, affectedQueryKey }: Comission
 						<HoverCardContent className="min-w-80 w-fit">
 							<div className="space-y-1">
 								<div className="w-full flex items-center justify-between gap-2">
-									<p className="text-sm font-semibold text-primary/80">DATA DE ASSINATURA:</p>
-									<p className="text-sm font-semibold text-primary/80">{formatDateAsLocale(opportunity.appDataAssinatura) || "N/A"}</p>
+									<p className="text-sm font-semibold text-black/80">DATA DE ASSINATURA:</p>
+									<p className="text-sm font-semibold text-black/80">{formatDateAsLocale(opportunity.appDataAssinatura) || "N/A"}</p>
 								</div>
 								<div className="w-full flex items-center justify-between gap-2">
-									<p className="text-sm font-semibold text-primary/80">DATA DE PAGAMENTO PARCIAL: </p>
-									<p className="text-sm font-semibold text-primary/80">{formatDateAsLocale(opportunity.appDataRecebimentoParcial) || "N/A"}</p>
+									<p className="text-sm font-semibold text-black/80">DATA DE PAGAMENTO PARCIAL: </p>
+									<p className="text-sm font-semibold text-black/80">{formatDateAsLocale(opportunity.appDataRecebimentoParcial) || "N/A"}</p>
 								</div>
 							</div>
 						</HoverCardContent>
@@ -240,11 +240,11 @@ function ComissionCard({ opportunity, queryClient, affectedQueryKey }: Comission
 				<div className="flex items-center gap-2">
 					<div className="flex items-center gap-1 px-2 py-1">
 						<Percent className="h-4 w-4 min-h-4 min-w-4" />
-						<p className="text-sm font-semibold text-primary/80">{formatDecimalPlaces(opportunity.comissao.comissaoPorcentagem)}%</p>
+						<p className="text-sm font-semibold text-black/80">{formatDecimalPlaces(opportunity.comissao.comissaoPorcentagem)}%</p>
 					</div>
 					<div className="flex items-center gap-1 px-2 py-1">
 						<BadgeDollarSign className="h-4 w-4 min-h-4 min-w-4" />
-						<p className="text-sm font-semibold text-primary/80">{formatToMoney(opportunity.comissao.comissaoValor)}</p>
+						<p className="text-sm font-semibold text-black/80">{formatToMoney(opportunity.comissao.comissaoValor)}</p>
 					</div>
 				</div>
 			</div>
@@ -252,13 +252,13 @@ function ComissionCard({ opportunity, queryClient, affectedQueryKey }: Comission
 				<div className="flex w-full flex-wrap items-center justify-center gap-2 lg:grow lg:justify-start">
 					<div className="flex items-center gap-1">
 						<Users className={cn("w-3 h-3 min-w-3 min-h-3")} />
-						<div className="flex items-center gap-1 rounded-lg bg-secondary px-2 py-0.5 text-center text-[0.5rem] font-bold italic text-primary/80">
+						<div className="flex items-center gap-1 rounded-lg bg-secondary px-2 py-0.5 text-center text-[0.5rem] font-bold italic text-black/80">
 							<p>FUNÇÃO: </p>
 							<p className="text-[#15599a] font-black text-[0.57rem]">{opportunity.comissao.comissionadoPapel}</p>
 						</div>
 					</div>
 					<div
-						className={cn("flex items-center gap-1 rounded-lg bg-secondary px-2 py-0.5 text-center text-[0.5rem] font-bold italic text-primary/80", {
+						className={cn("flex items-center gap-1 rounded-lg bg-secondary px-2 py-0.5 text-center text-[0.5rem] font-bold italic text-black/80", {
 							"bg-orange-100 text-orange-700": !opportunity.comissao.comissaoEfetivada,
 							"bg-green-100 text-green-700": opportunity.comissao.comissaoEfetivada,
 						})}
@@ -267,7 +267,7 @@ function ComissionCard({ opportunity, queryClient, affectedQueryKey }: Comission
 						<p className={cn("font-medium text-[0.57rem]")}>{opportunity.comissao.comissaoEfetivada ? "COMISSÕES DEFINIDAS" : "COMISSÕES NÃO DEFINIDAS"}</p>
 					</div>
 					<div
-						className={cn("flex items-center gap-1 rounded-lg bg-secondary px-2 py-0.5 text-center text-[0.5rem] font-bold italic text-primary/80", {
+						className={cn("flex items-center gap-1 rounded-lg bg-secondary px-2 py-0.5 text-center text-[0.5rem] font-bold italic text-black/80", {
 							"bg-orange-100 text-orange-700": !opportunity.comissao.comissaoPagamentoRealizado,
 							"bg-green-100 text-green-700": opportunity.comissao.comissaoPagamentoRealizado,
 						})}
@@ -276,7 +276,7 @@ function ComissionCard({ opportunity, queryClient, affectedQueryKey }: Comission
 						<p className={cn("font-medium text-[0.57rem]")}>{opportunity.comissao.comissaoPagamentoRealizado ? "PAGAMENTO REALIZADO" : "PAGAMENTO NÃO REALIZADO"}</p>
 					</div>
 					<div
-						className={cn("flex items-center gap-1 rounded-lg bg-secondary px-2 py-0.5 text-center text-[0.5rem] font-bold italic text-primary/80", {
+						className={cn("flex items-center gap-1 rounded-lg bg-secondary px-2 py-0.5 text-center text-[0.5rem] font-bold italic text-black/80", {
 							"bg-orange-100 text-orange-700": !opportunity.comissao.dataValidacao,
 							"bg-green-100 text-green-700": opportunity.comissao.dataValidacao,
 						})}
