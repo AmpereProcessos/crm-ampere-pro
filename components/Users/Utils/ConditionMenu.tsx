@@ -5,7 +5,7 @@ import { PricingMethodConditionTypeOptions } from "@/utils/select-options";
 import { conditionsAlias, getConditionOptions } from "@/utils/pricing/helpers";
 import { TPricingConditionData } from "@/utils/pricing/methods";
 import { TPartnerSimplifiedDTO } from "@/utils/schemas/partner.schema";
-import { TUserComission } from "@/utils/schemas/user.schema";
+import { TUserComissionItem } from "@/utils/schemas/user.schema";
 import SelectInput from "@/components/Inputs/SelectInput";
 import NumberInput from "@/components/Inputs/NumberInput";
 import MultipleSelectInput from "@/components/Inputs/MultipleSelectInput";
@@ -13,8 +13,8 @@ import { comissionConditionsAlias, getComissionScenarioConditionOptions } from "
 import { TComissionConditionData } from "@/utils/comissions/methods";
 
 type ConditionMenuProps = {
-	resultHolder: TUserComission["resultados"][number];
-	setResultHolder: React.Dispatch<React.SetStateAction<TUserComission["resultados"][number]>>;
+	resultHolder: TUserComissionItem["resultados"][number];
+	setResultHolder: React.Dispatch<React.SetStateAction<TUserComissionItem["resultados"][number]>>;
 };
 function ConditionMenu({ resultHolder, setResultHolder }: ConditionMenuProps) {
 	return (

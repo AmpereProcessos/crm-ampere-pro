@@ -17,52 +17,16 @@ const getManualTesting: NextApiHandler<GetResponse> = async (req, res) => {
 	const db = await connectToDatabase();
 
 	const usersCollection = db.collection<TUser>("users");
-	const users = await usersCollection
-		.find({
-			email: {
-				$not: {
-					$regex: "inativo",
-				},
+	const updateResponse = await usersCollection.updateMany(
+		{},
+		{
+			$set: {
+				comissionamento: [],
 			},
-		})
-		.toArray();
+		},
+	);
 
-	await novu.subscribers.createBulk({
-		subscribers: users.map((user, index) => {
-			console.log(user.nome, user.email, index);
-			return {
-				subscriberId: user._id.toString(),
-				email: user.email,
-				firstName: user.nome,
-			};
-		}),
-	});
-	// const opportunitiesCollection = db.collection<TOpportunity>("opportunities");
-	// const clientsCollection = db.collection("clients");
-
-	// const clients = await clientsCollection.find({}).toArray();
-
-	// console.log("Creating bulk write operations for clients...", formatDateAsLocale(new Date(), true));
-	// const bulkwriteOpportunities: AnyBulkWriteOperation<TOpportunity>[] = clients.map((client) => {
-	// 	return {
-	// 		updateOne: {
-	// 			filter: { idCliente: client._id.toString() },
-	// 			update: {
-	// 				$set: {
-	// 					"cliente.nome": client.nome,
-	// 					"cliente.cpfCnpj": client.cpfCnpj,
-	// 					"cliente.telefonePrimario": client.telefonePrimario,
-	// 					"cliente.email": client.email,
-	// 					"cliente.canalAquisicao": client.canalAquisicao,
-	// 				},
-	// 			},
-	// 		},
-	// 	};
-	// });
-	// console.log("Bulk write operations created. Executing bulk write...", formatDateAsLocale(new Date(), true));
-	// const bulkWriteResponse = await opportunitiesCollection.bulkWrite(bulkwriteOpportunities);
-	// console.log("Bulk write executed", formatDateAsLocale(new Date(), true));
-	return res.status(200).json("DESATIVADA");
+	return res.status(200).json(updateResponse);
 };
 
 export default apiHandler({ GET: getManualTesting });

@@ -1,165 +1,223 @@
-import React, { useState } from 'react'
-import { TComissionSpecs } from '../ComissionPannel'
-import NumberInput from '@/components/Inputs/NumberInput'
-import { operators } from '@/utils/pricing/helpers'
-import { FiDelete } from 'react-icons/fi'
-import CheckboxInput from '@/components/Inputs/CheckboxInput'
-import NewComissionScenario from './NewComissionScenario'
-import { TUser, TUserComission } from '@/utils/schemas/user.schema'
-import { formatComissionFormulaItem, renderComissionScenarioConditionPhrase } from '@/utils/comissions/helpers'
-import { MdContentCopy, MdDelete, MdEdit } from 'react-icons/md'
-import toast from 'react-hot-toast'
-import EditComissionScenario from './EditComissionScenario'
+import React, { useState } from "react";
+import type { TUser } from "@/utils/schemas/user.schema";
+import { useProjectTypes } from "@/utils/queries/project-types";
+import ErrorComponent from "@/components/utils/ErrorComponent";
+import { getErrorMessage } from "@/lib/methods/errors";
+import type { TProjectTypeDTO } from "@/utils/schemas/project-types.schema";
+import { Button } from "@/components/ui/button";
+import ComissionResultModal from "./ComissionResultModal";
+import { OpportunityResponsibilityRoles } from "@/utils/select-options";
+import { formatComissionFormulaIndividualItemLabel, handleRenderComissionScenarioResultConditionPhrase, SaleDefinitions } from "@/utils/comissions/helpers";
+import { MdEdit } from "react-icons/md";
+import { cn } from "@/lib/utils";
+import { Plus } from "lucide-react";
+import toast from "react-hot-toast";
 
-const comissionVariablesAlias = [{ label: 'VALOR DA PROPOSTA', value: 'valorProposta' }, { label: 'POTÊNCIA PICO DA PROPOSTA' }]
+const comissionVariablesAlias = [{ label: "VALOR DA PROPOSTA", value: "valorProposta" }, { label: "POTÊNCIA PICO DA PROPOSTA" }];
 
 type ComissionScenariosMenuProps = {
-  infoHolder: TUser
-  setInfoHolder: React.Dispatch<React.SetStateAction<TUser>>
-  resultHolder: TUserComission['resultados'][number]
-  setResultHolder: React.Dispatch<React.SetStateAction<TUserComission['resultados'][number]>>
-}
-function ComissionScenariosMenu({ infoHolder, setInfoHolder, resultHolder, setResultHolder }: ComissionScenariosMenuProps) {
-  const [newComissionScenarioMenuIsOpen, setNewComissionScenarioMenuIsOpen] = useState<boolean>(false)
-  const [editComissionScenarioMenu, setEditComissionScenarioMenu] = useState<{ info: TUserComission['resultados'][number] | null; index: number | null }>({
-    info: null,
-    index: null,
-  })
-  function deleteScenario(index: number) {
-    const scenarios = [...infoHolder.comissionamento.resultados]
-    scenarios.splice(index, 1)
-    setInfoHolder((prev) => ({ ...prev, comissionamento: { ...prev.comissionamento, resultados: scenarios } }))
-  }
-  return (
-    <div className="flex w-full flex-col gap-y-2">
-      <h1 className="mt-2 w-full rounded-md bg-gray-700 p-1 text-center text-sm font-bold text-white">CENÁRIOS DE COMISSIONAMENTO</h1>
-      {newComissionScenarioMenuIsOpen ? (
-        <NewComissionScenario
-          infoHolder={infoHolder}
-          setInfoHolder={setInfoHolder}
-          resultHolder={resultHolder}
-          setResultHolder={setResultHolder}
-          closeMenu={() => setNewComissionScenarioMenuIsOpen(false)}
-        />
-      ) : (
-        <div className="flex w-full items-center justify-end">
-          <button
-            className="rounded bg-green-500 p-1 px-4 text-sm font-medium text-white duration-300 ease-in-out hover:bg-green-600"
-            onClick={() => setNewComissionScenarioMenuIsOpen(true)}
-          >
-            NOVO CENÁRIO
-          </button>
-        </div>
-      )}
-      {editComissionScenarioMenu.index != null ? (
-        <EditComissionScenario
-          index={editComissionScenarioMenu.index}
-          infoHolder={infoHolder}
-          setInfoHolder={setInfoHolder}
-          resultHolder={resultHolder}
-          setResultHolder={setResultHolder}
-          closeMenu={() => setEditComissionScenarioMenu({ index: null, info: null })}
-        />
-      ) : null}
-      <h1 className="my-4 text-sm font-bold leading-none tracking-tight text-[#E25E3E]">LISTA DE CENÁRIOS</h1>
-      <div className="flex flex-col">
-        {infoHolder.comissionamento.resultados.map((result, index) => (
-          <div key={index} className="mb-1 flex w-full flex-col gap-2 rounded-md border border-[#A0E9FF] p-1">
-            <div className="flex w-full items-center justify-between gap-2">
-              {renderComissionScenarioConditionPhrase({ condition: result.condicao })}
-              <div className="flex items-center gap-1">
-                <button
-                  onClick={() => {
-                    setNewComissionScenarioMenuIsOpen(false)
-                    setEditComissionScenarioMenu({ index: index, info: result })
-                    setResultHolder(result)
-                  }}
-                  className="flex items-center justify-center rounded-lg p-1 text-orange-500 duration-300 ease-linear hover:scale-105 hover:bg-orange-200"
-                >
-                  <MdEdit />
-                </button>
-                <button
-                  onClick={() => deleteScenario(index)}
-                  type="button"
-                  className="flex items-center justify-center rounded-lg p-1 text-red-500 duration-300 ease-linear hover:scale-105 hover:bg-red-200"
-                >
-                  <MdDelete style={{ color: 'red' }} />
-                </button>
-              </div>
-            </div>
-            <div className="flex  grow flex-wrap items-center justify-center gap-1 p-1">
-              {result.formulaArr.map((y) => (
-                <p className={`text-[0.7rem] ${y.includes('[') ? 'rounded bg-blue-500 p-1 text-white' : ''}`}>{formatComissionFormulaItem(y)}</p>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
+	userComissionConfig: TUser["comissionamento"];
+	addComissionConfigItem: (item: TUser["comissionamento"][number]) => void;
+	updateComissionConfigItem: (info: { item: Partial<TUser["comissionamento"][number]>; index: number }) => void;
+};
+function ComissionScenariosMenu({ userComissionConfig, addComissionConfigItem, updateComissionConfigItem }: ComissionScenariosMenuProps) {
+	const { data: projectTypes, isLoading, isError, isSuccess, error } = useProjectTypes();
+	return (
+		<div className="w-full flex flex-col gap-2">
+			<h1 className="text-sm font-medium">CENÁRIOS DE COMISSÃO</h1>
+			{isLoading ? <p className="text-xs text-muted-foreground animate-pulse">Carregando...</p> : null}
+			{isError ? <ErrorComponent msg={getErrorMessage(error)} /> : null}
+			{isSuccess
+				? projectTypes.map((projectType) => (
+						<ComissionProjectTypeCard
+							key={projectType._id}
+							projectType={projectType}
+							userComissionConfig={userComissionConfig}
+							addComissionConfigItem={addComissionConfigItem}
+							updateComissionConfigItem={updateComissionConfigItem}
+						/>
+					))
+				: null}
+		</div>
+	);
 }
 
-export default ComissionScenariosMenu
+export default ComissionScenariosMenu;
 
-// <h1 className="my-2 w-full text-start text-sm font-black text-[#FF9B50]">VALORES</h1>
-// <div className="flex w-full items-end gap-2">
-//   <div className="grow">
-//     <NumberInput
-//       label="NÚMERO"
-//       labelClassName="font-semibold leading-none tracking-tight text-xs"
-//       placeholder="Preencha um valor para adição a fórmula..."
-//       value={numberHolder}
-//       handleChange={(value) => setNumberHolder(Number(value))}
-//       width="100%"
-//     />
-//   </div>
-//   <button
-//     onClick={() => {
-//       if (numberHolder) addToUnitPricingItems(numberHolder?.toString())
-//     }}
-//     className="min-h-[46px] rounded-md bg-green-500 p-2 text-sm text-white hover:bg-green-600"
-//   >
-//     ADD
-//   </button>
-// </div>
-// <h1 className="mt-2 w-full text-start text-sm font-black text-[#FF9B50]">VARIÁVEIS</h1>
-// <div className="my-2 flex flex-wrap items-center gap-2">
-//   {comissionVariablesAlias.map((va, index) => (
-//     <button
-//       key={index}
-//       onClick={() => addToUnitPricingItems(`[${va.value}]`)}
-//       className="grow rounded border border-gray-700 p-1 text-xs font-medium text-gray-700 duration-300 ease-in-out hover:bg-gray-700 hover:text-white"
-//     >
-//       {va.label}
-//     </button>
-//   ))}
-// </div>
-// <h1 className="my-2 w-full text-start text-sm font-black text-[#FF9B50]">OPERAÇÕES</h1>
-// <div className="flex w-full flex-wrap items-center justify-around gap-2">
-//   {operators.map((op, index) => (
-//     <button
-//       key={index}
-//       onClick={() => addToUnitPricingItems(op)}
-//       className="grow rounded border border-gray-300 bg-gray-100 p-2 text-center font-medium text-gray-700 duration-300 ease-in-out hover:scale-105 hover:bg-gray-200"
-//     >
-//       {op}
-//     </button>
-//   ))}
-//   <button
-//     onClick={() => dropUnitPricingItem()}
-//     className="flex grow items-center justify-center rounded border border-red-300 bg-red-100 p-2 text-center font-medium duration-300 ease-in-out hover:scale-105 hover:bg-red-200"
-//   >
-//     <FiDelete size={23} />
-//   </button>
-// </div>
-// <div className="my-2 flex w-full items-center justify-center gap-2">
-//   <div className="w-fit">
-//     <CheckboxInput
-//       labelFalse="APLICAR CONDIÇÃO"
-//       labelTrue="APLICAR CONDIÇÃO"
-//       checked={resultHolder.condicao.aplicavel}
-//       handleChange={(value) => setResultHolder((prev) => ({ ...prev, condicao: { ...prev.condicao, aplicavel: value } }))}
-//       justify="justify-center"
-//     />
-//   </div>
-// </div>
+type ComissionProjectTypeCardProps = {
+	projectType: TProjectTypeDTO;
+	userComissionConfig: TUser["comissionamento"];
+	addComissionConfigItem: (item: TUser["comissionamento"][number]) => void;
+	updateComissionConfigItem: (info: { item: Partial<TUser["comissionamento"][number]>; index: number }) => void;
+};
+function ComissionProjectTypeCard({ projectType, userComissionConfig, addComissionConfigItem, updateComissionConfigItem }: ComissionProjectTypeCardProps) {
+	const [newComissionMenuActiveRole, setNewComissionMenuActiveRole] = useState<string | null>(null);
+	const projectTypeComissionConfig = userComissionConfig.map((c, i) => ({ ...c, itemIndex: i })).filter((scenario) => scenario.tipoProjeto.id === projectType._id);
+	const missingRoleComissionConfig = OpportunityResponsibilityRoles.filter((role) => !projectTypeComissionConfig.some((scenario) => scenario.papel === role.value)).map(
+		(role) => role.value,
+	);
+	function addComissionConfigItemResult(info: { comissionConfigIndex: number; result: TUser["comissionamento"][number]["resultados"][number] }) {
+		if (info.result.condicao.aplicavel) {
+			if (!info.result.condicao.tipo) return toast.error("Selecione uma variável para condição.");
+			if (info.result.condicao.tipo === "IGUAL_TEXTO" && !info.result.condicao.igual) return toast.error("Selecione o resultado para comparação da condição.");
+			if (info.result.condicao.tipo === "IGUAL_NÚMERICO" && (info.result.condicao.igual === null || info.result.condicao.igual === undefined))
+				return toast.error("Preencha o resultado para comparação da condição.");
+			if (info.result.condicao.tipo === "MAIOR_QUE_NÚMERICO" && (info.result.condicao.maiorQue === null || info.result.condicao.maiorQue === undefined))
+				return toast.error("Preencha o valor para comparação.");
+			if (info.result.condicao.tipo === "MENOR_QUE_NÚMERICO" && (info.result.condicao.menorQue === null || info.result.condicao.menorQue === undefined))
+				return toast.error("Preencha o valor para comparação.");
+			if (
+				info.result.condicao.tipo === "INTERVALO_NÚMERICO" &&
+				(info.result.condicao.entre?.minimo === null || info.result.condicao.entre?.minimo === undefined) &&
+				(info.result.condicao.entre?.maximo === null || info.result.condicao.entre?.maximo === undefined)
+			)
+				return toast.error("Preencha os valores para comparação.");
+			if (info.result.condicao.tipo === "INCLUI_LISTA" && (!info.result.condicao.inclui || info.result.condicao.inclui.length === 0))
+				return toast.error("Preencha a list para comparação.");
+		}
+		const currentResults = userComissionConfig[info.comissionConfigIndex].resultados;
+		// Validating existence of general formula in results array
+		const hasGeneralFormula = currentResults.some((r) => !r.condicao.aplicavel);
+		if (hasGeneralFormula && !info.result.condicao.aplicavel) return toast.error("Não é possível cadastrar duas fórmulas gerais.");
+
+		updateComissionConfigItem({
+			index: info.comissionConfigIndex,
+			item: { resultados: [...currentResults, info.result] },
+		});
+	}
+	function updateComissionConfigItemResult(info: { comissionConfigIndex: number; resultIndex: number; result: TUser["comissionamento"][number]["resultados"][number] }) {
+		updateComissionConfigItem({
+			index: info.comissionConfigIndex,
+			item: { resultados: userComissionConfig[info.comissionConfigIndex].resultados.map((r, i) => (i === info.resultIndex ? info.result : r)) },
+		});
+	}
+	return (
+		<div className="flex w-full flex-col gap-3 rounded border border-primary/20 bg-[#fff] p-2 shadow-sm">
+			<div className="flex w-full flex-col items-center justify-between gap-2 lg:flex-row">
+				<h1 className="text-sm font-bold leading-none tracking-tight">{projectType.nome}</h1>
+			</div>
+			{projectTypeComissionConfig
+				? projectTypeComissionConfig.map((scenario, index) => (
+						<ComissionProjectTypeComissionConfigCard
+							key={`${projectType._id}-${index}`}
+							scenario={scenario}
+							addComissionConfigItemResult={(data) => addComissionConfigItemResult({ comissionConfigIndex: scenario.itemIndex, result: data })}
+							updateComissionConfigItemResult={(data) => updateComissionConfigItemResult({ comissionConfigIndex: scenario.itemIndex, resultIndex: data.resultIndex, result: data.result })}
+						/>
+					))
+				: null}
+			<div className="w-full flex items-center justify-center flex-wrap p-2">
+				{missingRoleComissionConfig.map((role) => (
+					<Button key={role} onClick={() => setNewComissionMenuActiveRole(role)} variant={"ghost"} size={"fit"} className="px-2 py-1 text-xs">
+						DEFINIR COMISSÃO PARA {role}
+					</Button>
+				))}
+			</div>
+			{newComissionMenuActiveRole ? (
+				<ComissionResultModal
+					handleCommitConditionResult={(info) =>
+						addComissionConfigItem({
+							tipoProjeto: {
+								nome: projectType.nome,
+								id: projectType._id,
+							},
+							papel: newComissionMenuActiveRole,
+							resultados: [info],
+						})
+					}
+					closeModal={() => setNewComissionMenuActiveRole(null)}
+				/>
+			) : null}
+		</div>
+	);
+}
+
+type ComissionProjectTypeComissionConfigCardProps = {
+	scenario: TUser["comissionamento"][number];
+	updateComissionConfigItemResult: (info: { resultIndex: number; result: TUser["comissionamento"][number]["resultados"][number] }) => void;
+	addComissionConfigItemResult: (item: TUser["comissionamento"][number]["resultados"][number]) => void;
+};
+function ComissionProjectTypeComissionConfigCard({ scenario, updateComissionConfigItemResult, addComissionConfigItemResult }: ComissionProjectTypeComissionConfigCardProps) {
+	const [newResultModalIsOpen, setNewResultModalIsOpen] = useState(false);
+	return (
+		<div className="flex w-full flex-col gap-3 rounded border border-gray-200 bg-[#fff] p-2 shadow-sm ">
+			<div className="flex w-full flex-col items-center justify-between gap-2 lg:flex-row">
+				<p className="text-sm font-bold leading-none tracking-tight">
+					COMISSÃO PARA ATUAÇÃO COMO: <span className="font-black">{scenario.papel}</span>
+				</p>
+				<div className="flex flex-wrap items-center gap-2">
+					<button
+						type="button"
+						onClick={() => setNewResultModalIsOpen(true)}
+						className="flex items-center gap-1 rounded-lg px-2 py-1 text-[0.6rem] text-primary hover:bg-green-500 hover:text-white transition-colors"
+					>
+						<Plus className="w-4 h-4 min-w-4 min-h-4" />
+						<p>NOVO RESULTADO</p>
+					</button>
+					{/* <button
+									type="button"
+									onClick={() => handleRemove()}
+									className="flex items-center gap-1 rounded-lg bg-red-600 px-2 py-1 text-[0.6rem] text-white hover:bg-red-500 transition-colors"
+								>
+									<MdDelete width={10} height={10} />
+									<p>REMOVER</p>
+								</button> */}
+				</div>
+			</div>
+
+			{scenario.resultados.map((result, index) => (
+				<ComissionProjectTypeCardResult
+					key={`${scenario.tipoProjeto.id}-${index}`}
+					result={result}
+					updateResult={(data) => updateComissionConfigItemResult({ resultIndex: index, result: data })}
+				/>
+			))}
+			{newResultModalIsOpen ? (
+				<ComissionResultModal handleCommitConditionResult={(info) => addComissionConfigItemResult(info)} closeModal={() => setNewResultModalIsOpen(false)} />
+			) : null}
+		</div>
+	);
+}
+
+type ComissionProjectTypeCardResultProps = {
+	result: TUser["comissionamento"][number]["resultados"][number];
+	updateResult: (info: TUser["comissionamento"][number]["resultados"][number]) => void;
+};
+function ComissionProjectTypeCardResult({ result, updateResult }: ComissionProjectTypeCardResultProps) {
+	const [editModalIsOpen, setEditModalIsOpen] = useState(false);
+	return (
+		<div className="w-full flex flex-col gap-1 rounded border border-primary/10 shadow-xs">
+			<div className="flex w-full flex-col items-center justify-between gap-2 lg:flex-row">
+				<div className="flex flex-wrap items-center gap-2">
+					{handleRenderComissionScenarioResultConditionPhrase({
+						result: result,
+						definitions: SaleDefinitions,
+					})}
+				</div>
+				<button
+					type="button"
+					onClick={() => setEditModalIsOpen(true)}
+					className="flex items-center gap-1 rounded-lg px-2 py-1 text-[0.6rem] text-primary hover:bg-orange-500 hover:text-white transition-colors"
+				>
+					<MdEdit width={10} height={10} />
+					<p>EDITAR</p>
+				</button>
+			</div>
+			<div className="flex w-full flex-wrap items-center justify-center gap-1 rounded-lg bg-primary/10 p-1">
+				{result.formulaArr.map((y, index) => (
+					<p
+						key={`${y}`}
+						className={cn("rounded-lg p-1 text-[0.55rem] font-medium", {
+							"bg-primary/80 px-2 text-white dark:bg-primary/20": y.includes("[") && y.includes("]"),
+						})}
+					>
+						{formatComissionFormulaIndividualItemLabel({ item: y, definitions: SaleDefinitions })}
+					</p>
+				))}
+			</div>
+			{editModalIsOpen ? (
+				<ComissionResultModal initialResult={result} handleCommitConditionResult={(info) => updateResult(info)} closeModal={() => setEditModalIsOpen(false)} />
+			) : null}
+		</div>
+	);
+}

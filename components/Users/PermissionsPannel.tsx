@@ -11,12 +11,12 @@ import RotativeIconButton from "../Buttons/RotativeIconButton";
 import { GeneralVisibleHiddenExitMotionVariants } from "@/utils/constants";
 type PermissionsPannelProps = {
 	userInfo: TUser;
-	setUserInfo: Dispatch<React.SetStateAction<TUser>>;
+	updateUserInfo: (info: Partial<TUser>) => void;
 	users?: TUserDTO[];
 	referenceId: string | null;
 	session: TUserSession;
 };
-function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session }: PermissionsPannelProps) {
+function PermissionsPannel({ userInfo, updateUserInfo, users, referenceId, session }: PermissionsPannelProps) {
 	const [pannelIsOpen, setPannelIsOpen] = useState<boolean>(true);
 	const { data: partners } = usePartnersSimplified();
 	return (
@@ -44,16 +44,15 @@ function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session 
 									checked={userInfo.permissoes.usuarios.visualizar}
 									justify="justify-start"
 									handleChange={(value) =>
-										setUserInfo((prev) => ({
-											...prev,
+										updateUserInfo({
 											permissoes: {
-												...prev.permissoes,
+												...userInfo.permissoes,
 												usuarios: {
-													...prev.permissoes.usuarios,
+													...userInfo.permissoes.usuarios,
 													visualizar: value,
 												},
 											},
-										}))
+										})
 									}
 								/>
 								<CheckboxInput
@@ -62,13 +61,12 @@ function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session 
 									checked={userInfo.permissoes.usuarios.criar}
 									justify="justify-start"
 									handleChange={(value) =>
-										setUserInfo((prev) => ({
-											...prev,
+										updateUserInfo({
 											permissoes: {
-												...prev.permissoes,
-												usuarios: { ...prev.permissoes.usuarios, criar: value },
+												...userInfo.permissoes,
+												usuarios: { ...userInfo.permissoes.usuarios, criar: value },
 											},
-										}))
+										})
 									}
 								/>
 								<CheckboxInput
@@ -77,13 +75,12 @@ function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session 
 									checked={userInfo.permissoes.usuarios.editar}
 									justify="justify-start"
 									handleChange={(value) =>
-										setUserInfo((prev) => ({
-											...prev,
+										updateUserInfo({
 											permissoes: {
-												...prev.permissoes,
-												usuarios: { ...prev.permissoes.usuarios, editar: value },
+												...userInfo.permissoes,
+												usuarios: { ...userInfo.permissoes.usuarios, editar: value },
 											},
-										}))
+										})
 									}
 								/>
 							</div>
@@ -99,13 +96,12 @@ function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session 
 									editable={session.user.permissoes.comissoes.visualizar}
 									justify="justify-start"
 									handleChange={(value) =>
-										setUserInfo((prev) => ({
-											...prev,
+										updateUserInfo({
 											permissoes: {
-												...prev.permissoes,
-												comissoes: { ...prev.permissoes.comissoes, visualizar: value },
+												...userInfo.permissoes,
+												comissoes: { ...userInfo.permissoes.comissoes, visualizar: value },
 											},
-										}))
+										})
 									}
 								/>
 								<CheckboxInput
@@ -115,13 +111,12 @@ function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session 
 									editable={session.user.permissoes.comissoes.editar}
 									justify="justify-start"
 									handleChange={(value) =>
-										setUserInfo((prev) => ({
-											...prev,
+										updateUserInfo({
 											permissoes: {
-												...prev.permissoes,
-												comissoes: { ...prev.permissoes.comissoes, editar: value },
+												...userInfo.permissoes,
+												comissoes: { ...userInfo.permissoes.comissoes, editar: value },
 											},
-										}))
+										})
 									}
 								/>
 							</div>
@@ -137,13 +132,12 @@ function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session 
 									editable={session.user.permissoes.kits.visualizar}
 									justify="justify-start"
 									handleChange={(value) =>
-										setUserInfo((prev) => ({
-											...prev,
+										updateUserInfo({
 											permissoes: {
-												...prev.permissoes,
-												kits: { ...prev.permissoes.kits, visualizar: value },
+												...userInfo.permissoes,
+												kits: { ...userInfo.permissoes.kits, visualizar: value },
 											},
-										}))
+										})
 									}
 								/>
 								<CheckboxInput
@@ -153,13 +147,12 @@ function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session 
 									editable={session.user.permissoes.kits.criar}
 									justify="justify-start"
 									handleChange={(value) =>
-										setUserInfo((prev) => ({
-											...prev,
+										updateUserInfo({
 											permissoes: {
-												...prev.permissoes,
-												kits: { ...prev.permissoes.kits, criar: value },
+												...userInfo.permissoes,
+												kits: { ...userInfo.permissoes.kits, criar: value },
 											},
-										}))
+										})
 									}
 								/>
 								<CheckboxInput
@@ -169,13 +162,12 @@ function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session 
 									editable={session.user.permissoes.kits.editar}
 									justify="justify-start"
 									handleChange={(value) =>
-										setUserInfo((prev) => ({
-											...prev,
+										updateUserInfo({
 											permissoes: {
-												...prev.permissoes,
-												kits: { ...prev.permissoes.kits, editar: value },
+												...userInfo.permissoes,
+												kits: { ...userInfo.permissoes.kits, editar: value },
 											},
-										}))
+										})
 									}
 								/>
 							</div>
@@ -191,13 +183,12 @@ function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session 
 									editable={session.user.permissoes.produtos.visualizar}
 									justify="justify-start"
 									handleChange={(value) =>
-										setUserInfo((prev) => ({
-											...prev,
+										updateUserInfo({
 											permissoes: {
-												...prev.permissoes,
-												produtos: { ...prev.permissoes.produtos, visualizar: value },
+												...userInfo.permissoes,
+												produtos: { ...userInfo.permissoes.produtos, visualizar: value },
 											},
-										}))
+										})
 									}
 								/>
 								<CheckboxInput
@@ -207,13 +198,12 @@ function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session 
 									editable={session.user.permissoes.produtos.criar}
 									justify="justify-start"
 									handleChange={(value) =>
-										setUserInfo((prev) => ({
-											...prev,
+										updateUserInfo({
 											permissoes: {
-												...prev.permissoes,
-												produtos: { ...prev.permissoes.produtos, criar: value },
+												...userInfo.permissoes,
+												produtos: { ...userInfo.permissoes.produtos, criar: value },
 											},
-										}))
+										})
 									}
 								/>
 								<CheckboxInput
@@ -223,13 +213,12 @@ function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session 
 									editable={session.user.permissoes.produtos.editar}
 									justify="justify-start"
 									handleChange={(value) =>
-										setUserInfo((prev) => ({
-											...prev,
+										updateUserInfo({
 											permissoes: {
-												...prev.permissoes,
-												produtos: { ...prev.permissoes.produtos, editar: value },
+												...userInfo.permissoes,
+												produtos: { ...userInfo.permissoes.produtos, editar: value },
 											},
-										}))
+										})
 									}
 								/>
 							</div>
@@ -245,13 +234,12 @@ function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session 
 									editable={session.user.permissoes.servicos.visualizar}
 									justify="justify-start"
 									handleChange={(value) =>
-										setUserInfo((prev) => ({
-											...prev,
+										updateUserInfo({
 											permissoes: {
-												...prev.permissoes,
-												servicos: { ...prev.permissoes.servicos, visualizar: value },
+												...userInfo.permissoes,
+												servicos: { ...userInfo.permissoes.servicos, visualizar: value },
 											},
-										}))
+										})
 									}
 								/>
 								<CheckboxInput
@@ -261,13 +249,12 @@ function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session 
 									editable={session.user.permissoes.servicos.criar}
 									justify="justify-start"
 									handleChange={(value) =>
-										setUserInfo((prev) => ({
-											...prev,
+										updateUserInfo({
 											permissoes: {
-												...prev.permissoes,
-												servicos: { ...prev.permissoes.servicos, criar: value },
+												...userInfo.permissoes,
+												servicos: { ...userInfo.permissoes.servicos, criar: value },
 											},
-										}))
+										})
 									}
 								/>
 								<CheckboxInput
@@ -277,13 +264,12 @@ function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session 
 									editable={session.user.permissoes.servicos.editar}
 									justify="justify-start"
 									handleChange={(value) =>
-										setUserInfo((prev) => ({
-											...prev,
+										updateUserInfo({
 											permissoes: {
-												...prev.permissoes,
-												servicos: { ...prev.permissoes.servicos, editar: value },
+												...userInfo.permissoes,
+												servicos: { ...userInfo.permissoes.servicos, editar: value },
 											},
-										}))
+										})
 									}
 								/>
 							</div>
@@ -299,13 +285,12 @@ function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session 
 									editable={session.user.permissoes.planos.visualizar}
 									justify="justify-start"
 									handleChange={(value) =>
-										setUserInfo((prev) => ({
-											...prev,
+										updateUserInfo({
 											permissoes: {
-												...prev.permissoes,
-												planos: { ...prev.permissoes.planos, visualizar: value },
+												...userInfo.permissoes,
+												planos: { ...userInfo.permissoes.planos, visualizar: value },
 											},
-										}))
+										})
 									}
 								/>
 								<CheckboxInput
@@ -315,13 +300,12 @@ function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session 
 									editable={session.user.permissoes.planos.criar}
 									justify="justify-start"
 									handleChange={(value) =>
-										setUserInfo((prev) => ({
-											...prev,
+										updateUserInfo({
 											permissoes: {
-												...prev.permissoes,
-												planos: { ...prev.permissoes.planos, criar: value },
+												...userInfo.permissoes,
+												planos: { ...userInfo.permissoes.planos, criar: value },
 											},
-										}))
+										})
 									}
 								/>
 								<CheckboxInput
@@ -331,13 +315,12 @@ function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session 
 									editable={session.user.permissoes.planos.editar}
 									justify="justify-start"
 									handleChange={(value) =>
-										setUserInfo((prev) => ({
-											...prev,
+										updateUserInfo({
 											permissoes: {
-												...prev.permissoes,
-												planos: { ...prev.permissoes.planos, editar: value },
+												...userInfo.permissoes,
+												planos: { ...userInfo.permissoes.planos, editar: value },
 											},
-										}))
+										})
 									}
 								/>
 							</div>
@@ -350,10 +333,9 @@ function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session 
 									referenceId={referenceId}
 									selected={userInfo.permissoes.clientes.escopo}
 									handleScopeSelection={(selected) =>
-										setUserInfo((prev) => ({
-											...prev,
-											permissoes: { ...prev.permissoes, clientes: { ...prev.permissoes.clientes, escopo: selected } },
-										}))
+										updateUserInfo({
+											permissoes: { ...userInfo.permissoes, clientes: { ...userInfo.permissoes.clientes, escopo: selected } },
+										})
 									}
 								/>
 							</div>
@@ -365,16 +347,9 @@ function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session 
 									editable={session.user.permissoes.clientes.visualizar}
 									justify="justify-start"
 									handleChange={(value) =>
-										setUserInfo((prev) => ({
-											...prev,
-											permissoes: {
-												...prev.permissoes,
-												clientes: {
-													...prev.permissoes.clientes,
-													visualizar: value,
-												},
-											},
-										}))
+										updateUserInfo({
+											permissoes: { ...userInfo.permissoes, clientes: { ...userInfo.permissoes.clientes, visualizar: value } },
+										})
 									}
 								/>
 								<CheckboxInput
@@ -384,13 +359,9 @@ function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session 
 									editable={session.user.permissoes.clientes.criar}
 									justify="justify-start"
 									handleChange={(value) =>
-										setUserInfo((prev) => ({
-											...prev,
-											permissoes: {
-												...prev.permissoes,
-												clientes: { ...prev.permissoes.clientes, criar: value },
-											},
-										}))
+										updateUserInfo({
+											permissoes: { ...userInfo.permissoes, clientes: { ...userInfo.permissoes.clientes, criar: value } },
+										})
 									}
 								/>
 								<CheckboxInput
@@ -400,13 +371,9 @@ function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session 
 									editable={session.user.permissoes.clientes.editar}
 									justify="justify-start"
 									handleChange={(value) =>
-										setUserInfo((prev) => ({
-											...prev,
-											permissoes: {
-												...prev.permissoes,
-												clientes: { ...prev.permissoes.clientes, editar: value },
-											},
-										}))
+										updateUserInfo({
+											permissoes: { ...userInfo.permissoes, clientes: { ...userInfo.permissoes.clientes, editar: value } },
+										})
 									}
 								/>
 							</div>
@@ -420,10 +387,9 @@ function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session 
 									referenceId={referenceId}
 									selected={userInfo.permissoes.oportunidades.escopo}
 									handleScopeSelection={(selected) =>
-										setUserInfo((prev) => ({
-											...prev,
-											permissoes: { ...prev.permissoes, oportunidades: { ...prev.permissoes.oportunidades, escopo: selected } },
-										}))
+										updateUserInfo({
+											permissoes: { ...userInfo.permissoes, oportunidades: { ...userInfo.permissoes.oportunidades, escopo: selected } },
+										})
 									}
 								/>
 							</div>
@@ -435,13 +401,12 @@ function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session 
 									editable={session.user.permissoes.oportunidades.visualizar}
 									justify="justify-start"
 									handleChange={(value) =>
-										setUserInfo((prev) => ({
-											...prev,
+										updateUserInfo({
 											permissoes: {
-												...prev.permissoes,
-												oportunidades: { ...prev.permissoes.oportunidades, visualizar: value },
+												...userInfo.permissoes,
+												oportunidades: { ...userInfo.permissoes.oportunidades, visualizar: value },
 											},
-										}))
+										})
 									}
 								/>
 								<CheckboxInput
@@ -451,13 +416,12 @@ function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session 
 									editable={session.user.permissoes.oportunidades.criar}
 									justify="justify-start"
 									handleChange={(value) =>
-										setUserInfo((prev) => ({
-											...prev,
+										updateUserInfo({
 											permissoes: {
-												...prev.permissoes,
-												oportunidades: { ...prev.permissoes.oportunidades, criar: value },
+												...userInfo.permissoes,
+												oportunidades: { ...userInfo.permissoes.oportunidades, criar: value },
 											},
-										}))
+										})
 									}
 								/>
 								<CheckboxInput
@@ -467,13 +431,12 @@ function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session 
 									editable={session.user.permissoes.oportunidades.editar}
 									justify="justify-start"
 									handleChange={(value) =>
-										setUserInfo((prev) => ({
-											...prev,
+										updateUserInfo({
 											permissoes: {
-												...prev.permissoes,
-												oportunidades: { ...prev.permissoes.oportunidades, editar: value },
+												...userInfo.permissoes,
+												oportunidades: { ...userInfo.permissoes.oportunidades, editar: value },
 											},
-										}))
+										})
 									}
 								/>
 								<CheckboxInput
@@ -483,13 +446,9 @@ function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session 
 									editable={!!session.user.permissoes.oportunidades?.excluir}
 									justify="justify-start"
 									handleChange={(value) =>
-										setUserInfo((prev) => ({
-											...prev,
-											permissoes: {
-												...prev.permissoes,
-												oportunidades: { ...prev.permissoes.oportunidades, excluir: value },
-											},
-										}))
+										updateUserInfo({
+											permissoes: { ...userInfo.permissoes, oportunidades: { ...userInfo.permissoes.oportunidades, excluir: value } },
+										})
 									}
 								/>
 							</div>
@@ -503,10 +462,9 @@ function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session 
 									referenceId={referenceId}
 									selected={userInfo.permissoes.analisesTecnicas.escopo}
 									handleScopeSelection={(selected) =>
-										setUserInfo((prev) => ({
-											...prev,
-											permissoes: { ...prev.permissoes, analisesTecnicas: { ...prev.permissoes.analisesTecnicas, escopo: selected } },
-										}))
+										updateUserInfo({
+											permissoes: { ...userInfo.permissoes, analisesTecnicas: { ...userInfo.permissoes.analisesTecnicas, escopo: selected } },
+										})
 									}
 								/>
 							</div>
@@ -518,13 +476,12 @@ function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session 
 									editable={session.user.permissoes.analisesTecnicas.visualizar}
 									justify="justify-start"
 									handleChange={(value) =>
-										setUserInfo((prev) => ({
-											...prev,
+										updateUserInfo({
 											permissoes: {
-												...prev.permissoes,
-												analisesTecnicas: { ...prev.permissoes.analisesTecnicas, visualizar: value },
+												...userInfo.permissoes,
+												analisesTecnicas: { ...userInfo.permissoes.analisesTecnicas, visualizar: value },
 											},
-										}))
+										})
 									}
 								/>
 								<CheckboxInput
@@ -534,13 +491,12 @@ function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session 
 									editable={session.user.permissoes.analisesTecnicas.criar}
 									justify="justify-start"
 									handleChange={(value) =>
-										setUserInfo((prev) => ({
-											...prev,
+										updateUserInfo({
 											permissoes: {
-												...prev.permissoes,
-												analisesTecnicas: { ...prev.permissoes.analisesTecnicas, criar: value },
+												...userInfo.permissoes,
+												analisesTecnicas: { ...userInfo.permissoes.analisesTecnicas, criar: value },
 											},
-										}))
+										})
 									}
 								/>
 								<CheckboxInput
@@ -550,13 +506,12 @@ function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session 
 									editable={session.user.permissoes.analisesTecnicas.editar}
 									justify="justify-start"
 									handleChange={(value) =>
-										setUserInfo((prev) => ({
-											...prev,
+										updateUserInfo({
 											permissoes: {
-												...prev.permissoes,
-												analisesTecnicas: { ...prev.permissoes.analisesTecnicas, editar: value },
+												...userInfo.permissoes,
+												analisesTecnicas: { ...userInfo.permissoes.analisesTecnicas, editar: value },
 											},
-										}))
+										})
 									}
 								/>
 							</div>
@@ -569,10 +524,9 @@ function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session 
 									referenceId={referenceId}
 									selected={userInfo.permissoes.homologacoes.escopo}
 									handleScopeSelection={(selected) =>
-										setUserInfo((prev) => ({
-											...prev,
-											permissoes: { ...prev.permissoes, homologacoes: { ...prev.permissoes.homologacoes, escopo: selected } },
-										}))
+										updateUserInfo({
+											permissoes: { ...userInfo.permissoes, homologacoes: { ...userInfo.permissoes.homologacoes, escopo: selected } },
+										})
 									}
 								/>
 							</div>
@@ -584,13 +538,12 @@ function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session 
 									editable={session.user.permissoes.homologacoes.visualizar}
 									justify="justify-start"
 									handleChange={(value) =>
-										setUserInfo((prev) => ({
-											...prev,
+										updateUserInfo({
 											permissoes: {
-												...prev.permissoes,
-												homologacoes: { ...prev.permissoes.homologacoes, visualizar: value },
+												...userInfo.permissoes,
+												homologacoes: { ...userInfo.permissoes.homologacoes, visualizar: value },
 											},
-										}))
+										})
 									}
 								/>
 								<CheckboxInput
@@ -600,13 +553,12 @@ function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session 
 									editable={session.user.permissoes.homologacoes.criar}
 									justify="justify-start"
 									handleChange={(value) =>
-										setUserInfo((prev) => ({
-											...prev,
+										updateUserInfo({
 											permissoes: {
-												...prev.permissoes,
-												homologacoes: { ...prev.permissoes.homologacoes, criar: value },
+												...userInfo.permissoes,
+												homologacoes: { ...userInfo.permissoes.homologacoes, criar: value },
 											},
-										}))
+										})
 									}
 								/>
 								<CheckboxInput
@@ -616,13 +568,12 @@ function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session 
 									editable={session.user.permissoes.homologacoes.editar}
 									justify="justify-start"
 									handleChange={(value) =>
-										setUserInfo((prev) => ({
-											...prev,
+										updateUserInfo({
 											permissoes: {
-												...prev.permissoes,
-												homologacoes: { ...prev.permissoes.homologacoes, editar: value },
+												...userInfo.permissoes,
+												homologacoes: { ...userInfo.permissoes.homologacoes, editar: value },
 											},
-										}))
+										})
 									}
 								/>
 							</div>
@@ -636,10 +587,9 @@ function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session 
 									referenceId={userInfo.idParceiro || null}
 									selected={userInfo.permissoes.parceiros.escopo}
 									handleScopeSelection={(selected) =>
-										setUserInfo((prev) => ({
-											...prev,
-											permissoes: { ...prev.permissoes, parceiros: { ...prev.permissoes.parceiros, escopo: selected } },
-										}))
+										updateUserInfo({
+											permissoes: { ...userInfo.permissoes, parceiros: { ...userInfo.permissoes.parceiros, escopo: selected } },
+										})
 									}
 								/>
 							</div>
@@ -651,13 +601,12 @@ function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session 
 									editable={session.user.permissoes.parceiros.visualizar}
 									justify="justify-start"
 									handleChange={(value) =>
-										setUserInfo((prev) => ({
-											...prev,
+										updateUserInfo({
 											permissoes: {
-												...prev.permissoes,
-												parceiros: { ...prev.permissoes.parceiros, visualizar: value },
+												...userInfo.permissoes,
+												parceiros: { ...userInfo.permissoes.parceiros, visualizar: value },
 											},
-										}))
+										})
 									}
 								/>
 								<CheckboxInput
@@ -667,13 +616,12 @@ function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session 
 									editable={session.user.permissoes.parceiros.criar}
 									justify="justify-start"
 									handleChange={(value) =>
-										setUserInfo((prev) => ({
-											...prev,
+										updateUserInfo({
 											permissoes: {
-												...prev.permissoes,
-												parceiros: { ...prev.permissoes.parceiros, criar: value },
+												...userInfo.permissoes,
+												parceiros: { ...userInfo.permissoes.parceiros, criar: value },
 											},
-										}))
+										})
 									}
 								/>
 								<CheckboxInput
@@ -683,13 +631,12 @@ function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session 
 									editable={session.user.permissoes.parceiros.editar}
 									justify="justify-start"
 									handleChange={(value) =>
-										setUserInfo((prev) => ({
-											...prev,
+										updateUserInfo({
 											permissoes: {
-												...prev.permissoes,
-												parceiros: { ...prev.permissoes.parceiros, editar: value },
+												...userInfo.permissoes,
+												parceiros: { ...userInfo.permissoes.parceiros, editar: value },
 											},
-										}))
+										})
 									}
 								/>
 							</div>
@@ -703,10 +650,9 @@ function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session 
 									referenceId={referenceId}
 									selected={userInfo.permissoes.propostas.escopo}
 									handleScopeSelection={(selected) =>
-										setUserInfo((prev) => ({
-											...prev,
-											permissoes: { ...prev.permissoes, propostas: { ...prev.permissoes.propostas, escopo: selected } },
-										}))
+										updateUserInfo({
+											permissoes: { ...userInfo.permissoes, propostas: { ...userInfo.permissoes.propostas, escopo: selected } },
+										})
 									}
 								/>
 							</div>
@@ -718,13 +664,9 @@ function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session 
 									editable={session.user.permissoes.propostas.visualizar}
 									justify="justify-start"
 									handleChange={(value) =>
-										setUserInfo((prev) => ({
-											...prev,
-											permissoes: {
-												...prev.permissoes,
-												propostas: { ...prev.permissoes.propostas, visualizar: value },
-											},
-										}))
+										updateUserInfo({
+											permissoes: { ...userInfo.permissoes, propostas: { ...userInfo.permissoes.propostas, visualizar: value } },
+										})
 									}
 								/>
 								<CheckboxInput
@@ -734,13 +676,9 @@ function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session 
 									editable={session.user.permissoes.propostas.criar}
 									justify="justify-start"
 									handleChange={(value) =>
-										setUserInfo((prev) => ({
-											...prev,
-											permissoes: {
-												...prev.permissoes,
-												propostas: { ...prev.permissoes.propostas, criar: value },
-											},
-										}))
+										updateUserInfo({
+											permissoes: { ...userInfo.permissoes, propostas: { ...userInfo.permissoes.propostas, criar: value } },
+										})
 									}
 								/>
 								<CheckboxInput
@@ -750,13 +688,9 @@ function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session 
 									editable={session.user.permissoes.propostas.editar}
 									justify="justify-start"
 									handleChange={(value) =>
-										setUserInfo((prev) => ({
-											...prev,
-											permissoes: {
-												...prev.permissoes,
-												propostas: { ...prev.permissoes.propostas, editar: value },
-											},
-										}))
+										updateUserInfo({
+											permissoes: { ...userInfo.permissoes, propostas: { ...userInfo.permissoes.propostas, editar: value } },
+										})
 									}
 								/>
 							</div>
@@ -772,13 +706,9 @@ function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session 
 									editable={session.user.permissoes.precos.visualizar}
 									justify="justify-start"
 									handleChange={(value) =>
-										setUserInfo((prev) => ({
-											...prev,
-											permissoes: {
-												...prev.permissoes,
-												precos: { ...prev.permissoes.precos, visualizar: value },
-											},
-										}))
+										updateUserInfo({
+											permissoes: { ...userInfo.permissoes, precos: { ...userInfo.permissoes.precos, visualizar: value } },
+										})
 									}
 								/>
 								<CheckboxInput
@@ -788,13 +718,9 @@ function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session 
 									editable={session.user.permissoes.precos.editar}
 									justify="justify-start"
 									handleChange={(value) =>
-										setUserInfo((prev) => ({
-											...prev,
-											permissoes: {
-												...prev.permissoes,
-												precos: { ...prev.permissoes.precos, editar: value },
-											},
-										}))
+										updateUserInfo({
+											permissoes: { ...userInfo.permissoes, precos: { ...userInfo.permissoes.precos, editar: value } },
+										})
 									}
 								/>
 							</div>
@@ -808,10 +734,9 @@ function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session 
 									referenceId={referenceId}
 									selected={userInfo.permissoes.resultados.escopo}
 									handleScopeSelection={(selected) =>
-										setUserInfo((prev) => ({
-											...prev,
-											permissoes: { ...prev.permissoes, resultados: { ...prev.permissoes.resultados, escopo: selected } },
-										}))
+										updateUserInfo({
+											permissoes: { ...userInfo.permissoes, resultados: { ...userInfo.permissoes.resultados, escopo: selected } },
+										})
 									}
 								/>
 							</div>
@@ -823,13 +748,12 @@ function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session 
 									editable={session.user.permissoes.resultados.visualizarComercial}
 									justify="justify-start"
 									handleChange={(value) =>
-										setUserInfo((prev) => ({
-											...prev,
+										updateUserInfo({
 											permissoes: {
-												...prev.permissoes,
-												resultados: { ...prev.permissoes.resultados, visualizarComercial: value },
+												...userInfo.permissoes,
+												resultados: { ...userInfo.permissoes.resultados, visualizarComercial: value },
 											},
-										}))
+										})
 									}
 								/>
 								<CheckboxInput
@@ -839,13 +763,12 @@ function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session 
 									editable={session.user.permissoes.resultados.visualizarOperacional}
 									justify="justify-start"
 									handleChange={(value) =>
-										setUserInfo((prev) => ({
-											...prev,
+										updateUserInfo({
 											permissoes: {
-												...prev.permissoes,
-												resultados: { ...prev.permissoes.resultados, visualizarOperacional: value },
+												...userInfo.permissoes,
+												resultados: { ...userInfo.permissoes.resultados, visualizarOperacional: value },
 											},
-										}))
+										})
 									}
 								/>
 							</div>
@@ -861,13 +784,12 @@ function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session 
 										checked={userInfo.permissoes.configuracoes.parceiro}
 										justify="justify-start"
 										handleChange={(value) =>
-											setUserInfo((prev) => ({
-												...prev,
+											updateUserInfo({
 												permissoes: {
-													...prev.permissoes,
-													configuracoes: { ...prev.permissoes.configuracoes, parceiro: value },
+													...userInfo.permissoes,
+													configuracoes: { ...userInfo.permissoes.configuracoes, parceiro: value },
 												},
-											}))
+											})
 										}
 									/>
 								) : null}
@@ -879,13 +801,12 @@ function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session 
 										editable={session.user.permissoes.configuracoes.precificacao}
 										justify="justify-start"
 										handleChange={(value) =>
-											setUserInfo((prev) => ({
-												...prev,
+											updateUserInfo({
 												permissoes: {
-													...prev.permissoes,
-													configuracoes: { ...prev.permissoes.configuracoes, precificacao: value },
+													...userInfo.permissoes,
+													configuracoes: { ...userInfo.permissoes.configuracoes, precificacao: value },
 												},
-											}))
+											})
 										}
 									/>
 								) : null}
@@ -897,13 +818,12 @@ function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session 
 										editable={session.user.permissoes.configuracoes.funis}
 										justify="justify-start"
 										handleChange={(value) =>
-											setUserInfo((prev) => ({
-												...prev,
+											updateUserInfo({
 												permissoes: {
-													...prev.permissoes,
-													configuracoes: { ...prev.permissoes.configuracoes, funis: value },
+													...userInfo.permissoes,
+													configuracoes: { ...userInfo.permissoes.configuracoes, funis: value },
 												},
-											}))
+											})
 										}
 									/>
 								) : null}
@@ -915,13 +835,12 @@ function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session 
 										editable={session.user.permissoes.configuracoes.metodosPagamento}
 										justify="justify-start"
 										handleChange={(value) =>
-											setUserInfo((prev) => ({
-												...prev,
+											updateUserInfo({
 												permissoes: {
-													...prev.permissoes,
-													configuracoes: { ...prev.permissoes.configuracoes, metodosPagamento: value },
+													...userInfo.permissoes,
+													configuracoes: { ...userInfo.permissoes.configuracoes, metodosPagamento: value },
 												},
-											}))
+											})
 										}
 									/>
 								) : null}
@@ -933,13 +852,12 @@ function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session 
 										editable={session.user.permissoes.configuracoes.tiposProjeto}
 										justify="justify-start"
 										handleChange={(value) =>
-											setUserInfo((prev) => ({
-												...prev,
+											updateUserInfo({
 												permissoes: {
-													...prev.permissoes,
-													configuracoes: { ...prev.permissoes.configuracoes, tiposProjeto: value },
+													...userInfo.permissoes,
+													configuracoes: { ...userInfo.permissoes.configuracoes, tiposProjeto: value },
 												},
-											}))
+											})
 										}
 									/>
 								) : null}
@@ -951,13 +869,12 @@ function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session 
 										editable={session.user.permissoes.configuracoes.gruposUsuarios}
 										justify="justify-start"
 										handleChange={(value) =>
-											setUserInfo((prev) => ({
-												...prev,
+											updateUserInfo({
 												permissoes: {
-													...prev.permissoes,
-													configuracoes: { ...prev.permissoes.configuracoes, gruposUsuarios: value },
+													...userInfo.permissoes,
+													configuracoes: { ...userInfo.permissoes.configuracoes, gruposUsuarios: value },
 												},
-											}))
+											})
 										}
 									/>
 								) : null}
@@ -973,13 +890,12 @@ function PermissionsPannel({ userInfo, setUserInfo, users, referenceId, session 
 									checked={userInfo.permissoes.integracoes.receberLeads}
 									justify="justify-start"
 									handleChange={(value) =>
-										setUserInfo((prev) => ({
-											...prev,
+										updateUserInfo({
 											permissoes: {
-												...prev.permissoes,
-												integracoes: { ...prev.permissoes.integracoes, receberLeads: value },
+												...userInfo.permissoes,
+												integracoes: { ...userInfo.permissoes.integracoes, receberLeads: value },
 											},
-										}))
+										})
 									}
 								/>
 							</div>
