@@ -1,7 +1,6 @@
-import { getAllValueCombinations } from "@/lib/methods/array-manipulation";
-import { TComissionScenarioConditionType, TUserComissionItem } from "../schemas/user.schema";
-import { OpportunityResponsibilityRoles, OpportunityResponsibilityRolesCombinations } from "../select-options";
-import { TComissionConditionData, TComissionVariableData } from "./methods";
+import type { TComissionScenarioConditionType, TUserComissionItem } from "../schemas/user.schema";
+import { OpportunityResponsibilityRolesCombinations } from "../select-options";
+import type { TComissionConditionData, TComissionVariableData } from "./methods";
 
 export const MathematicalOperators = [
 	{
@@ -183,6 +182,112 @@ export function handleRenderComissionScenarioResultConditionPhrase({ result, def
 	return <></>;
 }
 
+type TComissionDefinitionWithValue = {
+	identifier: string;
+	value: string;
+};
+
+type isComissionConditionMatchedParams = {
+	conditionConfig: TUserComissionItem["resultados"][number]["condicao"];
+	definitions: TComissionDefinitionWithValue[];
+};
+function isComissionConditionMatched({ conditionConfig, definitions }: isComissionConditionMatchedParams) {
+	const { tipo, variavel, igual, maiorQue, menorQue, entre, inclui } = conditionConfig;
+
+	if (!tipo)
+		// Shouldnt happen. but just in case
+		return false;
+	const checkConditionIdentifier = variavel;
+	const checkPremisseValue = definitions.find((p) => p.identifier === checkConditionIdentifier)?.value;
+
+	if (tipo === "IGUAL_TEXTO" || tipo === "IGUAL_NÚMERICO") {
+		if (checkPremisseValue === igual) return true;
+	}
+	// If there's no value, then the condition is not applicable
+	if (!checkPremisseValue) return false;
+
+	if (tipo === "IGUAL_TEXTO") {
+		const checkConditionValue = igual;
+		return checkConditionValue === checkPremisseValue;
+	}
+	if (tipo === "IGUAL_NÚMERICO") {
+		const checkConditionValue = igual;
+		return Number(checkPremisseValue) === Number(checkConditionValue);
+	}
+	if (tipo === "MAIOR_QUE_NÚMERICO") {
+		const checkConditionValue = maiorQue;
+		return Number(checkPremisseValue) > Number(checkConditionValue);
+	}
+	if (tipo === "MENOR_QUE_NÚMERICO") {
+		const checkConditionValue = menorQue;
+		return Number(checkPremisseValue) < Number(checkConditionValue);
+	}
+	if (tipo === "INTERVALO_NÚMERICO") {
+		// Getting the values as numbers
+		const checkConditionValueMinNumber = Number(entre?.minimo || 0);
+		const checkConditionValueMaxNumber = Number(entre?.maximo || 0);
+		const checkPremisseValueNumber = Number(checkPremisseValue);
+
+		return checkPremisseValueNumber >= checkConditionValueMinNumber && checkPremisseValueNumber <= checkConditionValueMaxNumber;
+	}
+	if (inclui) {
+		const checkConditionValuesList = inclui || [];
+		return checkConditionValuesList.includes(checkPremisseValue);
+	}
+
+	return false;
+}
+type GetComissionValueParams = {
+	userComissionConfig: TUserComissionItem[];
+	projectTypeId: string;
+	userRole: string;
+	definitions: TComissionDefinitionWithValue[];
+};
+export function getComissionValue({ userComissionConfig, projectTypeId, userRole, definitions }: GetComissionValueParams) {
+	const comissionConfig = userComissionConfig.find((c) => c.tipoProjeto.id === projectTypeId && c.papel === userRole);
+	if (!comissionConfig) return 0;
+
+	const orderedPossibleResults = comissionConfig.resultados.sort((a, b) => (a.condicao.aplicavel === b.condicao.aplicavel ? 0 : a.condicao.aplicavel ? -1 : 1));
+
+	const applicableResult = orderedPossibleResults.find((r) => {
+		// Since general formulas are last, if condicao aplicavel equals false, either:
+		// 1. no result matched the condition
+		// 2. there is only one possible result (the general one)
+		if (!r.condicao.aplicavel) return true;
+
+		return isComissionConditionMatched({ conditionConfig: r.condicao, definitions });
+	});
+	// If no result is applicable, then the comission is 0
+	if (!applicableResult) return 0;
+
+	try {
+		const populatedFormula = applicableResult.formulaArr
+			.map((f) => {
+				// Extracting the variable, which is determined by outer brackets
+				const isVariable = f.includes("[") && f.includes("]");
+				if (!isVariable)
+					// If there is not variable, then returning the original value
+					return f;
+				// Else, exchanging the variable key by the variable value itself and returning it
+				const variableIdentifier = f.replace("[", "").replace("]", "");
+
+				// Checking if variable used was from definitions, if so, returning it
+				const premisseValue = definitions.find((p) => p.identifier === variableIdentifier)?.value;
+				if (premisseValue) return premisseValue;
+
+				// If any (definitions) matched, returning 0
+				return 0;
+			})
+			.join("");
+		const evaluatedComission = eval(populatedFormula);
+
+		return Number(evaluatedComission);
+	} catch (error) {
+		console.log("Error processing comission formula", error);
+		return 0;
+	}
+}
+
 ///
 
 type TComissionVariablesAlias = { label: string; value: keyof TComissionVariableData };
@@ -204,7 +309,7 @@ export const comissionConditionsAlias: TConditionsAlias[] = [
 ];
 export function formatComissionFormulaItem(value: string) {
 	if (value.includes("[") && value.includes("]")) {
-		const variable = comissionVariablesAlias.find((c) => c.value == value.replace("[", "").replace("]", ""));
+		const variable = comissionVariablesAlias.find((c) => c.value === value.replace("[", "").replace("]", ""));
 		if (!variable) return "NÃO DEFINIDO";
 		return variable.label;
 	}
@@ -212,7 +317,7 @@ export function formatComissionFormulaItem(value: string) {
 }
 
 export function formatCondition(value: string) {
-	const condition = comissionConditionsAlias.find((c) => c.value == value);
+	const condition = comissionConditionsAlias.find((c) => c.value === value);
 	if (!condition) return "NÃO DEFINIDO";
 	return condition.label;
 }
@@ -222,18 +327,18 @@ type FormatComissionSccenarioConditionValueParams = {
 	conditionValue: string;
 };
 export function formatComissionSccenarioConditionValue({ conditionValue, conditionVariable }: FormatComissionSccenarioConditionValueParams) {
-	if (conditionVariable == "combinacaoResponsaveis") {
-		return OpportunityResponsibilityRolesCombinations.find((c) => c == conditionValue) || "NÃO DEFINIDO";
+	if (conditionVariable === "combinacaoResponsaveis") {
+		return OpportunityResponsibilityRolesCombinations.find((c) => c === conditionValue) || "NÃO DEFINIDO";
 	}
-	if (conditionVariable == "potenciaPico") return conditionValue.toString();
-	if (conditionVariable == "valorProposta") return conditionValue.toString();
+	if (conditionVariable === "potenciaPico") return conditionValue.toString();
+	if (conditionVariable === "valorProposta") return conditionValue.toString();
 }
 
 type GetConditionOptions = {
 	variable: keyof TComissionConditionData;
 };
 export function getComissionScenarioConditionOptions({ variable }: GetConditionOptions) {
-	if (variable == "combinacaoResponsaveis") return OpportunityResponsibilityRolesCombinations.map((c, index) => ({ id: index + 1, label: c, value: c }));
+	if (variable === "combinacaoResponsaveis") return OpportunityResponsibilityRolesCombinations.map((c, index) => ({ id: index + 1, label: c, value: c }));
 	return [];
 }
 
@@ -245,7 +350,7 @@ export function renderComissionScenarioConditionPhrase({ condition }: RenderComi
 	const conditionType = condition.tipo;
 	const conditionAlias = formatCondition(condition.variavel || "");
 	if (!isConditionAplicable) return <h1 className="text-start text-sm font-bold leading-none tracking-tight text-cyan-500">FÓRMULA GERAL:</h1>;
-	if (!conditionType || conditionType == "IGUAL_TEXTO" || conditionType == "IGUAL_NÚMERICO")
+	if (!conditionType || conditionType === "IGUAL_TEXTO" || conditionType === "IGUAL_NÚMERICO")
 		return (
 			<h1 className="text-start text-sm font-bold leading-none tracking-tight text-cyan-500">
 				SE <strong className="text-[#fead41]">{formatCondition(condition.variavel || "")}</strong> FOR IGUAL A{" "}
@@ -258,26 +363,26 @@ export function renderComissionScenarioConditionPhrase({ condition }: RenderComi
 				:
 			</h1>
 		);
-	if (conditionType == "MAIOR_QUE_NÚMERICO")
+	if (conditionType === "MAIOR_QUE_NÚMERICO")
 		return (
 			<h1 className="text-start text-sm font-bold leading-none tracking-tight text-cyan-500">
 				{`SE ${formatCondition(condition.variavel || "")} FOR MAIOR QUE ${condition.maiorQue || 0}:`}
 			</h1>
 		);
-	if (conditionType == "MENOR_QUE_NÚMERICO")
+	if (conditionType === "MENOR_QUE_NÚMERICO")
 		return (
 			<h1 className="text-start text-sm font-bold leading-none tracking-tight text-cyan-500">
 				{`SE ${formatCondition(condition.variavel || "")} FOR MENOR QUE ${condition.menorQue || 0}:`}
 			</h1>
 		);
-	if (conditionType == "INTERVALO_NÚMERICO")
+	if (conditionType === "INTERVALO_NÚMERICO")
 		return (
 			<h1 className="text-start text-sm font-bold leading-none tracking-tight text-cyan-500">
 				{`SE ${formatCondition(condition.variavel || "")} ESTIVER ENTRE ${condition.entre?.minimo || 0} E ${condition.entre?.maximo || 0}:`}
 			</h1>
 		);
 	const conditionValues = condition.inclui ? condition.inclui.join(", ") : "";
-	if (conditionType == "INCLUI_LISTA")
+	if (conditionType === "INCLUI_LISTA")
 		return (
 			<h1 className="text-start text-sm font-bold leading-none tracking-tight text-cyan-500">
 				{`SE ${formatCondition(condition.variavel || "")} FOR UMA DAS OPÇÕES A SEGUIR ${conditionValues}:`}
