@@ -35,6 +35,7 @@ export async function getComissions(request: NextRequest) {
 		projectsCollection,
 		afterDateStr: after,
 		beforeDateStr: before,
+		userId: user.id,
 		userName: user.nome,
 	});
 
@@ -50,15 +51,13 @@ export async function getComissions(request: NextRequest) {
 				console.log(`[GET COMISSIONS] Error finding project for opportunity ${opportunity._id.toString()}`);
 				return null;
 			}
-			const userIsSellerInProject = user.nome === project.vendedor.nome;
-			const userIsInsiderInProject = project.insider === user.nome;
+			const userInProject = project.comissoes?.comissionados?.find((comissionedUser) => comissionedUser.idCrm === user.id);
 
-			let comissionPercentage = 0;
-			if (userIsSellerInProject) {
-				comissionPercentage = project.comissoes?.porcentagemVendedor || 0;
-			} else {
-				comissionPercentage = project.comissoes?.porcentagemInsider || 0;
+			if (!userInProject) {
+				console.log(`[GET COMISSIONS] User ${user.id} not found as comissioned user in project ${project._id.toString()}`);
+				throw new createHttpError.NotFound("Oops, um erro desconhecido ocorreu. Por favor, tente novamente mais tarde.");
 			}
+
 			const comissionableValue = project.comissoes?.valorComissionavel || 0;
 			return {
 				...opportunity,
@@ -70,13 +69,14 @@ export async function getComissions(request: NextRequest) {
 				appDataAssinatura: project.contrato?.dataAssinatura,
 				appDataRecebimentoParcial: project.compra?.dataPagamento,
 				comissao: {
-					comissionadoPapel: (userIsSellerInProject ? "VENDEDOR" : "INSIDER") as "VENDEDOR" | "INSIDER",
-					comissaoEfetivada: project.comissoes?.efetivado || false,
-					comissaoPagamentoRealizado: project.comissoes?.pagamentoRealizado || false,
+					dataReferencia: project.comissoes?.dataReferencia,
+					comissionadoPapel: userInProject?.papel,
+					comissaoEfetivada: !!userInProject?.dataEfetivacao || false,
+					comissaoPagamentoRealizado: !!userInProject?.dataPagamento || false,
 					valorComissionavel: comissionableValue,
-					comissaoPorcentagem: comissionPercentage,
-					comissaoValor: comissionableValue * (comissionPercentage / 100),
-					dataValidacao: userIsSellerInProject ? project.comissoes?.dataValidacaoVendedor : project.comissoes?.dataValidacaoInsider,
+					comissaoPorcentagem: userInProject?.porcentagem,
+					comissaoValor: comissionableValue * (userInProject?.porcentagem / 100),
+					dataValidacao: userInProject?.dataValidacao,
 				},
 			};
 		})
@@ -93,9 +93,8 @@ export type TGetComissionsRouteOutput = UnwrapNextResponse<Awaited<ReturnType<ty
 export type TBulkUpdateComissionsRouteInput = z.infer<typeof BulkUpdateComissionsInputSchema>;
 async function bulkUpdateComissions(request: NextRequest) {
 	const { user } = await getValidCurrentSessionUncached();
-	const userPartner = user.idParceiro;
-	const userScope = user.permissoes.resultados.escopo;
 
+	const userId = user.id;
 	const payload = await request.json();
 	const bulkUpdates = BulkUpdateComissionsInputSchema.parse(payload);
 
@@ -105,20 +104,15 @@ async function bulkUpdateComissions(request: NextRequest) {
 	console.log(`[BULK UPDATE COMISSIONS] User: ${user.nome} (${user.id})`);
 	console.log(`[BULK UPDATE COMISSIONS] Updating ${bulkUpdates.length} projects...`);
 	const bulkwrite: AnyBulkWriteOperation<TAppProject>[] = bulkUpdates.map((update) => {
-		const updates: Record<string, any> = {};
-		if (update.comissionValidatedAsSeller) {
-			updates["comissoes.dataValidacaoVendedor"] = new Date().toISOString();
-		}
-		if (update.comissionValidatedAsInsider) {
-			updates["comissoes.dataValidacaoInsider"] = new Date().toISOString();
-		}
-		if (Object.keys(updates).length === 0) throw new createHttpError.BadRequest("Nenhuma atualização válida foi encontrada.");
 		return {
 			updateOne: {
 				filter: { _id: new ObjectId(update.projectId) },
 				update: {
-					$set: { ...updates },
+					$set: {
+						"comissoes.comissionados.$[comissionado].dataValidacao": new Date().toISOString(),
+					},
 				},
+				arrayFilters: [{ "comissionado.idCrm": userId }],
 			},
 		};
 	});
@@ -156,40 +150,26 @@ type GetProjectsParams = {
 	projectsCollection: Collection<TAppProject>;
 	afterDateStr: string;
 	beforeDateStr: string;
+	userId: string;
 	userName: string;
 };
-export async function getProjects({ projectsCollection, afterDateStr, beforeDateStr, userName }: GetProjectsParams) {
-	const responsiblesQuery: Filter<TAppProject> = userName
+export async function getProjects({ projectsCollection, afterDateStr, beforeDateStr, userId, userName }: GetProjectsParams) {
+	const responsiblesQuery: Filter<TAppProject> = userId
 		? {
-				$or: [
-					{
-						"vendedor.nome": { $in: [userName] },
-					},
-					{
-						insider: { $in: [userName] },
-					},
-				],
+				"comissoes.comissionados.idCrm": { $in: [userId] },
 			}
 		: {};
 	const signedQueryFilter: Filter<TAppProject> = {
 		"contrato.status": "ASSINADO",
 	};
-	const photovoltaicQueryFilter: Filter<TAppProject> = {
-		tipoDeServico: { $in: ["SISTEMA FOTOVOLTAICO", "AUMENTO DE SISTEMA FOTOVOLTAICO"] },
-		$and: [{ "compra.dataPagamento": { $gte: afterDateStr } }, { "compra.dataPagamento": { $lte: beforeDateStr } }],
-	};
-	const nonPhotovoltaicQueryFilter: Filter<TAppProject> = {
-		tipoDeServico: { $nin: ["SISTEMA FOTOVOLTAICO", "AUMENTO DE SISTEMA FOTOVOLTAICO"] },
-		$and: [{ "contrato.dataAssinatura": { $gte: afterDateStr } }, { "contrato.dataAssinatura": { $lte: beforeDateStr } }],
-	};
-	const typeQueryFilter: Filter<TAppProject> = {
-		$or: [photovoltaicQueryFilter, nonPhotovoltaicQueryFilter],
+	const referenceDateQueryFilter: Filter<TAppProject> = {
+		"comissoes.dataReferencia": { $gte: afterDateStr, $lte: beforeDateStr },
 	};
 
 	const query: Filter<TAppProject> = {
 		...responsiblesQuery,
 		...signedQueryFilter,
-		...{ $and: [typeQueryFilter, responsiblesQuery] },
+		...referenceDateQueryFilter,
 	};
 
 	const result = await projectsCollection.find(query, { projection: AppProjectComissionSimplifiedProjection }).toArray();

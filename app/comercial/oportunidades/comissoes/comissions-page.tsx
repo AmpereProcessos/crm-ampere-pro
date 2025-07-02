@@ -31,18 +31,8 @@ function ComissionsPage({ session }: ComissionsPageProps) {
 
 	function handleBulkUpdateComission(comissions: TGetComissionsRouteOutput["data"]) {
 		const bulkUpdates: TBulkUpdateComissionsRouteInput = comissions.map((c) => {
-			const comissionedRole = c.comissao.comissionadoPapel;
-			if (comissionedRole === "VENDEDOR") {
-				return {
-					projectId: c.appId,
-					comissionValidatedAsSeller: true,
-					comissionValidatedAsInsider: false,
-				};
-			}
 			return {
 				projectId: c.appId,
-				comissionValidatedAsInsider: true,
-				comissionValidatedAsSeller: false,
 			};
 		});
 		return handleBulkUpdateComissionMutation({
@@ -167,25 +157,7 @@ function ComissionCard({ opportunity, queryClient, affectedQueryKey }: Comission
 		return opportunity.appDataAssinatura;
 	}
 	function handleValidateComission(opportunity: TGetComissionsRouteOutput["data"][number]) {
-		if (opportunity.comissao.comissionadoPapel === "VENDEDOR") {
-			const bulkUpdates: TBulkUpdateComissionsRouteInput = [
-				{
-					projectId: opportunity.appId,
-					comissionValidatedAsSeller: true,
-					comissionValidatedAsInsider: false,
-				},
-			];
-			return handleBulkUpdateComissionMutation({
-				comissions: bulkUpdates,
-			});
-		}
-		const bulkUpdates: TBulkUpdateComissionsRouteInput = [
-			{
-				projectId: opportunity.appId,
-				comissionValidatedAsInsider: true,
-				comissionValidatedAsSeller: false,
-			},
-		];
+		const bulkUpdates: TBulkUpdateComissionsRouteInput = [{ projectId: opportunity.appId }];
 		return handleBulkUpdateComissionMutation({
 			comissions: bulkUpdates,
 		});
