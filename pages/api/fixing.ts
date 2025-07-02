@@ -18,8 +18,23 @@ const handleGeneralFixing: NextApiHandler<any> = async (req, res) => {
 		const userComissionConfig: TUser["comissionamento"] = u.comissionamento;
 		userComissionConfig.push({
 			tipoProjeto: {
-				id: "661ec7e5e03128a48f94b4de",
-				nome: "OPERAÇÃO E MANUTENÇÃO",
+				id: "661ec86de03128a48f94b4df",
+				nome: "MONTAGEM E DESMONTAGEM",
+			},
+			papel: "VENDEDOR",
+			resultados: [
+				{
+					condicao: {
+						aplicavel: false,
+					},
+					formulaArr: ["0.1", "*", "[valor_venda]"],
+				},
+			],
+		});
+		userComissionConfig.push({
+			tipoProjeto: {
+				id: "6627b8c19440d7db1e618594",
+				nome: "SEGURO DE SISTEMA FOTOVOLTAICO",
 			},
 			papel: "VENDEDOR",
 			resultados: [
@@ -45,8 +60,7 @@ const handleGeneralFixing: NextApiHandler<any> = async (req, res) => {
 
 	// const userBulkwriteResult = await usersCollection.bulkWrite(userBulkwrite);
 	return res.status(200).json({
-		// userBulkwriteResult,
-		userBulkwrite,
+		// 	userBulkwriteResult,
 		message: "Comissionamento fixado com sucesso",
 	});
 };
