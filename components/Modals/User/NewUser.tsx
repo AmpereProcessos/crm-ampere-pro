@@ -454,26 +454,6 @@ function UserDataContent({ session, userInfo, updateUserInfo, avatarFile, update
 				<TextInput label="SENHA" value={userInfo.senha} placeholder="Preencha aqui o senha do usuário." handleChange={(value) => updateUserInfo({ senha: value })} width="100%" />
 			</div>
 			<div className="flex w-full flex-col gap-1">
-				<div className="flex w-full items-center gap-2">
-					<div className="w-[50%]">
-						<NumberInput
-							label="COMISSÃO SEM SDR"
-							placeholder="% SEM SDR"
-							value={userInfo.comissoes?.semSDR || null}
-							handleChange={(value) => updateUserInfo({ comissoes: { ...userInfo.comissoes, semSDR: value } })}
-							width="100%"
-						/>
-					</div>
-					<div className="w-[50%]">
-						<NumberInput
-							label="COMISSÃO COM SDR"
-							placeholder="% COM SDR"
-							value={userInfo.comissoes?.comSDR || null}
-							handleChange={(value) => updateUserInfo({ comissoes: { ...userInfo.comissoes, comSDR: value } })}
-							width="100%"
-						/>
-					</div>
-				</div>
 				<div className="flex w-full items-center">
 					<SelectWithImages
 						label="PARCEIRO"

@@ -181,42 +181,6 @@ function User({ partnerId, setAuthorHolder, goToNextStage, goToPreviousStage }: 
 						/>
 					</div>
 				</div>
-				<div className="flex w-full flex-col items-center gap-2 px-2 lg:flex-row">
-					<div className="w-full lg:w-1/2">
-						<NumberInput
-							label="COMISSÃO SEM SDR"
-							placeholder="% SEM SDR"
-							value={userHolder.comissoes?.semSDR || null}
-							handleChange={(value) =>
-								setUserHolder((prev) => ({
-									...prev,
-									comissoes: {
-										...prev.comissoes,
-										semSDR: value,
-									},
-								}))
-							}
-							width="100%"
-						/>
-					</div>
-					<div className="w-full lg:w-1/2">
-						<NumberInput
-							label="COMISSÃO COM SDR"
-							placeholder="% COM SDR"
-							value={userHolder.comissoes?.comSDR || null}
-							handleChange={(value) =>
-								setUserHolder((prev) => ({
-									...prev,
-									comissoes: {
-										...prev.comissoes,
-										comSDR: value,
-									},
-								}))
-							}
-							width="100%"
-						/>
-					</div>
-				</div>
 			</div>
 
 			<div className="flex w-full items-center justify-end px-2">
