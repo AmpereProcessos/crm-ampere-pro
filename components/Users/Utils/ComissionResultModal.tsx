@@ -24,6 +24,7 @@ import SelectInputVirtualized from "@/components/Inputs/SelectInputVirtualized";
 import MultipleSelectInputVirtualized from "@/components/Inputs/MultipleSelectInputVirtualized";
 import { Button } from "@/components/ui/button";
 import { OpportunityResponsibilityRoles } from "@/utils/select-options";
+import { usePartnersSimplified } from "@/utils/queries/partners";
 
 type ComissionResultModalProps = {
 	initialResult?: TUserComissionItem["resultados"][number];
@@ -97,6 +98,7 @@ type CalculationBlockProps = {
 	updateHolder: (result: Partial<TUserComissionItem["resultados"][number]>) => void;
 };
 function CalculationBlock({ resultHolder, updateHolder }: CalculationBlockProps) {
+	const { data: partners } = usePartnersSimplified();
 	function addToFormula(value: string) {
 		updateHolder({
 			formulaArr: [...resultHolder.formulaArr, value],
@@ -107,6 +109,7 @@ function CalculationBlock({ resultHolder, updateHolder }: CalculationBlockProps)
 			formulaArr: resultHolder.formulaArr.filter((_, i) => i !== index),
 		});
 	}
+	const partnersMetadata = partners?.map((p) => ({ id: p._id, label: p.nome, value: p._id }));
 	return (
 		<div className="flex w-full flex-col gap-2">
 			<h1 className="w-full text-center text-xs font-black tracking-tight">CONSTRUÇÃO DE CÁLCULO</h1>
@@ -221,6 +224,7 @@ function CalculationBlock({ resultHolder, updateHolder }: CalculationBlockProps)
 								options={getComissionScenarioConditionOptionsByDefinition({
 									conditionVariable: resultHolder.condicao.variavel,
 									definitions: SaleDefinitions,
+									metadata: { partners: partnersMetadata || [] },
 								})}
 								handleChange={(value) => updateHolder({ condicao: { ...resultHolder.condicao, igual: value } })}
 								resetOptionLabel="NÃO DEFINIDO"
@@ -304,6 +308,7 @@ function CalculationBlock({ resultHolder, updateHolder }: CalculationBlockProps)
 								options={getComissionScenarioConditionOptionsByDefinition({
 									conditionVariable: resultHolder.condicao.variavel,
 									definitions: SaleDefinitions,
+									metadata: { partners: partnersMetadata || [] },
 								})}
 								handleChange={(value) => updateHolder({ condicao: { ...resultHolder.condicao, inclui: value as string[] } })}
 								onReset={() => updateHolder({ condicao: { ...resultHolder.condicao, inclui: null } })}

@@ -12,6 +12,8 @@ import { MdEdit } from "react-icons/md";
 import { cn } from "@/lib/utils";
 import { Plus } from "lucide-react";
 import toast from "react-hot-toast";
+import { usePartnersSimplified } from "@/utils/queries/partners";
+import type { TPartnerSimplifiedDTO } from "@/utils/schemas/partner.schema";
 
 const comissionVariablesAlias = [{ label: "VALOR DA PROPOSTA", value: "valorProposta" }, { label: "POTÊNCIA PICO DA PROPOSTA" }];
 
@@ -22,6 +24,7 @@ type ComissionScenariosMenuProps = {
 };
 function ComissionScenariosMenu({ userComissionConfig, addComissionConfigItem, updateComissionConfigItem }: ComissionScenariosMenuProps) {
 	const { data: projectTypes, isLoading, isError, isSuccess, error } = useProjectTypes();
+	const { data: partners } = usePartnersSimplified();
 	return (
 		<div className="w-full flex flex-col gap-2">
 			<h1 className="text-sm font-medium">CENÁRIOS DE COMISSÃO</h1>
@@ -35,6 +38,7 @@ function ComissionScenariosMenu({ userComissionConfig, addComissionConfigItem, u
 							userComissionConfig={userComissionConfig}
 							addComissionConfigItem={addComissionConfigItem}
 							updateComissionConfigItem={updateComissionConfigItem}
+							partners={partners || []}
 						/>
 					))
 				: null}
@@ -49,8 +53,9 @@ type ComissionProjectTypeCardProps = {
 	userComissionConfig: TUser["comissionamento"];
 	addComissionConfigItem: (item: TUser["comissionamento"][number]) => void;
 	updateComissionConfigItem: (info: { item: Partial<TUser["comissionamento"][number]>; index: number }) => void;
+	partners: TPartnerSimplifiedDTO[];
 };
-function ComissionProjectTypeCard({ projectType, userComissionConfig, addComissionConfigItem, updateComissionConfigItem }: ComissionProjectTypeCardProps) {
+function ComissionProjectTypeCard({ projectType, userComissionConfig, addComissionConfigItem, updateComissionConfigItem, partners }: ComissionProjectTypeCardProps) {
 	const [newComissionMenuActiveRole, setNewComissionMenuActiveRole] = useState<string | null>(null);
 	const projectTypeComissionConfig = userComissionConfig.map((c, i) => ({ ...c, itemIndex: i })).filter((scenario) => scenario.tipoProjeto.id === projectType._id);
 	const missingRoleComissionConfig = OpportunityResponsibilityRoles.filter((role) => !projectTypeComissionConfig.some((scenario) => scenario.papel === role.value)).map(
@@ -103,6 +108,7 @@ function ComissionProjectTypeCard({ projectType, userComissionConfig, addComissi
 							scenario={scenario}
 							addComissionConfigItemResult={(data) => addComissionConfigItemResult({ comissionConfigIndex: scenario.itemIndex, result: data })}
 							updateComissionConfigItemResult={(data) => updateComissionConfigItemResult({ comissionConfigIndex: scenario.itemIndex, resultIndex: data.resultIndex, result: data.result })}
+							partners={partners}
 						/>
 					))
 				: null}
@@ -136,8 +142,14 @@ type ComissionProjectTypeComissionConfigCardProps = {
 	scenario: TUser["comissionamento"][number];
 	updateComissionConfigItemResult: (info: { resultIndex: number; result: TUser["comissionamento"][number]["resultados"][number] }) => void;
 	addComissionConfigItemResult: (item: TUser["comissionamento"][number]["resultados"][number]) => void;
+	partners: TPartnerSimplifiedDTO[];
 };
-function ComissionProjectTypeComissionConfigCard({ scenario, updateComissionConfigItemResult, addComissionConfigItemResult }: ComissionProjectTypeComissionConfigCardProps) {
+function ComissionProjectTypeComissionConfigCard({
+	scenario,
+	updateComissionConfigItemResult,
+	addComissionConfigItemResult,
+	partners,
+}: ComissionProjectTypeComissionConfigCardProps) {
 	const [newResultModalIsOpen, setNewResultModalIsOpen] = useState(false);
 	return (
 		<div className="flex w-full flex-col gap-3 rounded border border-gray-200 bg-[#fff] p-2 shadow-sm ">
@@ -170,6 +182,7 @@ function ComissionProjectTypeComissionConfigCard({ scenario, updateComissionConf
 					key={`${scenario.tipoProjeto.id}-${index}`}
 					result={result}
 					updateResult={(data) => updateComissionConfigItemResult({ resultIndex: index, result: data })}
+					partners={partners}
 				/>
 			))}
 			{newResultModalIsOpen ? (
@@ -182,8 +195,9 @@ function ComissionProjectTypeComissionConfigCard({ scenario, updateComissionConf
 type ComissionProjectTypeCardResultProps = {
 	result: TUser["comissionamento"][number]["resultados"][number];
 	updateResult: (info: TUser["comissionamento"][number]["resultados"][number]) => void;
+	partners: TPartnerSimplifiedDTO[];
 };
-function ComissionProjectTypeCardResult({ result, updateResult }: ComissionProjectTypeCardResultProps) {
+function ComissionProjectTypeCardResult({ result, updateResult, partners }: ComissionProjectTypeCardResultProps) {
 	const [editModalIsOpen, setEditModalIsOpen] = useState(false);
 	return (
 		<div className="w-full flex flex-col gap-1 rounded border border-primary/10 shadow-xs">
@@ -192,6 +206,7 @@ function ComissionProjectTypeCardResult({ result, updateResult }: ComissionProje
 					{handleRenderComissionScenarioResultConditionPhrase({
 						result: result,
 						definitions: SaleDefinitions,
+						metadata: { partners: partners.map((p) => ({ id: p._id, label: p.nome, value: p._id })) },
 					})}
 				</div>
 				<button

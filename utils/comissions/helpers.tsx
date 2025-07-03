@@ -83,6 +83,24 @@ export const SaleDefinitions = [
 		type: "SELEÇÃO",
 		options: OpportunityResponsibilityRolesCombinations.map((c, index) => ({ id: index + 1, label: c, value: c })),
 	},
+	{
+		label: "PARCEIRO DA VENDA",
+		identifier: "parceiro_venda",
+		type: "SELEÇÃO",
+		options: [],
+	},
+	{
+		label: "PARCEIRO DO VENDEDOR",
+		identifier: "parceiro_vendedor",
+		type: "SELEÇÃO",
+		options: [],
+	},
+	{
+		label: "PARCEIRO DO SDR",
+		identifier: "parceiro_sdr",
+		type: "SELEÇÃO",
+		options: [],
+	},
 ];
 export const MethodConditionTypes: {
 	id: number;
@@ -124,17 +142,27 @@ export function getComissionScenarioConditionApplicableDefinitions({ conditionTy
 type GetComissionScenarioConditionOptionsByDefinitionParams = {
 	conditionVariable: string;
 	definitions: typeof SaleDefinitions;
+	metadata?: {
+		partners: { id: string; label: string; value: string }[];
+	};
 };
-export function getComissionScenarioConditionOptionsByDefinition({ conditionVariable, definitions }: GetComissionScenarioConditionOptionsByDefinitionParams) {
+export function getComissionScenarioConditionOptionsByDefinition({ conditionVariable, definitions, metadata }: GetComissionScenarioConditionOptionsByDefinitionParams) {
 	const definition = definitions.find((p) => p.identifier === conditionVariable);
 	if (!definition) return [];
+	// If the definition is a partner, then return the options from the metadata
+	if (conditionVariable === "parceiro_venda" || conditionVariable === "parceiro_vendedor" || conditionVariable === "parceiro_sdr") {
+		return metadata?.partners.map((p) => ({ id: p.id, label: p.label, value: p.value })) || [];
+	}
 	return definition.options;
 }
 type HandleRenderComissionScenarioResultConditionPhraseParams = {
 	result: TUserComissionItem["resultados"][number];
 	definitions: typeof SaleDefinitions;
+	metadata?: {
+		partners: { id: string; label: string; value: string }[];
+	};
 };
-export function handleRenderComissionScenarioResultConditionPhrase({ result, definitions }: HandleRenderComissionScenarioResultConditionPhraseParams) {
+export function handleRenderComissionScenarioResultConditionPhrase({ result, definitions, metadata }: HandleRenderComissionScenarioResultConditionPhraseParams) {
 	const {
 		condicao: { aplicavel, tipo, variavel, igual, maiorQue, menorQue, entre, inclui },
 	} = result;
@@ -145,6 +173,16 @@ export function handleRenderComissionScenarioResultConditionPhrase({ result, def
 	const premisseDefinitionLabel = premisseDefinition?.label || "";
 
 	if (tipo === "IGUAL_TEXTO" || tipo === "IGUAL_NÚMERICO") {
+		if (premisseDefinition?.identifier === "parceiro_venda" || premisseDefinition?.identifier === "parceiro_vendedor" || premisseDefinition?.identifier === "parceiro_sdr") {
+			const partner = metadata?.partners.find((p) => p.value === igual);
+			if (partner) {
+				return (
+					<p className="text-sm font-bold leading-none tracking-tight">
+						CÁLCULO SE {premisseDefinitionLabel} FOR IGUAL A {partner?.label}:
+					</p>
+				);
+			}
+		}
 		return (
 			<p className="text-sm font-bold leading-none tracking-tight">
 				CÁLCULO SE {premisseDefinitionLabel} FOR IGUAL A {igual}:
@@ -173,6 +211,18 @@ export function handleRenderComissionScenarioResultConditionPhrase({ result, def
 		);
 	}
 	if (tipo === "INCLUI_LISTA") {
+		if (premisseDefinition?.identifier === "parceiro_venda" || premisseDefinition?.identifier === "parceiro_vendedor" || premisseDefinition?.identifier === "parceiro_sdr") {
+			const partnersLabels = metadata?.partners
+				.filter((p) => inclui?.includes(p.value))
+				.map((p) => p.label)
+				.join(", ");
+			console.log({ partnersLabels });
+			return (
+				<p className="text-sm font-bold leading-none tracking-tight">
+					CÁLCULO SE {premisseDefinitionLabel} FOR UMA DAS OPÇÕES DEFINIDAS ({partnersLabels || ""}):
+				</p>
+			);
+		}
 		return (
 			<p className="text-sm font-bold leading-none tracking-tight">
 				CÁLCULO SE {premisseDefinitionLabel} FOR UMA DAS OPÇÕES DEFINIDAS ({inclui?.join(", ") || ""}):
