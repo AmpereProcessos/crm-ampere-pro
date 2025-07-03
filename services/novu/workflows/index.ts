@@ -136,7 +136,7 @@ export const notifyOpportunityTopicOnTechnicalAnalysisConcluded = workflow(
 			return {
 				subject: `A análise técnica da oportunidade ${payload.oportunidade.identificador} foi concluída !`,
 				body: "A análise técnica foi concluída com sucesso ! Oportunidade apta para a próxima etapa.",
-				avatar: payload.autor.avatar_url,
+				avatar: payload.autor.avatar_url || undefined,
 				redirect: {
 					url: `${process.env.NEXT_PUBLIC_APP_URL}/comercial/oportunidades/id/${payload.oportunidade.id}`,
 					target: "_blank",
@@ -162,9 +162,12 @@ export const notifyOpportunityTopicOnTechnicalAnalysisConcluded = workflow(
 				nome: z.string({
 					required_error: "O nome do autor é obrigatório",
 				}),
-				avatar_url: z.string({
-					required_error: "A URL do avatar do autor é obrigatória",
-				}),
+				avatar_url: z
+					.string({
+						required_error: "A URL do avatar do autor é obrigatória",
+					})
+					.optional()
+					.nullable(),
 			}),
 			oportunidade: z.object({
 				id: z.string({
