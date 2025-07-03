@@ -225,7 +225,7 @@ const updateProposalPersonalized: NextApiHandler<PutResponse> = async (req, res)
 
 	const { proposal, client, opportunity, regenerateFile, idAnvil } = PersonalizedProposalUpdateSchema.parse(req.body);
 
-	const db = await connectToDatabase(process.env.MONGODB_URI, "crm");
+	const db = await connectToDatabase();
 	const proposalsCollection: Collection<TProposal> = db.collection("proposals");
 
 	if (regenerateFile) {

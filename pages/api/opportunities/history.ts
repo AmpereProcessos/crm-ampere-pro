@@ -47,38 +47,38 @@ const createOpportunityHistory: NextApiHandler<PostResponse> = async (req, res) 
 			{ "oportunidade.id": opportunityHistory.oportunidade.id, "oportunidade.dataInteracao": null },
 			{ $set: { "oportunidade.dataInteracao": new Date().toISOString() } },
 		);
-		// Notifying users of the new interaction
-		const novuTopicKey = `opportunity:${opportunityHistory.oportunidade.id}`;
-		// Notifying users of the new interaction
-		const novuTriggerBulkResponse = await novu.trigger({
-			to: {
-				type: "Topic",
-				topicKey: novuTopicKey,
-			},
-			workflowId: NOVU_WORKFLOW_IDS.NOTIFY_NEW_INTERACTION_TO_RESPONSIBLES,
-			payload: {
-				autor: {
-					nome: session.user.nome,
-					avatar_url: session.user.avatar_url,
-				},
-				oportunidade: {
-					id: opportunityHistory.oportunidade.id,
-					identificador: opportunityHistory.oportunidade.identificador,
-					nome: opportunityHistory.oportunidade.nome,
-				},
-				interacao: {
-					tipo: opportunityHistory.tipoInteracao,
-				},
-			},
-			actor: {
-				subscriberId: session.user.id,
-				firstName: session.user.nome,
-				avatar: session.user.avatar_url || undefined,
-			},
-		});
-		console.log("[NOVU] - Notifications sent on new interaction", novuTriggerBulkResponse.result);
 	}
 
+	// Notifying users of the new interaction
+	const novuTopicKey = `opportunity:${opportunityHistory.oportunidade.id}`;
+	// Notifying users of the new interaction
+	const novuTriggerBulkResponse = await novu.trigger({
+		to: {
+			type: "Topic",
+			topicKey: novuTopicKey,
+		},
+		workflowId: NOVU_WORKFLOW_IDS.NOTIFY_NEW_INTERACTION_TO_RESPONSIBLES,
+		payload: {
+			autor: {
+				nome: session.user.nome,
+				avatar_url: session.user.avatar_url,
+			},
+			oportunidade: {
+				id: opportunityHistory.oportunidade.id,
+				identificador: opportunityHistory.oportunidade.identificador,
+				nome: opportunityHistory.oportunidade.nome,
+			},
+			interacao: {
+				tipo: opportunityHistory.categoria === "INTERAÇÃO" ? opportunityHistory.tipoInteracao : opportunityHistory.categoria,
+			},
+		},
+		actor: {
+			subscriberId: session.user.id,
+			firstName: session.user.nome,
+			avatar: session.user.avatar_url || undefined,
+		},
+	});
+	console.log("[NOVU] - Notifications sent on new interaction", novuTriggerBulkResponse.result);
 	const insertedId = insertResponse.insertedId.toString();
 
 	res.status(201).json({ data: { insertedId: insertedId }, message: "Evento de oportunidade criado com sucesso." });
