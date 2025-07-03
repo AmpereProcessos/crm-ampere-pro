@@ -164,6 +164,11 @@ const createProposalPersonalized: NextApiHandler<PostResponse> = async (req, res
 				tipo: "ORÇAMENTOS/PROPOSTAS",
 			},
 		},
+		actor: {
+			subscriberId: session.user.id,
+			firstName: session.user.nome,
+			avatar: session.user.avatar_url || undefined,
+		},
 	});
 	console.log("[NOVU] - Notifications sent on new interaction", novuTriggerBulkResponse.result);
 	// Updating indication (if applicable) in case of first interaction

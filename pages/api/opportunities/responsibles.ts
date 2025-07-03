@@ -74,6 +74,11 @@ const handleAddResponsibleToOpportunity: NextApiHandler<TAddResponsibleToOpportu
 				avatar_url: session.user.avatar_url,
 			},
 		},
+		actor: {
+			subscriberId: session.user.id,
+			firstName: session.user.nome,
+			avatar: session.user.avatar_url || undefined,
+		},
 	});
 
 	// adding new user as subscripter to the opportunity topic

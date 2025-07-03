@@ -136,6 +136,13 @@ async function createNotification(request: NextRequest) {
 					nome: notificationPayload.oportunidade.nome,
 				},
 			},
+			actor: user
+				? {
+						subscriberId: user.id,
+						firstName: user.nome,
+						avatar: user.avatar_url || undefined,
+					}
+				: undefined,
 		});
 		console.log("[NOVU] - Notifications sent on technical analysis concluded", novuTriggerBulkResponse.result);
 	}
@@ -162,6 +169,13 @@ async function createNotification(request: NextRequest) {
 					tipo: notificationPayload.interacao.tipo,
 				},
 			},
+			actor: user
+				? {
+						subscriberId: user.id,
+						firstName: user.nome,
+						avatar: user.avatar_url || undefined,
+					}
+				: undefined,
 		});
 		console.log("[NOVU] - Notifications sent on new interaction to responsibles", novuTriggerBulkResponse.result);
 	}

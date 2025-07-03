@@ -70,6 +70,11 @@ const createOpportunityHistory: NextApiHandler<PostResponse> = async (req, res) 
 					tipo: opportunityHistory.tipoInteracao,
 				},
 			},
+			actor: {
+				subscriberId: session.user.id,
+				firstName: session.user.nome,
+				avatar: session.user.avatar_url || undefined,
+			},
 		});
 		console.log("[NOVU] - Notifications sent on new interaction", novuTriggerBulkResponse.result);
 	}
