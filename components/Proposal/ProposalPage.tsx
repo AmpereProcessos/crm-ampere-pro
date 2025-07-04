@@ -41,9 +41,13 @@ import { handleDownload } from "@/lib/methods/download";
 import EditProposalFile from "../Modals/Proposal/EditFile";
 import toast from "react-hot-toast";
 import { formatProposalPremissesLabel, formatProposalPremissesValue } from "@/utils/proposal";
-import type { TProposalPremisses } from "@/utils/schemas/proposal.schema";
+import type { TProposalDTOWithOpportunityAndClient, TProposalPremisses } from "@/utils/schemas/proposal.schema";
 import { FaTrophy } from "react-icons/fa6";
 import { BsCalendarPlus, BsFillFunnelFill } from "react-icons/bs";
+import { getSalesProposalScenarios } from "@/utils/solar";
+import { Button } from "../ui/button";
+import { ChartArea } from "lucide-react";
+import UFVEnergyEconomyAnalysis from "../Modals/Proposal/UFVEconomicAnalysis";
 
 function getPricingMethodById({ methods, id }: { methods?: TPricingMethodDTO[]; id: string }) {
 	if (!methods) return "NÃO DEFINIDO";
@@ -60,6 +64,7 @@ function ProposalPage({ proposalId, session }: ProposalPageProps) {
 	const [editProposalModalIsOpen, setEditProposalModalIsOpen] = useState<boolean>(false);
 	const [editProposalFileModalIsOpen, setEditProposalFileModalIsOpen] = useState<boolean>(false);
 	const [newContractRequestIsOpen, setNewContractRequestIsOpen] = useState<boolean>(false);
+	const [economicAnalysisIsOpen, setEconomicAnalysisIsOpen] = useState<boolean>(false);
 	const [testRequestIsOpen, setTestRequestIsOpen] = useState<boolean>(false);
 	const { data: proposal, isLoading: proposalLoading, isError: proposalError, isSuccess: proposalSuccess } = useProposalById({ id: proposalId });
 	const { data: pricingMethods } = usePricingMethods();
@@ -117,16 +122,7 @@ function ProposalPage({ proposalId, session }: ProposalPageProps) {
 									</div>
 								</Link>
 							</div>
-							{/* <button
-                onClick={() =>
-                  winOpportunity({
-                    proposalId,
-                    opportunityId: proposal.oportunidade.id,
-                  })
-                }
-              >
-                DAR GANHO TESTE
-              </button> */}
+
 							<WinBlock
 								opportunityId={proposal.oportunidade.id}
 								proposalId={proposalId}
@@ -160,19 +156,16 @@ function ProposalPage({ proposalId, session }: ProposalPageProps) {
 								</div>
 							</div>
 						</div>
-
-						{/* {session.user.permissoes.projetos.visualizar ? (
-              <button
-                // @ts-ignore
-                onClick={() => setTestRequestIsOpen(true)}
-                className="rounded border border-cyan-600 px-4 py-2 text-sm font-bold text-cyan-600 duration-300 ease-in-out hover:bg-cyan-600 hover:text-white"
-              >
-                TESTAR GANHO
-              </button>
-            ) : null} */}
 					</div>
 					<div className="flex w-full grow flex-col py-2">
 						<div className="my-2 flex w-full items-center justify-end gap-2">
+							{proposal.oportunidadeDados.tipo.titulo === "SISTEMA FOTOVOLTAICO" ? (
+								<Button variant="ghost" className="flex items-center gap-2" onClick={() => setEconomicAnalysisIsOpen(true)}>
+									<ChartArea />
+									ANÁLISE ECONÔMICA
+								</Button>
+							) : null}
+
 							{session.user.permissoes.propostas.editar ? (
 								<button
 									type="button"
@@ -298,35 +291,6 @@ function ProposalPage({ proposalId, session }: ProposalPageProps) {
 											</div>
 										</div>
 									) : null}
-
-									{/* {proposal.urlArquivo ? (
-                    <>
-                      <button
-                        onClick={() => handleDownload({ fileName: proposal.nome, fileUrl: proposal.urlArquivo || '' })}
-                        className="flex w-fit items-center gap-2 self-center rounded-lg border border-dashed border-[#15599a] p-2 text-[#15599a]"
-                      >
-                        <p>DOWNLOAD DO PDF</p>
-                        <TbDownload />
-                      </button>
-                      <button
-                        onClick={() => copyToClipboard(proposal.urlArquivo || '')}
-                        className="flex w-fit items-center gap-2 self-center rounded-lg border border-dashed border-[#fead61] p-2 font-medium text-[#fead61]"
-                      >
-                        <p>COPIAR LINK DO ARQUIVO</p>
-                        <MdContentCopy />
-                      </button>
-
-                      {session?.user.permissoes.propostas.editar ? (
-                        <button
-                          onClick={() => setEditProposalFileModalIsOpen(true)}
-                          className="flex w-fit items-center gap-2 self-center rounded-lg border border-dashed border-black p-2 font-medium text-black"
-                        >
-                          <p>EDITAR ARQUIVO</p>
-                          <AiFillEdit />
-                        </button>
-                      ) : null}
-                    </>
-                  ) : null} */}
 								</div>
 							</div>
 							<div className="flex h-full w-full flex-col rounded border border-gray-500 bg-[#fff] p-6 shadow-md lg:w-1/4">
@@ -431,6 +395,7 @@ function ProposalPage({ proposalId, session }: ProposalPageProps) {
 						) : null}
 						{proposal.precificacao.length > 0 ? <ProposalViewPricingBlock userHasPricingViewPermission={userHasPricingViewPermission} pricing={proposal.precificacao} /> : null}
 						<ProposalUpdateRecords proposalId={proposalId} />
+						<ProposalEconomicAnalysis proposal={proposal} />
 					</div>
 				</div>
 				{testRequestIsOpen ? (
@@ -469,6 +434,7 @@ function ProposalPage({ proposalId, session }: ProposalPageProps) {
 				{editProposalFileModalIsOpen ? (
 					<EditProposalFile proposalId={proposalId} opportunityId={proposal.oportunidade.id} proposalName={proposal.nome} closeModal={() => setEditProposalFileModalIsOpen(false)} />
 				) : null}
+				{economicAnalysisIsOpen ? <UFVEnergyEconomyAnalysis proposal={proposal} closeModal={() => setEconomicAnalysisIsOpen(false)} /> : null}
 			</div>
 		);
 	}
@@ -476,3 +442,16 @@ function ProposalPage({ proposalId, session }: ProposalPageProps) {
 }
 
 export default ProposalPage;
+
+function ProposalEconomicAnalysis({ proposal }: { proposal: TProposalDTOWithOpportunityAndClient }) {
+	const analysis = getSalesProposalScenarios({
+		salesProposal: proposal,
+		salesProposalProducts: proposal.produtos,
+		locationUf: proposal.oportunidadeDados.localizacao.uf,
+		locationCity: proposal.oportunidadeDados.localizacao.cidade,
+	});
+
+	console.log(analysis);
+
+	return null;
+}
