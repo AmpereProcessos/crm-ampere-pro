@@ -130,8 +130,19 @@ type GetSalesProposalScenariosProps = {
 	locationUf: string;
 	locationCity: string;
 	salesProposalProducts: TProposal["produtos"];
+	yearsQty?: number;
+	publicIluminationCost?: number;
+	yearlyConsumptionScaling?: number;
 };
-export function getSalesProposalScenarios({ salesProposal, salesProposalProducts, locationUf, locationCity }: GetSalesProposalScenariosProps) {
+export function getSalesProposalScenarios({
+	salesProposal,
+	salesProposalProducts,
+	locationUf,
+	locationCity,
+	yearsQty = 25,
+	publicIluminationCost = 20,
+	yearlyConsumptionScaling = 0,
+}: GetSalesProposalScenariosProps) {
 	// Getting the progression array of billing prices, payback, and other stuff
 
 	// Expense related
@@ -150,7 +161,6 @@ export function getSalesProposalScenarios({ salesProposal, salesProposalProducts
 	const simultaneity = salesProposal.premissas.fatorSimultaneidade || 30;
 	const energyAvailabilityType = "BIFÁSICO"; // fixing at bifásico for now
 
-	const yearsQty = 25;
 	const Table = getExpenseAndEconomyProgression({
 		data: {
 			investimento: salesProposal.valor,
@@ -162,8 +172,10 @@ export function getSalesProposalScenarios({ salesProposal, salesProposalProducts
 			"tarifa-de-energia": energyConsumptonTariff,
 			"tipo-de-disponibilidade-de-energia": energyAvailabilityType,
 			"fator-simultaneidade": simultaneity,
+			"custo-iluminacao-publica": publicIluminationCost,
 		},
 		yearsQty: yearsQty,
+		yearlyConsumptionScaling: yearlyConsumptionScaling,
 	});
 	// console.log('MATRIZ GD1', Table)
 
@@ -202,6 +214,8 @@ export type TSalesProposalScenarios = ReturnType<typeof getSalesProposalScenario
 function getExpenseAndEconomyProgression({
 	data,
 	yearsQty = 25,
+	yearlyConsumptionScaling = 0,
+	yearlyGenerationDecrease = 0.008,
 }: {
 	data: {
 		investimento: number;
@@ -213,8 +227,11 @@ function getExpenseAndEconomyProgression({
 		"consumo-de-energia-medio-mensal": number;
 		"tarifa-de-energia": number;
 		"tipo-de-disponibilidade-de-energia": string;
+		"custo-iluminacao-publica": number;
 	};
 	yearsQty?: number;
+	yearlyConsumptionScaling?: number;
+	yearlyGenerationDecrease?: number;
 }) {
 	const totalModulesPower = data.potencia_total_modulos || 0;
 	const locationCity = data.localizacao_cidade;
@@ -241,20 +258,10 @@ function getExpenseAndEconomyProgression({
 		BIFÁSICO: 50,
 		TRIFÁSICO: 100,
 	} as const;
-	const PublicIluminationCost = 20;
+	const PublicIluminationCost = data["custo-iluminacao-publica"] || 20;
 
 	const ConsumptionArray = Array.from({ length: 12 }, () => 1).map((x) => x * consumption);
 	const GenerationArray = Array.from({ length: 12 }, () => 1).map((x) => x * generation);
-	const InstantConsumptionArray = ConsumptionArray.map((c, index) => {
-		const gen = GenerationArray[index] || 0;
-		const simultaneousConsumption = c * (simultaneity / 100);
-		// In case generation was bigger than the simultaneous consumption, then
-		// instant consumption equals simultaneous consumption
-		if (gen > simultaneousConsumption) return simultaneousConsumption;
-		// In case it was smaller, instant consumption equals total generation
-		return gen;
-	});
-	const NetMonthEnergyArray = GenerationArray.map((g, index) => g - (ConsumptionArray[index] || 0));
 
 	const MonthQty = yearsQty * 12;
 
@@ -274,24 +281,27 @@ function getExpenseAndEconomyProgression({
 		PastBalance = CumulatedBalance;
 		const IndexEnergyTariff = getIndexEnergyTariff({ StartEnergyTariff, InitialYear, IndexYear: Year });
 		const IndexFioBTariff = getIndexFioBTariff({ IndexYear: Year, InitialYear, StartEnergyTariff, StartFioBEnergyTariff });
-		const IndexLiquidEnergy = NetMonthEnergyArray[Month] || 0;
-		const IndexInjectedEnergy = (GenerationArray[Month] || 0) - (InstantConsumptionArray[Month] || 0);
+
+		const { NetGeneration, InjectedEnergy, UsedEnergyFromGrid, Consumption, Generation, InstantConsumption } = getIndexConsumptionGenerationValues({
+			ReferenceConsumption: ConsumptionArray[Month],
+			ReferenceGeneration: GenerationArray[Month],
+			InitialYear,
+			IndexYear: Year,
+			YearlyConsumptionScaling: yearlyConsumptionScaling,
+			YearGenerationDecrease: yearlyGenerationDecrease,
+			Simultaneity: simultaneity,
+		});
+
+		const IndexLiquidEnergy = NetGeneration;
+		const IndexInjectedEnergy = InjectedEnergy;
 
 		// Used energy from the grid, which is the total consumption minus the instantaneous consumption on gen
 		// (PT-BR) Energia utilizada da rede, que é o consumo total menos a consumação instantânea na geração
-		const IndexUsedEnergy = (ConsumptionArray[Month] || 0) - (InstantConsumptionArray[Month] || 0);
+		const IndexUsedEnergy = UsedEnergyFromGrid;
 		// New cumulated balance
 		// (PT-BR) Novo saldo acumulado, que é o saldo acumulado atual mais a energia líquida do mês
 		const WillUseAllCumulatedBalance = CumulatedBalance + IndexLiquidEnergy <= 0;
 		CumulatedBalance = WillUseAllCumulatedBalance ? 0 : PastBalance + IndexLiquidEnergy;
-		console.log({
-			Year,
-			Month,
-			WillUseAllCumulatedBalance,
-			PastBalance,
-			IndexLiquidEnergy,
-			CumulatedBalance,
-		});
 
 		// Getting energy compensated
 		// (PT-BR) Obtendo a energia compensada, levará em consideração o saldo acumulado, a energia injetada e a energia utilizada da rede
@@ -325,11 +335,26 @@ function getExpenseAndEconomyProgression({
 		const EnergyBillValue = Math.max(DisponibilityCost, OverallEnergyCost) + PublicIluminationCost;
 		// Energy Bill without a energy generation system
 		// (PT-BR) Fatura de energia sem um sistema de geração de energia
-		const ConventionalEnergyBill = IndexEnergyTariff * consumption + PublicIluminationCost;
+		const ConventionalEnergyBill = IndexEnergyTariff * Consumption + PublicIluminationCost;
 		// Getting the monetary value saved from being a energy generator
 		// (PT-BR) Obtendo o valor monetário salvo de ser um gerador de energia
 		const SavedValue = ConventionalEnergyBill - EnergyBillValue;
 
+		console.log({
+			"A - Year": Year,
+			"B - Month": Month + 1,
+			"C - Consumption": Consumption,
+			"D - Generation": Generation,
+			"E - NetGeneration": NetGeneration,
+			"F - InstantConsumption": InstantConsumption,
+			"G - InjectedEnergy": InjectedEnergy,
+			"H - UsedEnergyFromGrid": UsedEnergyFromGrid,
+			"I - CompensationEnergy": CompensationEnergy,
+			"J - CompensatedEnergyCost": CompensationValue.networkCost,
+			"K - NonCompensatedEnergyCost": NonCompensatedEnergyCost,
+			"L - OverallEnergyCost": OverallEnergyCost,
+			"M - EnergyBillValue": EnergyBillValue,
+		});
 		// Updating payback based on the saved value
 		// (PT-BR) Atualizando o payback com o valor salvo
 		Payback = Payback + SavedValue;
@@ -338,6 +363,10 @@ function getExpenseAndEconomyProgression({
 			Year: Year,
 			Month: Month + 1,
 			Tag: Month + 1 >= 10 ? `${Month + 1}/${Year}` : `0${Month + 1}/${Year}`,
+			Consumption: Consumption,
+			Generation: Generation,
+			NonCompensatedEnergyCost,
+			CompensatedEnergyCost: CompensationValue.networkCost,
 			CumulatedBalance: CumulatedBalance,
 			EnergyBillValue: EnergyBillValue,
 			ConventionalEnergyBill: ConventionalEnergyBill,
@@ -467,4 +496,46 @@ function getIndexEnergyTariff({ StartEnergyTariff, InitialYear, IndexYear }: { S
 	const EnergyAnnualInflation = 0.05;
 	const Increase = (1 + EnergyAnnualInflation) ** YearDiff;
 	return StartEnergyTariff * Increase;
+}
+
+function getIndexConsumptionGenerationValues({
+	ReferenceConsumption,
+	ReferenceGeneration,
+	Simultaneity,
+	InitialYear,
+	IndexYear,
+	YearlyConsumptionScaling,
+	YearGenerationDecrease,
+}: {
+	ReferenceConsumption: number;
+	ReferenceGeneration: number;
+	Simultaneity: number;
+	InitialYear: number;
+	IndexYear: number;
+	YearlyConsumptionScaling: number;
+	YearGenerationDecrease: number;
+}) {
+	const YearDiff = IndexYear - InitialYear;
+	const ConsumptionMultiplier = (1 + YearlyConsumptionScaling) ** YearDiff;
+	const GenerationMultiplier = (1 - YearGenerationDecrease) ** YearDiff;
+
+	const UpdatedConsumption = ReferenceConsumption * ConsumptionMultiplier;
+	const UpdatedGeneration = ReferenceGeneration * GenerationMultiplier;
+	const NetGeneration = UpdatedGeneration - UpdatedConsumption;
+
+	const SimultaneousConsumption = UpdatedConsumption * (Simultaneity / 100);
+	const InstantConsumption = UpdatedGeneration > SimultaneousConsumption ? SimultaneousConsumption : UpdatedGeneration;
+
+	const UsedEnergyFromGrid = UpdatedConsumption - InstantConsumption;
+	const InjectedEnergy = UpdatedGeneration - InstantConsumption;
+
+	return {
+		Consumption: UpdatedConsumption,
+		Generation: UpdatedGeneration,
+		NetGeneration: NetGeneration,
+		InstantConsumption: InstantConsumption,
+		SimultaneousConsumption: SimultaneousConsumption,
+		UsedEnergyFromGrid: UsedEnergyFromGrid,
+		InjectedEnergy: InjectedEnergy,
+	};
 }
