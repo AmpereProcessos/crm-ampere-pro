@@ -210,23 +210,28 @@ export function useOpportunitiesUltraSimplified() {
 	});
 }
 
-async function fetchOwnComissions({ after, before }: TGetComissionsRouteInput) {
+async function fetchComissions({ after, before, userIds }: TGetComissionsRouteInput) {
 	try {
-		const { data }: { data: TGetComissionsRouteOutput } = await axios.get(`/api/opportunities/comissions?after=${after}&before=${before}`);
+		const params = new URLSearchParams();
+		params.set("after", after);
+		params.set("before", before);
+		if (userIds) {
+			params.set("userIds", userIds.join(","));
+		}
+		console.log("PARAMS", params.toString());
+		const { data }: { data: TGetComissionsRouteOutput } = await axios.get(`/api/opportunities/comissions?${params.toString()}`);
 		return data.data;
 	} catch (error) {
-		console.log("Error fetching own comissions", error);
+		console.log("Error fetching comissions", error);
 		throw error;
 	}
 }
 
-export function useOwnComissions() {
-	const monthStart = dayjs().startOf("month");
-	const monthEnd = dayjs().endOf("month");
-	const [queryParams, setQueryParams] = useState<TGetComissionsRouteInput>({
-		after: monthStart.toISOString(),
-		before: monthEnd.toISOString(),
-	});
+type UseComissionsParams = {
+	initialQueryParams: TGetComissionsRouteInput;
+};
+export function useComissions({ initialQueryParams }: UseComissionsParams) {
+	const [queryParams, setQueryParams] = useState<TGetComissionsRouteInput>(initialQueryParams);
 
 	function updateQueryParams(queryParams: Partial<TGetComissionsRouteInput>) {
 		setQueryParams((prev) => ({ ...prev, ...queryParams }));
@@ -234,8 +239,8 @@ export function useOwnComissions() {
 	const debouncedParams = useDebounceMemo(queryParams, 500);
 	return {
 		...useQuery({
-			queryKey: ["own-comissions", debouncedParams],
-			queryFn: async () => await fetchOwnComissions(debouncedParams),
+			queryKey: ["comissions", debouncedParams],
+			queryFn: async () => await fetchComissions(debouncedParams),
 		}),
 		queryParams,
 		updateQueryParams,

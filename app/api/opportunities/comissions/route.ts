@@ -20,11 +20,27 @@ export async function getComissions(request: NextRequest) {
 	const searchParams = request.nextUrl.searchParams;
 	const afterParam = searchParams.get("after");
 	const beforeParam = searchParams.get("before");
-
-	const { after, before } = GetComissionsQueryParams.parse({
+	const userIdsParam = searchParams.get("userIds");
+	console.log("PARAMS", {
 		after: afterParam,
 		before: beforeParam,
+		userIds: userIdsParam,
 	});
+	const { after, before, userIds } = GetComissionsQueryParams.parse({
+		after: afterParam,
+		before: beforeParam,
+		userIds: userIdsParam,
+	});
+
+	// First, checking for attempts to access overall comission data (passing userIds as null or undefined)
+	// If user has a defined scope, then, overall access is not allowed
+	if (!userIds && !!userScope) {
+		throw new createHttpError.BadRequest("Parâmetro de visualização não permitido para o seu nível de acesso.");
+	}
+	// Second, checking for attempts to access unauthorized users comission (passing any userId that is not in the user scope)
+	if (userScope && userIds && userIds.some((userId) => !userScope.includes(userId))) {
+		throw new createHttpError.BadRequest("Parâmetro de visualização não permitido para o seu nível de acesso.");
+	}
 
 	const crmDb = await connectToDatabase();
 	const opportunitiesCollection = crmDb.collection<TOpportunity>("opportunities");
@@ -35,8 +51,7 @@ export async function getComissions(request: NextRequest) {
 		projectsCollection,
 		afterDateStr: after,
 		beforeDateStr: before,
-		userId: user.id,
-		userName: user.nome,
+		userIds: userIds,
 	});
 
 	const projectOpportunityIdsAsObjectId = projects.filter((project) => !!project.idProjetoCRM).map((project) => new ObjectId(project.idProjetoCRM as string));
@@ -51,12 +66,6 @@ export async function getComissions(request: NextRequest) {
 				console.log(`[GET COMISSIONS] Error finding project for opportunity ${opportunity._id.toString()}`);
 				return null;
 			}
-			const userInProject = project.comissoes?.comissionados?.find((comissionedUser) => comissionedUser.idCrm === user.id);
-
-			if (!userInProject) {
-				console.log(`[GET COMISSIONS] User ${user.id} not found as comissioned user in project ${project._id.toString()}`);
-				throw new createHttpError.NotFound("Oops, um erro desconhecido ocorreu. Por favor, tente novamente mais tarde.");
-			}
 
 			const comissionableValue = project.comissoes?.valorComissionavel || 0;
 			return {
@@ -68,15 +77,28 @@ export async function getComissions(request: NextRequest) {
 				appTipo: project.tipoDeServico,
 				appDataAssinatura: project.contrato?.dataAssinatura,
 				appDataRecebimentoParcial: project.compra?.dataPagamento,
+				valorProjeto: project.sistema?.valorProjeto,
+				valorPadrao: project.padrao?.valor,
+				valorEstruturaPersonalizada: project.estruturaPersonalizada?.valor,
+				valorOem: project.oem?.valor,
+				valorSeguro: project.seguro?.valor,
 				comissao: {
 					dataReferencia: project.comissoes?.dataReferencia,
-					comissionadoPapel: userInProject?.papel,
-					comissaoEfetivada: !!userInProject?.dataEfetivacao || false,
-					comissaoPagamentoRealizado: !!userInProject?.dataPagamento || false,
 					valorComissionavel: comissionableValue,
-					comissaoPorcentagem: userInProject?.porcentagem,
-					comissaoValor: comissionableValue * (userInProject?.porcentagem / 100),
-					dataValidacao: userInProject?.dataValidacao,
+					itensComissionaveis: project.comissoes?.itensComissionaveis || [],
+					comissionados: (
+						project.comissoes?.comissionados?.map((c) => ({
+							id: c.idCrm,
+							nome: c.nome,
+							papel: c.papel,
+							avatar_url: c.avatar_url,
+							comissaoPorcentagem: c.porcentagem,
+							comissaoValor: comissionableValue * (c.porcentagem / 100),
+							comissaoEfetivada: !!c.dataEfetivacao || false,
+							comissaoPagamentoRealizado: !!c.dataPagamento || false,
+							dataValidacao: c.dataValidacao,
+						})) || []
+					).filter((c) => (userScope ? userScope.includes(c.id || "") : true)), // Filtering out comissioned users that are not in the user scope
 				},
 			};
 		})
@@ -150,15 +172,15 @@ type GetProjectsParams = {
 	projectsCollection: Collection<TAppProject>;
 	afterDateStr: string;
 	beforeDateStr: string;
-	userId: string;
-	userName: string;
+	userIds: string[] | undefined;
 };
-export async function getProjects({ projectsCollection, afterDateStr, beforeDateStr, userId, userName }: GetProjectsParams) {
-	const responsiblesQuery: Filter<TAppProject> = userId
-		? {
-				"comissoes.comissionados.idCrm": { $in: [userId] },
-			}
-		: {};
+export async function getProjects({ projectsCollection, afterDateStr, beforeDateStr, userIds }: GetProjectsParams) {
+	const responsiblesQuery: Filter<TAppProject> =
+		userIds && userIds.length > 0
+			? {
+					"comissoes.comissionados.idCrm": { $in: userIds },
+				}
+			: {};
 	const signedQueryFilter: Filter<TAppProject> = {
 		"contrato.status": "ASSINADO",
 	};

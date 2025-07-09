@@ -4,14 +4,14 @@ import { Sidebar } from "@/components/Sidebar";
 import ErrorComponent from "@/components/utils/ErrorComponent";
 import LoadingComponent from "@/components/utils/LoadingComponent";
 import type { TUserSession } from "@/lib/auth/session";
-import { useOwnComissions } from "@/utils/queries/opportunities";
+import { useComissions } from "@/utils/queries/opportunities";
 import Link from "next/link";
 import { BsFunnel } from "react-icons/bs";
-import { FaDiamond } from "react-icons/fa6";
-import { MdDashboard } from "react-icons/md";
+import { FaDiamond, FaShieldHalved, FaSolarPanel } from "react-icons/fa6";
+import { MdDashboard, MdElectricMeter, MdOutlineRoofing } from "react-icons/md";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
-import { BadgeDollarSign, Percent, Calendar, BadgeCheck, Users } from "lucide-react";
-import { formatDateAsLocale, formatDecimalPlaces, formatToMoney } from "@/lib/methods/formatting";
+import { BadgeDollarSign, Percent, Calendar, BadgeCheck, Users, Wrench } from "lucide-react";
+import { formatDateAsLocale, formatDecimalPlaces, formatNameAsInitials, formatToMoney } from "@/lib/methods/formatting";
 import { cn } from "@/lib/utils";
 import { LoadingButton } from "@/components/Buttons/loading-button";
 import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
@@ -21,13 +21,45 @@ import { bulkUpdateComissions } from "@/utils/mutations/opportunities";
 import { VscDiffAdded } from "react-icons/vsc";
 import DateIntervalInput from "@/components/ui/DateIntervalInput";
 import { useState } from "react";
+import dayjs from "dayjs";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import MultipleSelectInput from "@/components/Inputs/MultipleSelectInput";
+import { useStatsQueryOptions } from "@/utils/queries/stats";
 
+const comissionableItemsIconsMap = {
+	SISTEMA: FaSolarPanel,
+	PADRÃO: MdElectricMeter,
+	"ESTRUTURA PERSONALIZADA": MdOutlineRoofing,
+	OEM: Wrench,
+	SEGURO: FaShieldHalved,
+};
+
+const monthStart = dayjs().startOf("month");
+const monthEnd = dayjs().endOf("month");
 type ComissionsPageProps = {
 	session: TUserSession;
 };
 function ComissionsPage({ session }: ComissionsPageProps) {
 	const queryClient = useQueryClient();
-	const { data: comissions, isLoading, isError, isSuccess, queryParams, updateQueryParams } = useOwnComissions();
+	const userResultsScope = session.user.permissoes.resultados.escopo;
+	// Checking if user results scope is broader then his own id
+	const userResultsScopeIsBroad = !userResultsScope?.every((u) => u === session.user.id);
+	const { data: queryOptions } = useStatsQueryOptions();
+	const {
+		data: comissions,
+		isLoading,
+		isError,
+		isSuccess,
+		queryParams,
+		updateQueryParams,
+	} = useComissions({
+		initialQueryParams: {
+			after: monthStart.toISOString(),
+			before: monthEnd.toISOString(),
+			userIds: userResultsScope || undefined,
+		},
+	});
 
 	function handleBulkUpdateComission(comissions: TGetComissionsRouteOutput["data"]) {
 		const bulkUpdates: TBulkUpdateComissionsRouteInput = comissions.map((c) => {
@@ -39,24 +71,37 @@ function ComissionsPage({ session }: ComissionsPageProps) {
 			comissions: bulkUpdates,
 		});
 	}
-	const [period, setPeriod] = useState<{ after?: Date; before?: Date }>({});
 	function getStats(info: TGetComissionsRouteOutput["data"]) {
-		return {
-			totalComissionableProjects: info.length,
-			totalComissionValue: info.reduce((acc, c) => acc + c.comissao.valorComissionavel * (c.comissao.comissaoPorcentagem / 100), 0),
-			totalComissionsValidated: info.filter((c) => c.comissao.dataValidacao).length,
-			totalComissionsNotValidated: info.filter((c) => !c.comissao.dataValidacao).length,
-		};
+		const groupedStats = info.reduce(
+			(acc: { totalComissionableProjects: number; totalComissionValue: number; totalComissionsValidated: number; totalComissionsNotValidated: number }, c) => {
+				acc.totalComissionableProjects++;
+				acc.totalComissionValue += c.comissao.comissionados?.reduce((acc, c) => acc + c.comissaoValor, 0) || 0;
+				acc.totalComissionsValidated += c.comissao.comissionados?.filter((c) => c.dataValidacao).length || 0;
+				acc.totalComissionsNotValidated += c.comissao.comissionados?.filter((c) => !c.dataValidacao).length || 0;
+				return acc;
+			},
+			{
+				totalComissionableProjects: 0,
+				totalComissionValue: 0,
+				totalComissionsValidated: 0,
+				totalComissionsNotValidated: 0,
+			},
+		);
+		return groupedStats;
 	}
 	const { mutate: handleBulkUpdateComissionMutation, isPending: isBulkUpdateComissionPending } = useMutationWithFeedback({
 		mutationKey: ["bulk-update-comissions"],
 		mutationFn: bulkUpdateComissions,
 		queryClient,
-		affectedQueryKey: ["own-comissions", queryParams],
+		affectedQueryKey: ["comissions", queryParams],
 	});
 	const stats = getStats(comissions || []);
-	const areExistingOpportunitiesMissingValidation = comissions?.some((c) => !c.comissao.dataValidacao);
-	console.log(queryParams);
+	const responsiblesSelectableOptions = queryOptions?.responsibles
+		? userResultsScope
+			? queryOptions.responsibles.filter((a) => userResultsScope.includes(a._id))
+			: queryOptions.responsibles
+		: [];
+	const areExistingOpportunitiesMissingValidation = comissions?.some((c) => c.comissao.comissionados.some((c) => !c.dataValidacao));
 	return (
 		<div className="flex h-full flex-col md:flex-row">
 			<Sidebar session={session} />
@@ -68,21 +113,38 @@ function ComissionsPage({ session }: ComissionsPageProps) {
 								<h1 className="text-xl font-black leading-none tracking-tight md:text-2xl">COMISSÕES</h1>
 							</div>
 						</div>
-						<DateIntervalInput
-							label="Período"
-							labelClassName="text-xs font-medium leading-none tracking-tight"
-							className="border-none p-0 px-2 h-fit py-0.5 shadow-none"
-							value={{
-								after: queryParams.after ? new Date(queryParams.after) : undefined,
-								before: queryParams.before ? new Date(queryParams.before) : undefined,
-							}}
-							handleChange={(v) => {
-								updateQueryParams({
-									after: v.after ? v.after.toISOString() : undefined,
-									before: v.before ? v.before.toISOString() : undefined,
-								});
-							}}
-						/>
+						<div className="flex items-center gap-2">
+							{userResultsScopeIsBroad ? (
+								<div className="w-full lg:w-[300px]">
+									<MultipleSelectInput
+										labelClassName="text-sm font-medium uppercase tracking-tight"
+										resetOptionLabel="TODOS OS USUÁRIOS"
+										selected={queryParams.userIds || []}
+										options={responsiblesSelectableOptions?.map((resp) => ({ id: resp._id || "", label: resp.nome || "", value: resp._id || "" })) || []}
+										handleChange={(value) => updateQueryParams({ userIds: value as string[] })}
+										onReset={() => updateQueryParams({ userIds: userResultsScope || undefined })}
+										label="USUÁRIOS"
+										width="100%"
+									/>
+								</div>
+							) : null}
+
+							<DateIntervalInput
+								label="Período"
+								labelClassName="text-xs font-medium leading-none tracking-tight"
+								className="border-none p-0 px-2 h-fit py-0.5 shadow-none"
+								value={{
+									after: queryParams.after ? new Date(queryParams.after) : undefined,
+									before: queryParams.before ? new Date(queryParams.before) : undefined,
+								}}
+								handleChange={(v) => {
+									updateQueryParams({
+										after: v.after ? v.after.toISOString() : undefined,
+										before: v.before ? v.before.toISOString() : undefined,
+									});
+								}}
+							/>
+						</div>
 					</div>
 				</div>
 				<div className="flex flex-col justify-between gap-4 py-2">
@@ -129,7 +191,14 @@ function ComissionsPage({ session }: ComissionsPageProps) {
 							</div>
 							{comissions.length > 0 ? (
 								comissions.map((opportunity) => (
-									<ComissionCard key={opportunity._id} opportunity={opportunity} queryClient={queryClient} affectedQueryKey={["own-comissions", queryParams]} />
+									<ComissionCard
+										key={opportunity._id}
+										opportunity={opportunity}
+										queryClient={queryClient}
+										affectedQueryKey={["own-comissions", queryParams]}
+										view={userResultsScopeIsBroad ? "broad" : "own"}
+										sessionUserId={session.user.id}
+									/>
 								))
 							) : (
 								<p className="w-full text-center italic text-gray-500">Nenhuma comissão para o período selecionado encontrada...</p>
@@ -145,11 +214,15 @@ function ComissionsPage({ session }: ComissionsPageProps) {
 export default ComissionsPage;
 
 type ComissionCardProps = {
+	sessionUserId: string;
 	opportunity: TGetComissionsRouteOutput["data"][number];
 	queryClient: QueryClient;
+	view: "own" | "broad";
 	affectedQueryKey: any[];
 };
-function ComissionCard({ opportunity, queryClient, affectedQueryKey }: ComissionCardProps) {
+function ComissionCard({ opportunity, queryClient, affectedQueryKey, view, sessionUserId }: ComissionCardProps) {
+	const totalComissionPercentage = opportunity.comissao.comissionados.reduce((acc, comissionado) => acc + comissionado.comissaoPorcentagem, 0) / 100;
+	const totalComissionValue = opportunity.comissao.valorComissionavel * totalComissionPercentage;
 	function getDateParams(opportunity: TGetComissionsRouteOutput["data"][number]) {
 		if (["SISTEMA FOTOVOLTAICO", "AUMENTO DE SISTEMA FOTOVOLTAICO"].includes(opportunity.appTipo)) {
 			return opportunity.appDataRecebimentoParcial;
@@ -162,13 +235,41 @@ function ComissionCard({ opportunity, queryClient, affectedQueryKey }: Comission
 			comissions: bulkUpdates,
 		});
 	}
-
 	const { mutate: handleBulkUpdateComissionMutation, isPending: isBulkUpdateComissionPending } = useMutationWithFeedback({
 		mutationKey: ["bulk-update-comissions"],
 		mutationFn: bulkUpdateComissions,
 		queryClient,
 		affectedQueryKey,
 	});
+	const comissionValueMap = {
+		SISTEMA: opportunity.valorProjeto,
+		PADRÃO: opportunity.valorPadrao,
+		"ESTRUTURA PERSONALIZADA": opportunity.valorEstruturaPersonalizada,
+		OEM: opportunity.valorOem,
+		SEGURO: opportunity.valorSeguro,
+	};
+	function getComissionByItemList(opportunity: TGetComissionsRouteOutput["data"][number]) {
+		const comissionableItems = opportunity.comissao.itensComissionaveis || ["SISTEMA", "PADRÃO", "ESTRUTURA PERSONALIZADA", "OEM", "SEGURO"];
+
+		const comissionableItemsList = comissionableItems.map((item) => {
+			const value = comissionValueMap[item as keyof typeof comissionValueMap] || 0;
+			return {
+				item,
+				icon: comissionableItemsIconsMap[item as keyof typeof comissionableItemsIconsMap],
+				valor: value,
+				comissionados: opportunity.comissao.comissionados.map((comissionado) => ({
+					nome: comissionado.nome,
+					avatar_url: comissionado.avatar_url,
+					porcentagem: comissionado.comissaoPorcentagem,
+					comissao: (comissionado.comissaoPorcentagem * value) / 100,
+				})),
+				comissaoTotal: value * totalComissionPercentage,
+			};
+		});
+		return comissionableItemsList;
+	}
+	const comissionByItemList = getComissionByItemList(opportunity);
+	const sessionUserComission = opportunity.comissao.comissionados.find((c) => c.id === sessionUserId);
 	return (
 		<div className="flex w-full flex-col gap-1 rounded border border-primary bg-[#fff] p-2 shadow-sm">
 			<div className="flex w-full flex-col items-center justify-between gap-2 lg:flex-row">
@@ -209,57 +310,163 @@ function ComissionCard({ opportunity, queryClient, affectedQueryKey }: Comission
 						</HoverCardContent>
 					</HoverCard>
 				</div>
-				<div className="flex items-center gap-2">
-					<div className="flex items-center gap-1 px-2 py-1">
-						<Percent className="h-4 w-4 min-h-4 min-w-4" />
-						<p className="text-sm font-semibold text-black/80">{formatDecimalPlaces(opportunity.comissao.comissaoPorcentagem)}%</p>
+				{view === "own" ? (
+					<div className="flex items-center gap-2">
+						<p className="text-sm font-semibold text-black/80">SUA COMISSÃO</p>
+						<div className="flex items-center gap-1 px-2 py-1">
+							<Percent className="h-4 w-4 min-h-4 min-w-4" />
+							<p className="text-sm font-semibold text-black/80">{formatDecimalPlaces(sessionUserComission?.comissaoPorcentagem || 0)}%</p>
+						</div>
+						<div className="flex items-center gap-1 px-2 py-1">
+							<BadgeDollarSign className="h-4 w-4 min-h-4 min-w-4" />
+							<p className="text-sm font-semibold text-black/80">{formatToMoney(sessionUserComission?.comissaoValor || 0)}</p>
+						</div>
 					</div>
-					<div className="flex items-center gap-1 px-2 py-1">
-						<BadgeDollarSign className="h-4 w-4 min-h-4 min-w-4" />
-						<p className="text-sm font-semibold text-black/80">{formatToMoney(opportunity.comissao.comissaoValor)}</p>
-					</div>
-				</div>
+				) : null}
 			</div>
 			<div className="flex w-full flex-col items-center justify-between gap-2 lg:flex-row">
 				<div className="flex w-full flex-wrap items-center justify-center gap-2 lg:grow lg:justify-start">
-					<div className="flex items-center gap-1">
-						<Users className={cn("w-3 h-3 min-w-3 min-h-3")} />
-						<div className="flex items-center gap-1 rounded-lg bg-secondary px-2 py-0.5 text-center text-[0.5rem] font-bold italic text-black/80">
-							<p>FUNÇÃO: </p>
-							<p className="text-[#15599a] font-black text-[0.57rem]">{opportunity.comissao.comissionadoPapel}</p>
-						</div>
-					</div>
-					<div
-						className={cn("flex items-center gap-1 rounded-lg bg-secondary px-2 py-0.5 text-center text-[0.5rem] font-bold italic text-black/80", {
-							"bg-orange-100 text-orange-700": !opportunity.comissao.comissaoEfetivada,
-							"bg-green-100 text-green-700": opportunity.comissao.comissaoEfetivada,
-						})}
-					>
-						<BadgeCheck className={cn("w-3 h-3 min-w-3 min-h-3")} />
-						<p className={cn("font-medium text-[0.57rem]")}>{opportunity.comissao.comissaoEfetivada ? "COMISSÕES DEFINIDAS" : "COMISSÕES NÃO DEFINIDAS"}</p>
-					</div>
-					<div
-						className={cn("flex items-center gap-1 rounded-lg bg-secondary px-2 py-0.5 text-center text-[0.5rem] font-bold italic text-black/80", {
-							"bg-orange-100 text-orange-700": !opportunity.comissao.comissaoPagamentoRealizado,
-							"bg-green-100 text-green-700": opportunity.comissao.comissaoPagamentoRealizado,
-						})}
-					>
-						<BadgeDollarSign className={cn("w-3 h-3 min-w-3 min-h-3")} />
-						<p className={cn("font-medium text-[0.57rem]")}>{opportunity.comissao.comissaoPagamentoRealizado ? "PAGAMENTO REALIZADO" : "PAGAMENTO NÃO REALIZADO"}</p>
-					</div>
-					<div
-						className={cn("flex items-center gap-1 rounded-lg bg-secondary px-2 py-0.5 text-center text-[0.5rem] font-bold italic text-black/80", {
-							"bg-orange-100 text-orange-700": !opportunity.comissao.dataValidacao,
-							"bg-green-100 text-green-700": opportunity.comissao.dataValidacao,
-						})}
-					>
-						<BadgeCheck className={cn("w-3 h-3 min-w-3 min-h-3")} />
-						<p className={cn("font-medium text-[0.57rem]")}>
-							{opportunity.comissao.dataValidacao ? `VALIDO COMO ${opportunity.comissao.comissionadoPapel} EM ${formatDateAsLocale(opportunity.comissao.dataValidacao)}` : "NÃO VALIDADO"}
-						</p>
-					</div>
+					{view === "own" ? (
+						<>
+							<div className="flex items-center gap-1">
+								<Users className={cn("w-3 h-3 min-w-3 min-h-3")} />
+								<div className="flex items-center gap-1 rounded-lg bg-secondary px-2 py-0.5 text-center text-[0.5rem] font-bold italic text-black/80">
+									<p>FUNÇÃO: </p>
+									<p className="text-[#15599a] font-black text-[0.57rem]">{sessionUserComission?.papel}</p>
+								</div>
+							</div>
+							<div
+								className={cn("flex items-center gap-1 rounded-lg bg-secondary px-2 py-0.5 text-center text-[0.5rem] font-bold italic text-black/80", {
+									"bg-orange-100 text-orange-700": !sessionUserComission?.comissaoEfetivada,
+									"bg-green-100 text-green-700": sessionUserComission?.comissaoEfetivada,
+								})}
+							>
+								<BadgeCheck className={cn("w-3 h-3 min-w-3 min-h-3")} />
+								<p className={cn("font-medium text-[0.57rem]")}>{sessionUserComission?.comissaoEfetivada ? "COMISSÕES DEFINIDAS" : "COMISSÕES NÃO DEFINIDAS"}</p>
+							</div>
+							<div
+								className={cn("flex items-center gap-1 rounded-lg bg-secondary px-2 py-0.5 text-center text-[0.5rem] font-bold italic text-black/80", {
+									"bg-orange-100 text-orange-700": !sessionUserComission?.comissaoPagamentoRealizado,
+									"bg-green-100 text-green-700": sessionUserComission?.comissaoPagamentoRealizado,
+								})}
+							>
+								<BadgeDollarSign className={cn("w-3 h-3 min-w-3 min-h-3")} />
+								<p className={cn("font-medium text-[0.57rem]")}>{sessionUserComission?.comissaoPagamentoRealizado ? "PAGAMENTO REALIZADO" : "PAGAMENTO NÃO REALIZADO"}</p>
+							</div>
+							<div
+								className={cn("flex items-center gap-1 rounded-lg bg-secondary px-2 py-0.5 text-center text-[0.5rem] font-bold italic text-black/80", {
+									"bg-orange-100 text-orange-700": !sessionUserComission?.dataValidacao,
+									"bg-green-100 text-green-700": sessionUserComission?.dataValidacao,
+								})}
+							>
+								<BadgeCheck className={cn("w-3 h-3 min-w-3 min-h-3")} />
+								<p className={cn("font-medium text-[0.57rem]")}>
+									{sessionUserComission?.dataValidacao ? `VALIDO COMO ${sessionUserComission?.papel} EM ${formatDateAsLocale(sessionUserComission?.dataValidacao)}` : "NÃO VALIDADO"}
+								</p>
+							</div>
+						</>
+					) : (
+						<>
+							<Users className={cn("w-3 h-3 min-w-3 min-h-3")} />
+							<p className="text-[0.5rem] font-bold italic text-primary/80">COMISSIONADOS</p>
+							{opportunity.comissao.comissionados.map((comissionado, index) => (
+								<div
+									key={`${comissionado.nome}-${index}`}
+									className="flex items-center gap-1 rounded-lg bg-secondary px-2 py-0.5 text-center text-[0.5rem] font-bold italic text-primary/80"
+								>
+									<Avatar className="h-5 w-5 min-h-5 min-w-5">
+										<AvatarImage src={comissionado.avatar_url || undefined} alt={comissionado.nome} />
+										<AvatarFallback>{formatNameAsInitials(comissionado.nome || "NA")}</AvatarFallback>
+									</Avatar>
+									<p className="text-[#15599a] font-black text-[0.57rem]">{comissionado.nome}</p>
+									<p className="text-green-700 font-black text-[0.57rem]">{formatDecimalPlaces(comissionado.comissaoPorcentagem)}%</p>
+									<BadgeCheck
+										className={cn("w-3 h-3 min-w-3 min-h-3", {
+											"text-orange-700": !comissionado.dataValidacao,
+											"text-green-700": comissionado.dataValidacao,
+										})}
+									/>
+								</div>
+							))}
+						</>
+					)}
 				</div>
-				{!opportunity.comissao.dataValidacao ? (
+			</div>
+			<div className="w-full flex items-center justify-between gap-2 flex-col lg:flex-row">
+				<div className="flex justify-center lg:justify-start items-center gap-2 flex-wrap">
+					{comissionByItemList.map((item) => (
+						<HoverCard key={item.item}>
+							<HoverCardTrigger asChild>
+								<Button variant={"ghost"} className="flex items-center gap-1 px-2 py-1" size={"fit"}>
+									<item.icon className="h-4 w-4 min-h-4 min-w-4" />
+									<p className="text-sm font-semibold text-primary/80">{formatToMoney(item.comissaoTotal)}</p>
+								</Button>
+							</HoverCardTrigger>
+							<HoverCardContent className="min-w-80 w-fit">
+								<div className="space-y-1">
+									<div className="w-full flex items-center justify-between gap-2">
+										<p className="text-sm font-semibold text-primary/80">VALOR COMISSIONÁVEL DO ITEM</p>
+										<p className="text-sm font-semibold text-primary/80">{formatToMoney(item.valor)}</p>
+									</div>
+									{item.comissionados.map((comissionado, index) => (
+										<div key={`${comissionado.nome}-${index}`} className="w-full flex items-center justify-between gap-2">
+											<div className="flex items-center gap-1">
+												<Avatar className="h-5 w-5 min-h-5 min-w-3">
+													<AvatarImage src={comissionado.avatar_url || undefined} alt={comissionado.nome} />
+													<AvatarFallback>{formatNameAsInitials(comissionado.nome || "NA")}</AvatarFallback>
+												</Avatar>
+												<p className="text-sm font-semibold text-primary/80">{comissionado.nome}</p>
+											</div>
+
+											<p className="text-sm font-semibold text-primary/80">{formatToMoney(comissionado.comissao)}</p>
+										</div>
+									))}
+								</div>
+								<div className="w-full h-[1px] rounded bg-primary my-2" />
+								<div className="w-full flex items-center justify-between gap-2">
+									<p className="text-sm font-semibold text-primary/80">COMISSÃO TOTAL</p>
+									<p className="text-sm font-semibold text-primary/80">{formatToMoney(item.comissaoTotal)}</p>
+								</div>
+							</HoverCardContent>
+						</HoverCard>
+					))}
+				</div>
+				<HoverCard>
+					<HoverCardTrigger asChild>
+						<Button variant={"ghost"} className="flex items-center gap-1 px-2 py-1" size={"fit"}>
+							<BadgeDollarSign className="h-4 w-4 min-h-4 min-w-4" />
+							<p className="text-sm font-semibold text-primary/80">{formatToMoney(totalComissionValue)}</p>
+						</Button>
+					</HoverCardTrigger>
+					<HoverCardContent className="min-w-80 w-fit">
+						<div className="space-y-1">
+							<div className="w-full flex items-center justify-between gap-2">
+								<p className="text-sm font-semibold text-primary/80">VALOR COMISSIONÁVEL TOTAL</p>
+								<p className="text-sm font-semibold text-primary/80">{formatToMoney(opportunity.comissao.valorComissionavel)}</p>
+							</div>
+							{opportunity.comissao.comissionados.map((comissionado, index) => (
+								<div key={`${comissionado.nome}-${index}`} className="w-full flex items-center justify-between gap-2">
+									<div className="flex items-center gap-1">
+										<Avatar className="h-5 w-5 min-h-5 min-w-3">
+											<AvatarImage src={comissionado.avatar_url || undefined} alt={comissionado.nome} />
+											<AvatarFallback>{formatNameAsInitials(comissionado.nome || "NA")}</AvatarFallback>
+										</Avatar>
+										<p className="text-sm font-semibold text-primary/80">{comissionado.nome}</p>
+									</div>
+									<p className="text-sm font-semibold text-primary/80">{formatToMoney((comissionado.comissaoPorcentagem / 100) * opportunity.comissao.valorComissionavel)}</p>
+								</div>
+							))}
+						</div>
+						<div className="w-full h-[1px] rounded bg-primary my-2" />
+						<div className="w-full flex items-center justify-between gap-2">
+							<p className="text-sm font-semibold text-primary/80">COMISSÃO TOTAL</p>
+							<p className="text-sm font-semibold text-primary/80">{formatToMoney(totalComissionValue)}</p>
+						</div>
+					</HoverCardContent>
+				</HoverCard>
+			</div>
+			{view === "own" ? (
+				sessionUserComission && !sessionUserComission?.dataValidacao ? (
 					<LoadingButton
 						size={"fit"}
 						className="px-2 py-1 text-xs font-bold"
@@ -269,8 +476,8 @@ function ComissionCard({ opportunity, queryClient, affectedQueryKey }: Comission
 					>
 						VALIDAR COMISSÃO
 					</LoadingButton>
-				) : null}
-			</div>
+				) : null
+			) : null}
 		</div>
 	);
 }

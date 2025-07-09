@@ -36,13 +36,20 @@ function Login({ searchParams }: LoginProps) {
 								<div className="grid gap-6">
 									<div className="grid gap-3">
 										<Label htmlFor="email">Email</Label>
-										<Input id="email" name="email" type="email" placeholder="seu@email.com" required />
+										<Input
+											id="email"
+											name="email"
+											type="email"
+											placeholder="seu@email.com"
+											required
+											className="dark:bg-white dark:border-gray-200 dark:placeholder:text-gray-500 dark:text-black"
+										/>
 									</div>
 									<div className="grid gap-3">
 										<div className="flex items-center">
 											<Label htmlFor="password">Senha</Label>
 										</div>
-										<Input id="password" name="password" type="password" required />
+										<Input id="password" name="password" type="password" required className="dark:bg-white" />
 									</div>
 									{searchParams?.error && <p className="text-red-500 w-full text-center">{searchParams.error}</p>}
 									<Button type="submit" className="w-full font-bold">
