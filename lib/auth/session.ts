@@ -28,6 +28,7 @@ export type TUserSession = {
 			nome: TPartner["nome"];
 			logo_url: TPartner["logo_url"];
 		};
+		codigoIndicacaoConecta: TUser["codigoIndicacaoConecta"];
 	};
 };
 
@@ -125,6 +126,7 @@ export async function validateSession(token: string) {
 				nome: partner.nome,
 				logo_url: partner.logo_url,
 			},
+			codigoIndicacaoConecta: user.codigoIndicacaoConecta,
 		},
 	};
 	// Checking if the session is expired

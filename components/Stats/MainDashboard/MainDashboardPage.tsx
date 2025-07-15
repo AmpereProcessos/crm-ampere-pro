@@ -19,6 +19,7 @@ import { useStats, useStatsQueryOptions } from "@/utils/queries/stats";
 import { FaListCheck } from "react-icons/fa6";
 import { FaBolt } from "react-icons/fa";
 import type { TUserSession } from "@/lib/auth/session";
+import UserConectaIndicationCodeFlag from "@/components/Conecta/UserConectaIndicationCodeFlag";
 
 const currentDate = new Date();
 const firstDayOfMonth = getFirstDayOfMonth(currentDate.getFullYear(), currentDate.getMonth()).toISOString();
@@ -69,8 +70,11 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
 		<div className="flex h-full flex-col md:flex-row">
 			<Sidebar session={session} />
 			<div className="flex w-full max-w-full grow flex-col overflow-x-hidden bg-[#f8f9fa] p-6">
-				<div className="flex w-full flex-col items-center justify-between border-b border-black pb-2 lg:flex-row">
-					<h1 className="font-Raleway text-2xl font-black text-black">DASHBOARD</h1>
+				<div className="flex w-full flex-col gap-2 items-center justify-between border-b border-black pb-2 lg:flex-row">
+					<div className="flex flex-col items-center gap-2 lg:flex-row">
+						<h1 className="font-Raleway text-2xl font-black text-black">DASHBOARD</h1>
+						<UserConectaIndicationCodeFlag code={session.user.codigoIndicacaoConecta} />
+					</div>
 					<div className="flex flex-col items-center gap-6 lg:flex-row">
 						{session?.user.permissoes.resultados?.visualizarComercial ? (
 							<Link href="/comercial/gestao/resultados">

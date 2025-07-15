@@ -31,6 +31,7 @@ import type { TOpportunitiesPageModes } from "@/app/comercial/oportunidades/oppo
 import { FaRotate } from "react-icons/fa6";
 import MultipleSelectInput from "../Inputs/MultipleSelectInput";
 import { PeriodByFieldFilter } from "../Inputs/PeriodByFieldFilter";
+import UserConectaIndicationCodeFlag from "../Conecta/UserConectaIndicationCodeFlag";
 
 type Options = {
 	activeResponsible: string[] | null;
@@ -230,86 +231,89 @@ export default function OpportunitiesKanbanModePage({ session, funnelsOptions, r
 						</div>
 					</div>
 
-					<div className="w-full flex items-center justify-end flex-wrap gap-2">
-						<PeriodByFieldFilter
-							value={dateParam}
-							handleChange={(v) =>
-								setDateParam({
-									after: v?.after,
-									before: v?.before,
-									field: v?.field as DateFilterType["field"],
-								})
-							}
-							holderClassName="text-xs p-2 max-h-[36px] min-h-[36px]"
-							fieldOptions={[
-								{ id: 1, label: "DATA DE INSERÇÃO", value: "dataInsercao" },
-								{ id: 2, label: "DATA DE GANHO", value: "dataGanho" },
-								{ id: 3, label: "DATA DE PERDA", value: "dataPerda" },
-								{ id: 4, label: "DATA DA ÚLTIMA INTERAÇÃO", value: "ultimaInteracao.data" },
-							]}
-						/>
-						<div className="w-full lg:w-[250px]">
-							<SelectInput
-								showLabel={false}
-								label="STATUS"
-								labelClassName="text-[0.6rem]"
-								holderClassName="text-xs p-2 min-h-[34px]"
-								resetOptionLabel="EM ANDAMENTO"
-								value={params.status}
-								options={[
-									{ id: 1, label: "GANHOS", value: "GANHOS" },
-									{ id: 2, label: "PERDIDOS", value: "PERDIDOS" },
+					<div className="w-full flex flex-col lg:flex-row justify-between gap-2 items-center">
+						<UserConectaIndicationCodeFlag code={session.user.codigoIndicacaoConecta} />
+						<div className="flex items-center justify-end flex-wrap gap-2">
+							<PeriodByFieldFilter
+								value={dateParam}
+								handleChange={(v) =>
+									setDateParam({
+										after: v?.after,
+										before: v?.before,
+										field: v?.field as DateFilterType["field"],
+									})
+								}
+								holderClassName="text-xs p-2 max-h-[36px] min-h-[36px]"
+								fieldOptions={[
+									{ id: 1, label: "DATA DE INSERÇÃO", value: "dataInsercao" },
+									{ id: 2, label: "DATA DE GANHO", value: "dataGanho" },
+									{ id: 3, label: "DATA DE PERDA", value: "dataPerda" },
+									{ id: 4, label: "DATA DA ÚLTIMA INTERAÇÃO", value: "ultimaInteracao.data" },
 								]}
-								handleChange={(selected) => {
-									setParams((prev) => ({ ...prev, status: selected }));
-								}}
-								onReset={() => setParams((prev) => ({ ...prev, status: undefined }))}
-								width="100%"
 							/>
-						</div>
-						<div className="w-full lg:w-[250px]">
-							<MultipleSelectInput
-								label="Usuários"
-								labelClassName="text-[0.6rem]"
-								holderClassName="text-xs p-2 min-h-[34px]"
-								showLabel={false}
-								resetOptionLabel="Todos"
-								selected={responsible}
-								options={getOptions({ session, responsiblesOptions, funnelsOptions }).responsibleOptions}
-								handleChange={(selected) => {
-									localStorage.setItem("responsible", JSON.stringify(selected as string[]));
-									setResponsible(selected as string[]);
-								}}
-								onReset={() => {
-									if (!session.user.permissoes.oportunidades.escopo) {
-										setResponsible(null);
-										localStorage.removeItem("responsible");
-									} else {
-										setResponsible(session.user.permissoes.oportunidades.escopo);
-										localStorage.setItem("responsible", JSON.stringify(session.user.permissoes.oportunidades.escopo));
-									}
-								}}
-								width="100%"
-							/>
-						</div>
-						<div className="w-full lg:w-[250px]">
-							<SelectInput
-								label="Funis"
-								labelClassName="text-[0.6rem]"
-								holderClassName="text-xs p-2 min-h-[34px]"
-								showLabel={false}
-								resetOptionLabel="NÃO DEFINIDO"
-								value={funnel}
-								options={getOptions({ session, responsiblesOptions, funnelsOptions }).funnelOptions}
-								handleChange={(selected) => {
-									handleFunnelChange(selected);
-									// setFunnel(selected.value)
-								}}
-								onReset={() => {
-									if (funnelsOptions) handleFunnelChange(funnelsOptions[0]._id.toString());
-								}}
-								width="100%"
-							/>
+							<div className="w-full lg:w-[250px]">
+								<SelectInput
+									showLabel={false}
+									label="STATUS"
+									labelClassName="text-[0.6rem]"
+									holderClassName="text-xs p-2 min-h-[34px]"
+									resetOptionLabel="EM ANDAMENTO"
+									value={params.status}
+									options={[
+										{ id: 1, label: "GANHOS", value: "GANHOS" },
+										{ id: 2, label: "PERDIDOS", value: "PERDIDOS" },
+									]}
+									handleChange={(selected) => {
+										setParams((prev) => ({ ...prev, status: selected }));
+									}}
+									onReset={() => setParams((prev) => ({ ...prev, status: undefined }))}
+									width="100%"
+								/>
+							</div>
+							<div className="w-full lg:w-[250px]">
+								<MultipleSelectInput
+									label="Usuários"
+									labelClassName="text-[0.6rem]"
+									holderClassName="text-xs p-2 min-h-[34px]"
+									showLabel={false}
+									resetOptionLabel="Todos"
+									selected={responsible}
+									options={getOptions({ session, responsiblesOptions, funnelsOptions }).responsibleOptions}
+									handleChange={(selected) => {
+										localStorage.setItem("responsible", JSON.stringify(selected as string[]));
+										setResponsible(selected as string[]);
+									}}
+									onReset={() => {
+										if (!session.user.permissoes.oportunidades.escopo) {
+											setResponsible(null);
+											localStorage.removeItem("responsible");
+										} else {
+											setResponsible(session.user.permissoes.oportunidades.escopo);
+											localStorage.setItem("responsible", JSON.stringify(session.user.permissoes.oportunidades.escopo));
+										}
+									}}
+									width="100%"
+								/>
+							</div>
+							<div className="w-full lg:w-[250px]">
+								<SelectInput
+									label="Funis"
+									labelClassName="text-[0.6rem]"
+									holderClassName="text-xs p-2 min-h-[34px]"
+									showLabel={false}
+									resetOptionLabel="NÃO DEFINIDO"
+									value={funnel}
+									options={getOptions({ session, responsiblesOptions, funnelsOptions }).funnelOptions}
+									handleChange={(selected) => {
+										handleFunnelChange(selected);
+										// setFunnel(selected.value)
+									}}
+									onReset={() => {
+										if (funnelsOptions) handleFunnelChange(funnelsOptions[0]._id.toString());
+									}}
+									width="100%"
+								/>
+							</div>
 						</div>
 					</div>
 				</div>
