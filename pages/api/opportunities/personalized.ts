@@ -200,7 +200,7 @@ type CreateNovuTopicAndSubscribeResponsiblesProps = {
 	opportunityId: string;
 	opportunityName: string;
 	opportunityIdentifier: string;
-	opportunityResponsibles: TOpportunity["responsaveis"];
+	opportunityResponsibles: Pick<TOpportunity["responsaveis"][number], "id">[];
 	author: {
 		id?: string;
 		nome: string;

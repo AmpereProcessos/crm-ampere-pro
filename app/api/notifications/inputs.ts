@@ -68,7 +68,43 @@ export const NotificationOpportunityNewInteractionToResponsiblesInputSchema = z.
 		}),
 	}),
 });
+
+export const NotificatioNewOpportunityInputSchema = z.object({
+	tipo: z.enum(["NEW_OPPORTUNITY"]),
+	payload: z.object({
+		responsaveisIds: z.array(
+			z.string({
+				required_error: "O ID do responsável é obrigatório",
+			}),
+		),
+		autor: z.object({
+			nome: z.string({
+				required_error: "O nome do autor é obrigatório",
+			}),
+			avatar_url: z
+				.string({
+					required_error: "A URL do avatar do autor é obrigatória",
+					invalid_type_error: "A URL do avatar do autor deve ser uma string",
+				})
+				.optional()
+				.nullable(),
+		}),
+		oportunidade: z.object({
+			id: z.string({
+				required_error: "O ID da oportunidade é obrigatório",
+			}),
+			identificador: z.string({
+				required_error: "O identificador da oportunidade é obrigatório",
+			}),
+			nome: z.string({
+				required_error: "O nome da oportunidade é obrigatório",
+			}),
+		}),
+	}),
+});
+
 export const CreateNotificationInput = z.discriminatedUnion("tipo", [
 	NotificationOpportunityTopicOnTechnicalAnalysisConcludedInputSchema,
 	NotificationOpportunityNewInteractionToResponsiblesInputSchema,
+	NotificatioNewOpportunityInputSchema,
 ]);

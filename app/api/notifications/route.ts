@@ -12,6 +12,7 @@ import { insertNotification, updateNotification } from "@/repositories/notificat
 import { ObjectId } from "mongodb";
 import { novu } from "@/services/novu";
 import { NOVU_WORKFLOW_IDS } from "@/services/novu/workflows";
+import { createNovuTopicAndSubscribeResponsibles } from "@/pages/api/opportunities/personalized";
 
 async function getNotifications(request: NextRequest) {
 	const { user } = await getValidCurrentSessionUncached();
@@ -178,6 +179,16 @@ async function createNotification(request: NextRequest) {
 				: undefined,
 		});
 		console.log("[NOVU] - Notifications sent on new interaction to responsibles", novuTriggerBulkResponse.result);
+	}
+	if (tipo === "NEW_OPPORTUNITY") {
+		await createNovuTopicAndSubscribeResponsibles({
+			opportunityId: notificationPayload.oportunidade.id,
+			opportunityName: notificationPayload.oportunidade.nome,
+			opportunityIdentifier: notificationPayload.oportunidade.identificador,
+			opportunityResponsibles: notificationPayload.responsaveisIds.map((id) => ({ id })),
+			author: notificationPayload.autor,
+		});
+		console.log("[NOVU] - Topic created and responsibles subscribed to new opportunity");
 	}
 
 	return NextResponse.json(
