@@ -3032,6 +3032,7 @@ function Teste() {
 		},
 	} satisfies ChartConfig;
 
+	console.log(chartData);
 	return (
 		<FullScreenWrapper>
 			<Card>
