@@ -8,7 +8,7 @@ import { MdAttachMoney, MdDashboard, MdOpenInNew } from "react-icons/md";
 import { VscChromeClose } from "react-icons/vsc";
 
 import { BsCalendarPlus, BsFillMegaphoneFill, BsPatchCheckFill } from "react-icons/bs";
-import { TOpportunityDTO, TOpportunityDTOWithFunnelReferenceAndActivitiesByStatus } from "@/utils/schemas/opportunity.schema";
+import type { TOpportunityDTO, TOpportunityDTOWithFunnelReferenceAndActivitiesByStatus } from "@/utils/schemas/opportunity.schema";
 import Avatar from "../utils/Avatar";
 import { formatDateAsLocale, formatDecimalPlaces, formatNameAsInitials, formatToMoney } from "@/lib/methods/formatting";
 
@@ -23,7 +23,7 @@ function getTagColor(activitiesByStatus: TOpportunityDTOWithFunnelReferenceAndAc
 	const comingDue = activitiesByStatus["EM VENCIMENTO"];
 	if (overDue > 0) return "bg-red-500";
 	if (comingDue > 0) return "bg-orange-500";
-	else return "bg-green-500";
+	return "bg-green-500";
 }
 function getBarColor({ isWon, isRequested, isLost }: { isWon: boolean; isRequested: boolean; isLost: boolean }) {
 	if (isWon) return "bg-green-500";
@@ -72,7 +72,7 @@ function FunnelListItem({ item, session, index }: FunnelListItemProps) {
 					{...provided.dragHandleProps}
 					className="relative flex min-h-[110px] w-full flex-col justify-between rounded border border-gray-400 bg-[#fff] shadow-sm"
 				>
-					<div className={`h-1 w-full rounded-sm  ${getBarColor({ isWon, isRequested, isLost })}`}></div>
+					<div className={`h-1 w-full rounded-sm  ${getBarColor({ isWon, isRequested, isLost })}`} />
 					<div className="flex w-full flex-col p-2">
 						{item.ganho ? (
 							<div className="z-8 absolute right-2 top-4 flex items-center justify-center text-green-500">
@@ -80,7 +80,8 @@ function FunnelListItem({ item, session, index }: FunnelListItemProps) {
 							</div>
 						) : null}
 						{item.statusAtividades ? (
-							<div
+							<button
+								type="button"
 								onClick={(e) => {
 									e.stopPropagation();
 									setActivitiesModalIsOpen((prev) => !prev);
@@ -88,7 +89,7 @@ function FunnelListItem({ item, session, index }: FunnelListItemProps) {
 								className={`absolute right-2 top-9 flex h-[15px] w-[15px] cursor-pointer items-center justify-center rounded-full text-white  ${getTagColor(item.statusAtividades)}`}
 							>
 								<AiOutlineRight style={{ fontSize: "10px" }} />
-							</div>
+							</button>
 						) : null}
 						{activitiesModalIsOpen ? <OpportunityActivitiesModal opportunityId={item.idOportunidade} closeModal={() => setActivitiesModalIsOpen(false)} /> : null}
 						<div className="flex w-full flex-col">
@@ -97,7 +98,7 @@ function FunnelListItem({ item, session, index }: FunnelListItemProps) {
 								{item.idMarketing ? <BsFillMegaphoneFill color="#3e53b2" /> : null}
 								{item.idIndicacao ? <Share2 size={15} color="#06b6d4" /> : null}
 							</div>
-							<Link href={`/comercial/oportunidades/id/${item.idOportunidade}`}>
+							<Link href={`/comercial/oportunidades/id/${item.idOportunidade}`} prefetch={false}>
 								<h1 className="font-bold text-[#353432] hover:text-blue-400">{item.nome}</h1>
 							</Link>
 							<div className="flex items-center gap-1">
@@ -136,14 +137,14 @@ function FunnelListItem({ item, session, index }: FunnelListItemProps) {
 												<p className="text-[0.65rem] font-light text-gray-400">{resp.nome}</p>
 											</div>
 										);
-									else return null;
+									return null;
 								})}
 								{item.responsaveis.length > 2 ? <p className="text-[0.65rem] font-light text-gray-400">...</p> : null}
 							</div>
 
 							<div className="ites-center flex min-w-fit gap-1">
 								<BsCalendarPlus />
-								<p className={`text-[0.65rem] font-medium text-gray-500`}>{formatDateAsLocale(item.dataInsercao, true)}</p>
+								<p className={"text-[0.65rem] font-medium text-gray-500"}>{formatDateAsLocale(item.dataInsercao, true)}</p>
 							</div>
 						</div>
 					</div>
