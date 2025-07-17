@@ -6,7 +6,7 @@ import { CreateActivityInput, GetActivitiesQueryParams, UpdateActivityInput } fr
 import type { z } from "zod";
 import createHttpError from "http-errors";
 import { type Collection, type Filter, ObjectId } from "mongodb";
-import { InsertActivitySchema, type TActivity } from "@/utils/schemas/activities.schema";
+import { InsertActivitySchema, type TActivityDTO, type TActivity } from "@/utils/schemas/activities.schema";
 import type { TNotification } from "@/utils/schemas/notification.schema";
 import {
 	getActivitiesByHomologationId,
@@ -51,7 +51,7 @@ async function getActivities(request: NextRequest) {
 	const db = await connectToDatabase();
 	const collection: Collection<TActivity> = db.collection("activities");
 
-	let activities: TActivity[];
+	let activities: TActivityDTO[];
 
 	if (opportunityId) {
 		if (!ObjectId.isValid(opportunityId)) throw new createHttpError.BadRequest("ID de oportunidade inválido.");
