@@ -4,7 +4,7 @@ import { Droppable } from "react-beautiful-dnd";
 import { ProjectActivity } from "@/utils/models";
 import { ImPower } from "react-icons/im";
 import { MdDashboard } from "react-icons/md";
-import { TOpportunityDTO, TOpportunityDTOWithFunnelReferenceAndActivitiesByStatus } from "@/utils/schemas/opportunity.schema";
+import type { TOpportunityDTO, TOpportunityDTOWithFunnelReferenceAndActivitiesByStatus } from "@/utils/schemas/opportunity.schema";
 
 import type { TUserSession } from "@/lib/auth/session";
 
@@ -34,28 +34,27 @@ interface IFunnelListProps {
 	}[];
 }
 function FunnelList({ stageName, session, items, id }: IFunnelListProps) {
-	function getListCumulativeProposalValues() {
-		var sum = 0;
-		for (let i = 0; i < items.length; i++) {
-			var value = items[i]?.proposta?.valor || 0;
-			if (value) sum = sum + value;
-		}
-		return sum.toLocaleString("pt-br", {
-			minimumFractionDigits: 2,
-			maximumFractionDigits: 2,
-		});
-	}
-	function getListCumulativeProposalPeakPower() {
-		var sum = 0;
-		for (let i = 0; i < items.length; i++) {
-			var value = items[i]?.proposta?.potenciaPico || 0;
-			if (value) sum = sum + value;
-		}
-		return sum.toLocaleString("pt-br", {
-			minimumFractionDigits: 2,
-			maximumFractionDigits: 2,
-		});
-	}
+	const cumulativeValues = React.useMemo(() => {
+		const totalValue = items.reduce((sum, item) => {
+			return sum + (item?.proposta?.valor || 0);
+		}, 0);
+
+		const totalPeakPower = items.reduce((sum, item) => {
+			return sum + (item?.proposta?.potenciaPico || 0);
+		}, 0);
+
+		return {
+			formattedValue: totalValue.toLocaleString("pt-br", {
+				minimumFractionDigits: 2,
+				maximumFractionDigits: 2,
+			}),
+			formattedPeakPower: totalPeakPower.toLocaleString("pt-br", {
+				minimumFractionDigits: 2,
+				maximumFractionDigits: 2,
+			}),
+			itemCount: items.length,
+		};
+	}, [items]);
 	return (
 		<Droppable droppableId={id.toString()}>
 			{(provided) => (
@@ -65,13 +64,13 @@ function FunnelList({ stageName, session, items, id }: IFunnelListProps) {
 						<div className="mt-1 flex w-full flex-col items-center justify-between px-2 pb-2 lg:flex-row">
 							<div className="flex w-full items-center justify-center gap-1 text-[0.65rem] text-white lg:w-1/3 lg:justify-start lg:text-[0.7rem]">
 								<p>R$</p>
-								<p>{getListCumulativeProposalValues()}</p>
+								<p>{cumulativeValues.formattedValue}</p>
 							</div>
 							<div className="flex w-full items-center justify-center gap-1 text-[0.65rem] text-white lg:w-1/3 lg:text-[0.7rem]">
 								<p>
 									<ImPower />
 								</p>
-								<p>{getListCumulativeProposalPeakPower()} kWp</p>
+								<p>{cumulativeValues.formattedPeakPower} kWp</p>
 							</div>
 							<div className="flex w-full items-center justify-center gap-1 text-[0.65rem] text-white lg:w-1/3 lg:justify-end lg:text-[0.7rem]">
 								<p>
