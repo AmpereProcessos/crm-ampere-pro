@@ -32,8 +32,14 @@ const createUser: NextApiHandler<PostResponse> = async (req, res) => {
 	if (existingUserInDn) {
 		throw new createHttpError.BadRequest("Oops, já existe um usuário com esse email.");
 	}
+
+	const firstNameSplit = user.nome.split(" ")[0];
+	const secondNameSplit = user.nome.split(" ")[1];
+
+	const conectaIndicationCode = `${firstNameSplit.slice(0, 3)}${secondNameSplit.slice(0, 3)}`.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
 	// Passed validations, now, creating user refencing requester partner ID
-	const insertResponse = await collection.insertOne({ ...user, senha: hashedPassword });
+	const insertResponse = await collection.insertOne({ ...user, senha: hashedPassword, codigoIndicacaoConecta: conectaIndicationCode });
 	const insertedIdAsString = insertResponse.insertedId.toString();
 	// Dealing with updates for self scope only
 	const updates = { $set: {} };
@@ -61,8 +67,7 @@ const createUser: NextApiHandler<PostResponse> = async (req, res) => {
 	await collection.updateOne({ _id: insertResponse.insertedId }, updates);
 	// Returning successful insertion
 	if (insertResponse.acknowledged) res.status(201).json({ data: { insertedId: insertedIdAsString }, message: "Usuário adicionado!" });
-
-	// Inserting user in novu 
+	// Inserting user in novu
 	else throw new createHttpError.InternalServerError("Oops, houve um erro desconhecido na criação do usuário.");
 };
 
