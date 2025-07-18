@@ -20,6 +20,7 @@ import { FaListCheck } from "react-icons/fa6";
 import { FaBolt } from "react-icons/fa";
 import type { TUserSession } from "@/lib/auth/session";
 import UserConectaIndicationCodeFlag from "@/components/Conecta/UserConectaIndicationCodeFlag";
+import { MousePointerClick, UserRoundPlus } from "lucide-react";
 
 const currentDate = new Date();
 const firstDayOfMonth = getFirstDayOfMonth(currentDate.getFullYear(), currentDate.getMonth()).toISOString();
@@ -177,7 +178,7 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
 						<div className="flex min-h-[110px] w-full flex-col rounded-xl border border-gray-200 bg-[#fff] p-6 shadow-sm lg:w-1/6">
 							<div className="flex items-center justify-between">
 								<h1 className="text-sm font-medium uppercase tracking-tight">Projetos Criados</h1>
-								<VscDiffAdded />
+								<VscDiffAdded className="h-4 w-4" />
 							</div>
 							<div className="mt-2 flex w-full flex-col">
 								<div className="text-xl font-bold text-[#15599a]">{data?.simplificado.ATUAL.projetosCriados || 0}</div>
@@ -187,7 +188,7 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
 						<div className="flex min-h-[110px] w-full flex-col rounded-xl border border-gray-200 bg-[#fff] p-6 shadow-sm lg:w-1/6">
 							<div className="flex items-center justify-between">
 								<h1 className="text-sm font-medium uppercase tracking-tight">Projetos Ganhos</h1>
-								<BsPatchCheck />
+								<BsPatchCheck className="h-4 w-4" />
 							</div>
 							<div className="mt-2 flex w-full flex-col">
 								<div className="text-xl font-bold text-[#15599a]">{data?.simplificado.ATUAL.projetosGanhos || 0}</div>
@@ -197,7 +198,7 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
 						<div className="flex min-h-[110px] w-full flex-col rounded-xl border border-gray-200 bg-[#fff] p-6 shadow-sm lg:w-1/6">
 							<div className="flex items-center justify-between">
 								<h1 className="text-sm font-medium uppercase tracking-tight">Projetos Perdidos</h1>
-								<AiOutlineCloseCircle size={"20px"} />
+								<AiOutlineCloseCircle className="h-4 w-4" />
 							</div>
 							<div className="mt-2 flex w-full flex-col">
 								<div className="text-xl font-bold text-[#15599a]">{data?.simplificado.ATUAL.projetosPerdidos || 0}</div>
@@ -207,7 +208,7 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
 						<div className="flex min-h-[110px] w-full flex-col rounded-xl border border-gray-200 bg-[#fff] p-6 shadow-sm lg:w-1/6">
 							<div className="flex items-center justify-between">
 								<h1 className="text-sm font-medium uppercase tracking-tight">Potência Vendida</h1>
-								<FaBolt />
+								<FaBolt className="h-4 w-4" />
 							</div>
 							<div className="mt-2 flex w-full flex-col">
 								<div className="text-xl font-bold text-[#15599a]">{data?.simplificado.ATUAL.potenciaVendida ? formatDecimalPlaces(data.simplificado.ATUAL.potenciaVendida) : 0} kWp</div>
@@ -219,7 +220,7 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
 						<div className="flex min-h-[110px] w-full flex-col rounded-xl border border-gray-200 bg-[#fff] p-6 shadow-sm lg:w-1/6">
 							<div className="flex items-center justify-between">
 								<h1 className="text-sm font-medium uppercase tracking-tight">Total Vendido</h1>
-								<BsFileEarmarkText />
+								<BsFileEarmarkText className="h-4 w-4" />
 							</div>
 							<div className="mt-2 flex w-full flex-col">
 								<div className="text-xl font-bold text-[#15599a]">{data?.simplificado.ATUAL.totalVendido ? formatToMoney(data.simplificado.ATUAL.totalVendido) : 0}</div>
@@ -231,7 +232,7 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
 						<div className="flex min-h-[110px] w-full flex-col rounded-xl border border-gray-200 bg-[#fff] p-6 shadow-sm lg:w-1/6">
 							<div className="flex items-center justify-between">
 								<h1 className="text-sm font-medium uppercase tracking-tight">Ticket Médio</h1>
-								<BsTicketPerforated />
+								<BsTicketPerforated className="h-4 w-4" />
 							</div>
 							<div className="mt-2 flex w-full flex-col">
 								<div className="text-xl font-bold text-[#15599a]">
@@ -240,6 +241,26 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
 								<p className="text-xs text-gray-500 lg:text-[0.6rem]">
 									{data?.simplificado.ANTERIOR.totalVendido ? formatToMoney(data.simplificado.ANTERIOR.totalVendido / data.simplificado.ANTERIOR.projetosGanhos) : 0} no último período
 								</p>
+							</div>
+						</div>
+					</div>
+					<div className="mt-1 flex w-full flex-col items-center justify-around gap-2 lg:flex-row">
+						<div className="flex min-h-[50px] w-full flex-col rounded-xl border border-gray-200 bg-[#fff] p-6 shadow-sm lg:w-1/2">
+							<div className="flex items-center justify-between">
+								<h1 className="text-sm font-medium uppercase tracking-tight">Visualizações do Conecta Link</h1>
+								<MousePointerClick className="h-4 w-4" />
+							</div>
+							<div className="mt-2 flex w-full flex-col">
+								<div className="text-xl font-bold text-[#15599a]">{data?.conecta.visualizacoes || 0}</div>
+							</div>
+						</div>
+						<div className="flex min-h-[50px] w-full flex-col rounded-xl border border-gray-200 bg-[#fff] p-6 shadow-sm lg:w-1/2">
+							<div className="flex items-center justify-between">
+								<h1 className="text-sm font-medium uppercase tracking-tight">Oportunidades do Conecta Link</h1>
+								<UserRoundPlus className="h-4 w-4" />
+							</div>
+							<div className="mt-2 flex w-full flex-col">
+								<div className="text-xl font-bold text-[#15599a]">{data?.conecta.oportunidades || 0}</div>
 							</div>
 						</div>
 					</div>

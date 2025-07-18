@@ -17,6 +17,7 @@ import { getProjectTypesSimplified } from "@/repositories/project-type/queries";
 import { getOpportunityCreators } from "@/repositories/users/queries";
 import { formatDateQuery } from "@/lib/methods/formatting";
 import dayjs from "dayjs";
+import type { TConectaInteractionEvent } from "@/utils/schemas/conecta-interaction-events.schema";
 
 export type TGeneralStatsQueryFiltersOptions = {
 	responsibles: TUserDTOSimplified[];
@@ -121,6 +122,7 @@ async function getStats(request: NextRequest) {
 	const db = await connectToDatabase();
 	const opportunitiesCollection: Collection<TOpportunity> = db.collection("opportunities");
 	const activitiesCollection: Collection<TActivity> = db.collection("activities");
+	const conectaInteractionEventsCollection: Collection<TConectaInteractionEvent> = db.collection("conecta-interaction-events");
 
 	const condensedInfo = await getSimplifiedInfo({
 		opportunitiesCollection,
@@ -138,12 +140,20 @@ async function getStats(request: NextRequest) {
 		query: { ...responsiblesQuery, ...partnerQuery } as Filter<TActivity>,
 	});
 
+	const conectaInteractionEventsStats = await getConectaInteractionEventsStats({
+		collection: conectaInteractionEventsCollection,
+		sellerIds: responsibles,
+		after: afterDate.toISOString(),
+		before: beforeDate.toISOString(),
+	});
+
 	return NextResponse.json({
 		data: {
 			simplificado: condensedInfo,
 			ganhos: wonOpportunities,
 			ganhosPendentes: pendingWins,
 			atividades: activities,
+			conecta: conectaInteractionEventsStats,
 		},
 		message: "Estatísticas geradas com sucesso",
 	});
@@ -373,4 +383,25 @@ type GetActivitiesParams = {
 async function getActivities({ collection, query }: GetActivitiesParams) {
 	const result = await collection.find(query).limit(50).sort({ dataInsercao: -1 }).toArray();
 	return result.map((r) => ({ ...r, _id: r._id.toString() }));
+}
+
+type TConectaInteractionEventsStats = {
+	collection: Collection<TConectaInteractionEvent>;
+	sellerIds: string[] | null;
+	after: string;
+	before: string;
+};
+async function getConectaInteractionEventsStats({ collection, sellerIds, after, before }: TConectaInteractionEventsStats) {
+	const generalQuery: Filter<TConectaInteractionEvent> = {
+		"vendedor.id": sellerIds ? { $in: sellerIds } : { $ne: null },
+		data: { $gte: after, $lte: before },
+	};
+
+	const views = await collection.countDocuments({ ...generalQuery, tipo: "VISUALIZACAO_PAGINA" });
+	const opportunities = await collection.countDocuments({ ...generalQuery, tipo: { $in: ["INDICAÇÃO", "INSCRIÇÃO"] } });
+
+	return {
+		visualizacoes: views,
+		oportunidades: opportunities,
+	};
 }

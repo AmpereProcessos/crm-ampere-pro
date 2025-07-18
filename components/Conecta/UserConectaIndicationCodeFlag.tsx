@@ -16,7 +16,7 @@ function UserConectaIndicationCodeFlag({ code }: UserConectaIndicationCodeFlagPr
 			size={"fit"}
 		>
 			<Share2 className="h-4 w-4 min-w-4 min-h-4" />
-			<p className="text-xs">COMPARTILHE SEU CÓDIGO DE INDICAÇÃO</p>
+			<p className="text-xs">COMPARTILHE SEU LINK DE INDICAÇÃO CONECTA</p>
 		</Button>
 	);
 }
