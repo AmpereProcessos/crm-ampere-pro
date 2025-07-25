@@ -75,12 +75,12 @@ export async function getActivitiesByPurchaseId({ purchaseId, collection, query 
 }
 
 type GetActivitiesByResponsibleIdParams = {
-	responsibleId: string;
+	responsibleIds: string[];
 	collection: Collection<TActivity>;
 	query: Filter<TActivity>;
 };
 
-export async function getActivitiesByResponsibleId({ responsibleId, collection, query }: GetActivitiesByResponsibleIdParams) {
+export async function getActivitiesByResponsibleId({ responsibleIds, collection, query }: GetActivitiesByResponsibleIdParams) {
 	try {
 		// Sorting:
 		// 1. Smaller due dates first (smaller due date first)
@@ -88,6 +88,7 @@ export async function getActivitiesByResponsibleId({ responsibleId, collection, 
 		const pipeline = [
 			{
 				$match: {
+					"responsaveis.id": { $in: responsibleIds },
 					...query,
 				},
 			},
@@ -147,8 +148,8 @@ export async function getAllActivities({ collection, query }: GetAllActivitiesPa
 				},
 			},
 		];
-
 		const activities = await collection.aggregate<TActivityDTO>(pipeline).toArray();
+		console.log("[INFO] [GETTING ALL ACTIVITIES] - Activities found", activities.length);
 		return activities;
 	} catch (error) {
 		console.log("[ERROR] - Error getting all activities", error);

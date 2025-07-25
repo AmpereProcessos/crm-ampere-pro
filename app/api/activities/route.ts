@@ -25,18 +25,18 @@ async function getActivities(request: NextRequest) {
 	const partnerQuery: Filter<TActivity> = parterScope ? { idParceiro: { $in: [...parterScope] } } : {};
 
 	const searchParams = request.nextUrl.searchParams;
-	console.log(searchParams);
+	console.log("[INFO] [GETTING ACTIVITIES] - Search Params", searchParams);
 	const queryParams = GetActivitiesQueryParams.parse({
 		opportunityId: searchParams.get("opportunityId"),
 		homologationId: searchParams.get("homologationId"),
 		technicalAnalysisId: searchParams.get("technicalAnalysisId"),
 		purchaseId: searchParams.get("purchaseId"),
-		responsibleId: searchParams.get("responsibleId"),
+		responsiblesId: searchParams.get("responsiblesId"),
 		openOnly: searchParams.get("openOnly"),
 		dueOnly: searchParams.get("dueOnly"),
 	});
 
-	const { opportunityId, homologationId, technicalAnalysisId, purchaseId, responsibleId, openOnly, dueOnly } = queryParams;
+	const { opportunityId, homologationId, technicalAnalysisId, purchaseId, responsiblesId, openOnly, dueOnly } = queryParams;
 
 	// Specifing queries
 	const queryOpenOnly: Filter<TActivity> = openOnly === "true" ? { dataConclusao: null } : {};
@@ -51,35 +51,42 @@ async function getActivities(request: NextRequest) {
 	const db = await connectToDatabase();
 	const collection: Collection<TActivity> = db.collection("activities");
 
+	console.log("[INFO] [GETTING ACTIVITIES] - Query", query);
 	let activities: TActivityDTO[];
 
 	if (opportunityId) {
+		console.log("[INFO] [GETTING ACTIVITIES] - Getting activities by opportunity id", { opportunityId });
 		if (!ObjectId.isValid(opportunityId)) throw new createHttpError.BadRequest("ID de oportunidade inválido.");
 		activities = await getActivitiesByOpportunityId({ collection, opportunityId, query });
 	} else if (homologationId) {
+		console.log("[INFO] [GETTING ACTIVITIES] - Getting activities by homologation id", { homologationId });
 		if (!ObjectId.isValid(homologationId)) throw new createHttpError.BadRequest("ID de homologação inválido.");
 		activities = await getActivitiesByHomologationId({ collection, homologationId, query });
 	} else if (technicalAnalysisId) {
+		console.log("[INFO] [GETTING ACTIVITIES] - Getting activities by technical analysis id", { technicalAnalysisId });
 		if (!ObjectId.isValid(technicalAnalysisId)) throw new createHttpError.BadRequest("ID de análise técnica inválido.");
 		activities = await getActivitiesByTechnicalAnalysisId({ collection, technicalAnalysisId, query });
 	} else if (purchaseId) {
+		console.log("[INFO] [GETTING ACTIVITIES] - Getting activities by purchase id", { purchaseId });
 		if (!ObjectId.isValid(purchaseId)) throw new createHttpError.BadRequest("ID de registro de compra inválido.");
 		activities = await getActivitiesByPurchaseId({ collection, purchaseId, query });
-	} else if (responsibleId) {
-		if (!ObjectId.isValid(responsibleId)) throw new createHttpError.BadRequest("ID de responsável inválido.");
-		activities = await getActivitiesByResponsibleId({ collection, responsibleId, query });
+	} else if (responsiblesId.length > 0) {
+		console.log("[INFO] [GETTING ACTIVITIES] - Getting activities by responsible ids", { responsiblesId });
+		if (!responsiblesId.every((id) => ObjectId.isValid(id))) throw new createHttpError.BadRequest("ID de responsável inválido.");
+		activities = await getActivitiesByResponsibleId({ collection, responsibleIds: responsiblesId, query });
 	} else {
+		console.log("[INFO] [GETTING ACTIVITIES] - Getting all activities");
 		activities = await getAllActivities({ collection, query });
 	}
 
 	return NextResponse.json({
 		data: {
-			default: !opportunityId && !homologationId && !technicalAnalysisId && !purchaseId && !responsibleId ? activities : undefined,
+			default: !opportunityId && !homologationId && !technicalAnalysisId && !purchaseId && responsiblesId.length === 0 ? activities : undefined,
 			byOpportunityId: opportunityId ? activities : undefined,
 			byHomologationId: homologationId ? activities : undefined,
 			byTechnicalAnalysisId: technicalAnalysisId ? activities : undefined,
 			byPurchaseId: purchaseId ? activities : undefined,
-			byResponsibleId: responsibleId ? activities : undefined,
+			byResponsibleId: responsiblesId.length > 0 ? activities : undefined,
 		},
 		message: "Atividades encontradas com sucesso",
 	});

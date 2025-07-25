@@ -72,14 +72,16 @@ export function useActivitiesByPurchaseId({ purchaseId }: { purchaseId: string }
 	});
 }
 
-async function fetchActivities({ responsibleId, openOnly, dueOnly }: { responsibleId?: string | null; openOnly?: boolean; dueOnly?: boolean }) {
+async function fetchActivities({ responsibleIds, openOnly, dueOnly }: { responsibleIds?: string[] | null; openOnly?: boolean; dueOnly?: boolean }) {
 	try {
-		let url = "/api/activities?";
-		if (openOnly) url = url + `openOnly=${openOnly}&`;
-		if (dueOnly) url = url + `dueOnly=${dueOnly}&`;
-		if (responsibleId) url = url + `responsibleId=${responsibleId}&`;
+		const baseUrl = "/api/activities?";
+		const params = new URLSearchParams();
+		if (openOnly) params.append("openOnly", String(openOnly));
+		if (dueOnly) params.append("dueOnly", String(dueOnly));
+		if (responsibleIds) params.append("responsiblesId", responsibleIds.join(","));
+		const url = baseUrl + params.toString();
 		const { data }: { data: TGetActivitiesRouteOutput } = await axios.get(url);
-		if (responsibleId) return data.data.byResponsibleId;
+		if (responsibleIds && responsibleIds.length > 0) return data.data.byResponsibleId;
 		return data.data.default;
 	} catch (error) {
 		console.log("[ERROR] - fetchActivities", error);
@@ -87,9 +89,9 @@ async function fetchActivities({ responsibleId, openOnly, dueOnly }: { responsib
 	}
 }
 
-export function useActivities({ responsibleId, openOnly, dueOnly }: { responsibleId?: string | null; openOnly?: boolean; dueOnly?: boolean }) {
+export function useActivities({ responsibleIds, openOnly, dueOnly }: { responsibleIds?: string[] | null; openOnly?: boolean; dueOnly?: boolean }) {
 	return useQuery({
-		queryKey: ["activities", responsibleId, openOnly, dueOnly],
-		queryFn: async () => await fetchActivities({ responsibleId, openOnly, dueOnly }),
+		queryKey: ["activities", responsibleIds, openOnly, dueOnly],
+		queryFn: async () => await fetchActivities({ responsibleIds, openOnly, dueOnly }),
 	});
 }

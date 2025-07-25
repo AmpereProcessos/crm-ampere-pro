@@ -105,7 +105,11 @@ export const GetActivitiesQueryParams = z.object({
 	homologationId: z.string().optional().nullable(),
 	technicalAnalysisId: z.string().optional().nullable(),
 	purchaseId: z.string().optional().nullable(),
-	responsibleId: z.string().optional().nullable(),
+	responsiblesId: z
+		.string()
+		.optional()
+		.nullable()
+		.transform((val) => val?.split(",") || []),
 	openOnly: z.enum(["true", "false"]).optional().nullable(),
 	dueOnly: z.enum(["true", "false"]).optional().nullable(),
 });
