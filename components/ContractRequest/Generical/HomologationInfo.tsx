@@ -68,14 +68,6 @@ function HomologationInfo({ requestInfo, setRequestInfo, showActions, goToPrevio
 				observacoesHomologacao: "A HOMOLOGAÇÃO SERÁ FEITA NA MODALIDADE FAST TRACK. NESSE SENTIDO O CLIENTE OPTA POR ABDICAR, PERMANENTEMENTE, DE DISTRUIÇÕES DE CRÉDITO.",
 			}));
 
-		if (!requestInfo.loginCemigAtende || requestInfo.loginCemigAtende.length <= 2) {
-			toast.error("Por favor, preencha um login para o APP da concessionária válido.");
-			return false;
-		}
-		if (!requestInfo.senhaCemigAtende || requestInfo.senhaCemigAtende.length <= 2) {
-			toast.error("Por favor, preencha uma senha para o APP da concessionária válida.");
-			return false;
-		}
 		return true;
 	}
 	return (
