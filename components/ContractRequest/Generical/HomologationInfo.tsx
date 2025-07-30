@@ -68,6 +68,14 @@ function HomologationInfo({ requestInfo, setRequestInfo, showActions, goToPrevio
 				observacoesHomologacao: "A HOMOLOGAÇÃO SERÁ FEITA NA MODALIDADE FAST TRACK. NESSE SENTIDO O CLIENTE OPTA POR ABDICAR, PERMANENTEMENTE, DE DISTRUIÇÕES DE CRÉDITO.",
 			}));
 
+		if (!requestInfo.loginCemigAtende || requestInfo.loginCemigAtende.length <= 2) {
+			toast.error("Por favor, preencha um login para o APP da concessionária válido.");
+			return false;
+		}
+		if (!requestInfo.senhaCemigAtende || requestInfo.senhaCemigAtende.length <= 2) {
+			toast.error("Por favor, preencha uma senha para o APP da concessionária válida.");
+			return false;
+		}
 		return true;
 	}
 	return (
@@ -374,7 +382,7 @@ function CreditDistributions({ distributions, addDistribution, removeDistributio
 					<TextInput
 						label="NÚMERO DA INSTALAÇÃO"
 						labelClassName="text-[0.6rem]"
-						inputClassName="text-xs p-2 min-h-[34px]"
+						holderClassName="text-xs p-2 min-h-[34px]"
 						placeholder="NÚMERO DA INSTALAÇÃO"
 						value={distributionHolder.numInstalacao}
 						handleChange={(value) =>
@@ -390,7 +398,7 @@ function CreditDistributions({ distributions, addDistribution, removeDistributio
 					<NumberInput
 						label="PORCENTAGE DO EXCEDENTE (%)"
 						labelClassName="text-[0.6rem]"
-						inputClassName="text-xs p-2 min-h-[34px]"
+						holderClassName="text-xs p-2 min-h-[34px]"
 						placeholder="PORCENTAGE DO EXCEDENTE (%)"
 						value={distributionHolder.excedente || null}
 						handleChange={(value) =>
