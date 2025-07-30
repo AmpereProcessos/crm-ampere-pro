@@ -373,7 +373,7 @@ function UserDataContent({ session, userInfo, updateUserInfo, avatarFile, update
 	const { data: users } = useUsers();
 
 	return (
-		<div>
+		<div className="w-full h-full flex flex-col gap-6">
 			<div className="flex h-[200px]  flex-col items-center justify-center">
 				{!avatarFile && userInfo.avatar_url ? (
 					<div className="relative mb-3 h-[120px] w-[120px] cursor-pointer rounded-full">

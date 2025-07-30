@@ -3,9 +3,14 @@ import { easeBackInOut } from "d3-ease";
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
 import Avatar from "../utils/Avatar";
-import { formatNameAsInitials } from "@/lib/methods/formatting";
+import { formatNameAsInitials, formatWithoutDiacritics } from "@/lib/methods/formatting";
 import { VscChromeClose } from "react-icons/vsc";
 import { useKey } from "@/lib/hooks";
+import { cn, useMediaQuery } from "@/lib/utils";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
 const variants = {
 	hidden: {
 		opacity: 0.2,
@@ -104,50 +109,97 @@ function ScopeSelection({ referenceId, options, selected, handleScopeSelection }
 				</div>
 			</div>
 			{mode === "PERSONALIZADO" && selectMenuIsOpen ? (
-				<AnimatePresence>
-					<motion.div
-						key={"editor"}
-						variants={variants}
-						initial="hidden"
-						animate="visible"
-						exit="exit"
-						className="absolute -top-[160px] right-0 z-[1000] flex h-[150px] w-[270px] flex-col  gap-2 self-center rounded-sm border border-gray-200 bg-[#fff] p-2 py-2 shadow-sm"
-					>
-						<div className="mb-1 flex w-full items-center justify-between border-b border-gray-200">
-							<h1 className="text-center font-Raleway text-[0.57rem] font-bold leading-none tracking-tight">ESCOPO DO USUÁRIO SE ESTENDE A:</h1>
-							<button
-								onClick={() => setSelectMenuIsOpen(false)}
-								type="button"
-								className="flex items-center justify-center rounded-lg p-1 duration-300 ease-linear hover:scale-105 hover:bg-red-200"
-							>
-								<VscChromeClose size={10} style={{ color: "red" }} />
-							</button>
-						</div>
-						<div className="overscroll-y flex w-full flex-col gap-2 overflow-y-auto pr-2 scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300">
-							{options.map((user, index) => (
-								<button
-									type="button"
-									key={`${user.id}-${index}`}
-									onClick={() => {
-										const selectedArr = selected ? [...selected] : [];
-										if (selectedArr.includes(user.id.toString())) selectedArr.splice(index, 1);
-										else selectedArr.push(user.id.toString());
-										handleScopeSelection(selectedArr);
-									}}
-									className={`${
-										validateIsSelected({ id: user.id.toString(), selected }) ? " border-cyan-400" : "border-gray-400 opacity-40"
-									} flex w-full cursor-pointer items-center gap-2 rounded-md border bg-gray-50 p-1`}
-								>
-									<Avatar url={user.image_url || undefined} height={20} width={20} fallback={formatNameAsInitials(user.label)} />
-									<p className="text-primary/80 text-xs font-medium">{user.label}</p>
-								</button>
-							))}
-						</div>
-					</motion.div>
-				</AnimatePresence>
+				<PersonalizedScopeSelectionMenu options={options} selected={selected} handleScopeSelection={handleScopeSelection} closeMenu={() => setSelectMenuIsOpen(false)} />
 			) : null}
 		</div>
 	);
 }
 
 export default ScopeSelection;
+type ScopeSelectionMenuProps = {
+	options: TScopeOption[];
+	selected?: string[] | null;
+	handleScopeSelection: (selected: string[] | null) => void;
+	closeMenu: () => void;
+};
+function PersonalizedScopeSelectionMenu({ options, selected, handleScopeSelection, closeMenu }: ScopeSelectionMenuProps) {
+	const isDesktop = useMediaQuery("(min-width: 768px)");
+	const MENU_TITLE = "ESCOLHA O ESCOPO DE ACESSO";
+	const MENU_DESCRIPTION = "Selecione o escopo de acesso para o usuário.";
+
+	function ScopeSelectionMenuContent() {
+		const [search, setSearch] = useState<string>("");
+
+		const filteredOptions = options.filter((option) =>
+			search.trim().length > 0 ? formatWithoutDiacritics(option.label, true).includes(formatWithoutDiacritics(search, true)) : true,
+		);
+		return (
+			<div className="w-full h-full flex flex-col gap-6">
+				<input
+					className="w-full h-fit outline-none ring-0 border-none bg-transparent text-xs placeholder:italic"
+					placeholder="Pesquise por uma opção..."
+					value={search}
+					onChange={(e) => setSearch(e.target.value)}
+				/>
+				<div className="w-full flex flex-col gap-2">
+					{filteredOptions.map((option, index) => (
+						<button
+							type="button"
+							key={`${option.id}-${index}`}
+							onClick={() => {
+								const selectedArr = selected ? [...selected] : [];
+								if (selectedArr.includes(option.id.toString())) selectedArr.splice(index, 1);
+								else selectedArr.push(option.id.toString());
+								handleScopeSelection(selectedArr);
+							}}
+							className={cn(
+								"flex w-full cursor-pointer items-center gap-2 rounded-md border bg-gray-50 p-1",
+								validateIsSelected({ id: option.id.toString(), selected }) ? " border-cyan-400" : "border-gray-400 opacity-40",
+							)}
+						>
+							<Avatar url={option.image_url || undefined} height={20} width={20} fallback={formatNameAsInitials(option.label)} />
+							<p className="text-primary/80 text-xs font-medium">{option.label}</p>
+						</button>
+					))}
+				</div>
+			</div>
+		);
+	}
+	return isDesktop ? (
+		<Dialog open onOpenChange={(v) => (!v ? closeMenu() : null)}>
+			<DialogContent className="flex flex-col h-fit min-h-[60vh] max-h-[60vh] dark:bg-white">
+				<DialogHeader>
+					<DialogTitle>{MENU_TITLE}</DialogTitle>
+					<DialogDescription>{MENU_DESCRIPTION}</DialogDescription>
+				</DialogHeader>
+
+				<div className="flex-1 overflow-auto">
+					<ScopeSelectionMenuContent />
+				</div>
+				<DialogFooter>
+					<DialogClose asChild>
+						<Button variant="outline">FECHAR</Button>
+					</DialogClose>
+				</DialogFooter>
+			</DialogContent>
+		</Dialog>
+	) : (
+		<Drawer open onOpenChange={(v) => (!v ? closeMenu() : null)}>
+			<DrawerContent className="h-fit max-h-[70vh] flex flex-col">
+				<DrawerHeader className="text-left">
+					<DrawerTitle>{MENU_TITLE}</DrawerTitle>
+					<DrawerDescription>{MENU_DESCRIPTION}</DrawerDescription>
+				</DrawerHeader>
+
+				<div className="flex-1 overflow-auto">
+					<ScopeSelectionMenuContent />
+				</div>
+				<DrawerFooter>
+					<DrawerClose asChild>
+						<Button variant="outline">FECHAR</Button>
+					</DrawerClose>
+				</DrawerFooter>
+			</DrawerContent>
+		</Drawer>
+	);
+}

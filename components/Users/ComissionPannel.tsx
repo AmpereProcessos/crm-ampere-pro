@@ -20,7 +20,7 @@ type ComissionPannelProps = {
 };
 function ComissionPannel({ infoHolder, updateUserInfo }: ComissionPannelProps) {
 	function addComissionConfigItem(item: TUser["comissionamento"][number]) {
-		const isProjectTypeAlreadyInConfig = infoHolder.comissionamento.some((config) => config.tipoProjeto.id === item.tipoProjeto.id);
+		const isProjectTypeAlreadyInConfig = infoHolder.comissionamento.some((config) => config.tipoProjeto.id === item.tipoProjeto.id && config.papel === item.papel);
 		if (isProjectTypeAlreadyInConfig) {
 			return toast.error("Este tipo de projeto já está configurado");
 		}

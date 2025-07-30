@@ -8,9 +8,9 @@ import { Button } from "@/components/ui/button";
 import ComissionResultModal from "./ComissionResultModal";
 import { OpportunityResponsibilityRoles } from "@/utils/select-options";
 import { formatComissionFormulaIndividualItemLabel, handleRenderComissionScenarioResultConditionPhrase, SaleDefinitions } from "@/utils/comissions/helpers";
-import { MdEdit } from "react-icons/md";
+import { MdDashboard, MdEdit } from "react-icons/md";
 import { cn } from "@/lib/utils";
-import { Plus } from "lucide-react";
+import { Diamond, Plus } from "lucide-react";
 import toast from "react-hot-toast";
 import { usePartnersSimplified } from "@/utils/queries/partners";
 import type { TPartnerSimplifiedDTO } from "@/utils/schemas/partner.schema";
@@ -27,7 +27,12 @@ function ComissionScenariosMenu({ userComissionConfig, addComissionConfigItem, u
 	const { data: partners } = usePartnersSimplified();
 	return (
 		<div className="w-full flex flex-col gap-2">
-			<h1 className="text-sm font-medium">CENÁRIOS DE COMISSÃO</h1>
+			<div className="w-full flex flex-col gap-1">
+				<h1 className="text-sm font-medium">CENÁRIOS DE COMISSÃO</h1>
+				<p className="text-xs text-muted-foreground">
+					Configure as comissões para cada cenário. Com base nos tipos de projetos, defina as comissões do usuário para cada papel desempenhado na venda.
+				</p>
+			</div>
 			{isLoading ? <p className="text-xs text-muted-foreground animate-pulse">Carregando...</p> : null}
 			{isError ? <ErrorComponent msg={getErrorMessage(error)} /> : null}
 			{isSuccess
@@ -97,9 +102,12 @@ function ComissionProjectTypeCard({ projectType, userComissionConfig, addComissi
 		});
 	}
 	return (
-		<div className="flex w-full flex-col gap-3 rounded border border-primary/20 bg-[#fff] p-2 shadow-sm">
-			<div className="flex w-full flex-col items-center justify-between gap-2 lg:flex-row">
-				<h1 className="text-sm font-bold leading-none tracking-tight">{projectType.nome}</h1>
+		<div className="flex w-full flex-col gap-3 rounded border border-primary/30 bg-[#fff] p-2 shadow-sm">
+			<div className="flex items-center gap-2 w-full">
+				<div className="flex items-center gap-2 bg-[#15599a] text-white rounded-lg px-2 py-1">
+					<MdDashboard className="w-4 h-4 min-w-4 min-h-4" />
+					<h1 className="text-xs font-bold leading-none tracking-tight">{projectType.nome}</h1>
+				</div>
 			</div>
 			{projectTypeComissionConfig
 				? projectTypeComissionConfig.map((scenario, index) => (
@@ -112,16 +120,30 @@ function ComissionProjectTypeCard({ projectType, userComissionConfig, addComissi
 						/>
 					))
 				: null}
-			<div className="w-full flex items-center justify-center flex-wrap p-2">
-				{missingRoleComissionConfig.map((role) => (
-					<Button key={role} onClick={() => setNewComissionMenuActiveRole(role)} variant={"ghost"} size={"fit"} className="px-2 py-1 text-xs">
-						DEFINIR COMISSÃO PARA {role}
-					</Button>
-				))}
-			</div>
+			{missingRoleComissionConfig.map((role) => (
+				<div key={role} className="w-full flex flex-col gap-1">
+					<div className="w-full flex items-center justify-between">
+						<div className="flex items-center gap-1">
+							<Diamond className="w-4 h-4 min-w-4 min-h-4" />
+							<p className="text-sm font-bold leading-none tracking-tight">
+								COMISSÃO PARA ATUAÇÃO COMO: <span className="font-black">{role}</span>
+							</p>
+						</div>
+						<button
+							type="button"
+							onClick={() => setNewComissionMenuActiveRole(role)}
+							className="flex items-center gap-1 rounded-lg px-2 py-1 text-[0.6rem] text-primary hover:bg-blue-600 hover:text-white transition-colors"
+						>
+							<Plus className="w-4 h-4 min-w-4 min-h-4" />
+							<p>DEFINIR COMISSÃO</p>
+						</button>
+					</div>
+					<p className="text-xs text-muted-foreground">Não há cenários de comissão definidos para este papel.</p>
+				</div>
+			))}
 			{newComissionMenuActiveRole ? (
 				<ComissionResultModal
-					handleCommitConditionResult={(info) =>
+					handleCommitConditionResult={(info) => {
 						addComissionConfigItem({
 							tipoProjeto: {
 								nome: projectType.nome,
@@ -129,8 +151,9 @@ function ComissionProjectTypeCard({ projectType, userComissionConfig, addComissi
 							},
 							papel: newComissionMenuActiveRole,
 							resultados: [info],
-						})
-					}
+						});
+						setNewComissionMenuActiveRole(null);
+					}}
 					closeModal={() => setNewComissionMenuActiveRole(null)}
 				/>
 			) : null}
@@ -152,11 +175,14 @@ function ComissionProjectTypeComissionConfigCard({
 }: ComissionProjectTypeComissionConfigCardProps) {
 	const [newResultModalIsOpen, setNewResultModalIsOpen] = useState(false);
 	return (
-		<div className="flex w-full flex-col gap-3 rounded border border-gray-200 bg-[#fff] p-2 shadow-sm ">
+		<div className="flex w-full flex-col gap-3 file:p-2">
 			<div className="flex w-full flex-col items-center justify-between gap-2 lg:flex-row">
-				<p className="text-sm font-bold leading-none tracking-tight">
-					COMISSÃO PARA ATUAÇÃO COMO: <span className="font-black">{scenario.papel}</span>
-				</p>
+				<div className="flex items-center gap-1">
+					<Diamond className="w-4 h-4 min-w-4 min-h-4" />
+					<p className="text-sm font-bold leading-none tracking-tight">
+						COMISSÃO PARA ATUAÇÃO COMO: <span className="font-black">{scenario.papel}</span>
+					</p>
+				</div>
 				<div className="flex flex-wrap items-center gap-2">
 					<button
 						type="button"
@@ -166,25 +192,19 @@ function ComissionProjectTypeComissionConfigCard({
 						<Plus className="w-4 h-4 min-w-4 min-h-4" />
 						<p>NOVO RESULTADO</p>
 					</button>
-					{/* <button
-									type="button"
-									onClick={() => handleRemove()}
-									className="flex items-center gap-1 rounded-lg bg-red-600 px-2 py-1 text-[0.6rem] text-white hover:bg-red-500 transition-colors"
-								>
-									<MdDelete width={10} height={10} />
-									<p>REMOVER</p>
-								</button> */}
 				</div>
 			</div>
+			<div className="w-full flex flex-col gap-1 px-4">
+				{scenario.resultados.map((result, index) => (
+					<ComissionProjectTypeCardResult
+						key={`${scenario.tipoProjeto.id}-${index}`}
+						result={result}
+						updateResult={(data) => updateComissionConfigItemResult({ resultIndex: index, result: data })}
+						partners={partners}
+					/>
+				))}
+			</div>
 
-			{scenario.resultados.map((result, index) => (
-				<ComissionProjectTypeCardResult
-					key={`${scenario.tipoProjeto.id}-${index}`}
-					result={result}
-					updateResult={(data) => updateComissionConfigItemResult({ resultIndex: index, result: data })}
-					partners={partners}
-				/>
-			))}
 			{newResultModalIsOpen ? (
 				<ComissionResultModal handleCommitConditionResult={(info) => addComissionConfigItemResult(info)} closeModal={() => setNewResultModalIsOpen(false)} />
 			) : null}
@@ -200,7 +220,7 @@ type ComissionProjectTypeCardResultProps = {
 function ComissionProjectTypeCardResult({ result, updateResult, partners }: ComissionProjectTypeCardResultProps) {
 	const [editModalIsOpen, setEditModalIsOpen] = useState(false);
 	return (
-		<div className="w-full flex flex-col gap-1 rounded border border-primary/10 shadow-xs">
+		<div className="w-full flex flex-col gap-1 rounded border border-primary/30 shadow-xs p-2">
 			<div className="flex w-full flex-col items-center justify-between gap-2 lg:flex-row">
 				<div className="flex flex-wrap items-center gap-2">
 					{handleRenderComissionScenarioResultConditionPhrase({

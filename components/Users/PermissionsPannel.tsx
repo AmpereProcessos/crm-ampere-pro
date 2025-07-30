@@ -9,6 +9,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { IoMdArrowDropdownCircle } from "react-icons/io";
 import RotativeIconButton from "../Buttons/RotativeIconButton";
 import { GeneralVisibleHiddenExitMotionVariants } from "@/utils/constants";
+
 type PermissionsPannelProps = {
 	userInfo: TUser;
 	updateUserInfo: (info: Partial<TUser>) => void;
