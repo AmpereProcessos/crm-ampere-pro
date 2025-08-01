@@ -28,10 +28,8 @@ import { getErrorMessage } from "@/lib/methods/errors";
 import { formatDateInputChange } from "@/lib/methods/formatting";
 
 import { formatDateForInput, getFirstDayOfMonth, getLastDayOfMonth } from "@/utils/methods";
-import { useSalePromoters } from "@/utils/queries/users";
 import type { TUserDTOWithSaleGoals } from "@/utils/schemas/user.schema";
 import { fetchResultsExports } from "@/utils/queries/stats/exports";
-import { usePartnersSimplified } from "@/utils/queries/partners";
 import { useComercialResultsQueryOptions } from "@/utils/queries/stats";
 import RegionResults from "@/components/Stats/Results/Region";
 import Sellers from "@/components/Stats/Results/Sellers";
@@ -229,7 +227,6 @@ function ManagementComercialResults({ session }: ComercialResultsProps) {
 					partners={queryFilters.partners}
 					projectTypes={queryFilters.projectTypes}
 				/>
-
 				<InProgressResults
 					after={queryFilters.period.after}
 					before={queryFilters.period.before}
