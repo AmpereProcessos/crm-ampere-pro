@@ -130,47 +130,59 @@ function VirtualizedTable({ isDesktop, data }: VirtualizedTableProps) {
 					{/* Fatura Solar */}
 					<div className="flex items-center justify-center px-2 py-2 text-xs font-medium text-green-600 w-1/6">{formatToMoney(item.EnergyBillValue)}</div>
 				</div>
-				<div className="w-full flex lg:hidden flex-col gap-1 bg-primary/10 rounded-lg p-2">
+				<div className="w-full flex lg:hidden flex-col gap-2 bg-primary/10 rounded-lg p-2">
 					<div className="w-full flex items-center justify-between gap-2">
 						<div className="flex items-center gap-1">
 							<Calendar className="h-4 w-4" />
 							<p className="text-xs font-medium">PERÍODO {item.Tag}</p>
 						</div>
-						<div className="flex items-center gap-2">
-							<div className="flex items-center gap-1 bg-green-300 text-green-800 rounded-lg p-1 px-2">
-								<Zap className="h-4 w-4" />
-								<p className="text-[0.6rem] font-medium"> {formatDecimalPlaces(item.Generation)} kWh</p>
+					</div>
+					<div className="flex items-center gap-2 w-full">
+						<div className="flex flex-col items-center bg-green-300 text-green-800 rounded-lg py-0.5 px-2 w-1/2">
+							<div className="w-full flex items-center justify-center gap-1">
+								<Zap className="h-4 w-4 min-w-4 min-h-4" />
+								<p className="text-[0.45rem] font-medium">GERAÇÃO</p>
 							</div>
-							<div className="flex items-center gap-1 bg-orange-300 text-orange-800 rounded-lg p-1 px-2">
-								<Zap className="h-4 w-4" />
-								<p className="text-[0.6rem] font-medium"> {formatDecimalPlaces(item.Consumption)} kWh</p>
+							<p className="text-[0.5rem] font-bold"> {formatDecimalPlaces(item.Generation)} kWh</p>
+						</div>
+						<div className="flex flex-col items-center bg-orange-300 text-orange-800 rounded-lg py-0.5 px-2 w-1/2">
+							<div className="w-full flex items-center justify-center gap-1">
+								<Zap className="h-4 w-4 min-w-4 min-h-4" />
+								<p className="text-[0.45rem] font-medium">CONSUMO</p>
 							</div>
+							<p className="text-[0.5rem] font-bold"> {formatDecimalPlaces(item.Consumption)} kWh</p>
 						</div>
 					</div>
-					<div className="w-full flex items-center flex-wrap gap-2">
-						<div className="flex items-center gap-1 bg-primary/20 text-primary rounded-lg p-0.5 px-2">
-							<BadgeDollarSign className="h-4 w-4" />
-							<p className="text-[0.5rem] font-medium">
-								COMPENSADO: <strong>{formatToMoney(item.CompensatedEnergyCost)}</strong>
-							</p>
+					<div className="flex items-center gap-2 w-full">
+						<div className="flex flex-col items-center bg-primary/20 text-primary rounded-lg py-0.5 px-2 w-1/2">
+							<div className="w-full flex items-center justify-center gap-1">
+								<BadgeDollarSign className="h-4 w-4 min-w-4 min-h-4" />
+								<p className="text-[0.45rem] font-medium">COMPENSADO</p>
+							</div>
+							<p className="text-[0.5rem] font-bold">{formatToMoney(item.CompensatedEnergyCost)}</p>
 						</div>
-						<div className="flex items-center gap-1 bg-primary/20 text-primary rounded-lg p-0.5 px-2">
-							<BadgeDollarSign className="h-4 w-4" />
-							<p className="text-[0.5rem] font-medium">
-								NÃO COMPENSADO: <strong>{formatToMoney(item.NonCompensatedEnergyCost)}</strong>
-							</p>
+						<div className="flex flex-col items-center bg-primary/20 text-primary rounded-lg py-0.5 px-2 w-1/2">
+							<div className="w-full flex items-center justify-center gap-1">
+								<BadgeDollarSign className="h-4 w-4 min-w-4 min-h-4" />
+								<p className="text-[0.45rem] font-medium">NÃO COMPENSADO</p>
+							</div>
+							<p className="text-[0.5rem] font-bold">{formatToMoney(item.NonCompensatedEnergyCost)}</p>
 						</div>
-						<div className="flex items-center gap-1 bg-green-300 text-green-800 rounded-lg p-0.5 px-2">
-							<Receipt className="h-4 w-4" />
-							<p className="text-[0.5rem] font-medium">
-								FATURA SOLAR: <strong>{formatToMoney(item.EnergyBillValue)}</strong>
-							</p>
+					</div>
+					<div className="flex items-center gap-2 w-full">
+						<div className="flex flex-col items-center bg-green-400 text-green-900 rounded-lg py-0.5 px-2 w-1/2">
+							<div className="w-full flex items-center justify-center gap-1">
+								<Receipt className="h-4 w-4 min-w-4 min-h-4" />
+								<p className="text-[0.45rem] font-medium">FATURA SOLAR</p>
+							</div>
+							<p className="text-[0.5rem] font-bold">{formatToMoney(item.EnergyBillValue)}</p>
 						</div>
-						<div className="flex items-center gap-1 bg-red-300 text-red-800 rounded-lg p-0.5 px-2">
-							<Receipt className="h-4 w-4" />
-							<p className="text-[0.5rem] font-medium">
-								FATURA CONVENCIONAL: <strong>{formatToMoney(item.ConventionalEnergyBill)}</strong>
-							</p>
+						<div className="flex flex-col items-center bg-red-400 text-red-900 rounded-lg py-0.5 px-2 w-1/2">
+							<div className="w-full flex items-center justify-center gap-1">
+								<Receipt className="h-4 w-4 min-w-4 min-h-4" />
+								<p className="text-[0.45rem] font-medium">FATURA CONVENCIONAL</p>
+							</div>
+							<p className="text-[0.5rem] font-bold">{formatToMoney(item.ConventionalEnergyBill)}</p>
 						</div>
 					</div>
 				</div>
@@ -191,7 +203,7 @@ function VirtualizedTable({ isDesktop, data }: VirtualizedTableProps) {
 	return (
 		<div className="flex flex-col gap-2 w-full">
 			<DetailsHeader />
-			<List height={400} itemCount={data.length} itemSize={isDesktop ? 45 : 100} width={"100%"} className="gap-2 scrollbar-thin scrollbar-track-primary/10 scrollbar-thumb-primary/30">
+			<List height={400} itemCount={data.length} itemSize={isDesktop ? 45 : 180} width={"100%"} className="gap-2 scrollbar-thin scrollbar-track-primary/10 scrollbar-thumb-primary/30">
 				{DetailsItem}
 			</List>
 		</div>
