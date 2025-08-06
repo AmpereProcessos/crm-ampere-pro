@@ -27,6 +27,7 @@ async function getActivities(request: NextRequest) {
 	const searchParams = request.nextUrl.searchParams;
 	console.log("[INFO] [GETTING ACTIVITIES] - Search Params", searchParams);
 	const queryParams = GetActivitiesQueryParams.parse({
+		id: searchParams.get("id"),
 		opportunityId: searchParams.get("opportunityId"),
 		homologationId: searchParams.get("homologationId"),
 		technicalAnalysisId: searchParams.get("technicalAnalysisId"),
@@ -36,7 +37,7 @@ async function getActivities(request: NextRequest) {
 		dueOnly: searchParams.get("dueOnly"),
 	});
 
-	const { opportunityId, homologationId, technicalAnalysisId, purchaseId, responsiblesId, openOnly, dueOnly } = queryParams;
+	const { id, opportunityId, homologationId, technicalAnalysisId, purchaseId, responsiblesId, openOnly, dueOnly } = queryParams;
 
 	// Specifing queries
 	const queryOpenOnly: Filter<TActivity> = openOnly === "true" ? { dataConclusao: null } : {};
@@ -50,6 +51,26 @@ async function getActivities(request: NextRequest) {
 
 	const db = await connectToDatabase();
 	const collection: Collection<TActivity> = db.collection("activities");
+
+	if (id) {
+		console.log("[INFO] [GETTING ACTIVITIES] - Getting activity by id", { id });
+		if (!ObjectId.isValid(id)) throw new createHttpError.BadRequest("ID de atividade inválido.");
+		const activity = await getActivityById({ collection, id, query });
+
+		if (!activity) throw new createHttpError.NotFound("Atividade não encontrada.");
+		return NextResponse.json({
+			data: {
+				byId: activity,
+				default: undefined,
+				byOpportunityId: undefined,
+				byHomologationId: undefined,
+				byTechnicalAnalysisId: undefined,
+				byPurchaseId: undefined,
+				byResponsibleId: undefined,
+			},
+			message: "Atividade encontrada com sucesso",
+		});
+	}
 
 	console.log("[INFO] [GETTING ACTIVITIES] - Query", query);
 	let activities: TActivityDTO[];
@@ -81,6 +102,7 @@ async function getActivities(request: NextRequest) {
 
 	return NextResponse.json({
 		data: {
+			byId: undefined,
 			default: !opportunityId && !homologationId && !technicalAnalysisId && !purchaseId && responsiblesId.length === 0 ? activities : undefined,
 			byOpportunityId: opportunityId ? activities : undefined,
 			byHomologationId: homologationId ? activities : undefined,
@@ -93,6 +115,7 @@ async function getActivities(request: NextRequest) {
 }
 
 export type TGetActivitiesRouteOutput = UnwrapNextResponse<Awaited<ReturnType<typeof getActivities>>>;
+export type TGetActivitiesRouteOutputDataById = TGetActivitiesRouteOutput["data"]["byId"];
 export type TGetActivitiesRouteOutputDataDefault = Exclude<TGetActivitiesRouteOutput["data"]["default"], undefined>;
 export type TGetActivitiesRouteOutputDataByOpportunityId = TGetActivitiesRouteOutput["data"]["byOpportunityId"];
 export type TGetActivitiesRouteOutputDataByHomologationId = TGetActivitiesRouteOutput["data"]["byHomologationId"];

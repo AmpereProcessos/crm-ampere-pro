@@ -11,9 +11,12 @@ type TextareaInputProps = {
 	handleChange: (value: string) => void;
 };
 function TextareaInput({ label, labelClassName, holderClassName, value, placeholder, editable = true, handleChange }: TextareaInputProps) {
+	const inputIdentifier = label.toLowerCase().replace(" ", "_");
 	return (
 		<div className="flex w-full flex-col gap-1">
-			<h1 className={cn("text-primary/80 text-start text-sm font-medium tracking-tight", labelClassName)}>{label}</h1>
+			<label htmlFor={inputIdentifier} className={cn("text-sm font-medium tracking-tight text-primary/80", labelClassName)}>
+				{label}
+			</label>
 			<textarea
 				disabled={!editable}
 				placeholder={placeholder}
@@ -22,7 +25,7 @@ function TextareaInput({ label, labelClassName, holderClassName, value, placehol
 					handleChange(e.target.value);
 				}}
 				className={cn(
-					"border-primary/20 focus:border-primary outline-none field-sizing-content resize-none w-full rounded-md border p-3 text-sm shadow-xs outline-hidden duration-500 ease-in-out placeholder:italic",
+					"w-full field-sizing-content resize-none rounded-md border border-primary/20 p-3 text-sm shadow-sm outline-none duration-500 ease-in-out placeholder:italic focus:border-primary",
 					holderClassName,
 				)}
 			/>

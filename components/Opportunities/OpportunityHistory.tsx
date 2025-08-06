@@ -20,6 +20,8 @@ import OpportunityHistoryCard from "../Cards/OpportunityHistory";
 import { AnimatePresence } from "framer-motion";
 import NewOpportunityInteractionMenu from "../OpportunityHistories/NewInteractionMenu";
 import { AiFillInteraction } from "react-icons/ai";
+import NewOpportunityHistory from "../OpportunityHistories/NewOpportunityHistory";
+import NewActivity from "../Activities/NewActivity";
 type GetInitialState = {
 	type?: "ATIVIDADE" | "ANOTAÇÃO";
 	project: {
@@ -38,9 +40,10 @@ type OpportunityHistoryProps = {
 };
 function OpportunityHistory({ session, opportunityName, opportunityId, opportunityIdentifier }: OpportunityHistoryProps) {
 	const queryClient = useQueryClient();
-
 	const { data: historyAndActivities, isLoading, isError, isSuccess } = useOpportunityHistoryAndActivities({ opportunityId: opportunityId });
 
+	const handleOnMutate = async () => await queryClient.cancelQueries({ queryKey: ["opportunity-history-and-activities", opportunityId] });
+	const handleOnSettled = async () => await queryClient.invalidateQueries({ queryKey: ["opportunity-history-and-activities", opportunityId] });
 	// In open activities using activities with no conclusion date defined
 	const openActivities = historyAndActivities?.filter((h) => !!(h as TActivityDTO).responsaveis && !(h as TActivityDTO).dataConclusao);
 	// In history, considering both opportunity history and closed opportunities
@@ -48,8 +51,7 @@ function OpportunityHistory({ session, opportunityName, opportunityId, opportuni
 		(h) => (h as TOpportunityHistoryDTO).categoria === "ANOTAÇÃO" || (h as TOpportunityHistoryDTO).categoria === "INTERAÇÃO" || !!(h as TActivityDTO).dataConclusao,
 	);
 	const [view, setView] = useState<"NEW NOTE" | "NEW ACTIVITY" | "NEW INTERACTION" | null>(null);
-	console.log("ACTIVITIES", openActivities);
-	console.log("HISTORY", history);
+
 	return (
 		<div className="flex w-full flex-col gap-2 rounded-md border border-gray-200 bg-[#fff] p-3 shadow-lg">
 			<div className="flex h-fit flex-col items-center justify-between border-b border-gray-200 pb-2 lg:h-[40px] lg:flex-row">
@@ -87,19 +89,36 @@ function OpportunityHistory({ session, opportunityName, opportunityId, opportuni
 					</button>
 				</div>
 			</div>
-			<AnimatePresence>
-				{view === "NEW ACTIVITY" ? <NewOpportunityActivityMenu session={session} opportunity={{ id: opportunityId, nome: opportunityName }} closeMenu={() => setView(null)} /> : null}
-				{view === "NEW NOTE" ? (
-					<NewOpportunityNoteMenu session={session} opportunity={{ id: opportunityId, nome: opportunityName, identificador: opportunityIdentifier }} closeMenu={() => setView(null)} />
-				) : null}
-				{view === "NEW INTERACTION" ? (
-					<NewOpportunityInteractionMenu
-						session={session}
-						opportunity={{ id: opportunityId, nome: opportunityName, identificador: opportunityIdentifier }}
-						closeMenu={() => setView(null)}
-					/>
-				) : null}
-			</AnimatePresence>
+			{view === "NEW NOTE" || view === "NEW INTERACTION" ? (
+				<NewOpportunityHistory
+					initialCategory={view === "NEW NOTE" ? "ANOTAÇÃO" : "INTERAÇÃO"}
+					session={session}
+					opportunity={{ id: opportunityId, nome: opportunityName, identificador: opportunityIdentifier }}
+					callbacks={{
+						onMutate: handleOnMutate,
+						onSettled: handleOnSettled,
+					}}
+					closeModal={() => setView(null)}
+				/>
+			) : null}
+			{view === "NEW ACTIVITY" ? (
+				<NewActivity
+					session={session}
+					vinculations={{
+						opportunity: {
+							blocked: true,
+							id: opportunityId,
+							name: opportunityName,
+							identifier: opportunityIdentifier,
+						},
+					}}
+					callbacks={{
+						onMutate: handleOnMutate,
+						onSettled: handleOnSettled,
+					}}
+					closeModal={() => setView(null)}
+				/>
+			) : null}
 
 			<div className="flex w-full grow flex-col gap-2">
 				{isLoading ? <LoadingComponent /> : null}
@@ -111,7 +130,16 @@ function OpportunityHistory({ session, opportunityName, opportunityId, opportuni
 							<div className="flex w-full flex-col gap-2">
 								<h1 className="w-full text-start font-medium">Atividades em aberto</h1>
 								{openActivities.map((activity) => (
-									<OpportunityActivity key={activity._id} activity={activity as TActivityDTO} opportunityId={opportunityId} />
+									<OpportunityActivity
+										key={activity._id}
+										activity={activity as TActivityDTO}
+										opportunityId={opportunityId}
+										session={session}
+										callbacks={{
+											onMutate: handleOnMutate,
+											onSettled: handleOnSettled,
+										}}
+									/>
 								))}
 								<div className="my-4 h-1 w-full rounded bg-gray-300" />
 							</div>
@@ -121,8 +149,30 @@ function OpportunityHistory({ session, opportunityName, opportunityId, opportuni
 						{history ? (
 							history.length > 0 ? (
 								history.map((history) => {
-									if ((history as TActivityDTO).dataConclusao) return <OpportunityActivity key={history._id} activity={history as TActivityDTO} opportunityId={opportunityId} />;
-									return <OpportunityHistoryCard key={history._id} history={history as TOpportunityHistoryDTO} />;
+									if ((history as TActivityDTO).dataConclusao)
+										return (
+											<OpportunityActivity
+												key={history._id}
+												activity={history as TActivityDTO}
+												opportunityId={opportunityId}
+												session={session}
+												callbacks={{
+													onMutate: handleOnMutate,
+													onSettled: handleOnSettled,
+												}}
+											/>
+										);
+									return (
+										<OpportunityHistoryCard
+											key={history._id}
+											session={session}
+											history={history as TOpportunityHistoryDTO}
+											callbacks={{
+												onMutate: handleOnMutate,
+												onSettled: handleOnSettled,
+											}}
+										/>
+									);
 								})
 							) : (
 								<p className="flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-gray-500">

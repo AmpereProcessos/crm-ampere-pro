@@ -50,7 +50,6 @@ function OpportunityPage({ session, opportunityId }: OpportunityPageProps) {
 		queryClient: queryClient,
 		affectedQueryKey: ["opportunity-by-id", opportunityId],
 	});
-	console.log(session.user.permissoes.oportunidades.excluir);
 	if (opportunityLoading) return <LoadingComponent />;
 	if (opportunityError)
 		return (

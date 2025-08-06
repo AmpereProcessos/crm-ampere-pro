@@ -101,6 +101,7 @@ export const CreateActivityInput = z.object({
 export const UpdateActivityInput = CreateActivityInput.partial();
 
 export const GetActivitiesQueryParams = z.object({
+	id: z.string().optional().nullable(),
 	opportunityId: z.string().optional().nullable(),
 	homologationId: z.string().optional().nullable(),
 	technicalAnalysisId: z.string().optional().nullable(),

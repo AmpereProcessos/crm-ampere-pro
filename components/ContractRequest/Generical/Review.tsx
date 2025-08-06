@@ -87,7 +87,7 @@ function Review({ proposal, requestInfo, setRequestInfo, documentsFile, setDocum
 			/>
 			<div className="w-full flex items-center justify-end">
 				<LoadingButton loading={isPending} onClick={() => requestContract()}>
-					SOLICIAR CONTRATO
+					SOLICITAR CONTRATO
 				</LoadingButton>
 			</div>
 		</div>

@@ -2,6 +2,24 @@ import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import type { TGetActivitiesRouteOutput } from "@/app/api/activities/route";
 
+async function fetchActivityById({ id }: { id: string }) {
+	try {
+		const { data }: { data: TGetActivitiesRouteOutput } = await axios.get(`/api/activities?id=${id}`);
+		if (!data.data.byId) throw new Error("Atividade não encontrada.");
+		return data.data.byId;
+	} catch (error) {
+		console.log("[ERROR] - fetchActivityById", error);
+		throw error;
+	}
+}
+
+export function useActivityById({ id }: { id: string }) {
+	return useQuery({
+		queryKey: ["activity-by-id", id],
+		queryFn: async () => await fetchActivityById({ id }),
+	});
+}
+
 type UseActivitiesByOpportunityIdParams = { opportunityId: string; openOnly?: boolean; dueOnly?: boolean };
 async function fetchActivitiesByOpportunityId({ opportunityId, openOnly, dueOnly }: UseActivitiesByOpportunityIdParams) {
 	try {

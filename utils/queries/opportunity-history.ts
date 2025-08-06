@@ -4,6 +4,23 @@ import { useQuery } from "@tanstack/react-query";
 import type { TActivityDTO } from "../schemas/activities.schema";
 import type { TGetActivitiesRouteOutput } from "@/app/api/activities/route";
 
+async function fetchOpportunityHistoryById({ id }: { id: string }) {
+	try {
+		const { data } = await axios.get(`/api/opportunities/history?id=${id}`);
+		return data.data as TOpportunityHistoryDTO;
+	} catch (error) {
+		console.log("[ERROR] - fetchOpportunityHistoryById", error);
+		throw error;
+	}
+}
+
+export function useOpportunityHistoryById({ id }: { id: string }) {
+	return useQuery({
+		queryKey: ["opportunity-history-by-id", id],
+		queryFn: async () => await fetchOpportunityHistoryById({ id }),
+	});
+}
+
 async function fetchOpportunityHistory({ opportunityId }: { opportunityId: string }) {
 	try {
 		const { data } = await axios.get(`/api/opportunities/history?opportunityId=${opportunityId}`);

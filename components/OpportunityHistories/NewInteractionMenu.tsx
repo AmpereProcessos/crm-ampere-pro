@@ -12,6 +12,7 @@ import { useQueryClient } from "@tanstack/react-query";
 type NewOpportunityInteractionMenuProps = {
 	session: TUserSession;
 	opportunity: { id: string; nome: string; identificador: string };
+
 	closeMenu: () => void;
 };
 function NewOpportunityInteractionMenu({ session, opportunity, closeMenu }: NewOpportunityInteractionMenuProps) {

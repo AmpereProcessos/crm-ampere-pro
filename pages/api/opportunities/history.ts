@@ -85,7 +85,7 @@ const createOpportunityHistory: NextApiHandler<PostResponse> = async (req, res) 
 };
 
 type GetResponse = {
-	data: TOpportunityHistory[];
+	data: TOpportunityHistory[] | TOpportunityHistory;
 };
 
 const getTypes = ["open-activities"];
@@ -95,11 +95,18 @@ const getOpportunitiesHistory: NextApiHandler<GetResponse> = async (req, res) =>
 	const parterScope = session.user.permissoes.parceiros.escopo;
 	const partnerQuery: Filter<TOpportunityHistory> = parterScope ? { idParceiro: { $in: [...parterScope] } } : {};
 
-	const { opportunityId, type } = req.query;
-	if (!opportunityId || typeof opportunityId !== "string" || !ObjectId.isValid(opportunityId)) throw new createHttpError.BadRequest("ID de oportunidade inválido.");
+	const { id, opportunityId, type } = req.query;
 
 	const db = await connectToDatabase();
 	const collection: Collection<TOpportunityHistory> = db.collection("opportunities-history");
+
+	if (id) {
+		if (typeof id !== "string" || !ObjectId.isValid(id)) throw new createHttpError.BadRequest("ID inválido.");
+		const history = await getOpportunityHistoryById({ id: id, collection: collection, query: {} });
+		if (!history) throw new createHttpError.NotFound("Objeto de histórico da oportunidade não encontrado.");
+		return res.status(200).json({ data: history });
+	}
+	if (!opportunityId || typeof opportunityId !== "string" || !ObjectId.isValid(opportunityId)) throw new createHttpError.BadRequest("ID de oportunidade inválido.");
 
 	const history = await getOpportunityHistory({ opportunityId: opportunityId, collection: collection, query: {} });
 
