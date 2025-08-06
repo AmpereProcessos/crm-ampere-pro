@@ -21,12 +21,12 @@ function Profile({ session }: ProfileProps) {
 
 	return (
 		<div className="flex h-full grow flex-col">
-			<div className="flex w-full items-center justify-between border-b border-gray-200 pb-2 flex-col lg:flex-row">
+			<div className="flex w-full items-center justify-between border-b border-gray-300 pb-2 flex-col lg:flex-row">
 				<div className="flex flex-col">
 					<h1 className={"text-lg font-bold"}>Meu Perfil</h1>
 					<p className="text-sm text-[#71717A]">Gerencie informações do seu usuário.</p>
 				</div>
-				<div className="flex items-center gap-2 rounded-md border border-gray-200 p-2 shadow-sm">
+				<div className="flex items-center gap-2 rounded-md border border-gray-300 p-2 shadow-md">
 					<Avatar url={partner?.logo_url || undefined} fallback={formatNameAsInitials(partner?.nome || "")} height={28} width={28} />
 					<p className="text-xs font-medium text-gray-500">{partner?.nome}</p>
 				</div>

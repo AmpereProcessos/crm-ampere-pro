@@ -25,8 +25,8 @@ function OpportunityClient({ opportunityId, client, responsibles, session }: Opp
 	const userScope = session.user.permissoes.clientes.escopo;
 	const userHasClientEditPermission = !userScope || userScope.includes(client.autor.id) || responsibles.some((r) => userScope.includes(r.id));
 	return (
-		<div className="flex h-[450px] w-full flex-col rounded-md border border-gray-200 bg-[#fff] p-3 shadow-lg lg:h-[300px]">
-			<div className="flex h-[40px] items-center justify-between border-b border-gray-200 pb-2">
+		<div className="flex h-[450px] w-full flex-col rounded-md border border-gray-300 bg-[#fff] p-3 shadow-lg lg:h-[300px]">
+			<div className="flex h-[40px] items-center justify-between border-b border-gray-300 pb-2">
 				<h1 className="font-bold text-black">Dados do Cliente</h1>
 				{userHasClientEditPermission ? (
 					<button type="button" onClick={() => setEditModalIsOpen(true)} className="text-md text-gray-400 duration-300 ease-in-out hover:text-blue-800">

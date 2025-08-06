@@ -59,7 +59,7 @@ function PartnersControlPannel() {
 						</button>
 					</div>
 					<div className="my-2 flex w-full flex-col items-center justify-center gap-3 lg:flex-row">
-						<div className="flex min-h-[110px] w-full flex-col rounded-xl border border-gray-200 bg-[#fff] p-3 shadow-sm lg:w-1/4">
+						<div className="flex min-h-[110px] w-full flex-col rounded-xl border border-gray-300 bg-[#fff] p-3 shadow-md lg:w-1/4">
 							<div className="flex items-center justify-between">
 								<h1 className="text-sm font-medium uppercase tracking-tight">Nº DE PARCEIROS</h1>
 								<VscDiffAdded />
@@ -68,7 +68,7 @@ function PartnersControlPannel() {
 								<div className="text-2xl font-bold text-[#15599a]">{getStats({ info: partners }).parceiros}</div>
 							</div>
 						</div>
-						<div className="flex min-h-[110px] w-full flex-col rounded-xl border border-gray-200 bg-[#fff] p-3 shadow-sm lg:w-1/4">
+						<div className="flex min-h-[110px] w-full flex-col rounded-xl border border-gray-300 bg-[#fff] p-3 shadow-md lg:w-1/4">
 							<div className="flex items-center justify-between">
 								<h1 className="text-sm font-medium uppercase tracking-tight">Nº DE USUÁRIOS</h1>
 								<FaUser />
@@ -85,7 +85,7 @@ function PartnersControlPannel() {
 				{isSuccess && partners ? (
 					<div className="flex w-full flex-col gap-3 py-2">
 						{partners.map((partner, key) => (
-							<div key={partner._id} className="flex w-full gap-2 rounded-md border border-gray-300 bg-[#fff] font-Inter shadow-sm">
+							<div key={partner._id} className="flex w-full gap-2 rounded-md border border-gray-300 bg-[#fff] font-Inter shadow-md">
 								<div className={`flex h-full min-h-[100%] min-w-[6px] ${getBarColor(partner.ativo)} rounded-bl-md rounded-tl-md`} />
 								<div className="flex h-full grow flex-col p-3">
 									<div className="flex w-full items-center gap-2">

@@ -196,7 +196,7 @@ function Proposal({ opportunity, projectTypes, infoHolder, setInfoHolder, moveTo
 						</button>
 					</div>
 					<div className="flex w-full flex-col gap-4 xl:flex-row">
-						<div className="hidden flex-col rounded-md border border-gray-200 p-2 md:flex">
+						<div className="hidden flex-col rounded-md border border-gray-300 p-2 md:flex">
 							<h1 className="w-full rounded-tl-md rounded-tr-md bg-cyan-500 p-2 text-center font-bold leading-none tracking-tight text-white">PREVIEW DA PROPOSTA</h1>
 							{renderProposalPreview({ proposal: infoHolder, opportunity: opportunity, partner: partner })}
 						</div>

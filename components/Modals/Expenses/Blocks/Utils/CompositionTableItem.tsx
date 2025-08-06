@@ -57,7 +57,7 @@ function CompositionTableItem({ item, handleUpdate, handleRemove }: CompositionT
 						<h1 className="w-[20%] text-center text-xs tracking-tight">{item.valor ? formatToMoney(item.qtde * item.valor) : "-"}</h1>
 					</div>
 				</div>
-				<div className="flex w-full flex-col rounded-md border border-gray-200 p-2 lg:hidden">
+				<div className="flex w-full flex-col rounded-md border border-gray-300 p-2 lg:hidden">
 					<div className="flex w-full flex-col items-start justify-between gap-2">
 						<div className="flex w-full items-center justify-between gap-2">
 							<div className="flex flex-col gap-1">

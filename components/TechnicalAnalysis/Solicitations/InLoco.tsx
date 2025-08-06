@@ -571,7 +571,7 @@ function Inloco({ session, infoHolder, setInfoHolder, files, setFiles, activePro
 			<div className="flex w-full flex-col flex-wrap justify-around gap-2 lg:flex-row">
 				{infoHolder.equipamentos.length > 0 ? (
 					infoHolder.equipamentos.map((equipment, index) => (
-						<div key={index} className="mt-1 flex w-full flex-col rounded-md border border-gray-200 p-2 lg:w-[350px]">
+						<div key={index} className="mt-1 flex w-full flex-col rounded-md border border-gray-300 p-2 lg:w-[350px]">
 							<div className="flex w-full flex-col items-start justify-between gap-2 lg:flex-row lg:items-center">
 								<div className="flex items-center gap-1">
 									<div className="flex h-[25px] w-[25px] items-center justify-center rounded-full border border-black p-1 text-[15px]">{renderCategoryIcon(equipment.categoria, 18)}</div>

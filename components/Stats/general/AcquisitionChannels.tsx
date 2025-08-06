@@ -25,7 +25,7 @@ function AcquisitionChannels({ stats }: AcquisitionChannelsProps) {
 		convertion: { label: "CONVERSÃO" },
 	};
 	return (
-		<div className="mt-2 flex min-h-[110px] w-full flex-col rounded-xl border border-gray-200 bg-[#fff] p-6 shadow-sm">
+		<div className="mt-2 flex min-h-[110px] w-full flex-col rounded-xl border border-gray-300 bg-[#fff] p-6 shadow-md">
 			<div className="flex items-center justify-between">
 				<h1 className="text-sm font-medium uppercase tracking-tight">CANAIS DE AQUISIÇÃO</h1>
 				<BsMegaphoneFill />

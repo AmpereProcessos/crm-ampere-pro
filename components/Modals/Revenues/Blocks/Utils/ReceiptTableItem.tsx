@@ -56,7 +56,7 @@ function ReceiptTableItem({ item, revenueTotal, handleUpdate, handleRemove }: Re
 						<h1 className="w-[25%] text-center text-xs tracking-tight">{item.efetivado ? "SIM" : "NÃO"}</h1>
 					</div>
 				</div>
-				<div className="flex w-full flex-col rounded-md border border-gray-200 p-2 lg:hidden">
+				<div className="flex w-full flex-col rounded-md border border-gray-300 p-2 lg:hidden">
 					<div className="flex w-full items-center justify-between gap-2">
 						<div className="flex items-center gap-1">
 							<div className="flex h-[30px] w-[30px] items-center justify-center rounded-full border border-black p-1 text-[20px]">

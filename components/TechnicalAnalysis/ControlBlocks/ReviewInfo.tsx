@@ -494,7 +494,7 @@ function ReviewInfo({ requestInfo, setRequestInfo, requireFiles = true, files, s
 						</div>
 						<div className="mt-2 flex w-full flex-col gap-2">
 							{requestInfo.padrao.map((paInfo, index) => (
-								<div key={index} className="flex w-full flex-col border border-gray-200 p-2 shadow-sm">
+								<div key={index} className="flex w-full flex-col border border-gray-300 p-2 shadow-md">
 									<div className="flex w-full items-center justify-between">
 										<h1 className="font-medium leading-none tracking-tight text-gray-500">
 											PADRÃO <strong className="text-[#fead41]">{paInfo.ligacao} </strong> de <strong className="text-[#fead41]">{paInfo.amperagem}</strong>
@@ -718,7 +718,7 @@ function ReviewInfo({ requestInfo, setRequestInfo, requireFiles = true, files, s
 								/>
 							</div>
 						</div>
-						<div className="my-3 flex h-[165px] w-[300px] flex-col items-center justify-center self-center border border-gray-200 p-1 py-2 lg:h-[250px] lg:w-[450px]">
+						<div className="my-3 flex h-[165px] w-[300px] flex-col items-center justify-center self-center border border-gray-300 p-1 py-2 lg:h-[250px] lg:w-[450px]">
 							<h1 className="text-sm font-bold text-[#fead41]">TIPOS DE TELHAS</h1>
 							<Image src={RoofTilesImage} alt="Tipos de Telhas" width={300} height={145} />
 						</div>

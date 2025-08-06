@@ -64,7 +64,7 @@ function NewOpportunityInteractionMenu({ session, opportunity, closeMenu }: NewO
 					))}
 				</div>
 			</div>
-			<div className="flex w-full flex-col rounded-md border border-gray-200 p-2 shadow-sm">
+			<div className="flex w-full flex-col rounded-md border border-gray-300 p-2 shadow-md">
 				<h1 className="text-sm font-medium leading-none tracking-tight text-gray-500">CONTEÚDO DA INTERAÇÃO</h1>
 				<input
 					value={newInteractionHolder.conteudo}

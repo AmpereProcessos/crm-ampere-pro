@@ -407,7 +407,7 @@ function ProductComposition({ infoHolder, setInfoHolder }: ProductCompositionPro
 						))}
 					</div>
 				</div>
-				<div className="mt-2 flex min-h-[150px] w-full flex-col rounded-md border border-gray-500 p-3 shadow-sm">
+				<div className="mt-2 flex min-h-[150px] w-full flex-col rounded-md border border-gray-500 p-3 shadow-md">
 					<h1 className="mb-2 text-start font-Inter font-bold leading-none tracking-tight">PRODUTOS ADICIONADOS</h1>
 					<div className="flex w-full flex-wrap items-center justify-around gap-2">
 						{infoHolder.produtos.length > 0 ? (

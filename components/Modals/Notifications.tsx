@@ -32,7 +32,7 @@ function Notifications({ sidebarExtended, session, closeModal, notifications }: 
 				id="defaultModal"
 				className={`fixed ${
 					sidebarExtended ? "bottom-[20%] left-10 md:left-[220px]" : "bottom-[20%] left-10 md:left-[100px]"
-				}  z-[2000] flex h-[350px] w-[350px] flex-col rounded-lg border border-gray-200 bg-[#fff] py-3 shadow-lg md:bottom-[10px]`}
+				}  z-[2000] flex h-[350px] w-[350px] flex-col rounded-lg border border-gray-300 bg-[#fff] py-3 shadow-lg md:bottom-[10px]`}
 			>
 				<div className="flex items-center justify-between border-b border-gray-300 px-3 pb-1">
 					<h1 className="text-center text-sm font-medium text-[#264653]">PAINEL DE NOTIFICAÇÕES</h1>

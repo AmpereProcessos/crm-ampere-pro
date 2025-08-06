@@ -50,7 +50,7 @@ function OpportunityClientInformationBlock({
 		<div className="flex w-full flex-col gap-2">
 			<h1 className="w-full rounded bg-gray-800 p-1 text-center text-sm font-bold text-white lg:text-base">INFORMAÇÕES PESSOAIS DO CLIENTE</h1>
 			{similarClient ? (
-				<div className="flex w-full flex-col gap-2 rounded-md border border-gray-500 bg-[#fff] font-Inter shadow-sm">
+				<div className="flex w-full flex-col gap-2 rounded-md border border-gray-500 bg-[#fff] font-Inter shadow-md">
 					<h1 className="w-full rounded-tl rounded-tr bg-cyan-500 text-center font-bold text-white">CLIENTE VINCULADO</h1>
 					<div className="flex w-full flex-col gap-2 p-4">
 						<div className="flex w-full items-center justify-between gap-2">

@@ -64,7 +64,7 @@ function OpportunitiesCardModePage({ session, partnersOptions, responsiblesOptio
 							<button
 								onClick={() => setFilterMenuIsOpen((prev) => !prev)}
 								className={cn(
-									"flex h-[46.6px] items-center justify-center gap-2 rounded-md border bg-[#fead41] p-2 px-3 text-sm font-medium text-white shadow-sm duration-300 ease-in-out hover:scale-105 hover:bg-orange-500",
+									"flex h-[46.6px] items-center justify-center gap-2 rounded-md border bg-[#fead41] p-2 px-3 text-sm font-medium text-white shadow-md duration-300 ease-in-out hover:scale-105 hover:bg-orange-500",
 									filterMenuIsOpen && "bg-orange-600",
 								)}
 							>
@@ -72,7 +72,7 @@ function OpportunitiesCardModePage({ session, partnersOptions, responsiblesOptio
 							</button>
 							<button
 								onClick={() => setNewProjectModalIsOpen(true)}
-								className="flex h-[46.6px] items-center justify-center gap-2 rounded-md border bg-[#15599a] p-2 px-3 text-sm font-medium text-white shadow-sm duration-300 ease-in-out hover:scale-105"
+								className="flex h-[46.6px] items-center justify-center gap-2 rounded-md border bg-[#15599a] p-2 px-3 text-sm font-medium text-white shadow-md duration-300 ease-in-out hover:scale-105"
 							>
 								<AiOutlinePlus style={{ fontSize: "18px" }} />
 							</button>

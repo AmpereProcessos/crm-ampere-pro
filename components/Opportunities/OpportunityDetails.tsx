@@ -58,8 +58,8 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 	}, [info]);
 	return (
 		<div className="flex w-full flex-col gap-6 lg:flex-row">
-			<div className="flex w-full flex-col rounded-md border border-gray-200 bg-[#fff] p-3 shadow-lg">
-				<div className="flex h-[40px] items-center justify-between border-b border-gray-200 pb-2">
+			<div className="flex w-full flex-col rounded-md border border-gray-300 bg-[#fff] p-3 shadow-lg">
+				<div className="flex h-[40px] items-center justify-between border-b border-gray-300 pb-2">
 					<h1 className="font-bold text-black">Detalhes</h1>
 				</div>
 				<div className="mt-3 flex w-full flex-col gap-2">

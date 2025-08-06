@@ -126,13 +126,13 @@ function NewClient({ session, partnerId, closeModal }: NewClientModalProps) {
 		<div id="newClient" className="fixed bottom-0 left-0 right-0 top-0 z-[100] bg-[rgba(0,0,0,.85)]">
 			<div className="fixed left-[50%] top-[50%] z-[100] h-[80%] w-[93%] translate-x-[-50%] translate-y-[-50%] rounded-md bg-[#fff] p-[10px]">
 				<div className="flex h-full flex-col">
-					<div className="flex flex-col items-center justify-between border-b border-gray-200 px-2 pb-2 text-lg lg:flex-row">
+					<div className="flex flex-col items-center justify-between border-b border-gray-300 px-2 pb-2 text-lg lg:flex-row">
 						<h3 className="text-xl font-bold text-[#353432] dark:text-white ">NOVO CLIENTE</h3>
 						<button onClick={closeModal} type="button" className="flex items-center justify-center rounded-lg p-1 duration-300 ease-linear hover:scale-105 hover:bg-red-200">
 							<VscChromeClose style={{ color: "red" }} />
 						</button>
 					</div>
-					<div className="flex grow flex-col gap-y-2 overflow-y-auto overscroll-y-auto border-b border-gray-200 py-2 scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300">
+					<div className="flex grow flex-col gap-y-2 overflow-y-auto overscroll-y-auto border-b border-gray-300 py-2 scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300">
 						<h1 className="w-full rounded bg-gray-800 p-1 text-center font-bold text-white">INFORMAÇÕES PESSOAIS</h1>
 						<div className="flex w-full flex-col items-center gap-2 lg:flex-row">
 							<div className="w-full lg:w-1/2">

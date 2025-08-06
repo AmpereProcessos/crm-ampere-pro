@@ -22,7 +22,7 @@ function ProjectTypes({ session }: ProjectTypesProps) {
 	const [editModal, setEditModal] = useState<{ id: string | null; isOpen: boolean }>({ id: null, isOpen: false });
 	return (
 		<div className="flex h-full grow flex-col">
-			<div className="flex w-full flex-col items-center justify-between border-b border-gray-200 pb-2 lg:flex-row">
+			<div className="flex w-full flex-col items-center justify-between border-b border-gray-300 pb-2 lg:flex-row">
 				<div className="flex flex-col">
 					<h1 className={`text-lg font-bold`}>Controle de tipos de projeto</h1>
 					<p className="text-sm text-[#71717A]">Gerencie, adicione e edite os tipos de projeto</p>
@@ -40,7 +40,7 @@ function ProjectTypes({ session }: ProjectTypesProps) {
 				{isSuccess ? (
 					types.length > 0 ? (
 						types.map((type) => (
-							<div key={type._id.toString()} className="flex w-full flex-col rounded-md border border-gray-200 p-2">
+							<div key={type._id.toString()} className="flex w-full flex-col rounded-md border border-gray-300 p-2">
 								<div className="flex w-full items-center justify-between gap-2">
 									<div className="flex grow items-center gap-1">
 										<div className="flex h-[25px] w-[25px] items-center justify-center rounded-full border border-black p-1">

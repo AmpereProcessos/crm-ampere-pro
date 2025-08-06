@@ -14,7 +14,7 @@ function PPSOpenCallsBlock({ session }: PPSOpenCallsBlockProps) {
 	const { data: calls } = usePPSCalls({ applicantId: scope ? session.user.id : null, openOnly: true });
 
 	return (
-		<div className="flex h-[650px] w-full flex-col rounded-xl  border border-gray-200 bg-[#fff] p-6 shadow-sm lg:h-[450px]">
+		<div className="flex h-[650px] w-full flex-col rounded-xl  border border-gray-300 bg-[#fff] p-6 shadow-md lg:h-[450px]">
 			<div className="flex min-h-[42px] w-full flex-col">
 				<div className="flex items-center justify-between">
 					<h1 className="text-sm font-medium uppercase tracking-tight">Chamados</h1>

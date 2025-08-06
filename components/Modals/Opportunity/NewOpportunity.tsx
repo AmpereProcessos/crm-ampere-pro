@@ -189,13 +189,13 @@ function NewOpportunity({ session, closeModal, opportunityCreators, funnels }: N
 		<div id="defaultModal" className="fixed bottom-0 left-0 right-0 top-0 z-[100] bg-[rgba(0,0,0,.85)]">
 			<div className="fixed left-[50%] top-[50%] z-[100] h-[90%] w-[95%] translate-x-[-50%] translate-y-[-50%] rounded-md bg-[#fff] p-[10px]">
 				<div className="flex h-full flex-col">
-					<div className="flex flex-col items-center justify-between border-b border-gray-200 px-2 pb-2 text-lg lg:flex-row">
+					<div className="flex flex-col items-center justify-between border-b border-gray-300 px-2 pb-2 text-lg lg:flex-row">
 						<h3 className="text-xl font-bold text-[#353432] dark:text-white ">NOVA OPORTUNIDADE</h3>
 						<button onClick={closeModal} type="button" className="flex items-center justify-center rounded-lg p-1 duration-300 ease-linear hover:scale-105 hover:bg-red-200">
 							<VscChromeClose style={{ color: "red" }} />
 						</button>
 					</div>
-					<div className="flex h-full flex-col gap-y-2 overflow-y-auto overscroll-y-auto border-b border-gray-200 py-2 scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300 lg:flex-row">
+					<div className="flex h-full flex-col gap-y-2 overflow-y-auto overscroll-y-auto border-b border-gray-300 py-2 scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300 lg:flex-row">
 						<div className="flex w-full flex-col gap-2 px-2 scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300 lg:h-full lg:max-h-full lg:w-[60%] lg:overflow-y-auto">
 							<ResponsiblesInformationBlock session={session} opportunity={newOpportunity} setOpportunity={setNewOpportunity} opportunityCreators={opportunityCreators} />
 							<GeneralInformationBlock opportunity={newOpportunity} setOpportunity={setNewOpportunity} projectTypes={projectTypes} session={session} />

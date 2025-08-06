@@ -121,7 +121,7 @@ function RevenueProjectInformationBlockEdit({ infoHolder, setInfoHolder, session
 						<p className="text-[0.65rem] font-medium text-gray-500">FRACIONAMENTO</p>
 						<div className="flex w-full flex-wrap items-center justify-start gap-2">
 							{infoHolder.projetoDados.pagamento.metodo.fracionamento.map((fractionnement, itemIndex) => (
-								<div key={itemIndex} className={`flex w-[450px] flex-col rounded-md border border-gray-500 p-2  shadow-sm`}>
+								<div key={itemIndex} className={`flex w-[450px] flex-col rounded-md border border-gray-500 p-2  shadow-md`}>
 									<div className="flex w-full items-center justify-between gap-2">
 										<h1 className="text-xs font-black leading-none tracking-tight lg:text-sm">FRAÇÃO DE {fractionnement.porcentagem}%</h1>
 										<h1 className="rounded-full bg-gray-800 px-2 py-1 text-[0.65rem] font-medium text-white lg:text-xs">

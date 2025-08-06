@@ -126,7 +126,7 @@ function SelectInput<T>({
 				) : null}
 				<div
 					className={cn(
-						"flex h-full min-h-[46.6px] w-full items-center justify-between rounded-md border bg-[#fff] p-3 text-sm shadow-sm duration-500 ease-in-out",
+						"flex h-full min-h-[46.6px] w-full items-center justify-between rounded-md border bg-[#fff] p-3 text-sm shadow-md duration-500 ease-in-out",
 						selectMenuIsOpen ? "border-primary" : "border-primary/20",
 						holderClassName,
 					)}
@@ -172,7 +172,7 @@ function SelectInput<T>({
 					<div
 						className={`absolute ${
 							dropdownDirection === "down" ? "top-[75px]" : "bottom-[75px]"
-						} z-[100] flex h-[250px] max-h-[250px] w-full flex-col gap-1 self-center overflow-y-auto overscroll-y-auto rounded-md border border-primary/20 bg-[#fff] p-2 py-1 shadow-sm scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300`}
+						} z-[100] flex h-[250px] max-h-[250px] w-full flex-col gap-1 self-center overflow-y-auto overscroll-y-auto rounded-md border border-primary/20 bg-[#fff] p-2 py-1 shadow-md scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300`}
 					>
 						<button
 							type="button"
@@ -214,7 +214,7 @@ function SelectInput<T>({
 				) : null}
 				<div
 					className={cn(
-						"flex h-full min-h-[46.6px] w-full items-center justify-between rounded-md border bg-[#fff] p-3 text-sm shadow-sm duration-500 ease-in-out",
+						"flex h-full min-h-[46.6px] w-full items-center justify-between rounded-md border bg-[#fff] p-3 text-sm shadow-md duration-500 ease-in-out",
 						selectMenuIsOpen ? "border-primary" : "border-primary/20",
 						holderClassName,
 					)}

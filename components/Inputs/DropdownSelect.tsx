@@ -70,7 +70,7 @@ function DropdownSelect<T extends {}>({ resetOptionLabel, options, value, editab
 
 	return (
 		<div ref={ref} className={`relative flex  items-center ${width ? `w-full lg:w-[${width}]` : "w-full lg:w-[400px]"}`}>
-			<div className="flex min-h-[46.6px] w-full grow items-center justify-between rounded-md border border-gray-200 bg-[#fff] p-2 shadow-sm">
+			<div className="flex min-h-[46.6px] w-full grow items-center justify-between rounded-md border border-gray-300 bg-[#fff] p-2 shadow-md">
 				{selectMenuIsOpen ? (
 					<input
 						type="text"
@@ -107,7 +107,7 @@ function DropdownSelect<T extends {}>({ resetOptionLabel, options, value, editab
 				)}
 			</div>
 			{selectMenuIsOpen ? (
-				<div className="absolute top-[55px] z-[100] flex h-[250px] w-full flex-col self-center rounded-md border border-gray-200 bg-[#fff] p-2 shadow-sm">
+				<div className="absolute top-[55px] z-[100] flex h-[250px] w-full flex-col self-center rounded-md border border-gray-300 bg-[#fff] p-2 shadow-md">
 					<h1 className="w-full border-b border-[#15599a] pb-1 text-center font-medium italic">{categoryName}</h1>
 					<div className="overscroll-y my-2 flex w-full grow flex-col gap-1 overflow-y-auto scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300">
 						<div onClick={() => resetState()} className={`flex w-full cursor-pointer items-center rounded p-1 px-2 hover:bg-gray-100 ${!(selectedId != undefined) ? "bg-gray-100" : ""}`}>

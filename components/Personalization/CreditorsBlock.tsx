@@ -57,7 +57,7 @@ function CreditorsBlock({ session }: CreditorsBlockProps) {
 						}}
 						type="text"
 						placeholder="Preencha um nome para o credor..."
-						className="grow rounded border border-gray-200 p-1 text-center text-xs tracking-tight text-gray-500 shadow-sm outline-none placeholder:italic"
+						className="grow rounded border border-gray-300 p-1 text-center text-xs tracking-tight text-gray-500 shadow-md outline-none placeholder:italic"
 					/>
 					<button
 						type="button"

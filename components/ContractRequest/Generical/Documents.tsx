@@ -201,7 +201,7 @@ function NewAttachmentsMenu({ addFiles }: NewAttachmentsMenuProps) {
 			initial="hidden"
 			animate="visible"
 			exit="exit"
-			className="flex w-full flex-col gap-2 rounded border border-green-600 bg-[#fff] shadow-sm"
+			className="flex w-full flex-col gap-2 rounded border border-green-600 bg-[#fff] shadow-md"
 		>
 			<h1 className="rounded-tl rounded-tr bg-green-600 p-1 text-center text-xs text-white">NOVOS ANEXOS</h1>
 			<div className="flex w-full flex-col gap-2 p-3">

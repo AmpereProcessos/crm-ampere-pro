@@ -77,7 +77,7 @@ type ConversionStatCardProps = {
 };
 function ConversionStatCard({ stats, statsLoading, promoters, numeratorStatKey, denominatorStatKey }: ConversionStatCardProps) {
 	return (
-		<div className="flex h-[400px] max-h-[600px] w-full flex-col rounded-xl border border-gray-200 bg-[#fff] p-6 shadow-sm lg:h-[600px]">
+		<div className="flex h-[400px] max-h-[600px] w-full flex-col rounded-xl border border-gray-300 bg-[#fff] p-6 shadow-md lg:h-[600px]">
 			<div className="flex items-center justify-between">
 				<h1 className="text-sm font-medium uppercase tracking-tight">Conversão</h1>
 				<FaPercentage />

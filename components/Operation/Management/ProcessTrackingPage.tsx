@@ -88,7 +88,7 @@ function ProcessTrackingPage({ session }: ProcessTrackingPageProps) {
 								<h1 className="rounded-bl-0 rounded-br-0 w-full rounded bg-blue-800 p-2 text-center text-sm font-bold text-white">{category}</h1>
 								<div className="flex w-full flex-wrap items-center justify-around gap-6 bg-[#fff] p-6">
 									{Object.entries(processes).map(([process, metrics], processIndex) => (
-										<div key={processIndex} className="flex w-[400px] flex-col gap-4 rounded-lg border border-gray-500 bg-[#fff] p-1 shadow-sm">
+										<div key={processIndex} className="flex w-[400px] flex-col gap-4 rounded-lg border border-gray-500 bg-[#fff] p-1 shadow-md">
 											<div className="flex w-full items-center justify-center rounded-lg rounded-bl-none rounded-br-none border-b border-gray-500 p-1">
 												<h2 className="text-center text-xs font-bold leading-6 tracking-tighter text-black">{process}</h2>
 											</div>

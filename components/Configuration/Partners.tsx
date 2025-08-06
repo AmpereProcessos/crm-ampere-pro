@@ -22,7 +22,7 @@ function Partners({ session }: PartnersProps) {
 
 	return (
 		<div className="flex h-full grow flex-col">
-			<div className="flex w-full flex-col items-center justify-between border-b border-gray-200 pb-2 lg:flex-row">
+			<div className="flex w-full flex-col items-center justify-between border-b border-gray-300 pb-2 lg:flex-row">
 				<div className="flex flex-col">
 					<h1 className={`text-lg font-bold`}>Controle de parceiros</h1>
 					<p className="text-sm text-[#71717A]">Gerencie, adicione e edite parceiros</p>

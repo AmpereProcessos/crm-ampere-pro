@@ -198,7 +198,7 @@ function ReportPage({ user, order }: ReportPageProps) {
 							<h1 className="w-full text-start text-[0.85rem] tracking-tight text-gray-500">RESPONSÁVEIS</h1>
 							<div className="flex w-full flex-wrap items-center justify-start gap-1">
 								{order.responsaveis.map((responsible, index) => (
-									<div key={index} className="flex items-center gap-2 rounded border border-gray-500 bg-[#f8f8f8] px-2 py-1 shadow-sm">
+									<div key={index} className="flex items-center gap-2 rounded border border-gray-500 bg-[#f8f8f8] px-2 py-1 shadow-md">
 										<Avatar fallback={formatNameAsInitials(responsible.nome)} url={responsible.avatar_url || undefined} height={20} width={20} />
 										<p className="text-[0.85rem] font-[600] leading-none tracking-tight">{responsible.nome}</p>
 									</div>

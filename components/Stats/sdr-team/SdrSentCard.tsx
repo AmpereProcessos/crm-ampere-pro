@@ -47,7 +47,7 @@ function getSDRSendInfoOrdenated({ stats }: { stats?: TSDRTeamResults }) {
 }
 function SdrSentCard({ stats, promoters }: SdrSentCardProps) {
 	return (
-		<div className="flex h-[400px] max-h-[600px] w-full flex-col rounded-xl border border-gray-200 bg-[#fff] p-6 shadow-sm lg:h-[600px] lg:w-[50%]">
+		<div className="flex h-[400px] max-h-[600px] w-full flex-col rounded-xl border border-gray-300 bg-[#fff] p-6 shadow-md lg:h-[600px] lg:w-[50%]">
 			<div className="flex items-center justify-between">
 				<h1 className="text-sm font-medium uppercase tracking-tight">Projetos Enviados</h1>
 				<GrSend />

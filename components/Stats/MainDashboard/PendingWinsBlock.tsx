@@ -24,7 +24,7 @@ function PendingWinsBlock({ data, session }: PendingWinsBlockProps) {
 		return total;
 	}
 	return (
-		<div className="flex h-[450px] w-full flex-col items-center rounded-xl border border-gray-200 bg-[#fff] p-6 shadow-sm">
+		<div className="flex h-[450px] w-full flex-col items-center rounded-xl border border-gray-300 bg-[#fff] p-6 shadow-md">
 			<div className="flex min-h-[42px] w-full flex-col">
 				<div className="flex items-center justify-between">
 					<h1 className="text-sm font-medium uppercase tracking-tight">Contratos para Assinar</h1>
@@ -39,7 +39,7 @@ function PendingWinsBlock({ data, session }: PendingWinsBlockProps) {
 				{data ? (
 					data?.length > 0 ? (
 						data?.map((opportunity, index: number) => (
-							<div key={`${opportunity._id}`} className="flex w-full flex-col items-center justify-between border-b  border-gray-200 p-2 md:flex-row md:border-b-0">
+							<div key={`${opportunity._id}`} className="flex w-full flex-col items-center justify-between border-b  border-gray-300 p-2 md:flex-row md:border-b-0">
 								<div className="flex w-full items-start gap-4 md:grow">
 									<div className="flex grow flex-col items-start">
 										<Link href={`/comercial/oportunidades/id/${opportunity._id}`}>

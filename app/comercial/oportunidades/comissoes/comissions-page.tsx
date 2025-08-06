@@ -153,7 +153,7 @@ function ComissionsPage({ session }: ComissionsPageProps) {
 					{isSuccess ? (
 						<>
 							<div className="w-full flex items-center gap-2 flex-col lg:flex-row">
-								<div className="flex min-h-[110px] w-full flex-col rounded-xl border border-gray-200 bg-[#fff] px-6 py-3 shadow-sm lg:w-1/2">
+								<div className="flex min-h-[110px] w-full flex-col rounded-xl border border-gray-300 bg-[#fff] px-6 py-3 shadow-md lg:w-1/2">
 									<div className="flex items-center justify-between">
 										<h1 className="text-sm font-medium uppercase tracking-tight">Projetos Comissionáveis</h1>
 										<VscDiffAdded />
@@ -162,7 +162,7 @@ function ComissionsPage({ session }: ComissionsPageProps) {
 										<div className="text-xl font-bold text-[#15599a]">{stats.totalComissionableProjects}</div>
 									</div>
 								</div>
-								<div className="flex min-h-[110px] w-full flex-col rounded-xl border border-gray-200 bg-[#fff] px-6 py-3 shadow-sm lg:w-1/2">
+								<div className="flex min-h-[110px] w-full flex-col rounded-xl border border-gray-300 bg-[#fff] px-6 py-3 shadow-md lg:w-1/2">
 									<div className="flex items-center justify-between">
 										<h1 className="text-sm font-medium uppercase tracking-tight">Comissão total</h1>
 										<BadgeDollarSign />
@@ -271,7 +271,7 @@ function ComissionCard({ opportunity, queryClient, affectedQueryKey, view, sessi
 	const comissionByItemList = getComissionByItemList(opportunity);
 	const sessionUserComission = opportunity.comissao.comissionados.find((c) => c.id === sessionUserId);
 	return (
-		<div className="flex w-full flex-col gap-1 rounded border border-primary bg-[#fff] p-2 shadow-sm">
+		<div className="flex w-full flex-col gap-1 rounded border border-primary bg-[#fff] p-2 shadow-md">
 			<div className="flex w-full flex-col items-center justify-between gap-2 lg:flex-row">
 				<div className="flex items-center gap-2 flex-wrap">
 					<div className="flex items-center gap-1 text-center text-xs font-bold italic text-black/80">

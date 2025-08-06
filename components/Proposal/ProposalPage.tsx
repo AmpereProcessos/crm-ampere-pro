@@ -112,7 +112,7 @@ function ProposalPage({ proposalId, session }: ProposalPageProps) {
 			<div className="flex h-full flex-col md:flex-row">
 				<Sidebar session={session} />
 				<div className="flex w-full max-w-full grow flex-col overflow-x-hidden bg-[#f8f9fa] p-6">
-					<div className="flex w-full flex-col items-center justify-between gap-4 border-b border-gray-200 pb-2">
+					<div className="flex w-full flex-col items-center justify-between gap-4 border-b border-gray-300 pb-2">
 						<div className="flex w-full flex-col items-center justify-center gap-2 lg:flex-row lg:justify-between">
 							<div className="flex items-center gap-2">
 								<h1 className="text-center text-2xl font-bold leading-none tracking-tight text-gray-800 lg:text-start">{proposal?.nome}</h1>
@@ -316,7 +316,7 @@ function ProposalPage({ proposalId, session }: ProposalPageProps) {
 									<div className="mt-2 flex w-full flex-col gap-2">
 										{proposal.produtos.length > 0 ? (
 											proposal.produtos.map((product, index) => (
-												<div key={`${product.modelo}-${product.fabricante}`} className="mt-1 flex w-full flex-col rounded-md border border-gray-200 p-2">
+												<div key={`${product.modelo}-${product.fabricante}`} className="mt-1 flex w-full flex-col rounded-md border border-gray-300 p-2">
 													<div className="flex w-full flex-col items-start justify-between gap-2">
 														<div className="flex items-center gap-1">
 															<div className="flex h-[25px] w-[25px] items-center justify-center rounded-full border border-black p-1 text-[15px]">{renderCategoryIcon(product.categoria)}</div>
@@ -354,7 +354,7 @@ function ProposalPage({ proposalId, session }: ProposalPageProps) {
 									<div className="mt-2 flex w-full flex-col gap-2">
 										{proposal.servicos.length > 0 ? (
 											proposal.servicos.map((service, index) => (
-												<div key={`${service.descricao}`} className="mt-1 flex w-full flex-col rounded-md border border-gray-200 p-2">
+												<div key={`${service.descricao}`} className="mt-1 flex w-full flex-col rounded-md border border-gray-300 p-2">
 													<div className="flex w-full items-center justify-between gap-2">
 														<div className="flex  items-center gap-1">
 															<div className="flex h-[25px] w-[25px] items-center justify-center rounded-full border border-black p-1">

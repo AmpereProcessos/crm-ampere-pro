@@ -29,7 +29,7 @@ type PPSCallCardProps = {
 };
 function PPSCallCard({ call, session }: PPSCallCardProps) {
 	return (
-		<div className="flex w-full gap-2 rounded-md border border-gray-300 shadow-sm">
+		<div className="flex w-full gap-2 rounded-md border border-gray-300 shadow-md">
 			<div className={`h-full w-[5px] rounded-bl-md rounded-tl-md ${getBarColor(call.status)}`}></div>
 			<div className="flex grow flex-col p-3">
 				<div className="flex w-full grow flex-col gap-1">

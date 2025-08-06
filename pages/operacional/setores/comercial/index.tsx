@@ -41,7 +41,7 @@ function ComercialSectorMainPage() {
 				</div>
 				<div className="flex flex-wrap justify-between gap-2 py-2">
 					{projects?.map((project) => (
-						<div key={project._id} className="flex min-h-[250px] w-full flex-col gap-2 rounded-md border border-gray-500 bg-[#fff] p-4 font-Inter shadow-sm lg:w-[600px]">
+						<div key={project._id} className="flex min-h-[250px] w-full flex-col gap-2 rounded-md border border-gray-500 bg-[#fff] p-4 font-Inter shadow-md lg:w-[600px]">
 							<div className="flex w-full items-center justify-between gap-2">
 								<div className="flex items-center gap-1">
 									<div className="flex h-[25px] min-h-[25px] w-[25px] min-w-[25px] items-center justify-center rounded-full border border-black p-1">

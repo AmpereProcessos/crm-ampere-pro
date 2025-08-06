@@ -121,7 +121,7 @@ function SupplyBlock({ infoHolder, setInfoHolder, changes, setChanges }: SupplyB
 				</div>
 				<div className="flex w-full flex-wrap items-center justify-around gap-2">
 					{infoHolder.suprimentos?.itens?.map((item, index) => (
-						<div key={index} className="flex w-full  items-center justify-between rounded-md border border-cyan-500 p-2 shadow-sm lg:w-[350px]">
+						<div key={index} className="flex w-full  items-center justify-between rounded-md border border-cyan-500 p-2 shadow-md lg:w-[350px]">
 							<div className="flex flex-col">
 								<h1 className="text-sm font-medium text-gray-500">
 									<strong>{item.qtde}</strong> x {item.descricao} <strong className="text-[#fead41]">({item.tipo})</strong>

@@ -53,7 +53,7 @@ function Activity(node: TProcessSettingNode) {
 				handleChange={(value) => updateNodeData(id, { ...data, entidade: { ...data.entidade, customizacao: { ...data.entidade.customizacao, titulo: value } } })}
 				width="100%"
 			/>
-			<div className="flex w-full flex-col rounded-md border border-gray-200 p-2 shadow-sm">
+			<div className="flex w-full flex-col rounded-md border border-gray-300 p-2 shadow-md">
 				<h1 className="text-sm font-medium leading-none tracking-tight text-gray-500">DESCRIÇÃO DA ATIVIDADE</h1>
 				<input
 					value={data.entidade.customizacao.descricao}
@@ -92,7 +92,7 @@ function Activity(node: TProcessSettingNode) {
 			</div>
 			<div className="flex flex-wrap items-center justify-start gap-2">
 				{(data.entidade.customizacao.responsaveis as TActivity["responsaveis"])?.map((resp, index) => (
-					<div key={index} onClick={() => removeResponsible(index)} draggable={false} className="flex items-center gap-2 rounded-lg border border-cyan-500 p-2 shadow-sm">
+					<div key={index} onClick={() => removeResponsible(index)} draggable={false} className="flex items-center gap-2 rounded-lg border border-cyan-500 p-2 shadow-md">
 						<Avatar width={15} height={15} url={resp.avatar_url || undefined} fallback={formatNameAsInitials(resp.nome)} />
 						<p className="text-[0.6rem] font-medium tracking-tight text-gray-500">{resp.nome}</p>
 					</div>

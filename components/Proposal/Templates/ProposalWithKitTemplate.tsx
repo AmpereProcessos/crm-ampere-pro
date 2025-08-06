@@ -122,7 +122,7 @@ function ProposalWithKitTemplate({ proposalDocumentRef, proposal, opportunity, p
 								</div>
 								<div className="flex grow items-center justify-end gap-2">
 									{method.fracionamento.map((fractionnement, itemIndex) => (
-										<div key={`${method.descricao}-${itemIndex}`} className={"flex w-fit min-w-fit items-center gap-1 rounded-md border border-gray-200 p-2 shadow-sm"}>
+										<div key={`${method.descricao}-${itemIndex}`} className={"flex w-fit min-w-fit items-center gap-1 rounded-md border border-gray-300 p-2 shadow-md"}>
 											<BsCircleHalf color="#ed174c" />
 											<h1 className="text-[0.55rem] font-medium leading-none tracking-tight">
 												{fractionnement.parcelas || fractionnement.maximoParcelas} x{" "}

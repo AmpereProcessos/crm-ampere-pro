@@ -105,7 +105,7 @@ function VirtualizedTable({ data }: VirtualizedTableProps) {
 		if (!item) return null;
 
 		return (
-			<div style={style} className="flex border-b border-gray-200 hover:bg-gray-50 w-full">
+			<div style={style} className="flex border-b border-gray-300 hover:bg-gray-50 w-full">
 				{/* Tag */}
 				<div className="flex items-center justify-center px-2 py-2 text-sm font-medium w-1/6">{item.Tag}</div>
 
@@ -141,7 +141,7 @@ function VirtualizedTable({ data }: VirtualizedTableProps) {
 	);
 
 	return (
-		<div className="border border-gray-200 rounded-lg overflow-hidden w-full">
+		<div className="border border-gray-300 rounded-lg overflow-hidden w-full">
 			<HeaderRow />
 			<List height={400} itemCount={data.length} itemSize={60} width={"100%"}>
 				{Row}
@@ -332,7 +332,7 @@ function TechnicalAnalysisConditionDataBlock({ analysis, params, updateParams }:
 			</div>
 			{/* Informações gerais */}
 			<div className="w-full flex flex-col gap-2">
-				<div className="flex flex-col p-3 rounded shadow-sm gap-4 border border-primary/30">
+				<div className="flex flex-col p-3 rounded shadow-md gap-4 border border-primary/30">
 					<div className="w-full flex flex-col gap-1">
 						<h2 className="text-lg font-medium tracking-tight leading-none">Economia Mensal Média</h2>
 						<p className="text-sm text-muted-foreground tracking-tight leading-none">Economia mensal média com o sistema solar</p>
@@ -341,7 +341,7 @@ function TechnicalAnalysisConditionDataBlock({ analysis, params, updateParams }:
 						<h1 className="text-2xl font-black tracking-tight leading-none">{formatToMoney(analysis.monthlySavedValue)}</h1>
 					</div>
 				</div>
-				<div className="flex flex-col p-3 rounded shadow-sm gap-4 border border-primary/30">
+				<div className="flex flex-col p-3 rounded shadow-md gap-4 border border-primary/30">
 					<div className="w-full flex flex-col gap-1">
 						<h2 className="text-lg font-medium tracking-tight leading-none">Economia em {params.yearsQty} Anos</h2>
 						<p className="text-sm text-muted-foreground tracking-tight leading-none">Economia total em {params.yearsQty} anos com o sistema solar</p>
@@ -350,7 +350,7 @@ function TechnicalAnalysisConditionDataBlock({ analysis, params, updateParams }:
 						<h1 className="text-2xl font-black tracking-tight leading-none">{formatToMoney(analysis.twentyFiveYearsSavedValue)}</h1>
 					</div>
 				</div>
-				<div className="flex flex-col p-3 rounded shadow-sm gap-4 border border-primary/30">
+				<div className="flex flex-col p-3 rounded shadow-md gap-4 border border-primary/30">
 					<div className="w-full flex flex-col gap-1">
 						<h2 className="text-lg font-medium tracking-tight leading-none">Tempo de Retorno</h2>
 						<p className="text-sm text-muted-foreground tracking-tight leading-none">Tempo de retorno do investimento</p>
@@ -362,7 +362,7 @@ function TechnicalAnalysisConditionDataBlock({ analysis, params, updateParams }:
 			</div>
 
 			{/* Gráfico de Payback */}
-			<div className="flex flex-col p-3 rounded shadow-sm gap-4 border border-primary/30">
+			<div className="flex flex-col p-3 rounded shadow-md gap-4 border border-primary/30">
 				<div className="w-full flex flex-col gap-1">
 					<h2 className="text-lg font-medium tracking-tight leading-none">Análise de Payback</h2>
 					<p className="text-sm text-muted-foreground tracking-tight leading-none">Progressão do retorno financeiro ao longo do tempo</p>
@@ -413,7 +413,7 @@ function TechnicalAnalysisConditionDataBlock({ analysis, params, updateParams }:
 			</div>
 
 			{/* Gráfico de Comparação de Contas */}
-			<div className="flex flex-col p-3 rounded shadow-sm gap-4 border border-primary/30">
+			<div className="flex flex-col p-3 rounded shadow-md gap-4 border border-primary/30">
 				<div className="w-full flex flex-col gap-1">
 					<h2 className="text-lg font-medium tracking-tight leading-none">Comparação de Contas de Energia</h2>
 					<p className="text-sm text-muted-foreground tracking-tight leading-none">Conta com sistema solar vs. conta convencional ao longo do tempo</p>
@@ -471,7 +471,7 @@ function TechnicalAnalysisConditionDataBlock({ analysis, params, updateParams }:
 			</div>
 
 			{/* Tabela Virtualizada */}
-			<div className=" flex-col p-3 rounded shadow-sm gap-4 border border-primary/30 hidden lg:flex">
+			<div className=" flex-col p-3 rounded shadow-md gap-4 border border-primary/30 hidden lg:flex">
 				<div className="w-full flex flex-col gap-1">
 					<h2 className="text-lg font-medium tracking-tight leading-none">Detalhamento Mensal</h2>
 					<p className="text-sm text-muted-foreground tracking-tight leading-none">Análise detalhada mês a mês dos valores de energia</p>

@@ -19,8 +19,7 @@ function TypeSelector() {
 				ANOTAÇÃO
 			</Button>
 			<Button
-				variant="ghost"
-				size={"fit"}
+				variant="outline"
 				className={cn("px-2 py-1 flex items-center gap-2", selectedType === "INTERAÇÃO" && "bg-blue-500 text-white")}
 				onClick={() => setSelectedType("INTERAÇÃO")}
 			>

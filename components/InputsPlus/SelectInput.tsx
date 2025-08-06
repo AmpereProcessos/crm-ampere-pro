@@ -46,7 +46,7 @@ function SelectInput<T>({ value, options, handleChange, resetOptionLabel, showLa
 							variant="outline"
 							role="combobox"
 							aria-expanded={menuIsOpen}
-							className={cn("justify-between outline-none w-full text-sm font-medium min-h-[46.6px] text-[#353432] rounded-md border border-gray-200 bg-[#fff] p-3 shadow-sm")}
+							className={cn("justify-between outline-none w-full text-sm font-medium min-h-[46.6px] text-[#353432] rounded-md border border-gray-300 bg-[#fff] p-3 shadow-md")}
 						>
 							{value ? options?.find((option) => option.value === value)?.label : resetOptionLabel}
 							<CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -89,7 +89,7 @@ function SelectInput<T>({ value, options, handleChange, resetOptionLabel, showLa
 						variant="outline"
 						role="combobox"
 						aria-expanded={menuIsOpen}
-						className={cn("justify-between outline-none w-full text-sm font-medium min-h-[46.6px] text-[#353432] rounded-md border border-gray-200 bg-[#fff] p-3 shadow-sm")}
+						className={cn("justify-between outline-none w-full text-sm font-medium min-h-[46.6px] text-[#353432] rounded-md border border-gray-300 bg-[#fff] p-3 shadow-md")}
 					>
 						{value ? options?.find((option) => option.value === value)?.label : resetOptionLabel}
 						<CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />

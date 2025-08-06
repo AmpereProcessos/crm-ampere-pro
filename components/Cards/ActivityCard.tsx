@@ -26,7 +26,7 @@ function getBarColor(dueDate?: string) {
 function ActivityCard({ activity }: ActivityCardProps) {
 	const info = activity as TActivityDTO;
 	return (
-		<div className="flex  w-full max-w-full  gap-2 rounded-md border border-gray-300 shadow-sm">
+		<div className="flex  w-full max-w-full  gap-2 rounded-md border border-gray-300 shadow-md">
 			<div className={`flex h-[100%] w-[5px] rounded-bl-md rounded-tl-md ${getBarColor(info.dataVencimento || undefined)}`}></div>
 			<div className="flex w-full grow flex-col gap-1 p-3 pl-1">
 				<div className="flex w-full grow flex-col">
@@ -46,7 +46,7 @@ function ActivityCard({ activity }: ActivityCardProps) {
 					<h1 className="text-xs leading-none tracking-tight text-gray-500">RESPONSÁVEIS</h1>
 					<div className="flex grow flex-wrap items-center gap-2">
 						{activity.responsaveis.map((resp) => (
-							<div className="flex items-center gap-2 rounded-lg border border-cyan-500 p-1 px-2 shadow-sm">
+							<div className="flex items-center gap-2 rounded-lg border border-cyan-500 p-1 px-2 shadow-md">
 								<Avatar width={15} height={15} url={resp.avatar_url || undefined} fallback={formatNameAsInitials(resp.nome)} />
 								<p className="text-[0.65rem] font-medium tracking-tight text-gray-500">{resp.nome}</p>
 							</div>

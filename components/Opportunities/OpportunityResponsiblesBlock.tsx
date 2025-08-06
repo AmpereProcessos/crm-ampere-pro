@@ -57,7 +57,7 @@ function OpportunityResponsiblesBlock({ opportunityId, infoHolder, setInfoHolder
 			<h1 className="w-full rounded-md bg-[#fead41] p-1 text-center text-sm font-medium text-white">RESPONSÁVEIS DA OPORTUNIDADE</h1>
 			<div className="flex flex-col gap-2">
 				{infoHolder.responsaveis.map((resp, index) => (
-					<div key={resp.id} className="flex w-full flex-col rounded-md border border-gray-200 p-3">
+					<div key={resp.id} className="flex w-full flex-col rounded-md border border-gray-300 p-3">
 						<div className="flex w-full items-center gap-2">
 							<div className="flex items-center gap-2">
 								<Avatar url={resp.avatar_url || undefined} height={20} width={20} fallback={formatNameAsInitials(resp.nome)} />

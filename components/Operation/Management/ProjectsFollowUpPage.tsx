@@ -52,7 +52,7 @@ function ProjectsFollowUpPage({ session }: ProjectsFollowUpPageProps) {
 					<div className="flex w-full flex-col gap-6">
 						{projects.map((project, key) => (
 							<ProjectFollowUpCard key={key} project={project} />
-							// <div key={key} className="flex w-full flex-col gap-2 rounded border border-gray-500 bg-[#fff] p-4 shadow-sm">
+							// <div key={key} className="flex w-full flex-col gap-2 rounded border border-gray-500 bg-[#fff] p-4 shadow-md">
 							//   <div className="flex w-full items-center justify-between gap-2">
 							//     <div className="flex items-center gap-1">
 							//       <div className="flex h-[25px] min-h-[25px] w-[25px] min-w-[25px] items-center justify-center rounded-full border border-black p-1">

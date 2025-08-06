@@ -191,7 +191,7 @@ function PAInfo({ infoHolder, setInfoHolder, files, setFiles, goToNextStage, goT
 				<div className="mt-2 flex w-full flex-col flex-wrap items-start justify-around gap-2 lg:flex-row">
 					{infoHolder.padrao.length > 0 ? (
 						infoHolder.padrao.map((paInfo, index) => (
-							<div key={index} className="flex w-[450px] flex-col rounded-md border border-gray-500 p-2 shadow-sm">
+							<div key={index} className="flex w-[450px] flex-col rounded-md border border-gray-500 p-2 shadow-md">
 								<div className="flex w-full items-center justify-between gap-1">
 									<div className="flex items-center gap-1">
 										<h1 className="font-black leading-none tracking-tight">PADRÃO {paInfo.ligacao}</h1>

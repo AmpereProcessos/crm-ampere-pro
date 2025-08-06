@@ -44,7 +44,7 @@ function OpportunityActivity({ opportunityId, activity, session, callbacks }: Op
 		},
 	});
 	return (
-		<div className="flex w-full flex-col rounded border border-gray-200 p-3 shadow-sm">
+		<div className="flex w-full flex-col rounded border border-gray-300 p-3 shadow-md">
 			<div className="flex w-full flex-col items-center justify-between gap-2 lg:flex-row">
 				<div className="flex items-center gap-2">
 					<button
@@ -92,7 +92,7 @@ function OpportunityActivity({ opportunityId, activity, session, callbacks }: Op
 					<h1 className="mr-2 text-[0.6rem] leading-none tracking-tight text-gray-500 lg:text-xs">RESPONSÁVEIS</h1>
 					<div className="flex grow flex-wrap items-center gap-2">
 						{activity.responsaveis.map((resp) => (
-							<div key={resp.id} className="flex items-center gap-2 rounded-lg border border-cyan-500 p-1 px-2 shadow-sm">
+							<div key={resp.id} className="flex items-center gap-2 rounded-lg border border-cyan-500 p-1 px-2 shadow-md">
 								<Avatar width={20} height={20} url={resp.avatar_url || undefined} fallback={formatNameAsInitials(resp.nome)} />
 								<p className="text-[0.65rem] font-medium tracking-tight text-gray-500 lg:text-xs">{resp.nome}</p>
 							</div>

@@ -81,7 +81,7 @@ export function TableSortingControl<T>({
 	const currentSize = sizeClasses[size];
 
 	return (
-		<div className={cn("mt-4 bg-gradient-to-r from-gray-50 to-gray-100 border border-gray-200 rounded-lg shadow-sm", currentSize.container)}>
+		<div className={cn("mt-4 bg-gradient-to-r from-gray-50 to-gray-100 border border-gray-300 rounded-lg shadow-md", currentSize.container)}>
 			<div className="flex items-center justify-between flex-wrap gap-4">
 				<div className="flex items-center gap-3">
 					<div className="flex items-center gap-2">
@@ -104,7 +104,7 @@ export function TableSortingControl<T>({
 							>
 								<SelectValue placeholder="Selecione um campo" />
 							</SelectTrigger>
-							<SelectContent className="border-gray-200 shadow-lg">
+							<SelectContent className="border-gray-300 shadow-lg">
 								{sortOptions.map((option) => (
 									<SelectItem
 										key={option.value}
@@ -160,7 +160,7 @@ export function TableSortingControl<T>({
 					</div>
 
 					{showCurrentSelection && (
-						<div className={cn("hidden sm:flex items-center gap-2 bg-white border border-gray-200 rounded-md", currentSize.status)}>
+						<div className={cn("hidden sm:flex items-center gap-2 bg-white border border-gray-300 rounded-md", currentSize.status)}>
 							<div className="flex items-center gap-2 text-gray-500">
 								<span>Ordenando por:</span>
 								<span className="font-semibold" style={{ color: accentColor }}>

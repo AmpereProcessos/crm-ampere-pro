@@ -13,7 +13,7 @@ function Header() {
 	if (pathname.includes("/auth/signin")) return null;
 
 	return (
-		<div className="sticky top-0 z-[1] grid h-[70px] w-full  max-w-full grid-cols-3 items-center border-b border-gray-200 bg-[#fff] px-3 lg:px-12">
+		<div className="sticky top-0 z-[1] grid h-[70px] w-full  max-w-full grid-cols-3 items-center border-b border-gray-300 bg-[#fff] px-3 lg:px-12">
 			{/* <div
           onClick={toggleSidebar}
           className="flex w-fit cursor-pointer items-center rounded-full p-2 text-[#15599a] duration-200 ease-in-out hover:scale-110"

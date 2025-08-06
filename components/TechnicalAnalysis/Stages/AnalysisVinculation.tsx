@@ -92,7 +92,7 @@ function AnalysisVinculation({ requestInfo, setRequestInfo, resetSolicitationTyp
 						/>
 						{technicalAnalysis.length > 0 ? (
 							technicalAnalysis.map((analysis) => (
-								<div key={analysis._id} className="flex w-full items-center rounded-md border border-gray-200">
+								<div key={analysis._id} className="flex w-full items-center rounded-md border border-gray-300">
 									<div className={`h-full w-[5px] rounded-bl-md rounded-tl-md ${getTagColor(analysis.status)}`}></div>
 									<div className="flex grow flex-col p-3">
 										<div className="flex w-full items-start justify-between">

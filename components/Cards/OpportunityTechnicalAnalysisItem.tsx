@@ -61,7 +61,7 @@ function OpportunityTechnicalAnalysisItem({ analysis, session }: OpportunityTech
 	const [editModalIsOpen, setEditModalIsOpen] = useState<boolean>(false);
 
 	return (
-		<div className="relative flex w-full items-center rounded-md border border-gray-200">
+		<div className="relative flex w-full items-center rounded-md border border-gray-300">
 			<div className={`h-full w-[5px] rounded-bl-md rounded-tl-md ${getTagColor(analysis.status)}`}></div>
 			<div className="flex grow flex-col p-3">
 				<div className="flex w-full grow flex-col gap-1">

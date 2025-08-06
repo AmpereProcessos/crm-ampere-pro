@@ -48,7 +48,7 @@ function Sellers({ after, before, session }: SellersProps) {
 				{isSuccess ? (
 					data.map((responsible, index) => {
 						return (
-							<div key={responsible.id} className="flex w-full  flex-col gap-2 rounded-xl border border-black bg-[#fff] p-6 shadow-sm lg:w-[48%]">
+							<div key={responsible.id} className="flex w-full  flex-col gap-2 rounded-xl border border-black bg-[#fff] p-6 shadow-md lg:w-[48%]">
 								<div className="flex w-full items-center justify-between">
 									<div className="flex items-center gap-2">
 										<Avatar width={25} height={25} url={responsible.avatar_url || undefined} fallback={formatNameAsInitials(responsible.nome)} />

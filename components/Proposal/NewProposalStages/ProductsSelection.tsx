@@ -132,7 +132,7 @@ function ProductsSelection({ opportunity, infoHolder, setInfoHolder, moveToNextS
 				</div>
 				<h1 className="mb-0 mt-2 text-xs font-bold leading-none tracking-tight text-gray-500 lg:text-sm">PRODUTOS</h1>
 				{produtos.map((product, index) => (
-					<div key={index} className="mt-1 flex w-full flex-col rounded-md border border-gray-200 p-2">
+					<div key={index} className="mt-1 flex w-full flex-col rounded-md border border-gray-300 p-2">
 						<div className="flex w-full flex-col items-start justify-between gap-2">
 							<div className="flex items-center gap-1">
 								<div className="flex h-[20px] w-[20px] items-center justify-center rounded-full border border-black p-1 text-[15px]">{renderCategoryIcon(product.categoria)}</div>
@@ -236,7 +236,7 @@ function ProductsSelection({ opportunity, infoHolder, setInfoHolder, moveToNextS
 			<div className="flex w-full items-center justify-center">
 				<h1 className="text-center font-medium italic text-[#fead61]">Nessa etapa por favor escolha os produtos que melhor se adequem as necessidades desse projeto.</h1>
 			</div>
-			<div className="flex w-full flex-col rounded-md border border-gray-200 p-3">
+			<div className="flex w-full flex-col rounded-md border border-gray-300 p-3">
 				<div className="flex w-full items-center justify-between">
 					<h1 className="font-bold leading-none tracking-tight">COMPOSIÇÃO</h1>
 				</div>

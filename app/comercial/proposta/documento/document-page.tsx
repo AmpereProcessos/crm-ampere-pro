@@ -74,7 +74,7 @@ function ProposalDocumentPage({ proposal, opportunity, partner }: ProposalDocume
 
 	return (
 		<div className="relative flex w-full items-center justify-center bg-gray-50">
-			<div className="border-primary/20 flex flex-col rounded-lg border bg-white p-3 shadow-sm print:border-none print:p-0">
+			<div className="border-primary/20 flex flex-col rounded-lg border bg-white p-3 shadow-md print:border-none print:p-0">
 				{isSolarSystemSale ? <ProposalWithKitUFVTemplate proposalDocumentRef={proposalDocumentRef} proposal={proposal} opportunity={opportunity} partner={partner} /> : null}
 				{isGeneralKitSale ? <ProposalWithKitTemplate proposalDocumentRef={proposalDocumentRef} proposal={proposal} opportunity={opportunity} partner={partner} /> : null}
 				{opportunity.categoriaVenda === "PLANO" ? (

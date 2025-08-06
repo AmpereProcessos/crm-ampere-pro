@@ -20,8 +20,8 @@ function ExpensesBlock({ session }: ExpensesBlockProps) {
 	const expensesMatched = data?.expensesMatched;
 	const totalPages = data?.totalPages;
 	return (
-		<div className="flex h-full w-full flex-col gap-2 rounded border border-gray-300 bg-[#fff] p-3 shadow-sm">
-			<div className="flex w-full items-center justify-between gap-2 border-b border-gray-200 pb-2">
+		<div className="flex h-full w-full flex-col gap-2 rounded border border-gray-300 bg-[#fff] p-3 shadow-md">
+			<div className="flex w-full items-center justify-between gap-2 border-b border-gray-300 pb-2">
 				<h1 className="w-full text-sm font-bold tracking-tight">DESPESAS</h1>
 			</div>
 			<ExpensePaginationMenu

@@ -198,7 +198,7 @@ function SystemInfo({ requestInfo, setRequestInfo, requireFiles = true, goToNext
 			<span className="py-2 text-center text-lg font-bold uppercase text-[#15599a]">DADOS DO SISTEMA</span>
 			<div className="flex w-full grow flex-col gap-2">
 				{proposal?.kit ? (
-					<div className="flex w-full flex-col self-center rounded border border-gray-200 p-3 shadow-sm lg:w-[60%]">
+					<div className="flex w-full flex-col self-center rounded border border-gray-300 p-3 shadow-md lg:w-[60%]">
 						<div className="flex w-full items-center justify-between">
 							<h1 className="font-bold leading-none tracking-tight">{proposal.kit.nome}</h1>
 							<h1 className="rounded-md border border-blue-500 p-1 text-xs font-medium tracking-tight text-blue-500">KIT DA PROPOSTA ATIVA</h1>

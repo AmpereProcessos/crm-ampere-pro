@@ -53,8 +53,8 @@ function OpportunityHistory({ session, opportunityName, opportunityId, opportuni
 	const [view, setView] = useState<"NEW NOTE" | "NEW ACTIVITY" | "NEW INTERACTION" | null>(null);
 
 	return (
-		<div className="flex w-full flex-col gap-2 rounded-md border border-gray-200 bg-[#fff] p-3 shadow-lg">
-			<div className="flex h-fit flex-col items-center justify-between border-b border-gray-200 pb-2 lg:h-[40px] lg:flex-row">
+		<div className="flex w-full flex-col gap-2 rounded-md border border-gray-300 bg-[#fff] p-3 shadow-lg">
+			<div className="flex h-fit flex-col items-center justify-between border-b border-gray-300 pb-2 lg:h-[40px] lg:flex-row">
 				<h1 className="font-bold text-black">Histórico</h1>
 				<div className="mt-2 flex w-full grow flex-col items-center justify-end gap-2 lg:mt-0 lg:w-fit lg:flex-row">
 					<button

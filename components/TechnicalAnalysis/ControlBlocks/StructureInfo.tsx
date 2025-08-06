@@ -224,7 +224,7 @@ function StructureInfo({ requestInfo, setRequestInfo, requireFiles = true, files
 						/>
 					</div>
 				</div>
-				<div className="my-3 flex h-[165px] w-[300px] flex-col items-center justify-center self-center border border-gray-200 p-1 py-2 lg:h-[250px] lg:w-[450px]">
+				<div className="my-3 flex h-[165px] w-[300px] flex-col items-center justify-center self-center border border-gray-300 p-1 py-2 lg:h-[250px] lg:w-[450px]">
 					<h1 className="text-sm font-bold text-[#fead41]">TIPOS DE TELHAS</h1>
 					<Image src={RoofTiles} alt="Tipos de Telhas" />
 				</div>

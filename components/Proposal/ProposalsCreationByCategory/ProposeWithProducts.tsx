@@ -28,8 +28,8 @@ function ProposalWithProducts({ opportunity, infoHolder, setInfoHolder, session,
 	const [applicablePaymentMethodsIds, setApplicablePaymentMethodsIds] = useState<string[]>([]);
 
 	return (
-		<div className="m-6 flex h-fit flex-col rounded-md border border-gray-200 bg-[#fff] p-2 shadow-lg">
-			<div className="grid min-h-[50px] w-full grid-cols-1 grid-rows-5 items-center gap-6 border-b border-gray-200 pb-4 lg:grid-cols-5 lg:grid-rows-1 lg:gap-1">
+		<div className="m-6 flex h-fit flex-col rounded-md border border-gray-300 bg-[#fff] p-2 shadow-lg">
+			<div className="grid min-h-[50px] w-full grid-cols-1 grid-rows-5 items-center gap-6 border-b border-gray-300 pb-4 lg:grid-cols-5 lg:grid-rows-1 lg:gap-1">
 				<div className={`flex items-center justify-center gap-1 ${stage == 1 ? "text-cyan-500" : "text-gray-600"} `}>
 					<IoMdOptions style={{ fontSize: "23px" }} />
 					<p className="text-sm font-bold lg:text-lg">DIMENSIONAMENTO</p>

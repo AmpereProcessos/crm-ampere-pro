@@ -111,7 +111,7 @@ function NewOpportunityActivityMenu({ session, opportunity, closeMenu }: NewOppo
 					/>
 				</div>
 			</div>
-			<div className="flex w-full flex-col rounded-md border border-gray-200 p-2 shadow-sm">
+			<div className="flex w-full flex-col rounded-md border border-gray-300 p-2 shadow-md">
 				<h1 className="text-sm font-medium leading-none tracking-tight text-gray-500">DESCRIÇÃO DA ATIVIDADE</h1>
 				<input
 					value={newActivityHolder.descricao}
@@ -155,7 +155,7 @@ function NewOpportunityActivityMenu({ session, opportunity, closeMenu }: NewOppo
 					<div
 						onClick={() => removeResponsible(index)}
 						key={index}
-						className="flex cursor-pointer items-center gap-2 rounded-lg border border-cyan-500 p-2 shadow-sm duration-300 ease-in-out hover:border-red-500 hover:bg-red-100"
+						className="flex cursor-pointer items-center gap-2 rounded-lg border border-cyan-500 p-2 shadow-md duration-300 ease-in-out hover:border-red-500 hover:bg-red-100"
 					>
 						<Avatar width={25} height={25} url={resp.avatar_url || undefined} fallback={formatNameAsInitials(resp.nome)} />
 						<p className="text-sm font-medium tracking-tight text-gray-500">{resp.nome}</p>

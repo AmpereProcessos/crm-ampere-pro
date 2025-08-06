@@ -19,7 +19,7 @@ function OpportunityOpenActivites({ opportunityId, session, closeModal }: Opport
 	return (
 		<div id="dropdown" className="absolute -right-10 z-10 flex w-64 list-none flex-col divide-y divide-gray-100 rounded bg-white text-base shadow">
 			<div className="flex w-full flex-col p-1">
-				<div className="flex w-full justify-between border-b border-gray-200 pb-1">
+				<div className="flex w-full justify-between border-b border-gray-300 pb-1">
 					<h1 className="text-xs font-medium text-gray-700">ATIVIDADES</h1>
 					<button
 						onClick={() => {

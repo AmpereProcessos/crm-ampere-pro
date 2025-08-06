@@ -19,7 +19,7 @@ function PaymentMethods({ session }: PaymentMethodsProps) {
 	const [editPaymentMethodModal, setEditPaymentMethodModal] = useState<{ id: string | null; isOpen: boolean }>({ id: null, isOpen: false });
 	return (
 		<div className="flex h-full grow flex-col">
-			<div className="flex w-full items-center justify-between border-b border-gray-200 pb-2">
+			<div className="flex w-full items-center justify-between border-b border-gray-300 pb-2">
 				<div className="flex flex-col">
 					<h1 className={`text-lg font-bold`}>Controle de métodos de pagamento</h1>
 					<p className="text-sm text-[#71717A]">Gerencie, adicione e edite os métodos de pagamento</p>
@@ -40,7 +40,7 @@ function PaymentMethods({ session }: PaymentMethodsProps) {
 							<div
 								onClick={() => setEditPaymentMethodModal({ id: method._id, isOpen: true })}
 								key={method._id.toString()}
-								className="flex w-full flex-col rounded-md border border-gray-200 p-2"
+								className="flex w-full flex-col rounded-md border border-gray-300 p-2"
 							>
 								<div className="flex grow items-center gap-1">
 									<div className="flex h-[25px] w-[25px] items-center justify-center rounded-full border border-black p-1">

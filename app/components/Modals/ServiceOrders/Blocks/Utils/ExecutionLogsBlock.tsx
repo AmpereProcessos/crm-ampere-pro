@@ -78,7 +78,7 @@ function ExecutionLogsBlock({ infoHolder, setInfoHolder, session }: ExecutionLog
 										<MdDelete style={{ color: "red" }} />
 									</button>
 								</div>
-								<div className="flex w-full items-center justify-center border border-gray-200 bg-[#F4F0BB] p-2">
+								<div className="flex w-full items-center justify-center border border-gray-300 bg-[#F4F0BB] p-2">
 									<p className="w-full text-center text-sm text-gray-500">{registry.anotacoes || "..."}</p>
 								</div>
 							</div>

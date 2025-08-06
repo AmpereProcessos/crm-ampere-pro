@@ -70,7 +70,7 @@ function FunnelListItem({ item, session, index }: FunnelListItemProps) {
 					ref={provided.innerRef}
 					{...provided.draggableProps}
 					{...provided.dragHandleProps}
-					className="relative flex min-h-[110px] w-full flex-col justify-between rounded border border-gray-400 bg-[#fff] shadow-sm"
+					className="relative flex min-h-[110px] w-full flex-col justify-between rounded border border-gray-400 bg-[#fff] shadow-md"
 				>
 					<div className={`h-1 w-full rounded-sm  ${getBarColor({ isWon, isRequested, isLost })}`} />
 					<div className="flex w-full flex-col p-2">

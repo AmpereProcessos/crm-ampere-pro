@@ -25,7 +25,7 @@ function SaleCompositionBlock({ infoHolder, setInfoHolder, moveToNextStage, move
 					<p className="w-full text-center text-sm font-light tracking-tighter text-gray-700">A composição de venda é feita de PRODUTOS e SERVIÇOS.</p>
 					<p className="w-full text-center text-sm font-light tracking-tighter text-gray-700">As categorias de venda são KITS, PLANOS, PRODUTOS avulsos e SERVIÇOS avulsos.</p>
 				</div>
-				<div className="my-2 flex flex-col self-center rounded border border-[#fead41] p-3 px-6 shadow-sm">
+				<div className="my-2 flex flex-col self-center rounded border border-[#fead41] p-3 px-6 shadow-md">
 					<h1 className="w-full text-center font-black tracking-tight text-[#fead41]">VENDA {infoHolder.venda.tipo}</h1>
 					{infoHolder.venda.tipo == "ÚNICA" ? null : (
 						<div className="flex w-full items-center justify-center gap-2">

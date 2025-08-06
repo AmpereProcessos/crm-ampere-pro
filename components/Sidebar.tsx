@@ -39,7 +39,7 @@ export const Sidebar = ({ session }: SidebarProps) => {
 					maxHeight: "100vh",
 					overflow: "visible",
 				}}
-				className={`sticky top-0 z-[90] hidden flex-col border-r border-gray-200 bg-[#fff] px-2 py-4 scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300 md:flex ${
+				className={`sticky top-0 z-[90] hidden flex-col border-r border-gray-300 bg-[#fff] px-2 py-4 scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300 md:flex ${
 					sidebarExtended ? "w-[210px] min-w-[210px]" : "w-[70px] min-w-[70px]"
 				}`}
 			>
@@ -119,7 +119,7 @@ export const Sidebar = ({ session }: SidebarProps) => {
 					</Link>
 				</div>
 			</motion.div>
-			<div className={`sticky  z-[90] flex flex-col ${sidebarExtended ? "h-fit" : "h-[50px] "} w-full items-center border-t border-gray-200 bg-[#fff] pb-4 md:hidden`}>
+			<div className={`sticky  z-[90] flex flex-col ${sidebarExtended ? "h-fit" : "h-[50px] "} w-full items-center border-t border-gray-300 bg-[#fff] pb-4 md:hidden`}>
 				<div className="grid h-[50px] w-full grid-cols-3">
 					<div className="col-span-1 flex items-center justify-center gap-2">
 						{session?.user.avatar_url ? (

@@ -244,7 +244,7 @@ function SaleGoalCard({ goal }: SaleGoalCardProps) {
 		callbackFn: () => setEditGoalMenuIsOpen(false),
 	});
 	return (
-		<div className="flex w-full flex-col gap-1 rounded border border-black bg-[#fff] p-2 shadow-sm dark:bg-[#121212]">
+		<div className="flex w-full flex-col gap-1 rounded border border-black bg-[#fff] p-2 shadow-md dark:bg-[#121212]">
 			<div className="flex w-full items-center justify-between">
 				<div className="flex items-center gap-1">
 					<h1 className="text-sm font-bold leading-none tracking-tight">

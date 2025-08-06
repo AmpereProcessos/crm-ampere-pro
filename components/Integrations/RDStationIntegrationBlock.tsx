@@ -40,7 +40,7 @@ function RDStationIntegrationBlock({ session }: RDStationIntegrationBlockProps) 
 		link.remove();
 	}
 	return (
-		<div className="flex w-full flex-col rounded-md border border-gray-200 p-2">
+		<div className="flex w-full flex-col rounded-md border border-gray-300 p-2">
 			<div className="flex w-full items-center gap-1">
 				<div style={{ width: 35, height: 35 }} className="relative flex items-center justify-center">
 					<Image src={RDStationLogo} alt="Avatar" fill={true} style={{ borderRadius: "100%" }} />

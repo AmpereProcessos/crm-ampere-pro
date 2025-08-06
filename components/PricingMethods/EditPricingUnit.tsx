@@ -137,7 +137,7 @@ function EditPricingUnit({ index, pricingHolder, setPricingHolder, resultHolder,
 				id={"pricingName"}
 				type="text"
 				placeholder={"Preencha o nome da unidade de preço..."}
-				className="w-full rounded-md border border-gray-200 p-3 text-sm outline-none placeholder:italic"
+				className="w-full rounded-md border border-gray-300 p-3 text-sm outline-none placeholder:italic"
 			/>
 			<h1 className="mt-4 w-full text-center font-Inter text-sm font-black leading-none tracking-tight">CONSTRUÇÃO DO CÁLCULO DE CUSTO</h1>
 			<h1 className="my-2 w-full text-start text-sm font-black text-[#FF9B50]">VALORES</h1>

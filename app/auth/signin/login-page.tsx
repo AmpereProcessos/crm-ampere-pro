@@ -42,7 +42,7 @@ function Login({ searchParams }: LoginProps) {
 											type="email"
 											placeholder="seu@email.com"
 											required
-											className="dark:bg-white dark:border-gray-200 dark:placeholder:text-gray-500 dark:text-black"
+											className="dark:bg-white dark:border-gray-300 dark:placeholder:text-gray-500 dark:text-black"
 										/>
 									</div>
 									<div className="grid gap-3">

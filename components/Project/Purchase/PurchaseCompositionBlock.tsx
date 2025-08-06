@@ -141,7 +141,7 @@ function PurchaseCompositionBlock({ infoHolder, setInfoHolder }: PurchaseComposi
 				</div>
 			</div>
 			{infoHolder.composicao.map((item, index) => (
-				<div key={index} className="flex w-full flex-col rounded-md border border-gray-200 p-2">
+				<div key={index} className="flex w-full flex-col rounded-md border border-gray-300 p-2">
 					<div className="flex w-full flex-col items-start justify-between gap-2">
 						<div className="flex w-full items-center justify-between gap-2">
 							<div className="flex items-center gap-1">

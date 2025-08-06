@@ -267,7 +267,7 @@ function NewCall({ opportunity, session, closeModal }: NewCallProps) {
 		<div id="newCost" className="fixed bottom-0 left-0 right-0 top-0 z-[100] bg-[rgba(0,0,0,.85)]">
 			<div className="fixed left-[50%] top-[50%] z-[100] h-[90%] w-[60%] translate-x-[-50%] translate-y-[-50%] rounded-md bg-[#fff] p-[10px]">
 				<div className="flex h-full flex-col">
-					<div className="flex flex-wrap items-center justify-between border-b border-gray-200 px-2 pb-2 text-lg">
+					<div className="flex flex-wrap items-center justify-between border-b border-gray-300 px-2 pb-2 text-lg">
 						<h3 className="text-xl font-bold text-[#353432] dark:text-white ">NOVO CHAMADO</h3>
 						<button onClick={() => closeModal()} type="button" className="flex items-center justify-center rounded-lg p-1 duration-300 ease-linear hover:scale-105 hover:bg-red-200">
 							<VscChromeClose style={{ color: "red" }} />

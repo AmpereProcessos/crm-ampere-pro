@@ -32,7 +32,7 @@ function CardUserControl({ userInfo, admin, openModal }: CardUserControlProps) {
 	}, [onClickOutside]);
 
 	return (
-		<div ref={ref} className="flex min-h-[100px] w-full flex-col gap-2 rounded-md border border-gray-300 shadow-sm lg:flex-row">
+		<div ref={ref} className="flex min-h-[100px] w-full flex-col gap-2 rounded-md border border-gray-300 shadow-md lg:flex-row">
 			<div className={`h-[4px] w-full lg:h-full lg:w-[4px] ${userInfo.ativo ? "bg-blue-500" : "bg-gray-500"} rounded-bl-md rounded-tl-md`}></div>
 			<div className="flex grow flex-col items-center lg:flex-row">
 				<div className="flex h-full min-w-[60px] flex-col items-center justify-center gap-2">

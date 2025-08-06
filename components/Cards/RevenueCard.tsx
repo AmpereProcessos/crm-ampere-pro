@@ -29,7 +29,7 @@ function RevenueCard({ revenue, session }: RevenueCardProps) {
 					<div className="hidden grow flex-wrap items-center gap-2 lg:flex">
 						{revenue.categorias.length > 0 ? (
 							revenue.categorias.map((item, index) => (
-								<div key={index} className="flex items-center gap-1 rounded-md border border-blue-600 bg-blue-50 px-2 py-0.5 text-center shadow-sm">
+								<div key={index} className="flex items-center gap-1 rounded-md border border-blue-600 bg-blue-50 px-2 py-0.5 text-center shadow-md">
 									<FaTag size={12} color="rgb(37,99,235)" />
 									<p className="text-[0.6rem] font-medium leading-none tracking-tight text-blue-600">{item}</p>
 								</div>

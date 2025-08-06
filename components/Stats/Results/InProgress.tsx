@@ -65,7 +65,7 @@ function InProgressResults({ after, before, responsibles, partners, projectTypes
               {funnel.etapas.map((stage, stageIndex) => (
                 <div
                   key={stageIndex}
-                  className={`flex w-[350px] min-w-[350px] max-w-[350px] grow flex-col rounded-xl border border-gray-200 bg-[#fff] p-6 shadow-sm`}
+                  className={`flex w-[350px] min-w-[350px] max-w-[350px] grow flex-col rounded-xl border border-gray-300 bg-[#fff] p-6 shadow-md`}
                 >
                   <div className="flex w-full items-center justify-between">
                     <h1 className="text-sm font-medium uppercase tracking-tight">{stage.nome}</h1>

@@ -173,7 +173,7 @@ export default function PartialControlTechnicalAnalysis({ analysisId, session, c
 		<div id="control-technical-analysis" className="fixed bottom-0 left-0 right-0 top-0 z-[100] bg-[rgba(0,0,0,.85)]">
 			<div className="relative left-[50%] top-[50%] z-[100] h-[80%] max-h-[80%] w-[90%] translate-x-[-50%] translate-y-[-50%] overflow-hidden rounded-md bg-[#fff] p-[10px] lg:w-[90%]">
 				<div className="flex h-full w-full flex-col">
-					<div className="flex flex-col items-center justify-between border-b border-gray-200 px-2 pb-2 text-lg lg:flex-row">
+					<div className="flex flex-col items-center justify-between border-b border-gray-300 px-2 pb-2 text-lg lg:flex-row">
 						<h3 className="text-xl font-bold text-[#353432] dark:text-white ">{infoHolder.nome || "CONTROLAR ANÁLISE TÉCNICA"}</h3>
 						<button onClick={() => closeModal()} type="button" className="flex items-center justify-center rounded-lg p-1 duration-300 ease-linear hover:scale-105 hover:bg-red-200">
 							<VscChromeClose style={{ color: "red" }} />
@@ -290,7 +290,7 @@ export default function PartialControlTechnicalAnalysis({ analysisId, session, c
 									<div className="flex w-full flex-wrap items-center justify-center gap-2 px-4">
 										{TechnicalAnalysisReportTypes.map((type) => (
 											<Link key={type.id} href={`/operacional/analises-tecnicas/laudo/${analysisId}?type=${type.value}`}>
-												<p className="w-fit rounded border border-black px-2 py-1 text-center font-bold shadow-sm hover:bg-black hover:text-white">{type.value}</p>
+												<p className="w-fit rounded border border-black px-2 py-1 text-center font-bold shadow-md hover:bg-black hover:text-white">{type.value}</p>
 											</Link>
 										))}
 									</div>

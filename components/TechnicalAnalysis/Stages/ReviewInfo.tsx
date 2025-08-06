@@ -612,7 +612,7 @@ function ReviewInfo({ session, infoHolder, setInfoHolder, files, setFiles, goToN
 				<div className="flex w-full flex-col flex-wrap justify-around gap-2 lg:flex-row">
 					{infoHolder.equipamentos.length > 0 ? (
 						infoHolder.equipamentos.map((equipment, index) => (
-							<div key={index} className="mt-1 flex w-full flex-col rounded-md border border-gray-200 p-2 lg:w-[350px]">
+							<div key={index} className="mt-1 flex w-full flex-col rounded-md border border-gray-300 p-2 lg:w-[350px]">
 								<div className="flex w-full flex-col items-start justify-between gap-2 lg:flex-row lg:items-center">
 									<div className="flex items-center gap-1">
 										<div className="flex h-[25px] w-[25px] items-center justify-center rounded-full border border-black p-1 text-[15px]">{renderCategoryIcon(equipment.categoria, 18)}</div>
@@ -756,7 +756,7 @@ function ReviewInfo({ session, infoHolder, setInfoHolder, files, setFiles, goToN
 				<div className="mt-2 flex w-full flex-col flex-wrap items-start justify-around gap-2 lg:flex-row">
 					{infoHolder.padrao.length > 0 ? (
 						infoHolder.padrao.map((paInfo, index) => (
-							<div key={index} className="flex w-[450px] flex-col rounded-md border border-gray-500 p-2 shadow-sm">
+							<div key={index} className="flex w-[450px] flex-col rounded-md border border-gray-500 p-2 shadow-md">
 								<div className="flex w-full items-center justify-between gap-1">
 									<div className="flex items-center gap-1">
 										<h1 className="font-black leading-none tracking-tight">PADRÃO {paInfo.ligacao}</h1>
@@ -978,7 +978,7 @@ function ReviewInfo({ session, infoHolder, setInfoHolder, files, setFiles, goToN
 						/>
 					</div>
 				</div>
-				<div className="my-3 flex h-[165px] w-[300px] flex-col items-center justify-center self-center border border-gray-200 p-1 py-2 lg:h-[250px] lg:w-[450px]">
+				<div className="my-3 flex h-[165px] w-[300px] flex-col items-center justify-center self-center border border-gray-300 p-1 py-2 lg:h-[250px] lg:w-[450px]">
 					<h1 className="text-sm font-bold text-[#fead41]">TIPOS DE TELHAS</h1>
 					<Image src={RoofTiles} alt="Tipos de Telhas" />
 				</div>

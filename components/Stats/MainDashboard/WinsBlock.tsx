@@ -14,7 +14,7 @@ type WinsBlockProps = {
 };
 function WinsBlock({ data, session }: WinsBlockProps) {
 	return (
-		<div className="flex h-[650px] w-full flex-col rounded-xl  border border-gray-200 bg-[#fff] p-6 shadow-sm lg:h-[450px]">
+		<div className="flex h-[650px] w-full flex-col rounded-xl  border border-gray-300 bg-[#fff] p-6 shadow-md lg:h-[450px]">
 			<div className="flex min-h-[42px] w-full flex-col">
 				<div className="flex items-center justify-between">
 					<h1 className="text-sm font-medium uppercase tracking-tight">Projetos ganhos</h1>
@@ -25,7 +25,7 @@ function WinsBlock({ data, session }: WinsBlockProps) {
 			<div className="flex grow flex-col justify-start gap-2 overflow-y-auto overscroll-y-auto py-2 scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300">
 				{data.length > 0 ? (
 					data.map((win, index: number) => (
-						<div key={`${win._id}`} className="flex w-full flex-col items-center justify-between border-b  border-gray-200 p-2 md:flex-row md:border-b-0">
+						<div key={`${win._id}`} className="flex w-full flex-col items-center justify-between border-b  border-gray-300 p-2 md:flex-row md:border-b-0">
 							<div className="flex w-full items-start gap-4 md:grow">
 								<div className="flex h-[30px] min-h-[30px] w-[30px] min-w-[30px] items-center justify-center rounded-full border border-black">
 									<MdOutlineAttachMoney />

@@ -69,7 +69,7 @@ function AcquisitionChannelsBlock({ session }: AcquisitionChannelsBlockProps) {
 							type="text"
 							placeholder="Preencha um nome para o canal de aquisição..."
 							onBlur={() => setAcquisitionChannelHolder((prev) => ({ ...prev, slug: formatToSlug(prev.value) }))}
-							className="w-full rounded border border-gray-200 p-1 text-center text-xs tracking-tight text-gray-500 shadow-sm outline-none placeholder:italic"
+							className="w-full rounded border border-gray-300 p-1 text-center text-xs tracking-tight text-gray-500 shadow-md outline-none placeholder:italic"
 						/>
 					</div>
 					<div className="w-full lg:w-1/3">
@@ -80,7 +80,7 @@ function AcquisitionChannelsBlock({ session }: AcquisitionChannelsBlockProps) {
 							}}
 							type="text"
 							placeholder="Preencha um slug para o canal de aquisição..."
-							className="w-full rounded border border-gray-200 p-1 text-center text-xs tracking-tight text-gray-500 shadow-sm outline-none placeholder:italic"
+							className="w-full rounded border border-gray-300 p-1 text-center text-xs tracking-tight text-gray-500 shadow-md outline-none placeholder:italic"
 						/>
 					</div>
 				</div>
@@ -116,7 +116,7 @@ export default AcquisitionChannelsBlock;
 
 function AcquisitionChannelUtil({ acquisitionChannel }: { acquisitionChannel: TAcquisitionChannelDTO }) {
 	return (
-		<div className="flex w-full flex-col rounded-md border border-gray-200 p-2">
+		<div className="flex w-full flex-col rounded-md border border-gray-300 p-2">
 			<div className="flex items-center w-full justify-start gap-2">
 				<div className="flex items-center gap-1">
 					<div className="flex h-[25px] w-[25px] items-center justify-center rounded-full border border-black p-1 text-[15px]">

@@ -229,7 +229,7 @@ function PAInfo({ requestInfo, setRequestInfo, requireFiles = true, files, setFi
 				</div>
 				<div className="mt-2 flex w-full flex-col gap-2">
 					{requestInfo.padrao.map((paInfo, index) => (
-						<div key={index} className="flex w-full flex-col border border-gray-200 p-2 shadow-sm">
+						<div key={index} className="flex w-full flex-col border border-gray-300 p-2 shadow-md">
 							<div className="flex w-full items-center justify-between">
 								<h1 className="font-medium leading-none tracking-tight text-gray-500">
 									PADRÃO <strong className="text-[#fead41]">{paInfo.ligacao} </strong> de <strong className="text-[#fead41]">{paInfo.amperagem}</strong>

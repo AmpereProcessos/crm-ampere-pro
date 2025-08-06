@@ -102,7 +102,7 @@ function NewActivity({ session, newEvent, setNewEvent, setView, opportunityId, o
 								}))
 							}
 							type="datetime-local"
-							className="w-full rounded-md border border-gray-200 p-3 text-sm outline-none placeholder:italic"
+							className="w-full rounded-md border border-gray-300 p-3 text-sm outline-none placeholder:italic"
 						/>
 					</div>
 				</div>
@@ -115,10 +115,10 @@ function NewActivity({ session, newEvent, setNewEvent, setView, opportunityId, o
 						}))
 					}
 					placeholder="Observações sobre a atividade..."
-					className="h-[80px] resize-none border border-gray-200 bg-gray-100 p-2 text-center outline-none"
+					className="h-[80px] resize-none border border-gray-300 bg-gray-100 p-2 text-center outline-none"
 				/>
 			</div>
-			<div className="flex w-full items-center justify-end gap-3 border-t border-gray-200 p-1">
+			<div className="flex w-full items-center justify-end gap-3 border-t border-gray-300 p-1">
 				<button onClick={() => setView("HISTORY")} className="text-gray-500 duration-300 ease-in-out disabled:opacity-50 hover:scale-105">
 					FECHAR
 				</button>

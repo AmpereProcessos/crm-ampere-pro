@@ -904,7 +904,7 @@ function ReviewInfo({ requestInfo, setRequestInfo, modulesQty, distance, activeP
 				<div className="flex w-full grow flex-col bg-[#fff] pb-2">
 					<span className="py-2 text-center text-lg font-bold uppercase text-[#15599a]">DADOS DO SISTEMA</span>
 					<div className="mt-2 flex w-full flex-col items-center justify-around gap-2 lg:flex-row">
-						<div className="flex min-h-[80px] w-full flex-col rounded-xl border border-gray-200 bg-[#fff] p-4 shadow-sm lg:w-1/4 lg:p-6">
+						<div className="flex min-h-[80px] w-full flex-col rounded-xl border border-gray-300 bg-[#fff] p-4 shadow-md lg:w-1/4 lg:p-6">
 							<div className="flex items-center justify-between">
 								<h1 className="text-sm font-medium uppercase tracking-tight">POTÊNCIA DE MÓDULOS</h1>
 								<ImPower />
@@ -913,7 +913,7 @@ function ReviewInfo({ requestInfo, setRequestInfo, modulesQty, distance, activeP
 								<div className="text-xl font-bold text-[#15599a] lg:text-2xl">{getModulesPeakPotByProducts(proposeInfo.produtos)} kWp</div>
 							</div>
 						</div>
-						<div className="flex min-h-[80px] w-full flex-col rounded-xl border border-gray-200 bg-[#fff] p-4 shadow-sm lg:w-1/4 lg:p-6">
+						<div className="flex min-h-[80px] w-full flex-col rounded-xl border border-gray-300 bg-[#fff] p-4 shadow-md lg:w-1/4 lg:p-6">
 							<div className="flex items-center justify-between">
 								<h1 className="text-sm font-medium uppercase tracking-tight">POTÊNCIA DE INVERSORES</h1>
 								<ImPower />
@@ -922,7 +922,7 @@ function ReviewInfo({ requestInfo, setRequestInfo, modulesQty, distance, activeP
 								<div className="text-xl font-bold text-[#15599a] lg:text-2xl">{getInverterPeakPowerByProducts(proposeInfo.produtos)} kWp</div>
 							</div>
 						</div>
-						<div className="flex min-h-[80px] w-full flex-col rounded-xl border border-gray-200 bg-[#fff] p-4 shadow-sm lg:w-1/4 lg:p-6">
+						<div className="flex min-h-[80px] w-full flex-col rounded-xl border border-gray-300 bg-[#fff] p-4 shadow-md lg:w-1/4 lg:p-6">
 							<div className="flex items-center justify-between">
 								<h1 className="text-sm font-medium uppercase tracking-tight">NÚMERO DE MÓDULOS</h1>
 								<FaSolarPanel />
@@ -931,7 +931,7 @@ function ReviewInfo({ requestInfo, setRequestInfo, modulesQty, distance, activeP
 								<div className="text-xl font-bold text-[#15599a] lg:text-2xl">{getModulesQty(proposeInfo.produtos)}</div>
 							</div>
 						</div>
-						<div className="flex min-h-[80px] w-full flex-col rounded-xl border border-gray-200 bg-[#fff] p-4 shadow-sm lg:w-1/4 lg:p-6">
+						<div className="flex min-h-[80px] w-full flex-col rounded-xl border border-gray-300 bg-[#fff] p-4 shadow-md lg:w-1/4 lg:p-6">
 							<div className="flex items-center justify-between">
 								<h1 className="text-sm font-medium uppercase tracking-tight">NÚMERO DE INVERSORES</h1>
 								<TbTopologyFull />
@@ -944,7 +944,7 @@ function ReviewInfo({ requestInfo, setRequestInfo, modulesQty, distance, activeP
 					<h1 className="w-full text-start font-medium text-gray-500">LISTA DE EQUIPAMENTOS</h1>
 					<div className="flex w-full flex-col flex-wrap justify-around gap-2 lg:flex-row">
 						{proposeInfo.produtos.map((product, index) => (
-							<div key={index} className="mt-1 flex w-full flex-col rounded-md border border-gray-200 p-2">
+							<div key={index} className="mt-1 flex w-full flex-col rounded-md border border-gray-300 p-2">
 								<div className="flex w-full flex-col items-start justify-between gap-2 lg:flex-row lg:items-center">
 									<div className="flex items-center gap-1">
 										<div className="flex h-[25px] w-[25px] items-center justify-center rounded-full border border-black p-1 text-[15px]">{renderCategoryIcon(product.categoria)}</div>
@@ -974,7 +974,7 @@ function ReviewInfo({ requestInfo, setRequestInfo, modulesQty, distance, activeP
 					<h1 className="w-full text-start font-medium text-gray-500">LISTA DE SERVIÇOS</h1>
 					<div className="flex w-full flex-col flex-wrap justify-around gap-2 lg:flex-row">
 						{proposeInfo.servicos.map((service, index) => (
-							<div key={index} className="mt-1 flex w-full flex-col rounded-md border border-gray-200 p-2">
+							<div key={index} className="mt-1 flex w-full flex-col rounded-md border border-gray-300 p-2">
 								<div className="flex w-full items-center justify-between gap-2">
 									<div className="flex  items-center gap-1">
 										<div className="flex h-[25px] w-[25px] items-center justify-center rounded-full border border-black p-1">

@@ -214,7 +214,7 @@ function EnergyPABlock({ infoHolder, setInfoHolder, changes, setChanges }: Energ
 				<h1 className="w-full rounded-tl-sm rounded-tr-sm bg-gray-500 p-1 text-center font-bold text-white">LISTA DE PADRÕES</h1>
 				{infoHolder.padrao.length > 0 ? (
 					infoHolder.padrao.map((paInfo, index) => (
-						<div key={index} className="flex w-full flex-col border border-gray-200 p-2 shadow-sm">
+						<div key={index} className="flex w-full flex-col border border-gray-300 p-2 shadow-md">
 							<div className="flex w-full items-center justify-between">
 								<h1 className="font-medium leading-none tracking-tight text-gray-500">
 									PADRÃO <strong className="text-[#fead41]">{paInfo.ligacao} </strong> de <strong className="text-[#fead41]">{paInfo.amperagem}</strong>

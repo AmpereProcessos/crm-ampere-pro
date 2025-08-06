@@ -129,7 +129,7 @@ function OpportunityFunnelReference({ reference, referenceIndex, funnels, opport
 		affectedQueryKey: ["opportunity-by-id", opportunity._id],
 	});
 	return (
-		<div className="flex w-full flex-col rounded-md border border-gray-200 p-3">
+		<div className="flex w-full flex-col rounded-md border border-gray-300 p-3">
 			<div className="flex w-full items-center gap-2">
 				<div className="flex items-center gap-2">
 					<div className="flex h-[25px] w-[25px] items-center justify-center rounded-full border border-black p-1">

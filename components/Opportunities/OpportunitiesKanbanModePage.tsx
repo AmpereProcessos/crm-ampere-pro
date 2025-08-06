@@ -215,7 +215,7 @@ export default function OpportunitiesKanbanModePage({ session, funnelsOptions, r
 							<button
 								type="button"
 								onClick={() => handleExportData()}
-								className="flex h-[46.6px] items-center justify-center gap-2 rounded-md border bg-[#2c6e49] p-2 px-3 text-sm font-medium text-white shadow-sm duration-300 ease-in-out hover:scale-105"
+								className="flex h-[46.6px] items-center justify-center gap-2 rounded-md border bg-[#2c6e49] p-2 px-3 text-sm font-medium text-white shadow-md duration-300 ease-in-out hover:scale-105"
 							>
 								<BsDownload style={{ fontSize: "18px" }} />
 							</button>
@@ -224,7 +224,7 @@ export default function OpportunitiesKanbanModePage({ session, funnelsOptions, r
 							<button
 								type="button"
 								onClick={() => setNewProjectModalIsOpen(true)}
-								className="flex h-[46.6px] items-center justify-center gap-2 rounded-md border bg-[#15599a] p-2 px-3 text-sm font-medium text-white shadow-sm duration-300 ease-in-out hover:scale-105"
+								className="flex h-[46.6px] items-center justify-center gap-2 rounded-md border bg-[#15599a] p-2 px-3 text-sm font-medium text-white shadow-md duration-300 ease-in-out hover:scale-105"
 							>
 								<AiOutlinePlus style={{ fontSize: "18px" }} />
 							</button>

@@ -66,7 +66,7 @@ function NewOpportunityNoteMenu({ session, opportunity, closeMenu }: NewOpportun
 					onChange={(e) => {
 						setNewNoteHolder((prev) => ({ ...prev, conteudo: e.target.value }));
 					}}
-					className="min-h-[80px] w-full resize-none rounded-md border border-gray-200  p-3 text-center text-sm shadow-sm outline-none"
+					className="min-h-[80px] w-full resize-none rounded-md border border-gray-300  p-3 text-center text-sm shadow-md outline-none"
 				/>
 			</div>
 			<div className="flex w-full items-center justify-between">

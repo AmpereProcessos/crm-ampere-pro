@@ -175,7 +175,7 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
 						</div>
 					</div>
 					<div className="mt-2 flex w-full flex-col items-center justify-around gap-2 lg:flex-row">
-						<div className="flex min-h-[110px] w-full flex-col rounded-xl border border-gray-200 bg-[#fff] p-6 shadow-sm lg:w-1/6">
+						<div className="flex min-h-[110px] w-full flex-col rounded-xl border border-gray-300 bg-[#fff] p-6 shadow-md lg:w-1/6">
 							<div className="flex items-center justify-between">
 								<h1 className="text-sm font-medium uppercase tracking-tight">Projetos Criados</h1>
 								<VscDiffAdded className="h-4 w-4" />
@@ -185,7 +185,7 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
 								<p className="text-xs text-gray-500 lg:text-[0.6rem]">{data?.simplificado.ANTERIOR.projetosCriados || 0} no último período</p>
 							</div>
 						</div>
-						<div className="flex min-h-[110px] w-full flex-col rounded-xl border border-gray-200 bg-[#fff] p-6 shadow-sm lg:w-1/6">
+						<div className="flex min-h-[110px] w-full flex-col rounded-xl border border-gray-300 bg-[#fff] p-6 shadow-md lg:w-1/6">
 							<div className="flex items-center justify-between">
 								<h1 className="text-sm font-medium uppercase tracking-tight">Projetos Ganhos</h1>
 								<BsPatchCheck className="h-4 w-4" />
@@ -195,7 +195,7 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
 								<p className="text-xs text-gray-500 lg:text-[0.6rem]">{data?.simplificado.ANTERIOR.projetosGanhos || 0} no último período</p>
 							</div>
 						</div>
-						<div className="flex min-h-[110px] w-full flex-col rounded-xl border border-gray-200 bg-[#fff] p-6 shadow-sm lg:w-1/6">
+						<div className="flex min-h-[110px] w-full flex-col rounded-xl border border-gray-300 bg-[#fff] p-6 shadow-md lg:w-1/6">
 							<div className="flex items-center justify-between">
 								<h1 className="text-sm font-medium uppercase tracking-tight">Projetos Perdidos</h1>
 								<AiOutlineCloseCircle className="h-4 w-4" />
@@ -205,7 +205,7 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
 								<p className="text-xs text-gray-500 lg:text-[0.6rem]">{data?.simplificado.ANTERIOR.projetosPerdidos || 0} no último período</p>
 							</div>
 						</div>
-						<div className="flex min-h-[110px] w-full flex-col rounded-xl border border-gray-200 bg-[#fff] p-6 shadow-sm lg:w-1/6">
+						<div className="flex min-h-[110px] w-full flex-col rounded-xl border border-gray-300 bg-[#fff] p-6 shadow-md lg:w-1/6">
 							<div className="flex items-center justify-between">
 								<h1 className="text-sm font-medium uppercase tracking-tight">Potência Vendida</h1>
 								<FaBolt className="h-4 w-4" />
@@ -217,7 +217,7 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
 								</p>
 							</div>
 						</div>
-						<div className="flex min-h-[110px] w-full flex-col rounded-xl border border-gray-200 bg-[#fff] p-6 shadow-sm lg:w-1/6">
+						<div className="flex min-h-[110px] w-full flex-col rounded-xl border border-gray-300 bg-[#fff] p-6 shadow-md lg:w-1/6">
 							<div className="flex items-center justify-between">
 								<h1 className="text-sm font-medium uppercase tracking-tight">Total Vendido</h1>
 								<BsFileEarmarkText className="h-4 w-4" />
@@ -229,7 +229,7 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
 								</p>
 							</div>
 						</div>
-						<div className="flex min-h-[110px] w-full flex-col rounded-xl border border-gray-200 bg-[#fff] p-6 shadow-sm lg:w-1/6">
+						<div className="flex min-h-[110px] w-full flex-col rounded-xl border border-gray-300 bg-[#fff] p-6 shadow-md lg:w-1/6">
 							<div className="flex items-center justify-between">
 								<h1 className="text-sm font-medium uppercase tracking-tight">Ticket Médio</h1>
 								<BsTicketPerforated className="h-4 w-4" />
@@ -245,7 +245,7 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
 						</div>
 					</div>
 					<div className="mt-1 flex w-full flex-col items-center justify-around gap-2 lg:flex-row">
-						<div className="flex min-h-[50px] w-full flex-col rounded-xl border border-gray-200 bg-[#fff] p-6 shadow-sm lg:w-1/2">
+						<div className="flex min-h-[50px] w-full flex-col rounded-xl border border-gray-300 bg-[#fff] p-6 shadow-md lg:w-1/2">
 							<div className="flex items-center justify-between">
 								<h1 className="text-sm font-medium uppercase tracking-tight">Visualizações do Conecta Link</h1>
 								<MousePointerClick className="h-4 w-4" />
@@ -254,7 +254,7 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
 								<div className="text-xl font-bold text-[#15599a]">{data?.conecta.visualizacoes || 0}</div>
 							</div>
 						</div>
-						<div className="flex min-h-[50px] w-full flex-col rounded-xl border border-gray-200 bg-[#fff] p-6 shadow-sm lg:w-1/2">
+						<div className="flex min-h-[50px] w-full flex-col rounded-xl border border-gray-300 bg-[#fff] p-6 shadow-md lg:w-1/2">
 							<div className="flex items-center justify-between">
 								<h1 className="text-sm font-medium uppercase tracking-tight">Oportunidades do Conecta Link</h1>
 								<UserRoundPlus className="h-4 w-4" />

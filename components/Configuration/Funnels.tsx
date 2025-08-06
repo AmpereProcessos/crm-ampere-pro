@@ -17,7 +17,7 @@ function Funnels({ session }: FunnelsProps) {
 	const { data: funnels, isSuccess, isLoading, isError } = useFunnels();
 	return (
 		<div className="flex h-full grow flex-col">
-			<div className="flex w-full flex-col items-center justify-between border-b border-gray-200 pb-2 lg:flex-row">
+			<div className="flex w-full flex-col items-center justify-between border-b border-gray-300 pb-2 lg:flex-row">
 				<div className="flex flex-col">
 					<h1 className={`text-lg font-bold`}>Controle de funis</h1>
 					<p className="text-sm text-[#71717A]">Gerencie, adicione e edite os funis existentes</p>
@@ -35,7 +35,7 @@ function Funnels({ session }: FunnelsProps) {
 				{isError ? <ErrorComponent msg="Erro ao buscar funis" /> : null}
 				{isSuccess &&
 					funnels.map((funnel, index: number) => (
-						<div key={funnel._id.toString()} className="flex w-full flex-col rounded-md border border-gray-200 p-2">
+						<div key={funnel._id.toString()} className="flex w-full flex-col rounded-md border border-gray-300 p-2">
 							<div className="flex grow items-center gap-1">
 								<div className="flex h-[25px] w-[25px] items-center justify-center rounded-full border border-black p-1">
 									<BsFunnelFill />

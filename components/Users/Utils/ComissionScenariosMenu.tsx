@@ -102,7 +102,7 @@ function ComissionProjectTypeCard({ projectType, userComissionConfig, addComissi
 		});
 	}
 	return (
-		<div className="flex w-full flex-col gap-3 rounded border border-primary/30 bg-[#fff] p-2 shadow-sm">
+		<div className="flex w-full flex-col gap-3 rounded border border-primary/30 bg-[#fff] p-2 shadow-md">
 			<div className="flex items-center gap-2 w-full">
 				<div className="flex items-center gap-2 bg-[#15599a] text-white rounded-lg px-2 py-1">
 					<MdDashboard className="w-4 h-4 min-w-4 min-h-4" />

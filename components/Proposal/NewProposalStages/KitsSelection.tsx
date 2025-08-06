@@ -219,7 +219,7 @@ function KitsSelection({ opportunity, infoHolder, setInfoHolder, moveToNextStage
 					</div>
 					<h1 className="mb-0 mt-2 text-xs font-bold leading-none tracking-tight text-gray-500 lg:text-sm">PRODUTOS</h1>
 					{produtos.map((product, index) => (
-						<div key={index} className="mt-1 flex w-full flex-col rounded-md border border-gray-200 p-2">
+						<div key={index} className="mt-1 flex w-full flex-col rounded-md border border-gray-300 p-2">
 							<div className="flex w-full flex-col items-start justify-between gap-2 lg:flex-row lg:items-center">
 								<div className="flex items-center gap-1">
 									<div className="flex h-[20px] w-[20px] items-center justify-center rounded-full border border-black p-1 text-[15px]">{renderCategoryIcon(product.categoria)}</div>
@@ -246,7 +246,7 @@ function KitsSelection({ opportunity, infoHolder, setInfoHolder, moveToNextStage
 					))}
 					<h1 className="my-2 mb-0 text-xs font-bold leading-none tracking-tight text-gray-500 lg:text-sm">SERVIÇOS</h1>
 					{servicos.map((service, index) => (
-						<div key={index} className="mt-1 flex w-full flex-col rounded-md border border-gray-200 p-2">
+						<div key={index} className="mt-1 flex w-full flex-col rounded-md border border-gray-300 p-2">
 							<div className="flex w-full items-center justify-between gap-2">
 								<div className="flex  items-center gap-1">
 									<div className="flex h-[20px] w-[20px] items-center justify-center rounded-full border border-black p-1">
@@ -372,7 +372,7 @@ function KitsSelection({ opportunity, infoHolder, setInfoHolder, moveToNextStage
 				<h1 className="text-center font-medium italic text-gray-800">{formatDecimalPlaces(ideal)} kWp</h1>
 			</div>
 			<AccessGrantingWarning proposal={infoHolder} opportunity={opportunity} type="warn" projectTypeId={opportunity.tipo.id} />
-			<div className="flex w-full flex-col rounded-md border border-gray-200 p-3">
+			<div className="flex w-full flex-col rounded-md border border-gray-300 p-3">
 				<div className="flex w-full flex-col items-center justify-between gap-1 lg:flex-row">
 					<h1 className="font-bold leading-none tracking-tight">COMPOSIÇÃO DO SISTEMA</h1>
 					<div className="flex flex-col-reverse items-center gap-1 lg:flex-row lg:gap-2">
@@ -385,8 +385,8 @@ function KitsSelection({ opportunity, infoHolder, setInfoHolder, moveToNextStage
 				</div>
 				<div className="mt-2 flex w-full flex-col gap-1">{renderSystemCompostion()}</div>
 			</div>
-			<div className="flex h-[600px] w-full flex-col rounded-md border border-gray-200 p-3">
-				<div className="flex w-full flex-col border-b border-gray-200 pb-2">
+			<div className="flex h-[600px] w-full flex-col rounded-md border border-gray-300 p-3">
+				<div className="flex w-full flex-col border-b border-gray-300 pb-2">
 					<div className="flex w-full flex-col items-center justify-between gap-2 lg:flex-row">
 						<h1 className="font-bold leading-none tracking-tight">KITS DISPONÍVEIS ({kits ? kits.length : "..."})</h1>
 						<div className="flex w-full flex-col items-center gap-2 lg:w-fit lg:flex-row">

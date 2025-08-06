@@ -92,7 +92,7 @@ function NewProjectJourneyTypeMenu({ session }: NewProjectJourneyTypeMenuProps) 
 				</div>
 				<div className="flex w-full flex-wrap items-start justify-around gap-2">
 					{infoHolder.etapas.map((stage, stageIndex) => (
-						<div key={stageIndex} className="flex w-[350px] items-center justify-between rounded-md border border-gray-200 p-2">
+						<div key={stageIndex} className="flex w-[350px] items-center justify-between rounded-md border border-gray-300 p-2">
 							<div className="flex grow items-center gap-1">
 								<div className="flex h-[25px] w-[25px] items-center justify-center rounded-full border border-black p-1">
 									<h1 className="text-sm font-bold">{stageIndex + 1}</h1>

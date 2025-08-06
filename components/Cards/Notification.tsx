@@ -80,7 +80,7 @@ function NotificationCard({ notification, session }: NotificationCardProps) {
 				</Link>
 			) : null}
 			<div className="flex w-full grow flex-col">
-				<h1 className="rounded-md border border-gray-200 px-2 py-1 text-[0.65rem] font-medium tracking-tight">{notification.mensagem}</h1>
+				<h1 className="rounded-md border border-gray-300 px-2 py-1 text-[0.65rem] font-medium tracking-tight">{notification.mensagem}</h1>
 			</div>
 			<div className="flex w-full items-center justify-between gap-2">
 				<div className="flex items-center gap-2">

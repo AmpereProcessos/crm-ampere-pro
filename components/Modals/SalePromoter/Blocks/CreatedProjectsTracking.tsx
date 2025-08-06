@@ -54,7 +54,7 @@ function CreatedProjectsTracking({ data, firstPeriodAfter, firstPeriodBefore, se
 	} satisfies ChartConfig;
 	return (
 		<div className="flex w-full flex-col p-3">
-			<div className="flex w-full flex-col rounded-xl border border-gray-200 bg-[#fff] p-6 shadow-sm ">
+			<div className="flex w-full flex-col rounded-xl border border-gray-300 bg-[#fff] p-6 shadow-md ">
 				<div className="flex items-center justify-between">
 					<h1 className="text-sm font-medium uppercase tracking-tight">Projetos Criados</h1>
 					<VscDiffAdded />

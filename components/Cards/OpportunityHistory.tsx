@@ -61,7 +61,7 @@ function OpportunityHistoryAnnotation({ annotation, handleEditHistory }: Opportu
 					</div>
 				</div>
 			</div>
-			<div className="flex w-full items-center justify-center border border-gray-200 bg-[#F4F0BB] p-2">
+			<div className="flex w-full items-center justify-center border border-gray-300 bg-[#F4F0BB] p-2">
 				<p className="w-full text-center text-sm text-gray-500">{annotation.conteudo}</p>
 			</div>
 		</div>
@@ -78,7 +78,7 @@ function OpportunityHistoryInteraction({ interaction, handleEditHistory }: Oppor
 		return interactionInfo?.icon || MdMessage;
 	}
 	return (
-		<div className="flex w-full flex-col gap-2 border border-gray-200 p-3 shadow-sm">
+		<div className="flex w-full flex-col gap-2 border border-gray-300 p-3 shadow-md">
 			<div className="flex w-full items-center justify-between">
 				<div className="flex items-center gap-2">
 					<p className="rounded-lg bg-[#15599a] px-2 py-0.5 text-[0.65rem] font-medium text-white">INTERAÇÃO</p>
@@ -100,7 +100,7 @@ function OpportunityHistoryInteraction({ interaction, handleEditHistory }: Oppor
 					</div>
 				</div>
 			</div>
-			<div className="flex w-full items-center justify-center border border-gray-200 p-2">
+			<div className="flex w-full items-center justify-center border border-gray-300 p-2">
 				<p className="w-full text-center text-sm text-gray-500">{interaction.conteudo}</p>
 			</div>
 		</div>

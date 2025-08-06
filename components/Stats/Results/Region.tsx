@@ -15,7 +15,7 @@ function RegionResults({ after, before, responsibles, partners, projectTypes }: 
 	return (
 		<div className="flex w-full flex-col">
 			<h1 className="mt-4 rounded-md bg-[#15599a] text-center text-xl font-black text-white">RESULTADOS POR REGIÃO</h1>
-			<div className="flex w-full flex-col gap-2 rounded-xl border border-gray-200 bg-[#fff] p-6 shadow-sm">
+			<div className="flex w-full flex-col gap-2 rounded-xl border border-gray-300 bg-[#fff] p-6 shadow-md">
 				<div className="hidden w-full items-center gap-2 lg:flex">
 					<div className="flex w-1/5 items-center justify-center">
 						<h1 className="font-black text-cyan-500">CIDADE</h1>

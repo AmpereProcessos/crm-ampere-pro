@@ -60,12 +60,12 @@ function PeriodDropdownFilter({ initialAfter, initialBefore, setDateParam }: Per
 			<button
 				type="button"
 				onClick={() => setDropdownIsOpen((prev) => !prev)}
-				className="flex w-[46.6px] cursor-pointer items-center justify-center rounded bg-[#fead61] p-2 shadow-sm duration-300 ease-in-out hover:scale-105 hover:bg-[#eb8423] hover:text-white"
+				className="flex w-[46.6px] cursor-pointer items-center justify-center rounded bg-[#fead61] p-2 shadow-md duration-300 ease-in-out hover:scale-105 hover:bg-[#eb8423] hover:text-white"
 			>
 				<IoIosCalendar />
 			</button>
 			{dropdownIsOpen ? (
-				<div className="absolute -right-[400%] top-[45px] z-[100] flex h-[115px] w-[350px] flex-col self-center rounded-md border border-gray-200 bg-[#fff] p-2 shadow-sm">
+				<div className="absolute -right-[400%] top-[45px] z-[100] flex h-[115px] w-[350px] flex-col self-center rounded-md border border-gray-300 bg-[#fff] p-2 shadow-md">
 					<h1 className="text-center text-sm font-medium text-gray-700">SELECIONE UM PERÍODO DE FILTRO</h1>
 					<div className="mt-2 flex w-full items-center justify-between">
 						<div className="flex flex-col items-start">

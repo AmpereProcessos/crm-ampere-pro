@@ -97,7 +97,7 @@ function ResponsiblesInformationBlock({ session, opportunity, setOpportunity, op
 			</div>
 			{opportunity.responsaveis.length > 0 ? (
 				opportunity.responsaveis.map((resp, index) => (
-					<div key={resp.id} className="flex w-full justify-between rounded-md border border-gray-200 p-3 font-Inter">
+					<div key={resp.id} className="flex w-full justify-between rounded-md border border-gray-300 p-3 font-Inter">
 						<div className="flex grow items-center gap-1">
 							<Avatar width={20} height={20} url={resp.avatar_url || undefined} fallback={resp.nome} />
 							<p className="text-sm font-medium leading-none tracking-tight text-gray-500">{resp.nome}</p>{" "}
