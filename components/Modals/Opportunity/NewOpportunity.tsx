@@ -1,15 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { type Dispatch, type SetStateAction, useEffect, useState } from "react";
 import type { TUserSession } from "@/lib/auth/session";
 import Link from "next/link";
 import { toast } from "react-hot-toast";
 import { useQueryClient } from "@tanstack/react-query";
-
-import { VscChromeClose } from "react-icons/vsc";
-import type { stateCities } from "../../../utils/estados_cidades";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
 
 import { useSearchClients } from "@/utils/queries/clients";
 import { CustomersAcquisitionChannels } from "@/utils/select-options";
-import { getCEPInfo } from "@/utils/methods";
 
 import type { TUserDTOSimplified } from "@/utils/schemas/user.schema";
 import type { TClient, TSimilarClientSimplifiedDTO } from "@/utils/schemas/client.schema";
@@ -28,6 +26,9 @@ import FunnelReferenceInformationBlock from "@/components/Opportunities/Creation
 import OpportunityClientInformationBlock from "@/components/Opportunities/Creation/OpportunityClientInformationBlock";
 import AddressInformationBlock from "@/components/Opportunities/Creation/AddressInformationBlock";
 import { LoadingButton } from "@/components/Buttons/loading-button";
+import { useMediaQuery } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { BadgeCheck } from "lucide-react";
 
 type NewOpportunityProps = {
 	session: TUserSession;
@@ -36,10 +37,12 @@ type NewOpportunityProps = {
 	closeModal: () => void;
 };
 function NewOpportunity({ session, closeModal, opportunityCreators, funnels }: NewOpportunityProps) {
+	const isDesktop = useMediaQuery("(min-width: 768px)");
+
 	const queryClient = useQueryClient();
 	const { data: projectTypes } = useProjectTypes();
 	const [similarClient, setSimilarClient] = useState<TSimilarClientSimplifiedDTO | null>(null);
-	const [newClient, setNewClient] = useState<TClient & { _id?: string | null }>({
+	const initialClient = {
 		_id: null,
 		nome: "",
 		idParceiro: session.user.idParceiro || "",
@@ -68,8 +71,8 @@ function NewOpportunity({ session, closeModal, opportunityCreators, funnels }: N
 			nome: session.user.nome,
 			avatar_url: session.user.avatar_url,
 		},
-	});
-	const [newOpportunity, setNewOpportunity] = useState<TOpportunity>({
+	};
+	const initialOpportunity: TOpportunity = {
 		nome: "",
 		idParceiro: session.user.idParceiro || "",
 		tipo: {
@@ -123,28 +126,19 @@ function NewOpportunity({ session, closeModal, opportunityCreators, funnels }: N
 		},
 		dataInsercao: new Date().toISOString(),
 		// adicionar contrato e solicitação de contrato futuramente
-	});
-	const [newFunnelReference, setNewFunnelReference] = useState<TFunnelReference>({
+	};
+	const initialFunnelReference = {
 		idParceiro: session.user.idParceiro || "",
 		idOportunidade: "id-holder",
 		idFunil: "",
 		idEstagioFunil: "",
 		estagios: {},
 		dataInsercao: new Date().toISOString(),
-	});
+	};
+	const [newClient, setNewClient] = useState<TClient & { _id?: string | null }>(initialClient);
+	const [newOpportunity, setNewOpportunity] = useState<TOpportunity>(initialOpportunity);
+	const [newFunnelReference, setNewFunnelReference] = useState<TFunnelReference>(initialFunnelReference);
 
-	const {
-		data: similarClients,
-		isSuccess: clientsSuccess,
-		isLoading: clientsLoading,
-		isError: clientsError,
-		refetch,
-	} = useSearchClients({
-		cpfCnpj: newClient.cpfCnpj || "",
-		email: newClient.email || "",
-		phoneNumber: newClient.telefonePrimario,
-		enabled: false,
-	});
 	const [createdProjectId, setCreateProjectId] = useState<string | null>(null);
 
 	async function handleOpportunityCreation() {
@@ -163,19 +157,205 @@ function NewOpportunity({ session, closeModal, opportunityCreators, funnels }: N
 			throw error;
 		}
 	}
-	const { mutate, isPending, isSuccess } = useMutationWithFeedback({
+	const {
+		mutate,
+		isPending,
+		isSuccess,
+		reset: resetMutation,
+	} = useMutationWithFeedback({
 		mutationKey: ["create-project"],
 		mutationFn: handleOpportunityCreation,
 		queryClient: queryClient,
 		affectedQueryKey: ["opportunities"],
 	});
 
+	const MENU_TITLE = "NOVA OPORTUNIDADE";
+	const MENU_DESCRIPTION = "Preencha os campos abaixo para criar uma nova oportunidade.";
+	const BUTTON_TEXT = "CADASTRAR";
+	return isDesktop ? (
+		<Dialog open onOpenChange={(v) => (!v ? closeModal() : null)}>
+			<DialogContent className="flex flex-col h-fit min-h-[60vh] max-h-[80vh] dark:bg-white min-w-[80vw]">
+				<DialogHeader>
+					<DialogTitle>{MENU_TITLE}</DialogTitle>
+					<DialogDescription>{MENU_DESCRIPTION}</DialogDescription>
+				</DialogHeader>
+				{!isSuccess ? (
+					<>
+						<div className="flex-1 overflow-auto">
+							<NewOpportunityContent
+								session={session}
+								clientHolder={newClient}
+								setClientHolder={setNewClient}
+								opportunityHolder={newOpportunity}
+								setOpportunityHolder={setNewOpportunity}
+								funnelReferenceHolder={newFunnelReference}
+								setFunnelReferenceHolder={setNewFunnelReference}
+								similarClientHolder={similarClient}
+								setSimilarClientHolder={setSimilarClient}
+								opportunityCreators={opportunityCreators}
+								funnels={funnels || []}
+							/>
+						</div>
+						<DialogFooter>
+							<DialogClose asChild>
+								<Button variant="outline">FECHAR</Button>
+							</DialogClose>
+							<LoadingButton
+								onClick={() =>
+									// @ts-ignore
+									mutate()
+								}
+								loading={isPending}
+							>
+								{BUTTON_TEXT}
+							</LoadingButton>
+						</DialogFooter>
+					</>
+				) : (
+					<div className="grow w-full flex flex-col items-center justify-center gap-2">
+						<div className="flex flex-col gap-1 items-center">
+							<BadgeCheck className="w-10 h-10 lg:w-20 lg:h-20 min-w-10 min-h-10 text-green-500" />
+							<h1 className="text-lg font-bold text-primary tracking-tight text-center">Oportunidade criada com sucesso!</h1>
+						</div>
+						<div className="flex items-center gap-2 flex-col lg:flex-row">
+							<Button
+								variant={"secondary"}
+								onClick={() => {
+									setNewClient(initialClient);
+									setNewOpportunity(initialOpportunity);
+									setNewFunnelReference(initialFunnelReference);
+									setSimilarClient(null);
+									setCreateProjectId(null);
+									resetMutation();
+								}}
+							>
+								NOVA OPORTUNIDADE
+							</Button>
+							<Link href={`/comercial/oportunidades/id/${createdProjectId}`}>
+								<Button>VISUALIZAR OPORTUNIDADE</Button>
+							</Link>
+						</div>
+					</div>
+				)}
+			</DialogContent>
+		</Dialog>
+	) : (
+		<Drawer open onOpenChange={(v) => (!v ? closeModal() : null)}>
+			<DrawerContent className="h-fit max-h-[70vh] flex flex-col">
+				<DrawerHeader className="text-left">
+					<DrawerTitle>{MENU_TITLE}</DrawerTitle>
+					<DrawerDescription>{MENU_DESCRIPTION}</DrawerDescription>
+				</DrawerHeader>
+				{!isSuccess ? (
+					<>
+						<div className="flex-1 overflow-auto">
+							<NewOpportunityContent
+								session={session}
+								clientHolder={newClient}
+								setClientHolder={setNewClient}
+								opportunityHolder={newOpportunity}
+								setOpportunityHolder={setNewOpportunity}
+								funnelReferenceHolder={newFunnelReference}
+								setFunnelReferenceHolder={setNewFunnelReference}
+								similarClientHolder={similarClient}
+								setSimilarClientHolder={setSimilarClient}
+								opportunityCreators={opportunityCreators}
+								funnels={funnels || []}
+							/>
+						</div>
+						<DrawerFooter>
+							<DrawerClose asChild>
+								<Button variant="outline">FECHAR</Button>
+							</DrawerClose>
+							<LoadingButton
+								onClick={() =>
+									// @ts-ignore
+									mutate()
+								}
+								loading={isPending}
+							>
+								{BUTTON_TEXT}
+							</LoadingButton>
+						</DrawerFooter>
+					</>
+				) : (
+					<div className="grow w-full flex flex-col items-center justify-center gap-2">
+						<div className="flex flex-col gap-1 items-center">
+							<BadgeCheck className="w-10 h-10 lg:w-20 lg:h-20 min-w-10 min-h-10 text-green-500" />
+							<h1 className="text-lg font-bold text-primary tracking-tight text-center">Oportunidade criada com sucesso!</h1>
+						</div>
+						<div className="flex items-center gap-2 flex-col lg:flex-row">
+							<Button
+								variant={"secondary"}
+								onClick={() => {
+									setNewClient(initialClient);
+									setNewOpportunity(initialOpportunity);
+									setNewFunnelReference(initialFunnelReference);
+									setSimilarClient(null);
+									setCreateProjectId(null);
+									resetMutation();
+								}}
+							>
+								NOVA OPORTUNIDADE
+							</Button>
+							<Link href={`/comercial/oportunidades/id/${createdProjectId}`}>
+								<Button>VISUALIZAR OPORTUNIDADE</Button>
+							</Link>
+						</div>
+					</div>
+				)}
+			</DrawerContent>
+		</Drawer>
+	);
+}
+
+export default NewOpportunity;
+
+type NewOpportunityContentProps = {
+	opportunityCreators: TUserDTOSimplified[];
+	funnels: TFunnelDTO[];
+	session: TUserSession;
+	clientHolder: TClient;
+	setClientHolder: Dispatch<SetStateAction<TClient>>;
+	opportunityHolder: TOpportunity;
+	setOpportunityHolder: Dispatch<SetStateAction<TOpportunity>>;
+	funnelReferenceHolder: TFunnelReference;
+	setFunnelReferenceHolder: Dispatch<SetStateAction<TFunnelReference>>;
+	similarClientHolder: TSimilarClientSimplifiedDTO | null;
+	setSimilarClientHolder: Dispatch<SetStateAction<TSimilarClientSimplifiedDTO | null>>;
+};
+function NewOpportunityContent({
+	session,
+	clientHolder,
+	setClientHolder,
+	opportunityHolder,
+	setOpportunityHolder,
+	funnelReferenceHolder,
+	setFunnelReferenceHolder,
+	similarClientHolder,
+	setSimilarClientHolder,
+	opportunityCreators,
+	funnels,
+}: NewOpportunityContentProps) {
+	const { data: projectTypes } = useProjectTypes();
+	const {
+		data: similarClients,
+		isSuccess: clientsSuccess,
+		isLoading: clientsLoading,
+		isError: clientsError,
+		refetch,
+	} = useSearchClients({
+		cpfCnpj: clientHolder.cpfCnpj || "",
+		email: clientHolder.email || "",
+		phoneNumber: clientHolder.telefonePrimario,
+		enabled: false,
+	});
 	function handleSelectSimilarClient(client: TSimilarClientSimplifiedDTO) {
-		setSimilarClient(client);
+		setSimilarClientHolder(client);
 		const { nome, telefonePrimario, email, autor, cpfCnpj, dataInsercao, cep, uf, cidade, bairro, endereco, numeroOuIdentificador, complemento } = client;
 		const location = { cep, uf, cidade, bairro, endereco, numeroOuIdentificador, complemento };
-		setNewOpportunity((prev) => ({ ...prev, localizacao: location }));
-		setNewClient((prev) => ({ ...prev, nome, telefonePrimario, email, cpfCnpj, autor }));
+		setOpportunityHolder((prev) => ({ ...prev, localizacao: location }));
+		setClientHolder((prev) => ({ ...prev, nome, telefonePrimario, email, cpfCnpj, autor }));
 		return toast.success("Cliente vinculado com sucesso !");
 	}
 	useEffect(() => {
@@ -183,69 +363,34 @@ function NewOpportunity({ session, closeModal, opportunityCreators, funnels }: N
 			refetch();
 		}, 2000);
 		return () => clearTimeout(getData);
-	}, [newClient.cpfCnpj, newClient.email, newClient.telefonePrimario]);
-	console.log("OPORTUNIDADE", newOpportunity);
+	}, [clientHolder.cpfCnpj, clientHolder.email, clientHolder.telefonePrimario]);
 	return (
-		<div id="defaultModal" className="fixed bottom-0 left-0 right-0 top-0 z-[100] bg-[rgba(0,0,0,.85)]">
-			<div className="fixed left-[50%] top-[50%] z-[100] h-[90%] w-[95%] translate-x-[-50%] translate-y-[-50%] rounded-md bg-[#fff] p-[10px]">
-				<div className="flex h-full flex-col">
-					<div className="flex flex-col items-center justify-between border-b border-gray-300 px-2 pb-2 text-lg lg:flex-row">
-						<h3 className="text-xl font-bold text-[#353432] dark:text-white ">NOVA OPORTUNIDADE</h3>
-						<button onClick={closeModal} type="button" className="flex items-center justify-center rounded-lg p-1 duration-300 ease-linear hover:scale-105 hover:bg-red-200">
-							<VscChromeClose style={{ color: "red" }} />
-						</button>
-					</div>
-					<div className="flex h-full flex-col gap-y-2 overflow-y-auto overscroll-y-auto border-b border-gray-300 py-2 scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300 lg:flex-row">
-						<div className="flex w-full flex-col gap-2 px-2 scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300 lg:h-full lg:max-h-full lg:w-[60%] lg:overflow-y-auto">
-							<ResponsiblesInformationBlock session={session} opportunity={newOpportunity} setOpportunity={setNewOpportunity} opportunityCreators={opportunityCreators} />
-							<GeneralInformationBlock opportunity={newOpportunity} setOpportunity={setNewOpportunity} projectTypes={projectTypes} session={session} />
-							<FunnelReferenceInformationBlock funnelReference={newFunnelReference} setFunnelReference={setNewFunnelReference} funnels={funnels || []} />
-							<OpportunityClientInformationBlock
-								opportunity={newOpportunity}
-								setOpportunity={setNewOpportunity}
-								client={newClient}
-								setClient={setNewClient}
-								similarClient={similarClient}
-								setSimilarClient={setSimilarClient}
-								similarClients={similarClients || []}
-							/>
-							<AddressInformationBlock opportunity={newOpportunity} setOpportunity={setNewOpportunity} client={newClient} setClient={setNewClient} />
-						</div>
-						<div className="flex w-full lg:w-[40%]">
-							<SimilarClients
-								clients={similarClients || []}
-								isSuccess={clientsSuccess}
-								isLoading={clientsLoading}
-								isError={clientsError}
-								selectedClientId={similarClient?._id || null}
-								handleSelectSimilarClient={handleSelectSimilarClient}
-							/>
-						</div>
-					</div>
-					<div className="my-2 flex w-full flex-col items-center justify-center gap-4 px-4 lg:flex-row lg:justify-end">
-						{createdProjectId ? (
-							<Link href={`/comercial/oportunidades/id/${createdProjectId}`}>
-								<button type="button" className="rounded bg-green-500 px-2 py-1 text-xs font-medium tracking-tight text-white duration-300 ease-in-out hover:bg-green-600 lg:text-base">
-									IR PARA O PROJETO CRIADO
-								</button>
-							</Link>
-						) : null}
-						{!createdProjectId ? (
-							<LoadingButton
-								loading={isPending}
-								onClick={() =>
-									// @ts-ignore
-									mutate()
-								}
-							>
-								CRIAR OPORTUNIDADE
-							</LoadingButton>
-						) : null}
-					</div>
-				</div>
+		<div className="flex h-full w-full flex-col gap-6 px-4 lg:flex-row lg:px-0">
+			<div className="flex w-full flex-col gap-2 px-2 scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300 lg:h-full lg:max-h-full lg:w-[60%] lg:overflow-y-auto">
+				<ResponsiblesInformationBlock session={session} opportunity={opportunityHolder} setOpportunity={setOpportunityHolder} opportunityCreators={opportunityCreators} />
+				<GeneralInformationBlock opportunity={opportunityHolder} setOpportunity={setOpportunityHolder} projectTypes={projectTypes} session={session} />
+				<FunnelReferenceInformationBlock funnelReference={funnelReferenceHolder} setFunnelReference={setFunnelReferenceHolder} funnels={funnels || []} />
+				<OpportunityClientInformationBlock
+					opportunity={opportunityHolder}
+					setOpportunity={setOpportunityHolder}
+					client={clientHolder}
+					setClient={setClientHolder}
+					similarClient={similarClientHolder}
+					setSimilarClient={setSimilarClientHolder}
+					similarClients={similarClients || []}
+				/>
+				<AddressInformationBlock opportunity={opportunityHolder} setOpportunity={setOpportunityHolder} client={clientHolder} setClient={setClientHolder} />
+			</div>
+			<div className="flex w-full lg:w-[40%]">
+				<SimilarClients
+					clients={similarClients || []}
+					isSuccess={clientsSuccess}
+					isLoading={clientsLoading}
+					isError={clientsError}
+					selectedClientId={similarClientHolder?._id || null}
+					handleSelectSimilarClient={handleSelectSimilarClient}
+				/>
 			</div>
 		</div>
 	);
 }
-
-export default NewOpportunity;

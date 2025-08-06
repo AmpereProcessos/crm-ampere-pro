@@ -2,16 +2,17 @@ import SelectInput from "@/components/Inputs/SelectInput";
 import SelectWithImages from "@/components/Inputs/SelectWithImages";
 import TextInput from "@/components/Inputs/TextInput";
 import { usePartnersSimplified } from "@/utils/queries/partners";
-import { TOpportunity } from "@/utils/schemas/opportunity.schema";
-import { TProjectTypeDTO } from "@/utils/schemas/project-types.schema";
-import { TUser } from "@/utils/schemas/user.schema";
+import type { TOpportunity } from "@/utils/schemas/opportunity.schema";
+import type { TProjectTypeDTO } from "@/utils/schemas/project-types.schema";
+import type { TUser } from "@/utils/schemas/user.schema";
 import { ComercialSegments } from "@/utils/select-options";
 import type { TUserSession } from "@/lib/auth/session";
-import React from "react";
+import React, { type Dispatch, type SetStateAction } from "react";
+import { LayoutGrid } from "lucide-react";
 
 type GeneralInformationBlockProps = {
 	opportunity: TOpportunity;
-	setOpportunity: React.Dispatch<React.SetStateAction<TOpportunity>>;
+	setOpportunity: Dispatch<SetStateAction<TOpportunity>>;
 	projectTypes?: TProjectTypeDTO[];
 	session: TUserSession;
 };
@@ -21,7 +22,10 @@ function GeneralInformationBlock({ opportunity, setOpportunity, projectTypes, se
 	const vinculationPartners = partners ? (partnersScope ? partners?.filter((p) => partnersScope.includes(p._id)) : partners) : [];
 	return (
 		<div className="flex w-full flex-col gap-2">
-			<h1 className="w-full rounded bg-gray-800 p-1 text-center text-sm font-bold text-white lg:text-base">INFORMAÇÕES DO PROJETO</h1>
+			<div className="flex items-center gap-2 bg-primary/20 px-2 py-1 rounded w-fit">
+				<LayoutGrid size={15} />
+				<h1 className="text-xs tracking-tight font-medium text-start w-fit">INFORMAÇÕES DA OPORTUNIDADE</h1>
+			</div>
 			<TextInput
 				label="NOME DO PROJETO"
 				value={opportunity.nome}
@@ -55,7 +59,7 @@ function GeneralInformationBlock({ opportunity, setOpportunity, projectTypes, se
 						value={opportunity.tipo.id}
 						options={projectTypes?.map((type, index) => ({ id: index + 1, label: type.nome, value: type._id })) || []}
 						handleChange={(value) => {
-							const type = projectTypes?.find((t) => t._id == value);
+							const type = projectTypes?.find((t) => t._id === value);
 							const saleCategory = type?.categoriaVenda || "KIT";
 							const typeTitle = type?.nome || "SISTEMA FOTOVOLTAICO";
 							setOpportunity((prev) => ({

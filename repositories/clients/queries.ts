@@ -106,7 +106,7 @@ type GetSimilarClientsParams = {
 export async function getSimilarClients({ collection, query }: GetSimilarClientsParams) {
 	try {
 		const clients = await collection.find({ ...query }, { projection: SimilarClientsSimplifiedProjection }).toArray();
-		return clients as TSimilarClientSimplified[];
+		return clients.map((c) => ({ ...c, _id: c._id.toString() })) as TSimilarClientSimplifiedDTO[];
 	} catch (error) {
 		console.log("[ERROR] Error getting similar clients", error);
 		throw error;

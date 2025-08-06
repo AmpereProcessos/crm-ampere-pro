@@ -8,6 +8,7 @@ import { useAcquisitionChannels } from "@/utils/queries/utils";
 import type { TClient, TSimilarClientSimplifiedDTO } from "@/utils/schemas/client.schema";
 import type { TOpportunity } from "@/utils/schemas/opportunity.schema";
 import { CustomersAcquisitionChannels } from "@/utils/select-options";
+import { UserRound } from "lucide-react";
 import React, { type Dispatch, type SetStateAction } from "react";
 import toast from "react-hot-toast";
 import { BsCalendarPlus } from "react-icons/bs";
@@ -48,7 +49,10 @@ function OpportunityClientInformationBlock({
 	};
 	return (
 		<div className="flex w-full flex-col gap-2">
-			<h1 className="w-full rounded bg-gray-800 p-1 text-center text-sm font-bold text-white lg:text-base">INFORMAÇÕES PESSOAIS DO CLIENTE</h1>
+			<div className="flex items-center gap-2 bg-primary/20 px-2 py-1 rounded w-fit">
+				<UserRound size={15} />
+				<h1 className="text-xs tracking-tight font-medium text-start w-fit">INFORMAÇÕES PESSOAIS DO CLIENTE</h1>
+			</div>
 			{similarClient ? (
 				<div className="flex w-full flex-col gap-2 rounded-md border border-gray-500 bg-[#fff] font-Inter shadow-md">
 					<h1 className="w-full rounded-tl rounded-tr bg-cyan-500 text-center font-bold text-white">CLIENTE VINCULADO</h1>
@@ -102,84 +106,85 @@ function OpportunityClientInformationBlock({
 				</div>
 			) : (
 				<>
-					{/* <div className="flex w-full items-center justify-center">
-            <button
-              onClick={() => setClient((prev) => ({ ...prev, canalAquisicao: 'FEIRÃO SOLAR' }))}
-              className={cn('flex items-center gap-2 rounded bg-[#15599a] px-3 py-2', client.canalAquisicao == 'FEIRÃO SOLAR' ? 'opacity-100' : 'opacity-50')}
-            >
-              <FaBolt color="#fead41" />
-              <h1 className="text-sm font-black text-white">VEIO POR CONTA DO FEIRÃO SOLAR</h1>
-              <FaBolt color="#fead41" />
-            </button>
-          </div> */}
-					<div className="grid grid-cols-1 grid-rows-2 items-center gap-6 px-2 lg:grid-cols-2 lg:grid-rows-1">
-						<TextInput
-							label="NOME"
-							value={client.nome}
-							placeholder="Preencha aqui o nome do cliente."
-							handleChange={(value) => setClient((prev) => ({ ...prev, nome: value }))}
-							width="100%"
-						/>
-						<TextInput
-							label="CPF/CNPJ"
-							value={client.cpfCnpj || ""}
-							placeholder="Preencha aqui o CPF ou CNPJ do cliente."
-							handleChange={(value) =>
-								setClient((prev) => ({
-									...prev,
-									cpfCnpj: formatToCPForCNPJ(value),
-								}))
-							}
-							width="100%"
-						/>
+					<div className="flex w-full flex-col items-center gap-2 lg:flex-row">
+						<div className="w-full lg:w-1/2">
+							<TextInput
+								label="NOME"
+								value={client.nome}
+								placeholder="Preencha aqui o nome do cliente."
+								handleChange={(value) => setClient((prev) => ({ ...prev, nome: value }))}
+								width="100%"
+							/>
+						</div>
+						<div className="w-full lg:w-1/2">
+							<TextInput
+								label="CPF/CNPJ"
+								value={client.cpfCnpj || ""}
+								placeholder="Preencha aqui o CPF ou CNPJ do cliente."
+								handleChange={(value) =>
+									setClient((prev) => ({
+										...prev,
+										cpfCnpj: formatToCPForCNPJ(value),
+									}))
+								}
+								width="100%"
+							/>
+						</div>
 					</div>
-					<div className="grid grid-cols-1 grid-rows-2 items-center gap-6 px-2 lg:grid-cols-2 lg:grid-rows-1">
-						<TextInput
-							label="TELEFONE PRIMÁRIO"
-							value={client.telefonePrimario}
-							placeholder="Preencha aqui o telefone primário do cliente."
-							handleChange={(value) =>
-								setClient((prev) => ({
-									...prev,
-									telefonePrimario: formatToPhone(value),
-								}))
-							}
-							width="100%"
-						/>
-
-						<TextInput
-							label="TELEFONE SECUNDÁRIO"
-							value={client.telefoneSecundario || ""}
-							placeholder="Preencha aqui o telefone secundário do cliente."
-							handleChange={(value) =>
-								setClient((prev) => ({
-									...prev,
-									telefoneSecundario: formatToPhone(value),
-								}))
-							}
-							width="100%"
-						/>
+					<div className="flex w-full flex-col items-center gap-2 lg:flex-row">
+						<div className="w-full lg:w-1/2">
+							<TextInput
+								label="TELEFONE PRIMÁRIO"
+								value={client.telefonePrimario}
+								placeholder="Preencha aqui o telefone primário do cliente."
+								handleChange={(value) =>
+									setClient((prev) => ({
+										...prev,
+										telefonePrimario: formatToPhone(value),
+									}))
+								}
+								width="100%"
+							/>
+						</div>
+						<div className="w-full lg:w-1/2">
+							<TextInput
+								label="TELEFONE SECUNDÁRIO"
+								value={client.telefoneSecundario || ""}
+								placeholder="Preencha aqui o telefone secundário do cliente."
+								handleChange={(value) =>
+									setClient((prev) => ({
+										...prev,
+										telefoneSecundario: formatToPhone(value),
+									}))
+								}
+								width="100%"
+							/>
+						</div>
 					</div>
-					<div className="grid grid-cols-1 grid-rows-2 items-center gap-6 px-2 lg:grid-cols-2 lg:grid-rows-1">
-						<TextInput
-							label="EMAIL"
-							value={client.email || ""}
-							placeholder="Preencha aqui o email do cliente."
-							handleChange={(value) => setClient((prev) => ({ ...prev, email: value }))}
-							width="100%"
-						/>
-						<SelectInput
-							label="CANAL DE AQUISIÇÃO"
-							value={client.canalAquisicao || ""}
-							handleChange={(value) => {
-								setClient((prev) => ({ ...prev, canalAquisicao: value, idMarketing: value === "SMBOT" ? "SMBOT" : prev.idMarketing }));
-								if (value === "SMBOT") setOpportunity((prev) => ({ ...prev, idMarketing: "SMBOT" }));
-							}}
-							options={acquisitionChannels?.map((channel) => ({ id: channel._id, label: channel.valor, value: channel.valor })) || []}
-							resetOptionLabel="NÃO DEFINIDO"
-							onReset={() => setClient((prev) => ({ ...prev, canalAquisicao: CustomersAcquisitionChannels[0].value }))}
-							width="100%"
-						/>
+					<div className="flex w-full flex-col items-center gap-2 lg:flex-row">
+						<div className="w-full lg:w-1/2">
+							<TextInput
+								label="EMAIL"
+								value={client.email || ""}
+								placeholder="Preencha aqui o email do cliente."
+								handleChange={(value) => setClient((prev) => ({ ...prev, email: value }))}
+								width="100%"
+							/>
+						</div>
+						<div className="w-full lg:w-1/2">
+							<SelectInput
+								label="CANAL DE AQUISIÇÃO"
+								value={client.canalAquisicao || ""}
+								handleChange={(value) => {
+									setClient((prev) => ({ ...prev, canalAquisicao: value, idMarketing: value === "SMBOT" ? "SMBOT" : prev.idMarketing }));
+									if (value === "SMBOT") setOpportunity((prev) => ({ ...prev, idMarketing: "SMBOT" }));
+								}}
+								options={acquisitionChannels?.map((channel) => ({ id: channel._id, label: channel.valor, value: channel.valor })) || []}
+								resetOptionLabel="NÃO DEFINIDO"
+								onReset={() => setClient((prev) => ({ ...prev, canalAquisicao: CustomersAcquisitionChannels[0].value }))}
+								width="100%"
+							/>
+						</div>
 					</div>
 				</>
 			)}

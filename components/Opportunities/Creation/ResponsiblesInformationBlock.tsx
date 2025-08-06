@@ -8,6 +8,7 @@ import type { TUserSession } from "@/lib/auth/session";
 import React, { useState, type Dispatch, type SetStateAction } from "react";
 import toast from "react-hot-toast";
 import { MdDelete } from "react-icons/md";
+import { Users } from "lucide-react";
 
 type ResponsiblesInformationBlockProps = {
 	session: TUserSession;
@@ -38,7 +39,10 @@ function ResponsiblesInformationBlock({ session, opportunity, setOpportunity, op
 	}
 	return (
 		<div className="flex w-full flex-col gap-2">
-			<h1 className="w-full rounded bg-gray-800 p-1 text-center font-bold text-white">RESPONSÁVEIS</h1>
+			<div className="flex items-center gap-2 bg-primary/20 px-2 py-1 rounded w-fit">
+				<Users size={15} />
+				<h1 className="text-xs tracking-tight font-medium text-start w-fit">RESPONSÁVEIS</h1>
+			</div>
 			<div className="flex w-full flex-col items-center gap-2 lg:flex-row">
 				<div className="w-full lg:w-2/3">
 					<SelectWithImages
