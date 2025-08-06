@@ -10,8 +10,10 @@ import { formatToMoney } from "@/utils/methods";
 import type { TProposalDTOWithOpportunityAndClient } from "@/utils/schemas/proposal.schema";
 import { getSalesProposalScenarios, type TSalesProposalScenarios } from "@/utils/solar";
 import { useState } from "react";
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis, Line, LineChart } from "recharts";
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis, Line, LineChart, BarChart, Bar } from "recharts";
 import { FixedSizeList as List } from "react-window";
+import { BadgeDollarSign, Bolt, Calendar, CalendarDays, CalendarRange, ChartArea, ChartBar, PiggyBank, Receipt, Zap } from "lucide-react";
+import { formatDecimalPlaces } from "@/lib/methods/formatting";
 
 type UFVEconomicAnalysisParams = {
 	yearsQty: number;
@@ -55,7 +57,7 @@ function UFVEnergyEconomyAnalysis({ proposal, closeModal }: UFVEnergyEconomyAnal
 				</DialogHeader>
 
 				<div className="flex-1 overflow-auto">
-					<TechnicalAnalysisConditionDataBlock analysis={analysis} params={params} updateParams={updateParams} />
+					<TechnicalAnalysisConditionDataBlock isDesktop={isDesktop} analysis={analysis} params={params} updateParams={updateParams} />
 				</div>
 				<DialogFooter>
 					<DialogClose asChild>
@@ -73,7 +75,7 @@ function UFVEnergyEconomyAnalysis({ proposal, closeModal }: UFVEnergyEconomyAnal
 				</DrawerHeader>
 
 				<div className="flex-1 overflow-auto">
-					<TechnicalAnalysisConditionDataBlock analysis={analysis} params={params} updateParams={updateParams} />
+					<TechnicalAnalysisConditionDataBlock isDesktop={isDesktop} analysis={analysis} params={params} updateParams={updateParams} />
 				</div>
 				<DrawerFooter>
 					<DrawerClose asChild>
@@ -87,53 +89,99 @@ function UFVEnergyEconomyAnalysis({ proposal, closeModal }: UFVEnergyEconomyAnal
 
 // Componente da Tabela Virtualizada
 type VirtualizedTableProps = {
+	isDesktop: boolean;
 	data: TSalesProposalScenarios["progression"];
 };
 
-function VirtualizedTable({ data }: VirtualizedTableProps) {
+function VirtualizedTable({ isDesktop, data }: VirtualizedTableProps) {
 	const columns = [
 		{ key: "tag", label: "Período" },
 		{ key: "consumption_generation", label: "Consumo/Geração" },
-		{ key: "compensated_energy", label: "Energia Compensada (R$)" },
-		{ key: "non_compensated_energy", label: "Energia Não Compensada (R$)" },
+		{ key: "compensated_energy", label: "Compensado (R$)" },
+		{ key: "non_compensated_energy", label: "Não Compensado (R$)" },
 		{ key: "conventional_bill", label: "Fatura Convencional" },
 		{ key: "solar_bill", label: "Fatura Solar" },
 	];
 
-	const Row = ({ index, style }: { index: number; style: React.CSSProperties }) => {
+	const DetailsItem = ({ index, style }: { index: number; style: React.CSSProperties }) => {
 		const item = data[index];
 		if (!item) return null;
 
 		return (
-			<div style={style} className="flex border-b border-gray-300 hover:bg-gray-50 w-full">
-				{/* Tag */}
-				<div className="flex items-center justify-center px-2 py-2 text-sm font-medium w-1/6">{item.Tag}</div>
+			<div style={style} className="flex flex-col">
+				<div className="w-full hidden lg:flex items-center gap-1 bg-primary/10 rounded-lg">
+					{/* Tag */}
+					<div className="flex items-center justify-center px-2 py-2 text-xs font-medium w-1/6">{item.Tag}</div>
 
-				{/* Consumo e Geração */}
-				<div className="flex flex-col justify-center px-2 py-1 text-xs w-1/6">
-					<div className="text-blue-600 font-medium">C: {item.Consumption.toFixed(0)} kWh</div>
-					<div className="text-green-600 font-medium">G: {item.Generation.toFixed(0)} kWh</div>
+					{/* Consumo e Geração */}
+					<div className="flex flex-col justify-center items-center px-2 py-1 text-xs w-1/6">
+						<div className="text-orange-600 font-medium">C: {item.Consumption.toFixed(0)} kWh</div>
+						<div className="text-green-600 font-medium">G: {item.Generation.toFixed(0)} kWh</div>
+					</div>
+					{/* Compensado */}
+					<div className="flex items-center justify-center px-2 py-2 text-xs w-1/6">{formatToMoney(item.CompensatedEnergyCost)}</div>
+
+					{/* Não Compensado */}
+					<div className="flex items-center justify-center px-2 py-2 text-xs w-1/6">{formatToMoney(item.NonCompensatedEnergyCost)}</div>
+
+					{/* Fatura Convencional */}
+					<div className="flex items-center justify-center px-2 py-2 text-xs w-1/6">{formatToMoney(item.ConventionalEnergyBill)}</div>
+
+					{/* Fatura Solar */}
+					<div className="flex items-center justify-center px-2 py-2 text-xs font-medium text-green-600 w-1/6">{formatToMoney(item.EnergyBillValue)}</div>
 				</div>
-
-				{/* Energia Compensada */}
-				<div className="flex items-center justify-end px-2 py-2 text-sm w-1/6">{formatToMoney(item.CompensatedEnergyCost)}</div>
-
-				{/* Energia Não Compensada */}
-				<div className="flex items-center justify-end px-2 py-2 text-sm w-1/6">{formatToMoney(item.NonCompensatedEnergyCost)}</div>
-
-				{/* Fatura Convencional */}
-				<div className="flex items-center justify-end px-2 py-2 text-sm w-1/6">{formatToMoney(item.ConventionalEnergyBill)}</div>
-
-				{/* Fatura Solar */}
-				<div className="flex items-center justify-end px-2 py-2 text-sm font-medium text-green-600 w-1/6">{formatToMoney(item.EnergyBillValue)}</div>
+				<div className="w-full flex lg:hidden flex-col gap-1 bg-primary/10 rounded-lg p-2">
+					<div className="w-full flex items-center justify-between gap-2">
+						<div className="flex items-center gap-1">
+							<Calendar className="h-4 w-4" />
+							<p className="text-xs font-medium">PERÍODO {item.Tag}</p>
+						</div>
+						<div className="flex items-center gap-2">
+							<div className="flex items-center gap-1 bg-green-300 text-green-800 rounded-lg p-1 px-2">
+								<Zap className="h-4 w-4" />
+								<p className="text-[0.6rem] font-medium"> {formatDecimalPlaces(item.Generation)} kWh</p>
+							</div>
+							<div className="flex items-center gap-1 bg-orange-300 text-orange-800 rounded-lg p-1 px-2">
+								<Zap className="h-4 w-4" />
+								<p className="text-[0.6rem] font-medium"> {formatDecimalPlaces(item.Consumption)} kWh</p>
+							</div>
+						</div>
+					</div>
+					<div className="w-full flex items-center flex-wrap gap-2">
+						<div className="flex items-center gap-1 bg-primary/20 text-primary rounded-lg p-0.5 px-2">
+							<BadgeDollarSign className="h-4 w-4" />
+							<p className="text-[0.5rem] font-medium">
+								COMPENSADO: <strong>{formatToMoney(item.CompensatedEnergyCost)}</strong>
+							</p>
+						</div>
+						<div className="flex items-center gap-1 bg-primary/20 text-primary rounded-lg p-0.5 px-2">
+							<BadgeDollarSign className="h-4 w-4" />
+							<p className="text-[0.5rem] font-medium">
+								NÃO COMPENSADO: <strong>{formatToMoney(item.NonCompensatedEnergyCost)}</strong>
+							</p>
+						</div>
+						<div className="flex items-center gap-1 bg-green-300 text-green-800 rounded-lg p-0.5 px-2">
+							<Receipt className="h-4 w-4" />
+							<p className="text-[0.5rem] font-medium">
+								FATURA SOLAR: <strong>{formatToMoney(item.EnergyBillValue)}</strong>
+							</p>
+						</div>
+						<div className="flex items-center gap-1 bg-red-300 text-red-800 rounded-lg p-0.5 px-2">
+							<Receipt className="h-4 w-4" />
+							<p className="text-[0.5rem] font-medium">
+								FATURA CONVENCIONAL: <strong>{formatToMoney(item.ConventionalEnergyBill)}</strong>
+							</p>
+						</div>
+					</div>
+				</div>
 			</div>
 		);
 	};
 
-	const HeaderRow = () => (
-		<div className="flex border-b-2 border-gray-300 bg-gray-100 font-semibold text-sm w-full">
+	const DetailsHeader = () => (
+		<div className="hidden lg:flex w-full items-center gap-1 bg-primary/50 text-primary-foreground rounded-lg p-2">
 			{columns.map((column) => (
-				<div key={column.key} className="flex items-center justify-center px-2 py-3 text-center w-1/6">
+				<div key={column.key} className="flex items-center justify-center text-center w-1/6 text-xs font-medium">
 					{column.label}
 				</div>
 			))}
@@ -141,10 +189,10 @@ function VirtualizedTable({ data }: VirtualizedTableProps) {
 	);
 
 	return (
-		<div className="border border-gray-300 rounded-lg overflow-hidden w-full">
-			<HeaderRow />
-			<List height={400} itemCount={data.length} itemSize={60} width={"100%"}>
-				{Row}
+		<div className="flex flex-col gap-2 w-full">
+			<DetailsHeader />
+			<List height={400} itemCount={data.length} itemSize={isDesktop ? 45 : 100} width={"100%"} className="gap-2 scrollbar-thin scrollbar-track-primary/10 scrollbar-thumb-primary/30">
+				{DetailsItem}
 			</List>
 		</div>
 	);
@@ -179,11 +227,12 @@ const chartConfig = {
 	},
 } satisfies ChartConfig;
 type TechnicalAnalysisConditionDataBlockProps = {
+	isDesktop: boolean;
 	analysis: TSalesProposalScenarios;
 	params: UFVEconomicAnalysisParams;
 	updateParams: (params: Partial<UFVEconomicAnalysisParams>) => void;
 };
-function TechnicalAnalysisConditionDataBlock({ analysis, params, updateParams }: TechnicalAnalysisConditionDataBlockProps) {
+function TechnicalAnalysisConditionDataBlock({ isDesktop, analysis, params, updateParams }: TechnicalAnalysisConditionDataBlockProps) {
 	// Preparar dados para o gráfico
 	const fullChartData = analysis.progression.map((item) => ({
 		tag: item.Tag,
@@ -225,151 +274,164 @@ function TechnicalAnalysisConditionDataBlock({ analysis, params, updateParams }:
 	const paybackMonths = paybackBreakEven ? analysis.progression.indexOf(paybackBreakEven) : -1;
 
 	return (
-		<div className="w-full h-full flex flex-col gap-6 py-4 px-4">
-			<div className="w-full flex items-center justify-end gap-2">
-				<SelectInput
-					label="TEMPO DE AVALIAÇÃO"
-					value={params.yearsQty}
-					options={[
-						{
-							id: 1,
-							label: "5 Anos",
-							value: 5,
-						},
-						{
-							id: 2,
-							label: "10 Anos",
-							value: 10,
-						},
-						{
-							id: 3,
-							label: "12 Anos",
-							value: 12,
-						},
-						{
-							id: 4,
-							label: "20 Anos",
-							value: 20,
-						},
-						{
-							id: 5,
-							label: "25 Anos",
-							value: 25,
-						},
-					]}
-					resetOptionLabel="Selecione o número de anos"
-					handleChange={(value) => updateParams({ yearsQty: Number(value) })}
-					onReset={() => updateParams({ yearsQty: 12 })}
-				/>
-				<SelectInput
-					label="CUSTO DE ILUMINAÇÃO PÚBLICA"
-					value={params.publicIluminationCost}
-					options={[
-						{
-							id: 1,
-							label: "R$0",
-							value: 0,
-						},
-						{
-							id: 2,
-							label: "R$10",
-							value: 10,
-						},
-						{
-							id: 3,
-							label: "R$20",
-							value: 20,
-						},
-						{
-							id: 4,
-							label: "R$30",
-							value: 30,
-						},
-						{
-							id: 5,
-							label: "R$40",
-							value: 40,
-						},
-					]}
-					resetOptionLabel="Selecione o custo de iluminação pública"
-					handleChange={(value) => updateParams({ publicIluminationCost: Number(value) })}
-					onReset={() => updateParams({ publicIluminationCost: 20 })}
-				/>
-				<SelectInput
-					label="AUMENTO ANUAL DE CONSUMO"
-					value={params.yearlyConsumptionScaling}
-					options={[
-						{
-							id: 1,
-							label: "0%",
-							value: 0,
-						},
-						{
-							id: 2,
-							label: "5%",
-							value: 0.05,
-						},
-						{
-							id: 3,
-							label: "10%",
-							value: 0.1,
-						},
-						{
-							id: 4,
-							label: "15%",
-							value: 0.15,
-						},
-						{
-							id: 5,
-							label: "20%",
-							value: 0.2,
-						},
-					]}
-					resetOptionLabel="Selecione o aumento anual de consumo"
-					handleChange={(value) => updateParams({ yearlyConsumptionScaling: Number(value) })}
-					onReset={() => updateParams({ yearlyConsumptionScaling: 0 })}
-				/>
+		<div className="w-full h-full flex flex-col gap-6 py-4 px-4 lg:px-0">
+			<div className="w-full flex items-center flex-col lg:flex-row gap-2">
+				<div className="w-full lg:w-1/3">
+					<SelectInput
+						label="TEMPO DE AVALIAÇÃO"
+						labelClassName="text-[0.6rem]"
+						holderClassName="text-xs p-2 min-h-[34px]"
+						value={params.yearsQty}
+						options={[
+							{
+								id: 1,
+								label: "5 ANOS",
+								value: 5,
+							},
+							{
+								id: 2,
+								label: "10 ANOS",
+								value: 10,
+							},
+							{
+								id: 3,
+								label: "12 ANOS",
+								value: 12,
+							},
+							{
+								id: 4,
+								label: "20 ANOS",
+								value: 20,
+							},
+							{
+								id: 5,
+								label: "25 ANOS",
+								value: 25,
+							},
+						]}
+						resetOptionLabel="SELECIONE"
+						handleChange={(value) => updateParams({ yearsQty: Number(value) })}
+						onReset={() => updateParams({ yearsQty: 12 })}
+						width="100%"
+					/>
+				</div>
+				<div className="w-full lg:w-1/3">
+					<SelectInput
+						label="CUSTO DE ILUMINAÇÃO PÚBLICA"
+						labelClassName="text-[0.6rem]"
+						holderClassName="text-xs p-2 min-h-[34px]"
+						value={params.publicIluminationCost}
+						options={[
+							{
+								id: 1,
+								label: "R$0",
+								value: 0,
+							},
+							{
+								id: 2,
+								label: "R$10",
+								value: 10,
+							},
+							{
+								id: 3,
+								label: "R$20",
+								value: 20,
+							},
+							{
+								id: 4,
+								label: "R$30",
+								value: 30,
+							},
+							{
+								id: 5,
+								label: "R$40",
+								value: 40,
+							},
+						]}
+						resetOptionLabel="SELECIONE"
+						handleChange={(value) => updateParams({ publicIluminationCost: Number(value) })}
+						onReset={() => updateParams({ publicIluminationCost: 20 })}
+						width="100%"
+					/>
+				</div>
+				<div className="w-full lg:w-1/3">
+					<SelectInput
+						label="AUMENTO ANUAL DE CONSUMO"
+						labelClassName="text-[0.6rem]"
+						holderClassName="text-xs p-2 min-h-[34px]"
+						value={params.yearlyConsumptionScaling}
+						options={[
+							{
+								id: 1,
+								label: "0%",
+								value: 0,
+							},
+							{
+								id: 2,
+								label: "5%",
+								value: 0.05,
+							},
+							{
+								id: 3,
+								label: "10%",
+								value: 0.1,
+							},
+							{
+								id: 4,
+								label: "15%",
+								value: 0.15,
+							},
+							{
+								id: 5,
+								label: "20%",
+								value: 0.2,
+							},
+						]}
+						resetOptionLabel="SELECIONE"
+						handleChange={(value) => updateParams({ yearlyConsumptionScaling: Number(value) })}
+						onReset={() => updateParams({ yearlyConsumptionScaling: 0 })}
+						width="100%"
+					/>
+				</div>
 			</div>
 			{/* Informações gerais */}
 			<div className="w-full flex flex-col gap-2">
-				<div className="flex flex-col p-3 rounded shadow-md gap-4 border border-primary/30">
-					<div className="w-full flex flex-col gap-1">
-						<h2 className="text-lg font-medium tracking-tight leading-none">Economia Mensal Média</h2>
-						<p className="text-sm text-muted-foreground tracking-tight leading-none">Economia mensal média com o sistema solar</p>
+				<div className="flex min-h-[110px] w-full flex-col rounded-xl border border-gray-300 bg-[#fff] p-6 shadow-md">
+					<div className="flex items-center justify-between">
+						<h1 className="text-sm font-medium uppercase tracking-tight">ECONOMIA MENSAL MÉDIA</h1>
+						<PiggyBank className="h-4 w-4" />
 					</div>
-					<div className="w-full flex flex-col">
-						<h1 className="text-2xl font-black tracking-tight leading-none">{formatToMoney(analysis.monthlySavedValue)}</h1>
-					</div>
+					<h3 className="text-xl font-bold text-[#15599a]">{formatToMoney(analysis.monthlySavedValue)}</h3>
+					<p className="text-xs text-primary/80">Considerando o período, esse é o valor médio a ser pago nas contas de energia.</p>
 				</div>
-				<div className="flex flex-col p-3 rounded shadow-md gap-4 border border-primary/30">
-					<div className="w-full flex flex-col gap-1">
-						<h2 className="text-lg font-medium tracking-tight leading-none">Economia em {params.yearsQty} Anos</h2>
-						<p className="text-sm text-muted-foreground tracking-tight leading-none">Economia total em {params.yearsQty} anos com o sistema solar</p>
+				<div className="flex min-h-[110px] w-full flex-col rounded-xl border border-gray-300 bg-[#fff] p-6 shadow-md">
+					<div className="flex items-center justify-between">
+						<h1 className="text-sm font-medium uppercase tracking-tight">ECONOMIA TOTAL NO PERÍODO</h1>
+						<PiggyBank className="h-4 w-4" />
 					</div>
-					<div className="w-full flex flex-col">
-						<h1 className="text-2xl font-black tracking-tight leading-none">{formatToMoney(analysis.twentyFiveYearsSavedValue)}</h1>
-					</div>
+					<h3 className="text-xl font-bold text-[#15599a]">{formatToMoney(analysis.twentyFiveYearsSavedValue)}</h3>
+					<p className="text-xs text-primary/80">Considerando o período, esse é o valor total a ser pago nas contas de energia.</p>
 				</div>
-				<div className="flex flex-col p-3 rounded shadow-md gap-4 border border-primary/30">
-					<div className="w-full flex flex-col gap-1">
-						<h2 className="text-lg font-medium tracking-tight leading-none">Tempo de Retorno</h2>
-						<p className="text-sm text-muted-foreground tracking-tight leading-none">Tempo de retorno do investimento</p>
+				<div className="flex min-h-[110px] w-full flex-col rounded-xl border border-gray-300 bg-[#fff] p-6 shadow-md">
+					<div className="flex items-center justify-between">
+						<h1 className="text-sm font-medium uppercase tracking-tight">TEMPO DE RETORNO</h1>
+						<CalendarRange className="h-4 w-4" />
 					</div>
-					<div className="w-full flex flex-col">
-						<h1 className="text-2xl font-black tracking-tight leading-none">{paybackMonths > 0 ? `${Math.floor(paybackMonths / 12)} anos e ${paybackMonths % 12} meses` : "..."}</h1>
-					</div>
+					<h3 className="text-xl font-bold text-[#15599a]">{paybackMonths > 0 ? `${Math.floor(paybackMonths / 12)} ANOS E ${paybackMonths % 12} MESES` : "..."}</h3>
+					<p className="text-xs text-primary/80">Esse é o tempo necessário para o retorno do investimento.</p>
 				</div>
 			</div>
 
 			{/* Gráfico de Payback */}
-			<div className="flex flex-col p-3 rounded shadow-md gap-4 border border-primary/30">
-				<div className="w-full flex flex-col gap-1">
-					<h2 className="text-lg font-medium tracking-tight leading-none">Análise de Payback</h2>
-					<p className="text-sm text-muted-foreground tracking-tight leading-none">Progressão do retorno financeiro ao longo do tempo</p>
+			<div className="flex  w-full flex-col rounded-xl border border-gray-300 bg-[#fff] p-6 shadow-md">
+				<div className="flex items-center justify-between">
+					<h1 className="text-sm font-medium uppercase tracking-tight">ANÁLISE DE PAYBACK</h1>
+					<ChartBar className="h-4 w-4" />
 				</div>
+				<p className="text-xs text-primary/80">Gráfico demonstrativo do payback do investimento. Em verde, o payback positivo e em vermelho, o payback negativo.</p>
 				<div className="w-full flex flex-col gap-2 p-3">
 					<ChartContainer config={chartConfig} className="aspect-auto h-[250px] w-full">
-						<AreaChart
+						<BarChart
 							accessibilityLayer
 							data={chartData}
 							margin={{
@@ -395,7 +457,7 @@ function TechnicalAnalysisConditionDataBlock({ analysis, params, updateParams }:
 								}}
 							/>
 							<ChartTooltip content={<ChartTooltipContent className="w-fit min-w-[200px]" labelFormatter={(value) => `Período: ${value}`} />} />
-							<defs>
+							{/* <defs>
 								<linearGradient id="paybackPositiveGradient" x1="0" y1="0" x2="0" y2="1">
 									<stop offset="0%" stopColor="#22c55e" stopOpacity={0.8} />
 									<stop offset="100%" stopColor="#22c55e" stopOpacity={0.1} />
@@ -404,20 +466,21 @@ function TechnicalAnalysisConditionDataBlock({ analysis, params, updateParams }:
 									<stop offset="0%" stopColor="#ef4444" stopOpacity={0.1} />
 									<stop offset="100%" stopColor="#ef4444" stopOpacity={0.8} />
 								</linearGradient>
-							</defs>
-							<Area dataKey="paybackPositive" stroke="#22c55e" strokeWidth={2} fill="url(#paybackPositiveGradient)" connectNulls={false} />
-							<Area dataKey="paybackNegative" stroke="#ef4444" strokeWidth={2} fill="url(#paybackNegativeGradient)" connectNulls={false} />
-						</AreaChart>
+							</defs> */}
+							<Bar dataKey="paybackPositive" stroke="#22c55e" strokeWidth={2} fill="url(#paybackPositiveGradient)" />
+							<Bar dataKey="paybackNegative" stroke="#ef4444" strokeWidth={2} fill="url(#paybackNegativeGradient)" />
+						</BarChart>
 					</ChartContainer>
 				</div>
 			</div>
 
 			{/* Gráfico de Comparação de Contas */}
-			<div className="flex flex-col p-3 rounded shadow-md gap-4 border border-primary/30">
-				<div className="w-full flex flex-col gap-1">
-					<h2 className="text-lg font-medium tracking-tight leading-none">Comparação de Contas de Energia</h2>
-					<p className="text-sm text-muted-foreground tracking-tight leading-none">Conta com sistema solar vs. conta convencional ao longo do tempo</p>
+			<div className="flex  w-full flex-col rounded-xl border border-gray-300 bg-[#fff] p-6 shadow-md">
+				<div className="flex items-center justify-between">
+					<h1 className="text-sm font-medium uppercase tracking-tight">COMPARAÇÃO DE CONTAS DE ENERGIA</h1>
+					<ChartArea className="h-4 w-4" />
 				</div>
+				<p className="text-xs text-primary/80">Gráfico demonstrativo da comparação de contas de energia. Em azul, a conta com solar e em laranja, a conta convencional.</p>
 				<div className="w-full flex flex-col gap-2 p-3">
 					<ChartContainer config={chartConfig} className="aspect-auto h-[250px] w-full">
 						<LineChart
@@ -471,13 +534,13 @@ function TechnicalAnalysisConditionDataBlock({ analysis, params, updateParams }:
 			</div>
 
 			{/* Tabela Virtualizada */}
-			<div className=" flex-col p-3 rounded shadow-md gap-4 border border-primary/30 hidden lg:flex">
-				<div className="w-full flex flex-col gap-1">
-					<h2 className="text-lg font-medium tracking-tight leading-none">Detalhamento Mensal</h2>
-					<p className="text-sm text-muted-foreground tracking-tight leading-none">Análise detalhada mês a mês dos valores de energia</p>
+			<div className="flex w-full flex-col rounded-xl border border-gray-300 bg-[#fff] p-6 shadow-md gap-3">
+				<div className="flex items-center justify-between">
+					<h1 className="text-sm font-medium uppercase tracking-tight">DETALHAMENTO MENSAL</h1>
+					<CalendarDays className="h-4 w-4" />
 				</div>
 				<div className="w-full">
-					<VirtualizedTable data={analysis.progression} />
+					<VirtualizedTable isDesktop={isDesktop} data={analysis.progression} />
 				</div>
 			</div>
 		</div>
