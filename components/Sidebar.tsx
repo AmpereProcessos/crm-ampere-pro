@@ -27,7 +27,7 @@ export const Sidebar = ({ session }: SidebarProps) => {
 	const pathname = usePathname();
 	if (pathname?.includes("/auth/signin")) return null;
 	return (
-		<AnimatePresence>
+		<>
 			<motion.div
 				layout={true}
 				transition={{
@@ -229,6 +229,6 @@ export const Sidebar = ({ session }: SidebarProps) => {
 					</motion.div>
 				) : null}
 			</div>
-		</AnimatePresence>
+		</>
 	);
 };
