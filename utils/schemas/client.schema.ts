@@ -1,6 +1,17 @@
 import { z } from "zod";
 import { AuthorSchema } from "./user.schema";
 
+export const RestrictionSchema = z.object({
+	aplicavel: z.boolean({ invalid_type_error: "Tipo não válido para a aplicabilidade da restrição." }).optional().nullable(),
+	observacoes: z.string({ invalid_type_error: "Tipo não válido para as observações da restrição." }).optional().nullable(),
+	data: z.string({ invalid_type_error: "Tipo não válido para a data da restrição." }).datetime().optional().nullable(),
+	autor: z.object({
+		id: z.string({ invalid_type_error: "Tipo não válido para o ID do autor da restrição." }),
+		nome: z.string({ invalid_type_error: "Tipo não válido para o nome do autor da restrição." }),
+		avatar: z.string({ invalid_type_error: "Tipo não válido para o avatar do autor da restrição." }).optional().nullable(),
+	}),
+});
+
 export const ClientIndicatorSchema = z.object({
 	id: z
 		.string({
@@ -42,10 +53,7 @@ export const ClientConectaSchema = z.object({
 		})
 		.optional()
 		.nullable(),
-	conviteId: z
-		.string({ invalid_type_error: "Tipo não válido para ID do convite." })
-		.optional()
-		.nullable(),
+	conviteId: z.string({ invalid_type_error: "Tipo não válido para ID do convite." }).optional().nullable(),
 	conviteDataAceite: z
 		.string({
 			invalid_type_error: "Tipo não válido para data de aceite do convite.",
@@ -54,15 +62,13 @@ export const ClientConectaSchema = z.object({
 		.nullable(),
 	codigoIndicacaoVendedor: z
 		.string({
-			invalid_type_error:
-				"Tipo não válido para código de indicação do vendedor.",
+			invalid_type_error: "Tipo não válido para código de indicação do vendedor.",
 		})
 		.optional()
 		.nullable(),
 	creditos: z
 		.number({
-			invalid_type_error:
-				"Tipo não válido para o número de créditos do usuário.",
+			invalid_type_error: "Tipo não válido para o número de créditos do usuário.",
 		})
 		.optional()
 		.nullable(),
@@ -75,8 +81,7 @@ export const ClientConectaSchema = z.object({
 		.nullable(),
 	googleRefreshToken: z
 		.string({
-			invalid_type_error:
-				"Tipo não válido para o token de revalidações google do cliente.",
+			invalid_type_error: "Tipo não válido para o token de revalidações google do cliente.",
 		})
 		.optional()
 		.nullable(),
@@ -93,28 +98,16 @@ export const GeneralClientSchema = z.object({
 		required_error: "Referência a parceiro não informado.",
 		invalid_type_error: "Tipo não válido para a referência de parceiro.",
 	}),
-	cpfCnpj: z
-		.string({ invalid_type_error: "Tipo não válido para CPF/CNPJ do cliente." })
-		.optional()
-		.nullable(),
-	rg: z
-		.string({ invalid_type_error: "Tipo não válido para RG do cliente." })
-		.optional()
-		.nullable(),
+	cpfCnpj: z.string({ invalid_type_error: "Tipo não válido para CPF/CNPJ do cliente." }).optional().nullable(),
+	rg: z.string({ invalid_type_error: "Tipo não válido para RG do cliente." }).optional().nullable(),
 	telefonePrimario: z.string({
 		required_error: "Telefone primário do cliente não informado.",
 		invalid_type_error: "Tipo não válido para nome do cliente.",
 	}),
 	// .min(14, 'Formato inválido para telefone primário. O mínimo de caracteres é 14.')
 	telefoneSecundario: z.string().optional().nullable(),
-	email: z
-		.string({ invalid_type_error: "Tipo não válido para email do cliente." })
-		.optional()
-		.nullable(),
-	cep: z
-		.string({ invalid_type_error: "Tipo não válido para CEP do cliente." })
-		.optional()
-		.nullable(),
+	email: z.string({ invalid_type_error: "Tipo não válido para email do cliente." }).optional().nullable(),
+	cep: z.string({ invalid_type_error: "Tipo não válido para CEP do cliente." }).optional().nullable(),
 	uf: z.string({
 		required_error: "UF do cliente não informada.",
 		invalid_type_error: "Tipo não válido para UF do cliente.",
@@ -123,14 +116,8 @@ export const GeneralClientSchema = z.object({
 		required_error: "Cidade não informada.",
 		invalid_type_error: "Tipo não válido para cidade do cliente.",
 	}),
-	bairro: z
-		.string({ invalid_type_error: "Tipo não válido para bairro do cliente." })
-		.optional()
-		.nullable(),
-	endereco: z
-		.string({ invalid_type_error: "Tipo não válido para endereço do cliente." })
-		.optional()
-		.nullable(),
+	bairro: z.string({ invalid_type_error: "Tipo não válido para bairro do cliente." }).optional().nullable(),
+	endereco: z.string({ invalid_type_error: "Tipo não válido para endereço do cliente." }).optional().nullable(),
 	numeroOuIdentificador: z
 		.string({
 			invalid_type_error: "Tipo não válido para número/identificador.",
@@ -158,8 +145,7 @@ export const GeneralClientSchema = z.object({
 		.nullable(),
 	ondeTrabalha: z
 		.string({
-			invalid_type_error:
-				"Tipo não válido para o lugar de trabalho do cliente.",
+			invalid_type_error: "Tipo não válido para o lugar de trabalho do cliente.",
 		})
 		.optional()
 		.nullable(),
@@ -169,10 +155,7 @@ export const GeneralClientSchema = z.object({
 		})
 		.optional()
 		.nullable(),
-	deficiencia: z
-		.string({ invalid_type_error: "Tipo inválido para deficiência." })
-		.optional()
-		.nullable(),
+	deficiencia: z.string({ invalid_type_error: "Tipo inválido para deficiência." }).optional().nullable(),
 	canalAquisicao: z.string({
 		required_error: "Canal de aquisição não informado.",
 		invalid_type_error: "Tipo não válido para canal de aquisição.",
@@ -185,8 +168,7 @@ export const GeneralClientSchema = z.object({
 		.datetime({ message: "Formato inválido para data de inserção." }),
 	idIndicacao: z
 		.string({
-			invalid_type_error:
-				"Tipo não válido para o ID de referência da indicação.",
+			invalid_type_error: "Tipo não válido para o ID de referência da indicação.",
 		})
 		.optional()
 		.nullable(),
@@ -196,6 +178,7 @@ export const GeneralClientSchema = z.object({
 		})
 		.optional()
 		.nullable(),
+	restricao: RestrictionSchema.optional().nullable(),
 	indicador: ClientIndicatorSchema,
 	conecta: ClientConectaSchema.optional().nullable(),
 	autor: AuthorSchema,
@@ -209,35 +192,11 @@ export type TClientDTO = TClient & { _id: string };
 
 export type TSimilarClientSimplifiedDTO = Pick<
 	TClientDTO,
-	| "_id"
-	| "nome"
-	| "autor"
-	| "telefonePrimario"
-	| "email"
-	| "cpfCnpj"
-	| "cep"
-	| "uf"
-	| "cidade"
-	| "bairro"
-	| "endereco"
-	| "numeroOuIdentificador"
-	| "complemento"
-	| "dataInsercao"
+	"_id" | "nome" | "autor" | "telefonePrimario" | "email" | "cpfCnpj" | "cep" | "uf" | "cidade" | "bairro" | "endereco" | "numeroOuIdentificador" | "complemento" | "dataInsercao"
 >;
 export type TSimilarClientSimplified = Pick<
 	TClient,
-	| "nome"
-	| "autor"
-	| "telefonePrimario"
-	| "email"
-	| "cpfCnpj"
-	| "cep"
-	| "uf"
-	| "cidade"
-	| "bairro"
-	| "endereco"
-	| "numeroOuIdentificador"
-	| "complemento"
+	"nome" | "autor" | "telefonePrimario" | "email" | "cpfCnpj" | "cep" | "uf" | "cidade" | "bairro" | "endereco" | "numeroOuIdentificador" | "complemento"
 >;
 export type TClientSimplified = Pick<
 	TClient,
@@ -318,14 +277,11 @@ const PersonalizedFiltersSchema = z.object({
 		}),
 		{
 			required_error: "Lista de canais de aquisição de filtro não informada.",
-			invalid_type_error:
-				"Tipo não válido para lista de canais de aquisição de filtro.",
+			invalid_type_error: "Tipo não válido para lista de canais de aquisição de filtro.",
 		},
 	),
 });
-export type TPersonalizedClientsFilter = z.infer<
-	typeof PersonalizedFiltersSchema
->;
+export type TPersonalizedClientsFilter = z.infer<typeof PersonalizedFiltersSchema>;
 export const PersonalizedClientQuerySchema = z.object({
 	authors: z
 		.array(

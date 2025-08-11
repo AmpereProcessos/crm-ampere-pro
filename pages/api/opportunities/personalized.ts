@@ -53,9 +53,20 @@ const createClientOpportunityAndFunnelReferences: NextApiHandler<PostResponse> =
 	const clientsCollection: Collection<TClient> = db.collection("clients");
 	const funnelReferencesCollection: Collection<TFunnelReference> = db.collection("funnel-references");
 	if (clientId) {
-		console.log("PASSOU PELO CAMINHO DE VINCULAÇÃO DE CLIENTE EXISTENTE");
+		console.log("[INFO] [CREATE_OPPORTUNITY_PERSONALIZED] Existing client provider.");
 		// If there is a client ID, then the opportunity will be reference to an existing client, therefore, there is no need to create a new client
 		if (typeof clientId !== "string" || !ObjectId.isValid(clientId)) throw new createHttpError.BadRequest("ID de cliente inválido.");
+
+		const existingClient = await clientsCollection.findOne({ _id: new ObjectId(clientId) });
+		if (!existingClient) throw new createHttpError.BadRequest("Cliente não encontrado.");
+		console.log("[INFO] [CREATE_OPPORTUNITY_PERSONALIZED] Existing client found.", {
+			clientId: clientId,
+			clientName: existingClient.nome,
+			clientCpfCnpj: existingClient.cpfCnpj,
+			clientPhoneNumber: existingClient.telefonePrimario,
+			clientEmail: existingClient.email,
+		});
+		if (client.restricao?.aplicavel) throw new createHttpError.BadRequest("Cliente foi restrito para novas negociações. Converse com seu responsável para mais informações.");
 
 		// Creating opportunity with idCliente referencing the clientId provided
 		const insertOpportunityResponse = await insertOpportunity({
