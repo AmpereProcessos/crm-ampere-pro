@@ -66,7 +66,7 @@ const createClientOpportunityAndFunnelReferences: NextApiHandler<PostResponse> =
 			clientPhoneNumber: existingClient.telefonePrimario,
 			clientEmail: existingClient.email,
 		});
-		if (client.restricao?.aplicavel) throw new createHttpError.BadRequest("Cliente foi restrito para novas negociações. Converse com seu responsável para mais informações.");
+		if (existingClient.restricao?.aplicavel) throw new createHttpError.BadRequest("Cliente foi restrito para novas negociações. Converse com seu responsável para mais informações.");
 
 		// Creating opportunity with idCliente referencing the clientId provided
 		const insertOpportunityResponse = await insertOpportunity({
