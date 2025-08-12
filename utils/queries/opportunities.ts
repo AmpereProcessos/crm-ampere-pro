@@ -18,6 +18,7 @@ import type { TOpportunitiesQueryOptions } from "@/pages/api/opportunities/query
 import type { TGetComissionsRouteInput, TGetComissionsRouteOutput } from "@/app/api/opportunities/comissions/route";
 import dayjs from "dayjs";
 import { useDebounceMemo } from "@/lib/hooks";
+import type { TGetOpportunitiesKanbanViewInput, TGetOpportunitiesKanbanViewOutput } from "@/pages/api/opportunities/kanban";
 
 type UseOpportunitiesParams = {
 	responsibles: string[] | null;
@@ -245,4 +246,26 @@ export function useComissions({ initialQueryParams }: UseComissionsParams) {
 		queryParams,
 		updateQueryParams,
 	};
+}
+
+async function fetchOpportunitiesKanbanView(input: TGetOpportunitiesKanbanViewInput) {
+	try {
+		const { data } = await axios.post<TGetOpportunitiesKanbanViewOutput>("/api/opportunities/kanban", input);
+		return data.data;
+	} catch (error) {
+		console.log("Error fetching opportunities kanban view", error);
+		throw error;
+	}
+}
+
+type UseOpportunitiesKanbanViewParams = {
+	funnelId: TGetOpportunitiesKanbanViewInput["funnelId"];
+	funnelStage: TGetOpportunitiesKanbanViewInput["funnelStage"];
+	globalFilters: Omit<TGetOpportunitiesKanbanViewInput, "funnelId" | "funnelStage">;
+};
+export function useOpportunitiesKanbanView({ funnelId, funnelStage, globalFilters }: UseOpportunitiesKanbanViewParams) {
+	return useQuery({
+		queryKey: ["opportunities-kanban-view", funnelId, funnelStage, globalFilters],
+		queryFn: async () => await fetchOpportunitiesKanbanView({ ...globalFilters, funnelId, funnelStage }),
+	});
 }

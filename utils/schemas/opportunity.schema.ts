@@ -462,6 +462,7 @@ export const UpdateOpportunitySchema = z.object({
 	dataExclusao: z.string({ invalid_type_error: "Tipo não válido para data de exclusão." }).datetime({ message: "Tipo não válido para data de exclusão." }).optional().nullable(),
 	dataInsercao: z.string().datetime(),
 });
+export const OpportunitySegmentsEnumSchema = z.enum(["RESIDENCIAL", "RURAL", "COMERCIAL", "INDUSTRIAL"]);
 export const OpportunityWithClientSchema = z.object({
 	_id: z.string({
 		required_error: "ID de referência da oportunidade não informado.",
@@ -498,13 +499,7 @@ export const OpportunityWithClientSchema = z.object({
 			invalid_type_error: "Tipo não válido para responsáveis da oportunidade.",
 		})
 		.min(1, "É necessário ao menos 1 responsável."),
-	segmento: z
-		.union([z.literal("RESIDENCIAL"), z.literal("RURAL"), z.literal("COMERCIAL"), z.literal("INDUSTRIAL")], {
-			required_error: "Segmento da oportunidade não informado.",
-			invalid_type_error: "Tipo não válido para o segmento da oportunidade.",
-		})
-		.optional()
-		.nullable(),
+	segmento: OpportunitySegmentsEnumSchema.optional().nullable(),
 	idCliente: z.string({ required_error: "Vínculo de cliente não informado.", invalid_type_error: "Tipo não válido para vínculo de cliente." }),
 	cliente: GeneralClientSchema,
 	idPropostaAtiva: z.string().optional().nullable(),

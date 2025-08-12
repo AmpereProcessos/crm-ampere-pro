@@ -67,10 +67,7 @@ type GetStageOpportunities = {
 };
 function getStageOpportunities({ opportunities, stageId }: GetStageOpportunities) {
 	if (opportunities) {
-		console.log("STAGE ID", stageId);
-		console.log("OPPORTUNITIES	", opportunities);
 		const filteredOpportunities = opportunities.filter((project) => project.funil.idEstagio?.toString() === stageId.toString());
-		console.log("FILTERED OPPORTUNITIES LENGTH", filteredOpportunities.length);
 		return filteredOpportunities;
 	}
 	return [];
