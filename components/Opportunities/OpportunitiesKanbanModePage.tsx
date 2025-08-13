@@ -147,7 +147,7 @@ export default function OpportunitiesKanbanModePage({ session, funnelsOptions, r
 		mode: "GERAL",
 	});
 
-	const { data: projects } = useOpportunities({
+	const { data: projects, queryKey } = useOpportunities({
 		responsibles: responsible,
 		funnel: funnel,
 		periodAfter: dateParam.after,
@@ -157,7 +157,7 @@ export default function OpportunitiesKanbanModePage({ session, funnelsOptions, r
 	});
 	const { mutate: handleFunnelReferenceUpdate } = useFunnelReferenceUpdate({
 		queryClient,
-		affectedQueryKey: ["opportunities", responsible, funnel, dateParam.after, dateParam.before, params.status],
+		affectedQueryKey: queryKey,
 	});
 
 	function handleFunnelChange(value: string) {
@@ -315,7 +315,7 @@ export default function OpportunitiesKanbanModePage({ session, funnelsOptions, r
 					</div>
 				</div>
 				<DragDropContext onDragEnd={(e) => onDragEnd(e)}>
-					<div className="1.5xl:max-h- mt-2 flex w-full overflow-x-auto scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300 md:max-h-[500px] lg:max-h-[600px]  2.25xl:max-h-[800px]">
+					<div className="1.5xl:max-h- mt-2 flex w-full overflow-x-auto scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300 md:max-h-[500px] lg:max-h-[calc(100vh-200px)]">
 						{!projects || !funnelsOptions ? (
 							<div className="flex min-h-[600px] w-full items-center justify-center">
 								<LoadingComponent />

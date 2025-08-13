@@ -56,7 +56,7 @@ function FunnelList({ stageName, session, items, id }: IFunnelListProps) {
 		};
 	}, [items]);
 	return (
-		<Droppable droppableId={id.toString()}>
+		<Droppable droppableId={id.toString()} isDropDisabled={false} isCombineEnabled={false} ignoreContainerClipping={false}>
 			{(provided) => (
 				<div className="flex w-full min-w-[375px] flex-col p-2 px-4 lg:w-[375px]">
 					<div className="flex h-[100px] w-full flex-col rounded bg-[#15599a] px-2 lg:h-[60px]">

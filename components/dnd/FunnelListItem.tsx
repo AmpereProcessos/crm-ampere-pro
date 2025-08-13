@@ -132,7 +132,7 @@ function FunnelListItem({ item, session, index }: FunnelListItemProps) {
 								{item.responsaveis.map((resp, index) => {
 									if (index <= 1)
 										return (
-											<div className="flex items-center gap-1">
+											<div key={resp.id} className="flex items-center gap-1">
 												<Avatar url={resp.avatar_url || undefined} fallback={formatNameAsInitials(resp.nome)} height={18} width={18} />
 												<p className="text-[0.65rem] font-light text-gray-400">{resp.nome}</p>
 											</div>

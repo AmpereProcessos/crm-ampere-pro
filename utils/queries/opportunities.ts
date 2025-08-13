@@ -10,7 +10,7 @@ import type {
 	TOpportunityWithFunnelReferenceAndActivitiesByStatus,
 	TPersonalizedOpportunitiesFilter,
 } from "../schemas/opportunity.schema";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import type { TResultsExportsItem } from "@/app/api/stats/comercial-results/exports/route";
 import type { TOpportunitiesByFastSearch, TOpportunitiesByFilterResult } from "@/pages/api/opportunities/search";
 import { useState } from "react";
@@ -19,6 +19,7 @@ import type { TGetComissionsRouteInput, TGetComissionsRouteOutput } from "@/app/
 import dayjs from "dayjs";
 import { useDebounceMemo } from "@/lib/hooks";
 import type { TGetOpportunitiesKanbanViewInput, TGetOpportunitiesKanbanViewOutput } from "@/pages/api/opportunities/kanban";
+import type { TGetOpportunitiesQueryDefinitionsOutput } from "@/pages/api/opportunities/query-definitions";
 
 type UseOpportunitiesParams = {
 	responsibles: string[] | null;
@@ -50,11 +51,14 @@ async function fetchOpportunities({ responsibles, funnel, periodAfter, periodBef
 	}
 }
 export function useOpportunities({ responsibles, funnel, periodAfter, periodBefore, periodField, status }: UseOpportunitiesParams) {
-	return useQuery({
+	return {
+		...useQuery({
+			queryKey: ["opportunities", responsibles, funnel, periodAfter, periodBefore, periodField, status],
+			queryFn: async () => await fetchOpportunities({ responsibles, funnel, periodAfter, periodBefore, periodField, status }),
+			gcTime: 1000 * 60 * 5, // 5 minutes
+		}),
 		queryKey: ["opportunities", responsibles, funnel, periodAfter, periodBefore, periodField, status],
-		queryFn: async () => await fetchOpportunities({ responsibles, funnel, periodAfter, periodBefore, periodField, status }),
-		gcTime: 1000 * 60 * 5, // 5 minutes
-	});
+	};
 }
 
 async function fetchOpportunity({ opportunityId }: { opportunityId: string }) {
@@ -261,11 +265,30 @@ async function fetchOpportunitiesKanbanView(input: TGetOpportunitiesKanbanViewIn
 type UseOpportunitiesKanbanViewParams = {
 	funnelId: TGetOpportunitiesKanbanViewInput["funnelId"];
 	funnelStage: TGetOpportunitiesKanbanViewInput["funnelStage"];
-	globalFilters: Omit<TGetOpportunitiesKanbanViewInput, "funnelId" | "funnelStage">;
+	globalFilters: Omit<TGetOpportunitiesKanbanViewInput, "page" | "funnelId" | "funnelStage">;
 };
 export function useOpportunitiesKanbanView({ funnelId, funnelStage, globalFilters }: UseOpportunitiesKanbanViewParams) {
-	return useQuery({
+	return useInfiniteQuery({
 		queryKey: ["opportunities-kanban-view", funnelId, funnelStage, globalFilters],
-		queryFn: async () => await fetchOpportunitiesKanbanView({ ...globalFilters, funnelId, funnelStage }),
+		queryFn: async ({ pageParam }) => await fetchOpportunitiesKanbanView({ ...globalFilters, funnelId, funnelStage, page: pageParam }),
+		getNextPageParam: (lastPage, pages) => lastPage.nextCursor,
+		initialPageParam: 1,
+	});
+}
+
+async function fetchOpportunitiesQueryDefinitions() {
+	try {
+		const { data } = await axios.get<TGetOpportunitiesQueryDefinitionsOutput>("/api/opportunities/query-definitions");
+		return data.data;
+	} catch (error) {
+		console.log("Error fetching opportunities query definitions", error);
+		throw error;
+	}
+}
+
+export function useOpportunitiesQueryDefinitions() {
+	return useQuery({
+		queryKey: ["opportunities-query-definitions"],
+		queryFn: fetchOpportunitiesQueryDefinitions,
 	});
 }

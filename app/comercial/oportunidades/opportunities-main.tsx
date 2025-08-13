@@ -49,13 +49,13 @@ export default function OpportunitiesMainPage({ initialMode, session }: Opportun
 		return <OpportunitiesKanbanModePage session={session} funnelsOptions={funnelsOptions} responsiblesOptions={responsiblesOptions} handleSetMode={handleSetMode} />;
 	return <></>;
 }
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-	const cookies = nookies.get(context);
-	console.log(cookies);
-	const initialMode = cookies["opportunities-page-mode"] || null;
-	return {
-		props: {
-			initialMode,
-		},
-	};
-}
+// export async function getServerSideProps(context: GetServerSidePropsContext) {
+// 	const cookies = nookies.get(context);
+// 	console.log(cookies);
+// 	const initialMode = cookies["opportunities-page-mode"] || null;
+// 	return {
+// 		props: {
+// 			initialMode,
+// 		},
+// 	};
+// }

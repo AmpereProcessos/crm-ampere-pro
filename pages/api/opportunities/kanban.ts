@@ -75,6 +75,20 @@ const OpportunityKanbanViewInputSchema = z.object({
 			.optional()
 			.nullable(),
 	}),
+	cities: z.array(
+		z.string({
+			required_error: "ID da cidade não informado.",
+			invalid_type_error: "Tipo não válido para o ID da cidade.",
+		}),
+		{ required_error: "Lista de cidades não informada.", invalid_type_error: "Tipo não válido para lista de cidades." },
+	),
+	ufs: z.array(
+		z.string({
+			required_error: "UF não informada.",
+			invalid_type_error: "Tipo não válido para UF.",
+		}),
+		{ required_error: "Lista de UFs não informada.", invalid_type_error: "Tipo não válido para lista de UFs." },
+	),
 	status: z.enum(["ongoing", "won", "lost"]),
 	segments: z.array(OpportunitySegmentsEnumSchema),
 	isFromMarketing: z
@@ -107,7 +121,7 @@ const OpportunityStatusesMap: Record<TGetOpportunitiesKanbanViewInput["status"],
 	},
 };
 async function getOpportunitiesKanbanView({ payload, session }: { payload: TGetOpportunitiesKanbanViewInput; session: TUserSession }) {
-	const { page, funnelId, funnelStage, partnerIds, responsiblesIds, opportunityTypeIds, period, status, segments, isFromMarketing, isFromIndication } = payload;
+	const { page, funnelId, funnelStage, partnerIds, responsiblesIds, opportunityTypeIds, period, status, segments, isFromMarketing, isFromIndication, cities, ufs } = payload;
 
 	const userOpportunityScope = session.user.permissoes.oportunidades.escopo;
 	const userPartnerScope = session.user.permissoes.parceiros.escopo;
@@ -121,6 +135,8 @@ async function getOpportunitiesKanbanView({ payload, session }: { payload: TGetO
 	const isOpportunityTypesDefined = opportunityTypeIds.length > 0;
 	const isSegmentsDefined = segments.length > 0;
 	const isPeriodDefined = period.field && period.after && period.before;
+	const isCitiesDefined = cities.length > 0;
+	const isUfsDefined = ufs.length > 0;
 	// Validating scopes selection
 	/// First, checking for possible opportunity scope violation attempts (if user has scope defined and is attempting to visualize users that are not in his scope)
 	if (userOpportunityScope && responsiblesIds.some((r) => !userOpportunityScope.includes(r)))
@@ -136,7 +152,8 @@ async function getOpportunitiesKanbanView({ payload, session }: { payload: TGetO
 	const opportunityPeriodQuery: Filter<TOpportunity> = isPeriodDefined && period.field ? { [period.field]: { $gte: period.after, $lte: period.before } } : {};
 	const opportunityFromMarketingQuery: Filter<TOpportunity> = isFromMarketing ? { idMarketing: { $ne: null } } : {};
 	const opportunityFromIndicationQuery: Filter<TOpportunity> = isFromIndication ? { idIndicacao: { $ne: null } } : {};
-
+	const opportunityCitiesQuery: Filter<TOpportunity> = isCitiesDefined ? { "localizacao.cidade": { $in: cities } } : {};
+	const opportunityUfsQuery: Filter<TOpportunity> = isUfsDefined ? { "localizacao.uf": { $in: ufs } } : {};
 	const opportunityQuery: Filter<TOpportunity> = {
 		...opportunityResponsiblesQuery,
 		...opportunityPartnersQuery,
@@ -146,6 +163,8 @@ async function getOpportunitiesKanbanView({ payload, session }: { payload: TGetO
 		...opportunityPeriodQuery,
 		...opportunityFromMarketingQuery,
 		...opportunityFromIndicationQuery,
+		...opportunityCitiesQuery,
+		...opportunityUfsQuery,
 	};
 
 	console.log("Opportunities Query", JSON.stringify(opportunityQuery, null, 2));

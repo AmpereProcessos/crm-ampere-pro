@@ -36,22 +36,20 @@ export async function updateFunnelReference({ funnelReferenceId, newStageId }: O
 export function useFunnelReferenceUpdate({ queryClient, affectedQueryKey }: Omit<UseUpdateFunnelReferenceParams, "funnelReferenceId" | "newStageId">) {
 	return useMutation({
 		mutationKey: ["upate-funnel-reference"],
-		mutationFn: async ({ funnelReferenceId, newStageId }: Omit<UseUpdateFunnelReferenceParams, "queryClient" | "affectedQueryKey">) =>
-			await updateFunnelReference({ funnelReferenceId, newStageId }),
+		mutationFn: async ({ funnelReferenceId, newStageId }: Omit<UseUpdateFunnelReferenceParams, "queryClient" | "affectedQueryKey">) => {
+			return await updateFunnelReference({ funnelReferenceId, newStageId });
+		},
 		onMutate: async (variables) => {
 			await queryClient.cancelQueries({ queryKey: affectedQueryKey });
-			const querySnapshot: TOpportunitySimplifiedDTOWithProposalAndActivitiesAndFunnels[] | undefined = queryClient.getQueryData(affectedQueryKey);
+			const querySnapshot: TOpportunitySimplifiedDTOWithProposalAndActivitiesAndFunnels[] | undefined = queryClient.getQueryData(
+				affectedQueryKey,
+			) as TOpportunitySimplifiedDTOWithProposalAndActivitiesAndFunnels[];
 			if (!querySnapshot) return { querySnapshot };
 
 			// Updating opportunity optimistically
 			queryClient.setQueryData(affectedQueryKey, (prevData: TOpportunitySimplifiedDTOWithProposalAndActivitiesAndFunnels[]) =>
 				prevData.map((op) => {
 					if (op.funil.id === variables.funnelReferenceId) {
-						console.log("[INFO] [ON_MUTATE_OPTIMISTIC] Updating opportunity", {
-							funnelReferenceId: variables.funnelReferenceId,
-							previousStageId: op.funil.idEstagio,
-							newStageId: variables.newStageId,
-						});
 						return {
 							...op,
 							funil: {
