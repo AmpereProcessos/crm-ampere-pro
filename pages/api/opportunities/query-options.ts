@@ -29,10 +29,8 @@ const getOpportunitiesQueryOptions: NextApiHandler<GetResponse> = async (req, re
 		throw new createHttpError.Unauthorized("Usuário não autenticado");
 	}
 	const partnerScope = session.user.permissoes.parceiros.escopo;
-	const opportunityScope = session.user.permissoes.oportunidades.escopo;
 
 	const partnerQuery = partnerScope ? { idParceiro: { $in: [...partnerScope, null] } } : {};
-	const opportunityQuery = opportunityScope ? { idParceiro: { $in: [...opportunityScope, null] } } : {};
 
 	const db = await connectToDatabase();
 	const usersCollection: Collection<TUser> = db.collection("users");
@@ -40,7 +38,7 @@ const getOpportunitiesQueryOptions: NextApiHandler<GetResponse> = async (req, re
 	const projectTypesCollection: Collection<TProjectType> = db.collection("project-types");
 	const funnelsCollection: Collection<TFunnel> = db.collection("funnels");
 
-	const responsibles = await getOpportunityCreators({ collection: usersCollection, query: { ...opportunityQuery, ...partnerQuery } as Filter<TUser> });
+	const responsibles = await getOpportunityCreators({ collection: usersCollection, query: { ...partnerQuery } as Filter<TUser> });
 	const partners = await getPartnersSimplified({ collection: partnersCollection, query: partnerQuery as Filter<TPartner> });
 	const projectTypes = await getProjectTypesSimplified({ collection: projectTypesCollection, query: partnerQuery as Filter<TProjectType> });
 	const funnels = await getPartnerFunnels({ collection: funnelsCollection, query: partnerQuery as Filter<TFunnel> });

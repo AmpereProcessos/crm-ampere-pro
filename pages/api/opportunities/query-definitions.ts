@@ -8,11 +8,12 @@ import { apiHandler, validateAuthentication, validateAuthenticationWithSession }
 import type { TFunnel } from "@/utils/schemas/funnel.schema";
 import type { TPartner } from "@/utils/schemas/partner.schema";
 import type { TProjectType } from "@/utils/schemas/project-types.schema";
-import type { TUserPreferences } from "@/utils/schemas/user-preferences.schema";
+import { OpportunityViewPreferencesSchema, UserPreferencesSchema, type TUserPreferences } from "@/utils/schemas/user-preferences.schema";
 import type { TUser } from "@/utils/schemas/user.schema";
 import createHttpError from "http-errors";
 import type { Collection, Filter } from "mongodb";
 import type { NextApiHandler } from "next";
+import { z } from "zod";
 
 async function getOpportunitiesQueryDefinitions({ session }: { session: TUserSession }) {
 	const db = await connectToDatabase();
@@ -41,6 +42,7 @@ async function getOpportunitiesQueryDefinitions({ session }: { session: TUserSes
 
 	return {
 		data: {
+			identificador: userPreferences?.identificador ?? "opportunity-view-definition-v1",
 			mode: userPreferences?.modo ?? "database",
 			filterSelections: {
 				partnerIds: userPreferences?.filtrosKanban.parceirosIds ?? partnerScope ?? [],
@@ -81,4 +83,57 @@ const getOpportunitiesQueryDefinitionsHandler: NextApiHandler<TGetOpportunitiesQ
 	return res.status(200).json(definitions);
 };
 
-export default apiHandler({ GET: getOpportunitiesQueryDefinitionsHandler });
+const UpdateOpportunityQueryDefinitionsInputSchema = z.object({
+	preferences: OpportunityViewPreferencesSchema,
+});
+export type TUpdateOpportunityQueryDefinitionsInput = z.infer<typeof UpdateOpportunityQueryDefinitionsInputSchema>;
+
+async function updateOpportunitiesQueryDefinitions({ payload, session }: { payload: TUpdateOpportunityQueryDefinitionsInput; session: TUserSession }) {
+	const db = await connectToDatabase();
+	const userPreferencesCollection: Collection<TUserPreferences> = db.collection("user-preferences");
+
+	const { preferences } = payload;
+
+	const existingPreference = await userPreferencesCollection.findOne({
+		identificador: preferences.identificador,
+		usuarioId: session.user.id,
+	});
+
+	let preferenceId: string | undefined;
+	if (!existingPreference) {
+		const insertResponse = await userPreferencesCollection.insertOne({
+			...preferences,
+			usuarioId: session.user.id,
+		});
+		preferenceId = insertResponse.insertedId.toString();
+	} else {
+		await userPreferencesCollection.updateOne(
+			{
+				_id: existingPreference._id,
+			},
+			{
+				$set: preferences,
+			},
+		);
+		preferenceId = existingPreference._id.toString();
+	}
+
+	return {
+		data: {
+			preferenceId,
+		},
+		message: !existingPreference ? "Preferências criadas com sucesso" : "Preferências atualizadas com sucesso",
+	};
+}
+export type TUpdateOpportunityQueryDefinitionsOutput = Awaited<ReturnType<typeof updateOpportunitiesQueryDefinitions>>;
+
+const updateOpportunitiesQueryDefinitionsHandler: NextApiHandler<TUpdateOpportunityQueryDefinitionsOutput> = async (req, res) => {
+	const session = await validateAuthenticationWithSession(req, res);
+
+	const payload = await UpdateOpportunityQueryDefinitionsInputSchema.parseAsync(req.body);
+
+	const response = await updateOpportunitiesQueryDefinitions({ payload, session });
+	return res.status(200).json(response);
+};
+
+export default apiHandler({ GET: getOpportunitiesQueryDefinitionsHandler, PUT: updateOpportunitiesQueryDefinitionsHandler });

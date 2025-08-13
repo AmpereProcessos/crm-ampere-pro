@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { OpportunitySegmentsEnumSchema } from "./opportunity.schema";
 
-const OpportunityViewPreferencesSchema = z.object({
+export const OpportunityViewPreferencesSchema = z.object({
 	identificador: z.literal("opportunity-view-definition-v1"),
 	modo: z.enum(["database", "kanban"]),
 	filtrosKanban: z.object({

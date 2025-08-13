@@ -1,6 +1,6 @@
 import type { TUserSession } from "@/lib/auth/session";
-import type { TGetOpportunitiesQueryDefinitionsOutput } from "@/pages/api/opportunities/query-definitions";
-import { useQueryClient } from "@tanstack/react-query";
+import type { TGetOpportunitiesQueryDefinitionsOutput, TUpdateOpportunityQueryDefinitionsInput } from "@/pages/api/opportunities/query-definitions";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useCallback, useRef, useState } from "react";
 import { Sidebar } from "@/components/Sidebar";
 import { AiOutlinePlus, AiOutlineRight } from "react-icons/ai";
@@ -19,6 +19,12 @@ import Link from "next/link";
 import { formatToMoney } from "@/utils/methods";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { formatDateAsLocale, formatNameAsInitials } from "@/lib/methods/formatting";
+import { updateOpportunitiesQueryDefinitions } from "@/utils/mutations/opportunities";
+import UserConectaIndicationCodeFlag from "../Conecta/UserConectaIndicationCodeFlag";
+import { cn } from "@/lib/utils";
+import { PeriodByFieldFilter } from "../Inputs/PeriodByFieldFilter";
+import SelectInput from "../Inputs/SelectInput";
+import MultipleSelectInput from "../Inputs/MultipleSelectInput";
 
 type OpportunitiesKanbanModePageV2Props = {
 	session: TUserSession;
@@ -36,18 +42,81 @@ export default function OpportunitiesKanbanModePageV2({ session, opportunityView
 		queryClient,
 	});
 
+	const { mutate: updateOpportunitiesQueryDefinitionsMutation, isPending } = useMutation({
+		mutationKey: ["update-opportunities-query-definitions"],
+		mutationFn: updateOpportunitiesQueryDefinitions,
+		onMutate: async (payload) => {
+			await queryClient.cancelQueries({ queryKey: ["opportunities-query-definitions"] });
+
+			const snapshot = queryClient.getQueryData(["opportunities-query-definitions"]) as TGetOpportunitiesQueryDefinitionsOutput["data"];
+			if (snapshot) return { snapshot };
+
+			await queryClient.setQueryData(["opportunities-query-definitions"], (prev: TGetOpportunitiesQueryDefinitionsOutput["data"]) => ({
+				identificador: prev.identificador,
+				mode: prev.mode,
+				filterOptions: prev.filterOptions,
+				filterSelections: {
+					partnerIds: payload.preferences.filtrosKanban.parceirosIds ?? prev.filterSelections.partnerIds,
+					responsiblesIds: payload.preferences.filtrosKanban.responsaveisIds ?? prev.filterSelections.responsiblesIds,
+					opportunityTypeIds: payload.preferences.filtrosKanban.tiposOportunidadeIds ?? prev.filterSelections.opportunityTypeIds,
+					period: payload.preferences.filtrosKanban.periodo
+						? {
+								field: payload.preferences.filtrosKanban.periodo.parametro ?? undefined,
+								after: payload.preferences.filtrosKanban.periodo.depois ?? undefined,
+								before: payload.preferences.filtrosKanban.periodo.antes ?? undefined,
+							}
+						: prev.filterSelections.period,
+					cities: payload.preferences.filtrosKanban.cidades ?? prev.filterSelections.cities,
+					ufs: payload.preferences.filtrosKanban.ufs ?? prev.filterSelections.ufs,
+					segments: payload.preferences.filtrosKanban.segmentos ?? prev.filterSelections.segments,
+					status: payload.preferences.filtrosKanban.status ?? prev.filterSelections.status,
+					isFromMarketing: payload.preferences.filtrosKanban.viaMarketing ?? prev.filterSelections.isFromMarketing,
+					isFromIndication: payload.preferences.filtrosKanban.viaIndicacao ?? prev.filterSelections.isFromIndication,
+				},
+			}));
+			return { snapshot };
+		},
+		onSettled: async (data, error, variables, context) => {
+			await queryClient.invalidateQueries({ queryKey: ["opportunities-query-definitions"] });
+		},
+		onError: (error, variables, context) => {
+			if (context?.snapshot) queryClient.setQueryData(["opportunities-query-definitions"], context.snapshot);
+		},
+	});
+	function updateOpportunitiesQueryDefinitionsMutationPartial(payload: Partial<TUpdateOpportunityQueryDefinitionsInput["preferences"]["filtrosKanban"]>) {
+		updateOpportunitiesQueryDefinitionsMutation({
+			preferences: {
+				modo: opportunityViewPreferences.mode,
+				identificador: opportunityViewPreferences.identificador,
+				filtrosKanban: {
+					parceirosIds: opportunityViewPreferences.filterSelections.partnerIds,
+					responsaveisIds: opportunityViewPreferences.filterSelections.responsiblesIds,
+					tiposOportunidadeIds: opportunityViewPreferences.filterSelections.opportunityTypeIds,
+					periodo: {
+						parametro: opportunityViewPreferences.filterSelections.period.field,
+						depois: opportunityViewPreferences.filterSelections.period.after,
+						antes: opportunityViewPreferences.filterSelections.period.before,
+					},
+					cidades: opportunityViewPreferences.filterSelections.cities,
+					ufs: opportunityViewPreferences.filterSelections.ufs,
+					segmentos: opportunityViewPreferences.filterSelections.segments,
+					status: opportunityViewPreferences.filterSelections.status,
+					viaMarketing: opportunityViewPreferences.filterSelections.isFromMarketing,
+					viaIndicacao: opportunityViewPreferences.filterSelections.isFromIndication,
+					...payload,
+				},
+				usuarioId: session.user.id,
+			},
+		});
+	}
 	return (
 		<div className="flex h-full flex-col md:flex-row">
 			<Sidebar session={session} />
-			<div className="flex w-full max-w-full grow flex-col overflow-x-hidden bg-[#f8f9fa] p-6">
+			<div className="flex w-full max-w-full grow flex-col overflow-x-hidden bg-[#f8f9fa] p-6 gap-3">
 				<div className="flex flex-col items-center border-b border-[#000] pb-2 gap-1">
 					<div className="w-full flex items-center justify-between gap-2 flex-col lg:flex-row">
 						<div className="flex items-center gap-1">
 							<div className="text-xl font-black leading-none tracking-tight md:text-2xl">OPORTUNIDADES</div>
-							{/* <button type="button" onClick={() => handleSetMode("card")} className="flex items-center gap-1 px-2 text-xs text-gray-500 duration-300 ease-out hover:text-gray-800">
-								<FaRotate />
-								<h1 className="font-medium">ALTERAR MODO</h1>
-							</button> */}
 						</div>
 
 						<div className="flex grow flex-col items-center justify-end  gap-2 xl:flex-row">
@@ -67,6 +136,111 @@ export default function OpportunitiesKanbanModePageV2({ session, opportunityView
 							>
 								<AiOutlinePlus style={{ fontSize: "18px" }} />
 							</button>
+						</div>
+					</div>
+					<div className="w-full flex flex-col lg:flex-row justify-between gap-2 items-center">
+						<UserConectaIndicationCodeFlag code={session.user.codigoIndicacaoConecta} />
+						<div className="flex items-center justify-end flex-wrap gap-2">
+							<button
+								type="button"
+								className={cn("flex items-center justify-center p-2 max-h-[36px] min-h-[36px] border border-[#3e53b2] rounded-md transition-colors", {
+									"bg-[#3e53b2] text-white": opportunityViewPreferences.filterSelections.isFromMarketing,
+									"text-[#3e53b2]": !opportunityViewPreferences.filterSelections.isFromMarketing,
+								})}
+								onClick={() => updateOpportunitiesQueryDefinitionsMutationPartial({ viaMarketing: !opportunityViewPreferences.filterSelections.isFromMarketing })}
+							>
+								<BsFillMegaphoneFill className="w-4 h-4" />
+							</button>
+							<button
+								onClick={() => updateOpportunitiesQueryDefinitionsMutationPartial({ viaIndicacao: !opportunityViewPreferences.filterSelections.isFromIndication })}
+								type="button"
+								className={cn("flex items-center justify-center p-2 max-h-[36px] min-h-[36px] border border-[#06b6d4] rounded-md transition-colors", {
+									"bg-[#06b6d4] text-white": opportunityViewPreferences.filterSelections.isFromIndication,
+									"text-[#06b6d4]": !opportunityViewPreferences.filterSelections.isFromIndication,
+								})}
+							>
+								<Share2 className="w-4 h-4" />
+							</button>
+							<PeriodByFieldFilter
+								value={opportunityViewPreferences.filterSelections.period}
+								handleChange={(v) =>
+									updateOpportunitiesQueryDefinitionsMutationPartial({
+										periodo: {
+											depois: v?.after ?? undefined,
+											antes: v?.before ?? undefined,
+											parametro: v?.field as "dataInsercao" | "dataGanho" | "dataPerda" | "ultimaInteracao.data",
+										},
+									})
+								}
+								holderClassName="text-xs p-2 max-h-[36px] min-h-[36px]"
+								fieldOptions={[
+									{ id: 1, label: "DATA DE INSERÇÃO", value: "dataInsercao" },
+									{ id: 2, label: "DATA DE GANHO", value: "dataGanho" },
+									{ id: 3, label: "DATA DE PERDA", value: "dataPerda" },
+									{ id: 4, label: "DATA DA ÚLTIMA INTERAÇÃO", value: "ultimaInteracao.data" },
+								]}
+							/>
+							<div className="w-full lg:w-[250px]">
+								<SelectInput
+									showLabel={false}
+									label="STATUS"
+									labelClassName="text-[0.6rem]"
+									holderClassName="text-xs p-2 min-h-[34px]"
+									resetOptionLabel="EM ANDAMENTO"
+									value={opportunityViewPreferences.filterSelections.status}
+									options={[
+										{ id: 1, label: "EM ANDAMENTO", value: "ongoing" },
+										{ id: 2, label: "GANHOS", value: "won" },
+										{ id: 3, label: "PERDIDOS", value: "lost" },
+									]}
+									handleChange={(selected) => {
+										updateOpportunitiesQueryDefinitionsMutationPartial({ status: selected });
+									}}
+									onReset={() => updateOpportunitiesQueryDefinitionsMutationPartial({ status: undefined })}
+									width="100%"
+								/>
+							</div>
+							<div className="w-full lg:w-[250px]">
+								<MultipleSelectInput
+									label="Usuários"
+									labelClassName="text-[0.6rem]"
+									holderClassName="text-xs p-2 min-h-[34px]"
+									showLabel={false}
+									resetOptionLabel="Todos"
+									selected={opportunityViewPreferences.filterSelections.responsiblesIds}
+									options={opportunityViewPreferences.filterOptions.responsibles}
+									handleChange={(selected) => {
+										updateOpportunitiesQueryDefinitionsMutationPartial({ responsaveisIds: selected as string[] });
+									}}
+									onReset={() => {
+										if (!session.user.permissoes.oportunidades.escopo) {
+											updateOpportunitiesQueryDefinitionsMutationPartial({ responsaveisIds: [] });
+										} else {
+											updateOpportunitiesQueryDefinitionsMutationPartial({ responsaveisIds: session.user.permissoes.oportunidades.escopo ?? [] });
+										}
+									}}
+									width="100%"
+								/>
+							</div>
+							<div className="w-full lg:w-[250px]">
+								<SelectInput
+									label="Funis"
+									labelClassName="text-[0.6rem]"
+									holderClassName="text-xs p-2 min-h-[34px]"
+									showLabel={false}
+									resetOptionLabel="NÃO DEFINIDO"
+									value={selectedFunnelId}
+									options={opportunityViewPreferences.filterOptions.funnels}
+									handleChange={(selected) => {
+										setSelectedFunnelId(selected);
+										// setFunnel(selected.value)
+									}}
+									onReset={() => {
+										setSelectedFunnelId(selectedFunnelId);
+									}}
+									width="100%"
+								/>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -195,66 +369,46 @@ function KanbanBoardStageCard({ stageId, opportunity, isDragOverlay = false }: K
 				<GripVertical className="w-3 h-3 text-primary/60" />
 			</div>
 			<div className={`h-1 w-full rounded-sm  ${getBarColor({ isWon, isRequested, isLost })}`} />
-			<div {...listeners} {...attributes} className="flex w-full flex-col gap-2">
+			<div className="w-full flex flex-col gap-1">
+				<div className="flex items-center gap-1">
+					<h1 className="text-xs font-bold text-[#fead41]">{opportunity.identificador}</h1>
+					{opportunity.idMarketing ? <BsFillMegaphoneFill color="#3e53b2" /> : null}
+					{opportunity.idIndicacao ? <Share2 size={15} color="#06b6d4" /> : null}
+				</div>
+				<Link href={`/comercial/oportunidades/id/${opportunity._id}`} prefetch={false}>
+					<h1 className="font-bold text-[#353432] hover:text-blue-400">{opportunity.nome}</h1>
+				</Link>
+			</div>
+			<div {...listeners} {...attributes} className="w-full grow flex flex-col gap-2">
 				{isWon ? (
 					<div className="z-8 absolute right-2 top-4 flex items-center justify-center text-green-500">
 						<p className="text-sm font-medium italic">GANHO</p>
 					</div>
 				) : null}
-
 				<div className="flex w-full flex-col">
-					<div className="flex items-center gap-1">
-						<h1 className="text-xs font-bold text-[#fead41]">{opportunity.identificador}</h1>
-						{opportunity.idMarketing ? <BsFillMegaphoneFill color="#3e53b2" /> : null}
-						{opportunity.idIndicacao ? <Share2 size={15} color="#06b6d4" /> : null}
-					</div>
-					<Link href={`/comercial/oportunidades/id/${opportunity._id}`} prefetch={false}>
-						<h1 className="font-bold text-[#353432] hover:text-blue-400">{opportunity.nome}</h1>
-					</Link>
 					<div className="flex items-center gap-1">
 						<MdDashboard />
 						<h3 className="text-[0.6rem] font-light">{opportunity.tipo.titulo}</h3>
 					</div>
 				</div>
-				{/* {item.proposta?.nome ? (
-					<div className="my-2 flex w-full grow flex-col rounded-md border border-gray-300 p-2">
-						<h1 className="text-[0.6rem] font-extralight text-gray-500">PROPOSTA ATIVA</h1>
-						<div className="flex w-full flex-col justify-between">
-							<p className="text-xs font-medium text-cyan-500">{item.proposta.nome}</p>
-							<div className="flex  items-center justify-between">
-								<div className="flex items-center gap-1">
-									<FaBolt color="rgb(6,182,212)" />
-									<p className="text-xs  text-gray-500">
-										{formatDecimalPlaces(item.proposta.potenciaPico || 0)}
-										kWp
-									</p>
-								</div>
-								<div className="flex items-center gap-1">
-									<MdAttachMoney color="rgb(6,182,212)" />
-									<p className="text-xs  text-gray-500">{formatToMoney(item.proposta.valor)}</p>
-								</div>
+			</div>
+			<div className="flex w-full items-center justify-between gap-2">
+				<div className="flex grow flex-wrap items-center gap-2">
+					{opportunity.responsaveis.map((resp) => {
+						return (
+							<div key={resp.id} className="flex items-center gap-1">
+								<Avatar className="h-5 w-5 min-w-5 min-h-5">
+									<AvatarImage src={resp.avatar_url || undefined} alt={resp.nome} />
+									<AvatarFallback className="text-xs">{formatNameAsInitials(resp.nome)}</AvatarFallback>
+								</Avatar>
 							</div>
-						</div>
-					</div>
-				) : null} */}
-				<div className="flex w-full items-center justify-between gap-2">
-					<div className="flex grow flex-wrap items-center gap-2">
-						{opportunity.responsaveis.map((resp) => {
-							return (
-								<div key={resp.id} className="flex items-center gap-1">
-									<Avatar className="h-5 w-5 min-w-5 min-h-5">
-										<AvatarImage src={resp.avatar_url || undefined} alt={resp.nome} />
-										<AvatarFallback className="text-xs">{formatNameAsInitials(resp.nome)}</AvatarFallback>
-									</Avatar>
-								</div>
-							);
-						})}
-					</div>
+						);
+					})}
+				</div>
 
-					<div className="ites-center flex min-w-fit gap-1">
-						<BsCalendarPlus />
-						<p className={"text-[0.65rem] font-medium text-gray-500"}>{formatDateAsLocale(opportunity.dataInsercao, true)}</p>
-					</div>
+				<div className="ites-center flex min-w-fit gap-1">
+					<BsCalendarPlus />
+					<p className={"text-[0.65rem] font-medium text-gray-500"}>{formatDateAsLocale(opportunity.dataInsercao, true)}</p>
 				</div>
 			</div>
 		</div>

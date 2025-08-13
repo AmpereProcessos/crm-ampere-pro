@@ -6,6 +6,7 @@ import type { TFunnelReference } from "../schemas/funnel-reference.schema";
 import { updateAppProject } from "./app-projects";
 import type { TAddResponsibleToOpportunityInput, TRemoveResponsibleFromOpportunityInput } from "@/pages/api/opportunities/responsibles";
 import type { TBulkUpdateComissionsRouteInput, TBulkUpdateComissionsRouteOutput } from "@/app/api/opportunities/comissions/route";
+import type { TUpdateOpportunityQueryDefinitionsInput, TUpdateOpportunityQueryDefinitionsOutput } from "@/pages/api/opportunities/query-definitions";
 
 type HandleProjectCreationParams = {
 	info: TOpportunity;
@@ -142,6 +143,16 @@ export async function bulkUpdateComissions({ comissions }: { comissions: TBulkUp
 		return data.message as string;
 	} catch (error) {
 		console.log("Error running bulkUpdateComissions", error);
+		throw error;
+	}
+}
+
+export async function updateOpportunitiesQueryDefinitions(input: TUpdateOpportunityQueryDefinitionsInput) {
+	try {
+		const { data } = await axios.put<TUpdateOpportunityQueryDefinitionsOutput>("/api/opportunities/query-definitions", input);
+		return data;
+	} catch (error) {
+		console.log("Error running updateOpportunitiesQueryDefinitions", error);
 		throw error;
 	}
 }
