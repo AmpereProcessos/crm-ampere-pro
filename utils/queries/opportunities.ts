@@ -256,14 +256,44 @@ export function useComissions({ initialQueryParams }: UseComissionsParams) {
 	};
 }
 
-async function fetchOpportunitiesKanbanView(input: TGetOpportunitiesKanbanViewInput) {
+// Simple micro-batcher to aggregate multiple stage requests into a single POST
+type TKvKanbanQueueItem = {
+	payload: TGetOpportunitiesKanbanViewInput;
+	resolve: (value: TGetOpportunitiesKanbanViewOutput["data"]) => void;
+	reject: (reason?: unknown) => void;
+};
+let kanbanQueue: TKvKanbanQueueItem[] = [];
+let kanbanQueueTimer: ReturnType<typeof setTimeout> | null = null;
+
+function scheduleKanbanFlush() {
+	if (kanbanQueueTimer) return;
+	kanbanQueueTimer = setTimeout(flushKanbanQueue, 15);
+}
+
+async function flushKanbanQueue() {
+	const currentQueue = kanbanQueue;
+	kanbanQueue = [];
+	kanbanQueueTimer = null;
+	if (currentQueue.length === 0) return;
 	try {
-		const { data } = await axios.post<TGetOpportunitiesKanbanViewOutput>("/api/opportunities/kanban", input);
-		return data.data;
+		const { data } = await axios.post<{ data: TGetOpportunitiesKanbanViewOutput["data"][] }>("/api/opportunities/kanban-batch", { requests: currentQueue.map((q) => q.payload) });
+		const results = data.data;
+		for (let index = 0; index < currentQueue.length; index++) {
+			const item = currentQueue[index];
+			item.resolve(results[index]);
+		}
 	} catch (error) {
-		console.log("Error fetching opportunities kanban view", error);
-		throw error;
+		for (const item of currentQueue) {
+			item.reject(error);
+		}
 	}
+}
+
+async function fetchOpportunitiesKanbanView(input: TGetOpportunitiesKanbanViewInput) {
+	return new Promise<TGetOpportunitiesKanbanViewOutput["data"]>((resolve, reject) => {
+		kanbanQueue.push({ payload: input, resolve, reject });
+		scheduleKanbanFlush();
+	});
 }
 
 type UseOpportunitiesKanbanViewParams = {

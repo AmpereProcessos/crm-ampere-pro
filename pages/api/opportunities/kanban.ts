@@ -10,7 +10,7 @@ import type { TUserSession } from "@/lib/auth/session";
 import type { TFunnelReference } from "@/utils/schemas/funnel-reference.schema";
 import { OpportunitySegmentsEnumSchema, type TOpportunity, type TOpportunityDTO } from "@/utils/schemas/opportunity.schema";
 
-const OpportunityKanbanViewInputSchema = z.object({
+export const OpportunityKanbanViewInputSchema = z.object({
 	page: z.number({
 		required_error: "Parâmetro de paginação não informado.",
 		invalid_type_error: "Tipo não válido para parâmetro de paginação.",
@@ -120,7 +120,7 @@ const OpportunityStatusesMap: Record<TGetOpportunitiesKanbanViewInput["status"],
 		"perda.data": { $ne: null },
 	},
 };
-async function getOpportunitiesKanbanView({ payload, session }: { payload: TGetOpportunitiesKanbanViewInput; session: TUserSession }) {
+export async function getOpportunitiesKanbanView({ payload, session }: { payload: TGetOpportunitiesKanbanViewInput; session: TUserSession }) {
 	const { page, funnelId, funnelStage, partnerIds, responsiblesIds, opportunityTypeIds, period, status, segments, isFromMarketing, isFromIndication, cities, ufs } = payload;
 
 	const userOpportunityScope = session.user.permissoes.oportunidades.escopo;

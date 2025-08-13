@@ -7,11 +7,11 @@ import { AiOutlinePlus, AiOutlineRight } from "react-icons/ai";
 import SearchOpportunities from "./SearchOpportunities";
 import { BsCalendarPlus, BsDownload, BsFillMegaphoneFill } from "react-icons/bs";
 import { FaBolt, FaRotate } from "react-icons/fa6";
-import { DndContext, useDraggable, useDroppable } from "@dnd-kit/core";
+import { DndContext, DragOverlay, useDraggable, useDroppable } from "@dnd-kit/core";
 import { useOpportunitiesKanbanView } from "@/utils/queries/opportunities";
 import { GripVertical, Loader2, Share2 } from "lucide-react";
 import { MdAttachMoney, MdDashboard } from "react-icons/md";
-import { OPPORTUNITIES_FUNNEL_CONFIG } from "@/lib/funnels/opportunities-funnel-config";
+import { OPPORTUNITIES_FUNNEL_CONFIG, useOpportunitiesDragAndDropLogic } from "@/lib/funnels/opportunities-funnel-config";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { Button } from "../ui/button";
 import type { TGetOpportunitiesKanbanViewOutput } from "@/pages/api/opportunities/kanban";
@@ -30,6 +30,12 @@ export default function OpportunitiesKanbanModePageV2({ session, opportunityView
 	const [selectedFunnelId, setSelectedFunnelId] = useState<string | null>(opportunityViewPreferences.filterOptions.funnels[0].id || null);
 
 	const selectedFunnel = opportunityViewPreferences.filterOptions.funnels.find((funnel) => funnel.id === selectedFunnelId);
+
+	const { activeDragItem, handleOnDragStart, handleOnDragEnd, handleOnDragCancel } = useOpportunitiesDragAndDropLogic({
+		globalQueryParams: opportunityViewPreferences.filterSelections,
+		queryClient,
+	});
+
 	return (
 		<div className="flex h-full flex-col md:flex-row">
 			<Sidebar session={session} />
@@ -65,12 +71,13 @@ export default function OpportunitiesKanbanModePageV2({ session, opportunityView
 					</div>
 				</div>
 				{selectedFunnel ? (
-					<DndContext>
+					<DndContext onDragStart={handleOnDragStart} onDragEnd={(event) => handleOnDragEnd({ funnelId: selectedFunnel.id, event })} onDragCancel={handleOnDragCancel}>
 						<div className="flex items-start overflow-x-auto gap-2 flex-1 min-h-0 w-full max-w-full max-h-[calc(100vh-200px)] scrollbar-thin scrollbar-track-primary/10 scrollbar-thumb-primary/30">
 							{selectedFunnel.stages.map((stage) => (
 								<KanbanBoardStage key={stage.id} funnelId={selectedFunnel.id} stage={stage} globalQueryParams={opportunityViewPreferences.filterSelections} />
 							))}
 						</div>
+						<DragOverlay>{activeDragItem ? <KanbanBoardStageCard stageId="" opportunity={activeDragItem} isDragOverlay={true} /> : null}</DragOverlay>
 					</DndContext>
 				) : null}
 			</div>
@@ -110,18 +117,6 @@ function KanbanBoardStage({ funnelId, stage, globalQueryParams }: KanbanBoardSta
 	const stageOpportunitiesMatched = oppportunitesKanbanViewStage?.pages[0]?.opportunitiesMatched || 0;
 	const stageOpportunities = oppportunitesKanbanViewStage?.pages.flatMap((page) => page.opportunities) || [];
 
-	// Memoizar as funções do virtualizador para melhor performance
-	const estimateSize = useCallback(() => OPPORTUNITIES_FUNNEL_CONFIG.ESTIMATED_ITEM_SIZE, []);
-	const measureElement = useCallback((element: Element | null) => element?.getBoundingClientRect().height ?? 0, []);
-
-	// Configuração do virtualizador
-	const virtualizer = useVirtualizer({
-		count: stageOpportunities.length,
-		getScrollElement: () => parentRef.current,
-		estimateSize,
-		overscan: OPPORTUNITIES_FUNNEL_CONFIG.OVERSCAN,
-		measureElement,
-	});
 	return (
 		<div className="flex flex-col gap-2 h-full" style={{ width: OPPORTUNITIES_FUNNEL_CONFIG.STAGE_WIDTH, minWidth: OPPORTUNITIES_FUNNEL_CONFIG.STAGE_MIN_WIDTH }}>
 			<div className="w-full bg-primary text-primary-foreground flex flex-col gap-2 p-3 rounded-md">
@@ -142,41 +137,11 @@ function KanbanBoardStage({ funnelId, stage, globalQueryParams }: KanbanBoardSta
 						(parentRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
 					}
 				}}
-				className="flex-1 overflow-auto scrollbar-thin scrollbar-track-primary/10 scrollbar-thumb-primary/30"
-				style={{
-					height: `${OPPORTUNITIES_FUNNEL_CONFIG.VIRTUALIZED_HEIGHT}px`,
-				}}
+				className="flex flex-col flex-1 overflow-auto scrollbar-thin scrollbar-track-primary/10 scrollbar-thumb-primary/30 gap-2"
 			>
-				<div
-					style={{
-						height: `${virtualizer.getTotalSize()}px`,
-						width: "100%",
-						position: "relative",
-					}}
-				>
-					{virtualizer.getVirtualItems().map((virtualItem) => {
-						const opportunity = stageOpportunities[virtualItem.index];
-						if (!opportunity) return null;
-
-						return (
-							<div
-								key={virtualItem.key}
-								style={{
-									position: "absolute",
-									top: 0,
-									left: 0,
-									width: "100%",
-									height: `${virtualItem.size}px`,
-									transform: `translateY(${virtualItem.start}px)`,
-								}}
-							>
-								<div className="p-1">
-									<KanbanBoardStageCard stageId={stage.id} opportunity={opportunity} />
-								</div>
-							</div>
-						);
-					})}
-				</div>
+				{stageOpportunities.map((opportunity) => (
+					<KanbanBoardStageCard key={opportunity._id} stageId={stage.id} opportunity={opportunity} />
+				))}
 			</div>
 
 			{hasNextPage ? (
@@ -203,7 +168,7 @@ type KanbanBoardStageCardProps = {
 };
 function KanbanBoardStageCard({ stageId, opportunity, isDragOverlay = false }: KanbanBoardStageCardProps) {
 	const { attributes, listeners, setNodeRef, transform } = useDraggable({
-		id: opportunity._id,
+		id: opportunity.referenciaFunil.id,
 		data: {
 			stageId,
 			opportunity,
@@ -230,7 +195,7 @@ function KanbanBoardStageCard({ stageId, opportunity, isDragOverlay = false }: K
 				<GripVertical className="w-3 h-3 text-primary/60" />
 			</div>
 			<div className={`h-1 w-full rounded-sm  ${getBarColor({ isWon, isRequested, isLost })}`} />
-			<div className="flex w-full flex-col gap-2">
+			<div {...listeners} {...attributes} className="flex w-full flex-col gap-2">
 				{isWon ? (
 					<div className="z-8 absolute right-2 top-4 flex items-center justify-center text-green-500">
 						<p className="text-sm font-medium italic">GANHO</p>
