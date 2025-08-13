@@ -4,7 +4,7 @@ import type { TUserSession } from "@/lib/auth/session";
 import { DragDropContext, type DropResult } from "react-beautiful-dnd";
 
 import { AiOutlinePlus } from "react-icons/ai";
-import { BsDownload } from "react-icons/bs";
+import { BsDownload, BsFillMegaphoneFill } from "react-icons/bs";
 
 import { Sidebar } from "@/components/Sidebar";
 import FunnelList from "@/components/dnd/FunnelList";
@@ -32,6 +32,8 @@ import { FaRotate } from "react-icons/fa6";
 import MultipleSelectInput from "../Inputs/MultipleSelectInput";
 import { PeriodByFieldFilter } from "../Inputs/PeriodByFieldFilter";
 import UserConectaIndicationCodeFlag from "../Conecta/UserConectaIndicationCodeFlag";
+import { cn } from "@/lib/utils";
+import { Share2 } from "lucide-react";
 
 type Options = {
 	activeResponsible: string[] | null;
@@ -54,6 +56,8 @@ type Options = {
 type ParamFilter = {
 	status: "GANHOS" | "PERDIDOS" | undefined;
 	mode: "GERAL" | "ATIVO" | "LEAD";
+	isFromMarketing: boolean;
+	isFromIndication: boolean;
 };
 
 type DateFilterType = {
@@ -145,6 +149,8 @@ export default function OpportunitiesKanbanModePage({ session, funnelsOptions, r
 	const [params, setParams] = useState<ParamFilter>({
 		status: undefined,
 		mode: "GERAL",
+		isFromMarketing: false,
+		isFromIndication: false,
 	});
 
 	const { data: projects, queryKey } = useOpportunities({
@@ -154,6 +160,8 @@ export default function OpportunitiesKanbanModePage({ session, funnelsOptions, r
 		periodBefore: dateParam.before,
 		periodField: dateParam.field,
 		status: params.status,
+		isFromMarketing: params.isFromMarketing,
+		isFromIndication: params.isFromIndication,
 	});
 	const { mutate: handleFunnelReferenceUpdate } = useFunnelReferenceUpdate({
 		queryClient,
@@ -231,6 +239,26 @@ export default function OpportunitiesKanbanModePage({ session, funnelsOptions, r
 					<div className="w-full flex flex-col lg:flex-row justify-between gap-2 items-center">
 						<UserConectaIndicationCodeFlag code={session.user.codigoIndicacaoConecta} />
 						<div className="flex items-center justify-end flex-wrap gap-2">
+							<button
+								type="button"
+								className={cn("flex items-center justify-center p-2 max-h-[36px] min-h-[36px] border border-[#3e53b2] rounded-md transition-colors", {
+									"bg-[#3e53b2] text-white": params.isFromMarketing,
+									"text-[#3e53b2]": !params.isFromMarketing,
+								})}
+								onClick={() => setParams((prev) => ({ ...prev, isFromMarketing: !prev.isFromMarketing }))}
+							>
+								<BsFillMegaphoneFill className="w-4 h-4" />
+							</button>
+							<button
+								onClick={() => setParams((prev) => ({ ...prev, isFromIndication: !prev.isFromIndication }))}
+								type="button"
+								className={cn("flex items-center justify-center p-2 max-h-[36px] min-h-[36px] border border-[#06b6d4] rounded-md transition-colors", {
+									"bg-[#06b6d4] text-white": params.isFromIndication,
+									"text-[#06b6d4]": !params.isFromIndication,
+								})}
+							>
+								<Share2 className="w-4 h-4" />
+							</button>
 							<PeriodByFieldFilter
 								value={dateParam}
 								handleChange={(v) =>

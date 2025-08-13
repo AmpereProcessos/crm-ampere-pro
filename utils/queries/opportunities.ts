@@ -28,8 +28,10 @@ type UseOpportunitiesParams = {
 	periodBefore: string | undefined;
 	periodField: string | undefined;
 	status: "GANHOS" | "PERDIDOS" | undefined;
+	isFromMarketing: boolean;
+	isFromIndication: boolean;
 };
-async function fetchOpportunities({ responsibles, funnel, periodAfter, periodBefore, periodField, status }: UseOpportunitiesParams) {
+async function fetchOpportunities({ responsibles, funnel, periodAfter, periodBefore, periodField, status, isFromMarketing, isFromIndication }: UseOpportunitiesParams) {
 	try {
 		const queryParamsArr = [
 			{ key: "responsibles", value: responsibles },
@@ -38,6 +40,8 @@ async function fetchOpportunities({ responsibles, funnel, periodAfter, periodBef
 			{ key: "periodBefore", value: periodBefore },
 			{ key: "periodField", value: periodField },
 			{ key: "status", value: status },
+			{ key: "isFromMarketing", value: isFromMarketing },
+			{ key: "isFromIndication", value: isFromIndication },
 		];
 		const queryParams = queryParamsArr
 			.filter((q) => !!q.value)
@@ -50,14 +54,14 @@ async function fetchOpportunities({ responsibles, funnel, periodAfter, periodBef
 		throw error;
 	}
 }
-export function useOpportunities({ responsibles, funnel, periodAfter, periodBefore, periodField, status }: UseOpportunitiesParams) {
+export function useOpportunities({ responsibles, funnel, periodAfter, periodBefore, periodField, status, isFromMarketing, isFromIndication }: UseOpportunitiesParams) {
 	return {
 		...useQuery({
-			queryKey: ["opportunities", responsibles, funnel, periodAfter, periodBefore, periodField, status],
-			queryFn: async () => await fetchOpportunities({ responsibles, funnel, periodAfter, periodBefore, periodField, status }),
+			queryKey: ["opportunities", responsibles, funnel, periodAfter, periodBefore, periodField, status, isFromMarketing, isFromIndication],
+			queryFn: async () => await fetchOpportunities({ responsibles, funnel, periodAfter, periodBefore, periodField, status, isFromMarketing, isFromIndication }),
 			gcTime: 1000 * 60 * 5, // 5 minutes
 		}),
-		queryKey: ["opportunities", responsibles, funnel, periodAfter, periodBefore, periodField, status],
+		queryKey: ["opportunities", responsibles, funnel, periodAfter, periodBefore, periodField, status, isFromMarketing, isFromIndication],
 	};
 }
 

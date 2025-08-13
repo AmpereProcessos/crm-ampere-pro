@@ -113,7 +113,7 @@ const getOpportunities: NextApiHandler<GetResponse> = async (req, res) => {
 	const funnelReferencesCollection: Collection<TFunnelReference> = db.collection("funnel-references");
 	const opportunityActivitiesCollection: Collection<TActivity> = db.collection("activities");
 
-	const { id, responsibles, funnel, periodAfter, periodBefore, periodField, status } = req.query;
+	const { id, responsibles, funnel, periodAfter, periodBefore, periodField, status, isFromMarketing, isFromIndication } = req.query;
 	// There are two possible query dynamics, query by ID or query by funnel-status
 
 	// In case of query by ID, looking for the requested opportunity within the partners scope
@@ -140,31 +140,20 @@ const getOpportunities: NextApiHandler<GetResponse> = async (req, res) => {
 
 	// Defining the responsible query parameters. If specified, filtering opportunities in the provided responsible scope
 	const queryResponsible: Filter<TOpportunity> = responsibleArr ? { "responsaveis.id": { $in: responsibleArr } } : {};
-	console.log("queryResponsible", queryResponsible);
 	// Defining, if provided, period query parameters for date of insertion
 	const queryInsertion: Filter<TOpportunity> = periodParams
 		? {
 				$and: [{ [periodParams.periodField]: { $gte: periodParams.periodAfter } }, { [periodParams.periodField]: { $lte: periodParams.periodBefore } }],
 			}
 		: {};
-	console.log("queryInsertion", queryInsertion);
 	// Defining, if provided, won/lost query parameters
 	const queryStatus: Filter<TOpportunity> = status ? statusOption : { "perda.data": null, "ganho.data": null };
-	console.log("queryStatus", queryStatus);
-	const query = { ...partnerQuery, ...queryResponsible, ...queryInsertion, ...queryStatus };
-	console.log("FINAL QUERY", JSON.stringify(query));
-	// if (responsible !== 'null') queryParam = { 'responsaveis.id': responsible, 'perda.data': null }
-	// else queryParam = { 'perda.data': null }
-	// // Defining, if provided, period query parameters for date of insertion
-	// if (after !== 'undefined' && before !== 'undefined') {
-	//   queryParam = { ...queryParam, $and: [{ dataInsercao: { $gte: after } }, { dataInsercao: { $lte: before } }] }
-	// }
-	// // Defining, if provided, won/lost query parameters
-	// if (status == 'PERDIDOS') queryParam = { ...queryParam, 'perda.data': { $ne: null } }
-	// if (status == 'GANHOS') queryParam = { ...queryParam, 'ganho.idProjeto': { $ne: null } }
+	const queryMarketing: Filter<TOpportunity> = isFromMarketing === "true" ? { idMarketing: { $ne: null } } : {};
+	const queryIndication: Filter<TOpportunity> = isFromIndication === "true" ? { idIndicacao: { $ne: null } } : {};
+
+	const query = { ...partnerQuery, ...queryResponsible, ...queryInsertion, ...queryStatus, ...queryMarketing, ...queryIndication };
 
 	const opportunities = await getOpportunitiesByQuery({ collection: opportunitiesCollection, query: query });
-	console.log("OPPORTUNITIES FOUND", opportunities.length);
 	// Looking for the funnel references
 	const funnelReferences = await getFunnelReferences({
 		collection: funnelReferencesCollection,
