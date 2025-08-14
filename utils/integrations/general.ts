@@ -14,9 +14,17 @@ import { getOeMTemplateData } from "./anvil/oem-template";
 import { getOeMTemplateData2024 } from "./anvil/oem-template-2024";
 import { getSimpleTemplate2023Data } from "./anvil/simple-template-2023";
 import { getSimpleTemplate2024Data } from "./anvil/simple-template-2024";
+import { getSimpleTemplate2025Data } from "./anvil/simple-template-2025";
 import { getInsuranceTemplateData } from "./anvil/ufv-insurance";
 
 export const ProposalTemplates = [
+	{
+		active: true,
+		label: "TEMPLATE SIMPLES 2025",
+		value: "TEMPLATE SIMPLES 2025",
+		idAnvil: "eEoWfRMrFLdTqWJ3DlDm",
+		createProposeObj: getSimpleTemplate2025Data, //
+	},
 	{
 		active: true,
 		label: "TEMPLATE SIMPLES 2024",
@@ -89,6 +97,7 @@ export const ProposalTemplates = [
 	},
 ];
 export const ProposeTemplateOptions = [
+	"TEMPLATE SIMPLES 2025",
 	"TEMPLATE SIMPLES 2024",
 	"TEMPLATE SIMPLES",
 	"TEMPLATE COMERCIAL 2023",
@@ -106,40 +115,28 @@ type GetTemplateDataParams = {
 	proposal: TProposalDTO;
 	template: (typeof ProposeTemplateOptions)[number];
 };
-export function getTemplateData({
-	opportunity,
-	proposal,
-	template,
-}: GetTemplateDataParams) {
-	if (template === "TEMPLATE SIMPLES 2024")
-		return getSimpleTemplate2024Data({ opportunity, proposal });
+export function getTemplateData({ opportunity, proposal, template }: GetTemplateDataParams) {
+	if (template === "TEMPLATE SIMPLES 2025") return getSimpleTemplate2025Data({ opportunity, proposal });
 
-	if (template === "TEMPLATE SIMPLES")
-		return getSimpleTemplate2023Data({ opportunity, proposal });
+	if (template === "TEMPLATE SIMPLES 2024") return getSimpleTemplate2024Data({ opportunity, proposal });
 
-	if (template === "TEMPLATE COMERCIAL 2023")
-		return getComplexTemplateData({ opportunity, proposal });
+	if (template === "TEMPLATE SIMPLES") return getSimpleTemplate2023Data({ opportunity, proposal });
 
-	if (template === "TEMPLATE COMPLEXO 2024")
-		return getComplexTemplate2024Data({ opportunity, proposal });
+	if (template === "TEMPLATE COMERCIAL 2023") return getComplexTemplateData({ opportunity, proposal });
 
-	if (template === "TEMPLATE PARCEIRA BYD")
-		return getBYDTemplateData({ opportunity, proposal });
+	if (template === "TEMPLATE COMPLEXO 2024") return getComplexTemplate2024Data({ opportunity, proposal });
 
-	if (template === "TEMPLATE O&M")
-		return getOeMTemplateData({ opportunity, proposal });
+	if (template === "TEMPLATE PARCEIRA BYD") return getBYDTemplateData({ opportunity, proposal });
 
-	if (template === "TEMPLATE DESMONTAGEM E MONTAGEM")
-		return getDisassemblyAndAssemblyTemplateData({ opportunity, proposal });
+	if (template === "TEMPLATE O&M") return getOeMTemplateData({ opportunity, proposal });
 
-	if (template === "TEMPLATE O&M 2024")
-		return getOeMTemplateData2024({ opportunity, proposal });
+	if (template === "TEMPLATE DESMONTAGEM E MONTAGEM") return getDisassemblyAndAssemblyTemplateData({ opportunity, proposal });
 
-	if (template === "TEMPLATE SEGURO FOTOVOLTAICO")
-		return getInsuranceTemplateData({ opportunity, proposal });
+	if (template === "TEMPLATE O&M 2024") return getOeMTemplateData2024({ opportunity, proposal });
 
-	if (template === "TEMPLATE MONITORAMENTO")
-		return getMonitoringTemplateData({ opportunity, proposal });
+	if (template === "TEMPLATE SEGURO FOTOVOLTAICO") return getInsuranceTemplateData({ opportunity, proposal });
+
+	if (template === "TEMPLATE MONITORAMENTO") return getMonitoringTemplateData({ opportunity, proposal });
 
 	return getSimpleTemplate2024Data({ opportunity, proposal });
 }
@@ -158,12 +155,7 @@ export function getExpenseAndEconomyProgression({
 	const orientation = proposal.premissas.orientacao;
 	const simultaneity = proposal.premissas.fatorSimultaneidade || 30;
 	const consumption = proposal.premissas.consumoEnergiaMensal || 0;
-	const generation = getEstimatedGen(
-		peakPower,
-		city,
-		uf,
-		orientation || "NORTE",
-	);
+	const generation = getEstimatedGen(peakPower, city, uf, orientation || "NORTE");
 	const StartEnergyTariff = proposal.premissas.tarifaEnergia || 0;
 	const StartFioBEnergyTariff = proposal.premissas.tarifaFioB || 0;
 
@@ -174,12 +166,8 @@ export function getExpenseAndEconomyProgression({
 	} as const;
 	const PublicIluminationCost = 20;
 
-	const ConsumptionArray = Array.from({ length: 12 }, () => 1).map(
-		(x) => x * consumption,
-	);
-	const GenerationArray = Array.from({ length: 12 }, () => 1).map(
-		(x) => x * generation,
-	);
+	const ConsumptionArray = Array.from({ length: 12 }, () => 1).map((x) => x * consumption);
+	const GenerationArray = Array.from({ length: 12 }, () => 1).map((x) => x * generation);
 	const InstantConsumptionArray = ConsumptionArray.map((c, index) => {
 		const gen = GenerationArray[index];
 		const simultaneousConsumption = c * (simultaneity / 100);
@@ -189,9 +177,7 @@ export function getExpenseAndEconomyProgression({
 		// In case it was smaller, instant consumption equals total generation
 		return gen;
 	});
-	const NetMonthEnergyArray = GenerationArray.map(
-		(g, index) => g - ConsumptionArray[index],
-	);
+	const NetMonthEnergyArray = GenerationArray.map((g, index) => g - ConsumptionArray[index]);
 
 	const MonthQty = yearsQty * 12;
 
@@ -221,18 +207,13 @@ export function getExpenseAndEconomyProgression({
 			StartFioBEnergyTariff,
 		});
 		const IndexLiquidEnergy = NetMonthEnergyArray[Month];
-		const IndexInjectedEnergy =
-			GenerationArray[Month] - InstantConsumptionArray[Month];
+		const IndexInjectedEnergy = GenerationArray[Month] - InstantConsumptionArray[Month];
 
 		// Used energy from the grid, which is the total consumption minus the instantaneous consumption on gen
-		const IndexUsedEnergy =
-			ConsumptionArray[Month] - InstantConsumptionArray[Month];
+		const IndexUsedEnergy = ConsumptionArray[Month] - InstantConsumptionArray[Month];
 		// New cumulated balance
-		const WillUseAllCumulatedBalance =
-			CumulatedBalance + IndexLiquidEnergy <= 0;
-		CumulatedBalance = WillUseAllCumulatedBalance
-			? 0
-			: PastBalance + IndexLiquidEnergy;
+		const WillUseAllCumulatedBalance = CumulatedBalance + IndexLiquidEnergy <= 0;
+		CumulatedBalance = WillUseAllCumulatedBalance ? 0 : PastBalance + IndexLiquidEnergy;
 		// Getting compensation
 		const Compensation = getCompensationInBalanceUse({
 			IndexLiquidEnergy,
@@ -245,28 +226,20 @@ export function getExpenseAndEconomyProgression({
 		// Calculating the refence for Other Costs
 		// In case Compensation matched the used energy from grid, then Other Costs will be the FioB cost only
 		// Else, Other Cost will be the exceding used energy from grid (used - compensation) + FioB cost
-		const OtherCosts =
-			Compensation >= IndexUsedEnergy
-				? FioBCost
-				: FioBCost + (IndexUsedEnergy - Compensation) * IndexEnergyTariff;
+		const OtherCosts = Compensation >= IndexUsedEnergy ? FioBCost : FioBCost + (IndexUsedEnergy - Compensation) * IndexEnergyTariff;
 
 		// Getting the Disponibility cost based on the grid connection type and the index energy tariff
 		const DisponibilityCost = DisponibilityByType.BIFÁSICO * IndexEnergyTariff;
 		// Energy Bill with a energy generation system
-		const EnergyBillValue =
-			DisponibilityCost > OtherCosts
-				? DisponibilityCost + PublicIluminationCost
-				: OtherCosts + PublicIluminationCost;
+		const EnergyBillValue = DisponibilityCost > OtherCosts ? DisponibilityCost + PublicIluminationCost : OtherCosts + PublicIluminationCost;
 		// Energy Bill without a energy generation system
-		const ConventionalEnergyBill =
-			IndexEnergyTariff * consumption + PublicIluminationCost;
+		const ConventionalEnergyBill = IndexEnergyTariff * consumption + PublicIluminationCost;
 		// Getting the monetary value saved from being a energy generator for the grid (in GD1)
 		const SavedValue = ConventionalEnergyBill - EnergyBillValue;
 
 		// Updating payback based on the saved value
 		Payback = Payback + SavedValue;
-		if (DisponibilityCost > OtherCosts)
-			CumulatedBalance = CumulatedBalance + DisponibilityByType.BIFÁSICO;
+		if (DisponibilityCost > OtherCosts) CumulatedBalance = CumulatedBalance + DisponibilityByType.BIFÁSICO;
 
 		const IndexTableObject = {
 			Year: Year,
@@ -309,8 +282,7 @@ function getCompensationInBalanceUse({
 	if (PastBalance <= 0) BalanceCompensation = IndexInjectedEnergy;
 	// If there was but previous energy balance plus injected energy
 	// will surpass the used energy from grid, compensation from balance will the used energy from grid
-	if (PastBalance + IndexInjectedEnergy > IndexUsedEnergy)
-		BalanceCompensation = IndexUsedEnergy;
+	if (PastBalance + IndexInjectedEnergy > IndexUsedEnergy) BalanceCompensation = IndexUsedEnergy;
 	// Else, balance compensation will be the previous balance plus the injected energy
 	BalanceCompensation = PastBalance + IndexInjectedEnergy;
 	// If there will be balance compensation, then, the total compensation is
@@ -335,17 +307,9 @@ function getIndexFioBTariff({
 	const InitialReferenceYear = 2023;
 	const YearDiff = IndexYear - InitialReferenceYear;
 	const Progress = Pace * YearDiff > 0.9 ? 0.9 : Pace * YearDiff;
-	return (
-		(StartFioBEnergyTariff / StartEnergyTariff) *
-		Progress *
-		getIndexEnergyTariff({ StartEnergyTariff, InitialYear, IndexYear })
-	);
+	return (StartFioBEnergyTariff / StartEnergyTariff) * Progress * getIndexEnergyTariff({ StartEnergyTariff, InitialYear, IndexYear });
 }
-function getIndexEnergyTariff({
-	StartEnergyTariff,
-	InitialYear,
-	IndexYear,
-}: { StartEnergyTariff: number; InitialYear: number; IndexYear: number }) {
+function getIndexEnergyTariff({ StartEnergyTariff, InitialYear, IndexYear }: { StartEnergyTariff: number; InitialYear: number; IndexYear: number }) {
 	const YearDiff = IndexYear - InitialYear;
 	const EnergyAnnualInflation = 0.05;
 	const Increase = (1 + EnergyAnnualInflation) ** YearDiff;

@@ -29,6 +29,7 @@ import { LoadingButton } from "@/components/Buttons/loading-button";
 import { useMediaQuery } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { BadgeCheck } from "lucide-react";
+import createHttpError from "http-errors";
 
 type NewOpportunityProps = {
 	session: TUserSession;
@@ -143,6 +144,9 @@ function NewOpportunity({ session, closeModal, opportunityCreators, funnels }: N
 
 	async function handleOpportunityCreation() {
 		try {
+			if (newClient.telefonePrimario.trim().length < 14 && newClient.cpfCnpj && newClient.cpfCnpj?.trim().length < 14) {
+				throw new createHttpError.BadRequest("Telefone ou CPF/CNPJ são obrigatórios.");
+			}
 			const insertedOpportunityId = await createClientOpportunityAndFunnelReference({
 				clientId: similarClient?._id || null,
 				client: newClient,
