@@ -77,6 +77,14 @@ const GeneralContractRequestSchema = z.object({
 	marcaModulos: z.string(),
 	qtdeModulos: z.union([z.string(), z.number()]),
 	potModulos: z.string(),
+	// Metadata for oem items
+	marcaModulosOem: z.string().optional().nullable(),
+	qtdeModulosOem: z.string().optional().nullable(),
+	potModulosOem: z.string().optional().nullable(),
+	marcaInversorOem: z.string().optional().nullable(),
+	qtdeInversorOem: z.string().optional().nullable(),
+	potInversorOem: z.string().optional().nullable(),
+
 	tipoEstrutura: z.string().nullable().optional(), // replace with the actual Zod schema for structureTypes
 	materialEstrutura: z.enum(["MADEIRA", "FERRO"]).nullable().optional(),
 	estruturaAmpere: z.enum(["SIM", "NÃO"]),

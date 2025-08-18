@@ -17,7 +17,8 @@ import toast from "react-hot-toast";
 import SelectInputVirtualized from "@/components/Inputs/SelectInputVirtualized";
 import { useEquipments } from "@/utils/queries/utils";
 import { Button } from "@/components/ui/button";
-import { ChevronRight, Settings } from "lucide-react";
+import { ChevronRight, Plus, Settings } from "lucide-react";
+import { FaSolarPanel } from "react-icons/fa6";
 type ProductsAndServicesProps = {
 	editable: boolean;
 	requestInfo: TContractRequest;
@@ -60,6 +61,12 @@ function ProductsAndServices({ editable, requestInfo, setRequestInfo, showAction
 			return;
 		}
 
+		if (requestInfo.tipoDeServico === "OPERAÇÃO E MANUTENÇÃO") {
+			if (!requestInfo.qtdeModulosOem || requestInfo.qtdeModulosOem.trim().length === 0) return toast.error("Preencha a quantidade de módulos p/ manutenção.");
+			if (!requestInfo.qtdeInversorOem || requestInfo.qtdeInversorOem.trim().length === 0) return toast.error("Preencha a quantidade de inversores p/ manutenção.");
+			if (!requestInfo.potModulosOem || requestInfo.potModulosOem.trim().length === 0) return toast.error("Preencha a potência dos módulos p/ manutenção.");
+			if (!requestInfo.potInversorOem || requestInfo.potInversorOem.trim().length === 0) return toast.error("Preencha a potência dos inversores p/ manutenção.");
+		}
 		setRequestInfo((prev) => ({
 			...prev,
 			marcaInversor:
@@ -158,6 +165,7 @@ function ProductsAndServices({ editable, requestInfo, setRequestInfo, showAction
 					{newScopeItemMenuState === "product" ? <NewProductMenu addProduct={addProduct} /> : null}
 					{newScopeItemMenuState === "service" ? <NewServiceMenu addSaleService={addService} /> : null}
 				</AnimatePresence>
+				{requestInfo.tipoDeServico === "OPERAÇÃO E MANUTENÇÃO" ? <OemItemsMenu requestInfo={requestInfo} setRequestInfo={setRequestInfo} /> : null}
 				<div className="w-full flex flex-col gap-2">
 					<div className="flex items-center gap-2 bg-primary/20 px-2 py-1 rounded w-fit">
 						<ChevronRight size={15} />
@@ -264,7 +272,6 @@ function NewProductMenu({ addProduct }: NewProductMenuProps) {
 	});
 	const [personalizedProductHolder, setPersonalizedProductHolder] = useState<TContractRequest["produtos"][number]>({
 		categoria: "OUTROS",
-
 		fabricante: "",
 		modelo: "",
 		qtde: 1,
@@ -595,7 +602,7 @@ function ProductItem({
 								<SelectInput
 									label="CATEGORIA"
 									labelClassName="text-[0.6rem]"
-									inputClassName="text-xs p-2 min-h-[34px]"
+									holderClassName="text-xs p-2 min-h-[34px]"
 									resetOptionLabel="NÃO DEFINIDO"
 									options={ProductItemCategories.map((item) => ({
 										id: item.id,
@@ -622,7 +629,7 @@ function ProductItem({
 								<TextInput
 									label="FABRICANTE"
 									labelClassName="text-[0.6rem]"
-									inputClassName="text-xs p-2 min-h-[34px]"
+									holderClassName="text-xs p-2 min-h-[34px]"
 									placeholder="FABRICANTE"
 									value={itemHolder.fabricante}
 									handleChange={(value) =>
@@ -638,7 +645,7 @@ function ProductItem({
 								<TextInput
 									label="MODELO"
 									labelClassName="text-[0.6rem]"
-									inputClassName="text-xs p-2 min-h-[34px]"
+									holderClassName="text-xs p-2 min-h-[34px]"
 									placeholder="MODELO"
 									value={itemHolder.modelo}
 									handleChange={(value) =>
@@ -654,7 +661,7 @@ function ProductItem({
 								<NumberInput
 									label="POTÊNCIA"
 									labelClassName="text-[0.6rem]"
-									inputClassName="text-xs p-2 min-h-[34px]"
+									holderClassName="text-xs p-2 min-h-[34px]"
 									value={itemHolder.potencia || null}
 									handleChange={(value) =>
 										setItemHolder((prev) => ({
@@ -670,7 +677,7 @@ function ProductItem({
 								<NumberInput
 									label="QTDE"
 									labelClassName="text-[0.6rem]"
-									inputClassName="text-xs p-2 min-h-[34px]"
+									holderClassName="text-xs p-2 min-h-[34px]"
 									value={itemHolder.qtde}
 									handleChange={(value) =>
 										setItemHolder((prev) => ({
@@ -686,7 +693,7 @@ function ProductItem({
 								<NumberInput
 									label="GARANTIA"
 									labelClassName="text-[0.6rem]"
-									inputClassName="text-xs p-2 min-h-[34px]"
+									holderClassName="text-xs p-2 min-h-[34px]"
 									value={itemHolder.garantia}
 									handleChange={(value) =>
 										setItemHolder((prev) => ({
@@ -854,7 +861,7 @@ function ServiceItem({
 									label="DESCRIÇÃO"
 									labelClassName="text-[0.6rem]"
 									placeholder="Preencha a descrição do serviço..."
-									inputClassName="text-xs p-2 min-h-[34px]"
+									holderClassName="text-xs p-2 min-h-[34px]"
 									value={itemHolder.descricao}
 									handleChange={(value) => setItemHolder((prev) => ({ ...prev, descricao: value }))}
 									width="100%"
@@ -865,7 +872,7 @@ function ServiceItem({
 									label="GARANTIA"
 									labelClassName="text-[0.6rem]"
 									placeholder="Preencha a garantia do serviço..."
-									inputClassName="text-xs p-2 min-h-[34px]"
+									holderClassName="text-xs p-2 min-h-[34px]"
 									value={itemHolder.garantia || null}
 									handleChange={(value) => setItemHolder((prev) => ({ ...prev, garantia: value }))}
 									width="100%"
@@ -874,7 +881,7 @@ function ServiceItem({
 						</div>
 						<TextareaInput
 							label="OBSERVAÇÕES DO SERVIÇO"
-							inputClassName="p-2 min-h-[50px] lg:min-h-[45px]"
+							holderClassName="p-2 min-h-[50px] lg:min-h-[45px]"
 							value={itemHolder.observacoes || ""}
 							handleChange={(value) => setItemHolder((prev) => ({ ...prev, observacoes: value }))}
 							placeholder="Preencha aqui uma descrição acerca do serviço..."
@@ -904,5 +911,201 @@ function ServiceItem({
 				) : null}
 			</AnimatePresence>
 		</>
+	);
+}
+
+type TOemItemHolder = {
+	tipo: "MÓDULO" | "INVERSOR";
+	descricao: string;
+	qtde: number;
+	potencia: number;
+};
+
+type OemItemsMenuProps = {
+	requestInfo: TContractRequest;
+	setRequestInfo: Dispatch<SetStateAction<TContractRequest>>;
+};
+function OemItemsMenu({ requestInfo, setRequestInfo }: OemItemsMenuProps) {
+	const [itemsHolder, setItemsHolder] = useState<TOemItemHolder[]>([
+		{
+			tipo: "MÓDULO",
+			descricao: "",
+			qtde: 0,
+			potencia: 0,
+		},
+		{
+			tipo: "INVERSOR",
+			descricao: "",
+			qtde: 0,
+			potencia: 0,
+		},
+	]);
+
+	function getItemsRequestMetadata(items: TOemItemHolder[]) {
+		const newItemsRequestMetadata = items.reduce(
+			(acc, item) => {
+				if (item.tipo === "INVERSOR") {
+					acc.invertersDescription.push(item.descricao);
+					acc.invertersQty.push(item.qtde.toString());
+					acc.invertersPower.push(item.potencia.toString());
+				}
+				if (item.tipo === "MÓDULO") {
+					acc.modulesDescription.push(item.descricao);
+					acc.modulesQty.push(item.qtde.toString());
+					acc.modulesPower.push(item.potencia.toString());
+				}
+				return acc;
+			},
+			{
+				modulesQty: [] as string[],
+				modulesPower: [] as string[],
+				modulesDescription: [] as string[],
+				invertersQty: [] as string[],
+				invertersPower: [] as string[],
+				invertersDescription: [] as string[],
+			},
+		);
+		return {
+			modulesQty: newItemsRequestMetadata.modulesQty.join("/"),
+			modulesPower: newItemsRequestMetadata.modulesPower.join("/"),
+			modulesDescription: newItemsRequestMetadata.modulesDescription.join("/"),
+			invertersQty: newItemsRequestMetadata.invertersQty.join("/"),
+			invertersPower: newItemsRequestMetadata.invertersPower.join("/"),
+			invertersDescription: newItemsRequestMetadata.invertersDescription.join("/"),
+		};
+	}
+	function handleAddItem(item: TOemItemHolder) {
+		const newItems = [...itemsHolder, item];
+
+		const newItemsRequestMetadata = getItemsRequestMetadata(newItems);
+		setItemsHolder(newItems);
+		setRequestInfo((prev) => ({
+			...prev,
+			marcaModulosOem: newItemsRequestMetadata.modulesDescription,
+			qtdeModulosOem: newItemsRequestMetadata.modulesQty,
+			potModulosOem: newItemsRequestMetadata.modulesPower,
+			marcaInversorOem: newItemsRequestMetadata.invertersDescription,
+			qtdeInversorOem: newItemsRequestMetadata.invertersQty,
+			potInversorOem: newItemsRequestMetadata.invertersPower,
+		}));
+	}
+	function handleRemoveItem(index: number) {
+		const newItems = itemsHolder.filter((_, i) => i !== index);
+
+		const newItemsRequestMetadata = getItemsRequestMetadata(newItems);
+
+		setItemsHolder(newItems);
+		setRequestInfo((prev) => ({
+			...prev,
+			marcaModulosOem: newItemsRequestMetadata.modulesDescription,
+			qtdeModulosOem: newItemsRequestMetadata.modulesQty,
+			potModulosOem: newItemsRequestMetadata.modulesPower,
+			marcaInversorOem: newItemsRequestMetadata.invertersDescription,
+			qtdeInversorOem: newItemsRequestMetadata.invertersQty,
+			potInversorOem: newItemsRequestMetadata.invertersPower,
+		}));
+	}
+
+	function handleUpdateItem({ index, changes }: { index: number; changes: Partial<TOemItemHolder> }) {
+		const newItems = itemsHolder.map((item, i) => (i === index ? { ...item, ...changes } : item));
+
+		const newItemsRequestMetadata = getItemsRequestMetadata(newItems);
+
+		setItemsHolder(newItems);
+		setRequestInfo((prev) => ({
+			...prev,
+			marcaModulosOem: newItemsRequestMetadata.modulesDescription,
+			qtdeModulosOem: newItemsRequestMetadata.modulesQty,
+			potModulosOem: newItemsRequestMetadata.modulesPower,
+			marcaInversorOem: newItemsRequestMetadata.invertersDescription,
+			qtdeInversorOem: newItemsRequestMetadata.invertersQty,
+			potInversorOem: newItemsRequestMetadata.invertersPower,
+		}));
+	}
+
+	return (
+		<div className="w-full flex flex-col gap-2">
+			<div className="flex items-center gap-2 bg-primary/20 px-2 py-1 rounded w-fit">
+				<ChevronRight size={15} />
+				<h1 className="text-xs tracking-tight font-medium text-start w-fit">ITENS DA MANUTENÇÃO</h1>
+			</div>
+			<div className="w-full flex items-center justify-end gap-2 flex-wrap">
+				<div className="flex w-full items-center justify-end gap-2">
+					<button
+						type="button"
+						onClick={() => handleAddItem({ tipo: "MÓDULO", descricao: "", qtde: 0, potencia: 0 })}
+						className={cn("flex items-center gap-1 rounded-lg px-2 py-1 text-black duration-300 ease-in-out bg-gray-300 hover:bg-green-400")}
+					>
+						<Plus className="w-4 h-4" />
+						<h1 className="text-xs font-medium tracking-tight">ADICIONAR MÓDULO</h1>
+					</button>
+					<button
+						type="button"
+						onClick={() => handleAddItem({ tipo: "INVERSOR", descricao: "", qtde: 0, potencia: 0 })}
+						className={cn("flex items-center gap-1 rounded-lg px-2 py-1 text-black duration-300 ease-in-out bg-gray-300 hover:bg-green-400")}
+					>
+						<Plus className="w-4 h-4" />
+						<h1 className="text-xs font-medium tracking-tight">ADICIONAR INVERSOR</h1>
+					</button>
+				</div>
+			</div>
+			{itemsHolder.map((item, index) => (
+				<OemItem key={`${item.tipo}-${index}`} item={item} handleUpdate={(changes) => handleUpdateItem({ index, changes })} handleRemove={() => handleRemoveItem(index)} />
+			))}
+		</div>
+	);
+}
+
+function OemItem({ item, handleUpdate, handleRemove }: { item: TOemItemHolder; handleUpdate: (changes: Partial<TOemItemHolder>) => void; handleRemove: () => void }) {
+	return (
+		<div className="flex w-full flex-col gap-1 rounded border border-primary bg-[#fff] p-2">
+			<div className="w-full flex items-center justify-between">
+				<div className="flex items-center gap-2">
+					<div className="flex h-[25px] w-[25px] items-center justify-center rounded-full border border-black p-1">{renderCategoryIcon(item.tipo, 15)}</div>
+					<p className="text-sm font-bold leading-none tracking-tight">{item.tipo}</p>
+				</div>
+				<button type="button" onClick={() => handleRemove()} className="flex items-center gap-1 rounded-lg bg-red-600 px-2 py-1 text-[0.6rem] text-white hover:bg-red-500">
+					<MdDelete width={10} height={10} />
+					<p>REMOVER</p>
+				</button>
+			</div>
+			<div className="flex w-full items-center gap-2">
+				<div className="flex grow items-center gap-2 flex-col lg:flex-row">
+					<div className="w-full lg:w-[50%]">
+						<TextInput
+							label="DESCRIÇÃO"
+							labelClassName="text-[0.6rem]"
+							placeholder="Preencha a descrição do item..."
+							holderClassName="text-xs p-2 min-h-[34px]"
+							value={item.descricao}
+							handleChange={(value) => handleUpdate({ ...item, descricao: value })}
+							width="100%"
+						/>
+					</div>
+					<div className="w-full lg:w-[25%]">
+						<NumberInput
+							label="QUANTIDADE"
+							labelClassName="text-[0.6rem]"
+							placeholder="Preencha a quantidade do item..."
+							holderClassName="text-xs p-2 min-h-[34px]"
+							value={item.qtde}
+							handleChange={(value) => handleUpdate({ ...item, qtde: value })}
+							width="100%"
+						/>
+					</div>
+					<div className="w-full lg:w-[25%]">
+						<NumberInput
+							label="POTÊNCIA"
+							labelClassName="text-[0.6rem]"
+							placeholder="Preencha a potência do item..."
+							holderClassName="text-xs p-2 min-h-[34px]"
+							value={item.potencia}
+							handleChange={(value) => handleUpdate({ ...item, potencia: value })}
+							width="100%"
+						/>
+					</div>
+				</div>
+			</div>
+		</div>
 	);
 }

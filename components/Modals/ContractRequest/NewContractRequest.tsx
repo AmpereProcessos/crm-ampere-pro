@@ -21,7 +21,6 @@ type GetRequestObjectByProjectTypeArguments = {
 	client?: TClientDTO;
 };
 function getRequestObjectByProjectType({ propose, projectType, responsible, client }: GetRequestObjectByProjectTypeArguments): TContractRequest {
-	console.log("OPPORTUNITY RESPONSIBLES", propose.oportunidadeDados?.responsaveis);
 	const seller = propose.oportunidadeDados?.responsaveis.find((r) => r.papel === "VENDEDOR");
 	const sdr = propose.oportunidadeDados?.responsaveis.find((r) => r.papel === "SDR");
 	return {
