@@ -3,8 +3,8 @@
   "extends": ["ultracite"],
   "formatter": {
     "enabled": true,
-    "indentStyle": "space",
-    "indentWidth": 2,
+    "indentStyle": "tab",
+    "indentWidth": 4,
     "lineWidth": 160
   },
   "linter": {
@@ -14,10 +14,8 @@
       },
       "style": {
         "noMagicNumbers": "off"
-      },
-      "suspicious": {
-        "noConsoleLog": "off"
       }
+
     }
   }
 }
