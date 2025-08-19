@@ -1,25 +1,23 @@
 {
-	"linter": {
-		"rules": {
-			"suspicious": {
-				"noExplicitAny": "warn",
-				"noMisleadingCharacterClass": "warn"
-			},
-			"correctness": {
-				"useExhaustiveDependencies": "warn"
-			},
-			"style": {
-				"useTemplate": "warn"
-			},
-			"a11y": {
-				"noAutofocus": "warn"
-			}
-		}
-	},
-	"formatter": {
-		"indentStyle": "tab",
-		"indentWidth": 1,
-		"lineWidth": 180,
-		"lineEnding": "lf"
-	}
+  "$schema": "https://biomejs.dev/schemas/2.2.0/schema.json",
+  "extends": ["ultracite"],
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 160
+  },
+  "linter": {
+    "rules": {
+      "nursery": {
+        "useSortedClasses": "error"
+      },
+      "style": {
+        "noMagicNumbers": "off"
+      },
+      "suspicious": {
+        "noConsoleLog": "off"
+      }
+    }
+  }
 }
