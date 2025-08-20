@@ -141,6 +141,32 @@ export function formatDateForInput(value: any, normalize = true) {
   if (normalize) return dayjs(value).add(3, 'hours').format('YYYY-MM-DD');
   return dayjs(value).format('YYYY-MM-DD');
 }
+// JSDoc typing for the function:
+/**
+ * 
+ * @param {string | undefined} value 
+ * @returns {string | null}
+ */
+export function formatDateForInputValue(value: string | undefined): string | undefined {
+	if (value === '' || value === undefined || value === null) return undefined
+	const date = dayjs(value)
+	const yearValue = date.year()
+	const monthValue = date.month()
+	const dayValue = date.date()
+	console.log({
+		yearValue,
+		monthValue,
+		dayValue,
+	})
+
+
+	const year = yearValue.toString().padStart(4, '0')
+	const month = (monthValue + 1).toString().padStart(2, '0')
+	const day = dayValue.toString().padStart(2, '0')
+	return `${year}-${month}-${day}`
+
+}
+
 export function formatUpdateSetObject(changes: object) {
   var setObj: any = {};
   Object.entries(changes).forEach((entry) => {

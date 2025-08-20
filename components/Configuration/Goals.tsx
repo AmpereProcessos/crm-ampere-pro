@@ -9,6 +9,7 @@ import { useGoals } from '@/utils/queries/goals';
 import NewGoal from '../Modals/Goals/NewGoal';
 import ErrorComponent from '../utils/ErrorComponent';
 import LoadingComponent from '../utils/LoadingComponent';
+import EditGoal from '../Modals/Goals/EditGoal';
 
 type GoalsProps = {
   session: TUserSession;
@@ -16,6 +17,7 @@ type GoalsProps = {
 function Goals({ session }: GoalsProps) {
   const queryClient = useQueryClient();
   const [newGoalModalIsOpen, setNewGoalModalIsOpen] = useState(false);
+  const [editGoalModalId, setEditGoalModalId] = useState<string | null>(null);
   const { data: goals, isLoading, isError, isSuccess, queryKey } = useGoals();
 
   const handleOnMutate = async () => await queryClient.cancelQueries({ queryKey });
@@ -41,7 +43,7 @@ function Goals({ session }: GoalsProps) {
       <div className="flex w-full flex-col gap-2 py-2">
         {isLoading ? <LoadingComponent /> : null}
         {isError ? <ErrorComponent msg="Erro ao buscar metas" /> : null}
-        {isSuccess ? goals.map((goal) => <GoalCard goal={goal} handleEditClick={() => {}} key={goal._id.toString()} />) : null}
+        {isSuccess ? goals.map((goal) => <GoalCard goal={goal} handleEditClick={() => setEditGoalModalId(goal._id.toString())} key={goal._id.toString()} />) : null}
       </div>
       {newGoalModalIsOpen ? (
         <NewGoal
@@ -53,6 +55,9 @@ function Goals({ session }: GoalsProps) {
           session={session}
         />
       ) : null}
+      {
+        editGoalModalId ? <EditGoal goalId={editGoalModalId} session={session} closeMenu={() => setEditGoalModalId(null)} /> : null
+      }
     </div>
   );
 }

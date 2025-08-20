@@ -47,6 +47,50 @@ export function formatDateInputChange<T extends 'date' | 'string' | undefined>(
   if (!normalizeHours) return new Date(value) as any;
   return dayjs(new Date(value)).add(3, 'hours').toDate() as any;
 }
+
+// JSDoc typing for the function:
+/**
+ * 
+ * @param {string | undefined} value 
+ * @param {string | Date} returnType // 'string' or 'date'
+ * @param {'natural' | "start" | "end"} type 
+ * @returns {string | Date | null}
+ */
+export function formatDateOnInputChange(value: string | undefined, returnType: 'string' | 'date', type: 'natural' | 'start' | 'end') {
+	// The value coming from input change can be either string or undefined
+	// First, checking if the value is either empty or undefined
+	if (value === '' || value === undefined || value === null) return null
+
+	const isFullISO = value.includes('T') && value.includes('Z')
+	const isDateTimeOnly = value.includes('T') && !value.includes('Z')
+
+	// Then, since we know it's not empty, we can define the default date we will be working with
+	// If the value includes "T", we can assume it comes with datetime definition, we only complement it with "00.000Z" to make a valid ISO string
+	// If not, we define 12:00:00.000Z as "midday" for the coming input date (which already is YYYY-MM-DD)
+	const defaultDateStringAsISO = isFullISO ? value : isDateTimeOnly ? `${value}:00.000Z` : `${value}T12:00:00.000Z`;
+
+	const isValid = dayjs(defaultDateStringAsISO).isValid()
+	if (!isValid) return null
+
+	if (type === 'natural') {
+		// If type is natural, we return the default date without any further treatment
+		if (returnType === 'string') return defaultDateStringAsISO;
+		if (returnType === 'date') return dayjs(defaultDateStringAsISO).toDate();
+	}
+
+	if (type === 'start') {
+		if (returnType === 'string') return dayjs(defaultDateStringAsISO).startOf('day').toISOString();
+		if (returnType === 'date') return dayjs(defaultDateStringAsISO).startOf('day').toDate();
+	}
+
+	if (type === 'end') {
+		if (returnType === 'string') return dayjs(defaultDateStringAsISO).endOf('day').toISOString();
+		if (returnType === 'date') return dayjs(defaultDateStringAsISO).endOf('day').toDate();
+	}
+
+	return null
+}
+
 export function formatToDateTime(date: string | null) {
   if (!date) return '';
   return dayjs(date).format('DD/MM/YYYY HH:mm');
