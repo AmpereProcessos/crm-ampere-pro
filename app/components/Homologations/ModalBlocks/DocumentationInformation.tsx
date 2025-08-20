@@ -1,8 +1,8 @@
 import { THomologationDTO } from '@/utils/schemas/homologation.schema'
 import React from 'react'
 import DateInput from '@/components/Inputs/DateInput'
-import { formatDateForInput } from '@/utils/methods'
-import { formatDateInputChange } from '@/lib/methods/formatting'
+import { formatDateForInputValue } from '@/utils/methods'
+import { formatDateOnInputChange } from '@/lib/methods/formatting'
 
 type DocumentationInformationProps = {
   infoHolder: THomologationDTO
@@ -16,9 +16,9 @@ function DocumentationInformation({ infoHolder, setInfoHolder }: DocumentationIn
         <div className="w-full lg:w-1/2">
           <DateInput
             label="DATA DE LIBERAÇÃO PARA ASSINATURA"
-            value={formatDateForInput(infoHolder.documentacao.dataLiberacao)}
+            value={formatDateForInputValue(infoHolder.documentacao.dataLiberacao)}
             handleChange={(value) =>
-              setInfoHolder((prev) => ({ ...prev, documentacao: { ...prev.documentacao, dataLiberacao: formatDateInputChange(value) } }))
+              setInfoHolder((prev) => ({ ...prev, documentacao: { ...prev.documentacao, dataLiberacao: formatDateOnInputChange(value) } }))
             }
             width="100%"
           />
@@ -26,9 +26,9 @@ function DocumentationInformation({ infoHolder, setInfoHolder }: DocumentationIn
         <div className="w-full lg:w-1/2">
           <DateInput
             label="DATA DE ASSINATURA DA DOCUMENTAÇÃO"
-            value={formatDateForInput(infoHolder.documentacao.dataAssinatura)}
+            value={formatDateForInputValue(infoHolder.documentacao.dataAssinatura)}
             handleChange={(value) =>
-              setInfoHolder((prev) => ({ ...prev, documentacao: { ...prev.documentacao, dataAssinatura: formatDateInputChange(value) } }))
+              setInfoHolder((prev) => ({ ...prev, documentacao: { ...prev.documentacao, dataAssinatura: formatDateOnInputChange(value) } }))
             }
             width="100%"
           />
@@ -38,9 +38,9 @@ function DocumentationInformation({ infoHolder, setInfoHolder }: DocumentationIn
         <div className="w-full lg:w-1/2">
           <DateInput
             label="INÍCIO DA ELABORAÇÃO DAS DOCUMENTAÇÕES"
-            value={formatDateForInput(infoHolder.documentacao.dataInicioElaboracao)}
+            value={formatDateForInputValue(infoHolder.documentacao.dataInicioElaboracao)}
             handleChange={(value) =>
-              setInfoHolder((prev) => ({ ...prev, documentacao: { ...prev.documentacao, dataInicioElaboracao: formatDateInputChange(value) } }))
+              setInfoHolder((prev) => ({ ...prev, documentacao: { ...prev.documentacao, dataInicioElaboracao: formatDateOnInputChange(value) } }))
             }
             width="100%"
           />
@@ -48,9 +48,9 @@ function DocumentationInformation({ infoHolder, setInfoHolder }: DocumentationIn
         <div className="w-full lg:w-1/2">
           <DateInput
             label="CONCLUSÃO DA ELABORAÇÃO DAS DOCUMENTAÇÕES"
-            value={formatDateForInput(infoHolder.documentacao.dataConclusaoElaboracao)}
+            value={formatDateForInputValue(infoHolder.documentacao.dataConclusaoElaboracao)}
             handleChange={(value) =>
-              setInfoHolder((prev) => ({ ...prev, documentacao: { ...prev.documentacao, dataConclusaoElaboracao: formatDateInputChange(value) } }))
+              setInfoHolder((prev) => ({ ...prev, documentacao: { ...prev.documentacao, dataConclusaoElaboracao: formatDateOnInputChange(value) } }))
             }
             width="100%"
           />

@@ -4,8 +4,8 @@ import NumberInput from "@/components/Inputs/NumberInput";
 import SelectInput from "@/components/Inputs/SelectInput";
 import { Button } from "@/components/ui/button";
 import { DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { formatDateInputChange } from "@/lib/methods/formatting";
-import { formatDateForInput } from "@/utils/methods";
+import { formatDateOnInputChange } from "@/lib/methods/formatting";
+import { formatDateForInputValue } from "@/utils/methods";
 import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
 import { editRevenuePersonalized } from "@/utils/mutations/revenues";
 import { TReceipt } from "@/utils/schemas/revenues.schema";
@@ -73,11 +73,11 @@ function EditReceipt({ receipt, affectedQueryKey }: EditReceiptProps) {
 				<div className="w-full">
 					<DateInput
 						label="DATA/PREVISÃO DE RECEBIMENTO"
-						value={formatDateForInput(infoHolder.dataRecebimento)}
+						value={formatDateForInputValue(infoHolder.dataRecebimento)}
 						handleChange={(value) =>
 							setInfoHolder((prev) => ({
 								...prev,
-								dataRecebimento: formatDateInputChange(value),
+								dataRecebimento: formatDateOnInputChange(value),
 							}))
 						}
 						width="100%"

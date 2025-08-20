@@ -2,12 +2,12 @@ import { GeneralVisibleHiddenExitMotionVariants } from "@/utils/constants";
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useState } from "react";
 import DateInput from "../Inputs/DateInput";
-import { formatDateForInput, getFirstDayOfYear, getLastDayOfYear } from "@/utils/methods";
+import { formatDateForInputValue, getFirstDayOfYear, getLastDayOfYear } from "@/utils/methods";
 import type { TUserSession } from "@/lib/auth/session";
 import { TPartnerSimplifiedDTO } from "@/utils/schemas/partner.schema";
 import { useRevenueStats } from "@/utils/queries/stats/revenues";
 import { VscChromeClose } from "react-icons/vsc";
-import { formatDateInputChange, formatToMoney } from "@/lib/methods/formatting";
+import { formatDateOnInputChange, formatToMoney } from "@/lib/methods/formatting";
 import LoadingComponent from "../utils/LoadingComponent";
 import ErrorComponent from "../utils/ErrorComponent";
 import { TbAlertTriangle, TbSum } from "react-icons/tb";
@@ -52,11 +52,11 @@ function RevenueStats({ session, partnerOptions }: RevenueStatsProps) {
 							<DateInput
 								showLabel={false}
 								label="PERÍODO"
-								value={formatDateForInput(period.after)}
+								value={formatDateForInputValue(period.after)}
 								handleChange={(value) =>
 									setPeriod((prev) => ({
 										...prev,
-										after: formatDateInputChange(value) || firstDayOfMonth,
+										after: formatDateOnInputChange(value) || firstDayOfMonth,
 									}))
 								}
 								width="100%"
@@ -66,11 +66,11 @@ function RevenueStats({ session, partnerOptions }: RevenueStatsProps) {
 							<DateInput
 								showLabel={false}
 								label="PERÍODO"
-								value={formatDateForInput(period.before)}
+								value={formatDateForInputValue(period.before)}
 								handleChange={(value) =>
 									setPeriod((prev) => ({
 										...prev,
-										before: formatDateInputChange(value) || lastDayOfMonth,
+										before: formatDateOnInputChange(value) || lastDayOfMonth,
 									}))
 								}
 								width="100%"

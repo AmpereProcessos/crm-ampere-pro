@@ -7,9 +7,9 @@ import NumberInput from "../Inputs/NumberInput";
 import MultipleSelectInput from "../Inputs/MultipleSelectInput";
 import { TPricingMethodDTO } from "@/utils/schemas/pricing-method.schema";
 import { StructureTypes } from "@/utils/select-options";
-import { formatDateForInput } from "@/utils/methods";
+import { formatDateForInputValue } from "@/utils/methods";
 import DateInput from "../Inputs/DateInput";
-import { formatDateInputChange } from "@/lib/methods/formatting";
+import { formatDateOnInputChange } from "@/lib/methods/formatting";
 import { TNewKit } from "../Modals/Kit/NewKit";
 import { usePartnersSimplified } from "@/utils/queries/partners";
 import SelectWithImages from "../Inputs/SelectWithImages";
@@ -178,8 +178,8 @@ function GeneralInformationBlock({ infoHolder, setInfoHolder, pricingMethods }: 
 					<div className="w-full lg:w-1/2">
 						<DateInput
 							label="DATA DE VALIDADE (SE HOUVER)"
-							value={formatDateForInput(infoHolder.dataValidade)}
-							handleChange={(value) => setInfoHolder((prev) => ({ ...prev, dataValidade: formatDateInputChange(value) }))}
+							value={formatDateForInputValue(infoHolder.dataValidade)}
+							handleChange={(value) => setInfoHolder((prev) => ({ ...prev, dataValidade: formatDateOnInputChange(value) }))}
 						/>
 					</div>
 				</div>

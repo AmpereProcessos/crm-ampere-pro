@@ -4,8 +4,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import TextInput from "../Inputs/TextInput";
 import DateInput from "../Inputs/DateInput";
-import { formatDateForInput } from "@/utils/methods";
-import { formatDateInputChange } from "@/lib/methods/formatting";
+import { formatDateForInputValue } from "@/utils/methods";
+import { formatDateOnInputChange } from "@/lib/methods/formatting";
 import SelectInput from "../Inputs/SelectInput";
 import MultipleSelectInputVirtualized from "../Inputs/MultipleSelectInputVirtualized";
 import { ServiceOrderCategories } from "@/utils/select-options";
@@ -62,8 +62,8 @@ function ServiceOrdersFilterMenu({ updateFilters, queryLoading, resetSelectedPag
 									<DateInput
 										width={"100%"}
 										label={"DEPOIS DE"}
-										value={filtersHolder.period.after ? formatDateForInput(filtersHolder.period.after) : undefined}
-										handleChange={(value) => setFiltersHolder((prev) => ({ ...prev, period: { ...prev.period, after: formatDateInputChange(value) } }))}
+										value={filtersHolder.period.after ? formatDateForInputValue(filtersHolder.period.after) : undefined}
+										handleChange={(value) => setFiltersHolder((prev) => ({ ...prev, period: { ...prev.period, after: formatDateOnInputChange(value) } }))}
 										labelClassName="text-xs font-medium tracking-tight text-black"
 									/>
 								</div>
@@ -71,8 +71,8 @@ function ServiceOrdersFilterMenu({ updateFilters, queryLoading, resetSelectedPag
 									<DateInput
 										width={"100%"}
 										label={"ANTES DE"}
-										value={filtersHolder.period.before ? formatDateForInput(filtersHolder.period.before) : undefined}
-										handleChange={(value) => setFiltersHolder((prev) => ({ ...prev, period: { ...prev.period, before: formatDateInputChange(value) } }))}
+										value={filtersHolder.period.before ? formatDateForInputValue(filtersHolder.period.before) : undefined}
+										handleChange={(value) => setFiltersHolder((prev) => ({ ...prev, period: { ...prev.period, before: formatDateOnInputChange(value) } }))}
 									/>
 								</div>
 							</div>

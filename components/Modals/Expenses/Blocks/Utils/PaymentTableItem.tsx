@@ -2,9 +2,9 @@ import CheckboxInput from "@/components/Inputs/CheckboxInput";
 import DateInput from "@/components/Inputs/DateInput";
 import NumberInput from "@/components/Inputs/NumberInput";
 import SelectInput from "@/components/Inputs/SelectInput";
-import { formatDateAsLocale, formatDateInputChange, formatDecimalPlaces, formatToMoney } from "@/lib/methods/formatting";
+import { formatDateAsLocale, formatDateOnInputChange, formatDecimalPlaces, formatToMoney } from "@/lib/methods/formatting";
 import { GeneralVisibleHiddenExitMotionVariants } from "@/utils/constants";
-import { formatDateForInput } from "@/utils/methods";
+import { formatDateForInputValue } from "@/utils/methods";
 import { TExpensePaymentItem } from "@/utils/schemas/expenses.schema";
 import { PaymentMethods } from "@/utils/select-options";
 import { AnimatePresence, motion } from "framer-motion";
@@ -135,11 +135,11 @@ function PaymentTableItem({ item, expenseTotal, handleUpdate, handleRemove }: Pa
 							<div className="w-full lg:w-[25%]">
 								<DateInput
 									label="DATA/PREVISÃO DE PAGAMENTO"
-									value={formatDateForInput(itemHolder.dataPagamento)}
+									value={formatDateForInputValue(itemHolder.dataPagamento)}
 									handleChange={(value) =>
 										setItemHolder((prev) => ({
 											...prev,
-											dataPagamento: formatDateInputChange(value),
+											dataPagamento: formatDateOnInputChange(value),
 										}))
 									}
 									width="100%"

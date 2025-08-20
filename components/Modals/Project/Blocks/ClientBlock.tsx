@@ -1,9 +1,9 @@
 import DateInput from "@/components/Inputs/DateInput";
 import SelectInput from "@/components/Inputs/SelectInput";
 import TextInput from "@/components/Inputs/TextInput";
-import { formatDateInputChange } from "@/lib/methods/formatting";
+import { formatDateOnInputChange } from "@/lib/methods/formatting";
 import { stateCities } from "@/utils/estados_cidades";
-import { formatDateForInput, formatToCEP, formatToCPForCNPJ, formatToPhone, getCEPInfo } from "@/utils/methods";
+import { formatDateForInputValue, formatToCEP, formatToCPForCNPJ, formatToPhone, getCEPInfo } from "@/utils/methods";
 import { TChangesControl, TProjectDTOWithReferences } from "@/utils/schemas/project.schema";
 import { CustomersAcquisitionChannels, MaritalStatus } from "@/utils/select-options";
 import React from "react";
@@ -94,11 +94,11 @@ function ClientBlock({ infoHolder, setInfoHolder, changes, setChanges, userHasCl
 						<DateInput
 							label={"DATA DE NASCIMENTO"}
 							editable={userHasClientEditPermission}
-							value={infoHolder.clienteDados.dataNascimento ? formatDateForInput(infoHolder.clienteDados.dataNascimento) : undefined}
+							value={infoHolder.clienteDados.dataNascimento ? formatDateForInputValue(infoHolder.clienteDados.dataNascimento) : undefined}
 							handleChange={(value) => {
 								setInfoHolder((prev) => ({
 									...prev,
-									clienteDados: { ...prev.clienteDados, dataNascimento: formatDateInputChange(value) },
+									clienteDados: { ...prev.clienteDados, dataNascimento: formatDateOnInputChange(value) },
 								}));
 								setChanges((prev) => ({ ...prev, client: { ...prev.client, dataNascimento: value } }));
 							}}

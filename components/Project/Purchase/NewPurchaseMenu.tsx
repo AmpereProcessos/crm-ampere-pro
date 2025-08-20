@@ -3,7 +3,7 @@ import { TPurchase, TPurchaseCompositionItem } from "@/utils/schemas/purchase.sc
 import React, { useState } from "react";
 import { VscChromeClose } from "react-icons/vsc";
 import TextInput from "../../Inputs/TextInput";
-import { formatDateForInput, formatToCEP, formatToPhone, getCEPInfo } from "@/utils/methods";
+import { formatDateForInputValue, formatToCEP, formatToPhone, getCEPInfo } from "@/utils/methods";
 import SelectInput from "../../Inputs/SelectInput";
 import { PurchaseDeliveryStatus, PurchaseStatus } from "@/utils/select-options";
 import PurchaseCompositionBlock from "./PurchaseCompositionBlock";
@@ -11,7 +11,7 @@ import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
 import { useQueryClient } from "@tanstack/react-query";
 import { createPurchase } from "@/utils/mutations/purchases";
 import DateInput from "@/components/Inputs/DateInput";
-import { formatDateInputChange } from "@/lib/methods/formatting";
+import { formatDateOnInputChange } from "@/lib/methods/formatting";
 import TextareaInput from "@/components/Inputs/TextareaInput";
 import type { TUserSession } from "@/lib/auth/session";
 import CheckboxInput from "@/components/Inputs/CheckboxInput";
@@ -146,8 +146,8 @@ function NewPurchaseMenu({ session, project, closeMenu }: NewPurchaseMenuProps) 
 				<div className="w-full lg:w-1/2">
 					<DateInput
 						label="DATA DE LIBERAÇÃO"
-						value={formatDateForInput(infoHolder.liberacao.data)}
-						handleChange={(value) => setInfoHolder((prev) => ({ ...prev, liberacao: { ...prev.liberacao, data: formatDateInputChange(value) } }))}
+						value={formatDateForInputValue(infoHolder.liberacao.data)}
+						handleChange={(value) => setInfoHolder((prev) => ({ ...prev, liberacao: { ...prev.liberacao, data: formatDateOnInputChange(value) } }))}
 						width="100%"
 					/>
 				</div>
@@ -164,8 +164,8 @@ function NewPurchaseMenu({ session, project, closeMenu }: NewPurchaseMenuProps) 
 				<div className="w-full lg:w-1/3">
 					<DateInput
 						label="DATA DO PEDIDO"
-						value={formatDateForInput(infoHolder.pedido.data)}
-						handleChange={(value) => setInfoHolder((prev) => ({ ...prev, pedido: { ...prev.pedido, data: formatDateInputChange(value) } }))}
+						value={formatDateForInputValue(infoHolder.pedido.data)}
+						handleChange={(value) => setInfoHolder((prev) => ({ ...prev, pedido: { ...prev.pedido, data: formatDateOnInputChange(value) } }))}
 						width="100%"
 					/>
 				</div>
@@ -228,8 +228,8 @@ function NewPurchaseMenu({ session, project, closeMenu }: NewPurchaseMenuProps) 
 				<div className="w-full lg:w-1/2">
 					<DateInput
 						label="DATA DE FATURAMENTO"
-						value={formatDateForInput(infoHolder.faturamento.data)}
-						handleChange={(value) => setInfoHolder((prev) => ({ ...prev, faturamento: { ...prev.faturamento, data: formatDateInputChange(value) } }))}
+						value={formatDateForInputValue(infoHolder.faturamento.data)}
+						handleChange={(value) => setInfoHolder((prev) => ({ ...prev, faturamento: { ...prev.faturamento, data: formatDateOnInputChange(value) } }))}
 						width="100%"
 					/>
 				</div>
@@ -259,16 +259,16 @@ function NewPurchaseMenu({ session, project, closeMenu }: NewPurchaseMenuProps) 
 				<div className="w-full lg:w-1/3">
 					<DateInput
 						label="DATA DE PREVISÃO DA ENTREGA"
-						value={formatDateForInput(infoHolder.entrega.previsao)}
-						handleChange={(value) => setInfoHolder((prev) => ({ ...prev, entrega: { ...prev.entrega, previsao: formatDateInputChange(value) } }))}
+						value={formatDateForInputValue(infoHolder.entrega.previsao)}
+						handleChange={(value) => setInfoHolder((prev) => ({ ...prev, entrega: { ...prev.entrega, previsao: formatDateOnInputChange(value) } }))}
 						width="100%"
 					/>
 				</div>
 				<div className="w-full lg:w-1/3">
 					<DateInput
 						label="DATA DE EFETIVAÇÃO DA ENTREGA"
-						value={formatDateForInput(infoHolder.entrega.efetivacao)}
-						handleChange={(value) => setInfoHolder((prev) => ({ ...prev, entrega: { ...prev.entrega, efetivacao: formatDateInputChange(value) } }))}
+						value={formatDateForInputValue(infoHolder.entrega.efetivacao)}
+						handleChange={(value) => setInfoHolder((prev) => ({ ...prev, entrega: { ...prev.entrega, efetivacao: formatDateOnInputChange(value) } }))}
 						width="100%"
 					/>
 				</div>
@@ -335,10 +335,10 @@ function NewPurchaseMenu({ session, project, closeMenu }: NewPurchaseMenuProps) 
 						options={
 							infoHolder.entrega.localizacao.uf
 								? stateCities[infoHolder.entrega.localizacao.uf as keyof typeof stateCities].map((city, index) => ({
-										id: index + 1,
-										value: city,
-										label: city,
-									}))
+									id: index + 1,
+									value: city,
+									label: city,
+								}))
 								: null
 						}
 						resetOptionLabel="NÃO DEFINIDO"

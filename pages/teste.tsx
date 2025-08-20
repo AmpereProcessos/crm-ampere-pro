@@ -12,7 +12,7 @@ import dayjs from "dayjs";
 import { IconType } from "react-icons";
 import { renderIconWithClassNames } from "@/lib/methods/rendering";
 import { cn } from "@/lib/utils";
-import { formatDateInputChange } from "@/lib/methods/formatting";
+import { formatDateOnInputChange } from "@/lib/methods/formatting";
 
 // JSDoc typing for the function:
 /**

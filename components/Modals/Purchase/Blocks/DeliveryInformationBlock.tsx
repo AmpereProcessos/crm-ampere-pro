@@ -1,9 +1,9 @@
 import DateInput from "@/components/Inputs/DateInput";
 import SelectInput from "@/components/Inputs/SelectInput";
 import TextInput from "@/components/Inputs/TextInput";
-import { formatDateInputChange } from "@/lib/methods/formatting";
+import { formatDateOnInputChange } from "@/lib/methods/formatting";
 import { stateCities } from "@/utils/estados_cidades";
-import { formatDateForInput, formatToCEP, getCEPInfo } from "@/utils/methods";
+import { formatDateForInputValue, formatToCEP, getCEPInfo } from "@/utils/methods";
 import { TPurchaseDTO } from "@/utils/schemas/purchase.schema";
 import { PurchaseDeliveryStatus } from "@/utils/select-options";
 import React from "react";
@@ -60,16 +60,16 @@ function DeliveryInformationBlock({ infoHolder, setInfoHolder }: DeliveryInforma
 					<div className="w-full lg:w-1/3">
 						<DateInput
 							label="DATA DE PREVISÃO DA ENTREGA"
-							value={formatDateForInput(infoHolder.entrega.previsao)}
-							handleChange={(value) => setInfoHolder((prev) => ({ ...prev, entrega: { ...prev.entrega, previsao: formatDateInputChange(value) } }))}
+							value={formatDateForInputValue(infoHolder.entrega.previsao)}
+							handleChange={(value) => setInfoHolder((prev) => ({ ...prev, entrega: { ...prev.entrega, previsao: formatDateOnInputChange(value) } }))}
 							width="100%"
 						/>
 					</div>
 					<div className="w-full lg:w-1/3">
 						<DateInput
 							label="DATA DE EFETIVAÇÃO DA ENTREGA"
-							value={formatDateForInput(infoHolder.entrega.efetivacao)}
-							handleChange={(value) => setInfoHolder((prev) => ({ ...prev, entrega: { ...prev.entrega, efetivacao: formatDateInputChange(value) } }))}
+							value={formatDateForInputValue(infoHolder.entrega.efetivacao)}
+							handleChange={(value) => setInfoHolder((prev) => ({ ...prev, entrega: { ...prev.entrega, efetivacao: formatDateOnInputChange(value) } }))}
 							width="100%"
 						/>
 					</div>
@@ -136,10 +136,10 @@ function DeliveryInformationBlock({ infoHolder, setInfoHolder }: DeliveryInforma
 							options={
 								infoHolder.entrega.localizacao.uf
 									? stateCities[infoHolder.entrega.localizacao.uf as keyof typeof stateCities].map((city, index) => ({
-											id: index + 1,
-											value: city,
-											label: city,
-										}))
+										id: index + 1,
+										value: city,
+										label: city,
+									}))
 									: null
 							}
 							resetOptionLabel="NÃO DEFINIDO"

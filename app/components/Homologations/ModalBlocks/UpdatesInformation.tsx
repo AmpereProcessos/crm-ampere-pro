@@ -1,7 +1,7 @@
 import { THomologationDTO } from "@/utils/schemas/homologation.schema";
 import React, { useState } from "react";
 
-import { formatDateAsLocale, formatDateInputChange, formatDateTime } from "@/lib/methods/formatting";
+import { formatDateAsLocale, formatDateOnInputChange, formatDateForInputValue } from "@/lib/methods/formatting";
 import TextInput from "@/components/Inputs/TextInput";
 import DateTimeInput from "@/components/Inputs/DateTimeInput";
 import toast from "react-hot-toast";
@@ -56,10 +56,10 @@ function UpdatesInformation({ session, infoHolder, setInfoHolder }: UpdatesInfor
 				<div className="w-full lg:w-1/2">
 					<DateTimeInput
 						label="DATA DA ATUALIZAÇÃO"
-						value={formatDateTime(updateHolder.data)}
+						value={formatDateForInputValue(updateHolder.data, 'datetime')}
 						handleChange={(value) => {
 							console.log(value);
-							setUpdateHolder((prev) => ({ ...prev, data: formatDateInputChange(value) || new Date().toISOString() }));
+							setUpdateHolder((prev) => ({ ...prev, data: formatDateOnInputChange(value) || new Date().toISOString() }));
 						}}
 						width="100%"
 					/>

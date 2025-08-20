@@ -3,50 +3,27 @@ import type { TInverter, TModule, TProductItem } from '@/utils/schemas/kits.sche
 import type { TOpportunity } from '@/utils/schemas/opportunity.schema';
 import { isValidNumber } from './validation';
 
-export function formatDateTime(value: any) {
-  if (!value) return;
-  if (Number.isNaN(new Date(value).getMilliseconds())) return;
-  return dayjs(value).format('YYYY-MM-DDTHH:mm');
-}
+
 
 export function formatDateAsLocale(date?: string | Date | null, showHours = false) {
   if (!date) return null;
   if (showHours) return dayjs(date).format('DD/MM/YYYY HH:mm');
   return dayjs(date).add(3, 'hour').format('DD/MM/YYYY');
 }
-export function formatDateInputChangeUtils<T extends 'date' | 'string' | undefined>(
-  value: any,
-  returnType?: T,
-  type: 'natural' | 'normalized' | 'start' | 'end' = 'normalized'
-): T extends 'date' ? Date : string | null {
-  if (Number.isNaN(new Date(value).getMilliseconds())) return null as any;
-  if (!returnType || returnType === 'string') {
-    if (type === 'natural') return new Date(value).toISOString() as any;
-    if (type === 'normalized') return dayjs(new Date(value)).add(3, 'hours').toISOString() as any;
-    if (type === 'start') return dayjs(new Date(value)).startOf('day').toISOString() as any;
-    if (type === 'end') return dayjs(new Date(value)).endOf('day').toISOString() as any;
-    return dayjs(new Date(value)).add(3, 'hours').toISOString() as any;
-  }
-  if (!type || type === 'natural') return new Date(value) as any;
-  if (type === 'normalized') return dayjs(new Date(value)).add(3, 'hours').toDate() as any;
-  if (type === 'start') return dayjs(new Date(value)).startOf('day').toDate() as any;
-  if (type === 'end') return dayjs(new Date(value)).endOf('day').toDate() as any;
-  return dayjs(new Date(value)).add(3, 'hours').toDate() as any;
-}
 
-export function formatDateInputChange<T extends 'date' | 'string' | undefined>(
-  value: any,
-  returnType?: T,
-  normalizeHours = true
-): T extends 'date' ? Date : string | null {
-  if (Number.isNaN(new Date(value).getMilliseconds())) return null as any;
-  if (!returnType || returnType === 'string') {
-    if (!normalizeHours) return new Date(value).toISOString() as any;
-    return dayjs(new Date(value)).add(3, 'hours').toISOString() as any;
-  }
-  if (!normalizeHours) return new Date(value) as any;
-  return dayjs(new Date(value)).add(3, 'hours').toDate() as any;
-}
+// export function formatDateOnInputChange<T extends 'date' | 'string' | undefined>(
+//   value: any,
+//   returnType?: T,
+//   normalizeHours = true
+// ): T extends 'date' ? Date : string | null {
+//   if (Number.isNaN(new Date(value).getMilliseconds())) return null as any;
+//   if (!returnType || returnType === 'string') {
+//     if (!normalizeHours) return new Date(value).toISOString() as any;
+//     return dayjs(new Date(value)).add(3, 'hours').toISOString() as any;
+//   }
+//   if (!normalizeHours) return new Date(value) as any;
+//   return dayjs(new Date(value)).add(3, 'hours').toDate() as any;
+// }
 
 // JSDoc typing for the function:
 /**
@@ -56,7 +33,7 @@ export function formatDateInputChange<T extends 'date' | 'string' | undefined>(
  * @param {'natural' | "start" | "end"} type 
  * @returns {string | Date | null}
  */
-export function formatDateOnInputChange(value: string | undefined, returnType: 'string' | 'date', type: 'natural' | 'start' | 'end') {
+export function formatDateOnInputChange(value: string | undefined, returnType: 'string' | 'date' = 'string', type: 'natural' | 'start' | 'end' = 'natural') {
 	// The value coming from input change can be either string or undefined
 	// First, checking if the value is either empty or undefined
 	if (value === '' || value === undefined || value === null) return null
@@ -67,7 +44,7 @@ export function formatDateOnInputChange(value: string | undefined, returnType: '
 	// Then, since we know it's not empty, we can define the default date we will be working with
 	// If the value includes "T", we can assume it comes with datetime definition, we only complement it with "00.000Z" to make a valid ISO string
 	// If not, we define 12:00:00.000Z as "midday" for the coming input date (which already is YYYY-MM-DD)
-	const defaultDateStringAsISO = isFullISO ? value : isDateTimeOnly ? `${value}:00.000Z` : `${value}T12:00:00.000Z`;
+	const defaultDateStringAsISO = isFullISO ? value : isDateTimeOnly ? new Date(value).toISOString() : `${value}T12:00:00.000Z`;
 
 	const isValid = dayjs(defaultDateStringAsISO).isValid()
 	if (!isValid) return null
@@ -89,6 +66,42 @@ export function formatDateOnInputChange(value: string | undefined, returnType: '
 	}
 
 	return null
+}
+
+export function formatDateTime(value: any) {
+  if (!value) return;
+  if (Number.isNaN(new Date(value).getMilliseconds())) return;
+  return dayjs(value).format('YYYY-MM-DDTHH:mm');
+}
+
+// JSDoc typing for the function:
+/**
+ * 
+ * @param {string | undefined} value 
+ * @returns {string | null}
+ */
+export function formatDateForInputValue(value: Date | string | null | undefined, type: 'default' | 'datetime' = 'default'): string | undefined {
+	if (value === '' || value === undefined || value === null) return undefined
+	const date = dayjs(value)
+	const yearValue = date.year()
+	const monthValue = date.month()
+	const dayValue = date.date()
+  
+  const year = yearValue.toString().padStart(4, '0')
+	const month = (monthValue + 1).toString().padStart(2, '0')
+	const day = dayValue.toString().padStart(2, '0')
+
+  if(type === 'datetime') {
+    const hourValue = date.hour()
+    const minuteValue = date.minute()
+    const hour = hourValue.toString().padStart(2, '0')
+    const minute = minuteValue.toString().padStart(2, '0')
+    return `${year}-${month}-${day}T${hour}:${minute}`
+  }
+
+	
+	return `${year}-${month}-${day}`
+
 }
 
 export function formatToDateTime(date: string | null) {

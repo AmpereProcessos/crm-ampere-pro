@@ -3,9 +3,9 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "
 import type { TUsersQueryFilters } from "@/utils/schemas/user.schema";
 import TextInput from "../Inputs/TextInput";
 import DateInput from "../Inputs/DateInput";
-import { formatDateForInput } from "@/utils/methods";
+import { formatDateForInputValue } from "@/utils/methods";
 import SelectInput from "../Inputs/SelectInput";
-import { formatDateInputChange } from "@/lib/methods/formatting";
+import { formatDateOnInputChange } from "@/lib/methods/formatting";
 import { Button } from "../ui/button";
 import CheckboxInput from "../Inputs/CheckboxInput";
 
@@ -65,14 +65,14 @@ function ConfigUsersFilterMenu({ queryParams, updateQueryParams, closeMenu }: Co
 							<h1 className="w-full text-center text-[0.65rem] tracking-tight text-primary/80">FILTRO POR PERÍODO</h1>
 							<DateInput
 								label="DEPOIS DE"
-								value={formatDateForInput(queryParamsHolder.period.after)}
-								handleChange={(value) => setQueryParamsHolder((prev) => ({ ...prev, period: { ...prev.period, after: formatDateInputChange(value) as string } }))}
+								value={formatDateForInputValue(queryParamsHolder.period.after)}
+								handleChange={(value) => setQueryParamsHolder((prev) => ({ ...prev, period: { ...prev.period, after: formatDateOnInputChange(value) as string } }))}
 								width="100%"
 							/>
 							<DateInput
 								label="ANTES DE"
-								value={formatDateForInput(queryParamsHolder.period.before)}
-								handleChange={(value) => setQueryParamsHolder((prev) => ({ ...prev, period: { ...prev.period, before: formatDateInputChange(value) as string } }))}
+								value={formatDateForInputValue(queryParamsHolder.period.before)}
+								handleChange={(value) => setQueryParamsHolder((prev) => ({ ...prev, period: { ...prev.period, before: formatDateOnInputChange(value) as string } }))}
 								width="100%"
 							/>
 							<SelectInput

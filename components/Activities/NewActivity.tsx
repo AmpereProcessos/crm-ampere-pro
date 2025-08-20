@@ -16,6 +16,8 @@ import ActivityGeneralBlock from "./Blocks/General";
 import ActivityVinculationsBlock from "./Blocks/Vinculations";
 import ActivityResponsiblesBlock from "./Blocks/Responsibles";
 
+
+
 type NewActivityProps = {
 	session: TUserSession;
 	vinculations: TActivityVinculations;
@@ -60,13 +62,13 @@ function NewActivity({ session, callbacks, closeModal, vinculations }: NewActivi
 			idParceiro: session.user.idParceiro || "",
 			oportunidade: vinculations.opportunity?.blocked
 				? {
-						id: vinculations.opportunity?.id,
-						nome: vinculations.opportunity?.name,
-					}
+					id: vinculations.opportunity?.id,
+					nome: vinculations.opportunity?.name,
+				}
 				: {
-						id: null,
-						nome: null,
-					},
+					id: null,
+					nome: null,
+				},
 			idHomologacao: vinculations.homologation?.blocked ? vinculations.homologation?.id : null,
 			idAnaliseTecnica: vinculations.technicalAnalysis?.blocked ? vinculations.technicalAnalysis?.id : null,
 			autor: {

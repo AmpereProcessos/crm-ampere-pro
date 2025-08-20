@@ -1,8 +1,8 @@
 "use client";
 import DateInput from "@/components/Inputs/DateInput";
 import { Sidebar } from "@/components/Sidebar";
-import { formatDateInputChange, formatDecimalPlaces, formatToMoney } from "@/lib/methods/formatting";
-import { formatDateForInput, getFirstDayOfMonth, getLastDayOfMonth } from "@/utils/methods";
+import { formatDateOnInputChange, formatDecimalPlaces, formatToMoney } from "@/lib/methods/formatting";
+import { formatDateForInputValue, getFirstDayOfMonth, getLastDayOfMonth } from "@/utils/methods";
 import { usePartnersSimplified } from "@/utils/queries/partners";
 import { useOpportunityCreators } from "@/utils/queries/users";
 import Link from "next/link";
@@ -141,13 +141,13 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
 									<DateInput
 										label="PERÍODO"
 										showLabel={false}
-										value={formatDateForInput(queryFilters.period.after)}
+										value={formatDateForInputValue(queryFilters.period.after)}
 										handleChange={(value) =>
 											setQueryFilters((prev) => ({
 												...prev,
 												period: {
 													...prev.period,
-													after: formatDateInputChange(value, "string") || firstDayOfMonth,
+													after: formatDateOnInputChange(value, "string") || firstDayOfMonth,
 												},
 											}))
 										}
@@ -158,13 +158,13 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
 									<DateInput
 										label="PERÍODO"
 										showLabel={false}
-										value={formatDateForInput(queryFilters.period.before)}
+										value={formatDateForInputValue(queryFilters.period.before)}
 										handleChange={(value) =>
 											setQueryFilters((prev) => ({
 												...prev,
 												period: {
 													...prev.period,
-													before: formatDateInputChange(value, "string") || lastDayOfMonth,
+													before: formatDateOnInputChange(value, "string") || lastDayOfMonth,
 												},
 											}))
 										}

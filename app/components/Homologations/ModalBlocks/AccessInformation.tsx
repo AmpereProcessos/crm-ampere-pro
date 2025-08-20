@@ -1,8 +1,8 @@
 import { THomologationDTO } from '@/utils/schemas/homologation.schema'
 import React from 'react'
 
-import { formatDateForInput } from '@/utils/methods'
-import { formatDateInputChange } from '@/lib/methods/formatting'
+import { formatDateForInputValue } from '@/utils/methods'
+import { formatDateOnInputChange } from '@/lib/methods/formatting'
 import TextInput from '@/components/Inputs/TextInput'
 import DateInput from '@/components/Inputs/DateInput'
 
@@ -27,16 +27,16 @@ function AccessInformation({ infoHolder, setInfoHolder }: AccessInformationProps
         <div className="w-full lg:w-1/3">
           <DateInput
             label="DATA DE SOLICITAÇÃO DA HOMOLOGAÇÃO"
-            value={formatDateForInput(infoHolder.acesso.dataSolicitacao)}
-            handleChange={(value) => setInfoHolder((prev) => ({ ...prev, acesso: { ...prev.acesso, dataSolicitacao: formatDateInputChange(value) } }))}
+            value={formatDateForInputValue(infoHolder.acesso.dataSolicitacao)}
+            handleChange={(value) => setInfoHolder((prev) => ({ ...prev, acesso: { ...prev.acesso, dataSolicitacao: formatDateOnInputChange(value) } }))}
             width="100%"
           />
         </div>
         <div className="w-full lg:w-1/3">
           <DateInput
             label="DATA DE RESPOSTA DA HOMOLOGAÇÃO"
-            value={formatDateForInput(infoHolder.acesso.dataResposta)}
-            handleChange={(value) => setInfoHolder((prev) => ({ ...prev, acesso: { ...prev.acesso, dataResposta: formatDateInputChange(value) } }))}
+            value={formatDateForInputValue(infoHolder.acesso.dataResposta)}
+            handleChange={(value) => setInfoHolder((prev) => ({ ...prev, acesso: { ...prev.acesso, dataResposta: formatDateOnInputChange(value) } }))}
             width="100%"
           />
         </div>

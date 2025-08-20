@@ -8,7 +8,7 @@ import { renderCategoryIcon } from "@/lib/methods/rendering";
 import { structureTypes } from "@/utils/constants";
 
 import { stateCities } from "@/utils/estados_cidades";
-import { formatDateForInput, formatToCEP, formatToCPForCNPJ, formatToMoney, formatToPhone, getPeakPotByModules } from "@/utils/methods";
+import { formatDateForInputValue, formatToCEP, formatToCPForCNPJ, formatToMoney, formatToPhone, getPeakPotByModules } from "@/utils/methods";
 
 import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
 import { getOeMPrices } from "@/utils/pricing/oem/methods";
@@ -137,7 +137,7 @@ function ReviewInfo({ requestInfo, setRequestInfo, modulesQty, distance, activeP
 								width={"450px"}
 								label={"DATA DE NASCIMENTO"}
 								editable={true}
-								value={requestInfo.dataDeNascimento ? formatDateForInput(requestInfo.dataDeNascimento) : undefined}
+								value={requestInfo.dataDeNascimento ? formatDateForInputValue(requestInfo.dataDeNascimento) : undefined}
 								handleChange={(value) =>
 									setRequestInfo({
 										...requestInfo,
@@ -340,12 +340,12 @@ function ReviewInfo({ requestInfo, setRequestInfo, modulesQty, distance, activeP
 								options={
 									requestInfo.uf
 										? stateCities[requestInfo.uf as keyof typeof stateCities].map((city, index) => {
-												return {
-													id: index,
-													value: city,
-													label: city,
-												};
-											})
+											return {
+												id: index,
+												value: city,
+												label: city,
+											};
+										})
 										: null
 								}
 								handleChange={(value) => setRequestInfo({ ...requestInfo, cidade: value })}
@@ -833,12 +833,12 @@ function ReviewInfo({ requestInfo, setRequestInfo, modulesQty, distance, activeP
 								options={
 									requestInfo.ufInstalacao
 										? stateCities[requestInfo.ufInstalacao as keyof typeof stateCities].map((city, index) => {
-												return {
-													id: index,
-													value: city,
-													label: city,
-												};
-											})
+											return {
+												id: index,
+												value: city,
+												label: city,
+											};
+										})
 										: null
 								}
 								handleChange={(value) => setRequestInfo({ ...requestInfo, cidadeInstalacao: value })}

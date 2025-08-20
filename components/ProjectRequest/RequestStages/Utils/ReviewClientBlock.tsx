@@ -2,9 +2,9 @@ import DateInput from "@/components/Inputs/DateInput";
 import SelectInput from "@/components/Inputs/SelectInput";
 import TextInput from "@/components/Inputs/TextInput";
 import LoadingComponent from "@/components/utils/LoadingComponent";
-import { formatDateInputChange } from "@/lib/methods/formatting";
+import { formatDateOnInputChange } from "@/lib/methods/formatting";
 import { stateCities } from "@/utils/estados_cidades";
-import { formatDateForInput, formatToCEP, formatToCPForCNPJ, formatToPhone } from "@/utils/methods";
+import { formatDateForInputValue, formatToCEP, formatToCPForCNPJ, formatToPhone } from "@/utils/methods";
 import { useClientById } from "@/utils/queries/clients";
 import { TClientDTO } from "@/utils/schemas/client.schema";
 import { CustomersAcquisitionChannels, MaritalStatus } from "@/utils/select-options";
@@ -88,11 +88,11 @@ function ReviewClientBlock({ clientId, session }: ReviewClientBlockProps) {
 						<DateInput
 							label={"DATA DE NASCIMENTO"}
 							editable={false}
-							value={clientInfo.dataNascimento ? formatDateForInput(clientInfo.dataNascimento) : undefined}
+							value={clientInfo.dataNascimento ? formatDateForInputValue(clientInfo.dataNascimento) : undefined}
 							handleChange={(value) =>
 								setClientInfo((prev) => ({
 									...prev,
-									dataNascimento: formatDateInputChange(value),
+									dataNascimento: formatDateOnInputChange(value),
 								}))
 							}
 							width={"100%"}

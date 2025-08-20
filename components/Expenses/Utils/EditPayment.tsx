@@ -4,8 +4,8 @@ import NumberInput from "@/components/Inputs/NumberInput";
 import SelectInput from "@/components/Inputs/SelectInput";
 import { Button } from "@/components/ui/button";
 import { DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { formatDateInputChange } from "@/lib/methods/formatting";
-import { formatDateForInput } from "@/utils/methods";
+import { formatDateOnInputChange } from "@/lib/methods/formatting";
+import { formatDateForInputValue } from "@/utils/methods";
 import { editExpensePersonalized } from "@/utils/mutations/expenses";
 import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
 import { editRevenuePersonalized } from "@/utils/mutations/revenues";
@@ -74,11 +74,11 @@ function EditPayment({ payment, affectedQueryKey }: EditPaymentProps) {
 				<div className="w-full">
 					<DateInput
 						label="DATA/PREVISÃO DE PAGAMENTO"
-						value={formatDateForInput(infoHolder.dataPagamento)}
+						value={formatDateForInputValue(infoHolder.dataPagamento)}
 						handleChange={(value) =>
 							setInfoHolder((prev) => ({
 								...prev,
-								dataPagamento: formatDateInputChange(value),
+								dataPagamento: formatDateOnInputChange(value),
 							}))
 						}
 						width="100%"

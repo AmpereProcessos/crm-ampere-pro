@@ -25,9 +25,9 @@ import MultipleSelectInput from "@/components/Inputs/MultipleSelectInput";
 
 import { getExcelFromJSON } from "@/lib/methods/excel-utils";
 import { getErrorMessage } from "@/lib/methods/errors";
-import { formatDateInputChange } from "@/lib/methods/formatting";
+import { formatDateOnInputChange } from "@/lib/methods/formatting";
 
-import { formatDateForInput, getFirstDayOfMonth, getLastDayOfMonth } from "@/utils/methods";
+import { formatDateForInputValue, getFirstDayOfMonth, getLastDayOfMonth } from "@/utils/methods";
 import type { TUserDTOWithSaleGoals } from "@/utils/schemas/user.schema";
 import { fetchResultsExports } from "@/utils/queries/stats/exports";
 import { useComercialResultsQueryOptions } from "@/utils/queries/stats";
@@ -103,13 +103,13 @@ function ManagementComercialResults({ session }: ComercialResultsProps) {
 									label="PERÍODO"
 									labelClassName="text-[0.6rem]"
 									holderClassName="text-xs p-2 min-h-[34px]"
-									value={formatDateForInput(queryFilters.period.after)}
+									value={formatDateForInputValue(queryFilters.period.after)}
 									handleChange={(value) =>
 										setQueryFilters((prev) => ({
 											...prev,
 											period: {
 												...prev.period,
-												after: (formatDateInputChange(value) || firstDayOfMonth) as string,
+												after: (formatDateOnInputChange(value) || firstDayOfMonth) as string,
 											},
 										}))
 									}
@@ -122,13 +122,13 @@ function ManagementComercialResults({ session }: ComercialResultsProps) {
 									label="PERÍODO"
 									labelClassName="text-[0.6rem]"
 									holderClassName="text-xs p-2 min-h-[34px]"
-									value={formatDateForInput(queryFilters.period.before)}
+									value={formatDateForInputValue(queryFilters.period.before)}
 									handleChange={(value) =>
 										setQueryFilters((prev) => ({
 											...prev,
 											period: {
 												...prev.period,
-												before: (formatDateInputChange(value) || lastDayOfMonth) as string,
+												before: (formatDateOnInputChange(value) || lastDayOfMonth) as string,
 											},
 										}))
 									}

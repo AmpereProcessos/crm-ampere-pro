@@ -5,11 +5,11 @@ import DateInput from "@/components/Inputs/DateInput";
 import SelectInput from "@/components/Inputs/SelectInput";
 import TextInput from "@/components/Inputs/TextInput";
 
-import { formatDateForInput, formatToCEP, formatToCPForCNPJ, formatToPhone, getCEPInfo } from "@/utils/methods";
+import { formatDateForInputValue, formatToCEP, formatToCPForCNPJ, formatToPhone, getCEPInfo } from "@/utils/methods";
 import type { TContractRequest } from "@/utils/schemas/integrations/app-ampere/contract-request.schema";
 import { CustomersAcquisitionChannels } from "@/utils/select-options";
 import { BrazilianCitiesOptionsFromUF, BrazilianStatesOptions } from "@/utils/estados_cidades";
-import { formatDateInputChange } from "@/lib/methods/formatting";
+import { formatDateOnInputChange } from "@/lib/methods/formatting";
 import TextareaInput from "@/components/Inputs/TextareaInput";
 import { BookText, ChevronRight } from "lucide-react";
 import { useAcquisitionChannels } from "@/utils/queries/utils";
@@ -305,11 +305,11 @@ function ContractInfo({ requestInfo, setRequestInfo, showActions, goToNextStage 
 								width={"100%"}
 								label={"DATA DE NASCIMENTO"}
 								editable={true}
-								value={requestInfo.dataDeNascimento ? formatDateForInput(requestInfo.dataDeNascimento) : undefined}
+								value={requestInfo.dataDeNascimento ? formatDateForInputValue(requestInfo.dataDeNascimento) : undefined}
 								handleChange={(value) =>
 									setRequestInfo({
 										...requestInfo,
-										dataDeNascimento: formatDateInputChange(value) as string,
+										dataDeNascimento: formatDateOnInputChange(value) as string,
 									})
 								}
 							/>

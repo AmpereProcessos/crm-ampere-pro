@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import SelectInput from "../Inputs/SelectInput";
 import TextInput from "../Inputs/TextInput";
 import DateInput from "../Inputs/DateInput";
-import { formatDateForInput, formatToCPForCNPJ, useResponsibles } from "@/utils/methods";
+import { formatDateForInputValue, formatToCPForCNPJ, useResponsibles } from "@/utils/methods";
 
 import { AiOutlineCheck } from "react-icons/ai";
 import { useQueryClient } from "@tanstack/react-query";
@@ -231,12 +231,12 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 									options={
 										infoHolder.localizacao?.uf
 											? stateCities[infoHolder.localizacao?.uf as keyof typeof stateCities].map((city, index) => {
-													return {
-														id: index,
-														value: city,
-														label: city,
-													};
-												})
+												return {
+													id: index,
+													value: city,
+													label: city,
+												};
+											})
 											: null
 									}
 									value={infoHolder.localizacao?.cidade}
@@ -429,7 +429,7 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 						<div className="grow">
 							<DateInput
 								label="DATA DE NASCIMENTO"
-								value={infoHolder?.cliente || infoHolder?.cliente.dataNascimento ? formatDateForInput(infoHolder.cliente.dataNascimento) : undefined}
+								value={infoHolder?.cliente || infoHolder?.cliente.dataNascimento ? formatDateForInputValue(infoHolder.cliente.dataNascimento) : undefined}
 								handleChange={(value) => {
 									if (value)
 										setInfoHolder((prev: any) => ({

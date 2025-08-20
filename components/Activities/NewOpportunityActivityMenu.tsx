@@ -1,4 +1,4 @@
-import { formatDateInputChange, formatDateTime, formatNameAsInitials } from "@/lib/methods/formatting";
+import { formatDateOnInputChange, formatDateForInputValue, formatNameAsInitials } from "@/lib/methods/formatting";
 import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
 
 import { useUsers } from "@/utils/queries/users";
@@ -105,8 +105,8 @@ function NewOpportunityActivityMenu({ session, opportunity, closeMenu }: NewOppo
 				<div className="w-1/2 lg:w-full">
 					<DateTimeInput
 						label="DATA DE VENCIMENTO"
-						value={formatDateTime(newActivityHolder.dataVencimento)}
-						handleChange={(value) => setNewActivityHolder((prev) => ({ ...prev, dataVencimento: formatDateInputChange(value, "string", false) as string }))}
+						value={formatDateForInputValue(newActivityHolder.dataVencimento)}
+						handleChange={(value) => setNewActivityHolder((prev) => ({ ...prev, dataVencimento: formatDateOnInputChange(value, "string") as string }))}
 						width="100%"
 					/>
 				</div>

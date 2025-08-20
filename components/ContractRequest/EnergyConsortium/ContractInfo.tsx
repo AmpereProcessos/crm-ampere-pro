@@ -3,7 +3,7 @@ import SelectInput from "@/components/Inputs/SelectInput";
 import TextInput from "@/components/Inputs/TextInput";
 
 import { stateCities } from "@/utils/estados_cidades";
-import { formatDateForInput, formatToCEP, formatToCPForCNPJ, formatToPhone, getCEPInfo } from "@/utils/methods";
+import { formatDateForInputValue, formatToCEP, formatToCPForCNPJ, formatToPhone, getCEPInfo } from "@/utils/methods";
 
 import { TContractRequest } from "@/utils/schemas/integrations/app-ampere/contract-request.schema";
 import { CustomersAcquisitionChannels } from "@/utils/select-options";
@@ -173,7 +173,7 @@ function ContractInfo({ requestInfo, setRequestInfo, goToNextStage }: ContractIn
 						width={"450px"}
 						label={"DATA DE NASCIMENTO"}
 						editable={true}
-						value={requestInfo.dataDeNascimento ? formatDateForInput(requestInfo.dataDeNascimento) : undefined}
+						value={requestInfo.dataDeNascimento ? formatDateForInputValue(requestInfo.dataDeNascimento) : undefined}
 						handleChange={(value) =>
 							setRequestInfo({
 								...requestInfo,
@@ -380,12 +380,12 @@ function ContractInfo({ requestInfo, setRequestInfo, goToNextStage }: ContractIn
 						options={
 							requestInfo.uf
 								? stateCities[requestInfo.uf as keyof typeof stateCities].map((city, index) => {
-										return {
-											id: index,
-											value: city,
-											label: city,
-										};
-									})
+									return {
+										id: index,
+										value: city,
+										label: city,
+									};
+								})
 								: null
 						}
 						handleChange={(value) => setRequestInfo({ ...requestInfo, cidade: value, cidadeInstalacao: value })}

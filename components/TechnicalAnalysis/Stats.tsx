@@ -1,9 +1,9 @@
 import { GeneralVisibleHiddenExitMotionVariants } from "@/utils/constants";
-import { formatDateForInput, getFirstDayOfYear, getLastDayOfYear } from "@/utils/methods";
+import { formatDateForInputValue, getFirstDayOfYear, getLastDayOfYear } from "@/utils/methods";
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useState } from "react";
 import DateInput from "../Inputs/DateInput";
-import { formatDateInputChange, formatDecimalPlaces, formatNameAsInitials } from "@/lib/methods/formatting";
+import { formatDateOnInputChange, formatDecimalPlaces, formatNameAsInitials } from "@/lib/methods/formatting";
 import { VscChromeClose, VscDiffAdded } from "react-icons/vsc";
 import { useTechnicalAnalysisStats } from "@/utils/queries/stats/technical-analysis";
 import LoadingComponent from "../utils/LoadingComponent";
@@ -55,11 +55,11 @@ function Stats({ closeMenu }: StatsProps) {
 							<DateInput
 								showLabel={false}
 								label="PERÍODO"
-								value={formatDateForInput(period.after)}
+								value={formatDateForInputValue(period.after)}
 								handleChange={(value) =>
 									setPeriod((prev) => ({
 										...prev,
-										after: formatDateInputChange(value) || firstDayOfYear,
+										after: formatDateOnInputChange(value) || firstDayOfYear,
 									}))
 								}
 								width="100%"
@@ -69,11 +69,11 @@ function Stats({ closeMenu }: StatsProps) {
 							<DateInput
 								showLabel={false}
 								label="PERÍODO"
-								value={formatDateForInput(period.before)}
+								value={formatDateForInputValue(period.before)}
 								handleChange={(value) =>
 									setPeriod((prev) => ({
 										...prev,
-										before: formatDateInputChange(value) || lastDayOfYear,
+										before: formatDateOnInputChange(value) || lastDayOfYear,
 									}))
 								}
 								width="100%"

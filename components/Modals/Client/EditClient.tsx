@@ -3,7 +3,7 @@ import { VscChromeClose } from "react-icons/vsc";
 import DropdownSelect from "../../Inputs/DropdownSelect";
 import TextInput from "../../Inputs/TextInput";
 import { ObjectId } from "mongodb";
-import { formatDateForInput, formatToCEP, formatToCPForCNPJ, formatToPhone, getCEPInfo } from "@/utils/methods";
+import { formatDateForInputValue, formatToCEP, formatToCPForCNPJ, formatToPhone, getCEPInfo } from "@/utils/methods";
 import { stateCities } from "../../../utils/estados_cidades";
 import { IRepresentative } from "@/utils/models";
 import representatives from "@/pages/api/representatives";
@@ -14,7 +14,7 @@ import type { TClient } from "@/utils/schemas/client.schema";
 import type { TUserSession } from "@/lib/auth/session";
 import SelectInput from "@/components/Inputs/SelectInput";
 import DateInput from "@/components/Inputs/DateInput";
-import { formatDateInputChange } from "@/lib/methods/formatting";
+import { formatDateOnInputChange } from "@/lib/methods/formatting";
 import { MaritalStatus } from "@/utils/select-options";
 import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
 import { createClient, updateClient } from "@/utils/mutations/clients";
@@ -145,12 +145,12 @@ function EditClient({ clientId, session, partnerId, closeModal, additionalAffect
 								<div className="w-full lg:w-1/3">
 									<DateInput
 										label={"DATA DE NASCIMENTO"}
-										value={formatDateForInput(clientInfo.dataNascimento)}
+										value={formatDateForInputValue(clientInfo.dataNascimento)}
 										handleChange={(value) => {
 											console.log("SELECTED", value);
 											setClientInfo((prev) => ({
 												...prev,
-												dataNascimento: formatDateInputChange(value, "string") as string,
+												dataNascimento: formatDateOnInputChange(value, "string") as string,
 											}));
 										}}
 										width={"100%"}

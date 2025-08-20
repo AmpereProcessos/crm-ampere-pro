@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import toast from "react-hot-toast";
 import TextInput from "../Inputs/TextInput";
 import DateTimeInput from "../Inputs/DateTimeInput";
-import { formatDateInputChange, formatDateTime, formatNameAsInitials } from "@/lib/methods/formatting";
+import { formatDateOnInputChange, formatDateForInputValue, formatNameAsInitials } from "@/lib/methods/formatting";
 import { useUsers } from "@/utils/queries/users";
 import { useQueryClient } from "@tanstack/react-query";
 import type { TUserSession } from "@/lib/auth/session";
@@ -39,12 +39,12 @@ type NewActivityMenuProps = {
 	session: TUserSession;
 	opportunity: { id?: string | null; nome?: string | null };
 	project:
-		| {
-				id?: string | null | undefined;
-				nome?: string | null | undefined;
-		  }
-		| null
-		| undefined;
+	| {
+		id?: string | null | undefined;
+		nome?: string | null | undefined;
+	}
+	| null
+	| undefined;
 	homologationId?: string | null;
 	technicalAnalysisId?: string | null;
 	purchaseId?: string | null;
@@ -100,9 +100,8 @@ function NewActivityMenu({ session, opportunity, project, homologationId, techni
 			<div className="flex w-full items-center justify-end">
 				<button
 					onClick={() => setNewActivityMenuIsOpen((prev) => !prev)}
-					className={`${
-						newActivityMenuIsOpen ? "border-red-500 text-red-500 hover:bg-red-500" : "border-green-500 text-green-500 hover:bg-green-500"
-					} rounded border px-4 py-1 text-sm font-medium hover:text-white`}
+					className={`${newActivityMenuIsOpen ? "border-red-500 text-red-500 hover:bg-red-500" : "border-green-500 text-green-500 hover:bg-green-500"
+						} rounded border px-4 py-1 text-sm font-medium hover:text-white`}
 				>
 					{newActivityMenuIsOpen ? "FECHAR" : "NOVA ATIVIDADE"}
 				</button>
@@ -123,8 +122,8 @@ function NewActivityMenu({ session, opportunity, project, homologationId, techni
 							<div className="w-1/2 lg:w-full">
 								<DateTimeInput
 									label="DATA DE VENCIMENTO"
-									value={formatDateTime(newActivityHolder.dataVencimento)}
-									handleChange={(value) => setNewActivityHolder((prev) => ({ ...prev, dataVencimento: formatDateInputChange(value, "string", false) as string }))}
+									value={formatDateForInputValue(newActivityHolder.dataVencimento, 'datetime')}
+									handleChange={(value) => setNewActivityHolder((prev) => ({ ...prev, dataVencimento: formatDateOnInputChange(value, "string",) as string }))}
 									width="100%"
 								/>
 							</div>

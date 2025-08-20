@@ -1,7 +1,7 @@
 import DateTimeInput from "@/components/Inputs/DateTimeInput";
 import TextareaInput from "@/components/Inputs/TextareaInput";
 import Avatar from "@/components/utils/Avatar";
-import { formatDateAsLocale, formatDateInputChange, formatDateTime } from "@/lib/methods/formatting";
+import { formatDateAsLocale, formatDateOnInputChange, formatDateForInputValue } from "@/lib/methods/formatting";
 import { TServiceOrder, TServiceOrderExecutionLog } from "@/utils/schemas/service-order.schema";
 import type { TUserSession } from "@/lib/auth/session";
 import React, { useState } from "react";
@@ -92,8 +92,8 @@ function ExecutionLogsBlock({ infoHolder, setInfoHolder, session }: ExecutionLog
 						<DateTimeInput
 							label="INÍCIO"
 							labelClassName="text-sm tracking-tight font-medium"
-							value={formatDateTime(executionLogHolder.inicio)}
-							handleChange={(value) => setExecutionLogHolder((prev) => ({ ...prev, inicio: formatDateInputChange(value) || prev.inicio }))}
+							value={formatDateForInputValue(executionLogHolder.inicio, 'datetime')}
+							handleChange={(value) => setExecutionLogHolder((prev) => ({ ...prev, inicio: formatDateOnInputChange(value) || prev.inicio }))}
 							width="100%"
 						/>
 					</div>
@@ -101,8 +101,8 @@ function ExecutionLogsBlock({ infoHolder, setInfoHolder, session }: ExecutionLog
 						<DateTimeInput
 							label="FIM"
 							labelClassName="text-sm tracking-tight font-medium"
-							value={formatDateTime(executionLogHolder.fim)}
-							handleChange={(value) => setExecutionLogHolder((prev) => ({ ...prev, fim: formatDateInputChange(value) }))}
+							value={formatDateForInputValue(executionLogHolder.fim, 'datetime')}
+							handleChange={(value) => setExecutionLogHolder((prev) => ({ ...prev, fim: formatDateOnInputChange(value) }))}
 							width="100%"
 						/>
 					</div>

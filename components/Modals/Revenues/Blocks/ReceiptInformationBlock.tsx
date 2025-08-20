@@ -2,8 +2,8 @@ import CheckboxInput from "@/components/Inputs/CheckboxInput";
 import DateInput from "@/components/Inputs/DateInput";
 import NumberInput from "@/components/Inputs/NumberInput";
 import SelectInput from "@/components/Inputs/SelectInput";
-import { formatDateInputChange } from "@/lib/methods/formatting";
-import { formatDateForInput } from "@/utils/methods";
+import { formatDateOnInputChange } from "@/lib/methods/formatting";
+import { formatDateForInputValue } from "@/utils/methods";
 import { TRevenue, TRevenueReceiptItem } from "@/utils/schemas/revenues.schema";
 import { PaymentMethods } from "@/utils/select-options";
 import React, { useState } from "react";
@@ -40,8 +40,8 @@ function RevenueReceiptInformationBlock({ infoHolder, setInfoHolder }: RevenueRe
 				<div className="flex w-full items-center justify-center lg:justify-end">
 					<DateInput
 						label="DATA DE COMPETÊNCIA"
-						value={formatDateForInput(infoHolder.dataCompetencia)}
-						handleChange={(value) => setInfoHolder((prev) => ({ ...prev, dataCompetencia: formatDateInputChange(value) || prev.dataCompetencia }))}
+						value={formatDateForInputValue(infoHolder.dataCompetencia)}
+						handleChange={(value) => setInfoHolder((prev) => ({ ...prev, dataCompetencia: formatDateOnInputChange(value) || prev.dataCompetencia }))}
 					/>
 				</div>
 				<h1 className="w-full bg-gray-500 p-1 text-center text-xs font-medium text-white">RECEBIMENTOS DA RECEITA</h1>
@@ -80,11 +80,11 @@ function RevenueReceiptInformationBlock({ infoHolder, setInfoHolder }: RevenueRe
 						<div className="w-full lg:w-[25%]">
 							<DateInput
 								label="DATA/PREVISÃO DE RECEBIMENTO"
-								value={formatDateForInput(receiptHolder.dataRecebimento)}
+								value={formatDateForInputValue(receiptHolder.dataRecebimento)}
 								handleChange={(value) =>
 									setReceiptHolder((prev) => ({
 										...prev,
-										dataRecebimento: formatDateInputChange(value),
+										dataRecebimento: formatDateOnInputChange(value),
 									}))
 								}
 								width="100%"

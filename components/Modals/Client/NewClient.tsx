@@ -3,7 +3,7 @@ import { VscChromeClose } from "react-icons/vsc";
 import DropdownSelect from "../../Inputs/DropdownSelect";
 import TextInput from "../../Inputs/TextInput";
 import { ObjectId } from "mongodb";
-import { formatDateForInput, formatToCEP, formatToCPForCNPJ, formatToPhone, getCEPInfo } from "@/utils/methods";
+import { formatDateForInputValue, formatToCEP, formatToCPForCNPJ, formatToPhone, getCEPInfo } from "@/utils/methods";
 import { stateCities } from "../../../utils/estados_cidades";
 import { IRepresentative } from "@/utils/models";
 import representatives from "@/pages/api/representatives";
@@ -13,7 +13,7 @@ import { toast } from "react-hot-toast";
 import type { TClient } from "@/utils/schemas/client.schema";
 import SelectInput from "@/components/Inputs/SelectInput";
 import DateInput from "@/components/Inputs/DateInput";
-import { formatDateInputChange } from "@/lib/methods/formatting";
+import { formatDateOnInputChange } from "@/lib/methods/formatting";
 import { CustomersAcquisitionChannels, MaritalStatus } from "@/utils/select-options";
 import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
 import { createClient } from "@/utils/mutations/clients";
@@ -164,11 +164,11 @@ function NewClient({ session, partnerId, closeModal }: NewClientModalProps) {
 								<DateInput
 									label={"DATA DE NASCIMENTO"}
 									editable={true}
-									value={clientInfo.dataNascimento ? formatDateForInput(clientInfo.dataNascimento) : undefined}
+									value={clientInfo.dataNascimento ? formatDateForInputValue(clientInfo.dataNascimento) : undefined}
 									handleChange={(value) =>
 										setClientInfo((prev) => ({
 											...prev,
-											dataNascimento: formatDateInputChange(value, "string") as string,
+											dataNascimento: formatDateOnInputChange(value, "string") as string,
 										}))
 									}
 									width={"100%"}

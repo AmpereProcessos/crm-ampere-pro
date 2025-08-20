@@ -1,5 +1,5 @@
 import DateTimeInput from "@/components/Inputs/DateTimeInput";
-import { formatDateInputChange, formatDateTime } from "@/lib/methods/formatting";
+import { formatDateOnInputChange, formatDateForInputValue } from "@/lib/methods/formatting";
 import { TServiceOrder } from "@/utils/schemas/service-order.schema";
 import React from "react";
 import ExecutionLogsBlock from "./Utils/ExecutionLogsBlock";
@@ -19,16 +19,16 @@ function PeriodInformationBlock({ infoHolder, setInfoHolder, session }: PeriodIn
 					<div className="w-1/2 lg:w-full">
 						<DateTimeInput
 							label="INÍCIO DA EXECUÇÃO"
-							value={formatDateTime(infoHolder.periodo.inicio)}
-							handleChange={(value) => setInfoHolder((prev) => ({ ...prev, periodo: { ...prev.periodo, inicio: formatDateInputChange(value) } }))}
+							value={formatDateForInputValue(infoHolder.periodo.inicio, 'datetime')}
+							handleChange={(value) => setInfoHolder((prev) => ({ ...prev, periodo: { ...prev.periodo, inicio: formatDateOnInputChange(value) } }))}
 							width="100%"
 						/>
 					</div>
 					<div className="w-1/2 lg:w-full">
 						<DateTimeInput
 							label="FIM DA EXECUÇÃO"
-							value={formatDateTime(infoHolder.periodo.fim)}
-							handleChange={(value) => setInfoHolder((prev) => ({ ...prev, periodo: { ...prev.periodo, fim: formatDateInputChange(value) } }))}
+							value={formatDateForInputValue(infoHolder.periodo.fim, 'datetime')}
+							handleChange={(value) => setInfoHolder((prev) => ({ ...prev, periodo: { ...prev.periodo, fim: formatDateOnInputChange(value) } }))}
 							width="100%"
 						/>
 					</div>

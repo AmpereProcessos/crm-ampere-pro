@@ -4,7 +4,7 @@ import SelectInput from "@/components/Inputs/SelectInput";
 import TextInput from "@/components/Inputs/TextInput";
 import { formatToMoney } from "@/lib/methods/formatting";
 import { stateCities } from "@/utils/estados_cidades";
-import { formatDateForInput, formatToCEP, formatToCPForCNPJ, formatToPhone, getPeakPotByModules } from "@/utils/methods";
+import { formatDateForInputValue, formatToCEP, formatToCPForCNPJ, formatToPhone, getPeakPotByModules } from "@/utils/methods";
 
 import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
 import { getOeMPrices } from "@/utils/pricing/oem/methods";
@@ -144,7 +144,7 @@ function ReviewInfo({
 								width={"450px"}
 								label={"DATA DE NASCIMENTO"}
 								editable={true}
-								value={requestInfo.dataDeNascimento ? formatDateForInput(requestInfo.dataDeNascimento) : undefined}
+								value={requestInfo.dataDeNascimento ? formatDateForInputValue(requestInfo.dataDeNascimento) : undefined}
 								handleChange={(value) =>
 									setRequestInfo({
 										...requestInfo,
@@ -347,12 +347,12 @@ function ReviewInfo({
 								options={
 									requestInfo.uf
 										? stateCities[requestInfo.uf as keyof typeof stateCities].map((city, index) => {
-												return {
-													id: index,
-													value: city,
-													label: city,
-												};
-											})
+											return {
+												id: index,
+												value: city,
+												label: city,
+											};
+										})
 										: null
 								}
 								handleChange={(value) => setRequestInfo({ ...requestInfo, cidade: value })}
@@ -840,12 +840,12 @@ function ReviewInfo({
 								options={
 									requestInfo.ufInstalacao
 										? stateCities[requestInfo.ufInstalacao as keyof typeof stateCities].map((city, index) => {
-												return {
-													id: index,
-													value: city,
-													label: city,
-												};
-											})
+											return {
+												id: index,
+												value: city,
+												label: city,
+											};
+										})
 										: null
 								}
 								handleChange={(value) => setRequestInfo({ ...requestInfo, cidadeInstalacao: value })}

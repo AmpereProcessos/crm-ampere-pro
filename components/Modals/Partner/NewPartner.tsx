@@ -8,9 +8,9 @@ import GeneralInformationBlock from "@/components/Partners/GeneralInformationBlo
 import MediaInformationBlock from "@/components/Partners/MediaInformationBlock";
 import ErrorComponent from "@/components/utils/ErrorComponent";
 import LoadingPage from "@/components/utils/LoadingPage";
-import { formatDateInputChange } from "@/lib/methods/formatting";
+import { formatDateOnInputChange } from "@/lib/methods/formatting";
 import { stateCities } from "@/utils/estados_cidades";
-import { formatDateForInput, formatToCEP, formatToCPForCNPJ, formatToPhone, getCEPInfo } from "@/utils/methods";
+import { formatDateForInputValue, formatToCEP, formatToCPForCNPJ, formatToPhone, getCEPInfo } from "@/utils/methods";
 import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
 import { createPartner } from "@/utils/mutations/partners";
 import { TPartner } from "@/utils/schemas/partner.schema";

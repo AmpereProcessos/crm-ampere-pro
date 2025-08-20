@@ -7,8 +7,8 @@ import React, { useState } from "react";
 import TextInput from "../Inputs/TextInput";
 import MultipleSelectInputVirtualized from "../Inputs/MultipleSelectInputVirtualized";
 import DateInput from "../Inputs/DateInput";
-import { formatDateForInput } from "@/utils/methods";
-import { formatDateInputChange } from "@/lib/methods/formatting";
+import { formatDateForInputValue } from "@/utils/methods";
+import { formatDateOnInputChange } from "@/lib/methods/formatting";
 import SelectInput from "../Inputs/SelectInput";
 import { TUserDTO, TUserDTOSimplified } from "@/utils/schemas/user.schema";
 import { TPartnerSimplifiedDTO } from "@/utils/schemas/partner.schema";
@@ -114,13 +114,13 @@ function OpportunitiesFiltersMenu({
 									<DateInput
 										showLabel={false}
 										label="PERÍODO"
-										value={formatDateForInput(filtersHolder.period.after)}
+										value={formatDateForInputValue(filtersHolder.period.after)}
 										handleChange={(value) =>
 											setFiltersHolder((prev) => ({
 												...prev,
 												period: {
 													...prev.period,
-													after: formatDateInputChange(value),
+													after: formatDateOnInputChange(value),
 												},
 											}))
 										}
@@ -131,13 +131,13 @@ function OpportunitiesFiltersMenu({
 									<DateInput
 										showLabel={false}
 										label="PERÍODO"
-										value={formatDateForInput(filtersHolder.period.before)}
+										value={formatDateForInputValue(filtersHolder.period.before)}
 										handleChange={(value) =>
 											setFiltersHolder((prev) => ({
 												...prev,
 												period: {
 													...prev.period,
-													before: formatDateInputChange(value),
+													before: formatDateOnInputChange(value),
 												},
 											}))
 										}

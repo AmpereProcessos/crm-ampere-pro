@@ -2,9 +2,9 @@ import CheckboxInput from "@/components/Inputs/CheckboxInput";
 import DateInput from "@/components/Inputs/DateInput";
 import NumberInput from "@/components/Inputs/NumberInput";
 import SelectInput from "@/components/Inputs/SelectInput";
-import { formatDateAsLocale, formatDateInputChange, formatDecimalPlaces } from "@/lib/methods/formatting";
+import { formatDateAsLocale, formatDateOnInputChange, formatDecimalPlaces } from "@/lib/methods/formatting";
 import { GeneralVisibleHiddenExitMotionVariants } from "@/utils/constants";
-import { formatDateForInput, formatToMoney } from "@/utils/methods";
+import { formatDateForInputValue, formatToMoney } from "@/utils/methods";
 import { TRevenueReceiptItem } from "@/utils/schemas/revenues.schema";
 import { PaymentMethods } from "@/utils/select-options";
 import { AnimatePresence, motion } from "framer-motion";
@@ -135,11 +135,11 @@ function ReceiptTableItem({ item, revenueTotal, handleUpdate, handleRemove }: Re
 							<div className="w-full lg:w-[25%]">
 								<DateInput
 									label="DATA/PREVISÃO DE RECEBIMENTO"
-									value={formatDateForInput(itemHolder.dataRecebimento)}
+									value={formatDateForInputValue(itemHolder.dataRecebimento)}
 									handleChange={(value) =>
 										setItemHolder((prev) => ({
 											...prev,
-											dataRecebimento: formatDateInputChange(value),
+											dataRecebimento: formatDateOnInputChange(value),
 										}))
 									}
 									width="100%"

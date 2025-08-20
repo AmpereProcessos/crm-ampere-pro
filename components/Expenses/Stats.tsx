@@ -6,8 +6,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import type { TUserSession } from "@/lib/auth/session";
 import React, { useState } from "react";
 import DateInput from "../Inputs/DateInput";
-import { formatDateForInput } from "@/utils/methods";
-import { formatDateInputChange, formatToMoney } from "@/lib/methods/formatting";
+import { formatDateForInputValue } from "@/utils/methods";
+import { formatDateOnInputChange, formatToMoney } from "@/lib/methods/formatting";
 import LoadingComponent from "../utils/LoadingComponent";
 import ErrorComponent from "../utils/ErrorComponent";
 import { TbAlertTriangle, TbSum } from "react-icons/tb";
@@ -49,11 +49,11 @@ function ExpenseStats({ session, partnerOptions }: ExpenseStatsProps) {
 							<DateInput
 								showLabel={false}
 								label="PERÍODO"
-								value={formatDateForInput(period.after)}
+								value={formatDateForInputValue(period.after)}
 								handleChange={(value) =>
 									setPeriod((prev) => ({
 										...prev,
-										after: formatDateInputChange(value) || firstDayOfMonth,
+										after: formatDateOnInputChange(value) || firstDayOfMonth,
 									}))
 								}
 								width="100%"
@@ -63,11 +63,11 @@ function ExpenseStats({ session, partnerOptions }: ExpenseStatsProps) {
 							<DateInput
 								showLabel={false}
 								label="PERÍODO"
-								value={formatDateForInput(period.before)}
+								value={formatDateForInputValue(period.before)}
 								handleChange={(value) =>
 									setPeriod((prev) => ({
 										...prev,
-										before: formatDateInputChange(value) || lastDayOfMonth,
+										before: formatDateOnInputChange(value) || lastDayOfMonth,
 									}))
 								}
 								width="100%"

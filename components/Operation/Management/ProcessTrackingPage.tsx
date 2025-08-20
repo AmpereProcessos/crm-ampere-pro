@@ -3,8 +3,8 @@ import { Sidebar } from "@/components/Sidebar";
 import ErrorComponent from "@/components/utils/ErrorComponent";
 import LoadingComponent from "@/components/utils/LoadingComponent";
 import { getPeriodDateParamsByReferenceDate, getTimeFormattedTextFromHours } from "@/lib/methods/dates";
-import { formatDateInputChange, formatDecimalPlaces } from "@/lib/methods/formatting";
-import { formatDateForInput } from "@/utils/methods";
+import { formatDateOnInputChange, formatDecimalPlaces } from "@/lib/methods/formatting";
+import { formatDateForInputValue } from "@/utils/methods";
 import { ProcessTrackedByProjectType } from "@/utils/process-tracking";
 import { useProcessTrackingStats } from "@/utils/queries/stats/operation/process-tracking";
 import type { TUserSession } from "@/lib/auth/session";
@@ -53,11 +53,11 @@ function ProcessTrackingPage({ session }: ProcessTrackingPageProps) {
 										<DateInput
 											showLabel={false}
 											label="PERÍODO"
-											value={formatDateForInput(period.after)}
+											value={formatDateForInputValue(period.after)}
 											handleChange={(value) =>
 												setPeriod((prev) => ({
 													...prev,
-													after: formatDateInputChange(value) || start.toISOString(),
+													after: formatDateOnInputChange(value) || start.toISOString(),
 												}))
 											}
 											width="100%"
@@ -67,11 +67,11 @@ function ProcessTrackingPage({ session }: ProcessTrackingPageProps) {
 										<DateInput
 											showLabel={false}
 											label="PERÍODO"
-											value={formatDateForInput(period.before)}
+											value={formatDateForInputValue(period.before)}
 											handleChange={(value) =>
 												setPeriod((prev) => ({
 													...prev,
-													before: formatDateInputChange(value) || end.toISOString(),
+													before: formatDateOnInputChange(value) || end.toISOString(),
 												}))
 											}
 											width="100%"

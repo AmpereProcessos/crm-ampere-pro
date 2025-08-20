@@ -1,7 +1,7 @@
 import DateInput from '@/components/Inputs/DateInput'
 import TextInput from '@/components/Inputs/TextInput'
-import { formatDateInputChange } from '@/lib/methods/formatting'
-import { formatDateForInput } from '@/utils/methods'
+import { formatDateOnInputChange } from '@/lib/methods/formatting'
+import { formatDateForInputValue } from '@/utils/methods'
 import { TPurchaseDTO } from '@/utils/schemas/purchase.schema'
 import React from 'react'
 
@@ -18,8 +18,8 @@ function OrderInformationBlock({ infoHolder, setInfoHolder }: OrderInformationBl
           <div className="w-full lg:w-1/3">
             <DateInput
               label="DATA DO PEDIDO"
-              value={formatDateForInput(infoHolder.pedido.data)}
-              handleChange={(value) => setInfoHolder((prev) => ({ ...prev, pedido: { ...prev.pedido, data: formatDateInputChange(value) } }))}
+              value={formatDateForInputValue(infoHolder.pedido.data)}
+              handleChange={(value) => setInfoHolder((prev) => ({ ...prev, pedido: { ...prev.pedido, data: formatDateOnInputChange(value) } }))}
               width="100%"
             />
           </div>

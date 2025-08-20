@@ -1,10 +1,11 @@
 import DateTimeInput from "@/components/Inputs/DateTimeInput";
 import TextareaInput from "@/components/Inputs/TextareaInput";
 import TextInput from "@/components/Inputs/TextInput";
-import { formatDateInputChange, formatDateTime } from "@/lib/methods/formatting";
-import type { TActivity } from "@/utils/schemas/activities.schema";
+import { formatDateForInputValue, formatDateOnInputChange } from "@/lib/methods/formatting";
 import { useActivityStore } from "@/utils/stores/activity-store";
 import { ListTodo } from "lucide-react";
+
+
 
 function ActivityGeneralBlock() {
 	const title = useActivityStore((s) => s.activity.titulo);
@@ -36,14 +37,18 @@ function ActivityGeneralBlock() {
 				/>
 				<DateTimeInput
 					label="DATA DE VENCIMENTO"
-					value={formatDateTime(deadline)}
-					handleChange={(value) => updateActivity({ dataVencimento: formatDateInputChange(value, "string", false) as string })}
+					value={formatDateForInputValue(deadline, 'datetime')}
+					handleChange={(value) => {
+						updateActivity({ dataVencimento: formatDateOnInputChange(value, "string") as string })
+					}}
 					width="100%"
 				/>
 				<DateTimeInput
 					label="DATA DE CONCLUSÃO"
-					value={formatDateTime(conclusion)}
-					handleChange={(value) => updateActivity({ dataConclusao: formatDateInputChange(value, "string", false) as string })}
+					value={formatDateForInputValue(conclusion, 'datetime')}
+					handleChange={(value) => {
+						updateActivity({ dataConclusao: formatDateOnInputChange(value, "string") as string })
+					}}
 					width="100%"
 				/>
 			</div>

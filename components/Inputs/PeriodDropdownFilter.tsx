@@ -1,4 +1,4 @@
-import { formatDateForInput } from "@/utils/methods";
+import { formatDateForInputValue } from "@/utils/methods";
 import React, { Dispatch, SetStateAction, useRef, useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { IoIosCalendar } from "react-icons/io";
@@ -72,7 +72,7 @@ function PeriodDropdownFilter({ initialAfter, initialBefore, setDateParam }: Per
 							<h3 className="text-xs text-gray-500">DEPOIS DE:</h3>
 							<input
 								type="date"
-								value={dateFilter.after ? formatDateForInput(dateFilter.after) : undefined}
+								value={dateFilter.after ? formatDateForInputValue(dateFilter.after) : undefined}
 								className="text-xs text-gray-700 outline-none"
 								onChange={(e) =>
 									setDateFilter((prev) => ({
@@ -86,7 +86,7 @@ function PeriodDropdownFilter({ initialAfter, initialBefore, setDateParam }: Per
 							<h3 className="text-xs text-gray-500">ANTES DE:</h3>
 							<input
 								type="date"
-								value={dateFilter.before ? formatDateForInput(dateFilter.before) : undefined}
+								value={dateFilter.before ? formatDateForInputValue(dateFilter.before) : undefined}
 								className="text-xs text-gray-700 outline-none"
 								onChange={(e) =>
 									setDateFilter((prev) => ({
