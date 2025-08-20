@@ -27,7 +27,7 @@ export function GoalGeneralBlock() {
 				<div className="w-full lg:w-1/2">
 					<DateInput
 						handleChange={(v) => {
-							updatePeriod({ inicio: formatDateOnInputChange(v, 'string', 'start') as string });
+							updatePeriod({ inicio: formatDateOnInputChange(v, 'string', 'start') ?? undefined });
 						}}
 						label="INÍCIO DO PERÍODO"
 						labelIcon={Calendar}
@@ -39,7 +39,7 @@ export function GoalGeneralBlock() {
 				<div className="w-full lg:w-1/2">
 					<DateInput
 						handleChange={(v) => {
-							updatePeriod({ fim: formatDateOnInputChange(v, 'string', 'end') as string });
+							updatePeriod({ fim: formatDateOnInputChange(v, 'string', 'end') ?? undefined });
 						}}
 						label="FIM DO PERÍODO"
 						labelIcon={Calendar}
