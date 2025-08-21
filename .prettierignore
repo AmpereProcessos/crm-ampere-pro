@@ -1,0 +1,46 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+.next/
+out/
+dist/
+build/
+
+# Cache directories
+.cache/
+.nyc_output/
+coverage/
+
+# Environment files
+.env*
+
+# IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Package manager files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Generated files
+*.min.js
+*.min.css
+
+# Documentation
+*.md
+
+# Config files that should maintain their formatting
+*.config.js
+*.config.ts
+next.config.js
+tailwind.config.js
+postcss.config.js
+
+# Public assets
+public/

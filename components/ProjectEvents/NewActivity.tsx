@@ -7,16 +7,14 @@ import { ProjectActivity } from "@/utils/models";
 import SelectWithImages from "../Inputs/SelectWithImages";
 
 import { UseMutateFunction, useQueryClient } from "@tanstack/react-query";
-import { getErrorMessage } from "@/lib/methods/errors";
-import toast from "react-hot-toast";
-import { TOpportunityActivity, TOpportunityHistory } from "@/utils/schemas/opportunity-history.schema";
 import { useOpportunityCreators } from "@/utils/queries/users";
 import type { TUserSession } from "@/lib/auth/session";
+import type { TActivity } from "@/utils/schemas/activities.schema";
 type NewActivityProps = {
 	session: TUserSession;
 	opportunityId: string;
-	newEvent: TOpportunityActivity;
-	setNewEvent: React.Dispatch<React.SetStateAction<TOpportunityActivity>>;
+	newEvent: TActivity;
+	setNewEvent: React.Dispatch<React.SetStateAction<TActivity>>;
 	setView: React.Dispatch<React.SetStateAction<"HISTORY" | "NEW NOTE" | "NEW ACTIVITY">>;
 	opportunityName: string;
 	opportunityIdentifier: string;
