@@ -1,9 +1,3 @@
-import { useQueryClient } from '@tanstack/react-query';
-import createHttpError from 'http-errors';
-import { BadgeCheck } from 'lucide-react';
-import Link from 'next/link';
-import React, { type Dispatch, type SetStateAction, useEffect, useState } from 'react';
-import { toast } from 'react-hot-toast';
 import { LoadingButton } from '@/components/Buttons/loading-button';
 import AddressInformationBlock from '@/components/Opportunities/Creation/AddressInformationBlock';
 import FunnelReferenceInformationBlock from '@/components/Opportunities/Creation/FunnelReferenceInformationBlock';
@@ -21,11 +15,17 @@ import { createClientOpportunityAndFunnelReference } from '@/utils/mutations/opp
 import { useSearchClients } from '@/utils/queries/clients';
 import { useProjectTypes } from '@/utils/queries/project-types';
 import type { TClient, TSimilarClientSimplifiedDTO } from '@/utils/schemas/client.schema';
-import type { TFunnelDTO } from '@/utils/schemas/funnel.schema';
 import type { TFunnelReference } from '@/utils/schemas/funnel-reference.schema';
+import type { TFunnelDTO } from '@/utils/schemas/funnel.schema';
 import type { TOpportunity } from '@/utils/schemas/opportunity.schema';
 import type { TUserDTOSimplified } from '@/utils/schemas/user.schema';
 import { CustomersAcquisitionChannels } from '@/utils/select-options';
+import { useQueryClient } from '@tanstack/react-query';
+import createHttpError from 'http-errors';
+import { BadgeCheck } from 'lucide-react';
+import Link from 'next/link';
+import { type Dispatch, type SetStateAction, useEffect, useState } from 'react';
+import { toast } from 'react-hot-toast';
 
 type NewOpportunityProps = {
   session: TUserSession;
@@ -174,18 +174,18 @@ function NewOpportunity({ session, closeModal, opportunityCreators, funnels }: N
   const BUTTON_TEXT = 'CADASTRAR';
   return isDesktop ? (
     <Dialog onOpenChange={(v) => (v ? null : closeModal())} open>
-      <DialogContent className="flex h-fit max-h-[80vh] min-h-[60vh] min-w-[80vw] flex-col dark:bg-white">
+      <DialogContent className='flex h-fit max-h-[80vh] min-h-[60vh] min-w-[80vw] flex-col dark:bg-background'>
         <DialogHeader>
           <DialogTitle>{MENU_TITLE}</DialogTitle>
           <DialogDescription>{MENU_DESCRIPTION}</DialogDescription>
         </DialogHeader>
         {isSuccess ? (
-          <div className="flex w-full grow flex-col items-center justify-center gap-2">
-            <div className="flex flex-col items-center gap-1">
-              <BadgeCheck className="h-10 min-h-10 w-10 min-w-10 text-green-500 lg:h-20 lg:w-20" />
-              <h1 className="text-center font-bold text-lg text-primary tracking-tight">Oportunidade criada com sucesso!</h1>
+          <div className='flex w-full grow flex-col items-center justify-center gap-2'>
+            <div className='flex flex-col items-center gap-1'>
+              <BadgeCheck className='h-10 min-h-10 w-10 min-w-10 text-green-500 lg:h-20 lg:w-20' />
+              <h1 className='text-center font-bold text-lg text-primary tracking-tight'>Oportunidade criada com sucesso!</h1>
             </div>
-            <div className="flex flex-col items-center gap-2 lg:flex-row">
+            <div className='flex flex-col items-center gap-2 lg:flex-row'>
               <Button
                 onClick={() => {
                   setNewClient(initialClient);
@@ -206,7 +206,7 @@ function NewOpportunity({ session, closeModal, opportunityCreators, funnels }: N
           </div>
         ) : (
           <>
-            <div className="flex-1 overflow-auto">
+            <div className='flex-1 overflow-auto'>
               <NewOpportunityContent
                 clientHolder={newClient}
                 funnelReferenceHolder={newFunnelReference}
@@ -223,7 +223,7 @@ function NewOpportunity({ session, closeModal, opportunityCreators, funnels }: N
             </div>
             <DialogFooter>
               <DialogClose asChild>
-                <Button variant="outline">FECHAR</Button>
+                <Button variant='outline'>FECHAR</Button>
               </DialogClose>
               <LoadingButton
                 loading={isPending}
@@ -241,18 +241,18 @@ function NewOpportunity({ session, closeModal, opportunityCreators, funnels }: N
     </Dialog>
   ) : (
     <Drawer onOpenChange={(v) => (v ? null : closeModal())} open>
-      <DrawerContent className="flex h-fit max-h-[70vh] flex-col">
-        <DrawerHeader className="text-left">
+      <DrawerContent className='flex h-fit max-h-[70vh] flex-col'>
+        <DrawerHeader className='text-left'>
           <DrawerTitle>{MENU_TITLE}</DrawerTitle>
           <DrawerDescription>{MENU_DESCRIPTION}</DrawerDescription>
         </DrawerHeader>
         {isSuccess ? (
-          <div className="flex w-full grow flex-col items-center justify-center gap-2">
-            <div className="flex flex-col items-center gap-1">
-              <BadgeCheck className="h-10 min-h-10 w-10 min-w-10 text-green-500 lg:h-20 lg:w-20" />
-              <h1 className="text-center font-bold text-lg text-primary tracking-tight">Oportunidade criada com sucesso!</h1>
+          <div className='flex w-full grow flex-col items-center justify-center gap-2'>
+            <div className='flex flex-col items-center gap-1'>
+              <BadgeCheck className='h-10 min-h-10 w-10 min-w-10 text-green-500 lg:h-20 lg:w-20' />
+              <h1 className='text-center font-bold text-lg text-primary tracking-tight'>Oportunidade criada com sucesso!</h1>
             </div>
-            <div className="flex flex-col items-center gap-2 lg:flex-row">
+            <div className='flex flex-col items-center gap-2 lg:flex-row'>
               <Button
                 onClick={() => {
                   setNewClient(initialClient);
@@ -273,7 +273,7 @@ function NewOpportunity({ session, closeModal, opportunityCreators, funnels }: N
           </div>
         ) : (
           <>
-            <div className="flex-1 overflow-auto">
+            <div className='flex-1 overflow-auto'>
               <NewOpportunityContent
                 clientHolder={newClient}
                 funnelReferenceHolder={newFunnelReference}
@@ -290,7 +290,7 @@ function NewOpportunity({ session, closeModal, opportunityCreators, funnels }: N
             </div>
             <DrawerFooter>
               <DrawerClose asChild>
-                <Button variant="outline">FECHAR</Button>
+                <Button variant='outline'>FECHAR</Button>
               </DrawerClose>
               <LoadingButton
                 loading={isPending}
@@ -352,7 +352,8 @@ function NewOpportunityContent({
   });
   function handleSelectSimilarClient(client: TSimilarClientSimplifiedDTO) {
     setSimilarClientHolder(client);
-    const { nome, telefonePrimario, email, autor, cpfCnpj, dataInsercao, cep, uf, cidade, bairro, endereco, numeroOuIdentificador, complemento } = client;
+    const { nome, telefonePrimario, email, autor, cpfCnpj, dataInsercao, cep, uf, cidade, bairro, endereco, numeroOuIdentificador, complemento } =
+      client;
     const location = { cep, uf, cidade, bairro, endereco, numeroOuIdentificador, complemento };
     setOpportunityHolder((prev) => ({ ...prev, localizacao: location }));
     setClientHolder((prev) => ({ ...prev, nome, telefonePrimario, email, cpfCnpj, autor }));
@@ -365,16 +366,25 @@ function NewOpportunityContent({
     return () => clearTimeout(getData);
   }, [clientHolder.cpfCnpj, clientHolder.email, clientHolder.telefonePrimario]);
   return (
-    <div className="flex h-full w-full flex-col gap-6 px-4 lg:flex-row lg:px-0">
-      <div className="scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300 flex w-full flex-col gap-2 px-2 lg:h-full lg:max-h-full lg:w-[60%] lg:overflow-y-auto">
+    <div className='flex h-full w-full flex-col gap-6 px-4 lg:flex-row lg:px-0'>
+      <div className='scrollbar-thin scrollbar-track-primary/10 scrollbar-thumb-primary/30 flex w-full flex-col gap-2 px-2 lg:h-full lg:max-h-full lg:w-[60%] lg:overflow-y-auto'>
         <ResponsiblesInformationBlock
           opportunity={opportunityHolder}
           opportunityCreators={opportunityCreators}
           session={session}
           setOpportunity={setOpportunityHolder}
         />
-        <GeneralInformationBlock opportunity={opportunityHolder} projectTypes={projectTypes} session={session} setOpportunity={setOpportunityHolder} />
-        <FunnelReferenceInformationBlock funnelReference={funnelReferenceHolder} funnels={funnels || []} setFunnelReference={setFunnelReferenceHolder} />
+        <GeneralInformationBlock
+          opportunity={opportunityHolder}
+          projectTypes={projectTypes}
+          session={session}
+          setOpportunity={setOpportunityHolder}
+        />
+        <FunnelReferenceInformationBlock
+          funnelReference={funnelReferenceHolder}
+          funnels={funnels || []}
+          setFunnelReference={setFunnelReferenceHolder}
+        />
         <OpportunityClientInformationBlock
           client={clientHolder}
           opportunity={opportunityHolder}
@@ -384,9 +394,14 @@ function NewOpportunityContent({
           similarClient={similarClientHolder}
           similarClients={similarClients || []}
         />
-        <AddressInformationBlock client={clientHolder} opportunity={opportunityHolder} setClient={setClientHolder} setOpportunity={setOpportunityHolder} />
+        <AddressInformationBlock
+          client={clientHolder}
+          opportunity={opportunityHolder}
+          setClient={setClientHolder}
+          setOpportunity={setOpportunityHolder}
+        />
       </div>
-      <div className="flex w-full lg:w-[40%]">
+      <div className='flex w-full lg:w-[40%]'>
         <SimilarClients
           clients={similarClients || []}
           handleSelectSimilarClient={handleSelectSimilarClient}

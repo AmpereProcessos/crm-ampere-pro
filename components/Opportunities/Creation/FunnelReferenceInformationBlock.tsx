@@ -23,7 +23,7 @@ type FunnelReferenceInformationBlockProps = {
 function FunnelReferenceInformationBlock({ funnelReference, setFunnelReference, funnels }: FunnelReferenceInformationBlockProps) {
 	return (
 		<div className="flex w-full flex-col gap-2">
-			<div className="flex items-center gap-2 bg-primary/20 px-2 py-1 rounded w-fit">
+			<div className="flex items-center gap-2 bg-primary/20 px-2 py-1 rounded-sm w-fit">
 				<BsFillFunnelFill size={15} />
 				<h1 className="text-xs tracking-tight font-medium text-start w-fit">INFORMAÇÕES DO FUNIL</h1>
 			</div>

@@ -1,52 +1,50 @@
-import React from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion';
+import React from 'react';
 
-import TextInput from '../Inputs/TextInput'
-import CheckboxInput from '../Inputs/CheckboxInput'
+import CheckboxInput from '../Inputs/CheckboxInput';
+import TextInput from '../Inputs/TextInput';
 
-import { UseComercialServicesFilters } from '@/utils/queries/services'
-import { GeneralVisibleHiddenExitMotionVariants } from '@/utils/constants'
-import { SignaturePlanIntervalTypes } from '@/utils/select-options'
-import MultipleSelectInput from '../Inputs/MultipleSelectInput'
+import { GeneralVisibleHiddenExitMotionVariants } from '@/utils/constants';
+import { UseComercialServicesFilters } from '@/utils/queries/services';
 
 type FiltersMenuProps = {
-  filters: UseComercialServicesFilters
-  setFilters: React.Dispatch<React.SetStateAction<UseComercialServicesFilters>>
-}
+  filters: UseComercialServicesFilters;
+  setFilters: React.Dispatch<React.SetStateAction<UseComercialServicesFilters>>;
+};
 function FiltersMenu({ filters, setFilters }: FiltersMenuProps) {
   return (
     <AnimatePresence>
       <motion.div
         key={'editor'}
         variants={GeneralVisibleHiddenExitMotionVariants}
-        initial="hidden"
-        animate="visible"
-        exit="exit"
-        className="mt-2 flex w-full flex-col gap-2 rounded-md border border-gray-300 bg-[#fff] p-2"
+        initial='hidden'
+        animate='visible'
+        exit='exit'
+        className='mt-2 flex w-full flex-col gap-2 rounded-md border border-primary/30 bg-background p-2'
       >
-        <h1 className="text-sm font-bold tracking-tight">FILTROS</h1>
-        <div className="flex w-full flex-col flex-wrap items-center justify-start gap-2 lg:flex-row">
+        <h1 className='text-sm font-bold tracking-tight'>FILTROS</h1>
+        <div className='flex w-full flex-col flex-wrap items-center justify-start gap-2 lg:flex-row'>
           <TextInput
-            label="PESQUISA"
-            placeholder="Filtre pelo fabricante e modelo do produto..."
+            label='PESQUISA'
+            placeholder='Filtre pelo fabricante e modelo do produto...'
             value={filters.search}
             handleChange={(value) => setFilters((prev) => ({ ...prev, search: value }))}
-            labelClassName="text-xs font-medium tracking-tight text-black"
+            labelClassName='text-xs font-medium tracking-tight text-primary'
           />
         </div>
-        <div className="flex w-full flex-col flex-wrap items-center justify-start gap-2 lg:flex-row">
-          <div className="w-fit">
+        <div className='flex w-full flex-col flex-wrap items-center justify-start gap-2 lg:flex-row'>
+          <div className='w-fit'>
             <CheckboxInput
-              labelFalse="SOMENTE SERVIÇOS ATIVOS"
-              labelTrue="SOMENTE SERVIÇOS ATIVOS"
+              labelFalse='SOMENTE SERVIÇOS ATIVOS'
+              labelTrue='SOMENTE SERVIÇOS ATIVOS'
               checked={filters.onlyActive}
               handleChange={(value) => setFilters((prev) => ({ ...prev, onlyActive: value }))}
             />
           </div>
-          <div className="w-fit">
+          <div className='w-fit'>
             <CheckboxInput
-              labelFalse="SOMENTE SERVIÇOS INATIVOS"
-              labelTrue="SOMENTE SERVIÇOS INATIVOS"
+              labelFalse='SOMENTE SERVIÇOS INATIVOS'
+              labelTrue='SOMENTE SERVIÇOS INATIVOS'
               checked={filters.onlyInactive}
               handleChange={(value) => setFilters((prev) => ({ ...prev, onlyInactive: value }))}
             />
@@ -70,7 +68,7 @@ function FiltersMenu({ filters, setFilters }: FiltersMenuProps) {
         </div>
       </motion.div>
     </AnimatePresence>
-  )
+  );
 }
 
-export default FiltersMenu
+export default FiltersMenu;

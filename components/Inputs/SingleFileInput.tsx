@@ -1,25 +1,25 @@
-import { IProject } from '@/utils/models'
-import { storage } from '../../services/firebase/storage-config'
-import { FullMetadata, getMetadata, ref } from 'firebase/storage'
-import React, { useState } from 'react'
-import { AiOutlineCheck } from 'react-icons/ai'
-import { TbDownload } from 'react-icons/tb'
-import { fileTypes } from '@/utils/constants'
-import axios from 'axios'
-import JSZip from 'jszip'
-import { basename } from 'path'
-import { toast } from 'react-hot-toast'
+import { fileTypes } from '@/utils/constants';
+import { IProject } from '@/utils/models';
+import axios from 'axios';
+import { FullMetadata, getMetadata, ref } from 'firebase/storage';
+import JSZip from 'jszip';
+import { basename } from 'path';
+import { useState } from 'react';
+import { toast } from 'react-hot-toast';
+import { AiOutlineCheck } from 'react-icons/ai';
+import { TbDownload } from 'react-icons/tb';
+import { storage } from '../../services/firebase/storage-config';
 type SingleFileInputProps = {
-  label: string
-  width?: string
-  placeholder?: string
-  acceptedFiles?: string
-  fileKey: string
-  currentFileUrl?: string
-  info: IProject
-  infoHolder: IProject | undefined
-  handleAttachment: (fileKey: string, file: File) => void
-}
+  label: string;
+  width?: string;
+  placeholder?: string;
+  acceptedFiles?: string;
+  fileKey: string;
+  currentFileUrl?: string;
+  info: IProject;
+  infoHolder: IProject | undefined;
+  handleAttachment: (fileKey: string, file: File) => void;
+};
 function SingleFileInput({
   label,
   width,
@@ -31,72 +31,72 @@ function SingleFileInput({
   infoHolder,
   handleAttachment,
 }: SingleFileInputProps) {
-  const inputIdentifier = label.toLowerCase().replace(' ', '_')
-  const [file, setFile] = useState<File | null>(null)
+  const inputIdentifier = label.toLowerCase().replace(' ', '_');
+  const [file, setFile] = useState<File | null>(null);
 
   function formatLongString(str: string) {
     if (str.length > 50) {
-      return str.substring(0, 50) + '\u2026'
+      return str.substring(0, 50) + '\u2026';
     } else {
-      return str
+      return str;
     }
   }
   async function handleDownload(url: string) {
-    var splitFileName = label.toUpperCase().split(' ')
-    var fixedFileName = splitFileName.join('_')
+    var splitFileName = label.toUpperCase().split(' ');
+    var fixedFileName = splitFileName.join('_');
     if (info.nome) {
-      fixedFileName = `${info.nome}-${fixedFileName}`
+      fixedFileName = `${info.nome}-${fixedFileName}`;
     }
-    let fileRef = ref(storage, url)
-    const metadata = await getMetadata(fileRef)
-    const md = metadata as FullMetadata
+    let fileRef = ref(storage, url);
+    const metadata = await getMetadata(fileRef);
+    const md = metadata as FullMetadata;
 
-    const filePath = fileRef.fullPath
+    const filePath = fileRef.fullPath;
     // @ts-ignore
-    const extension = fileTypes[metadata.contentType]?.extension
-    const toastID = toast.loading('Baixando arquivo...')
+    const extension = fileTypes[metadata.contentType]?.extension;
+    const toastID = toast.loading('Baixando arquivo...');
     try {
       const response = await axios.get(`/api/utils/downloadFirebase?filePath=${encodeURIComponent(filePath)}`, {
         responseType: 'blob',
-      })
+      });
 
       // Given that the API now returns zipped files for reduced size, we gotta decompress
-      const zip = new JSZip()
-      const unzippedFiles = await zip.loadAsync(response.data)
-      const proposal = await unzippedFiles.file(basename(filePath))?.async('arraybuffer')
+      const zip = new JSZip();
+      const unzippedFiles = await zip.loadAsync(response.data);
+      const proposal = await unzippedFiles.file(basename(filePath))?.async('arraybuffer');
       if (!proposal) {
-        toast.error('Erro ao descomprimir o arquivo da proposta.')
-        throw 'Erro ao descomprimir proposta.'
+        toast.error('Erro ao descomprimir o arquivo da proposta.');
+        throw 'Erro ao descomprimir proposta.';
       }
-      const url = window.URL.createObjectURL(new Blob([proposal]))
-      const link = document.createElement('a')
-      link.href = url
-      link.setAttribute('download', `${fixedFileName}${extension}`)
-      document.body.appendChild(link)
-      link.click()
-      toast.dismiss(toastID)
-      link.remove()
+      const url = window.URL.createObjectURL(new Blob([proposal]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `${fixedFileName}${extension}`);
+      document.body.appendChild(link);
+      link.click();
+      toast.dismiss(toastID);
+      link.remove();
     } catch (error) {
-      toast.error('Houve um erro no download do arquivo.')
+      toast.error('Houve um erro no download do arquivo.');
     }
   }
   return (
-    <div className="flex w-full gap-2">
+    <div className='flex w-full gap-2'>
       <div className={`flex w-full grow flex-col gap-1 lg:w-[${width ? width : '350px'}]`}>
-        <label htmlFor={inputIdentifier} className="font-sans font-bold  text-[#353432]">
+        <label htmlFor={inputIdentifier} className='font-sans font-bold  text-primary'>
           {label}
         </label>
-        <div className="relative flex h-[46px] w-full items-center justify-center overflow-x-hidden rounded-lg border-2 border-dotted border-blue-700 bg-gray-100 p-2">
-          <div className="absolute">
+        <div className='relative flex h-[46px] w-full items-center justify-center overflow-x-hidden rounded-lg border-2 border-dotted border-blue-700 bg-primary/10 p-2'>
+          <div className='absolute'>
             {file ? (
-              <div className="flex flex-col items-center">
-                <i className="fa fa-folder-open fa-4x text-blue-700"></i>
-                <span className="block text-center text-sm font-normal text-gray-400">{file ? file.name : `-`}</span>
+              <div className='flex flex-col items-center'>
+                <i className='fa fa-folder-open fa-4x text-blue-700'></i>
+                <span className='block text-center text-sm font-normal text-primary/40'>{file ? file.name : `-`}</span>
               </div>
             ) : (
-              <div className="flex flex-col items-center overflow-x-hidden text-sm">
-                <i className="fa fa-folder-open fa-4x text-blue-700"></i>
-                <span className="block w-full overflow-x-hidden font-normal text-gray-400">
+              <div className='flex flex-col items-center overflow-x-hidden text-sm'>
+                <i className='fa fa-folder-open fa-4x text-blue-700'></i>
+                <span className='block w-full overflow-x-hidden font-normal text-primary/40'>
                   {currentFileUrl ? formatLongString(currentFileUrl) : placeholder}
                 </span>
               </div>
@@ -104,16 +104,16 @@ function SingleFileInput({
           </div>
           <input
             onChange={(e) => {
-              if (e.target.files) setFile(e.target.files[0])
+              if (e.target.files) setFile(e.target.files[0]);
             }}
-            className="h-full w-full opacity-0"
-            type="file"
+            className='h-full w-full opacity-0'
+            type='file'
             id={inputIdentifier}
             accept={acceptedFiles ? acceptedFiles : '.png, .jpeg, .jpg, .pdf, .docx, .doc'}
           />
         </div>
       </div>
-      <div className="flex flex-col items-end justify-end gap-2">
+      <div className='flex flex-col items-end justify-end gap-2'>
         {!!file || (!file && !currentFileUrl) ? (
           <button
             disabled={!file}
@@ -121,13 +121,13 @@ function SingleFileInput({
               // updateData("PROJETO", "servicosAdicionais", {
               //   outros: infoHolder?.servicosAdicionais?.outros,
               // })
-              console.log('UEPA')
+              console.log('UEPA');
               if (file) {
-                await handleAttachment(fileKey, file)
-                setFile(null)
+                await handleAttachment(fileKey, file);
+                setFile(null);
               }
             }}
-            className="cursor-pointer pb-4 text-green-200"
+            className='cursor-pointer pb-4 text-green-200'
           >
             <AiOutlineCheck
               style={{
@@ -141,14 +141,14 @@ function SingleFileInput({
         {currentFileUrl && !file ? (
           <div
             onClick={() => handleDownload(currentFileUrl)}
-            className="flex cursor-pointer items-center justify-center pb-4 text-blue-700 duration-300 ease-in-out hover:scale-105 hover:text-blue-500"
+            className='flex cursor-pointer items-center justify-center pb-4 text-blue-700 duration-300 ease-in-out hover:scale-105 hover:text-blue-500'
           >
             <TbDownload />
           </div>
         ) : null}
       </div>
     </div>
-  )
+  );
 }
 
-export default SingleFileInput
+export default SingleFileInput;

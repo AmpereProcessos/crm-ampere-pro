@@ -6,7 +6,7 @@ import { NOVU_APPLICATION_IDENTIFIER } from '@/services/novu/config';
 function NotificationBlock({ session }: { session: TUserSession }) {
   const appearance: ReactAppearance = {
     elements: {
-      inbox__popoverContent: 'w-80 h-[28rem]',
+      inbox__popoverContent: 'w-80 h-112',
     },
     variables: {
       borderRadius: '8px',

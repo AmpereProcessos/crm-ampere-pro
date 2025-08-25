@@ -37,7 +37,7 @@ function AddressInformationBlock({ infoHolder, setInfoHolder }: AddressInformati
 	}
 	return (
 		<div className="flex w-full flex-col gap-2">
-			<h1 className="w-full rounded bg-[#fead41] p-1 text-center text-sm font-bold text-white">INFORMAÇÕES DE ENDEREÇO</h1>
+			<h1 className="w-full rounded-sm bg-[#fead41] p-1 text-center text-sm font-bold text-white">INFORMAÇÕES DE ENDEREÇO</h1>
 			<div className="grid grid-cols-1 grid-rows-3 items-center gap-6 px-2 lg:grid-cols-3 lg:grid-rows-1">
 				<TextInput
 					label="CEP"

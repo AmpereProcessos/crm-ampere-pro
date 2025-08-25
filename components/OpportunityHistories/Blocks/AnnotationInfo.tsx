@@ -13,7 +13,7 @@ function AnnotationInfo() {
 
 	return (
 		<div className="w-full flex flex-col gap-2">
-			<div className="flex items-center gap-2 bg-primary/20 px-2 py-1 rounded w-fit">
+			<div className="flex items-center gap-2 bg-primary/20 px-2 py-1 rounded-sm w-fit">
 				<TbNotes size={15} />
 				<h1 className="text-xs tracking-tight font-medium text-start w-fit">INFORMAÇÕES DA ANOTAÇÃO</h1>
 			</div>

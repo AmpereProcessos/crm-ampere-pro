@@ -13,7 +13,7 @@ function ReturnBlock(node: ReturnBlockProps) {
   if (!activeAutomationReference.returns) return null
   return (
     <div className="flex w-full flex-col gap-2">
-      <h1 className="w-full rounded p-1 text-center text-xs font-bold text-blue-500">ENTIDADE DE RETORNO</h1>
+      <h1 className="w-full rounded-sm p-1 text-center text-xs font-bold text-blue-500">ENTIDADE DE RETORNO</h1>
       <div className="flex w-full flex-col gap-2 p-2">
         <div className="flex flex-wrap items-center gap-2">
           {ProcessAutomationEntitiesSpecs.filter((p) => !!p.returnable).map((p, index) => (

@@ -1,80 +1,79 @@
-import React, { useState } from 'react'
-import Avatar from '../utils/Avatar'
-import { getUserAvatarUrl } from '@/lib/methods/extracting'
-import { IUsuario } from '@/utils/models'
-import { formatNameAsInitials } from '@/lib/methods/formatting'
-import GoalTrackingBar from './GoalTrackingBar'
-import { TUserDTOWithSaleGoals } from '@/utils/schemas/user.schema'
+import { getUserAvatarUrl } from '@/lib/methods/extracting';
+import { formatNameAsInitials } from '@/lib/methods/formatting';
+import { TUserDTOWithSaleGoals } from '@/utils/schemas/user.schema';
+import { useState } from 'react';
+import Avatar from '../utils/Avatar';
+import GoalTrackingBar from './GoalTrackingBar';
 type SdrStatListItemProps = {
   promoter: {
-    nome: string
-    objetivo: number
-    atingido: number
-    percentual: number
-    origem?: any
-  }
-  promoters: TUserDTOWithSaleGoals[]
-}
+    nome: string;
+    objetivo: number;
+    atingido: number;
+    percentual: number;
+    origem?: any;
+  };
+  promoters: TUserDTOWithSaleGoals[];
+};
 function renderByLeadsStats({ origins }: { origins: any }) {
-  const entries = Object.entries(origins)
+  const entries = Object.entries(origins);
   if (entries.length > 0) {
     const total = entries.reduce((acc, current: any) => {
-      const number = current[1] || 0
-      return acc + number
-    }, 0)
+      const number = current[1] || 0;
+      return acc + number;
+    }, 0);
     return (
-      <div className="flex w-full flex-col">
+      <div className='flex w-full flex-col'>
         {entries.map(([inside, value], index) => (
-          <div key={index} className="flex w-full justify-between">
-            <p className="pl-4 text-xxs font-medium uppercase tracking-tight text-gray-500 lg:text-xs">{inside}</p>
-            <h1 className="text-xs font-medium uppercase tracking-tight">{value as number}</h1>
+          <div key={index} className='flex w-full justify-between'>
+            <p className='pl-4 text-xxs font-medium uppercase tracking-tight text-primary/50 lg:text-xs'>{inside}</p>
+            <h1 className='text-xs font-medium uppercase tracking-tight'>{value as number}</h1>
           </div>
         ))}
-        <div className="flex w-full justify-between">
-          <p className="pl-4 text-xxs font-bold uppercase tracking-tight text-[#15599a] lg:text-xs">TOTAL</p>
-          <h1 className="text-xs font-medium uppercase tracking-tight">{total}</h1>
+        <div className='flex w-full justify-between'>
+          <p className='pl-4 text-xxs font-bold uppercase tracking-tight text-[#15599a] lg:text-xs'>TOTAL</p>
+          <h1 className='text-xs font-medium uppercase tracking-tight'>{total}</h1>
         </div>
       </div>
-    )
+    );
   } else {
     return (
-      <div className="mb-1 flex w-full items-center">
-        <p className="w-full text-center text-xs italic text-gray-500 lg:text-sm">Sem resultados provindos por lead para esse indicador.</p>
+      <div className='mb-1 flex w-full items-center'>
+        <p className='w-full text-center text-xs italic text-primary/50 lg:text-sm'>Sem resultados provindos por lead para esse indicador.</p>
       </div>
-    )
+    );
   }
 }
 function renderByAquisitionOriginStats({ origins }: { origins: any }) {
-  const entries = Object.entries(origins)
+  const entries = Object.entries(origins);
 
   const total = entries.reduce((acc, current: any) => {
-    const number = current[1] || 0
-    return acc + number
-  }, 0)
+    const number = current[1] || 0;
+    return acc + number;
+  }, 0);
   return (
-    <div className="flex w-full flex-col">
+    <div className='flex w-full flex-col'>
       {entries.map(([key, value], index) => {
         return (
-          <div key={index} className="flex w-full justify-between">
-            <p className="pl-4 text-xxs font-medium uppercase tracking-tight text-gray-500 lg:text-xs">{key}</p>
-            <h1 className="text-xs font-medium uppercase tracking-tight">{value as number}</h1>
+          <div key={index} className='flex w-full justify-between'>
+            <p className='pl-4 text-xxs font-medium uppercase tracking-tight text-primary/50 lg:text-xs'>{key}</p>
+            <h1 className='text-xs font-medium uppercase tracking-tight'>{value as number}</h1>
           </div>
-        )
+        );
       })}
-      <div className="flex w-full justify-between">
-        <p className="pl-4 text-xxs font-bold uppercase tracking-tight text-[#15599a] lg:text-xs">TOTAL</p>
-        <h1 className="text-xs font-medium uppercase tracking-tight">{total}</h1>
+      <div className='flex w-full justify-between'>
+        <p className='pl-4 text-xxs font-bold uppercase tracking-tight text-[#15599a] lg:text-xs'>TOTAL</p>
+        <h1 className='text-xs font-medium uppercase tracking-tight'>{total}</h1>
       </div>
     </div>
-  )
+  );
 }
 function SdrStatListItem({ promoter, promoters }: SdrStatListItemProps) {
-  const [originsVisible, setOriginsVisible] = useState<boolean>(false)
+  const [originsVisible, setOriginsVisible] = useState<boolean>(false);
   return (
-    <div className="flex w-full flex-col">
-      <div className="flex w-full items-center gap-4">
-        <div className="flex items-center gap-2">
-          <div onClick={() => setOriginsVisible((prev) => !prev)} className="flex cursor-pointer md:hidden">
+    <div className='flex w-full flex-col'>
+      <div className='flex w-full items-center gap-4'>
+        <div className='flex items-center gap-2'>
+          <div onClick={() => setOriginsVisible((prev) => !prev)} className='flex cursor-pointer md:hidden'>
             <Avatar
               url={getUserAvatarUrl({ users: promoters, userName: promoter.nome })}
               height={20}
@@ -84,29 +83,29 @@ function SdrStatListItem({ promoter, promoters }: SdrStatListItemProps) {
           </div>
           <p
             onClick={() => setOriginsVisible((prev) => !prev)}
-            className="hidden min-w-[150px] max-w-[150px] cursor-pointer font-medium uppercase tracking-tight text-gray-500 hover:text-cyan-500 md:flex lg:text-sm"
+            className='hidden min-w-[150px] max-w-[150px] cursor-pointer font-medium uppercase tracking-tight text-primary/50 hover:text-cyan-500 md:flex lg:text-sm'
           >
             {promoter.nome}
           </p>
         </div>
-        <div className="grow">
+        <div className='grow'>
           <GoalTrackingBar
-            barBgColor="black"
+            barBgColor='black'
             goalText={`${promoter.objetivo}`}
-            barHeigth="25px"
+            barHeigth='25px'
             valueGoal={promoter.objetivo}
             valueHit={promoter.atingido}
           />
         </div>
       </div>
       {originsVisible && promoter.origem ? (
-        <div className="flex w-full flex-col gap-1">
-          <h1 className="w-full text-start text-xs font-bold text-gray-500 lg:text-sm">AQUISIÇÃO</h1>
+        <div className='flex w-full flex-col gap-1'>
+          <h1 className='w-full text-start text-xs font-bold text-primary/50 lg:text-sm'>AQUISIÇÃO</h1>
           {renderByAquisitionOriginStats({ origins: promoter.origem })}
         </div>
       ) : null}
     </div>
-  )
+  );
 }
 
-export default SdrStatListItem
+export default SdrStatListItem;

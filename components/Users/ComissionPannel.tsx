@@ -35,8 +35,8 @@ function ComissionPannel({ infoHolder, updateUserInfo }: ComissionPannelProps) {
 	}
 
 	return (
-		<div className="flex w-full flex-col gap-2 rounded border border-orange-500">
-			<div className="flex w-full items-center justify-center gap-1 rounded bg-orange-500 p-2 text-white">
+		<div className="flex w-full flex-col gap-2 rounded-sm border border-orange-500">
+			<div className="flex w-full items-center justify-center gap-1 rounded-sm bg-orange-500 p-2 text-white">
 				<h1 className="text-sm font-medium text-white">PAINEL DE COMISSÃO</h1>
 			</div>
 			<div className="w-full flex flex-col p-3">

@@ -19,7 +19,7 @@ export function GoalGeneralBlock() {
 
 	return (
 		<div className="flex w-full flex-col gap-2">
-			<div className="flex w-fit items-center gap-2 rounded bg-primary/20 px-2 py-1">
+			<div className="flex w-fit items-center gap-2 rounded-sm bg-primary/20 px-2 py-1">
 				<LayoutGrid size={15} />
 				<h1 className="text-start  w-fit font-medium text-xs tracking-tight">INFORMAÇÕES GERAIS</h1>
 			</div>

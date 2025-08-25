@@ -1,6 +1,6 @@
+import { cn } from '@/lib/utils';
 import { Raleway } from 'next/font/google';
 import type { PropsWithChildren } from 'react';
-import { cn } from '@/lib/utils';
 
 const raleway = Raleway({
   variable: '--font-raleway',
@@ -9,14 +9,9 @@ const raleway = Raleway({
 
 function FullScreenWrapper({ children }: PropsWithChildren) {
   return (
-    <div
-      className={cn(
-        'flex min-h-[100vh] w-screen max-w-full flex-col bg-[#fff] font-Inter antialiased xl:min-h-[100vh]',
-        raleway.variable
-      )}
-    >
-      <div className="flex min-h-[100%] grow">
-        <div className="flex w-full grow flex-col">{children}</div>
+    <div className={cn('flex min-h-screen w-screen max-w-full flex-col bg-background font-Inter antialiased xl:min-h-screen', raleway.variable)}>
+      <div className='flex min-h-full grow'>
+        <div className='flex w-full grow flex-col'>{children}</div>
       </div>
     </div>
   );

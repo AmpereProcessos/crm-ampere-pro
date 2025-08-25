@@ -1,12 +1,11 @@
-import dayjs from 'dayjs';
-import type { ComponentType } from 'react';
-import ReactDOM from 'react-dom/server';
-import type { IconType } from 'react-icons';
-import { AiFillFile } from 'react-icons/ai';
-import { BsCart } from 'react-icons/bs';
 import { fileTypes } from '@/utils/constants';
 import type { TProductItem } from '@/utils/schemas/kits.schema';
 import { ProductItemCategories, Units } from '@/utils/select-options';
+import dayjs from 'dayjs';
+import type { ComponentType } from 'react';
+import type { IconType } from 'react-icons';
+import { AiFillFile } from 'react-icons/ai';
+import { BsCart } from 'react-icons/bs';
 import { cn } from '../utils';
 
 export function handleRenderIcon(format: string, size?: number) {
@@ -14,11 +13,11 @@ export function handleRenderIcon(format: string, size?: number) {
   const extensionInfo = Object.values(fileTypes).find((f) => f.title == format);
   if (!extensionInfo)
     return (
-      <div className="text-black text-lg">
+      <div className='text-primary text-lg'>
         <AiFillFile />
       </div>
     );
-  return <div className="text-black text-lg">{renderIcon(extensionInfo.icon, size || 15)}</div>;
+  return <div className='text-primary text-lg'>{renderIcon(extensionInfo.icon, size || 15)}</div>;
 }
 export function renderIcon(icon: React.ComponentType | IconType, size: number | undefined = 12) {
   const IconComponent = icon;
@@ -35,7 +34,11 @@ export function renderCategoryIcon(category: TProductItem['categoria'], size: nu
 }
 export function renderDateDiffText(dueDate?: string) {
   if (!dueDate)
-    return <p className={'min-w-[170px] break-keep rounded-md text-start font-medium text-[0.65rem] text-green-500 leading-none'}>SEM DATA DE VENCIMENTO</p>;
+    return (
+      <p className={'min-w-[170px] break-keep rounded-md text-start font-medium text-[0.65rem] text-green-500 leading-none'}>
+        SEM DATA DE VENCIMENTO
+      </p>
+    );
   const diffHours = dayjs(dueDate).diff(undefined, 'hour');
   const diffDays = dayjs(dueDate).diff(undefined, 'days');
   var number;
@@ -91,7 +94,7 @@ export function renderPaginationPageItemsIcons({
   return pages.map((p) => (
     <button
       className={`${
-        activePage == p ? 'border-black bg-black text-white' : 'border-transparent text-black hover:bg-gray-500'
+        activePage == p ? 'border-black bg-black text-white' : 'border-transparent text-primary hover:bg-primary/50'
       } h-10 max-h-10 min-h-10 w-10 min-w-10 max-w-10 rounded-full border font-medium text-xs`}
       disabled={typeof p != 'number' || disabled}
       key={p}

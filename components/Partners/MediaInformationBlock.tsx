@@ -9,7 +9,7 @@ type MediaInformationBlockProps = {
 function MediaInformationBlock({ infoHolder, setInfoHolder }: MediaInformationBlockProps) {
   return (
     <div className="flex w-full flex-col gap-2">
-      <h1 className="w-full rounded bg-[#fead41] p-1 text-center text-sm font-bold text-white">MÍDIAS</h1>
+      <h1 className="w-full rounded-sm bg-[#fead41] p-1 text-center text-sm font-bold text-white">MÍDIAS</h1>
       <div className="flex w-full flex-col items-center justify-center gap-2 lg:flex-row">
         <div className="w-full lg:w-1/3">
           <TextInput

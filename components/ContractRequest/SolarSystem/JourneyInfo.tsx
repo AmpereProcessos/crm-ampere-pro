@@ -1,37 +1,36 @@
-import TextInput from '@/components/Inputs/TextInput'
-import { formatToPhone } from '@/utils/methods'
-import { IContractRequest } from '@/utils/models'
-import { TContractRequest } from '@/utils/schemas/integrations/app-ampere/contract-request.schema'
-import React from 'react'
-import { toast } from 'react-hot-toast'
+import TextInput from '@/components/Inputs/TextInput';
+import { formatToPhone } from '@/utils/methods';
+import { TContractRequest } from '@/utils/schemas/integrations/app-ampere/contract-request.schema';
+import React from 'react';
+import { toast } from 'react-hot-toast';
 type JourneyInfoProps = {
-  requestInfo: TContractRequest
-  setRequestInfo: React.Dispatch<React.SetStateAction<TContractRequest>>
-  goToPreviousStage: () => void
-  goToNextStage: () => void
-}
+  requestInfo: TContractRequest;
+  setRequestInfo: React.Dispatch<React.SetStateAction<TContractRequest>>;
+  goToPreviousStage: () => void;
+  goToNextStage: () => void;
+};
 function JourneyInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNextStage }: JourneyInfoProps) {
   function validateFields() {
     if (requestInfo.nomeContatoJornadaUm.trim().length < 6) {
-      toast.error('Por favor, preencha o nome do contato primário')
-      return false
+      toast.error('Por favor, preencha o nome do contato primário');
+      return false;
     }
     if (requestInfo.telefoneContatoUm.trim().length < 9) {
-      toast.error('Por favor, preencha o telefone do contato primário')
-      return false
+      toast.error('Por favor, preencha o telefone do contato primário');
+      return false;
     }
-    return true
+    return true;
   }
   return (
-    <div className="flex w-full grow flex-col bg-[#fff] pb-2">
-      <span className="py-2 text-center text-lg font-bold uppercase text-[#15599a]">DADOS PARA CONTATO</span>
-      <div className="flex grow flex-col gap-2 p-2">
-        <div className="grid w-full grid-cols-2 gap-2">
-          <div className="w-full">
+    <div className='flex w-full grow flex-col bg-background pb-2'>
+      <span className='py-2 text-center text-lg font-bold uppercase text-[#15599a]'>DADOS PARA CONTATO</span>
+      <div className='flex grow flex-col gap-2 p-2'>
+        <div className='grid w-full grid-cols-2 gap-2'>
+          <div className='w-full'>
             <TextInput
-              width="100%"
+              width='100%'
               label={'NOME DO CONTATO 1'}
-              placeholder="Preencha aqui o nome do contato primário para a jornada do cliente."
+              placeholder='Preencha aqui o nome do contato primário para a jornada do cliente.'
               editable={true}
               value={requestInfo.nomeContatoJornadaUm}
               handleChange={(value) =>
@@ -42,11 +41,11 @@ function JourneyInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNextS
               }
             />
           </div>
-          <div className="w-full">
+          <div className='w-full'>
             <TextInput
-              width="100%"
+              width='100%'
               label={'TELEFONE DO CONTATO 1'}
-              placeholder="Preencha aqui o telefone do contato primário para a jornada do cliente."
+              placeholder='Preencha aqui o telefone do contato primário para a jornada do cliente.'
               editable={true}
               value={requestInfo.telefoneContatoUm}
               handleChange={(value) =>
@@ -58,12 +57,12 @@ function JourneyInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNextS
             />
           </div>
         </div>
-        <div className="grid w-full grid-cols-2 gap-2">
-          <div className="w-full">
+        <div className='grid w-full grid-cols-2 gap-2'>
+          <div className='w-full'>
             <TextInput
-              width="100%"
+              width='100%'
               label={'NOME DO CONTATO 2'}
-              placeholder="Preencha aqui o nome do contato secundário para a jornada do cliente."
+              placeholder='Preencha aqui o nome do contato secundário para a jornada do cliente.'
               editable={true}
               value={requestInfo.nomeContatoJornadaDois}
               handleChange={(value) =>
@@ -74,11 +73,11 @@ function JourneyInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNextS
               }
             />
           </div>
-          <div className="w-full">
+          <div className='w-full'>
             <TextInput
-              width="100%"
+              width='100%'
               label={'TELEFONE DO CONTATO 2'}
-              placeholder="Preencha aqui o telefone do contato secundário para a jornada do cliente."
+              placeholder='Preencha aqui o telefone do contato secundário para a jornada do cliente.'
               editable={true}
               value={requestInfo.telefoneContatoDois}
               handleChange={(value) =>
@@ -91,10 +90,12 @@ function JourneyInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNextS
           </div>
         </div>
 
-        <div className="mt-2 flex w-full flex-col items-center self-center px-2">
-          <span className="font-raleway text-center text-sm font-bold uppercase">CUIDADOS PARA CONTATO COM O CLIENTE</span>
+        <div className='mt-2 flex w-full flex-col items-center self-center px-2'>
+          <span className='font-raleway text-center text-sm font-bold uppercase'>CUIDADOS PARA CONTATO COM O CLIENTE</span>
           <textarea
-            placeholder={'Descreva aqui cuidados em relação ao contato do cliente durante a jornada. Melhores horários para contato, texto ou aúdio, etc...'}
+            placeholder={
+              'Descreva aqui cuidados em relação ao contato do cliente durante a jornada. Melhores horários para contato, texto ou aúdio, etc...'
+            }
             value={requestInfo.cuidadosContatoJornada}
             onChange={(e) =>
               setRequestInfo({
@@ -102,33 +103,33 @@ function JourneyInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNextS
                 cuidadosContatoJornada: e.target.value,
               })
             }
-            className="block h-[80px] w-full resize-none rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-center text-gray-900 outline-none focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+            className='block h-[80px] w-full resize-none rounded-lg border border-primary/30 bg-gray-50 p-2.5 text-center text-primary/90 outline-hidden focus:border-blue-500 focus:ring-blue-500 dark:border-primary/60 dark:bg-primary/70 dark:text-white dark:placeholder-primary/40 dark:focus:border-blue-500 dark:focus:ring-blue-500'
           />
         </div>
       </div>
 
-      <div className="mt-2 flex w-full flex-wrap justify-between  gap-2">
+      <div className='mt-2 flex w-full flex-wrap justify-between  gap-2'>
         <button
           onClick={() => {
-            goToPreviousStage()
+            goToPreviousStage();
           }}
-          className="rounded p-2 font-bold text-gray-500 duration-300 hover:scale-105"
+          className='rounded p-2 font-bold text-primary/50 duration-300 hover:scale-105'
         >
           Voltar
         </button>
         <button
           onClick={() => {
             if (validateFields()) {
-              goToNextStage()
+              goToNextStage();
             }
           }}
-          className="rounded p-2 font-bold hover:bg-black hover:text-white"
+          className='rounded p-2 font-bold hover:bg-black hover:text-white'
         >
           Prosseguir
         </button>
       </div>
     </div>
-  )
+  );
 }
 
-export default JourneyInfo
+export default JourneyInfo;

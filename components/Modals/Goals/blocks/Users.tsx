@@ -27,7 +27,7 @@ function GoalUsersBlock() {
 	const editingUser = users.find((user) => user.id === editUserModalId);
 	return (
 		<div className="flex w-full flex-col gap-2">
-			<div className="flex w-fit items-center gap-2 rounded bg-primary/20 px-2 py-1">
+			<div className="flex w-fit items-center gap-2 rounded-sm bg-primary/20 px-2 py-1">
 				<UsersRound size={15} />
 				<h1 className="w-fit text-start font-medium text-xs tracking-tight">USUÁRIOS</h1>
 			</div>
@@ -121,7 +121,7 @@ function NewUserMenu({ closeMenu, addUser }: NewUserMenuProps) {
 				width="100%"
 			/>
 			<div className="flex w-full flex-col gap-2">
-				<div className="flex w-fit items-center gap-2 rounded bg-primary/20 px-2 py-1">
+				<div className="flex w-fit items-center gap-2 rounded-sm bg-primary/20 px-2 py-1">
 					<Goal size={15} />
 					<h1 className="w-fit text-start font-medium text-xs tracking-tight">OBJETIVO</h1>
 				</div>
@@ -243,7 +243,7 @@ function EditUserMenu({ closeMenu, initialUser, updateUser }: EditUserMenuProps)
 				width="100%"
 			/>
 			<div className="flex w-full flex-col gap-2">
-				<div className="flex w-fit items-center gap-2 rounded bg-primary/20 px-2 py-1">
+				<div className="flex w-fit items-center gap-2 rounded-sm bg-primary/20 px-2 py-1">
 					<Goal size={15} />
 					<h1 className="w-fit text-start font-medium text-xs tracking-tight">OBJETIVO</h1>
 				</div>

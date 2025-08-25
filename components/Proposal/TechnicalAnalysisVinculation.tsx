@@ -1,31 +1,31 @@
-import { useOpportunityTechnicalAnalysis } from '@/utils/queries/technical-analysis'
-import React from 'react'
-import ProposalTechnicalAnalysis from '../Cards/ProposalTechnicalAnalysis'
-import { TProposal } from '@/utils/schemas/proposal.schema'
-import { TTechnicalAnalysisDTO } from '@/utils/schemas/technical-analysis.schema'
+import { useOpportunityTechnicalAnalysis } from '@/utils/queries/technical-analysis';
+import { TProposal } from '@/utils/schemas/proposal.schema';
+import { TTechnicalAnalysisDTO } from '@/utils/schemas/technical-analysis.schema';
+import React from 'react';
+import ProposalTechnicalAnalysis from '../Cards/ProposalTechnicalAnalysis';
 
 type TechnicalAnalysisVinculationProps = {
-  opportunityId: string
-  userHasPricingViewPermission: boolean
-  infoHolder: TProposal
-  setInfoHolder: React.Dispatch<React.SetStateAction<TProposal>>
-}
+  opportunityId: string;
+  userHasPricingViewPermission: boolean;
+  infoHolder: TProposal;
+  setInfoHolder: React.Dispatch<React.SetStateAction<TProposal>>;
+};
 function TechnicalAnalysisVinculation({ infoHolder, setInfoHolder, opportunityId, userHasPricingViewPermission }: TechnicalAnalysisVinculationProps) {
   const {
     data: analysis,
     isLoading: analysisLoading,
     isError: analysisError,
     isSuccess: analysisSuccess,
-  } = useOpportunityTechnicalAnalysis({ opportunityId: opportunityId, concludedOnly: true })
+  } = useOpportunityTechnicalAnalysis({ opportunityId: opportunityId, concludedOnly: true });
 
   function vinculateAnalysis(analysis: TTechnicalAnalysisDTO) {
     const totals = analysis.custos.reduce(
       (acc, current) => {
-        const category = current.categoria
-        const total = current.total || 0
-        if (!category) return acc
-        acc[category] += total
-        return acc
+        const category = current.categoria;
+        const total = current.total || 0;
+        if (!category) return acc;
+        acc[category] += total;
+        return acc;
       },
       {
         INSTALAÇÃO: 0,
@@ -33,7 +33,7 @@ function TechnicalAnalysisVinculation({ infoHolder, setInfoHolder, opportunityId
         ESTRUTURA: 0,
         OUTROS: 0,
       }
-    )
+    );
     setInfoHolder((prev) => ({
       ...prev,
       idAnaliseTecnica: analysis._id,
@@ -44,7 +44,7 @@ function TechnicalAnalysisVinculation({ infoHolder, setInfoHolder, opportunityId
         custosEstruturaInstalacao: totals.ESTRUTURA,
         custosOutros: totals.OUTROS,
       },
-    }))
+    }));
   }
   function unvinculateAnalysis() {
     setInfoHolder((prev) => ({
@@ -57,14 +57,14 @@ function TechnicalAnalysisVinculation({ infoHolder, setInfoHolder, opportunityId
         custosEstruturaInstalacao: null,
         custosOutros: null,
       },
-    }))
+    }));
   }
   return (
     <div>
       {analysisSuccess ? (
-        <div className="mt-2 flex w-full flex-col">
-          <h1 className="w-full rounded bg-gray-800 p-1 text-center font-bold text-white">ANÁLISES TÉCNICAS</h1>
-          <div className="flex w-full flex-col gap-1 py-2">
+        <div className='mt-2 flex w-full flex-col'>
+          <h1 className='w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-white'>ANÁLISES TÉCNICAS</h1>
+          <div className='flex w-full flex-col gap-1 py-2'>
             {analysis.length > 0 ? (
               analysis.map((analysis) => (
                 <ProposalTechnicalAnalysis
@@ -77,7 +77,7 @@ function TechnicalAnalysisVinculation({ infoHolder, setInfoHolder, opportunityId
                 />
               ))
             ) : (
-              <p className="flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-gray-500">
+              <p className='flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/50'>
                 Sem análises técnicas concluídas disponíveis.
               </p>
             )}
@@ -85,7 +85,7 @@ function TechnicalAnalysisVinculation({ infoHolder, setInfoHolder, opportunityId
         </div>
       ) : null}
     </div>
-  )
+  );
 }
 
-export default TechnicalAnalysisVinculation
+export default TechnicalAnalysisVinculation;

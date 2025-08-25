@@ -43,7 +43,7 @@ export default function GoalValuesBlock() {
 		Object.keys(valuesTotalsFromUsers.totals).some((key) => valuesTotalsFromUsers.totals[key as TGoalKeys] !== goalValues[key as TGoalKeys]);
 	return (
 		<div className="flex w-full flex-col gap-2">
-			<div className="flex w-fit items-center gap-2 rounded bg-primary/20 px-2 py-1">
+			<div className="flex w-fit items-center gap-2 rounded-sm bg-primary/20 px-2 py-1">
 				<Goal size={15} />
 				<h1 className="w-fit text-start font-medium text-xs tracking-tight">OBJETIVO</h1>
 			</div>

@@ -1,5 +1,4 @@
 'use client';
-import { useState } from 'react';
 import Funnels from '@/components/Configuration/Funnels';
 import Goals from '@/components/Configuration/Goals';
 import Integrations from '@/components/Configuration/Integrations';
@@ -14,6 +13,7 @@ import UserGroups from '@/components/Configuration/UserGroups';
 import Users from '@/components/Configuration/Users';
 import { Sidebar } from '@/components/Sidebar';
 import type { TUserSession } from '@/lib/auth/session';
+import { useState } from 'react';
 
 type TConfigurationModes =
   | 'profile'
@@ -35,31 +35,31 @@ type ConfigurationsPageProps = {
 function ConfigurationsPage({ session }: ConfigurationsPageProps) {
   const [mode, setMode] = useState<TConfigurationModes>('profile');
   return (
-    <div className="flex h-full flex-col md:flex-row">
+    <div className='flex h-full flex-col md:flex-row'>
       <Sidebar session={session} />
-      <div className="flex w-full max-w-full grow flex-col overflow-x-hidden bg-[#f8f9fa] p-6">
-        <div className="flex w-full flex-col border-gray-300 border-b px-6 pb-2">
-          <h1 className="font-bold text-2xl tracking-tight">Configurações</h1>
-          <p className="text-[#71717A]">Gerencie configurações e preferências</p>
+      <div className='flex w-full max-w-full grow flex-col overflow-x-hidden bg-background p-6'>
+        <div className='flex w-full flex-col border-primary/30 border-b px-6 pb-2'>
+          <h1 className='font-bold text-2xl tracking-tight'>Configurações</h1>
+          <p className='text-[#71717A]'>Gerencie configurações e preferências</p>
         </div>
-        <div className="flex grow flex-col items-start gap-2 py-2 lg:flex-row">
-          <div className="flex h-fit w-full flex-col gap-1 px-2 py-2 lg:h-full lg:w-1/5">
+        <div className='flex grow flex-col items-start gap-2 py-2 lg:flex-row'>
+          <div className='flex h-fit w-full flex-col gap-1 px-2 py-2 lg:h-full lg:w-1/5'>
             <button
               className={`${
-                mode === 'profile' ? 'bg-gray-100' : ''
-              } w-full rounded-md px-4 py-2 text-center font-semibold text-gray-600 text-xs duration-300 ease-in-out hover:bg-gray-100 lg:text-start lg:text-base`}
+                mode === 'profile' ? 'bg-primary/10' : ''
+              } w-full rounded-md px-4 py-2 text-center font-semibold text-primary/60 text-xs duration-300 ease-in-out hover:bg-primary/10 lg:text-start lg:text-base`}
               onClick={() => setMode('profile')}
-              type="button"
+              type='button'
             >
               Perfil
             </button>
             {session.user.permissoes.configuracoes.parceiro ? (
               <button
                 className={`${
-                  mode === 'partner' ? 'bg-gray-100' : ''
-                } w-full rounded-md px-4 py-2 text-center font-semibold text-gray-600 text-xs duration-300 ease-in-out hover:bg-gray-100 lg:text-start lg:text-base`}
+                  mode === 'partner' ? 'bg-primary/10' : ''
+                } w-full rounded-md px-4 py-2 text-center font-semibold text-primary/60 text-xs duration-300 ease-in-out hover:bg-primary/10 lg:text-start lg:text-base`}
                 onClick={() => setMode('partner')}
-                type="button"
+                type='button'
               >
                 Empresa
               </button>
@@ -67,10 +67,10 @@ function ConfigurationsPage({ session }: ConfigurationsPageProps) {
             {session.user.permissoes.usuarios.visualizar ? (
               <button
                 className={`${
-                  mode === 'users' ? 'bg-gray-100' : ''
-                } w-full rounded-md px-4 py-2 text-center font-semibold text-gray-600 text-xs duration-300 ease-in-out hover:bg-gray-100 lg:text-start lg:text-base`}
+                  mode === 'users' ? 'bg-primary/10' : ''
+                } w-full rounded-md px-4 py-2 text-center font-semibold text-primary/60 text-xs duration-300 ease-in-out hover:bg-primary/10 lg:text-start lg:text-base`}
                 onClick={() => setMode('users')}
-                type="button"
+                type='button'
               >
                 Usuários
               </button>
@@ -78,10 +78,10 @@ function ConfigurationsPage({ session }: ConfigurationsPageProps) {
             {session.user.permissoes.configuracoes.gruposUsuarios ? (
               <button
                 className={`${
-                  mode === 'user-groups' ? 'bg-gray-100' : ''
-                } w-full rounded-md px-4 py-2 text-center font-semibold text-gray-600 text-xs duration-300 ease-in-out hover:bg-gray-100 lg:text-start lg:text-base`}
+                  mode === 'user-groups' ? 'bg-primary/10' : ''
+                } w-full rounded-md px-4 py-2 text-center font-semibold text-primary/60 text-xs duration-300 ease-in-out hover:bg-primary/10 lg:text-start lg:text-base`}
                 onClick={() => setMode('user-groups')}
-                type="button"
+                type='button'
               >
                 Grupos de usuários
               </button>
@@ -89,10 +89,10 @@ function ConfigurationsPage({ session }: ConfigurationsPageProps) {
             {session.user.permissoes.configuracoes.tiposProjeto ? (
               <button
                 className={`${
-                  mode === 'project-types' ? 'bg-gray-100' : ''
-                } w-full rounded-md px-4 py-2 text-center font-semibold text-gray-600 text-xs duration-300 ease-in-out hover:bg-gray-100 lg:text-start lg:text-base`}
+                  mode === 'project-types' ? 'bg-primary/10' : ''
+                } w-full rounded-md px-4 py-2 text-center font-semibold text-primary/60 text-xs duration-300 ease-in-out hover:bg-primary/10 lg:text-start lg:text-base`}
                 onClick={() => setMode('project-types')}
-                type="button"
+                type='button'
               >
                 Tipos de projeto
               </button>
@@ -100,10 +100,10 @@ function ConfigurationsPage({ session }: ConfigurationsPageProps) {
             {session.user.permissoes.configuracoes.funis ? (
               <button
                 className={`${
-                  mode === 'funnels' ? 'bg-gray-100' : ''
-                } w-full rounded-md px-4 py-2 text-center font-semibold text-gray-600 text-xs duration-300 ease-in-out hover:bg-gray-100 lg:text-start lg:text-base`}
+                  mode === 'funnels' ? 'bg-primary/10' : ''
+                } w-full rounded-md px-4 py-2 text-center font-semibold text-primary/60 text-xs duration-300 ease-in-out hover:bg-primary/10 lg:text-start lg:text-base`}
                 onClick={() => setMode('funnels')}
-                type="button"
+                type='button'
               >
                 Funis
               </button>
@@ -111,10 +111,10 @@ function ConfigurationsPage({ session }: ConfigurationsPageProps) {
             {session.user.permissoes.precos.editar ? (
               <button
                 className={`${
-                  mode === 'pricing-methods' ? 'bg-gray-100' : ''
-                } w-full rounded-md px-4 py-2 text-center font-semibold text-gray-600 text-xs duration-300 ease-in-out hover:bg-gray-100 lg:text-start lg:text-base`}
+                  mode === 'pricing-methods' ? 'bg-primary/10' : ''
+                } w-full rounded-md px-4 py-2 text-center font-semibold text-primary/60 text-xs duration-300 ease-in-out hover:bg-primary/10 lg:text-start lg:text-base`}
                 onClick={() => setMode('pricing-methods')}
-                type="button"
+                type='button'
               >
                 Metodologias de precificação
               </button>
@@ -122,10 +122,10 @@ function ConfigurationsPage({ session }: ConfigurationsPageProps) {
             {session.user.permissoes.precos.editar ? (
               <button
                 className={`${
-                  mode === 'payment-methods' ? 'bg-gray-100' : ''
-                } w-full rounded-md px-4 py-2 text-center font-semibold text-gray-600 text-xs duration-300 ease-in-out hover:bg-gray-100 lg:text-start lg:text-base`}
+                  mode === 'payment-methods' ? 'bg-primary/10' : ''
+                } w-full rounded-md px-4 py-2 text-center font-semibold text-primary/60 text-xs duration-300 ease-in-out hover:bg-primary/10 lg:text-start lg:text-base`}
                 onClick={() => setMode('payment-methods')}
-                type="button"
+                type='button'
               >
                 Métodos de pagamento
               </button>
@@ -133,10 +133,10 @@ function ConfigurationsPage({ session }: ConfigurationsPageProps) {
             {session.user.permissoes.parceiros.visualizar ? (
               <button
                 className={`${
-                  mode === 'partners' ? 'bg-gray-100' : ''
-                } w-full rounded-md px-4 py-2 text-center font-semibold text-gray-600 text-xs duration-300 ease-in-out hover:bg-gray-100 lg:text-start lg:text-base`}
+                  mode === 'partners' ? 'bg-primary/10' : ''
+                } w-full rounded-md px-4 py-2 text-center font-semibold text-primary/60 text-xs duration-300 ease-in-out hover:bg-primary/10 lg:text-start lg:text-base`}
                 onClick={() => setMode('partners')}
-                type="button"
+                type='button'
               >
                 Parceiros
               </button>
@@ -144,10 +144,10 @@ function ConfigurationsPage({ session }: ConfigurationsPageProps) {
             {session.user.permissoes.configuracoes.parceiro ? (
               <button
                 className={`${
-                  mode === 'integrations' ? 'bg-gray-100' : ''
-                } w-full rounded-md px-4 py-2 text-center font-semibold text-gray-600 text-xs duration-300 ease-in-out hover:bg-gray-100 lg:text-start lg:text-base`}
+                  mode === 'integrations' ? 'bg-primary/10' : ''
+                } w-full rounded-md px-4 py-2 text-center font-semibold text-primary/60 text-xs duration-300 ease-in-out hover:bg-primary/10 lg:text-start lg:text-base`}
                 onClick={() => setMode('integrations')}
-                type="button"
+                type='button'
               >
                 Integrações
               </button>
@@ -155,10 +155,10 @@ function ConfigurationsPage({ session }: ConfigurationsPageProps) {
             {session.user.permissoes.configuracoes.parceiro ? (
               <button
                 className={`${
-                  mode === 'personalization' ? 'bg-gray-100' : ''
-                } w-full rounded-md px-4 py-2 text-center font-semibold text-gray-600 text-xs duration-300 ease-in-out hover:bg-gray-100 lg:text-start lg:text-base`}
+                  mode === 'personalization' ? 'bg-primary/10' : ''
+                } w-full rounded-md px-4 py-2 text-center font-semibold text-primary/60 text-xs duration-300 ease-in-out hover:bg-primary/10 lg:text-start lg:text-base`}
                 onClick={() => setMode('personalization')}
-                type="button"
+                type='button'
               >
                 Personalizações
               </button>
@@ -166,16 +166,16 @@ function ConfigurationsPage({ session }: ConfigurationsPageProps) {
             {session.user.permissoes.resultados.visualizarComercial ? (
               <button
                 className={`${
-                  mode === 'goals' ? 'bg-gray-100' : ''
-                } w-full rounded-md px-4 py-2 text-center font-semibold text-gray-600 text-xs duration-300 ease-in-out hover:bg-gray-100 lg:text-start lg:text-base`}
+                  mode === 'goals' ? 'bg-primary/10' : ''
+                } w-full rounded-md px-4 py-2 text-center font-semibold text-primary/60 text-xs duration-300 ease-in-out hover:bg-primary/10 lg:text-start lg:text-base`}
                 onClick={() => setMode('goals')}
-                type="button"
+                type='button'
               >
                 Metas
               </button>
             ) : null}
           </div>
-          <div className="flex h-full w-full flex-col gap-1 px-2 py-2 lg:w-4/5">
+          <div className='flex h-full w-full flex-col gap-1 px-2 py-2 lg:w-4/5'>
             {mode === 'profile' ? <Profile session={session} /> : null}
             {mode === 'partner' ? <Partner session={session} /> : null}
             {mode === 'users' ? <Users session={session} /> : null}
