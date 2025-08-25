@@ -174,7 +174,7 @@ function FilterMenu({
               resetSelectedPage();
               updateFilters(filtersHolder);
             }}
-            className='h-9 whitespace-nowrap rounded-sm bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm disabled:bg-primary/50 disabled:text-white enabled:hover:bg-blue-700 enabled:hover:text-white'
+            className='h-9 whitespace-nowrap rounded-sm bg-blue-600 px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm disabled:bg-primary/50 disabled:text-primary-foreground enabled:hover:bg-blue-700 enabled:hover:text-primary-foreground'
           >
             PESQUISAR
           </button>

@@ -15,7 +15,7 @@ function PricingInformation({ infoHolder, setInfoHolder }: PricingInformationPro
   const { data: pricingMethods } = usePricingMethods();
   return (
     <div className='flex w-full flex-col gap-1'>
-      <h1 className='w-full bg-primary/70  p-1 text-center font-medium text-white'>PRECIFICAÇÃO</h1>
+      <h1 className='w-full bg-primary/70  p-1 text-center font-medium text-primary-foreground'>PRECIFICAÇÃO</h1>
       <div className='flex w-full flex-col items-center gap-2 lg:flex-row'>
         <div className='w-full lg:w-1/2'>
           <NumberInput

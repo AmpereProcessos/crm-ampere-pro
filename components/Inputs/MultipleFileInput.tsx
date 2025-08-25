@@ -7,16 +7,16 @@ import { BsCheck2All, BsCloudUploadFill } from 'react-icons/bs';
 function renderInputText(files: FileList | null) {
   if (!files)
     return (
-      <p className='mb-2 px-2 text-center text-sm text-primary/50 dark:text-primary/40'>
+      <p className='mb-2 px-2 text-center text-sm text-primary/70 dark:text-primary/40'>
         <span className='font-semibold'>Clique para escolher um arquivo</span> ou o arraste para a àrea demarcada
       </p>
     );
   const filesAsArr = Array.from(files);
   if (filesAsArr.length > 1) {
     const str = filesAsArr.map((file) => formatLongString(file.name, 15)).join(', ');
-    return <p className='mb-2 text-sm text-primary/50 dark:text-primary/40'>{str}</p>;
+    return <p className='mb-2 text-sm text-primary/70 dark:text-primary/40'>{str}</p>;
   }
-  return <p className='mb-2 text-sm text-primary/50 dark:text-primary/40'>{filesAsArr[0]?.name}</p>;
+  return <p className='mb-2 text-sm text-primary/70 dark:text-primary/40'>{filesAsArr[0]?.name}</p>;
 }
 
 type MultipleFileInputProps = {
@@ -44,11 +44,11 @@ function MultipleFileInput({ label, value, mode = 'default', handleChange, multi
           >
             <div className='flex w-full items-center gap-2'>
               {value ? (
-                <p className='grow text-center leading-none tracking-tight text-primary/50'>
+                <p className='grow text-center leading-none tracking-tight text-primary/70'>
                   {typeof value != 'string' ? (value.length > 1 ? `${value[0].name}, outros...` : value[0].name) : 'ARQUIVO DE REFERÊNCIA'}
                 </p>
               ) : (
-                <p className='grow text-center leading-none tracking-tight text-primary/50'>
+                <p className='grow text-center leading-none tracking-tight text-primary/70'>
                   <span className='font-semibold text-cyan-500'>Clique para escolher um arquivo</span> ou o arraste para a àrea demarcada
                 </p>
               )}
@@ -73,7 +73,7 @@ function MultipleFileInput({ label, value, mode = 'default', handleChange, multi
     <div className='relative flex w-full items-center justify-center'>
       <label
         htmlFor='dropzone-file'
-        className='dark:hover:bg-bray-800 flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-primary/30 bg-gray-50 hover:bg-primary/10 dark:border-primary/60 dark:bg-primary/70 dark:hover:border-primary/50 dark:hover:bg-primary/60'
+        className='dark:hover:bg-bray-800 flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-primary/30 bg-primary/10hover:bg-primary/10 dark:border-primary/60 dark:bg-primary/70 dark:hover:border-primary/50 dark:hover:bg-primary/60'
       >
         <div className='flex flex-col items-center justify-center pb-6 pt-5 text-primary/80'>
           <BsCloudUploadFill color={'rgb(31,41,55)'} size={50} />

@@ -26,7 +26,7 @@ function PaymentMethods({ infoHolder, setInfoHolder }: PaymentMethodsProps) {
             />
           ))
         ) : (
-          <p className='w-full text-center text-sm italic text-primary/50'>Nenhum método de pagamento vinculado à proposta...</p>
+          <p className='w-full text-center text-sm italic text-primary/70'>Nenhum método de pagamento vinculado à proposta...</p>
         )}
       </div>
     </div>

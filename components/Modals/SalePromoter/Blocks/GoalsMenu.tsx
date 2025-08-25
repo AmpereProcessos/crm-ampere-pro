@@ -37,7 +37,7 @@ function GoalsMenu({ promoter, session }: GoalsMenuProps) {
   const { data: saleGoals, isLoading, isSuccess, isError, error } = usePromoterSaleGoals(promoter.id);
   return (
     <div className='flex w-full flex-col gap-2'>
-      <h1 className='w-full rounded-sm bg-black p-1 text-center text-xs font-medium text-white'>METAS</h1>
+      <h1 className='w-full rounded-sm bg-black p-1 text-center text-xs font-medium text-primary-foreground'>METAS</h1>
       <div className='flex w-full items-center justify-end'>
         <button
           onClick={() => setNewSaleGoalMenuIsOpen((prev) => !prev)}
@@ -63,7 +63,7 @@ function GoalsMenu({ promoter, session }: GoalsMenuProps) {
           saleGoals.length > 0 ? (
             saleGoals.map((goal) => <SaleGoalCard key={goal._id} goal={goal} />)
           ) : (
-            <p className='w-full text-center text-xs font-medium tracking-tight text-primary/50'>
+            <p className='w-full text-center text-xs font-medium tracking-tight text-primary/70'>
               Nenhuma meta encontrada para o promotor de vendas.
             </p>
           )
@@ -125,7 +125,7 @@ function NewSaleGoalMenu({ promoter, session, closeMenu }: NewSaleGoalMenuProps)
       exit='exit'
       className='flex w-full flex-col gap-2 overflow-hidden rounded-sm border border-green-600'
     >
-      <h1 className='w-full bg-green-600 p-1 text-center text-xs font-bold text-white'>NOVA META</h1>
+      <h1 className='w-full bg-green-600 p-1 text-center text-xs font-bold text-primary-foreground'>NOVA META</h1>
       <div className='flex w-full flex-col gap-2 p-3'>
         <div className='flex w-full items-center justify-center'>
           <div className='w-full lg:w-[50%]'>
@@ -258,7 +258,7 @@ function SaleGoalCard({ goal }: SaleGoalCardProps) {
           </h1>
         </div>
       </div>
-      <h1 className='w-full py-0.5 text-start text-[0.6rem] font-medium italic text-primary/50'>METAS DEFINIDAS</h1>
+      <h1 className='w-full py-0.5 text-start text-[0.6rem] font-medium italic text-primary/70'>METAS DEFINIDAS</h1>
       <div className='flex w-full flex-col justify-between gap-2 lg:flex-row'>
         <div className='flex w-full items-center justify-center gap-1 lg:w-1/2 lg:justify-start'>
           <VscDiffAdded width={10} height={10} />
@@ -315,7 +315,7 @@ function SaleGoalCard({ goal }: SaleGoalCardProps) {
         </div>
         <button
           onClick={() => setEditGoalMenuIsOpen((prev) => !prev)}
-          className='flex items-center gap-1 rounded-lg bg-black px-2 py-1 text-[0.6rem] text-white'
+          className='flex items-center gap-1 rounded-lg bg-black px-2 py-1 text-[0.6rem] text-primary-foreground'
         >
           <Pencil width={10} height={10} />
           <p>EDITAR</p>
@@ -330,7 +330,7 @@ function SaleGoalCard({ goal }: SaleGoalCardProps) {
             exit='exit'
             className='flex flex-col gap-2 self-center overflow-hidden rounded-sm border border-blue-600'
           >
-            <h1 className='w-full bg-blue-600 p-1 text-center text-xs font-bold text-white'>NOVA META</h1>
+            <h1 className='w-full bg-blue-600 p-1 text-center text-xs font-bold text-primary-foreground'>NOVA META</h1>
             <div className='flex w-full flex-col gap-2 p-3'>
               <div className='flex w-full items-center justify-center'>
                 <div className='w-full lg:w-[50%]'>

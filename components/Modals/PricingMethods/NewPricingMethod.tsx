@@ -39,7 +39,7 @@ function NewPricingMethod({ session, closeModal }: NewPricingMethodProps) {
       <div className='fixed left-[50%] top-[50%] z-100 h-[80%] w-[90%] translate-x-[-50%] translate-y-[-50%] rounded-md bg-background p-[10px] lg:w-[70%]'>
         <div className='flex h-full flex-col font-Inter'>
           <div className='flex flex-col items-center justify-between border-b border-primary/30 px-2 pb-2 text-lg lg:flex-row'>
-            <h3 className='text-xl font-bold text-primary dark:text-white '>NOVA METODOLOGIA DE PRECIFICAÇÃO</h3>
+            <h3 className='text-xl font-bold text-primary  '>NOVA METODOLOGIA DE PRECIFICAÇÃO</h3>
             <button
               onClick={() => closeModal()}
               type='button'
@@ -50,8 +50,8 @@ function NewPricingMethod({ session, closeModal }: NewPricingMethodProps) {
           </div>
           <div className='flex h-full grow flex-col gap-y-2 overflow-y-auto overscroll-y-auto p-2 py-1 scrollbar-thin scrollbar-track-primary/10 scrollbar-thumb-primary/30'>
             <div className='my-5 flex flex-col'>
-              <p className='text-primary/50'>Construa metodologias de precificação a serem aplicadas ao seus kits.</p>
-              <p className='text-primary/50'>
+              <p className='text-primary/70'>Construa metodologias de precificação a serem aplicadas ao seus kits.</p>
+              <p className='text-primary/70'>
                 Crie unidades de preço para composição da sua precificação. Utilize <strong className='text-[#E25E3E]'>variáveis</strong>, aplique{' '}
                 <strong className='text-[#E25E3E]'>condições</strong> , e tenha flexibilidade na criação de fórmulas de{' '}
                 <strong className='text-[#E25E3E]'>cálculo de custo.</strong>
@@ -92,7 +92,7 @@ function NewPricingMethod({ session, closeModal }: NewPricingMethodProps) {
             <ControlPricingUnit methodology={methodology} setMethodology={setMethodology} />
             <div className='flex w-full items-center justify-end'>
               <button
-                className='rounded bg-black p-1 px-4 text-sm font-medium text-white duration-300 ease-in-out hover:bg-primary/70'
+                className='rounded bg-black p-1 px-4 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-primary/70'
                 onClick={() =>
                   // @ts-ignore
                   handleCreatePricingMethod({ info: methodology })

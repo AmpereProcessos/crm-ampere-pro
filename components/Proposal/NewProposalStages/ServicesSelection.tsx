@@ -135,7 +135,7 @@ function ServicesSelection({
             ) : (
               <div className='flex flex-col items-center justify-center gap-4'>
                 <ImSad style={{ fontSize: '50px', color: '#fead61' }} />
-                <p className='flex w-full items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/50'>
+                <p className='flex w-full items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/70'>
                   Nenhum serviço encontrado.
                 </p>
               </div>
@@ -144,10 +144,10 @@ function ServicesSelection({
         </div>
       </div>
       <div className='flex w-full items-center justify-between gap-2 px-1'>
-        <button onClick={() => moveToPreviousStage()} className='rounded p-2 font-bold text-primary/50 duration-300 hover:scale-105'>
+        <button onClick={() => moveToPreviousStage()} className='rounded p-2 font-bold text-primary/70 duration-300 hover:scale-105'>
           Voltar
         </button>
-        <button onClick={() => handleProceed()} className='rounded p-2 font-bold hover:bg-black hover:text-white'>
+        <button onClick={() => handleProceed()} className='rounded p-2 font-bold hover:bg-black hover:text-primary-foreground'>
           Prosseguir
         </button>
       </div>

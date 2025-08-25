@@ -5,9 +5,10 @@ import { FaListCheck } from 'react-icons/fa6';
 import { MdAttachFile } from 'react-icons/md';
 
 function getStatusTag(effectivationDate: string | null) {
-  if (!effectivationDate) return <h1 className='rounded-md bg-primary/50 px-2 py-0.5 text-xxs font-medium text-white lg:text-[0.6rem]'>PENDENTE</h1>;
+  if (!effectivationDate)
+    return <h1 className='rounded-md bg-primary/50 px-2 py-0.5 text-xxs font-medium text-primary-foreground lg:text-[0.6rem]'>PENDENTE</h1>;
 
-  return <h1 className='rounded-md bg-green-500 px-2 py-0.5 text-xxs font-medium text-white lg:text-[0.6rem]'>CONCLUÍDA</h1>;
+  return <h1 className='rounded-md bg-green-500 px-2 py-0.5 text-xxs font-medium text-primary-foreground lg:text-[0.6rem]'>CONCLUÍDA</h1>;
 }
 type ReportSessionProps = {
   session: TServiceOrder['relatorio']['secoes'][number];
@@ -21,14 +22,14 @@ function ReportSession({ session }: ReportSessionProps) {
         {session.dataConclusao ? (
           <div className={`flex items-center gap-1`}>
             <BsCalendarCheck color='rgb(34,197,94)' />
-            <p className='text-xs font-medium text-primary/50'>{formatDateAsLocale(session.dataConclusao, true)}</p>
+            <p className='text-xs font-medium text-primary/70'>{formatDateAsLocale(session.dataConclusao, true)}</p>
           </div>
         ) : null}
       </div>
 
       <div className='flex items-center gap-1'>
         <FaListCheck size={12} />
-        <p className='text-[0.65rem] font-medium text-primary/50'>CONTROLES</p>
+        <p className='text-[0.65rem] font-medium text-primary/70'>CONTROLES</p>
       </div>
       <div className='flex w-full flex-wrap gap-2'>
         {session.controles.map((control, index) => (
@@ -40,7 +41,7 @@ function ReportSession({ session }: ReportSessionProps) {
       </div>
       <div className='flex items-center gap-1'>
         <BsFiles size={12} />
-        <p className='text-[0.65rem] font-medium text-primary/50'>ARQUIVOS</p>
+        <p className='text-[0.65rem] font-medium text-primary/70'>ARQUIVOS</p>
       </div>
       <div className='flex w-full flex-wrap gap-2'>
         {session.arquivos.map((file, index) => (

@@ -132,7 +132,7 @@ function HomologationInfo({
               onClick={() => setHomologationModality('CONVENCIONAL')}
               className={cn(
                 'flex h-[20px] w-[20px] items-center justify-center rounded-full border border-blue-800 p-2',
-                homologationModality == 'CONVENCIONAL' ? 'bg-blue-800 text-xs text-white' : ''
+                homologationModality == 'CONVENCIONAL' ? 'bg-blue-800 text-xs text-primary-foreground' : ''
               )}
             ></button>
           </div>
@@ -152,7 +152,7 @@ function HomologationInfo({
                 onClick={() => setHomologationModality('FAST TRACK')}
                 className={cn(
                   'flex h-[20px] w-[20px] items-center justify-center rounded-full border border-green-800 p-2 text-xs',
-                  homologationModality == 'FAST TRACK' ? 'bg-green-800 text-white' : ''
+                  homologationModality == 'FAST TRACK' ? 'bg-green-800 text-primary-foreground' : ''
                 )}
               ></button>
             </div>
@@ -250,7 +250,7 @@ function HomologationInfo({
         </div>
         <h1 className='col-span-3 pt-2 text-center font-bold text-[#fead61]'>ENDEREÇO DA INSTALAÇÃO</h1>
         <div className='col-span-3 flex items-center justify-center'>
-          <button onClick={() => useMailInfo()} className='rounded bg-[#15599a] p-2 text-xs font-medium text-white'>
+          <button onClick={() => useMailInfo()} className='rounded bg-[#15599a] p-2 text-xs font-medium text-primary-foreground'>
             Usar informações de endereço da correspondência
           </button>
         </div>
@@ -435,7 +435,7 @@ function HomologationInfo({
           onClick={() => {
             goToPreviousStage();
           }}
-          className='rounded p-2 font-bold text-primary/50 duration-300 hover:scale-105'
+          className='rounded p-2 font-bold text-primary/70 duration-300 hover:scale-105'
         >
           Voltar
         </button>
@@ -445,7 +445,7 @@ function HomologationInfo({
               goToNextStage();
             }
           }}
-          className='rounded p-2 font-bold hover:bg-black hover:text-white'
+          className='rounded p-2 font-bold hover:bg-black hover:text-primary-foreground'
         >
           Prosseguir
         </button>

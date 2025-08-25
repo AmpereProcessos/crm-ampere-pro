@@ -33,14 +33,14 @@ function OpportunityFiles({ session, opportunityId, clientId }: OpportunityFiles
           <button
             type='button'
             onClick={() => setNewFileReferenceModalIsOpen(true)}
-            className='flex rounded-sm bg-green-600 p-1 text-sm font-bold text-white lg:hidden'
+            className='flex rounded-sm bg-green-600 p-1 text-sm font-bold text-primary-foreground lg:hidden'
           >
             <MdAdd />
           </button>
           <button
             type='button'
             onClick={() => setNewFileReferenceModalIsOpen(true)}
-            className='hidden rounded-sm bg-green-600 p-1 text-[0.7rem] font-bold text-white lg:flex'
+            className='hidden rounded-sm bg-green-600 p-1 text-[0.7rem] font-bold text-primary-foreground lg:flex'
           >
             ANEXAR ARQUIVO
           </button>
@@ -69,7 +69,7 @@ function OpportunityFiles({ session, opportunityId, clientId }: OpportunityFiles
                 />
               ))
             ) : (
-              <p className='flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/50'>
+              <p className='flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/70'>
                 Nenhum arquivo anexado a essa oportunidade...
               </p>
             )

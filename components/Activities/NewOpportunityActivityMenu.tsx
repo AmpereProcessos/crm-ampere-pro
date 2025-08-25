@@ -120,7 +120,7 @@ function NewOpportunityActivityMenu({ session, opportunity, closeMenu }: NewOppo
         </div>
       </div>
       <div className='flex w-full flex-col rounded-md border border-primary/30 p-2 shadow-md'>
-        <h1 className='text-sm font-medium leading-none tracking-tight text-primary/50'>DESCRIÇÃO DA ATIVIDADE</h1>
+        <h1 className='text-sm font-medium leading-none tracking-tight text-primary/70'>DESCRIÇÃO DA ATIVIDADE</h1>
         <input
           value={newActivityHolder.descricao}
           onChange={(e) => setNewActivityHolder((prev) => ({ ...prev, descricao: e.target.value }))}
@@ -129,7 +129,7 @@ function NewOpportunityActivityMenu({ session, opportunity, closeMenu }: NewOppo
           className='w-full p-3 text-start text-sm outline-hidden'
         />
       </div>
-      <h1 className='text-sm font-medium leading-none tracking-tight text-primary/50'>VINCULE RESPONSÁVEIS</h1>
+      <h1 className='text-sm font-medium leading-none tracking-tight text-primary/70'>VINCULE RESPONSÁVEIS</h1>
       <div className='flex w-full items-center gap-2'>
         <div className='flex items-end gap-2'>
           <SelectWithImages
@@ -152,7 +152,7 @@ function NewOpportunityActivityMenu({ session, opportunity, closeMenu }: NewOppo
           />
           <button
             onClick={() => vinculateResponsible({ id: newResponsibleHolder, users: users || [] })}
-            className='min-h-[46.6px]  rounded-sm border border-orange-500 px-4 py-2 text-sm font-medium text-orange-500 shadow-sm hover:bg-orange-500 hover:text-white'
+            className='min-h-[46.6px]  rounded-sm border border-orange-500 px-4 py-2 text-sm font-medium text-orange-500 shadow-sm hover:bg-orange-500 hover:text-primary-foreground'
           >
             VINCULAR
           </button>
@@ -166,21 +166,21 @@ function NewOpportunityActivityMenu({ session, opportunity, closeMenu }: NewOppo
             className='flex cursor-pointer items-center gap-2 rounded-lg border border-cyan-500 p-2 shadow-md duration-300 ease-in-out hover:border-red-500 hover:bg-red-100'
           >
             <Avatar width={25} height={25} url={resp.avatar_url || undefined} fallback={formatNameAsInitials(resp.nome)} />
-            <p className='text-sm font-medium tracking-tight text-primary/50'>{resp.nome}</p>
+            <p className='text-sm font-medium tracking-tight text-primary/70'>{resp.nome}</p>
           </div>
         ))}
       </div>
       <div className='flex w-full items-center justify-between'>
         <button
           onClick={() => closeMenu()}
-          className='whitespace-nowrap rounded-sm bg-primary/50 px-4 py-2 text-sm font-medium text-white shadow-sm disabled:bg-primary/50 disabled:text-white enabled:hover:bg-primary/80 enabled:hover:text-white'
+          className='whitespace-nowrap rounded-sm bg-primary/50 px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm disabled:bg-primary/50 disabled:text-primary-foreground enabled:hover:bg-primary/80 enabled:hover:text-primary-foreground'
         >
           FECHAR
         </button>
         <button
           // @ts-ignore
           onClick={() => handleCreateActivity({ info: newActivityHolder })}
-          className='whitespace-nowrap rounded-sm bg-primary/90 px-4 py-2 text-sm font-medium text-white shadow-sm disabled:bg-primary/50 disabled:text-white enabled:hover:bg-primary/80 enabled:hover:text-white'
+          className='whitespace-nowrap rounded-sm bg-primary/90 px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm disabled:bg-primary/50 disabled:text-primary-foreground enabled:hover:bg-primary/80 enabled:hover:text-primary-foreground'
         >
           CRIAR ATIVIDADE
         </button>

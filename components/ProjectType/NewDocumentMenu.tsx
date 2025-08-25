@@ -74,7 +74,7 @@ function NewDocumentMenu({ addDocument, closeMenu }: NewDocumentMenuProps) {
         </div>
       </div>
       <h1 className='mt-4 w-full text-center font-Inter text-sm font-black leading-none tracking-tight'>CONDIÇÃO DE OBRIGATORIEDADE</h1>
-      <p className='my-2 text-center text-sm tracking-tight text-primary/50'>
+      <p className='my-2 text-center text-sm tracking-tight text-primary/70'>
         Se aplicável, defina uma condição para obrigatoriedade do documento em questão.
       </p>
       <div className='flex w-full items-center justify-center'>
@@ -96,8 +96,8 @@ function NewDocumentMenu({ addDocument, closeMenu }: NewDocumentMenuProps) {
                 key={index}
                 onClick={() => setNewDocumentationHolder((prev) => ({ ...prev, condicao: { ...prev.condicao, variavel: va.value, igual: null } }))}
                 className={`grow ${
-                  va.value == newDocumentationHolder.condicao.variavel ? 'bg-primary/70  text-white' : 'text-primary/70 '
-                } rounded border border-primary/70  p-1 text-xs font-medium  duration-300 ease-in-out hover:bg-primary/70  hover:text-white`}
+                  va.value == newDocumentationHolder.condicao.variavel ? 'bg-primary/70  text-primary-foreground' : 'text-primary/70 '
+                } rounded border border-primary/70  p-1 text-xs font-medium  duration-300 ease-in-out hover:bg-primary/70  hover:text-primary-foreground`}
               >
                 {va.label}
               </button>
@@ -119,7 +119,7 @@ function NewDocumentMenu({ addDocument, closeMenu }: NewDocumentMenuProps) {
       <div className='my-2 flex items-center justify-end gap-2'>
         <button
           onClick={() => addDocument(newDocumentationHolder)}
-          className='rounded bg-blue-600 p-1 px-4 text-xs font-medium text-white duration-300 ease-in-out hover:bg-blue-800'
+          className='rounded bg-blue-600 p-1 px-4 text-xs font-medium text-primary-foreground duration-300 ease-in-out hover:bg-blue-800'
         >
           CADASTRAR DOCUMENTO
         </button>

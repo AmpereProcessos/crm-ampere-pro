@@ -13,7 +13,7 @@ function RevenuePaginationMenu({ activePage, selectPage, totalPages, revenuesMat
     <div className='my-2 flex w-full flex-col items-center gap-1 '>
       {totalPages > 1 ? (
         <>
-          <p className='w-full text-center text-sm leading-none tracking-tight text-primary/50'>
+          <p className='w-full text-center text-sm leading-none tracking-tight text-primary/70'>
             Um número grande de receitas foi encontrado, separamos em páginas para facilitar a visualização. Clique na página desejada para visualizar
             os demais receitas.
           </p>
@@ -69,10 +69,10 @@ function RevenuePaginationMenu({ activePage, selectPage, totalPages, revenuesMat
         </>
       ) : null}
 
-      <p className='w-full text-center text-sm leading-none tracking-tight text-primary/50'>
+      <p className='w-full text-center text-sm leading-none tracking-tight text-primary/70'>
         {revenuesMatched ? (revenuesMatched > 1 ? `${revenuesMatched} receitas encontrados.` : `${revenuesMatched} receita encontrado.`) : null}
       </p>
-      <p className='w-full text-center text-sm leading-none tracking-tight text-primary/50'>
+      <p className='w-full text-center text-sm leading-none tracking-tight text-primary/70'>
         {revenuesShowing ? (revenuesShowing > 1 ? `Mostrando ${revenuesShowing} receitas.` : `Mostrando ${revenuesShowing} receita.`) : null}
       </p>
     </div>

@@ -46,7 +46,7 @@ function EditPricingMethod({ pricingMethodId, session, closeModal }: EditPricing
       <div className='fixed left-[50%] top-[50%] z-100 h-[80%] w-[90%] translate-x-[-50%] translate-y-[-50%] rounded-md bg-background p-[10px] lg:w-[70%]'>
         <div className='flex h-full flex-col font-Inter'>
           <div className='flex flex-col items-center justify-between border-b border-primary/30 px-2 pb-2 text-lg lg:flex-row'>
-            <h3 className='text-xl font-bold text-primary dark:text-white '>EDITAR METODOLOGIA DE PRECIFICAÇÃO</h3>
+            <h3 className='text-xl font-bold text-primary  '>EDITAR METODOLOGIA DE PRECIFICAÇÃO</h3>
             <button
               onClick={() => closeModal()}
               type='button'
@@ -60,8 +60,8 @@ function EditPricingMethod({ pricingMethodId, session, closeModal }: EditPricing
           {isSuccess ? (
             <div className='flex h-full grow flex-col gap-y-2 overflow-y-auto overscroll-y-auto p-2 py-1 scrollbar-thin scrollbar-track-primary/10 scrollbar-thumb-primary/30'>
               <div className='my-5 flex flex-col'>
-                <p className='text-primary/50'>Construa metodologias de precificação a serem aplicadas ao seus kits.</p>
-                <p className='text-primary/50'>
+                <p className='text-primary/70'>Construa metodologias de precificação a serem aplicadas ao seus kits.</p>
+                <p className='text-primary/70'>
                   Crie unidades de preço para composição da sua precificação. Utilize <strong className='text-[#E25E3E]'>variáveis</strong>, aplique{' '}
                   <strong className='text-[#E25E3E]'>condições</strong> , e tenha flexibilidade na criação de fórmulas de{' '}
                   <strong className='text-[#E25E3E]'>cálculo de custo.</strong>
@@ -81,7 +81,7 @@ function EditPricingMethod({ pricingMethodId, session, closeModal }: EditPricing
               <div className='flex w-full items-center justify-end'>
                 <button
                   disabled={isPending}
-                  className='h-9 whitespace-nowrap rounded-sm bg-blue-800 px-4 py-2 text-sm font-medium text-white shadow-sm disabled:bg-primary/50 disabled:text-white enabled:hover:bg-blue-800 enabled:hover:text-white'
+                  className='h-9 whitespace-nowrap rounded-sm bg-blue-800 px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm disabled:bg-primary/50 disabled:text-primary-foreground enabled:hover:bg-blue-800 enabled:hover:text-primary-foreground'
                   onClick={() =>
                     // @ts-ignore
                     handleEditPricingMethod({ id: pricingMethodId, changes: methodology })

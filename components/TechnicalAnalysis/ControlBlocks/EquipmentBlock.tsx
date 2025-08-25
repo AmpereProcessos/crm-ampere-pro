@@ -183,7 +183,7 @@ function EquipmentBlock({ infoHolder, setInfoHolder, changes, setChanges }: Equi
   return (
     <div className='mt-4 flex w-full flex-col'>
       <div className='flex w-full items-center justify-center gap-2 rounded-md bg-primary/80 p-2'>
-        <h1 className='font-bold text-white'>EQUIPAMENTOS</h1>
+        <h1 className='font-bold text-primary-foreground'>EQUIPAMENTOS</h1>
         <button onClick={() => setEditEnabled((prev) => !prev)}>
           {!editEnabled ? <AiFillEdit color='white' /> : <AiFillCloseCircle color='#ff1736' />}
         </button>
@@ -249,7 +249,7 @@ function EquipmentBlock({ infoHolder, setInfoHolder, changes, setChanges }: Equi
                 </div>
                 <div className='flex items-center justify-end'>
                   <button
-                    className='rounded bg-black p-1 px-4 text-sm font-medium text-white duration-300 ease-in-out hover:bg-primary/70'
+                    className='rounded bg-black p-1 px-4 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-primary/70'
                     onClick={() => addInverterToEquipments()}
                   >
                     ADICIONAR INVERSOR
@@ -313,7 +313,7 @@ function EquipmentBlock({ infoHolder, setInfoHolder, changes, setChanges }: Equi
                 </div>
                 <div className='flex items-center justify-end'>
                   <button
-                    className='rounded bg-black p-1 px-4 text-sm font-medium text-white duration-300 ease-in-out hover:bg-primary/70'
+                    className='rounded bg-black p-1 px-4 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-primary/70'
                     onClick={() => addModuleToEquipments()}
                   >
                     ADICIONAR MÓDULO
@@ -403,7 +403,7 @@ function EquipmentBlock({ infoHolder, setInfoHolder, changes, setChanges }: Equi
 
                 <div className='flex items-center justify-end'>
                   <button
-                    className='rounded bg-black p-1 px-4 text-sm font-medium text-white duration-300 ease-in-out hover:bg-primary/70'
+                    className='rounded bg-black p-1 px-4 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-primary/70'
                     onClick={() => addPersonalizedEquipment()}
                   >
                     ADICIONAR PRODUTO PERSONALIZADO
@@ -445,17 +445,17 @@ function EquipmentBlock({ infoHolder, setInfoHolder, changes, setChanges }: Equi
                 <div className='flex w-full items-center justify-end gap-2 pl-2'>
                   <div className='flex items-center gap-1'>
                     <FaIndustry size={15} />
-                    <p className='text-[0.6rem] font-light text-primary/50'>{equipment.fabricante}</p>
+                    <p className='text-[0.6rem] font-light text-primary/70'>{equipment.fabricante}</p>
                   </div>
                   <div className='flex items-center gap-1'>
                     <ImPower size={15} />
-                    <p className='text-[0.6rem] font-light text-primary/50'>{equipment.potencia} W</p>
+                    <p className='text-[0.6rem] font-light text-primary/70'>{equipment.potencia} W</p>
                   </div>
                 </div>
               </div>
             ))
           ) : (
-            <p className='w-full text-center text-sm font-medium tracking-tight text-primary/50'>Nenhum equipamento adicionado à lista.</p>
+            <p className='w-full text-center text-sm font-medium tracking-tight text-primary/70'>Nenhum equipamento adicionado à lista.</p>
           )}
         </div>
       </AnimatePresence>

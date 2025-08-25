@@ -24,10 +24,10 @@ function RevenueReceiptsTable({ infoHolder, setInfoHolder }: RevenueReceiptsTabl
   return (
     <div className='flex w-full flex-col rounded-sm border border-primary/80'>
       <div className='hidden w-full items-center gap-2 rounded-sm rounded-bl-none rounded-br-none bg-primary/80 p-1 lg:flex'>
-        <h1 className='w-[25%] text-center text-sm font-bold text-white'>VALOR</h1>
-        <h1 className='w-[25%] text-center text-sm font-bold text-white'>MÉTODO</h1>
-        <h1 className='w-[25%] text-center text-sm font-bold text-white'>DATA/PREVISÃO DE RECEBIMENTO</h1>
-        <h1 className='w-[25%] text-center text-sm font-bold text-white'>RECEBIDO</h1>
+        <h1 className='w-[25%] text-center text-sm font-bold text-primary-foreground'>VALOR</h1>
+        <h1 className='w-[25%] text-center text-sm font-bold text-primary-foreground'>MÉTODO</h1>
+        <h1 className='w-[25%] text-center text-sm font-bold text-primary-foreground'>DATA/PREVISÃO DE RECEBIMENTO</h1>
+        <h1 className='w-[25%] text-center text-sm font-bold text-primary-foreground'>RECEBIDO</h1>
       </div>
       <div className='flex w-full flex-col gap-2 p-1'>
         {infoHolder.recebimentos.length > 0 ? (
@@ -41,7 +41,7 @@ function RevenueReceiptsTable({ infoHolder, setInfoHolder }: RevenueReceiptsTabl
             />
           ))
         ) : (
-          <p className='flex w-full grow items-center justify-center py-2 text-center text-sm font-medium italic tracking-tight text-primary/50'>
+          <p className='flex w-full grow items-center justify-center py-2 text-center text-sm font-medium italic tracking-tight text-primary/70'>
             Não há registros de recebimentos da receita.
           </p>
         )}

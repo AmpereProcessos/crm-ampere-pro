@@ -20,7 +20,7 @@ type ReviewInformationBlockProps = {
 function ReviewInformationBlock({ infoHolder, setInfoHolder, requestPending, requestNewProject, session, client }: ReviewInformationBlockProps) {
   return (
     <div className='flex w-full grow flex-col gap-2'>
-      <h1 className='w-full rounded-sm bg-green-800 p-1 text-center text-lg font-bold text-white'>REVISÃO DE INFORMAÇÕES</h1>
+      <h1 className='w-full rounded-sm bg-green-800 p-1 text-center text-lg font-bold text-primary-foreground'>REVISÃO DE INFORMAÇÕES</h1>
       <div className='my-1 flex w-full flex-col'>
         <p className='w-full text-center text-sm font-light tracking-tighter text-primary/70'>
           Revise as informações preenchidas para solicitação de projeto e, se necessário, faça correções.
@@ -48,7 +48,7 @@ function ReviewInformationBlock({ infoHolder, setInfoHolder, requestPending, req
           <button
             disabled={requestPending}
             onClick={() => requestNewProject()}
-            className='h-9 whitespace-nowrap rounded-sm bg-green-700 px-4 py-2 text-sm font-medium text-white shadow-sm disabled:bg-primary/50 disabled:text-white enabled:hover:bg-green-600 enabled:hover:text-white'
+            className='h-9 whitespace-nowrap rounded-sm bg-green-700 px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm disabled:bg-primary/50 disabled:text-primary-foreground enabled:hover:bg-green-600 enabled:hover:text-primary-foreground'
           >
             REQUISITAR PROJETO
           </button>

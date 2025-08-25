@@ -14,7 +14,7 @@ function EnergyPA({ requestInfo, setRequestInfo, goToNextState }: EnergyPAProps)
   return (
     <div className='flex w-full grow flex-col gap-2'>
       <div className='flex w-full grow flex-col gap-2'>
-        <h1 className='w-full rounded-md bg-[#fead41] p-1 text-center text-sm font-medium text-white'>PADRÃO DE ENERGIA</h1>
+        <h1 className='w-full rounded-md bg-[#fead41] p-1 text-center text-sm font-medium text-primary-foreground'>PADRÃO DE ENERGIA</h1>
         <div className='flex w-full flex-col items-center gap-2 lg:flex-row'>
           <div className='w-full lg:w-1/3'>
             <SelectInput
@@ -110,7 +110,7 @@ function EnergyPA({ requestInfo, setRequestInfo, goToNextState }: EnergyPAProps)
               </div>
             </div>
             <div className='flex w-full flex-col'>
-              <h1 className='w-full rounded-tl-sm rounded-tr-sm bg-primary/50 p-1 text-center font-bold text-white'>OBSERVAÇÕES</h1>
+              <h1 className='w-full rounded-tl-sm rounded-tr-sm bg-primary/50 p-1 text-center font-bold text-primary-foreground'>OBSERVAÇÕES</h1>
               <textarea
                 placeholder='SEM OBSERVAÇÕES PREENCHIDAS...'
                 value={requestInfo.padraoEnergia.observacoes || ''}
@@ -129,7 +129,7 @@ function EnergyPA({ requestInfo, setRequestInfo, goToNextState }: EnergyPAProps)
       <div className='flex w-full items-center justify-end'>
         <button
           onClick={() => validateAndProceed()}
-          className='rounded bg-black px-4 py-1 text-sm font-medium text-white duration-300 ease-in-out hover:bg-primary/70'
+          className='rounded bg-black px-4 py-1 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-primary/70'
         >
           PROSSEGUIR
         </button>

@@ -122,7 +122,7 @@ export default function OpportunitiesKanbanModePageV2({ session, opportunityView
               <button
                 type='button'
                 // onClick={() => handleExportData()}
-                className='flex h-[46.6px] items-center justify-center gap-2 rounded-md border bg-[#2c6e49] p-2 px-3 text-sm font-medium text-white shadow-md duration-300 ease-in-out hover:scale-105'
+                className='flex h-[46.6px] items-center justify-center gap-2 rounded-md border bg-[#2c6e49] p-2 px-3 text-sm font-medium text-primary-foreground shadow-md duration-300 ease-in-out hover:scale-105'
               >
                 <BsDownload style={{ fontSize: '18px' }} />
               </button>
@@ -131,7 +131,7 @@ export default function OpportunitiesKanbanModePageV2({ session, opportunityView
               <button
                 type='button'
                 onClick={() => setNewProjectModalIsOpen(true)}
-                className='flex h-[46.6px] items-center justify-center gap-2 rounded-md border bg-[#15599a] p-2 px-3 text-sm font-medium text-white shadow-md duration-300 ease-in-out hover:scale-105'
+                className='flex h-[46.6px] items-center justify-center gap-2 rounded-md border bg-[#15599a] p-2 px-3 text-sm font-medium text-primary-foreground shadow-md duration-300 ease-in-out hover:scale-105'
               >
                 <AiOutlinePlus style={{ fontSize: '18px' }} />
               </button>
@@ -143,7 +143,7 @@ export default function OpportunitiesKanbanModePageV2({ session, opportunityView
               <button
                 type='button'
                 className={cn('flex items-center justify-center p-2 max-h-[36px] min-h-[36px] border border-[#3e53b2] rounded-md transition-colors', {
-                  'bg-[#3e53b2] text-white': opportunityViewPreferences.filterSelections.isFromMarketing,
+                  'bg-[#3e53b2] text-primary-foreground': opportunityViewPreferences.filterSelections.isFromMarketing,
                   'text-[#3e53b2]': !opportunityViewPreferences.filterSelections.isFromMarketing,
                 })}
                 onClick={() =>
@@ -158,7 +158,7 @@ export default function OpportunitiesKanbanModePageV2({ session, opportunityView
                 }
                 type='button'
                 className={cn('flex items-center justify-center p-2 max-h-[36px] min-h-[36px] border border-[#06b6d4] rounded-md transition-colors', {
-                  'bg-[#06b6d4] text-white': opportunityViewPreferences.filterSelections.isFromIndication,
+                  'bg-[#06b6d4] text-primary-foreground': opportunityViewPreferences.filterSelections.isFromIndication,
                   'text-[#06b6d4]': !opportunityViewPreferences.filterSelections.isFromIndication,
                 })}
               >
@@ -427,7 +427,7 @@ function KanbanBoardStageCard({ stageId, opportunity, isDragOverlay = false }: K
 
         <div className='ites-center flex min-w-fit gap-1'>
           <BsCalendarPlus />
-          <p className={'text-[0.65rem] font-medium text-primary/50'}>{formatDateAsLocale(opportunity.dataInsercao, true)}</p>
+          <p className={'text-[0.65rem] font-medium text-primary/70'}>{formatDateAsLocale(opportunity.dataInsercao, true)}</p>
         </div>
       </div>
     </div>

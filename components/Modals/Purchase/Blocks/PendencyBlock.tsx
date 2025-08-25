@@ -15,7 +15,7 @@ function PendencyBlock({ purchaseId, project, session }: PendencyBlockProps) {
   const { data: activities, isLoading, isError, isSuccess } = useActivitiesByPurchaseId({ purchaseId });
   return (
     <div className='flex w-full flex-col gap-y-2'>
-      <h1 className='w-full bg-primary/70  p-1 text-center font-medium text-white'>PENDÊNCIAS</h1>
+      <h1 className='w-full bg-primary/70  p-1 text-center font-medium text-primary-foreground'>PENDÊNCIAS</h1>
       <NewActivityMenu
         session={session}
         opportunity={{}}
@@ -30,7 +30,7 @@ function PendencyBlock({ purchaseId, project, session }: PendencyBlockProps) {
           activities.length > 0 ? (
             activities.map((activity, index) => <PurchaseActivity key={activity._id} activity={activity} purchaseId={purchaseId} />)
           ) : (
-            <p className='flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/50'>
+            <p className='flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/70'>
               Sem atividades adicionadas.
             </p>
           )

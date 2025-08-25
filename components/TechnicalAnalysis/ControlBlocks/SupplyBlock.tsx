@@ -48,11 +48,11 @@ function SupplyBlock({ infoHolder, setInfoHolder, changes, setChanges }: SupplyB
   return (
     <div className='mt-4 flex w-full flex-col'>
       <div className='flex w-full items-center justify-center gap-2 rounded-md bg-primary/80 p-2'>
-        <h1 className='font-bold text-white'>SUPRIMENTOS</h1>
+        <h1 className='font-bold text-primary-foreground'>SUPRIMENTOS</h1>
       </div>
       <div className='mt-2 flex w-full flex-col gap-2'>
         <div className='flex w-full flex-col'>
-          <h1 className='w-full rounded-tl-sm rounded-tr-sm bg-primary/50 p-1 text-center font-bold text-white'>OBSERVAÇÕES</h1>
+          <h1 className='w-full rounded-tl-sm rounded-tr-sm bg-primary/50 p-1 text-center font-bold text-primary-foreground'>OBSERVAÇÕES</h1>
           <textarea
             placeholder='SEM OBSERVAÇÕES PREENCHIDAS...'
             value={infoHolder.suprimentos?.observacoes || ''}
@@ -117,7 +117,7 @@ function SupplyBlock({ infoHolder, setInfoHolder, changes, setChanges }: SupplyB
         <div className='mt-2 flex w-full items-center justify-end'>
           <button
             onClick={addSupplyItem}
-            className='rounded border border-green-500 p-1 font-bold text-green-500 duration-300 ease-in-out hover:bg-green-500 hover:text-white'
+            className='rounded border border-green-500 p-1 font-bold text-green-500 duration-300 ease-in-out hover:bg-green-500 hover:text-primary-foreground'
           >
             ADICIONAR ITEM
           </button>
@@ -126,12 +126,12 @@ function SupplyBlock({ infoHolder, setInfoHolder, changes, setChanges }: SupplyB
           {infoHolder.suprimentos?.itens?.map((item, index) => (
             <div key={index} className='flex w-full  items-center justify-between rounded-md border border-cyan-500 p-2 shadow-md lg:w-[350px]'>
               <div className='flex flex-col'>
-                <h1 className='text-sm font-medium text-primary/50'>
+                <h1 className='text-sm font-medium text-primary/70'>
                   <strong>{item.qtde}</strong> x {item.descricao} <strong className='text-[#fead41]'>({item.tipo})</strong>
                 </h1>
                 <div className='flex items-center gap-1'>
                   <TbRulerMeasure />
-                  <p className='text-xs italic text-primary/50'>{item.grandeza}</p>
+                  <p className='text-xs italic text-primary/70'>{item.grandeza}</p>
                 </div>
               </div>
               <div className='flex items-center justify-end gap-1'>
@@ -143,7 +143,7 @@ function SupplyBlock({ infoHolder, setInfoHolder, changes, setChanges }: SupplyB
                 </button>
               </div>
             </div>
-          )) || <p className='w-full text-center text-xs font-medium italic text-primary/50'>Nenhum item adicionado.</p>}
+          )) || <p className='w-full text-center text-xs font-medium italic text-primary/70'>Nenhum item adicionado.</p>}
         </div>
       </div>
     </div>

@@ -27,7 +27,7 @@ function ApplicantBlock({ infoHolder, setInfoHolder }: ApplicantBlockProps) {
   }
   return (
     <div className='flex w-full flex-col gap-2'>
-      <h1 className='w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-white'>REQUERENTE</h1>
+      <h1 className='w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-primary-foreground'>REQUERENTE</h1>
       <div className='flex w-full items-center justify-center'>
         <SelectWithImages
           label={'REQUERENTE'}

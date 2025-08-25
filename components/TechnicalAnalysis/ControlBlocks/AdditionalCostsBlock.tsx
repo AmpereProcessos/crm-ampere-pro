@@ -129,7 +129,7 @@ function AdditionalCostsBlock({ infoHolder, setInfoHolder, changes, setChanges }
   return (
     <div className='flex w-full flex-col'>
       <div className='flex w-full items-center justify-center gap-2 rounded-md bg-primary/80 p-2'>
-        <h1 className='font-bold text-white'>CUSTOS ADICIONAIS</h1>
+        <h1 className='font-bold text-primary-foreground'>CUSTOS ADICIONAIS</h1>
       </div>
       <div className='mt-2 flex w-full flex-col gap-2'>
         <div className='flex w-full flex-col items-center gap-2 lg:flex-row'>
@@ -233,7 +233,7 @@ function AdditionalCostsBlock({ infoHolder, setInfoHolder, changes, setChanges }
           {!!activeCostIndex && activeCostIndex >= 0 ? (
             <button
               onClick={() => saveChanges({ index: activeCostIndex })}
-              className='flex w-fit items-center gap-2 rounded-sm border border-blue-500 p-1 text-blue-500 duration-300 ease-in-out hover:bg-blue-500 hover:text-white'
+              className='flex w-fit items-center gap-2 rounded-sm border border-blue-500 p-1 text-blue-500 duration-300 ease-in-out hover:bg-blue-500 hover:text-primary-foreground'
             >
               <p className='font-bold'>SALVAR</p>
               <FaSave />
@@ -241,7 +241,7 @@ function AdditionalCostsBlock({ infoHolder, setInfoHolder, changes, setChanges }
           ) : (
             <button
               onClick={() => addCost()}
-              className='flex w-fit items-center gap-2 rounded-sm border border-green-500 p-1 text-green-500 duration-300 ease-in-out hover:bg-green-500 hover:text-white'
+              className='flex w-fit items-center gap-2 rounded-sm border border-green-500 p-1 text-green-500 duration-300 ease-in-out hover:bg-green-500 hover:text-primary-foreground'
             >
               <p className='font-bold'>ADICIONAR ITEM</p>
               <IoMdAdd />
@@ -276,31 +276,31 @@ function AdditionalCostsBlock({ infoHolder, setInfoHolder, changes, setChanges }
                     </button>
                   </div>
                 </div>
-                <p className='text-sm text-primary/50'>{cost.descricao}</p>
+                <p className='text-sm text-primary/70'>{cost.descricao}</p>
                 <div className='flex w-full items-center justify-between'>
                   <div className='flex items-center gap-2'>
                     <div className='flex items-center gap-2'>
                       <FaBox color='#fead41' />
-                      <p className='text-sm font-medium text-primary/50'>
+                      <p className='text-sm font-medium text-primary/70'>
                         {cost.qtde} {cost.grandeza}
                       </p>
                     </div>
                     <div className='flex items-center gap-2 text-green-500'>
                       <MdAttachMoney color='rgb(34,197,94)' />
-                      <p className='text-sm font-medium text-primary/50'>
+                      <p className='text-sm font-medium text-primary/70'>
                         {cost.custoUnitario ? formatToMoney(cost.custoUnitario) : 'R$ 0,00'} / {cost.grandeza}
                       </p>
                     </div>
                     {cost.totalVendaSimples ? (
                       <div className='flex items-center gap-2 text-green-500'>
                         <ImPriceTag color='rgb(34,197,94)' />
-                        <p className='text-sm font-medium text-primary/50'>VENDA SIMPLES: {formatToMoney(cost.totalVendaSimples)}</p>
+                        <p className='text-sm font-medium text-primary/70'>VENDA SIMPLES: {formatToMoney(cost.totalVendaSimples)}</p>
                       </div>
                     ) : null}
                     {cost.totalVendaFaturavel ? (
                       <div className='flex items-center gap-2 text-green-500'>
                         <ImPriceTag color='rgb(34,197,94)' />
-                        <p className='text-sm font-medium text-primary/50'>VENDA FATURÁVEL: {formatToMoney(cost.totalVendaFaturavel)}</p>
+                        <p className='text-sm font-medium text-primary/70'>VENDA FATURÁVEL: {formatToMoney(cost.totalVendaFaturavel)}</p>
                       </div>
                     ) : null}
                   </div>

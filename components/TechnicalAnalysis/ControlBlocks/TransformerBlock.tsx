@@ -50,7 +50,7 @@ function TransformerBlock({ infoHolder, setInfoHolder, changes, setChanges }: Tr
   return (
     <div className='mt-4 flex w-full flex-col'>
       <div className='flex w-full items-center justify-center gap-2 rounded-md bg-primary/80 p-2'>
-        <h1 className='font-bold text-white'>TRANSFORMADOR</h1>
+        <h1 className='font-bold text-primary-foreground'>TRANSFORMADOR</h1>
         <button onClick={() => setEditEnabled((prev) => !prev)}>
           {!editEnabled ? <AiFillEdit color='white' /> : <AiFillCloseCircle color='#ff1736' />}
         </button>

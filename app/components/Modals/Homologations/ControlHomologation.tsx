@@ -119,8 +119,8 @@ function ControlHomologation({ homologationId, session, closeModal }: ControlHom
         <div className='flex h-full w-full flex-col'>
           <div className='flex flex-col items-center justify-between border-b border-primary/30 px-2 pb-2 text-lg lg:flex-row'>
             <div className='flex flex-col'>
-              <h3 className='text-xl font-bold text-primary dark:text-white '>EDITAR HOMOLOGAÇÃO</h3>
-              <h3 className='text-[0.65rem] font-bold text-primary/50 dark:text-white '>#{homologationId}</h3>
+              <h3 className='text-xl font-bold text-primary  '>EDITAR HOMOLOGAÇÃO</h3>
+              <h3 className='text-[0.65rem] font-bold text-primary/70  '>#{homologationId}</h3>
             </div>
 
             <button
@@ -162,7 +162,7 @@ function ControlHomologation({ homologationId, session, closeModal }: ControlHom
                   disabled={isPending}
                   // @ts-ignore
                   onClick={() => handleUpdateHomologation({ id: homologationId, changes: infoHolder })}
-                  className='h-9 whitespace-nowrap rounded-sm bg-primary/90 px-4 py-2 text-sm font-medium text-white shadow-sm disabled:bg-primary/50 disabled:text-white enabled:hover:bg-primary/80 enabled:hover:text-white'
+                  className='h-9 whitespace-nowrap rounded-sm bg-primary/90 px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm disabled:bg-primary/50 disabled:text-primary-foreground enabled:hover:bg-primary/80 enabled:hover:text-primary-foreground'
                 >
                   ATUALIZAR HOMOLOGAÇÃO
                 </button>

@@ -28,7 +28,9 @@ function TransformerInfo({ infoHolder, setInfoHolder, files, setFiles, goToNextS
   }
   return (
     <div className='flex w-full grow flex-col bg-background px-2'>
-      <h1 className='w-full rounded-md  bg-primary/70 p-1 text-center font-medium text-white'>INFORMAÇÕES DO TRANSFORMADOR DE ENERGIA</h1>
+      <h1 className='w-full rounded-md  bg-primary/70 p-1 text-center font-medium text-primary-foreground'>
+        INFORMAÇÕES DO TRANSFORMADOR DE ENERGIA
+      </h1>
       <div className='flex w-full grow flex-col gap-2'>
         <div className='my-3 w-full self-center lg:w-1/3'>
           <CheckboxInput
@@ -85,14 +87,14 @@ function TransformerInfo({ infoHolder, setInfoHolder, files, setFiles, goToNextS
       </div>
 
       <div className='mt-2 flex w-full items-end justify-between bg-background'>
-        <button onClick={() => goToPreviousStage()} className='rounded p-2 font-bold text-primary/50 duration-300 ease-in-out hover:scale-105'>
+        <button onClick={() => goToPreviousStage()} className='rounded p-2 font-bold text-primary/70 duration-300 ease-in-out hover:scale-105'>
           Voltar
         </button>
         <button
           onClick={() => {
             validateAndProceed();
           }}
-          className=' rounded-sm p-2 font-bold hover:bg-black hover:text-white'
+          className=' rounded-sm p-2 font-bold hover:bg-black hover:text-primary-foreground'
         >
           Prosseguir
         </button>

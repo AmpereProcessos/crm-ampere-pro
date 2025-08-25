@@ -94,7 +94,7 @@ export function renderPaginationPageItemsIcons({
   return pages.map((p) => (
     <button
       className={`${
-        activePage == p ? 'border-black bg-black text-white' : 'border-transparent text-primary hover:bg-primary/50'
+        activePage == p ? 'border-black bg-black text-primary-foreground' : 'border-transparent text-primary hover:bg-primary/50'
       } h-10 max-h-10 min-h-10 w-10 min-w-10 max-w-10 rounded-full border font-medium text-xs`}
       disabled={typeof p != 'number' || disabled}
       key={p}

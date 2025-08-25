@@ -140,7 +140,7 @@ function ProductComposition({ infoHolder, setInfoHolder }: ProductCompositionPro
   }
   return (
     <div className='flex w-full flex-col gap-y-2'>
-      <h1 className='w-full bg-primary/70  p-1 text-center font-medium text-white'>COMPOSIÇÃO DE PRODUTOS</h1>
+      <h1 className='w-full bg-primary/70  p-1 text-center font-medium text-primary-foreground'>COMPOSIÇÃO DE PRODUTOS</h1>
       <div className='flex w-full flex-col gap-1'>
         <div className='flex w-full flex-col gap-1'>
           <div className='flex w-full flex-col items-center gap-2 lg:flex-row'>
@@ -213,7 +213,7 @@ function ProductComposition({ infoHolder, setInfoHolder }: ProductCompositionPro
           </div>
           <div className='flex items-center justify-end'>
             <button
-              className='rounded bg-black p-1 px-4 text-sm font-medium text-white duration-300 ease-in-out hover:bg-primary/70'
+              className='rounded bg-black p-1 px-4 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-primary/70'
               onClick={() => addInverterToKit()}
             >
               ADICIONAR INVERSOR
@@ -291,7 +291,7 @@ function ProductComposition({ infoHolder, setInfoHolder }: ProductCompositionPro
           </div>
           <div className='flex items-center justify-end'>
             <button
-              className='rounded bg-black p-1 px-4 text-sm font-medium text-white duration-300 ease-in-out hover:bg-primary/70'
+              className='rounded bg-black p-1 px-4 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-primary/70'
               onClick={() => addModuleToKit()}
             >
               ADICIONAR MÓDULO
@@ -395,7 +395,7 @@ function ProductComposition({ infoHolder, setInfoHolder }: ProductCompositionPro
 
           <div className='flex items-center justify-end'>
             <button
-              className='rounded bg-black p-1 px-4 text-sm font-medium text-white duration-300 ease-in-out hover:bg-primary/70'
+              className='rounded bg-black p-1 px-4 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-primary/70'
               onClick={() => addPersonalizedProductToKit()}
             >
               ADICIONAR PRODUTO PERSONALIZADO
@@ -422,7 +422,7 @@ function ProductComposition({ infoHolder, setInfoHolder }: ProductCompositionPro
             {infoHolder.produtos.length > 0 ? (
               infoHolder.produtos.map((product, index) => <ProductItem product={product} index={index} removeProductFromKit={removeProductFromKit} />)
             ) : (
-              <div className='text-center font-light text-primary/50'>Nenhum produto adicionado</div>
+              <div className='text-center font-light text-primary/70'>Nenhum produto adicionado</div>
             )}
           </div>
         </div>

@@ -179,7 +179,7 @@ function PersonalizedSystemInfo({ requestInfo, setRequestInfo, goToPreviousStage
             inverterList.map((inv, index) => (
               <div key={index} className='flex w-full items-center justify-center gap-2 py-2'>
                 <BsBoundingBoxCircles style={{ fontSize: '25px' }} />
-                <p className='text-md font-medium text-primary/50'>
+                <p className='text-md font-medium text-primary/70'>
                   <strong className='text-green-500'>{inv.qtde}</strong>x<strong className='text-green-500'>{inv.brand}</strong> de{' '}
                   <strong className='text-green-500'>{inv.power}W</strong>{' '}
                 </p>
@@ -198,7 +198,7 @@ function PersonalizedSystemInfo({ requestInfo, setRequestInfo, goToPreviousStage
           ) : (
             <div className='flex w-full grow flex-col items-center justify-center'>
               <FaRegListAlt />
-              <p className='text-center text-sm italic text-primary/50'>Lista de inversores vazia...</p>
+              <p className='text-center text-sm italic text-primary/70'>Lista de inversores vazia...</p>
             </div>
           )}
         </div>
@@ -242,7 +242,7 @@ function PersonalizedSystemInfo({ requestInfo, setRequestInfo, goToPreviousStage
             moduleList.map((module, index) => (
               <div key={index} className='flex w-full items-center justify-center gap-2 py-2'>
                 <FaSolarPanel style={{ fontSize: '25px' }} />
-                <p className='text-md font-medium text-primary/50'>
+                <p className='text-md font-medium text-primary/70'>
                   <strong className='text-green-500'>{module.qtde}</strong>x<strong className='text-green-500'>{module.brand}</strong> de{' '}
                   <strong className='text-green-500'>{module.power}W</strong>{' '}
                 </p>
@@ -261,7 +261,7 @@ function PersonalizedSystemInfo({ requestInfo, setRequestInfo, goToPreviousStage
           ) : (
             <div className='flex w-full grow flex-col items-center justify-center'>
               <FaRegListAlt />
-              <p className='text-center text-sm italic text-primary/50'>Lista de módulos vazia...</p>
+              <p className='text-center text-sm italic text-primary/70'>Lista de módulos vazia...</p>
             </div>
           )}
         </div>
@@ -271,7 +271,7 @@ function PersonalizedSystemInfo({ requestInfo, setRequestInfo, goToPreviousStage
           onClick={() => {
             goToPreviousStage();
           }}
-          className='rounded p-2 font-bold text-primary/50 duration-300 hover:scale-105'
+          className='rounded p-2 font-bold text-primary/70 duration-300 hover:scale-105'
         >
           Voltar
         </button>
@@ -281,7 +281,7 @@ function PersonalizedSystemInfo({ requestInfo, setRequestInfo, goToPreviousStage
               goToNextStage();
             }
           }}
-          className='rounded p-2 font-bold hover:bg-black hover:text-white'
+          className='rounded p-2 font-bold hover:bg-black hover:text-primary-foreground'
         >
           Prosseguir
         </button>

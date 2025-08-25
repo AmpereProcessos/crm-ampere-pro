@@ -93,20 +93,20 @@ function OpportunityCard({ opportunity }: { opportunity: TOpportunitySimplifiedD
   function getOpportunityStatusTag(opportunity: TOpportunitySimplifiedDTO) {
     if (!!opportunity.ganho?.data)
       return (
-        <div className='flex min-w-fit items-center gap-1 rounded-lg bg-green-600 px-2 py-0.5 text-white'>
+        <div className='flex min-w-fit items-center gap-1 rounded-lg bg-green-600 px-2 py-0.5 text-primary-foreground'>
           <Trophy size={10} />
           <h1 className='text-xxs'>GANHA</h1>
         </div>
       );
     if (!!opportunity.perda?.data)
       return (
-        <div className='flex min-w-fit items-center gap-1 rounded-lg bg-red-600 px-2 py-0.5 text-white'>
+        <div className='flex min-w-fit items-center gap-1 rounded-lg bg-red-600 px-2 py-0.5 text-primary-foreground'>
           <Trophy size={10} />
           <h1 className='text-xxs'>PERDIDA</h1>
         </div>
       );
     return (
-      <div className='flex min-w-fit items-center gap-1 rounded-lg bg-blue-600 px-2 py-0.5 text-white'>
+      <div className='flex min-w-fit items-center gap-1 rounded-lg bg-blue-600 px-2 py-0.5 text-primary-foreground'>
         <Trophy size={10} />
         <h1 className='text-xxs'>EM ANDAMENTO</h1>
       </div>
@@ -119,7 +119,7 @@ function OpportunityCard({ opportunity }: { opportunity: TOpportunitySimplifiedD
           <p className='text-sm font-bold leading-none tracking-tight text-[#fead41]'>{opportunity.identificador}</p>
           <p className='text-sm font-bold leading-none tracking-tight'>{opportunity.nome}</p>
           {opportunity.idMarketing ? (
-            <div className='flex min-w-fit items-center gap-1 rounded-lg bg-[#3e53b2] px-2 py-0.5 text-white'>
+            <div className='flex min-w-fit items-center gap-1 rounded-lg bg-[#3e53b2] px-2 py-0.5 text-primary-foreground'>
               <BsFillMegaphoneFill size={10} />
               <h1 className='text-xxs'>INBOUND</h1>
             </div>
@@ -155,7 +155,7 @@ function OpportunityCard({ opportunity }: { opportunity: TOpportunitySimplifiedD
         </div>
         <div className='flex w-full flex-wrap items-center justify-center gap-2 lg:min-w-fit lg:justify-end'>
           <Link href={`/comercial/oportunidades/id/${opportunity._id}`}>
-            <p className='rounded-lg bg-black px-2 py-1 text-[0.55rem] tracking-tight text-white duration-300 ease-in-out hover:bg-primary/80'>
+            <p className='rounded-lg bg-black px-2 py-1 text-[0.55rem] tracking-tight text-primary-foreground duration-300 ease-in-out hover:bg-primary/80'>
               VER OPORTUNIDADE
             </p>
           </Link>

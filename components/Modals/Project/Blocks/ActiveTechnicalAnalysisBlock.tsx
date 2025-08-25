@@ -11,13 +11,13 @@ function ActiveTechnicalAnalysisBlock({ infoHolder, setInfoHolder, userHasPricin
   const activeAnalysis = infoHolder.analiseTecnicaDados;
   return (
     <div className='flex w-full flex-col gap-2 rounded-sm border border-primary/80'>
-      <h1 className='w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-white'>ANÁLISE TÉCNICA ATIVA</h1>
+      <h1 className='w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-primary-foreground'>ANÁLISE TÉCNICA ATIVA</h1>
       <div className='flex w-full grow flex-col gap-2 p-2'>
         {!!activeAnalysis ? (
           <ActiveTechnicalAnalysis analysis={activeAnalysis} userHasPricingViewPermission={userHasPricingViewPermission} />
         ) : (
           <div className='flex items-center justify-center p-2'>
-            <h1 className='text-center font-medium italic tracking-tight text-primary/50'>
+            <h1 className='text-center font-medium italic tracking-tight text-primary/70'>
               Não foi possível encontrar nenhuma análise técnica ativa para o projeto.
             </h1>
           </div>

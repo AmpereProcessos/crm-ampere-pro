@@ -69,13 +69,13 @@ function User({ partnerId, setAuthorHolder, goToNextStage, goToPreviousStage }: 
   return (
     <div className='flex grow flex-col gap-y-2'>
       <div className='flex w-full grow flex-col gap-y-2'>
-        <h1 className='mt-4 w-full text-center text-lg tracking-tight text-primary/50'>
+        <h1 className='mt-4 w-full text-center text-lg tracking-tight text-primary/70'>
           Agora, precisamos que você crie o primeiro usuário para a sua empresa.
         </h1>
-        <h1 className='mb-4 w-full text-center text-lg tracking-tight text-primary/50'>
+        <h1 className='mb-4 w-full text-center text-lg tracking-tight text-primary/70'>
           Lembrando que esse primeiro usuário será criado com permissões gerais de administrador.
         </h1>
-        <h1 className='w-full self-center bg-[#fead41] p-1 text-center font-bold text-white'>DADOS DE USUÁRIO</h1>
+        <h1 className='w-full self-center bg-[#fead41] p-1 text-center font-bold text-primary-foreground'>DADOS DE USUÁRIO</h1>
         <div className='flex w-full flex-col px-2'>
           <div className='relative flex h-[200px] w-[200px] flex-col items-center justify-center gap-2 self-center rounded-full'>
             {userHolder.avatar_url && !editImage.enabled ? (
@@ -85,7 +85,7 @@ function User({ partnerId, setAuthorHolder, goToNextStage, goToPreviousStage }: 
                 </div>
                 <button
                   onClick={() => setEditImage((prev) => ({ ...prev, enabled: true }))}
-                  className='w-fit rounded-sm border border-black p-1 font-Raleway text-xs font-medium duration-300 ease-in-out hover:bg-black hover:text-white'
+                  className='w-fit rounded-sm border border-black p-1 font-Raleway text-xs font-medium duration-300 ease-in-out hover:bg-black hover:text-primary-foreground'
                 >
                   EDITAR IMAGEM
                 </button>
@@ -188,7 +188,7 @@ function User({ partnerId, setAuthorHolder, goToNextStage, goToPreviousStage }: 
       <div className='flex w-full items-center justify-end px-2'>
         <button
           disabled={isPending}
-          className='rounded bg-black p-1 px-4 text-xs font-medium text-white duration-300 ease-in-out disabled:bg-primary/40 disabled:text-primary enabled:hover:bg-primary/60'
+          className='rounded bg-black p-1 px-4 text-xs font-medium text-primary-foreground duration-300 ease-in-out disabled:bg-primary/40 disabled:text-primary enabled:hover:bg-primary/60'
           onClick={() => mutate()}
         >
           PROSSEGUIR

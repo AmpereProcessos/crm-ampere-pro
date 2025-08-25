@@ -13,7 +13,7 @@ type ReportPageSessionProps = {
 function ReportPageSession({ session, controls, setControls, files, setFiles }: ReportPageSessionProps) {
   return (
     <div className='flex h-full w-full flex-col gap-2 pb-3'>
-      <h1 className='w-full bg-primary/60 px-2 py-2 text-center font-black tracking-tight text-white'>{session}</h1>
+      <h1 className='w-full bg-primary/60 px-2 py-2 text-center font-black tracking-tight text-primary-foreground'>{session}</h1>
       <div className='flex w-full flex-col gap-2 px-9'>
         <h1 className='text-start font-black leading-none tracking-tight'>CONTROLES</h1>
         {controls[session].map((control, index) => (

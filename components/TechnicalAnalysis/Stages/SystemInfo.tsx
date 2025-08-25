@@ -163,9 +163,9 @@ function SystemInfo({ infoHolder, setInfoHolder, goToNextStage, goToPreviousStag
   }
   return (
     <div className='flex h-full max-h-full w-full flex-col bg-background px-2'>
-      <h1 className='w-full rounded-md  bg-primary/70 p-1 text-center font-medium text-white'>INFORMAÇÕES DOS EQUIPAMENTOS</h1>
+      <h1 className='w-full rounded-md  bg-primary/70 p-1 text-center font-medium text-primary-foreground'>INFORMAÇÕES DOS EQUIPAMENTOS</h1>
       <div className='flex w-full grow flex-col gap-2 overflow-y-auto overscroll-y-auto px-2 py-1 scrollbar-thin scrollbar-track-primary/10 scrollbar-thumb-primary/30'>
-        <p className='my-2 w-full text-center text-sm leading-none tracking-tight text-primary/50'>
+        <p className='my-2 w-full text-center text-sm leading-none tracking-tight text-primary/70'>
           Preencha abaixo os <strong className='text-cyan-500'>equipamentos</strong> a serem análisados, ou, escolha um dos kits ativos.
         </p>
         <div className='flex w-full flex-col gap-1'>
@@ -239,7 +239,7 @@ function SystemInfo({ infoHolder, setInfoHolder, goToNextStage, goToPreviousStag
           </div>
           <div className='flex items-center justify-end'>
             <button
-              className='rounded bg-black p-1 px-4 text-sm font-medium text-white duration-300 ease-in-out hover:bg-primary/70'
+              className='rounded bg-black p-1 px-4 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-primary/70'
               onClick={() => addInverterToEquipments(inverterHolder)}
             >
               ADICIONAR INVERSOR
@@ -317,7 +317,7 @@ function SystemInfo({ infoHolder, setInfoHolder, goToNextStage, goToPreviousStag
           </div>
           <div className='flex items-center justify-end'>
             <button
-              className='rounded bg-black p-1 px-4 text-sm font-medium text-white duration-300 ease-in-out hover:bg-primary/70'
+              className='rounded bg-black p-1 px-4 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-primary/70'
               onClick={() => addModuleToEquipments(moduleHolder)}
             >
               ADICIONAR MÓDULO
@@ -407,7 +407,7 @@ function SystemInfo({ infoHolder, setInfoHolder, goToNextStage, goToPreviousStag
 
           <div className='flex items-center justify-end'>
             <button
-              className='rounded bg-black p-1 px-4 text-sm font-medium text-white duration-300 ease-in-out hover:bg-primary/70'
+              className='rounded bg-black p-1 px-4 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-primary/70'
               onClick={() => addPersonalizedEquipment(personalizedProductHolder)}
             >
               ADICIONAR PRODUTO PERSONALIZADO
@@ -420,17 +420,17 @@ function SystemInfo({ infoHolder, setInfoHolder, goToNextStage, goToPreviousStag
             getProducts={(products) => setInfoHolder((prev) => ({ ...prev, equipamentos: products }))}
           />
         ) : null}
-        <p className='w-full text-center text-sm leading-none tracking-tight text-primary/50'>
+        <p className='w-full text-center text-sm leading-none tracking-tight text-primary/70'>
           Deseja utilizar os equipamentos de um kit específico ? Abra o menu e{' '}
           <strong className='text-cyan-500'>Escolha uma das opções de kit.</strong>
         </p>
         <div className='my-2 flex w-full items-center justify-center'>
           {showKits ? (
-            <button onClick={() => setShowKits(false)} className='rounded-md bg-red-500 px-2 py-1 text-sm font-bold text-white'>
+            <button onClick={() => setShowKits(false)} className='rounded-md bg-red-500 px-2 py-1 text-sm font-bold text-primary-foreground'>
               FECHAR MENU DE KITS
             </button>
           ) : (
-            <button onClick={() => setShowKits(true)} className='rounded-md bg-cyan-500 px-2 py-1 text-sm font-bold text-white'>
+            <button onClick={() => setShowKits(true)} className='rounded-md bg-cyan-500 px-2 py-1 text-sm font-bold text-primary-foreground'>
               MOSTRAR MENU KITS
             </button>
           )}
@@ -471,21 +471,21 @@ function SystemInfo({ infoHolder, setInfoHolder, goToNextStage, goToPreviousStag
                 <div className='flex w-full items-center justify-end gap-2 pl-2'>
                   <div className='flex items-center gap-1'>
                     <FaIndustry size={15} />
-                    <p className='text-[0.6rem] font-light text-primary/50'>{equipment.fabricante}</p>
+                    <p className='text-[0.6rem] font-light text-primary/70'>{equipment.fabricante}</p>
                   </div>
                   <div className='flex items-center gap-1'>
                     <ImPower size={15} />
-                    <p className='text-[0.6rem] font-light text-primary/50'>{equipment.potencia} W</p>
+                    <p className='text-[0.6rem] font-light text-primary/70'>{equipment.potencia} W</p>
                   </div>
                 </div>
               </div>
             ))
           ) : (
-            <p className='w-full text-center text-sm font-medium tracking-tight text-primary/50'>Nenhum equipamento adicionado à lista.</p>
+            <p className='w-full text-center text-sm font-medium tracking-tight text-primary/70'>Nenhum equipamento adicionado à lista.</p>
           )}
         </div>
         <div className='flex w-full flex-col gap-1 rounded-sm border border-orange-700 p-2'>
-          <p className='my-2 w-full text-center text-sm leading-none tracking-tight text-primary/50'>
+          <p className='my-2 w-full text-center text-sm leading-none tracking-tight text-primary/70'>
             A análise será feita para venda de um <strong className='text-orange-700'>aumento de sistema</strong> ? Se sim, marque a opção abaixo e
             preencha acerca dos equipamentos já instalados.
           </p>
@@ -503,10 +503,10 @@ function SystemInfo({ infoHolder, setInfoHolder, goToNextStage, goToPreviousStag
         </div>
       </div>
       <div className='mt-2 flex w-full justify-between'>
-        <button onClick={() => goToPreviousStage()} className='rounded p-2 font-bold text-primary/50 duration-300 ease-in-out hover:scale-105'>
+        <button onClick={() => goToPreviousStage()} className='rounded p-2 font-bold text-primary/70 duration-300 ease-in-out hover:scale-105'>
           Voltar
         </button>
-        <button onClick={() => validateAndProceed()} className='rounded p-2 font-bold hover:bg-black hover:text-white'>
+        <button onClick={() => validateAndProceed()} className='rounded p-2 font-bold hover:bg-black hover:text-primary-foreground'>
           Prosseguir
         </button>
       </div>

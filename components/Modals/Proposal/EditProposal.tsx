@@ -120,7 +120,7 @@ function EditProposal({ closeModal, info, userHasPricingViewPermission, userHasP
     <div id='edit-proposal' className='fixed bottom-0 left-0 right-0 top-0 z-100 bg-[rgba(0,0,0,.85)]'>
       <div className='fixed left-[50%] top-[50%] z-100 flex h-fit max-h-[90%] w-[90%] translate-x-[-50%] translate-y-[-50%] flex-col rounded-md bg-background p-[10px] lg:w-[90%]'>
         <div className='flex flex-col items-center justify-between border-b border-primary/30 px-2 pb-2 text-lg lg:flex-row'>
-          <h3 className='text-xl font-bold text-primary dark:text-white '>EDITAR PROPOSTA</h3>
+          <h3 className='text-xl font-bold text-primary  '>EDITAR PROPOSTA</h3>
           <button
             onClick={() => closeModal()}
             type='button'
@@ -138,7 +138,7 @@ function EditProposal({ closeModal, info, userHasPricingViewPermission, userHasP
             width='100%'
           />
           <div className='flex w-full flex-col gap-2 rounded-sm border border-cyan-500'>
-            <h1 className='w-full rounded-sm bg-cyan-500 p-1 text-center text-xs font-bold text-white'>PRECIFICAÇÃO</h1>
+            <h1 className='w-full rounded-sm bg-cyan-500 p-1 text-center text-xs font-bold text-primary-foreground'>PRECIFICAÇÃO</h1>
             <div className='flex w-full flex-col p-2'>
               <PricingTable
                 opportunity={info.oportunidadeDados}
@@ -152,7 +152,7 @@ function EditProposal({ closeModal, info, userHasPricingViewPermission, userHasP
                 <div className='flex w-full items-center justify-center'>
                   <button
                     onClick={() => setAddNewPriceItemModalIsOpen(true)}
-                    className='flex items-center gap-2 rounded-sm bg-orange-600 px-4 py-2 text-white duration-100 ease-in-out hover:bg-orange-700'
+                    className='flex items-center gap-2 rounded-sm bg-orange-600 px-4 py-2 text-primary-foreground duration-100 ease-in-out hover:bg-orange-700'
                   >
                     <MdAdd />
                     <h1 className='text-xs font-bold'>NOVO CUSTO</h1>
@@ -196,7 +196,7 @@ function EditProposal({ closeModal, info, userHasPricingViewPermission, userHasP
                   payment: payment,
                 })
               }
-              className='h-9 whitespace-nowrap rounded-sm bg-blue-700 px-4 py-2 text-sm font-medium text-white shadow-sm disabled:bg-primary/50 disabled:text-white enabled:hover:bg-blue-600 enabled:hover:text-white'
+              className='h-9 whitespace-nowrap rounded-sm bg-blue-700 px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm disabled:bg-primary/50 disabled:text-primary-foreground enabled:hover:bg-blue-600 enabled:hover:text-primary-foreground'
             >
               ATUALIZAR PROPOSTA
             </button>
@@ -235,8 +235,8 @@ function ProposalPaymentMethods({ proposalValue, payment, setPayment }: Proposal
   }
   return (
     <div className='flex w-full flex-col gap-2 rounded-sm border border-[#fead41]'>
-      <h1 className='w-full rounded-sm bg-[#fead41] p-1 text-center text-xs font-bold text-white'>FORMAS DE PAGAMENTO</h1>
-      <p className='my-2 w-full text-center font-medium leading-none tracking-tight text-primary/50'>
+      <h1 className='w-full rounded-sm bg-[#fead41] p-1 text-center text-xs font-bold text-primary-foreground'>FORMAS DE PAGAMENTO</h1>
+      <p className='my-2 w-full text-center font-medium leading-none tracking-tight text-primary/70'>
         Selecione os métodos de pagamento aplicáveis a essa proposta.
       </p>
       <div className='flex w-full flex-col gap-2 p-2'>
@@ -257,7 +257,7 @@ function ProposalPaymentMethods({ proposalValue, payment, setPayment }: Proposal
               />
             ))
           ) : (
-            <p className='flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/50'>
+            <p className='flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/70'>
               Nenhum método de pagamento disponível.
             </p>
           )

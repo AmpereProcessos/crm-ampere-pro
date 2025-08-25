@@ -58,7 +58,7 @@ function NewPaymentMethod({ session, closeModal }: NewPaymentMethodProps) {
       <div className='fixed left-[50%] top-[50%] z-100 h-[80%] w-[90%] translate-x-[-50%] translate-y-[-50%] rounded-md bg-background p-[10px] lg:w-[70%]'>
         <div className='flex h-full flex-col font-Inter'>
           <div className='flex flex-col items-center justify-between border-b border-primary/30 px-2 pb-2 text-lg lg:flex-row'>
-            <h3 className='text-xl font-bold text-primary dark:text-white '>NOVO MÉTODO DE PAGAMENTO</h3>
+            <h3 className='text-xl font-bold text-primary  '>NOVO MÉTODO DE PAGAMENTO</h3>
             <button
               onClick={() => closeModal()}
               type='button'
@@ -69,10 +69,10 @@ function NewPaymentMethod({ session, closeModal }: NewPaymentMethodProps) {
           </div>
           <div className='flex h-full grow flex-col gap-y-2 overflow-y-auto overscroll-y-auto p-2 py-1 scrollbar-thin scrollbar-track-primary/10 scrollbar-thumb-primary/30'>
             <div className='my-5 flex flex-col'>
-              <p className='text-primary/50'>
+              <p className='text-primary/70'>
                 Define <strong className='text-[#E25E3E]'>métodos de pagamento</strong> a ser utilizados nas suas propostas.
               </p>
-              <p className='text-primary/50'>
+              <p className='text-primary/70'>
                 Especifique <strong className='text-[#E25E3E]'>fracionamentos</strong> de pagamento, defina o número máximo de{' '}
                 <strong className='text-[#E25E3E]'>parcelas</strong> aplicável, fixe <strong className='text-[#E25E3E]'>taxas únicas</strong> (taxas
                 de máquininhas de cartão) e <strong className='text-[#E25E3E]'>taxas de juros</strong> . Através desse mecanismo, você será capaz de{' '}
@@ -120,7 +120,7 @@ function NewPaymentMethod({ session, closeModal }: NewPaymentMethodProps) {
                 width='100%'
               />
             </div>
-            <h1 className='mt-2 w-full rounded-md bg-primary/70 p-1 text-center text-sm font-bold text-white'>FRACIONAMENTO</h1>
+            <h1 className='mt-2 w-full rounded-md bg-primary/70 p-1 text-center text-sm font-bold text-primary-foreground'>FRACIONAMENTO</h1>
             {newFractionnementItemMenuIsOpen ? (
               <NewFractionnement
                 addFractionnement={addFractionnement}
@@ -131,7 +131,7 @@ function NewPaymentMethod({ session, closeModal }: NewPaymentMethodProps) {
             ) : (
               <div className='flex w-full items-center justify-end'>
                 <button
-                  className='rounded bg-green-500 p-1 px-4 text-sm font-medium text-white duration-300 ease-in-out hover:bg-green-600'
+                  className='rounded bg-green-500 p-1 px-4 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-green-600'
                   onClick={() => setNewFractionnementItemMenuIsOpen(true)}
                 >
                   NOVO ITEM DE FRACIONAMENTO
@@ -157,24 +157,24 @@ function NewPaymentMethod({ session, closeModal }: NewPaymentMethodProps) {
                     <div className='mt-2 flex w-full items-center justify-between'>
                       <div className='flex items-center gap-2'>
                         <MdPayment color={'#76c893'} />
-                        <p className='text-xs font-medium leading-none tracking-tight text-primary/50'>{fractionnement.metodo}</p>
+                        <p className='text-xs font-medium leading-none tracking-tight text-primary/70'>{fractionnement.metodo}</p>
                       </div>
                       <div className='flex items-center gap-2'>
                         <BsCircleHalf color='#ed174c' />
-                        <p className='text-xs font-medium leading-none tracking-tight text-primary/50'>
+                        <p className='text-xs font-medium leading-none tracking-tight text-primary/70'>
                           {fractionnement.maximoParcelas} {fractionnement.maximoParcelas > 1 ? 'PARCELAS' : 'PARCELA'}
                         </p>
                       </div>
                       {fractionnement.taxaJuros ? (
                         <div className='flex items-center gap-2'>
                           <FaPercentage />
-                          <p className='text-xs font-medium leading-none tracking-tight text-primary/50'>{fractionnement.taxaJuros} DE JUROS</p>
+                          <p className='text-xs font-medium leading-none tracking-tight text-primary/70'>{fractionnement.taxaJuros} DE JUROS</p>
                         </div>
                       ) : null}
                       {fractionnement.taxaUnica ? (
                         <div className='flex items-center gap-2'>
                           <FaPercentage />
-                          <p className='text-xs font-medium leading-none tracking-tight text-primary/50'>{fractionnement.taxaUnica} DE USO</p>
+                          <p className='text-xs font-medium leading-none tracking-tight text-primary/70'>{fractionnement.taxaUnica} DE USO</p>
                         </div>
                       ) : null}
                     </div>
@@ -182,12 +182,12 @@ function NewPaymentMethod({ session, closeModal }: NewPaymentMethodProps) {
                 ))}
               </div>
             ) : (
-              <p className='w-full text-center text-sm italic text-primary/50'>Nenhum fracionamento adicionado.</p>
+              <p className='w-full text-center text-sm italic text-primary/70'>Nenhum fracionamento adicionado.</p>
             )}
           </div>
           <div className='flex w-full items-center justify-end'>
             <button
-              className='h-9 whitespace-nowrap rounded-sm bg-green-700 px-4 py-2 text-sm font-medium text-white shadow-sm disabled:bg-primary/50 disabled:text-white enabled:hover:bg-green-600 enabled:hover:text-white'
+              className='h-9 whitespace-nowrap rounded-sm bg-green-700 px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm disabled:bg-primary/50 disabled:text-primary-foreground enabled:hover:bg-green-600 enabled:hover:text-primary-foreground'
               onClick={() =>
                 // @ts-ignore
                 handleCreatePaymentMethod({ info: infoHolder })

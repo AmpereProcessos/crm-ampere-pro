@@ -11,7 +11,7 @@ function ReturnConfigurationBlock(node: TProcessSettingNode) {
   const [updateNodeData, addNode] = useProjectSettingStore((state) => [state.updateNodeData, state.addNode]);
   return (
     <div className='flex w-full flex-col gap-2 rounded-sm border border-primary/50'>
-      <h1 className='w-full rounded-sm bg-primary/80 p-1 text-center text-xs font-bold text-white'>CONFIGURAÇÃO DE RETORNO</h1>
+      <h1 className='w-full rounded-sm bg-primary/80 p-1 text-center text-xs font-bold text-primary-foreground'>CONFIGURAÇÃO DE RETORNO</h1>
       <div className='flex w-full flex-col gap-2 p-2'>
         {activeAutomationReference.returns ? (
           <>
@@ -62,7 +62,7 @@ function ReturnConfigurationBlock(node: TProcessSettingNode) {
                         },
                       });
                     }}
-                    className='h-9 whitespace-nowrap rounded-sm bg-green-700 px-2 py-1 text-xs font-medium text-white shadow-sm disabled:bg-primary/50 disabled:text-white enabled:hover:bg-green-600 enabled:hover:text-white'
+                    className='h-9 whitespace-nowrap rounded-sm bg-green-700 px-2 py-1 text-xs font-medium text-primary-foreground shadow-sm disabled:bg-primary/50 disabled:text-primary-foreground enabled:hover:bg-green-600 enabled:hover:text-primary-foreground'
                   >
                     ADICIONAR PROCESSO DEPENDENTE
                   </button>
@@ -71,7 +71,7 @@ function ReturnConfigurationBlock(node: TProcessSettingNode) {
             ) : null}
           </>
         ) : (
-          <h1 className='w-full max-w-full break-words rounded-sm border border-primary/50 bg-gray-50 p-1 text-center text-[0.65rem] tracking-tight text-primary/50'>
+          <h1 className='w-full max-w-full break-words rounded-sm border border-primary/50 bg-primary/10p-1 text-center text-[0.65rem] tracking-tight text-primary/70'>
             ESSA ENTIDADE NÃO PERMITE PROCESSOS DEPENDENTES.
           </h1>
         )}

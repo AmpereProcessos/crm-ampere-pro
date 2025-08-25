@@ -22,12 +22,12 @@ function ActivitiesInformation({ homologation, session, opportunity }: Activitie
   return (
     <div className='flex w-full flex-col gap-2'>
       <div className='flex w-full items-center justify-center gap-2 rounded-md bg-cyan-500 p-1'>
-        <h1 className='font-bold text-white'>ATIVIDADES</h1>
+        <h1 className='font-bold text-primary-foreground'>ATIVIDADES</h1>
         <button onClick={() => setMenuEnabled((prev) => !prev)}>
           {!menuEnabled ? <IoMdArrowDropdownCircle color='white' /> : <IoMdArrowDropupCircle color='white' />}
         </button>
       </div>
-      {/* <h1 className="w-full rounded-sm bg-cyan-500 p-1 text-center font-bold text-white">ATIVIDADES</h1> */}
+      {/* <h1 className="w-full rounded-sm bg-cyan-500 p-1 text-center font-bold text-primary-foreground">ATIVIDADES</h1> */}
       <NewActivityMenu
         session={session}
         opportunity={opportunity}
@@ -44,13 +44,13 @@ function ActivitiesInformation({ homologation, session, opportunity }: Activitie
               {menuEnabled ? (
                 activities.map((activity, index) => <HomologationActivity key={activity._id} activity={activity} homologationId={homologation._id} />)
               ) : (
-                <p className='flex w-full grow items-center justify-center gap-2 py-2 text-center font-medium italic tracking-tight text-primary/50'>
+                <p className='flex w-full grow items-center justify-center gap-2 py-2 text-center font-medium italic tracking-tight text-primary/70'>
                   <strong className='text-orange-500'>{openActivityCount} </strong> atividades em aberto.
                 </p>
               )}
             </>
           ) : (
-            <p className='flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/50'>
+            <p className='flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/70'>
               Sem atividades adicionadas.
             </p>
           )

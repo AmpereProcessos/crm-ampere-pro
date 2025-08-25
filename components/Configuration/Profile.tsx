@@ -27,7 +27,7 @@ function Profile({ session }: ProfileProps) {
         </div>
         <div className='flex items-center gap-2 rounded-md border border-primary/30 p-2 shadow-md'>
           <Avatar url={partner?.logo_url || undefined} fallback={formatNameAsInitials(partner?.nome || '')} height={28} width={28} />
-          <p className='text-xs font-medium text-primary/50'>{partner?.nome}</p>
+          <p className='text-xs font-medium text-primary/70'>{partner?.nome}</p>
         </div>
       </div>
       <div className='flex w-full flex-col gap-2 py-6'>
@@ -44,23 +44,23 @@ function Profile({ session }: ProfileProps) {
             <div className='mt-1 flex items-center gap-2 flex-wrap'>
               <div className='flex items-center gap-1'>
                 <MdOutlineEmail size={16} />
-                <p className='text-sm text-primary/50'>{user?.email}</p>
+                <p className='text-sm text-primary/70'>{user?.email}</p>
               </div>
               <div className='flex items-center gap-1'>
                 <BsTelephone size={14} />
-                <p className='text-sm text-primary/50'>{user?.telefone}</p>
+                <p className='text-sm text-primary/70'>{user?.telefone}</p>
               </div>
             </div>
             <div className='mt-1 flex items-center gap-2 flex-wrap'>
               <div className='flex items-center gap-1'>
                 <BsCalendarPlus size={14} />
-                <p className='text-sm text-primary/50'>
+                <p className='text-sm text-primary/70'>
                   Criado em <strong>{formatDateAsLocale(user?.dataInsercao || undefined)}</strong>
                 </p>
               </div>
               <div className='flex items-center gap-1'>
                 <BsCalendar4Event size={14} />
-                <p className='text-sm text-primary/50'>
+                <p className='text-sm text-primary/70'>
                   Última alteração em <strong>{formatDateAsLocale(user?.dataAlteracao || undefined)}</strong>
                 </p>
               </div>

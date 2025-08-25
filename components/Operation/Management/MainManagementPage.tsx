@@ -25,7 +25,7 @@ function MainManagementPage({ session }: MainManagementPageProps) {
             <button
               onClick={() => setMode('process-tracking')}
               className={`${
-                mode == 'process-tracking' ? 'bg-background text-primary shadow-md' : 'bg-transparent text-primary/50 hover:bg-primary/30'
+                mode == 'process-tracking' ? 'bg-background text-primary shadow-md' : 'bg-transparent text-primary/70 hover:bg-primary/30'
               } whitespace-nowrap rounded-md px-3 py-2 text-[0.57rem] font-medium leading-none tracking-tight lg:text-sm`}
             >
               VISUALIZAÇÃO DE PROCESSOS
@@ -33,7 +33,7 @@ function MainManagementPage({ session }: MainManagementPageProps) {
             <button
               onClick={() => setMode('projects-follow-up')}
               className={`${
-                mode == 'projects-follow-up' ? 'bg-background text-primary shadow-md' : 'bg-transparent text-primary/50 hover:bg-primary/30'
+                mode == 'projects-follow-up' ? 'bg-background text-primary shadow-md' : 'bg-transparent text-primary/70 hover:bg-primary/30'
               } whitespace-nowrap rounded-md px-3 py-2 text-[0.57rem] font-medium leading-none tracking-tight shadow-md lg:text-sm`}
             >
               FOLLOW UP DE PROJETOS

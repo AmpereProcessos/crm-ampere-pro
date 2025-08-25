@@ -14,12 +14,12 @@ function OpportunityInformationBlock({ infoHolder, setInfoHolder }: OpportunityI
   const [vinculationMenuIsOpen, setVinculationMenuIsOpen] = useState(false);
   return (
     <div className='flex w-full flex-col gap-2'>
-      <h1 className='w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-white'>OPORTUNIDADE</h1>
+      <h1 className='w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-primary-foreground'>OPORTUNIDADE</h1>
       {infoHolder.oportunidade.id ? (
         <div className='my-2 flex flex-col items-center justify-center'>
           <h1 className='font-bold'>OPORTUNIDADE</h1>
           <Link href={`/comercial/oportunidades/id/${infoHolder.oportunidade.id}`}>
-            <div className='flex items-center gap-1 rounded-lg bg-cyan-500 px-2 py-1 text-white hover:bg-blue-500'>
+            <div className='flex items-center gap-1 rounded-lg bg-cyan-500 px-2 py-1 text-primary-foreground hover:bg-blue-500'>
               <MdCode />
               <p className='cursor-pointer text-sm font-bold tracking-tight'>{infoHolder.oportunidade.nome}</p>
             </div>

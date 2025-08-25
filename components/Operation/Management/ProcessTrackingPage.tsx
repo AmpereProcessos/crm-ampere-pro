@@ -38,7 +38,7 @@ function ProcessTrackingPage({ session }: ProcessTrackingPageProps) {
                   key={index}
                   data-type-selected={projectType == type ? 'true' : 'false'}
                   onClick={() => setProjectType(type)}
-                  className='rounded-lg border border-blue-800 px-3 py-2 text-[0.65rem] font-bold text-blue-800 duration-300 ease-out data-[type-selected=true]:bg-blue-800 data-[type-selected=true]:text-white'
+                  className='rounded-lg border border-blue-800 px-3 py-2 text-[0.65rem] font-bold text-blue-800 duration-300 ease-out data-[type-selected=true]:bg-blue-800 data-[type-selected=true]:text-primary-foreground'
                 >
                   {type}
                 </button>
@@ -84,7 +84,9 @@ function ProcessTrackingPage({ session }: ProcessTrackingPageProps) {
           <div className='flex w-full flex-col gap-6'>
             {Object.entries(stats).map(([category, processes], index) => (
               <div key={index} className='flex w-full flex-col rounded-sm border border-blue-800'>
-                <h1 className='rounded-bl-0 rounded-br-0 w-full rounded-sm bg-blue-800 p-2 text-center text-sm font-bold text-white'>{category}</h1>
+                <h1 className='rounded-bl-0 rounded-br-0 w-full rounded-sm bg-blue-800 p-2 text-center text-sm font-bold text-primary-foreground'>
+                  {category}
+                </h1>
                 <div className='flex w-full flex-wrap items-center justify-around gap-6 bg-background p-6'>
                   {Object.entries(processes).map(([process, metrics], processIndex) => (
                     <div key={processIndex} className='flex w-[400px] flex-col gap-4 rounded-lg border border-primary/50 bg-background p-1 shadow-md'>
@@ -95,21 +97,21 @@ function ProcessTrackingPage({ session }: ProcessTrackingPageProps) {
                         <div className='flex w-full justify-between gap-2'>
                           <div className='flex items-center justify-start gap-1'>
                             <TbProgress size={16} />
-                            <h3 className='text-xs tracking-tight text-primary/50'>EM ANDAMENTO</h3>
+                            <h3 className='text-xs tracking-tight text-primary/70'>EM ANDAMENTO</h3>
                           </div>
                           <h1 className='text-center font-bold'>{metrics.andamento}</h1>
                         </div>
                         <div className='flex w-full justify-between gap-2'>
                           <div className='flex items-center justify-center gap-1'>
                             <BsCheckCircle size={16} />
-                            <h3 className='text-xs tracking-tight text-primary/50'>CONCLUÍDOS NO PERÍODO</h3>
+                            <h3 className='text-xs tracking-tight text-primary/70'>CONCLUÍDOS NO PERÍODO</h3>
                           </div>
                           <h1 className='text-center font-bold'>{metrics.concluidos}</h1>
                         </div>
                         <div className='flex w-full justify-between gap-2'>
                           <div className='flex items-center justify-center gap-1'>
                             <MdOutlineTimer size={18} />
-                            <h3 className='text-xs tracking-tight text-primary/50'>TEMPO MÉDIO</h3>
+                            <h3 className='text-xs tracking-tight text-primary/70'>TEMPO MÉDIO</h3>
                           </div>
                           <h1 className='text-center font-bold'>
                             {getTimeFormattedTextFromHours(metrics.tempoTotalConclusao / metrics.concluidos).toLowerCase()}

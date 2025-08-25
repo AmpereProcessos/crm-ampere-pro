@@ -966,7 +966,7 @@ function DocumentAttachmentInfo({
           onClick={() => {
             goToPreviousStage();
           }}
-          className='rounded p-2 font-bold text-primary/50 duration-300 hover:scale-105'
+          className='rounded p-2 font-bold text-primary/70 duration-300 hover:scale-105'
         >
           Voltar
         </button>
@@ -975,7 +975,7 @@ function DocumentAttachmentInfo({
             onClick={() => {
               goToNextStage();
             }}
-            className='rounded p-2 font-bold disabled:bg-primary/30 hover:bg-black hover:text-white'
+            className='rounded p-2 font-bold disabled:bg-primary/30 hover:bg-black hover:text-primary-foreground'
           >
             Prosseguir
           </button>
@@ -985,7 +985,7 @@ function DocumentAttachmentInfo({
               uploadFiles();
             }}
             disabled={uploadOK == 'loading'}
-            className='rounded p-2 font-bold disabled:bg-primary/30 hover:bg-black hover:text-white'
+            className='rounded p-2 font-bold disabled:bg-primary/30 hover:bg-black hover:text-primary-foreground'
           >
             {uploadOK == 'loading' ? 'Carregando...' : 'Enviar arquivos'}
           </button>

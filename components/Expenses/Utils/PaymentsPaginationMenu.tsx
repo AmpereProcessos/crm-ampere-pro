@@ -13,7 +13,7 @@ function PaymentsPaginationMenu({ activePage, selectPage, totalPages, paymentsMa
     <div className='my-2 flex w-full flex-col items-center gap-1 '>
       {totalPages > 1 ? (
         <>
-          <p className='w-full text-center text-sm leading-none tracking-tight text-primary/50'>
+          <p className='w-full text-center text-sm leading-none tracking-tight text-primary/70'>
             Um número grande de pagamentos foi encontrado, separamos em páginas para facilitar a visualização. Clique na página desejada para
             visualizar os demais pagamentos.
           </p>
@@ -69,10 +69,10 @@ function PaymentsPaginationMenu({ activePage, selectPage, totalPages, paymentsMa
         </>
       ) : null}
 
-      <p className='w-full text-center text-sm leading-none tracking-tight text-primary/50'>
+      <p className='w-full text-center text-sm leading-none tracking-tight text-primary/70'>
         {paymentsMatched ? (paymentsMatched > 1 ? `${paymentsMatched} pagamentos encontrados.` : `${paymentsMatched} pagamento encontrado.`) : null}
       </p>
-      <p className='w-full text-center text-sm leading-none tracking-tight text-primary/50'>
+      <p className='w-full text-center text-sm leading-none tracking-tight text-primary/70'>
         {paymentsShowing ? (paymentsShowing > 1 ? `Mostrando ${paymentsShowing} pagamentos.` : `Mostrando ${paymentsShowing} pagamento.`) : null}
       </p>
     </div>

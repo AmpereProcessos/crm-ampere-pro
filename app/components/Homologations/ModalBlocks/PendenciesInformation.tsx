@@ -8,7 +8,7 @@ type PendenciesInformationProps = {
 function PendenciesInformation({ infoHolder, setInfoHolder }: PendenciesInformationProps) {
   return (
     <div className='flex w-full flex-col gap-2'>
-      <h1 className='w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-white'>PENDÊNCIAS</h1>
+      <h1 className='w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-primary-foreground'>PENDÊNCIAS</h1>
       <div className='flex w-full flex-col items-center justify-center gap-4 lg:flex-row'>
         <div className='w-fit'>
           <CheckboxWithDate

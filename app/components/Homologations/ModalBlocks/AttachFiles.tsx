@@ -26,7 +26,7 @@ function AttachFiles({ opportunityId, files, setFiles }: AttachFilesProps) {
   }
   return (
     <div className='flex w-full flex-col gap-2'>
-      <h1 className='w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-white'>ARQUIVOS</h1>
+      <h1 className='w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-primary-foreground'>ARQUIVOS</h1>
       <div className='flex w-full flex-col items-center justify-center gap-2'>
         <div className='w-full lg:w-1/2'>
           <DocumentFileInput
@@ -47,7 +47,7 @@ function AttachFiles({ opportunityId, files, setFiles }: AttachFilesProps) {
         </div>
         <button
           onClick={() => addFile(personalizedFile)}
-          className='rounded bg-black p-1 px-4 text-sm font-medium text-white duration-300 ease-in-out hover:bg-primary/70'
+          className='rounded bg-black p-1 px-4 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-primary/70'
         >
           ADICIONAR ARQUIVO
         </button>
@@ -61,12 +61,12 @@ function AttachFiles({ opportunityId, files, setFiles }: AttachFilesProps) {
                 <div className='text-lg text-primary'>
                   <AiFillFile />
                 </div>
-                <p className='text-sm font-bold leading-none tracking-tight text-primary/50'>{key}</p>
+                <p className='text-sm font-bold leading-none tracking-tight text-primary/70'>{key}</p>
               </div>
             </div>
           ))
         ) : (
-          <p className='flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/50'>
+          <p className='flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/70'>
             Nenhum arquivo anexado...
           </p>
         )}

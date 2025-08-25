@@ -69,7 +69,7 @@ function ScopeSelection({ referenceId, options, selected, handleScopeSelection }
   return (
     <div className='relative flex flex-col'>
       <div className='flex flex-col lg:flex-row items-center gap-1'>
-        <p className='text-[0.65rem] lg:text-xs text-primary/50'>ESCOPO</p>
+        <p className='text-[0.65rem] lg:text-xs text-primary/70'>ESCOPO</p>
         <div className='flex items-center gap-2'>
           <button
             type='button'
@@ -98,7 +98,7 @@ function ScopeSelection({ referenceId, options, selected, handleScopeSelection }
               setMode('PERSONALIZADO');
               setSelectMenuIsOpen(true);
             }}
-            className={`${mode === 'PERSONALIZADO' ? 'opacity-100' : 'opacity-40'} rounded-md border border-primary/40 bg-gray-50 p-1 text-[0.57rem] font-medium text-primary/40`}
+            className={`${mode === 'PERSONALIZADO' ? 'opacity-100' : 'opacity-40'} rounded-md border border-primary/40 bg-primary/10p-1 text-[0.57rem] font-medium text-primary/40`}
           >
             PERSONALIZADO
           </button>
@@ -154,7 +154,7 @@ function PersonalizedScopeSelectionMenu({ options, selected, handleScopeSelectio
                 handleScopeSelection(selectedArr);
               }}
               className={cn(
-                'flex w-full cursor-pointer items-center gap-2 rounded-md border bg-gray-50 p-1',
+                'flex w-full cursor-pointer items-center gap-2 rounded-md border bg-primary/10p-1',
                 validateIsSelected({ id: option.id.toString(), selected }) ? ' border-cyan-400' : 'border-primary/40 opacity-40'
               )}
             >

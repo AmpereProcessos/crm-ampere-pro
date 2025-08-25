@@ -64,7 +64,7 @@ export const Sidebar = ({ session }: SidebarProps) => {
           >
             <TfiAngleRight />
           </motion.div>
-          {sidebarExtended ? <h2 className='h-[18px] text-xs text-primary/50'>PRINCIPAL</h2> : <div className='h-[18px] w-full ' />}
+          {sidebarExtended ? <h2 className='h-[18px] text-xs text-primary/70'>PRINCIPAL</h2> : <div className='h-[18px] w-full ' />}
           <SidebarItem text='Dashboard' isOpen={sidebarExtended} url='/' icon={<BiStats className='w-3.5 h-3.5 min-w-3.5 min-h-3.5' />} />
           <SidebarItem
             text='Oportunidades'
@@ -79,7 +79,7 @@ export const Sidebar = ({ session }: SidebarProps) => {
             icon={<FaPercent className='w-3.5 h-3.5 min-w-3.5 min-h-3.5' />}
           />
           <SidebarItem text='Clientes' isOpen={sidebarExtended} url='/clientes' icon={<FaUser className='w-3.5 h-3.5 min-w-3.5 min-h-3.5' />} />
-          {sidebarExtended ? <h2 className='mt-2 h-[18px] text-xs text-primary/50'>COMPOSIÇÕES</h2> : <div className='mt-2 h-[18px]' />}
+          {sidebarExtended ? <h2 className='mt-2 h-[18px] text-xs text-primary/70'>COMPOSIÇÕES</h2> : <div className='mt-2 h-[18px]' />}
           <SidebarItem text='Kits' isOpen={sidebarExtended} url='/kits' icon={<FaTag className='w-3.5 h-3.5 min-w-3.5 min-h-3.5' />} />
           <SidebarItem
             text='Planos de assinatura'
@@ -94,7 +94,7 @@ export const Sidebar = ({ session }: SidebarProps) => {
             url='/servicos'
             icon={<MdOutlineMiscellaneousServices className='w-3.5 h-3.5 min-w-3.5 min-h-3.5' />}
           />
-          {sidebarExtended ? <h2 className='mt-2 h-[18px] text-xs text-primary/50'>OPERACIONAL</h2> : <div className='mt-2 h-[18px]' />}
+          {sidebarExtended ? <h2 className='mt-2 h-[18px] text-xs text-primary/70'>OPERACIONAL</h2> : <div className='mt-2 h-[18px]' />}
           {/* <SidebarItem
             text="Homologações"
             isOpen={sidebarExtended}

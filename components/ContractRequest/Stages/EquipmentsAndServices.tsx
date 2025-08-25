@@ -20,7 +20,7 @@ function EquipmentsAndServices({ requestInfo, setRequestInfo, goToNextState }: E
   return (
     <div className='flex w-full grow flex-col gap-2'>
       <div className='flex w-full grow flex-col gap-2'>
-        <h1 className='w-full rounded-md bg-[#fead41] p-1 text-center text-sm font-medium text-white'>EQUIPAMENTOS</h1>
+        <h1 className='w-full rounded-md bg-[#fead41] p-1 text-center text-sm font-medium text-primary-foreground'>EQUIPAMENTOS</h1>
         <div className='mt-2 flex w-full flex-col items-center justify-around gap-2 lg:flex-row'>
           <div className='flex min-h-[80px] w-full flex-col rounded-xl border border-primary/30 bg-background p-4 shadow-md lg:w-1/4 lg:p-6'>
             <div className='flex items-center justify-between'>
@@ -59,7 +59,7 @@ function EquipmentsAndServices({ requestInfo, setRequestInfo, goToNextState }: E
             </div>
           </div>
         </div>
-        <h1 className='w-full text-start font-medium text-primary/50'>LISTA DE EQUIPAMENTOS</h1>
+        <h1 className='w-full text-start font-medium text-primary/70'>LISTA DE EQUIPAMENTOS</h1>
         <div className='flex w-full flex-col flex-wrap justify-around gap-2 lg:flex-row'>
           {requestInfo.equipamentos.map((product, index) => (
             <div key={index} className='mt-1 flex w-full flex-col rounded-md border border-primary/30 p-2'>
@@ -75,23 +75,23 @@ function EquipmentsAndServices({ requestInfo, setRequestInfo, goToNextState }: E
                 <div className='flex w-full grow items-center justify-end gap-2 pl-2 lg:w-fit'>
                   <div className='flex items-center gap-1'>
                     <FaIndustry size={15} />
-                    <p className='text-[0.6rem] font-light text-primary/50'>{product.fabricante}</p>
+                    <p className='text-[0.6rem] font-light text-primary/70'>{product.fabricante}</p>
                   </div>
                   <div className='flex items-center gap-1'>
                     <ImPower size={15} />
-                    <p className='text-[0.6rem] font-light text-primary/50'>{product.potencia} W</p>
+                    <p className='text-[0.6rem] font-light text-primary/70'>{product.potencia} W</p>
                   </div>
                   <div className='flex items-center gap-1'>
                     <AiOutlineSafety size={15} />
-                    <p className='text-[0.6rem] font-light text-primary/50'>{product.garantia} ANOS</p>
+                    <p className='text-[0.6rem] font-light text-primary/70'>{product.garantia} ANOS</p>
                   </div>
                 </div>
               </div>
             </div>
           ))}
         </div>
-        <h1 className='w-full rounded-md bg-[#fead41] p-1 text-center text-sm font-medium text-white'>SERVIÇOS</h1>
-        <h1 className='w-full text-start font-medium text-primary/50'>LISTA DE SERVIÇOS</h1>
+        <h1 className='w-full rounded-md bg-[#fead41] p-1 text-center text-sm font-medium text-primary-foreground'>SERVIÇOS</h1>
+        <h1 className='w-full text-start font-medium text-primary/70'>LISTA DE SERVIÇOS</h1>
         <div className='flex w-full flex-col flex-wrap justify-around gap-2 lg:flex-row'>
           {requestInfo.servicos.map((service, index) => (
             <div key={index} className='mt-1 flex w-full flex-col rounded-md border border-primary/30 p-2'>
@@ -105,7 +105,7 @@ function EquipmentsAndServices({ requestInfo, setRequestInfo, goToNextState }: E
                 <div className='flex  grow items-center justify-end gap-2 pl-2'>
                   <div className='flex items-center gap-1'>
                     <AiOutlineSafety size={15} />
-                    <p className='text-[0.6rem] font-light text-primary/50'>{service.garantia} ANOS</p>
+                    <p className='text-[0.6rem] font-light text-primary/70'>{service.garantia} ANOS</p>
                   </div>
                 </div>
               </div>
@@ -116,7 +116,7 @@ function EquipmentsAndServices({ requestInfo, setRequestInfo, goToNextState }: E
       <div className='flex w-full items-center justify-end'>
         <button
           onClick={() => validateAndProceed()}
-          className='rounded bg-black px-4 py-1 text-sm font-medium text-white duration-300 ease-in-out hover:bg-primary/70'
+          className='rounded bg-black px-4 py-1 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-primary/70'
         >
           PROSSEGUIR
         </button>

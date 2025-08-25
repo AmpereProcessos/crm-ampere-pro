@@ -52,7 +52,7 @@ function ProcessFlowReferences({ flowReferences }: ProcessFlowReferencesProps) {
   const edges = getFlowEdges(flowReferences);
   return (
     <div className='flex w-full flex-col gap-2 rounded-sm border border-primary/80'>
-      <h1 className='w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-white'>FLUXO DE PROCESSOS</h1>
+      <h1 className='w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-primary-foreground'>FLUXO DE PROCESSOS</h1>
       <p className='w-full text-center text-sm tracking-tight'>Visualize o fluxo de processos do projeto.</p>
       <div className='flex h-[700px] w-full flex-col rounded-sm border border-primary/50 p-2'>
         <ReactFlow nodes={nodes} edges={edges} nodeTypes={nodeTypes} nodesDraggable={false} nodesConnectable={false} nodesFocusable={false} fitView>

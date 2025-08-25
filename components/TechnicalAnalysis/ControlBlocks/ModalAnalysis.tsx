@@ -55,14 +55,14 @@ function ModalAnalysis({ analysisId, modalIsOpen, closeModal, analysis }: ModalA
             <div className='flex flex-col items-center justify-between border-b border-primary/30 px-2 pb-2 text-lg lg:flex-row'>
               <div className='flex flex-col'>
                 <h1 className='pl-6 font-bold text-[#15599a]'>{analysis ? analysis.nome : 'CARREGANDO...'}</h1>
-                <p className='text-xs italic text-primary/50'>#{analysis?._id}</p>
+                <p className='text-xs italic text-primary/70'>#{analysis?._id}</p>
               </div>
               <div className='flex items-center gap-x-2'>
                 {/* {msg.text && <p className={`hidden lg:block text-sm italic ${msg.color}`}>{msg.text}</p>} */}
                 <button
                   //   disabled={isLoading}
                   onClick={mutate}
-                  className='flex cursor-pointer items-center gap-x-2 rounded-sm bg-[#15599a] p-2 text-sm font-bold text-white transition duration-300 ease-in-out disabled:bg-primary/30 disabled:text-white hover:scale-105 hover:bg-blue-500'
+                  className='flex cursor-pointer items-center gap-x-2 rounded-sm bg-[#15599a] p-2 text-sm font-bold text-primary-foreground transition duration-300 ease-in-out disabled:bg-primary/30 disabled:text-primary-foreground hover:scale-105 hover:bg-blue-500'
                 >
                   <p className='mr-2 text-sm'>Salvar alterações</p>
                   <FaSave />
@@ -144,7 +144,7 @@ function ModalAnalysis({ analysisId, modalIsOpen, closeModal, analysis }: ModalA
                     </div>
                     <button
                       onClick={reopenAnalysis}
-                      className='rounded border border-primary/50 p-1 font-bold text-primary/50 duration-300 ease-in-out hover:bg-primary/50 hover:text-white'
+                      className='rounded border border-primary/50 p-1 font-bold text-primary/70 duration-300 ease-in-out hover:bg-primary/50 hover:text-primary-foreground'
                     >
                       REABRIR ANÁLISE
                     </button>
@@ -167,13 +167,13 @@ function ModalAnalysis({ analysisId, modalIsOpen, closeModal, analysis }: ModalA
                     />
                     <button
                       onClick={concludeVisita}
-                      className='rounded border border-green-500 p-1 font-bold text-green-500 duration-300 ease-in-out hover:bg-green-500 hover:text-white'
+                      className='rounded border border-green-500 p-1 font-bold text-green-500 duration-300 ease-in-out hover:bg-green-500 hover:text-primary-foreground'
                     >
                       FINALIZAR ANÁLISE
                     </button>
                   </div>
                 )}
-                <span className='mb-2 w-full rounded-tl-md rounded-tr-md bg-[#15599a] py-2 text-center font-bold text-white'>
+                <span className='mb-2 w-full rounded-tl-md rounded-tr-md bg-[#15599a] py-2 text-center font-bold text-primary-foreground'>
                   INFORMAÇÕES DO CLIENTE
                 </span>
                 {analysis.projeto ? (
@@ -198,7 +198,7 @@ function ModalAnalysis({ analysisId, modalIsOpen, closeModal, analysis }: ModalA
                     </div>
                   </div>
                 ) : (
-                  <p className='w-full py-2 text-center text-sm italic text-primary/50'>Sem informações do projeto...</p>
+                  <p className='w-full py-2 text-center text-sm italic text-primary/70'>Sem informações do projeto...</p>
                 )}
                 <LocationBlock infoHolder={infoHolder} setInfoHolder={setInfoHolder} changes={changes} setChanges={setChanges} />
                 <EquipmentBlock infoHolder={infoHolder} setInfoHolder={setInfoHolder} changes={changes} setChanges={setChanges} />

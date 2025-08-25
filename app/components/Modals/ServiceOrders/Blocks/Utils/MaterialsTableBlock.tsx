@@ -36,10 +36,10 @@ function MaterialsTableBlock({ infoHolder, setInfoHolder, allMaterials }: Materi
   return (
     <div className='flex w-full flex-col rounded-sm border border-primary/80'>
       <div className='hidden w-full items-center gap-2 rounded-sm rounded-bl-none rounded-br-none bg-primary/80 p-1 lg:flex'>
-        <h1 className='w-[40%] text-center text-sm font-bold text-white'>ITEM</h1>
-        <h1 className='w-[20%] text-center text-sm font-bold text-white'>UNIDADE</h1>
-        <h1 className='w-[20%] text-center text-sm font-bold text-white'>QTDE</h1>
-        <h1 className='w-[20%] text-center text-sm font-bold text-white'>TIPO</h1>
+        <h1 className='w-[40%] text-center text-sm font-bold text-primary-foreground'>ITEM</h1>
+        <h1 className='w-[20%] text-center text-sm font-bold text-primary-foreground'>UNIDADE</h1>
+        <h1 className='w-[20%] text-center text-sm font-bold text-primary-foreground'>QTDE</h1>
+        <h1 className='w-[20%] text-center text-sm font-bold text-primary-foreground'>TIPO</h1>
       </div>
       <div className='flex w-full flex-col gap-2 p-1'>
         {allMaterials.map((material, index) => (

@@ -27,7 +27,7 @@ function GeneralStats() {
       <div className='flex w-full flex-col items-center gap-2 lg:flex-row'>
         <div className='flex w-full flex-col border border-primary/50 bg-background p-3 lg:w-1/3'>
           <h1 className='w-full text-center font-bold tracking-tight'>PROGRESSÃO DE VALOR VENDIDO</h1>
-          <p className='text-center text-xs font-medium leading-none text-primary/50'>Gráfico de progressão ao longo do ano do valor vendido.</p>
+          <p className='text-center text-xs font-medium leading-none text-primary/70'>Gráfico de progressão ao longo do ano do valor vendido.</p>
           <div className='flex w-full grow flex-col p-2'>
             <ChartContainer config={salesChartConfig} className='h-[275px] w-full'>
               <AreaChart
@@ -49,7 +49,7 @@ function GeneralStats() {
         </div>
         <div className='flex w-full flex-col border border-primary/50 bg-background p-3 lg:w-1/3'>
           <h1 className='w-full text-center font-bold tracking-tight'>PROJETOS POR TIPO</h1>
-          <p className='text-center text-xs font-medium leading-none text-primary/50'>Distribuição de projetos por tipo.</p>
+          <p className='text-center text-xs font-medium leading-none text-primary/70'>Distribuição de projetos por tipo.</p>
           <div className='flex w-full grow flex-col p-2'>
             <ChartContainer config={projectTypesChartConfig} className='h-[275px] w-full'>
               <PieChart>
@@ -79,7 +79,7 @@ function GeneralStats() {
         </div>
         <div className='flex w-full flex-col border border-primary/50 bg-background p-3 lg:w-1/3'>
           <h1 className='w-full text-center font-bold tracking-tight'>NOTA NPS</h1>
-          <p className='text-center text-xs font-medium leading-none text-primary/50'>Índice de Satisfação dos Clientes</p>
+          <p className='text-center text-xs font-medium leading-none text-primary/70'>Índice de Satisfação dos Clientes</p>
           <div className='flex w-full grow flex-col p-2'>
             <ChartContainer config={npsChartConfig} className='h-[275px] w-full'>
               <RadialBarChart data={npsChartData} startAngle={0} endAngle={(npsChartData[0].valor * 360) / 100} innerRadius={80} outerRadius={110}>

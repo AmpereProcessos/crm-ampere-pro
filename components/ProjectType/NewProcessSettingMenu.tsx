@@ -75,8 +75,8 @@ function NewProcessSettingMenu({ projectTypeId, dependencySettingId, dependencyS
               setInfoHolder((prev) => ({ ...prev, gatilho: { ...prev.gatilho, variavel: c.value } }));
             }}
             className={`grow ${
-              c.value == infoHolder.gatilho.variavel ? 'bg-blue-700  text-white' : 'text-blue-700 '
-            } rounded border border-blue-700  p-1 text-xs font-medium  duration-300 ease-in-out hover:bg-blue-700  hover:text-white`}
+              c.value == infoHolder.gatilho.variavel ? 'bg-blue-700  text-primary-foreground' : 'text-blue-700 '
+            } rounded border border-blue-700  p-1 text-xs font-medium  duration-300 ease-in-out hover:bg-blue-700  hover:text-primary-foreground`}
           >
             {c.label}
           </button>
@@ -102,8 +102,8 @@ function NewProcessSettingMenu({ projectTypeId, dependencySettingId, dependencyS
               }))
             }
             className={`grow ${
-              method.value == infoHolder.gatilho.tipo ? 'bg-blue-700  text-white' : 'text-blue-700 '
-            } rounded border border-blue-700  p-1 text-xs font-medium  duration-300 ease-in-out hover:bg-blue-700  hover:text-white`}
+              method.value == infoHolder.gatilho.tipo ? 'bg-blue-700  text-primary-foreground' : 'text-blue-700 '
+            } rounded border border-blue-700  p-1 text-xs font-medium  duration-300 ease-in-out hover:bg-blue-700  hover:text-primary-foreground`}
           >
             {method.label}
           </button>
@@ -212,8 +212,8 @@ function NewProcessSettingMenu({ projectTypeId, dependencySettingId, dependencyS
               setInfoHolder((prev) => ({ ...prev, retorno: { entidade: p.entity } }));
             }}
             className={`grow ${
-              p.entity == infoHolder.retorno.entidade ? 'bg-green-700  text-white' : 'text-green-700 '
-            } rounded border border-green-700  p-1 text-xs font-medium  duration-300 ease-in-out hover:bg-green-700  hover:text-white`}
+              p.entity == infoHolder.retorno.entidade ? 'bg-green-700  text-primary-foreground' : 'text-green-700 '
+            } rounded border border-green-700  p-1 text-xs font-medium  duration-300 ease-in-out hover:bg-green-700  hover:text-primary-foreground`}
           >
             {p.entityLabel}
           </button>

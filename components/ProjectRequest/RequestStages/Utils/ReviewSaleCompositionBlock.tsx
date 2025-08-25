@@ -14,7 +14,7 @@ type ReviewSaleCompositionBlockProps = {
 function ReviewSaleCompositionBlock({ infoHolder, setInfoHolder, session }: ReviewSaleCompositionBlockProps) {
   return (
     <div className='flex w-full flex-col gap-2'>
-      <h1 className='w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-white'>COMPOSIÇÃO DA VENDA</h1>
+      <h1 className='w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-primary-foreground'>COMPOSIÇÃO DA VENDA</h1>
       <div className='flex w-full flex-col gap-2'>
         <div className='my-1 flex w-full flex-col'>
           <p className='w-full text-center text-sm font-light tracking-tighter text-primary/70'>
@@ -39,7 +39,7 @@ function ReviewSaleCompositionBlock({ infoHolder, setInfoHolder, session }: Revi
             </div>
           )}
         </div>
-        <h1 className='w-full rounded-md bg-blue-500 p-1 text-center text-sm font-bold text-white'>PRODUTOS</h1>
+        <h1 className='w-full rounded-md bg-blue-500 p-1 text-center text-sm font-bold text-primary-foreground'>PRODUTOS</h1>
         <div className='flex w-full flex-wrap items-center justify-start gap-2'>
           {infoHolder.produtos.map((product, index) => (
             <div className='w-full lg:w-[400px]'>
@@ -47,7 +47,7 @@ function ReviewSaleCompositionBlock({ infoHolder, setInfoHolder, session }: Revi
             </div>
           ))}
         </div>
-        <h1 className='w-full rounded-md bg-blue-500 p-1 text-center text-sm font-bold text-white'>SERVIÇOS</h1>
+        <h1 className='w-full rounded-md bg-blue-500 p-1 text-center text-sm font-bold text-primary-foreground'>SERVIÇOS</h1>
         <div className='flex w-full flex-wrap items-center justify-start gap-2'>
           {infoHolder.servicos.map((service, index) => (
             <div className='w-full lg:w-[400px]'>

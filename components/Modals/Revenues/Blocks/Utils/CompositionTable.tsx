@@ -20,11 +20,11 @@ function RevenueCompositionTable({ infoHolder, setInfoHolder }: RevenueCompositi
   return (
     <div className='flex w-full flex-col rounded-sm border border-primary/80'>
       <div className='hidden w-full items-center gap-2 rounded-sm rounded-bl-none rounded-br-none bg-primary/80 p-1 lg:flex'>
-        <h1 className='w-[30%] text-center text-sm font-bold text-white'>ITEM</h1>
-        <h1 className='w-[15%] text-center text-sm font-bold text-white'>UNIDADE</h1>
-        <h1 className='w-[15%] text-center text-sm font-bold text-white'>QTDE</h1>
-        <h1 className='w-[20%] text-center text-sm font-bold text-white'>VALOR</h1>
-        <h1 className='w-[20%] text-center text-sm font-bold text-white'>TOTAL</h1>
+        <h1 className='w-[30%] text-center text-sm font-bold text-primary-foreground'>ITEM</h1>
+        <h1 className='w-[15%] text-center text-sm font-bold text-primary-foreground'>UNIDADE</h1>
+        <h1 className='w-[15%] text-center text-sm font-bold text-primary-foreground'>QTDE</h1>
+        <h1 className='w-[20%] text-center text-sm font-bold text-primary-foreground'>VALOR</h1>
+        <h1 className='w-[20%] text-center text-sm font-bold text-primary-foreground'>TOTAL</h1>
       </div>
       <div className='flex w-full flex-col gap-2 p-1'>
         {infoHolder.composicao.length > 0 ? (
@@ -37,7 +37,7 @@ function RevenueCompositionTable({ infoHolder, setInfoHolder }: RevenueCompositi
             />
           ))
         ) : (
-          <p className='flex w-full grow items-center justify-center py-2 text-center text-sm font-medium italic tracking-tight text-primary/50'>
+          <p className='flex w-full grow items-center justify-center py-2 text-center text-sm font-medium italic tracking-tight text-primary/70'>
             Não há itens de composição da receita.
           </p>
         )}

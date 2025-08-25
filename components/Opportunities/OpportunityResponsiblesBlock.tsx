@@ -60,7 +60,7 @@ function OpportunityResponsiblesBlock({
 
   return (
     <div className=' flex w-full flex-col gap-2'>
-      <h1 className='w-full rounded-md bg-[#fead41] p-1 text-center text-sm font-medium text-white'>RESPONSÁVEIS DA OPORTUNIDADE</h1>
+      <h1 className='w-full rounded-md bg-[#fead41] p-1 text-center text-sm font-medium text-primary-foreground'>RESPONSÁVEIS DA OPORTUNIDADE</h1>
       <div className='flex flex-col gap-2'>
         {infoHolder.responsaveis.map((resp, index) => (
           <div key={resp.id} className='flex w-full flex-col rounded-md border border-primary/30 p-3'>
@@ -119,7 +119,7 @@ function OpportunityResponsiblesBlock({
             <div className='mt-2 flex w-full items-center justify-end'>
               <div className={'flex items-center gap-1'}>
                 <BsCalendarPlus />
-                <p className='text-[0.65rem] font-medium text-primary/50'>{formatDateAsLocale(resp.dataInsercao, true)}</p>
+                <p className='text-[0.65rem] font-medium text-primary/70'>{formatDateAsLocale(resp.dataInsercao, true)}</p>
               </div>
             </div>
           </div>
@@ -130,7 +130,7 @@ function OpportunityResponsiblesBlock({
             onClick={() => setNewResponsibleMenuIsOpen((prev) => !prev)}
             className={`${
               newResponsibleMenuIsOpen ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'
-            } rounded  p-1 px-4 text-xs font-medium text-white duration-300 ease-in-out `}
+            } rounded  p-1 px-4 text-xs font-medium text-primary-foreground duration-300 ease-in-out `}
           >
             {newResponsibleMenuIsOpen ? 'FECHAR' : 'ADICIONAR RESPONSÁVEL'}
           </button>
@@ -196,7 +196,9 @@ function OpportunityResponsiblesBlock({
                     responsibleRole: newOpportunityResponsible.papel as 'VENDEDOR' | 'SDR' | 'ANALISTA TÉCNICO',
                   });
                 }}
-                className={'rounded-sm bg-green-500 p-1  px-4 text-xs font-medium text-white duration-300 ease-in-out hover:bg-green-600'}
+                className={
+                  'rounded-sm bg-green-500 p-1  px-4 text-xs font-medium text-primary-foreground duration-300 ease-in-out hover:bg-green-600'
+                }
               >
                 ADICIONAR
               </button>

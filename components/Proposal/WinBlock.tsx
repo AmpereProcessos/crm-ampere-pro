@@ -58,7 +58,7 @@ function WinBlock({
       onClick={() => handleWin()}
       className='flex w-fit items-center gap-2 rounded-sm bg-green-500 px-2 py-1 ease-in-out hover:bg-green-600'
     >
-      <h1 className='text-xs font-bold text-white'>DAR GANHO NA PROPOSTA</h1>
+      <h1 className='text-xs font-bold text-primary-foreground'>DAR GANHO NA PROPOSTA</h1>
       <Trophy size={15} color='white' />
     </button>
   );
@@ -66,7 +66,7 @@ function WinBlock({
   //   <>
   //     {/* <button
   //             onClick={() => setNewContractRequestIsOpen(true)}
-  //             className="rounded border border-green-600 px-4 py-2 text-sm font-bold text-green-600 duration-300 ease-in-out hover:bg-green-600 hover:text-white"
+  //             className="rounded border border-green-600 px-4 py-2 text-sm font-bold text-green-600 duration-300 ease-in-out hover:bg-green-600 hover:text-primary-foreground"
   //           >
   //             REQUISITAR CONTRATO
   //           </button> */}
@@ -83,7 +83,7 @@ function WinBlock({
   //       <button
   //         // @ts-ignore
   //         onClick={() => handleWin()}
-  //         className="rounded border border-green-600 px-4 py-2 text-sm font-bold text-green-600 duration-300 ease-in-out hover:bg-green-600 hover:text-white"
+  //         className="rounded border border-green-600 px-4 py-2 text-sm font-bold text-green-600 duration-300 ease-in-out hover:bg-green-600 hover:text-primary-foreground"
   //       >
   //         DAR GANHO
   //       </button>

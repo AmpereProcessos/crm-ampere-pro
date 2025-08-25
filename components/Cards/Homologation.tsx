@@ -9,18 +9,28 @@ import Avatar from '../utils/Avatar';
 
 function getStatusTag(status: string) {
   if (status == 'PENDENTE')
-    return <h1 className={`rounded-full bg-primary/80 px-2 py-1 text-center text-[0.65rem] font-bold text-white lg:text-xs`}>{status}</h1>;
+    return (
+      <h1 className={`rounded-full bg-primary/80 px-2 py-1 text-center text-[0.65rem] font-bold text-primary-foreground lg:text-xs`}>{status}</h1>
+    );
   if (status == 'ELABORANDO DOCUMENTAÇÕES')
-    return <h1 className={`rounded-full bg-blue-500 px-2 py-1 text-center text-[0.65rem] font-bold text-white lg:text-xs`}>{status}</h1>;
+    return <h1 className={`rounded-full bg-blue-500 px-2 py-1 text-center text-[0.65rem] font-bold text-primary-foreground lg:text-xs`}>{status}</h1>;
   if (['AGUARDANDO ASSINATURA', 'AGUARDANDO FATURAMENTO', 'AGUARDANDO PENDÊNCIAS'].includes(status))
-    return <h1 className={`rounded-full bg-orange-500 px-2 py-1 text-center text-[0.65rem] font-bold text-white lg:text-xs`}>{status}</h1>;
+    return (
+      <h1 className={`rounded-full bg-orange-500 px-2 py-1 text-center text-[0.65rem] font-bold text-primary-foreground lg:text-xs`}>{status}</h1>
+    );
   if (status == 'REPROVADO COM REDUÇÃO')
-    return <h1 className={`rounded-full bg-orange-700 px-2 py-1 text-center text-[0.65rem] font-bold text-white lg:text-xs`}>{status}</h1>;
+    return (
+      <h1 className={`rounded-full bg-orange-700 px-2 py-1 text-center text-[0.65rem] font-bold text-primary-foreground lg:text-xs`}>{status}</h1>
+    );
   if (['APROVADO COM OBRAS', 'APROVADO COM REDUÇÃO'].includes(status))
-    return <h1 className={`rounded-full bg-green-700 px-2 py-1 text-center text-[0.65rem] font-bold text-white lg:text-xs`}>{status}</h1>;
+    return (
+      <h1 className={`rounded-full bg-green-700 px-2 py-1 text-center text-[0.65rem] font-bold text-primary-foreground lg:text-xs`}>{status}</h1>
+    );
   if (status == 'APROVADO')
-    return <h1 className={`rounded-full bg-green-500 px-2 py-1 text-center text-[0.65rem] font-bold text-white lg:text-xs`}>{status}</h1>;
-  return <h1 className={`rounded-full bg-primary/80 px-2 py-1 text-center text-[0.65rem] font-bold text-white lg:text-xs`}>{status}</h1>;
+    return (
+      <h1 className={`rounded-full bg-green-500 px-2 py-1 text-center text-[0.65rem] font-bold text-primary-foreground lg:text-xs`}>{status}</h1>
+    );
+  return <h1 className={`rounded-full bg-primary/80 px-2 py-1 text-center text-[0.65rem] font-bold text-primary-foreground lg:text-xs`}>{status}</h1>;
 }
 
 type HomologationCardProps = {
@@ -46,7 +56,7 @@ function HomologationCard({ homologation, handleClick, userHasEditPermission }: 
 
           <div className='flex items-center gap-1'>
             <BsCode />
-            <p className='text-xs font-medium tracking-tight text-primary/50'>INSTALAÇÃO Nº {homologation.instalacao.numeroInstalacao}</p>
+            <p className='text-xs font-medium tracking-tight text-primary/70'>INSTALAÇÃO Nº {homologation.instalacao.numeroInstalacao}</p>
           </div>
         </div>
         {getStatusTag(homologation.status)}
@@ -54,13 +64,13 @@ function HomologationCard({ homologation, handleClick, userHasEditPermission }: 
       <div className='mt-2 flex w-full items-center justify-start gap-2'>
         <div className='flex items-center gap-1'>
           <FaSolarPanel />
-          <p className='text-xs font-medium tracking-tight text-primary/50'>
+          <p className='text-xs font-medium tracking-tight text-primary/70'>
             {getModulesPeakPotByProducts(homologation.equipamentos as TProductItem[])} kWp EM MÓDULOS
           </p>
         </div>
         <div className='flex items-center gap-1'>
           <ImPower />
-          <p className='text-xs font-medium tracking-tight text-primary/50'>
+          <p className='text-xs font-medium tracking-tight text-primary/70'>
             {getInverterPeakPowerByProducts(homologation.equipamentos as TProductItem[])} kWp EM INVERSORES
           </p>
         </div>
@@ -72,7 +82,7 @@ function HomologationCard({ homologation, handleClick, userHasEditPermission }: 
           width={20}
           height={20}
         />
-        <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/50 lg:text-xs'>
+        <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/70 lg:text-xs'>
           REQUERIDO POR <strong className='text-cyan-500'>{homologation.requerente.nome?.toUpperCase() || 'NÃO DEFINIDO'}</strong>
         </p>
       </div>

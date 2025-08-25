@@ -127,7 +127,7 @@ function Stats({ closeMenu }: StatsProps) {
                 {stats.byStatus.map((byStatus, index) => (
                   <p
                     key={index}
-                    className={`rounded-md px-2 py-1 text-[0.8rem] text-white ${StatusColors[byStatus.status as keyof typeof StatusColors]}`}
+                    className={`rounded-md px-2 py-1 text-[0.8rem] text-primary-foreground ${StatusColors[byStatus.status as keyof typeof StatusColors]}`}
                   >
                     {byStatus.status}: <strong>{byStatus.value}</strong>
                   </p>
@@ -146,15 +146,15 @@ function Stats({ closeMenu }: StatsProps) {
                     <div className='flex w-full items-center justify-around gap-2'>
                       <div className='flex items-center gap-1'>
                         <VscDiffAdded />
-                        <h1 className='text-[0.6rem] font-normal text-primary/50'>{byType.created} criadas</h1>
+                        <h1 className='text-[0.6rem] font-normal text-primary/70'>{byType.created} criadas</h1>
                       </div>
                       <div className='flex items-center gap-1'>
                         <BsPatchCheck color='rgb(22,163,74)' />
-                        <h1 className='text-[0.6rem] font-normal text-primary/50'>{byType.concluded} concluídas</h1>
+                        <h1 className='text-[0.6rem] font-normal text-primary/70'>{byType.concluded} concluídas</h1>
                       </div>
                       <div className='flex items-center gap-1'>
                         <FaRegHourglassHalf color='rgb(249,115,22)' />
-                        <h1 className='text-[0.6rem] font-normal text-primary/50'>{formatDecimalPlaces(byType.avgTimeTillConclusion)} horas</h1>
+                        <h1 className='text-[0.6rem] font-normal text-primary/70'>{formatDecimalPlaces(byType.avgTimeTillConclusion)} horas</h1>
                       </div>
                     </div>
                   </div>
@@ -176,9 +176,9 @@ function Stats({ closeMenu }: StatsProps) {
                         url={byApplicant.applicantAvatarUrl || undefined}
                         fallback={formatNameAsInitials(byApplicant.applicant)}
                       />
-                      <p className='text-[0.8rem] text-primary/50'>{byApplicant.applicant}</p>
+                      <p className='text-[0.8rem] text-primary/70'>{byApplicant.applicant}</p>
                     </div>
-                    <p key={index} className='text-[0.8rem] font-black text-primary/50'>
+                    <p key={index} className='text-[0.8rem] font-black text-primary/70'>
                       {byApplicant.analysis}
                     </p>
                   </div>

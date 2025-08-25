@@ -44,12 +44,12 @@ function PaymentInformationBlock({ infoHolder, setInfoHolder, client, moveToNext
   const isFinancing = infoHolder.pagamento.metodo.fracionamento.some((f) => f.metodo == 'FINANCIAMENTO');
   return (
     <div className='flex w-full grow flex-col gap-2'>
-      <h1 className='w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-white'>INFORMAÇÕES DE PAGAMENTO</h1>
+      <h1 className='w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-primary-foreground'>INFORMAÇÕES DE PAGAMENTO</h1>
       <div className='flex w-full grow flex-col gap-2'>
         <div className='my-2 flex w-full items-center justify-center'>
           <button
             onClick={() => useClientData(client)}
-            className='rounded-lg bg-blue-500 px-2 py-1 text-center text-xs font-medium tracking-tight text-white duration-300 ease-in-out hover:bg-blue-600'
+            className='rounded-lg bg-blue-500 px-2 py-1 text-center text-xs font-medium tracking-tight text-primary-foreground duration-300 ease-in-out hover:bg-blue-600'
           >
             UTILIZAR DOS DADOS DO CLIENTE
           </button>
@@ -138,7 +138,7 @@ function PaymentInformationBlock({ infoHolder, setInfoHolder, client, moveToNext
             />
           </div>
         </div>
-        <h1 className='w-full rounded-md bg-blue-500 p-1 text-center text-sm font-bold text-white'>MÉTODO DE PAGAMENTO</h1>
+        <h1 className='w-full rounded-md bg-blue-500 p-1 text-center text-sm font-bold text-primary-foreground'>MÉTODO DE PAGAMENTO</h1>
         <div className='my-1 flex w-full flex-col'>
           <p className='w-full text-center text-sm font-light tracking-tighter text-primary/70'>
             Escolha a metodologia de pagamento aplicável à esse projeto.
@@ -149,14 +149,14 @@ function PaymentInformationBlock({ infoHolder, setInfoHolder, client, moveToNext
         </div>
 
         <div className='mb-6 flex w-full flex-col items-center justify-center rounded-sm border border-green-500'>
-          <h1 className='w-full rounded-md rounded-tl rounded-tr bg-green-500 p-1 text-center text-sm font-bold text-white'>
+          <h1 className='w-full rounded-md rounded-tl rounded-tr bg-green-500 p-1 text-center text-sm font-bold text-primary-foreground'>
             MÉTODO DE PAGAMENTO ATIVO
           </h1>
           <div className='flex w-full items-center justify-center p-2'>
             <ActivePaymentMethod method={infoHolder.pagamento.metodo} saleValue={infoHolder.valor} />
           </div>
         </div>
-        <h1 className='text-[0.65rem] font-bold leading-none tracking-tight text-primary/50 lg:text-xs'>LISTA DE MÉTODOS DE PAGAMENTO DISPONÍVEIS</h1>
+        <h1 className='text-[0.65rem] font-bold leading-none tracking-tight text-primary/70 lg:text-xs'>LISTA DE MÉTODOS DE PAGAMENTO DISPONÍVEIS</h1>
         <div className='flex w-full grow flex-col gap-2'>
           {isLoading ? <LoadingComponent /> : null} {isError ? <ErrorComponent msg='Erro ao buscar métodos de pagamento.' /> : null}{' '}
           {isSuccess ? (
@@ -173,7 +173,7 @@ function PaymentInformationBlock({ infoHolder, setInfoHolder, client, moveToNext
                 />
               ))
             ) : (
-              <p className='w-full text-center text-sm font-medium tracking-tight text-primary/50'>Nenhuma método de pagamento encontrado.</p>
+              <p className='w-full text-center text-sm font-medium tracking-tight text-primary/70'>Nenhuma método de pagamento encontrado.</p>
             )
           ) : null}
         </div>
@@ -195,13 +195,13 @@ function PaymentInformationBlock({ infoHolder, setInfoHolder, client, moveToNext
           onClick={() => {
             moveToPreviousStage();
           }}
-          className='rounded p-2 font-bold text-primary/50 duration-300 hover:scale-105'
+          className='rounded p-2 font-bold text-primary/70 duration-300 hover:scale-105'
         >
           VOLTAR
         </button>
         <button
           onClick={() => validateAndProceed()}
-          className='rounded bg-black px-4 py-1 text-sm font-medium text-white duration-300 ease-in-out hover:bg-primary/70'
+          className='rounded bg-black px-4 py-1 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-primary/70'
         >
           PROSSEGUIR
         </button>

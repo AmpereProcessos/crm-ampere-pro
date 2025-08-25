@@ -30,19 +30,19 @@ function OeMPlansInfo({
   return (
     <div className='flex w-full grow flex-col bg-background pb-2'>
       <span className='py-2 text-center text-lg font-bold uppercase text-[#15599a]'>PLANO INTEGRADO DE OPERAÇÃO E MANUTENÇÃO</span>
-      <p className='text-center text-sm italic text-primary/50'>Escolha, se houver, o plano de Operação & Manutenção incluso no projeto.</p>
+      <p className='text-center text-sm italic text-primary/70'>Escolha, se houver, o plano de Operação & Manutenção incluso no projeto.</p>
       <div className='flex grow flex-wrap items-start justify-center gap-2 py-2'>
         <div className='flex w-[450px] flex-col rounded-lg border border-primary/50 bg-background p-6 shadow-lg'>
           <div className='flex w-full items-center justify-between gap-2'>
             <h1 className='font-black'>{plan.nome}</h1>
           </div>
-          <p className='w-full text-start text-sm text-primary/50'>{plan?.descricao || '...'}</p>
+          <p className='w-full text-start text-sm text-primary/70'>{plan?.descricao || '...'}</p>
           <div className='my-4 flex w-full items-end justify-center gap-1'>
             <h1 className='text-4xl font-black'>{formatToMoney(plan.valor || 0)}</h1>
-            <h1 className='text-xs font-light text-primary/50'>/ {plan?.intervalo.tipo}</h1>
+            <h1 className='text-xs font-light text-primary/70'>/ {plan?.intervalo.tipo}</h1>
           </div>
           <div className='my-4 flex grow flex-col gap-1'>
-            <h1 className='text-[0.6rem] tracking-tight text-primary/50'>DESCRITIVO</h1>
+            <h1 className='text-[0.6rem] tracking-tight text-primary/70'>DESCRITIVO</h1>
             <div className='flex grow flex-col gap-2'>
               {plan.descritivo.map((d, idx) => (
                 <div key={idx} className='flex items-center gap-1'>
@@ -61,7 +61,7 @@ function OeMPlansInfo({
           onClick={() => {
             goToPreviousStage();
           }}
-          className='rounded p-2 font-bold text-primary/50 duration-300 hover:scale-105'
+          className='rounded p-2 font-bold text-primary/70 duration-300 hover:scale-105'
         >
           Voltar
         </button>
@@ -72,7 +72,7 @@ function OeMPlansInfo({
             setRequestInfo((prev) => ({ ...prev, planoOeM: equivalentPlan as TContractRequest['planoOeM'] }));
             goToNextStage();
           }}
-          className='rounded p-2 font-bold hover:bg-black hover:text-white'
+          className='rounded p-2 font-bold hover:bg-black hover:text-primary-foreground'
         >
           Prosseguir
         </button>

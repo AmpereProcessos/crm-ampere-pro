@@ -20,13 +20,15 @@ function ProjectJourneyType({ journeyType, handleClick }: ProjectJourneyTypeProp
           {journeyType.nome}
         </p>
       </div>
-      <h1 className='"w-full mt-2 text-start text-xs font-medium'>ETAPAS</h1>
-      <div className='flex w-full flex-wrap items-center justify-start gap-2'>
-        {journeyType.etapas.map((stage, index) => (
-          <div key={index} className='rounded-lg border border-primary/30 bg-gray-50 px-2 py-1 text-[0.57rem] font-medium'>
-            {stage.titulo}
-          </div>
-        ))}
+      <div className='flex w-full flex-col gap-2'>
+        <h1 className='w-full mt-2 text-start text-xs font-medium'>ETAPAS</h1>
+        <div className='flex w-full flex-wrap items-center justify-start gap-2'>
+          {journeyType.etapas.map((stage, index) => (
+            <div key={index} className='rounded-lg border border-primary/30 bg-primary/20 px-2 py-1 text-[0.57rem] font-medium'>
+              {stage.titulo}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

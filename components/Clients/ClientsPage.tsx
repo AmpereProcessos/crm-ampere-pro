@@ -83,7 +83,7 @@ function ClientsPage({ session }: ClientsPageProps) {
                 <button
                   type='button'
                   onClick={() => setNewClientModalIsOpen(true)}
-                  className='h-9 whitespace-nowrap rounded-sm bg-primary/90 px-4 py-2 text-sm font-medium text-white shadow-sm disabled:bg-primary/50 disabled:text-white enabled:hover:bg-primary/80 enabled:hover:text-white'
+                  className='h-9 whitespace-nowrap rounded-sm bg-primary/90 px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm disabled:bg-primary/50 disabled:text-primary-foreground enabled:hover:bg-primary/80 enabled:hover:text-primary-foreground'
                 >
                   CRIAR CLIENTE
                 </button>
@@ -130,7 +130,7 @@ function ClientsPage({ session }: ClientsPageProps) {
                 />
               ))
             ) : (
-              <p className='w-full text-center italic text-primary/50'>Nenhum cliente encontrado...</p>
+              <p className='w-full text-center italic text-primary/70'>Nenhum cliente encontrado...</p>
             )
           ) : null}
         </div>

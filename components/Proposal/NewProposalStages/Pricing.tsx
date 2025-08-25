@@ -66,7 +66,7 @@ function Pricing({ opportunity, infoHolder, setInfoHolder, moveToNextStage, move
           <button
             type='button'
             onClick={() => setAddNewPriceItemModalIsOpen(true)}
-            className='flex items-center gap-2 rounded-sm bg-orange-600 px-4 py-2 text-white duration-100 ease-in-out hover:bg-orange-700'
+            className='flex items-center gap-2 rounded-sm bg-orange-600 px-4 py-2 text-primary-foreground duration-100 ease-in-out hover:bg-orange-700'
           >
             <MdAdd />
             <h1 className='text-xs font-bold'>NOVO CUSTO</h1>
@@ -97,10 +97,10 @@ function Pricing({ opportunity, infoHolder, setInfoHolder, moveToNextStage, move
         </div>
       </div>
       <div className='flex w-full items-center justify-between gap-2 px-1'>
-        <button type='button' onClick={() => moveToPreviousStage()} className='rounded p-2 font-bold text-primary/50 duration-300 hover:scale-105'>
+        <button type='button' onClick={() => moveToPreviousStage()} className='rounded p-2 font-bold text-primary/70 duration-300 hover:scale-105'>
           Voltar
         </button>
-        <button type='button' onClick={handleProceed} className='rounded p-2 font-bold hover:bg-black hover:text-white'>
+        <button type='button' onClick={handleProceed} className='rounded p-2 font-bold hover:bg-black hover:text-primary-foreground'>
           Prosseguir
         </button>
       </div>

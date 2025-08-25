@@ -25,14 +25,14 @@ function ProposalSignaturePlanShowcase({ plan, planIndex, userHasPricingEditPerm
           </button>
         ) : null}
       </div>
-      <p className='w-full text-start text-sm text-primary/50'>{plan?.descricao || '...'}</p>
+      <p className='w-full text-start text-sm text-primary/70'>{plan?.descricao || '...'}</p>
       <div className='my-4 flex w-full items-end justify-center gap-1'>
         <h1 className='text-4xl font-black'>{formatToMoney(plan.valor || 0)}</h1>
-        <h1 className='text-xs font-light text-primary/50'>/ {plan?.intervalo.tipo}</h1>
+        <h1 className='text-xs font-light text-primary/70'>/ {plan?.intervalo.tipo}</h1>
       </div>
 
       <div className='my-4 flex w-full grow flex-col gap-1'>
-        <h1 className='text-xs tracking-tight text-primary/50'>DESCRITIVO</h1>
+        <h1 className='text-xs tracking-tight text-primary/70'>DESCRITIVO</h1>
         <div className='flex w-[85%] flex-col gap-2 self-center'>
           {plan.descritivo.map((d) => (
             <div className='flex w-full items-center gap-1 self-center'>

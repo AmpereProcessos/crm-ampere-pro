@@ -24,13 +24,13 @@ function Partners({ session }: PartnersProps) {
     <div className='flex h-full grow flex-col'>
       <div className='flex w-full flex-col items-center justify-between border-b border-primary/30 pb-2 lg:flex-row'>
         <div className='flex flex-col'>
-          <h1 className={`text-lg font-bold`}>Controle de parceiros</h1>
+          <h1 className={`text-lg font-bold uppercase`}>Controle de parceiros</h1>
           <p className='text-sm text-[#71717A]'>Gerencie, adicione e edite parceiros</p>
         </div>
         {isAllowedToCreatePartner ? (
           <button
             onClick={() => setNewPartnerModalIsOpen(true)}
-            className='h-9 whitespace-nowrap rounded-sm bg-primary/90 px-4 py-2 text-sm font-medium text-white shadow-sm disabled:bg-primary/50 disabled:text-white enabled:hover:bg-primary/80 enabled:hover:text-white'
+            className='h-9 whitespace-nowrap rounded-sm bg-primary/90 px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm disabled:bg-primary/50 disabled:text-primary-foreground enabled:hover:bg-primary/80 enabled:hover:text-primary-foreground'
           >
             NOVO PARCEIRO
           </button>

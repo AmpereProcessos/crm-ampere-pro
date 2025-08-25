@@ -12,7 +12,9 @@ type HolderInformationProps = {
 function HolderInformation({ infoHolder, setInfoHolder }: HolderInformationProps) {
   return (
     <div className='flex w-full flex-col gap-2'>
-      <h1 className='w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-white'>INFORMAÇÕES DO TITULAR DA INSTALAÇÃO ELÉTRICA</h1>
+      <h1 className='w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-primary-foreground'>
+        INFORMAÇÕES DO TITULAR DA INSTALAÇÃO ELÉTRICA
+      </h1>
       <div className='flex w-full flex-col items-center gap-2 lg:flex-row'>
         <div className='w-full lg:w-1/3'>
           <TextInput

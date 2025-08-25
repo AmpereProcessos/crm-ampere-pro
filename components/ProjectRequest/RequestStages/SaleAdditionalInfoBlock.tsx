@@ -12,7 +12,7 @@ type SaleAdditionalInfoBlockProps = {
 function SaleAdditionalInfoBlock({ infoHolder, setInfoHolder }: SaleAdditionalInfoBlockProps) {
   return (
     <div className='flex w-full flex-col gap-2'>
-      <h1 className='w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-white'>INFORMAÇÕES ADICIONAIS</h1>
+      <h1 className='w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-primary-foreground'>INFORMAÇÕES ADICIONAIS</h1>
       <div className='flex w-full grow flex-col gap-2'>
         <div className='flex w-full flex-col items-center gap-2 lg:flex-row'>
           <div className='w-full lg:w-1/2'>
@@ -59,7 +59,9 @@ function SaleAdditionalInfoBlock({ infoHolder, setInfoHolder }: SaleAdditionalIn
           </div>
         </div>
         <div className='mt-2 flex w-full flex-col'>
-          <h1 className='w-full rounded-tl-sm rounded-tr-sm bg-primary/50 p-1 text-center font-bold text-white'>OBSERVAÇÕES SOBRE O PROJETO</h1>
+          <h1 className='w-full rounded-tl-sm rounded-tr-sm bg-primary/50 p-1 text-center font-bold text-primary-foreground'>
+            OBSERVAÇÕES SOBRE O PROJETO
+          </h1>
           <textarea
             placeholder='Preencha aqui informações relevantes sobre esse projeto. Peculiaridades sobre os serviços/produtos a serem prestados, detalhes adicionais, entre outras informações.'
             value={infoHolder.contatos.observacoes || ''}
@@ -116,7 +118,9 @@ function SaleAdditionalInfoBlock({ infoHolder, setInfoHolder }: SaleAdditionalIn
           </div>
         </div>
         <div className='mt-2 flex w-full flex-col'>
-          <h1 className='w-full rounded-tl-sm rounded-tr-sm bg-primary/50 p-1 text-center font-bold text-white'>OBSERVAÇÕES PARA O CONTATO</h1>
+          <h1 className='w-full rounded-tl-sm rounded-tr-sm bg-primary/50 p-1 text-center font-bold text-primary-foreground'>
+            OBSERVAÇÕES PARA O CONTATO
+          </h1>
           <textarea
             placeholder='Preencha aqui informações relevantes em relação ao contato com o cliente. Melhores horários para contato, preferência por áudio ou texto, etc.'
             value={infoHolder.contatos.observacoes || ''}

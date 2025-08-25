@@ -30,9 +30,9 @@ function TechnicalAnalysisKit({ kit, selectedId, userHasPricingViewPermission, h
         <div className='flex w-full items-center justify-between gap-2'>
           <h1 className='font-Inter font-bold leading-none tracking-tight'>{kit.nome}</h1>
           {selectedId == kit._id ? (
-            <button className='rounded-full bg-green-500 px-2 py-1 text-xs font-bold text-white'>SELECIONADO</button>
+            <button className='rounded-full bg-green-500 px-2 py-1 text-xs font-bold text-primary-foreground'>SELECIONADO</button>
           ) : (
-            <button onClick={() => handleClick(kit)} className='rounded-full bg-cyan-500 px-2 py-1 text-xs font-bold text-white'>
+            <button onClick={() => handleClick(kit)} className='rounded-full bg-cyan-500 px-2 py-1 text-xs font-bold text-primary-foreground'>
               SELECIONAR KIT
             </button>
           )}
@@ -55,7 +55,7 @@ function TechnicalAnalysisKit({ kit, selectedId, userHasPricingViewPermission, h
               <p className='text-[0.6rem] font-light lg:text-xs'>{kit.topologia}</p>
             </div>
           </div>
-          <h1 className='my-2 mb-0 text-[0.65rem] font-bold leading-none tracking-tight text-primary/50 lg:text-xs'>PRODUTOS</h1>
+          <h1 className='my-2 mb-0 text-[0.65rem] font-bold leading-none tracking-tight text-primary/70 lg:text-xs'>PRODUTOS</h1>
           <div className='flex w-full flex-col flex-wrap gap-2 lg:flex-row'>
             {kit.produtos.map((product, index) => (
               <div key={index} className='mt-1 flex w-full flex-col rounded-md border border-primary/30 p-2 lg:w-[400px]'>
@@ -71,22 +71,22 @@ function TechnicalAnalysisKit({ kit, selectedId, userHasPricingViewPermission, h
                   <div className='flex w-full grow items-center justify-end gap-2 pl-2 lg:w-fit'>
                     <div className='flex items-center gap-1'>
                       <FaIndustry size={12} />
-                      <p className='text-[0.6rem] font-light text-primary/50'>{product.fabricante}</p>
+                      <p className='text-[0.6rem] font-light text-primary/70'>{product.fabricante}</p>
                     </div>
                     <div className='flex items-center gap-1'>
                       <ImPower size={12} />
-                      <p className='text-[0.6rem] font-light text-primary/50'>{product.potencia} W</p>
+                      <p className='text-[0.6rem] font-light text-primary/70'>{product.potencia} W</p>
                     </div>
                     <div className='flex items-center gap-1'>
                       <AiOutlineSafety size={12} />
-                      <p className='text-[0.6rem] font-light text-primary/50'>{product.garantia} ANOS</p>
+                      <p className='text-[0.6rem] font-light text-primary/70'>{product.garantia} ANOS</p>
                     </div>
                   </div>
                 </div>
               </div>
             ))}
           </div>
-          <h1 className='my-2 mb-0 text-xs font-bold leading-none tracking-tight text-primary/50 lg:text-xs'>SERVIÇOS</h1>
+          <h1 className='my-2 mb-0 text-xs font-bold leading-none tracking-tight text-primary/70 lg:text-xs'>SERVIÇOS</h1>
           <div className='flex w-full flex-col flex-wrap gap-2 lg:flex-row'>
             {kit.servicos.map((service, index) => (
               <div key={index} className='mt-1 flex flex-col rounded-md border border-primary/30 p-2'>

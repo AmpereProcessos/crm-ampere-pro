@@ -62,7 +62,7 @@ function NewCost({ closeModal, pricing, setPricing }: NewCostProps) {
       <div className='fixed left-[50%] top-[50%] z-100 h-fit w-[90%] translate-x-[-50%] translate-y-[-50%] rounded-md bg-background p-[10px]  lg:w-[30%]'>
         <div className='flex h-full flex-col'>
           <div className='flex flex-wrap items-center justify-between border-b border-primary/30 px-2 pb-2 text-lg'>
-            <h3 className='text-xl font-bold text-primary dark:text-white '>NOVO CUSTO</h3>
+            <h3 className='text-xl font-bold text-primary  '>NOVO CUSTO</h3>
             <button
               onClick={() => closeModal()}
               type='button'

@@ -102,7 +102,7 @@ function ProposalDocumentPage({ proposal, opportunity, partner }: ProposalDocume
             <title>Baixar PDF</title>
             <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4' />
           </svg>
-          <span className='absolute right-full mr-2 whitespace-nowrap rounded-sm bg-primary/80 px-2 py-1 text-sm text-white opacity-0 transition-opacity group-hover:opacity-100'>
+          <span className='absolute right-full mr-2 whitespace-nowrap rounded-sm bg-primary/80 px-2 py-1 text-sm text-primary-foreground opacity-0 transition-opacity group-hover:opacity-100'>
             Baixar PDF
           </span>
         </button>
@@ -121,7 +121,7 @@ function ProposalDocumentPage({ proposal, opportunity, partner }: ProposalDocume
               d='M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z'
             />
           </svg>
-          <span className='absolute right-full mr-2 whitespace-nowrap rounded-sm bg-primary/80 px-2 py-1 text-sm text-white opacity-0 transition-opacity group-hover:opacity-100'>
+          <span className='absolute right-full mr-2 whitespace-nowrap rounded-sm bg-primary/80 px-2 py-1 text-sm text-primary-foreground opacity-0 transition-opacity group-hover:opacity-100'>
             Copiar link
           </span>
         </button>
@@ -140,7 +140,7 @@ function ProposalDocumentPage({ proposal, opportunity, partner }: ProposalDocume
               d='M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z'
             />
           </svg>
-          <span className='absolute right-full mr-2 whitespace-nowrap rounded-sm bg-primary/80 px-2 py-1 text-sm text-white opacity-0 transition-opacity group-hover:opacity-100'>
+          <span className='absolute right-full mr-2 whitespace-nowrap rounded-sm bg-primary/80 px-2 py-1 text-sm text-primary-foreground opacity-0 transition-opacity group-hover:opacity-100'>
             Imprimir
           </span>
         </button>
@@ -156,7 +156,7 @@ function ProposalDocumentPage({ proposal, opportunity, partner }: ProposalDocume
             <title>Baixar PDF</title>
             <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4' />
           </svg>
-          <span className='absolute right-full mr-2 whitespace-nowrap rounded-sm bg-primary/80 px-2 py-1 text-sm text-white opacity-0 transition-opacity group-hover:opacity-100'>
+          <span className='absolute right-full mr-2 whitespace-nowrap rounded-sm bg-primary/80 px-2 py-1 text-sm text-primary-foreground opacity-0 transition-opacity group-hover:opacity-100'>
             Baixar PDF
           </span>
         </button>
@@ -175,7 +175,7 @@ function ProposalDocumentPage({ proposal, opportunity, partner }: ProposalDocume
               d='M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z'
             />
           </svg>
-          <span className='absolute right-full mr-2 whitespace-nowrap rounded-sm bg-primary/80 px-2 py-1 text-sm text-white opacity-0 transition-opacity group-hover:opacity-100'>
+          <span className='absolute right-full mr-2 whitespace-nowrap rounded-sm bg-primary/80 px-2 py-1 text-sm text-primary-foreground opacity-0 transition-opacity group-hover:opacity-100'>
             Copiar link
           </span>
         </button>
@@ -194,7 +194,7 @@ function ProposalDocumentPage({ proposal, opportunity, partner }: ProposalDocume
               d='M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z'
             />
           </svg>
-          <span className='absolute right-full mr-2 whitespace-nowrap rounded-sm bg-primary/80 px-2 py-1 text-sm text-white opacity-0 transition-opacity group-hover:opacity-100'>
+          <span className='absolute right-full mr-2 whitespace-nowrap rounded-sm bg-primary/80 px-2 py-1 text-sm text-primary-foreground opacity-0 transition-opacity group-hover:opacity-100'>
             Imprimir
           </span>
         </button>

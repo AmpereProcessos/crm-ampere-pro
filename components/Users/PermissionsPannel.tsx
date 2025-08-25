@@ -23,8 +23,8 @@ function PermissionsPannel({ userInfo, updateUserInfo, users, referenceId, sessi
   return (
     <div className='flex w-full flex-col gap-2 rounded-sm border border-blue-500'>
       <AnimatePresence>
-        <div className='flex w-full items-center justify-center gap-1 rounded-sm bg-blue-500 p-2 text-white'>
-          <h1 className='text-sm font-medium text-white'>PAINEL DE PERMISSÕES</h1>
+        <div className='flex w-full items-center justify-center gap-1 rounded-sm bg-blue-500 p-2 text-primary-foreground'>
+          <h1 className='text-sm font-medium text-primary-foreground'>PAINEL DE PERMISSÕES</h1>
           <RotativeIconButton active={pannelIsOpen} setActive={setPannelIsOpen} icon={<IoMdArrowDropdownCircle size={20} />} />
         </div>
         {pannelIsOpen ? (
@@ -37,7 +37,7 @@ function PermissionsPannel({ userInfo, updateUserInfo, users, referenceId, sessi
             className='mt-1 flex w-full flex-col gap-4 bg-transparent p-2'
           >
             <div className='w-full flex flex-col gap-4'>
-              <h1 className='w-full text-start text-sm text-primary/50'>USUÁRIOS</h1>
+              <h1 className='w-full text-start text-sm text-primary/70'>USUÁRIOS</h1>
               <div className='w-full flex flex-col gap-2'>
                 <CheckboxInput
                   labelFalse='APTO A VISUALIZAR TODOS OS USUÁRIOS'
@@ -88,7 +88,7 @@ function PermissionsPannel({ userInfo, updateUserInfo, users, referenceId, sessi
             </div>
 
             <div className='w-full flex flex-col gap-4'>
-              <h1 className='w-full text-start text-sm text-primary/50'>COMISSÕES</h1>
+              <h1 className='w-full text-start text-sm text-primary/70'>COMISSÕES</h1>
               <div className='w-full flex flex-col gap-2'>
                 <CheckboxInput
                   labelFalse='APTO A VISUALIZAR COMISSÕES'
@@ -124,7 +124,7 @@ function PermissionsPannel({ userInfo, updateUserInfo, users, referenceId, sessi
             </div>
 
             <div className='w-full flex flex-col gap-4'>
-              <h1 className='w-full text-start text-sm text-primary/50'>KITS</h1>
+              <h1 className='w-full text-start text-sm text-primary/70'>KITS</h1>
               <div className='w-full flex flex-col gap-2'>
                 <CheckboxInput
                   labelFalse='APTO A VISUALIZAR TODOS OS KITS'
@@ -175,7 +175,7 @@ function PermissionsPannel({ userInfo, updateUserInfo, users, referenceId, sessi
             </div>
 
             <div className='w-full flex flex-col gap-4'>
-              <h1 className='w-full text-start text-sm text-primary/50'>PRODUTOS</h1>
+              <h1 className='w-full text-start text-sm text-primary/70'>PRODUTOS</h1>
               <div className='w-full flex flex-col gap-2'>
                 <CheckboxInput
                   labelFalse='APTO A VISUALIZAR TODOS OS PRODUTOS'
@@ -226,7 +226,7 @@ function PermissionsPannel({ userInfo, updateUserInfo, users, referenceId, sessi
             </div>
 
             <div className='w-full flex flex-col gap-4'>
-              <h1 className='w-full text-start text-sm text-primary/50'>SERVIÇOS</h1>
+              <h1 className='w-full text-start text-sm text-primary/70'>SERVIÇOS</h1>
               <div className='w-full flex flex-col gap-2'>
                 <CheckboxInput
                   labelFalse='APTO A VISUALIZAR TODOS OS SERVIÇOS'
@@ -277,7 +277,7 @@ function PermissionsPannel({ userInfo, updateUserInfo, users, referenceId, sessi
             </div>
 
             <div className='w-full flex flex-col gap-4'>
-              <h1 className='w-full text-start text-sm text-primary/50'>PLANOS</h1>
+              <h1 className='w-full text-start text-sm text-primary/70'>PLANOS</h1>
               <div className='w-full flex flex-col gap-2'>
                 <CheckboxInput
                   labelFalse='APTO A VISUALIZAR TODOS OS PLANOS'
@@ -328,7 +328,7 @@ function PermissionsPannel({ userInfo, updateUserInfo, users, referenceId, sessi
             </div>
             <div className='w-full flex flex-col gap-4'>
               <div className='flex w-full items-center lg:justify-between justify-center flex-col lg:flex-row gap-1'>
-                <h1 className='w-full text-start text-sm text-primary/50'>CLIENTES</h1>
+                <h1 className='w-full text-start text-sm text-primary/70'>CLIENTES</h1>
                 <ScopeSelection
                   options={users?.map((u) => ({ id: u._id, label: u.nome, image_url: u.avatar_url })) || []}
                   referenceId={referenceId}
@@ -382,7 +382,7 @@ function PermissionsPannel({ userInfo, updateUserInfo, users, referenceId, sessi
 
             <div className='w-full flex flex-col gap-4'>
               <div className='flex w-full items-center lg:justify-between justify-center flex-col lg:flex-row gap-1'>
-                <h1 className='w-full text-start text-sm text-primary/50'>OPORTUNIDADES</h1>
+                <h1 className='w-full text-start text-sm text-primary/70'>OPORTUNIDADES</h1>
                 <ScopeSelection
                   options={users?.map((u) => ({ id: u._id, label: u.nome, image_url: u.avatar_url })) || []}
                   referenceId={referenceId}
@@ -457,7 +457,7 @@ function PermissionsPannel({ userInfo, updateUserInfo, users, referenceId, sessi
 
             <div className='w-full flex flex-col gap-4'>
               <div className='flex w-full items-center lg:justify-between justify-center flex-col lg:flex-row gap-1'>
-                <h1 className='w-full text-start text-sm text-primary/50'>ANÁLISES TÉCNICAS</h1>
+                <h1 className='w-full text-start text-sm text-primary/70'>ANÁLISES TÉCNICAS</h1>
                 <ScopeSelection
                   options={users?.map((u) => ({ id: u._id, label: u.nome, image_url: u.avatar_url })) || []}
                   referenceId={referenceId}
@@ -519,7 +519,7 @@ function PermissionsPannel({ userInfo, updateUserInfo, users, referenceId, sessi
             </div>
             <div className='w-full flex flex-col gap-4'>
               <div className='flex w-full items-center lg:justify-between justify-center flex-col lg:flex-row gap-1'>
-                <h1 className='w-full text-start text-sm text-primary/50'>HOMOLOGAÇÕES</h1>
+                <h1 className='w-full text-start text-sm text-primary/70'>HOMOLOGAÇÕES</h1>
                 <ScopeSelection
                   options={users?.map((u) => ({ id: u._id, label: u.nome, image_url: u.avatar_url })) || []}
                   referenceId={referenceId}
@@ -582,7 +582,7 @@ function PermissionsPannel({ userInfo, updateUserInfo, users, referenceId, sessi
 
             <div className='w-full flex flex-col gap-4'>
               <div className='flex w-full items-center lg:justify-between justify-center flex-col lg:flex-row gap-1'>
-                <h1 className='w-full text-start text-sm text-primary/50'>PARCEIROS</h1>
+                <h1 className='w-full text-start text-sm text-primary/70'>PARCEIROS</h1>
                 <ScopeSelection
                   options={partners?.map((p) => ({ id: p._id, label: p.nome, image_url: p.logo_url })) || []}
                   referenceId={userInfo.idParceiro || null}
@@ -645,7 +645,7 @@ function PermissionsPannel({ userInfo, updateUserInfo, users, referenceId, sessi
 
             <div className='w-full flex flex-col gap-4'>
               <div className='flex w-full items-center lg:justify-between justify-center flex-col lg:flex-row gap-1'>
-                <h1 className='w-full text-start text-sm text-primary/50'>PROPOSTAS</h1>
+                <h1 className='w-full text-start text-sm text-primary/70'>PROPOSTAS</h1>
                 <ScopeSelection
                   options={users?.map((u) => ({ id: u._id, label: u.nome, image_url: u.avatar_url })) || []}
                   referenceId={referenceId}
@@ -698,7 +698,7 @@ function PermissionsPannel({ userInfo, updateUserInfo, users, referenceId, sessi
             </div>
 
             <div className='w-full flex flex-col gap-4'>
-              <h1 className='w-full text-start text-sm text-primary/50'>PREÇOS</h1>
+              <h1 className='w-full text-start text-sm text-primary/70'>PREÇOS</h1>
               <div className='w-full flex flex-col gap-2'>
                 <CheckboxInput
                   labelFalse='APTO A VISUALIZAR DESCRITIVO DE PRECIFICAÇÃO'
@@ -729,7 +729,7 @@ function PermissionsPannel({ userInfo, updateUserInfo, users, referenceId, sessi
 
             <div className='w-full flex flex-col gap-4'>
               <div className='flex w-full items-center lg:justify-between justify-center flex-col lg:flex-row gap-1'>
-                <h1 className='w-full text-start text-sm text-primary/50'>RESULTADOS</h1>
+                <h1 className='w-full text-start text-sm text-primary/70'>RESULTADOS</h1>
                 <ScopeSelection
                   options={users?.map((u) => ({ id: u._id, label: u.nome, image_url: u.avatar_url })) || []}
                   referenceId={referenceId}
@@ -776,7 +776,7 @@ function PermissionsPannel({ userInfo, updateUserInfo, users, referenceId, sessi
             </div>
 
             <div className='w-full flex flex-col gap-4'>
-              <h1 className='w-full text-start text-sm text-primary/50'>CONFIGURAÇÕES</h1>
+              <h1 className='w-full text-start text-sm text-primary/70'>CONFIGURAÇÕES</h1>
               <div className='w-full flex flex-col gap-2'>
                 {session.user.permissoes.configuracoes.parceiro ? (
                   <CheckboxInput
@@ -883,7 +883,7 @@ function PermissionsPannel({ userInfo, updateUserInfo, users, referenceId, sessi
             </div>
 
             <div className='w-full flex flex-col gap-4'>
-              <h1 className='w-full text-start text-sm text-primary/50'>INTEGRAÇÕES</h1>
+              <h1 className='w-full text-start text-sm text-primary/70'>INTEGRAÇÕES</h1>
               <div className='w-full flex flex-col gap-2'>
                 <CheckboxInput
                   labelFalse='APTO A RECEBER LEADS'

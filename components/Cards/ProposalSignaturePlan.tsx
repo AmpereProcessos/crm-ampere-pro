@@ -15,8 +15,8 @@ function getBarColor({ active }: { active: boolean }) {
 }
 function getStatusTag({ planId, selectedIds }: { planId: string; selectedIds: string[] }) {
   if (selectedIds.includes(planId))
-    return <h1 className='rounded-full bg-green-600 px-2 py-1 text-[0.65rem] font-bold text-white lg:text-xs'>SELECIONADO</h1>;
-  return <h1 className='rounded-full bg-primary/60 px-2 py-1 text-[0.65rem] font-bold text-white lg:text-xs'>NÃO SELECIONADO</h1>;
+    return <h1 className='rounded-full bg-green-600 px-2 py-1 text-[0.65rem] font-bold text-primary-foreground lg:text-xs'>SELECIONADO</h1>;
+  return <h1 className='rounded-full bg-primary/60 px-2 py-1 text-[0.65rem] font-bold text-primary-foreground lg:text-xs'>NÃO SELECIONADO</h1>;
 }
 type ProposalSignaturePlanProps = {
   index: number;
@@ -106,7 +106,7 @@ function ProposalSignaturePlan({
             </div>
           </div>
           <div className='flex w-full grow flex-col'>
-            {/* <h1 className="my-2 mb-0 text-xs font-bold leading-none tracking-tight text-primary/50 lg:text-sm">PRODUTOS</h1>
+            {/* <h1 className="my-2 mb-0 text-xs font-bold leading-none tracking-tight text-primary/70 lg:text-sm">PRODUTOS</h1>
             {plan.produtos.length > 0 ? (
               plan.produtos.map((product, index) => (
                 <div key={index} className="mt-1 flex w-full flex-col rounded-md border border-primary/30 p-2">
@@ -122,15 +122,15 @@ function ProposalSignaturePlan({
                     <div className="flex w-full grow items-center justify-end gap-2 pl-2 lg:w-fit">
                       <div className="flex items-center gap-1">
                         <FaIndustry size={12} />
-                        <p className="text-[0.6rem] font-light text-primary/50">{product.fabricante}</p>
+                        <p className="text-[0.6rem] font-light text-primary/70">{product.fabricante}</p>
                       </div>
                       <div className="flex items-center gap-1">
                         <ImPower size={12} />
-                        <p className="text-[0.6rem] font-light text-primary/50">{product.potencia} W</p>
+                        <p className="text-[0.6rem] font-light text-primary/70">{product.potencia} W</p>
                       </div>
                       <div className="flex items-center gap-1">
                         <AiOutlineSafety size={12} />
-                        <p className="text-[0.6rem] font-light text-primary/50">{product.garantia} ANOS</p>
+                        <p className="text-[0.6rem] font-light text-primary/70">{product.garantia} ANOS</p>
                       </div>
                     </div>
                   </div>
@@ -138,11 +138,11 @@ function ProposalSignaturePlan({
                 // <ProductItem product={module} index={index} removeProductFromKit={(index) => console.log()} showRemoveButton={false} />
               ))
             ) : (
-              <p className="flex w-full grow items-center justify-center py-2 text-center text-[0.6rem] font-medium italic tracking-tight text-primary/50 lg:text-xs">
+              <p className="flex w-full grow items-center justify-center py-2 text-center text-[0.6rem] font-medium italic tracking-tight text-primary/70 lg:text-xs">
                 Sem produtos vinculados ao plano
               </p>
             )} */}
-            <h1 className='my-2 mb-0 text-xs font-bold leading-none tracking-tight text-primary/50 lg:text-sm'>SERVIÇOS</h1>
+            <h1 className='my-2 mb-0 text-xs font-bold leading-none tracking-tight text-primary/70 lg:text-sm'>SERVIÇOS</h1>
             <div className='flex w-full flex-wrap items-center gap-2'>
               {plan.servicos.map((service, index) => (
                 <div key={index} className='mt-1 flex flex-col gap-1 rounded-md border border-primary/30 p-2'>
@@ -156,7 +156,7 @@ function ProposalSignaturePlan({
                   </div>
                   <div className='flex w-full items-center justify-end gap-1'>
                     <AiOutlineSafety size={12} />
-                    <p className='text-[0.6rem] font-light text-primary/50'>
+                    <p className='text-[0.6rem] font-light text-primary/70'>
                       {service.garantia > 1 ? `${service.garantia} ANOS` : `${service.garantia} ANO`}{' '}
                     </p>
                   </div>
@@ -168,20 +168,20 @@ function ProposalSignaturePlan({
             <div className={`flex items-center gap-2`}>
               <div className='ites-center flex gap-1'>
                 <BsCalendarPlus />
-                <p className={`text-xs font-medium text-primary/50`}>{formatDateAsLocale(plan.dataInsercao)}</p>
+                <p className={`text-xs font-medium text-primary/70`}>{formatDateAsLocale(plan.dataInsercao)}</p>
               </div>
             </div>
             {!selectedIds.includes(plan._id) ? (
               <button
                 onClick={() => handleSelect({ ...plan, valorFinal: proposalTotalPreview, precificacao: pricing })}
-                className='rounded-full border border-cyan-500 p-1 text-cyan-500 duration-300 ease-in-out hover:bg-cyan-500 hover:text-white'
+                className='rounded-full border border-cyan-500 p-1 text-cyan-500 duration-300 ease-in-out hover:bg-cyan-500 hover:text-primary-foreground'
               >
                 <IoMdAdd />
               </button>
             ) : (
               <button
                 onClick={() => handleRemove(index)}
-                className='rounded-full border border-red-500 p-1 text-red-500 duration-300 ease-in-out hover:bg-red-500 hover:text-white'
+                className='rounded-full border border-red-500 p-1 text-red-500 duration-300 ease-in-out hover:bg-red-500 hover:text-primary-foreground'
               >
                 <MdOutlineRemove />
               </button>

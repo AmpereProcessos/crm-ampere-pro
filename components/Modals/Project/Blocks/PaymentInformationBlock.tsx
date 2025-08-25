@@ -16,7 +16,7 @@ function PaymentInformationBlock({ infoHolder, setInfoHolder, changes, setChange
   const isFinancing = infoHolder.pagamento.metodo.fracionamento.some((f) => f.metodo == 'FINANCIAMENTO');
   return (
     <div className='flex w-full flex-col gap-2 rounded-sm border border-primary/80'>
-      <h1 className='w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-white'>INFORMAÇÕES DE PAGAMENTO</h1>
+      <h1 className='w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-primary-foreground'>INFORMAÇÕES DE PAGAMENTO</h1>
       <div className='flex w-full grow flex-col gap-2 p-2'>
         <div className='flex w-full flex-col items-center gap-2 lg:flex-row'>
           <div className='w-full lg:w-1/2'>
@@ -106,9 +106,9 @@ function PaymentInformationBlock({ infoHolder, setInfoHolder, changes, setChange
             />
           </div>
         </div>
-        <h1 className='w-full rounded-md bg-blue-500 p-1 text-center text-sm font-bold text-white'>MÉTODO DE PAGAMENTO</h1>
+        <h1 className='w-full rounded-md bg-blue-500 p-1 text-center text-sm font-bold text-primary-foreground'>MÉTODO DE PAGAMENTO</h1>
         <div className='mb-6 flex w-full flex-col items-center justify-center rounded-sm border border-green-500'>
-          <h1 className='w-full rounded-md rounded-tl rounded-tr bg-green-500 p-1 text-center text-sm font-bold text-white'>
+          <h1 className='w-full rounded-md rounded-tl rounded-tr bg-green-500 p-1 text-center text-sm font-bold text-primary-foreground'>
             MÉTODO DE PAGAMENTO ATIVO
           </h1>
           <div className='flex w-full items-center justify-center p-2'>

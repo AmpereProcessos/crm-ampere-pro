@@ -55,7 +55,7 @@ function GeneralInformationBlock({ infoHolder, setInfoHolder, session, moveToNex
   }
   return (
     <div className='flex w-full grow flex-col gap-2'>
-      <h1 className='w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-white'>INFORMAÇÕES GERAIS</h1>
+      <h1 className='w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-primary-foreground'>INFORMAÇÕES GERAIS</h1>
       <div className='flex w-full grow flex-col gap-2'>
         <div className='flex w-full flex-col items-center gap-2 lg:flex-row'>
           <div className='w-full lg:w-1/2'>
@@ -122,7 +122,7 @@ function GeneralInformationBlock({ infoHolder, setInfoHolder, session, moveToNex
           </div>
         </div>
         <ProjectObservations session={session} infoHolder={infoHolder} setInfoHolder={setInfoHolder} />
-        <h1 className='w-full rounded-md bg-blue-500 p-1 text-center text-sm font-bold text-white'>INFORMAÇÕES PARA CONTATO</h1>
+        <h1 className='w-full rounded-md bg-blue-500 p-1 text-center text-sm font-bold text-primary-foreground'>INFORMAÇÕES PARA CONTATO</h1>
         <div className='flex w-full flex-col items-center gap-2 lg:flex-row'>
           <div className='w-full lg:w-1/2'>
             <TextInput
@@ -171,7 +171,7 @@ function GeneralInformationBlock({ infoHolder, setInfoHolder, session, moveToNex
           value={infoHolder.contatos.observacoes || ''}
           handleChange={(value) => setInfoHolder((prev) => ({ ...prev, contatos: { ...prev.contatos, observacoes: value } }))}
         />
-        <h1 className='w-full rounded-md bg-blue-500 p-1 text-center text-sm font-bold text-white'>LOCALIZAÇÃO DO PROJETO</h1>
+        <h1 className='w-full rounded-md bg-blue-500 p-1 text-center text-sm font-bold text-primary-foreground'>LOCALIZAÇÃO DO PROJETO</h1>
         <div className='my-1 flex w-full flex-col'>
           <p className='w-full text-center text-sm font-light tracking-tighter text-primary/70'>
             Preencha abaixo a localização de execução do projeto.
@@ -315,7 +315,7 @@ function GeneralInformationBlock({ infoHolder, setInfoHolder, session, moveToNex
       <div className='flex w-full items-center justify-end'>
         <button
           onClick={() => validateAndProceed()}
-          className='rounded bg-black px-4 py-1 text-sm font-medium text-white duration-300 ease-in-out hover:bg-primary/70'
+          className='rounded bg-black px-4 py-1 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-primary/70'
         >
           PROSSEGUIR
         </button>

@@ -26,7 +26,7 @@ function MaterialsTableBlockItem({ material, handleUpdate, handleRemove }: Mater
             <div className='flex w-[40%] items-center gap-1'>
               <div className='flex flex-col'>
                 <h1 className='text-xs tracking-tight'>{material.descricao}</h1>
-                <p className='text-[0.65rem] font-light italic leading-none tracking-tight text-primary/50'>{material.categoria}</p>
+                <p className='text-[0.65rem] font-light italic leading-none tracking-tight text-primary/70'>{material.categoria}</p>
               </div>
               <button
                 onClick={() => setEditMenuIsOpen((prev) => !prev)}
@@ -59,14 +59,14 @@ function MaterialsTableBlockItem({ material, handleUpdate, handleRemove }: Mater
               </div>
 
               <div className='flex min-w-fit items-center gap-2 rounded-full bg-primary/80 px-2 py-1 '>
-                <h1 className='text-[0.65rem] font-medium text-white lg:text-xs'>{material.tipo}</h1>
+                <h1 className='text-[0.65rem] font-medium text-primary-foreground lg:text-xs'>{material.tipo}</h1>
               </div>
             </div>
             <div className='flex w-full items-center justify-between gap-2'>
               <div className='flex items-center gap-2'>
                 <div className='flex items-center gap-1'>
                   <TbRulerMeasure />
-                  <p className='text-[0.6rem] italic text-primary/50 lg:text-xs'>{renderUnitLabel(material.unidade)}</p>
+                  <p className='text-[0.6rem] italic text-primary/70 lg:text-xs'>{renderUnitLabel(material.unidade)}</p>
                 </div>
               </div>
               <div className='flex items-center gap-2'>
@@ -163,7 +163,7 @@ function MaterialsTableBlockItem({ material, handleUpdate, handleRemove }: Mater
                 onClick={() => {
                   setEditMenuIsOpen(false);
                 }}
-                className='rounded bg-red-800 p-1 px-4 text-[0.6rem] font-medium text-white duration-300 ease-in-out hover:bg-red-700'
+                className='rounded bg-red-800 p-1 px-4 text-[0.6rem] font-medium text-primary-foreground duration-300 ease-in-out hover:bg-red-700'
               >
                 FECHAR
               </button>
@@ -172,7 +172,7 @@ function MaterialsTableBlockItem({ material, handleUpdate, handleRemove }: Mater
                   handleUpdate(itemHolder);
                   setEditMenuIsOpen(false);
                 }}
-                className='rounded bg-blue-800 p-1 px-4 text-[0.6rem] font-medium text-white duration-300 ease-in-out hover:bg-blue-700'
+                className='rounded bg-blue-800 p-1 px-4 text-[0.6rem] font-medium text-primary-foreground duration-300 ease-in-out hover:bg-blue-700'
               >
                 ATUALIZAR ITEM
               </button>

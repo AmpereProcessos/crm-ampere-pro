@@ -30,7 +30,7 @@ function getBarColor(status: string) {
 }
 function getStatusTag(status: string) {
   const color = StatusColors[status as keyof typeof StatusColors] || 'bg-primary/50';
-  return <h1 className={`rounded-full ${color} px-2 py-1 text-center text-[0.65rem] font-bold text-white lg:text-xs`}>{status}</h1>;
+  return <h1 className={`rounded-full ${color} px-2 py-1 text-center text-[0.65rem] font-bold text-primary-foreground lg:text-xs`}>{status}</h1>;
 }
 
 type TechnicalAnalysisCardProps = {
@@ -60,18 +60,18 @@ function TechnicalAnalysisCard({ analysis, handleClick, userHasEditPermission }:
           </div>
           <div className='flex w-full items-center gap-2'>
             <FaDiamond />
-            <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/50 lg:text-xs'>{analysis.tipoSolicitacao}</p>
+            <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/70 lg:text-xs'>{analysis.tipoSolicitacao}</p>
           </div>
           <div className='mt-2 flex w-full items-center justify-between'>
             <div className='flex items-center gap-2'>
               <BsCode size={18} />
-              <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/50 lg:text-xs'>
+              <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/70 lg:text-xs'>
                 {analysis.oportunidade.nome || 'OPORTUNIDADE NÃO VINCULADA'}
               </p>
             </div>
             <div className='flex items-end gap-2'>
               <TbWorld size={18} />
-              <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/50 lg:text-xs'>
+              <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/70 lg:text-xs'>
                 {analysis.complexidade || 'COMPLEXIDADE NÃO DEFINIDA'}
               </p>
             </div>
@@ -84,13 +84,13 @@ function TechnicalAnalysisCard({ analysis, handleClick, userHasEditPermission }:
                 width={20}
                 height={20}
               />
-              <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/50 lg:text-xs'>
+              <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/70 lg:text-xs'>
                 REQUERIDO POR <strong className='text-cyan-500'>{analysis.requerente.nome?.toUpperCase() || 'NÃO DEFINIDO'}</strong>
               </p>
             </div>
             <div className='flex items-end gap-2'>
               <FaLocationDot size={18} />
-              <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/50 lg:text-xs'>
+              <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/70 lg:text-xs'>
                 {analysis.localizacao.cidade || ''} / {analysis.localizacao.uf || ''}
               </p>
             </div>
@@ -98,13 +98,13 @@ function TechnicalAnalysisCard({ analysis, handleClick, userHasEditPermission }:
 
           {/* <div className="mt-1 flex w-full items-center justify-start gap-2">
             <Avatar fallback={'R'} url={analysis.requerente?.avatar_url || undefined} height={20} width={20} />
-            <p className="text-xs font-medium text-primary/50">{analysis.requerente.nome || analysis.requerente.apelido}</p>
+            <p className="text-xs font-medium text-primary/70">{analysis.requerente.nome || analysis.requerente.apelido}</p>
           </div>
           <div className="mt-2 flex w-full items-center justify-center gap-2">
             {analysis.oportunidade.identificador ? (
               <p className="text-xs font-bold leading-none tracking-tight text-[#fead41]">({analysis.oportunidade.identificador})</p>
             ) : null}
-            <p className="text-xs font-semibold leading-none tracking-tight text-primary/50">{analysis.oportunidade.nome || 'NÃO DEFINIDO'}</p>
+            <p className="text-xs font-semibold leading-none tracking-tight text-primary/70">{analysis.oportunidade.nome || 'NÃO DEFINIDO'}</p>
           </div> */}
         </div>
         <div className='lg:0 mt-2 flex w-full flex-col-reverse items-center justify-between gap-1 lg:flex-row lg:gap-2'>
@@ -113,11 +113,11 @@ function TechnicalAnalysisCard({ analysis, handleClick, userHasEditPermission }:
               <>
                 <div className='flex items-center gap-1'>
                   <BsCalendarCheck color='rgb(34,197,94)' />
-                  <p className='text-[0.65rem] font-medium text-primary/50'>{formatDateAsLocale(analysis.dataEfetivacao, true)}</p>
+                  <p className='text-[0.65rem] font-medium text-primary/70'>{formatDateAsLocale(analysis.dataEfetivacao, true)}</p>
                 </div>
                 <div className='flex items-center gap-1'>
                   <MdTimer color='rgb(37,99,235)' />
-                  <p className='text-[0.55rem] text-primary/50'>
+                  <p className='text-[0.55rem] text-primary/70'>
                     {formatDecimalPlaces(getHoursDiff({ start: analysis.dataInsercao, finish: analysis.dataEfetivacao }), 0, 2)}h
                   </p>
                 </div>
@@ -127,11 +127,11 @@ function TechnicalAnalysisCard({ analysis, handleClick, userHasEditPermission }:
           <div className='flex flex-col items-center gap-2 lg:flex-row'>
             <div className={`flex items-center gap-1`}>
               <BsCalendarPlus />
-              <p className='text-[0.65rem] font-medium text-primary/50'>{formatDateAsLocale(analysis.dataInsercao, true)}</p>
+              <p className='text-[0.65rem] font-medium text-primary/70'>{formatDateAsLocale(analysis.dataInsercao, true)}</p>
             </div>
             <div className='flex items-center gap-1'>
               <Avatar fallback={'R'} url={analysis.analista?.avatar_url || undefined} height={20} width={20} />
-              <p className='text-[0.65rem] font-medium text-primary/50'>{analysis.analista?.nome || 'ANALISTA INDEFINIDO'}</p>
+              <p className='text-[0.65rem] font-medium text-primary/70'>{analysis.analista?.nome || 'ANALISTA INDEFINIDO'}</p>
             </div>
           </div>
         </div>

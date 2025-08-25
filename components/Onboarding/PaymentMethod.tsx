@@ -64,17 +64,17 @@ function PaymentMethod({ partnerId, author, goToNextStage, goToPreviousStage }: 
   });
   return (
     <div className='flex grow flex-col gap-y-2'>
-      <h1 className='mt-4 w-full px-2 text-center text-lg tracking-tight text-primary/50'>
+      <h1 className='mt-4 w-full px-2 text-center text-lg tracking-tight text-primary/70'>
         Cada parceiro tem métodos e necessidades diferentes para as suas metodologias de pagamento. Sendo assim, oferecemos uma maneira para que você
         personalize os métodos de pagamento a ser oferecidos nas propostas comerciais.
       </h1>
-      <h1 className='mb-4 w-full px-2 text-center text-lg tracking-tight text-primary/50'>
+      <h1 className='mb-4 w-full px-2 text-center text-lg tracking-tight text-primary/70'>
         Nesse etapa, você pode criar sua primeira metodologia de pagamento, com seus respectivos fracionamentos.
       </h1>
-      <h1 className='mb-4 w-full px-2 text-center text-lg tracking-tight text-primary/50'>
+      <h1 className='mb-4 w-full px-2 text-center text-lg tracking-tight text-primary/70'>
         Se desejar, você pode pular essa etapa e criar seus métodos de pagamento posteriormente.
       </h1>
-      <h1 className='w-full bg-[#fead41] p-1 text-center font-bold text-white'>MÉTODOS DE PAGAMENTO</h1>
+      <h1 className='w-full bg-[#fead41] p-1 text-center font-bold text-primary-foreground'>MÉTODOS DE PAGAMENTO</h1>
       <div className='flex w-full flex-col gap-2 px-2 lg:flex-row'>
         <div className='w-full lg:w-1/2'>
           <TextInput
@@ -95,7 +95,7 @@ function PaymentMethod({ partnerId, author, goToNextStage, goToPreviousStage }: 
           />
         </div>
       </div>
-      <h1 className='mt-2 w-full rounded-md bg-primary/70 p-1 text-center text-sm font-bold text-white'>FRACIONAMENTO</h1>
+      <h1 className='mt-2 w-full rounded-md bg-primary/70 p-1 text-center text-sm font-bold text-primary-foreground'>FRACIONAMENTO</h1>
       {newFractionnementItemMenuIsOpen ? (
         <NewFractionnement
           addFractionnement={addFractionnement}
@@ -106,7 +106,7 @@ function PaymentMethod({ partnerId, author, goToNextStage, goToPreviousStage }: 
       ) : (
         <div className='flex w-full items-center justify-end'>
           <button
-            className='rounded bg-green-500 p-1 px-4 text-sm font-medium text-white duration-300 ease-in-out hover:bg-green-600'
+            className='rounded bg-green-500 p-1 px-4 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-green-600'
             onClick={() => setNewFractionnementItemMenuIsOpen(true)}
           >
             NOVO ITEM DE FRACIONAMENTO
@@ -132,24 +132,24 @@ function PaymentMethod({ partnerId, author, goToNextStage, goToPreviousStage }: 
               <div className='mt-2 flex w-full items-center justify-between'>
                 <div className='flex items-center gap-2'>
                   <MdPayment color={'#76c893'} />
-                  <p className='text-xs font-medium leading-none tracking-tight text-primary/50'>{fractionnement.metodo}</p>
+                  <p className='text-xs font-medium leading-none tracking-tight text-primary/70'>{fractionnement.metodo}</p>
                 </div>
                 <div className='flex items-center gap-2'>
                   <BsCircleHalf color='#ed174c' />
-                  <p className='text-xs font-medium leading-none tracking-tight text-primary/50'>
+                  <p className='text-xs font-medium leading-none tracking-tight text-primary/70'>
                     {fractionnement.maximoParcelas} {fractionnement.maximoParcelas > 1 ? 'PARCELAS' : 'PARCELA'}
                   </p>
                 </div>
                 {fractionnement.taxaJuros ? (
                   <div className='flex items-center gap-2'>
                     <FaPercentage />
-                    <p className='text-xs font-medium leading-none tracking-tight text-primary/50'>{fractionnement.taxaJuros} DE JUROS</p>
+                    <p className='text-xs font-medium leading-none tracking-tight text-primary/70'>{fractionnement.taxaJuros} DE JUROS</p>
                   </div>
                 ) : null}
                 {fractionnement.taxaUnica ? (
                   <div className='flex items-center gap-2'>
                     <FaPercentage />
-                    <p className='text-xs font-medium leading-none tracking-tight text-primary/50'>{fractionnement.taxaUnica} DE USO</p>
+                    <p className='text-xs font-medium leading-none tracking-tight text-primary/70'>{fractionnement.taxaUnica} DE USO</p>
                   </div>
                 ) : null}
               </div>
@@ -157,11 +157,11 @@ function PaymentMethod({ partnerId, author, goToNextStage, goToPreviousStage }: 
           ))}
         </div>
       ) : (
-        <p className='w-full text-center text-sm italic text-primary/50'>Nenhum fracionamento adicionado.</p>
+        <p className='w-full text-center text-sm italic text-primary/70'>Nenhum fracionamento adicionado.</p>
       )}
       <div className='flex w-full items-center justify-end gap-2 px-2'>
         <button
-          className='rounded bg-primary/50 p-1 px-4 text-xs font-medium text-white duration-300 ease-in-out hover:bg-primary/60'
+          className='rounded bg-primary/50 p-1 px-4 text-xs font-medium text-primary-foreground duration-300 ease-in-out hover:bg-primary/60'
           // @ts-ignore
           onClick={async () => {
             await editPartner({ id: partnerId, info: { onboarding: { dataConclusao: new Date().toISOString() } } });
@@ -171,7 +171,7 @@ function PaymentMethod({ partnerId, author, goToNextStage, goToPreviousStage }: 
           PULAR
         </button>
         <button
-          className='rounded bg-black p-1 px-4 text-xs font-medium text-white duration-300 ease-in-out disabled:bg-primary/40 disabled:text-primary enabled:hover:bg-primary/60'
+          className='rounded bg-black p-1 px-4 text-xs font-medium text-primary-foreground duration-300 ease-in-out disabled:bg-primary/40 disabled:text-primary enabled:hover:bg-primary/60'
           disabled={isPending}
           // @ts-ignore
           onClick={() => mutate()}

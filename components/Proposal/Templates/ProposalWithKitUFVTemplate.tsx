@@ -25,28 +25,28 @@ function ProposalWithKitUFVTemplate({ proposalDocumentRef, proposal, opportunity
         <div className='flex w-full items-center justify-between'>
           <div className='flex flex-col gap-1'>
             <div className='flex items-center gap-2'>
-              <p className='text-xs font-medium text-white'>CLIENTE</p>
-              <p className='text-xs font-medium text-white'>{opportunity.nome}</p>
+              <p className='text-xs font-medium text-primary-foreground'>CLIENTE</p>
+              <p className='text-xs font-medium text-primary-foreground'>{opportunity.nome}</p>
             </div>
             <div className='flex items-center gap-2'>
-              <p className='text-xs font-medium text-white'>CPF/CNPJ</p>
-              <p className='text-xs font-medium text-white'>{opportunity.cliente.cpfCnpj}</p>
+              <p className='text-xs font-medium text-primary-foreground'>CPF/CNPJ</p>
+              <p className='text-xs font-medium text-primary-foreground'>{opportunity.cliente.cpfCnpj}</p>
             </div>
             <div className='flex items-center gap-2'>
-              <p className='text-xs font-medium text-white'>CIDADE</p>
-              <p className='text-xs font-medium text-white'>{opportunity.localizacao.cidade}</p>
+              <p className='text-xs font-medium text-primary-foreground'>CIDADE</p>
+              <p className='text-xs font-medium text-primary-foreground'>{opportunity.localizacao.cidade}</p>
             </div>
             <div className='flex items-center gap-2'>
-              <p className='text-xs font-medium text-white'>ENDEREÇO</p>
-              <p className='text-xs font-medium text-white'>{formatLocation({ location: opportunity.localizacao })}</p>
+              <p className='text-xs font-medium text-primary-foreground'>ENDEREÇO</p>
+              <p className='text-xs font-medium text-primary-foreground'>{formatLocation({ location: opportunity.localizacao })}</p>
             </div>
           </div>
           <div className='flex flex-col items-end'>
             {partner.logo_url ? <Image src={partner.logo_url} width={60} height={60} alt='WHITE LOGO' quality={100} /> : null}
 
             <div className='flex items-end gap-1'>
-              <p className='text-4xl font-bold text-white'>{proposal.potenciaPico || 0}</p>
-              <p className='mb-1 text-sm font-bold text-white'>kWp</p>
+              <p className='text-4xl font-bold text-primary-foreground'>{proposal.potenciaPico || 0}</p>
+              <p className='mb-1 text-sm font-bold text-primary-foreground'>kWp</p>
             </div>
           </div>
         </div>
@@ -55,21 +55,21 @@ function ProposalWithKitUFVTemplate({ proposalDocumentRef, proposal, opportunity
         <div className='flex w-full items-center justify-between'>
           {partner.logo_url ? <Image src={partner.logo_url} width={70} height={70} alt='WHITE LOGO' quality={100} /> : null}
           <div className='flex items-end gap-1'>
-            <p className='text-3xl font-bold text-white'>{proposal.potenciaPico || 0}</p>
-            <p className='mb-1 text-sm font-bold text-white'>kWp</p>
+            <p className='text-3xl font-bold text-primary-foreground'>{proposal.potenciaPico || 0}</p>
+            <p className='mb-1 text-sm font-bold text-primary-foreground'>kWp</p>
           </div>
         </div>
         <div className='flex items-center justify-center gap-2 self-center'>
           <FaUser color='white' />
-          <p className='text-xs font-medium text-white'>{opportunity.nome}</p>
+          <p className='text-xs font-medium text-primary-foreground'>{opportunity.nome}</p>
         </div>
         <div className='flex items-center justify-center gap-2 self-center'>
           <FaRegIdCard color='white' />
-          <p className='text-xs font-medium text-white'>{opportunity.cliente.cpfCnpj}</p>
+          <p className='text-xs font-medium text-primary-foreground'>{opportunity.cliente.cpfCnpj}</p>
         </div>
         <div className='flex items-center justify-center gap-2 self-center'>
           <FaLocationDot color='white' />
-          <p className='text-[0.65rem] font-medium text-white'>
+          <p className='text-[0.65rem] font-medium text-primary-foreground'>
             {formatLocation({ location: opportunity.localizacao, includeCity: true, includeUf: true })}
           </p>
         </div>
@@ -77,10 +77,10 @@ function ProposalWithKitUFVTemplate({ proposalDocumentRef, proposal, opportunity
       <div className='px-2 py-2 text-center text-[0.6rem] font-medium lg:text-xs'>{partner.descricao}</div>
       <div className='flex w-full flex-col'>
         <div className='flex w-full items-center gap-1 rounded-bl-md rounded-br-md bg-black p-3'>
-          <h1 className='w-1/4 text-center text-[0.7rem] font-bold text-white'>CONSUMO MÉDIO (kWh/mês)</h1>
-          <h1 className='w-1/4 text-center text-[0.7rem] font-bold text-white'>GASTO MENSAL ATUAL</h1>
-          <h1 className='w-1/4 text-center text-[0.7rem] font-bold text-white'>GASTO ANUAL ATUAL</h1>
-          <h1 className='w-1/4 text-center text-[0.7rem] font-bold text-white'>GASTO EM 25 ANOS</h1>
+          <h1 className='w-1/4 text-center text-[0.7rem] font-bold text-primary-foreground'>CONSUMO MÉDIO (kWh/mês)</h1>
+          <h1 className='w-1/4 text-center text-[0.7rem] font-bold text-primary-foreground'>GASTO MENSAL ATUAL</h1>
+          <h1 className='w-1/4 text-center text-[0.7rem] font-bold text-primary-foreground'>GASTO ANUAL ATUAL</h1>
+          <h1 className='w-1/4 text-center text-[0.7rem] font-bold text-primary-foreground'>GASTO EM 25 ANOS</h1>
         </div>
         <div className='flex w-full items-center gap-1 p-1'>
           <h1 className='w-1/4 text-center text-[0.7rem] font-bold text-primary'>
@@ -99,10 +99,10 @@ function ProposalWithKitUFVTemplate({ proposalDocumentRef, proposal, opportunity
       </div>
       <div className='mt-2 flex w-full flex-col'>
         <div className='flex w-full items-center gap-1 rounded-bl-md rounded-br-md bg-black p-3'>
-          <h1 className='w-1/4 text-center text-[0.7rem] font-bold text-white'>GERAÇÃO ESTIMADA (kWh/mês)</h1>
-          <h1 className='w-1/4 text-center text-[0.7rem] font-bold text-white'>ECONOMIA ESTIMADA MENSAL</h1>
-          <h1 className='w-1/4 text-center text-[0.7rem] font-bold text-white'>ECONOMIA ESTIMADA ANUAL</h1>
-          <h1 className='w-1/4 text-center text-[0.7rem] font-bold text-white'>ECONOMIA ESTIMADA 25 ANOS</h1>
+          <h1 className='w-1/4 text-center text-[0.7rem] font-bold text-primary-foreground'>GERAÇÃO ESTIMADA (kWh/mês)</h1>
+          <h1 className='w-1/4 text-center text-[0.7rem] font-bold text-primary-foreground'>ECONOMIA ESTIMADA MENSAL</h1>
+          <h1 className='w-1/4 text-center text-[0.7rem] font-bold text-primary-foreground'>ECONOMIA ESTIMADA ANUAL</h1>
+          <h1 className='w-1/4 text-center text-[0.7rem] font-bold text-primary-foreground'>ECONOMIA ESTIMADA 25 ANOS</h1>
         </div>
         <div className='flex w-full items-center gap-1 p-1'>
           <h1 className='w-1/4 text-center text-[0.7rem] font-bold text-primary'>
@@ -122,8 +122,8 @@ function ProposalWithKitUFVTemplate({ proposalDocumentRef, proposal, opportunity
       </div>
       <div className='mt-2 flex w-full flex-col gap-1'>
         <div className='flex w-full items-center gap-1 rounded-bl-md rounded-br-md bg-black p-3'>
-          <h1 className='w-3/4 text-center text-[0.7rem] font-bold text-white'>PRODUTOS</h1>
-          <h1 className='w-1/4 text-center text-[0.7rem] font-bold text-white'>GARANTIAS</h1>
+          <h1 className='w-3/4 text-center text-[0.7rem] font-bold text-primary-foreground'>PRODUTOS</h1>
+          <h1 className='w-1/4 text-center text-[0.7rem] font-bold text-primary-foreground'>GARANTIAS</h1>
         </div>
         {proposal.produtos.map((product) => (
           <div key={`${product.categoria}-${product.fabricante}-${product.modelo}`} className='flex w-full items-center gap-1'>
@@ -134,8 +134,8 @@ function ProposalWithKitUFVTemplate({ proposalDocumentRef, proposal, opportunity
       </div>
       <div className='mt-2 flex w-full flex-col gap-1'>
         <div className='flex w-full items-center gap-1 rounded-bl-md rounded-br-md bg-cyan-500 p-3'>
-          <h1 className='w-3/4 text-center text-[0.7rem] font-bold text-white'>SERVIÇOS</h1>
-          <h1 className='w-1/4 text-center text-[0.7rem] font-bold text-white'>GARANTIAS</h1>
+          <h1 className='w-3/4 text-center text-[0.7rem] font-bold text-primary-foreground'>SERVIÇOS</h1>
+          <h1 className='w-1/4 text-center text-[0.7rem] font-bold text-primary-foreground'>GARANTIAS</h1>
         </div>
         {proposal.servicos.map((service) => (
           <div key={`${service.descricao}-${service.garantia}`} className='flex w-full items-center gap-1'>
@@ -148,7 +148,7 @@ function ProposalWithKitUFVTemplate({ proposalDocumentRef, proposal, opportunity
       </div>
       <div className='mt-2 flex w-full flex-col gap-1'>
         <div className='flex w-full items-center gap-1 rounded-bl-md rounded-br-md bg-black p-3'>
-          <h1 className='w-full text-center text-[0.7rem] font-bold text-white'>FORMAS DE PAGAMENTO</h1>
+          <h1 className='w-full text-center text-[0.7rem] font-bold text-primary-foreground'>FORMAS DE PAGAMENTO</h1>
         </div>
         <div className='flex w-full flex-col gap-1'>
           {proposal.pagamento.metodos.map((method, index) => (
@@ -213,38 +213,38 @@ function ProposalWithKitUFVTemplate({ proposalDocumentRef, proposal, opportunity
       </div>
       <div className='mt-4 flex w-full flex-col gap-4 bg-black p-4'>
         <div className='flex w-full flex-wrap items-center justify-center gap-2'>
-          <div className='flex items-center gap-1 text-white'>
+          <div className='flex items-center gap-1 text-primary-foreground'>
             <FaLocationDot size={20} />
             <p className='text-xs tracking-tight'>
               {partner.localizacao.cidade}/{partner.localizacao.uf}, {formatLocation({ location: partner.localizacao })}
             </p>
           </div>
-          <div className='flex items-center gap-1 text-white'>
+          <div className='flex items-center gap-1 text-primary-foreground'>
             <MdEmail size={20} />
             <p className='text-xs tracking-tight'>{partner.contatos.email}</p>
           </div>
         </div>
         <div className='flex w-full flex-wrap items-center justify-around gap-6 gap-y-2'>
           {partner.midias.website ? (
-            <div className='flex items-center gap-1 text-white'>
+            <div className='flex items-center gap-1 text-primary-foreground'>
               <TbWorld size={20} />
               <p className='text-xs tracking-tight'>{partner.midias.website}</p>
             </div>
           ) : null}
 
           {partner.midias.instagram ? (
-            <div className='flex items-center gap-1 text-white'>
+            <div className='flex items-center gap-1 text-primary-foreground'>
               <FaInstagram size={20} />
               <p className='text-xs tracking-tight'>{partner.midias.instagram}</p>
             </div>
           ) : null}
 
-          <div className='flex items-center gap-1 text-white'>
+          <div className='flex items-center gap-1 text-primary-foreground'>
             <FaPhone size={20} />
             <p className='text-xs tracking-tight'>{partner.contatos.telefonePrimario}</p>
           </div>
         </div>
-        {partner.slogan ? <h1 className='w-full whitespace-nowrap text-center font-black text-white'>{partner.slogan}</h1> : null}
+        {partner.slogan ? <h1 className='w-full whitespace-nowrap text-center font-black text-primary-foreground'>{partner.slogan}</h1> : null}
       </div>
     </div>
   );

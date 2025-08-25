@@ -25,7 +25,7 @@ function renderByLeadsStats({ origins }: { origins: any }) {
       <div className='flex w-full flex-col'>
         {entries.map(([inside, value], index) => (
           <div key={index} className='flex w-full justify-between'>
-            <p className='pl-4 text-xxs font-medium uppercase tracking-tight text-primary/50 lg:text-xs'>{inside}</p>
+            <p className='pl-4 text-xxs font-medium uppercase tracking-tight text-primary/70 lg:text-xs'>{inside}</p>
             <h1 className='text-xs font-medium uppercase tracking-tight'>{value as number}</h1>
           </div>
         ))}
@@ -38,7 +38,7 @@ function renderByLeadsStats({ origins }: { origins: any }) {
   } else {
     return (
       <div className='mb-1 flex w-full items-center'>
-        <p className='w-full text-center text-xs italic text-primary/50 lg:text-sm'>Sem resultados provindos por lead para esse indicador.</p>
+        <p className='w-full text-center text-xs italic text-primary/70 lg:text-sm'>Sem resultados provindos por lead para esse indicador.</p>
       </div>
     );
   }
@@ -55,7 +55,7 @@ function renderByAquisitionOriginStats({ origins }: { origins: any }) {
       {entries.map(([key, value], index) => {
         return (
           <div key={index} className='flex w-full justify-between'>
-            <p className='pl-4 text-xxs font-medium uppercase tracking-tight text-primary/50 lg:text-xs'>{key}</p>
+            <p className='pl-4 text-xxs font-medium uppercase tracking-tight text-primary/70 lg:text-xs'>{key}</p>
             <h1 className='text-xs font-medium uppercase tracking-tight'>{value as number}</h1>
           </div>
         );
@@ -83,7 +83,7 @@ function SdrStatListItem({ promoter, promoters }: SdrStatListItemProps) {
           </div>
           <p
             onClick={() => setOriginsVisible((prev) => !prev)}
-            className='hidden min-w-[150px] max-w-[150px] cursor-pointer font-medium uppercase tracking-tight text-primary/50 hover:text-cyan-500 md:flex lg:text-sm'
+            className='hidden min-w-[150px] max-w-[150px] cursor-pointer font-medium uppercase tracking-tight text-primary/70 hover:text-cyan-500 md:flex lg:text-sm'
           >
             {promoter.nome}
           </p>
@@ -100,7 +100,7 @@ function SdrStatListItem({ promoter, promoters }: SdrStatListItemProps) {
       </div>
       {originsVisible && promoter.origem ? (
         <div className='flex w-full flex-col gap-1'>
-          <h1 className='w-full text-start text-xs font-bold text-primary/50 lg:text-sm'>AQUISIÇÃO</h1>
+          <h1 className='w-full text-start text-xs font-bold text-primary/70 lg:text-sm'>AQUISIÇÃO</h1>
           {renderByAquisitionOriginStats({ origins: promoter.origem })}
         </div>
       ) : null}

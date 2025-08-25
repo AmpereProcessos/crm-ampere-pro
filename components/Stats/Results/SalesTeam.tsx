@@ -127,7 +127,7 @@ function SalesTeamOverallResults({ stats, promoters }: { stats: TSellerSalesResu
         <FaUser />
       </div>
       <div className='overscroll-y mt-2 gap-1.5 flex w-full grow flex-col overflow-y-auto px-2 scrollbar-thin scrollbar-track-primary/10 scrollbar-thumb-primary/30'>
-        <div className='hidden lg:flex items-center justify-between gap-2 bg-[#15599a] text-white rounded-md p-2'>
+        <div className='hidden lg:flex items-center justify-between gap-2 bg-[#15599a] text-primary-foreground rounded-md p-2'>
           <div className='w-1/6 flex items-center gap-2'>
             <p className='text-xs lg:text-sm font-medium uppercase tracking-tight'>VENDEDOR</p>
           </div>

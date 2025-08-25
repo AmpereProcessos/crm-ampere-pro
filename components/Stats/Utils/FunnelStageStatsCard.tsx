@@ -17,41 +17,41 @@ function FunnelStageStatsCard({ stage }: FunnelStageStatsCardProps) {
         <BsFillBookmarkFill />
       </div>
       <div className='flex w-full flex-col'>
-        <h1 className='text-xs tracking-tight text-primary/50'>EM GERENCIAMENTO</h1>
+        <h1 className='text-xs tracking-tight text-primary/80'>EM GERENCIAMENTO</h1>
         <h1 className='text-center text-2xl font-bold text-[#15599a]'>{stage.emAndamento}</h1>
         <h1 className='text-center text-2xl font-bold text-green-800'>{formatToMoney(stage.valor)}</h1>
       </div>
       <div className='mt-2 flex w-full flex-col'>
-        <h1 className='text-xs tracking-tight text-primary/50'>MÉTRICAS DO PERÍODO</h1>
+        <h1 className='text-xs tracking-tight text-primary/80'>MÉTRICAS DO PERÍODO</h1>
         <div className='flex w-full items-center justify-between gap-2'>
           <div className='flex items-center gap-1'>
             <TbDownload color='rgb(22,163,74)' />
-            <p className='text-sm text-primary/50'>{stage.entradas || '-'}</p>
+            <p className='text-sm text-primary/80'>{stage.entradas || '-'}</p>
           </div>
           <div className='flex items-center gap-1'>
             <TbUpload color='rgb(220,38,38)' />
-            <p className='text-sm text-primary/50'>{stage.saidas || '-'}</p>
+            <p className='text-sm text-primary/80'>{stage.saidas || '-'}</p>
           </div>
           <div className='flex items-center gap-1'>
             <MdTimer color='rgb(37,99,235)' />
-            <p className='text-sm text-primary/50'>
+            <p className='text-sm text-primary/80'>
               {stage.tempoMedio ? `${getFormattedTextFromHoursAmount({ hours: stage.tempoMedio, onlyComplete: true, reference: 'auto' })}` : '-'}
             </p>
           </div>
           <div className='flex items-center gap-1'>
             <VscChromeClose color='#F31559' />
-            <p className='text-sm text-primary/50'>{stage.perdas.total}</p>
+            <p className='text-sm text-primary/80'>{stage.perdas.total}</p>
           </div>
         </div>
       </div>
       <div className='mt-2 flex w-full flex-col'>
-        <h1 className='text-[0.55rem] tracking-tight text-primary/50'>PERDAS POR MOTIVO</h1>
+        <h1 className='text-[0.55rem] tracking-tight text-primary/80'>PERDAS POR MOTIVO</h1>
         <div className='flex w-full flex-wrap items-start justify-start gap-2'>
           {Object.entries(stage.perdas.perdasPorMotivo)
             .sort(([aKey, aValue], [bKey, bValue]) => bValue - aValue)
             .map(([key, value], index) => (
               <div key={index} className='flex items-center gap-1 rounded-sm border border-[#F31559]'>
-                <div className='h-full bg-[#F31559] p-1 text-[0.55rem] font-bold text-white'>{value}</div>
+                <div className='h-full bg-[#F31559] p-1 text-[0.55rem] font-bold text-primary-foreground'>{value}</div>
                 <h1 className='p-1 text-[0.55rem]'>{key}</h1>
               </div>
             ))}

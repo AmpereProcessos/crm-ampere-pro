@@ -59,7 +59,7 @@ function OpportunityHistoryAnnotation({ annotation, handleEditHistory }: Opportu
       <div className='flex w-full items-center justify-between'>
         <div className='flex items-center gap-2'>
           <Avatar fallback={'R'} url={annotation.autor?.avatar_url || undefined} height={22} width={22} />
-          <p className='text-xs font-medium text-primary/50'>{annotation.autor.nome}</p>
+          <p className='text-xs font-medium text-primary/70'>{annotation.autor.nome}</p>
         </div>
         <div className='flex items-center gap-2'>
           <Button onClick={handleEditHistory} variant='ghost' size='fit' className='rounded-full p-1'>
@@ -67,12 +67,12 @@ function OpportunityHistoryAnnotation({ annotation, handleEditHistory }: Opportu
           </Button>
           <div className='flex items-center gap-2'>
             <IoIosCalendar style={{ fontSize: '20px' }} />
-            <p className='text-xs font-medium text-primary/50'>{formatDateAsLocale(annotation.dataInsercao, true)}</p>
+            <p className='text-xs font-medium text-primary/70'>{formatDateAsLocale(annotation.dataInsercao, true)}</p>
           </div>
         </div>
       </div>
       <div className='flex w-full items-center justify-center border border-primary/30 bg-[#F4F0BB] p-2'>
-        <p className='w-full text-center text-sm text-primary/50'>{annotation.conteudo}</p>
+        <p className='w-full text-center text-sm text-primary/70'>{annotation.conteudo}</p>
       </div>
     </div>
   );
@@ -91,10 +91,10 @@ function OpportunityHistoryInteraction({ interaction, handleEditHistory }: Oppor
     <div className='flex w-full flex-col gap-2 border border-primary/30 p-3 shadow-md'>
       <div className='flex w-full items-center justify-between'>
         <div className='flex items-center gap-2'>
-          <p className='rounded-lg bg-[#15599a] px-2 py-0.5 text-[0.65rem] font-medium text-white'>INTERAÇÃO</p>
+          <p className='rounded-lg bg-[#15599a] px-2 py-0.5 text-[0.65rem] font-medium text-primary-foreground'>INTERAÇÃO</p>
 
           {renderIcon(getInteractionIcon(interaction.tipoInteracao))}
-          <p className='text-xs font-medium text-primary/50'>{interaction.tipoInteracao}</p>
+          <p className='text-xs font-medium text-primary/70'>{interaction.tipoInteracao}</p>
         </div>
         <div className='flex items-center gap-2'>
           <Button onClick={handleEditHistory} variant='ghost' size='fit' className='rounded-full p-1'>
@@ -102,16 +102,16 @@ function OpportunityHistoryInteraction({ interaction, handleEditHistory }: Oppor
           </Button>
           <div className='flex items-center gap-2'>
             <Avatar fallback={'R'} url={interaction.autor?.avatar_url || undefined} height={22} width={22} />
-            <p className='text-xs font-medium text-primary/50'>{interaction.autor.nome}</p>
+            <p className='text-xs font-medium text-primary/70'>{interaction.autor.nome}</p>
           </div>
           <div className='flex items-center gap-2'>
             <IoIosCalendar style={{ fontSize: '20px' }} />
-            <p className='text-xs font-medium text-primary/50'>{formatDateAsLocale(interaction.dataInsercao, true)}</p>
+            <p className='text-xs font-medium text-primary/70'>{formatDateAsLocale(interaction.dataInsercao, true)}</p>
           </div>
         </div>
       </div>
       <div className='flex w-full items-center justify-center border border-primary/30 p-2'>
-        <p className='w-full text-center text-sm text-primary/50'>{interaction.conteudo}</p>
+        <p className='w-full text-center text-sm text-primary/70'>{interaction.conteudo}</p>
       </div>
     </div>
   );

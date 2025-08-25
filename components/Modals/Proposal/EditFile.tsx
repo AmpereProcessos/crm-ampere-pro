@@ -50,7 +50,7 @@ function EditProposalFile({ proposalName, proposalId, opportunityId, closeModal 
       <div className='fixed left-[50%] top-[50%] z-100 h-fit w-[90%] translate-x-[-50%] translate-y-[-50%] rounded-md bg-background p-[10px]  lg:w-[30%]'>
         <div className='flex h-full flex-col'>
           <div className='flex flex-wrap items-center justify-between border-b border-primary/30 px-2 pb-2 text-lg'>
-            <h3 className='text-xl font-bold text-primary dark:text-white '>EDITAR ARQUIVO DA PROPOSTA</h3>
+            <h3 className='text-xl font-bold text-primary  '>EDITAR ARQUIVO DA PROPOSTA</h3>
             <button
               onClick={() => closeModal()}
               type='button'
@@ -61,7 +61,7 @@ function EditProposalFile({ proposalName, proposalId, opportunityId, closeModal 
           </div>
           <div className='flex grow flex-col gap-y-2 overflow-y-auto overscroll-y-auto px-2 py-1 scrollbar-thin scrollbar-track-primary/10 scrollbar-thumb-primary/30'>
             <div className='my-2 flex flex-col'>
-              <p className='text-center text-primary/50'>Anexe aqui o novo arquivo da proposta.</p>
+              <p className='text-center text-primary/70'>Anexe aqui o novo arquivo da proposta.</p>
             </div>
             <div className='relative flex w-full items-center justify-center'>
               <label
@@ -70,9 +70,9 @@ function EditProposalFile({ proposalName, proposalId, opportunityId, closeModal 
               >
                 <div className='flex w-full items-center gap-2'>
                   {fileHolder ? (
-                    <p className='grow text-center leading-none tracking-tight text-primary/50'>{formatLongString(fileHolder.name, 30)}</p>
+                    <p className='grow text-center leading-none tracking-tight text-primary/70'>{formatLongString(fileHolder.name, 30)}</p>
                   ) : (
-                    <p className='grow text-center leading-none tracking-tight text-primary/50'>
+                    <p className='grow text-center leading-none tracking-tight text-primary/70'>
                       <span className='font-semibold text-cyan-500'>Clique para escolher um arquivo</span> ou o arraste para a àrea demarcada
                     </p>
                   )}
@@ -98,7 +98,7 @@ function EditProposalFile({ proposalName, proposalId, opportunityId, closeModal 
               disabled={isPending}
               // @ts-ignore
               onClick={() => handleVinculateNewFile(fileHolder)}
-              className='h-9 whitespace-nowrap rounded-sm bg-blue-700 px-4 py-2 text-sm font-medium text-white shadow-sm disabled:bg-primary/50 disabled:text-white enabled:hover:bg-blue-600 enabled:hover:text-white'
+              className='h-9 whitespace-nowrap rounded-sm bg-blue-700 px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm disabled:bg-primary/50 disabled:text-primary-foreground enabled:hover:bg-blue-600 enabled:hover:text-primary-foreground'
             >
               ATUALIZAR PROPOSTA
             </button>

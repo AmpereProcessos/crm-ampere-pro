@@ -21,15 +21,15 @@ function ModuleItem() {
       <div className='mt-1 flex w-full items-center justify-end gap-2 pl-2'>
         <div className='flex items-center gap-1'>
           <FaIndustry size={12} />
-          <p className='text-[0.6rem] font-thin text-primary/50 lg:text-xs'>{module.fabricante}</p>
+          <p className='text-[0.6rem] font-thin text-primary/70 lg:text-xs'>{module.fabricante}</p>
         </div>
         <div className='flex items-center gap-1'>
           <ImPower size={12} />
-          <p className='text-[0.6rem] font-thin text-primary/50 lg:text-xs'>{module.potencia} W</p>
+          <p className='text-[0.6rem] font-thin text-primary/70 lg:text-xs'>{module.potencia} W</p>
         </div>
         <div className='flex items-center gap-1'>
           <AiOutlineSafety size={12} />
-          <p className='text-[0.6rem] font-thin text-primary/50 lg:text-xs'>{module.garantia} ANOS</p>
+          <p className='text-[0.6rem] font-thin text-primary/70 lg:text-xs'>{module.garantia} ANOS</p>
         </div>
       </div>
     </div>

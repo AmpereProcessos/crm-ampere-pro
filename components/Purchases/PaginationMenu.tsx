@@ -20,7 +20,7 @@ function PurchasePaginationMenu({
     <div className='my-2 flex w-full flex-col items-center gap-1 '>
       {totalPages > 1 ? (
         <>
-          <p className='w-full text-center text-sm leading-none tracking-tight text-primary/50'>
+          <p className='w-full text-center text-sm leading-none tracking-tight text-primary/70'>
             Um número grande de registros de compra foi encontrado, separamos em páginas para facilitar a visualização. Clique na página desejada para
             visualizar os demais registros de compra.
           </p>
@@ -76,14 +76,14 @@ function PurchasePaginationMenu({
         </>
       ) : null}
 
-      <p className='w-full text-center text-sm leading-none tracking-tight text-primary/50'>
+      <p className='w-full text-center text-sm leading-none tracking-tight text-primary/70'>
         {purchasesMatched
           ? purchasesMatched > 0
             ? `${purchasesMatched} registros de compra encontrados.`
             : `${purchasesMatched} registro de compra encontrado.`
           : '...'}
       </p>
-      <p className='w-full text-center text-sm leading-none tracking-tight text-primary/50'>
+      <p className='w-full text-center text-sm leading-none tracking-tight text-primary/70'>
         {purchasesShowing
           ? purchasesShowing > 0
             ? `Mostrando ${purchasesShowing} registros de compra.`

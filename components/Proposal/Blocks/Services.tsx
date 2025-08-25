@@ -25,14 +25,14 @@ function Services({ infoHolder, setInfoHolder }: ServicesProps) {
                 <div className='flex  grow items-center justify-end gap-2 pl-2'>
                   <div className='flex items-center gap-1'>
                     <AiOutlineSafety size={15} />
-                    <p className='text-[0.6rem] font-light text-primary/50'>{service.garantia} ANOS</p>
+                    <p className='text-[0.6rem] font-light text-primary/70'>{service.garantia} ANOS</p>
                   </div>
                 </div>
               </div>
             </div>
           ))
         ) : (
-          <p className='w-full text-center text-sm italic text-primary/50'>Nenhum serviço vinculado à proposta...</p>
+          <p className='w-full text-center text-sm italic text-primary/70'>Nenhum serviço vinculado à proposta...</p>
         )}
       </div>
     </div>

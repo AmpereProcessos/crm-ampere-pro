@@ -104,7 +104,7 @@ function HomologationInfo({ requestInfo, setRequestInfo, showActions, goToPrevio
                       onClick={() => setHomologationModality('CONVENCIONAL')}
                       className={cn(
                         'flex h-[20px] w-[20px] items-center justify-center rounded-full border border-blue-800 p-2',
-                        homologationModality === 'CONVENCIONAL' ? 'bg-blue-800 text-xs text-white' : ''
+                        homologationModality === 'CONVENCIONAL' ? 'bg-blue-800 text-xs text-primary-foreground' : ''
                       )}
                     />
                   </div>
@@ -125,7 +125,7 @@ function HomologationInfo({ requestInfo, setRequestInfo, showActions, goToPrevio
                         onClick={() => setHomologationModality('FAST TRACK')}
                         className={cn(
                           'flex h-[20px] w-[20px] items-center justify-center rounded-full border border-green-800 p-2 text-xs',
-                          homologationModality === 'FAST TRACK' ? 'bg-green-800 text-white' : ''
+                          homologationModality === 'FAST TRACK' ? 'bg-green-800 text-primary-foreground' : ''
                         )}
                       />
                     </div>
@@ -342,7 +342,7 @@ function HomologationInfo({ requestInfo, setRequestInfo, showActions, goToPrevio
             onClick={() => {
               goToPreviousStage();
             }}
-            className='rounded p-2 font-bold text-primary/50 duration-300 hover:scale-105'
+            className='rounded p-2 font-bold text-primary/70 duration-300 hover:scale-105'
           >
             Voltar
           </button>
@@ -353,7 +353,7 @@ function HomologationInfo({ requestInfo, setRequestInfo, showActions, goToPrevio
                 goToNextStage();
               }
             }}
-            className='rounded p-2 font-bold hover:bg-black hover:text-white'
+            className='rounded p-2 font-bold hover:bg-black hover:text-primary-foreground'
           >
             Prosseguir
           </button>
@@ -442,7 +442,7 @@ function CreditDistributions({ distributions, addDistribution, removeDistributio
             <button
               type='button'
               onClick={() => removeDistribution(index)}
-              className='flex items-center gap-1 rounded-lg bg-red-600 px-2 py-1 text-[0.6rem] text-white hover:bg-red-500'
+              className='flex items-center gap-1 rounded-lg bg-red-600 px-2 py-1 text-[0.6rem] text-primary-foreground hover:bg-red-500'
             >
               <MdDelete width={10} height={10} />
               <p>REMOVER</p>

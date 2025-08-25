@@ -52,7 +52,7 @@ function FiltersMenu({ filters, setFilters }: FiltersMenuProps) {
           <div
             onClick={() => setFilters((prev) => ({ ...prev, powerOrder: null, priceOrder: prev.priceOrder == 'ASC' ? null : 'ASC' }))}
             className={`flex w-full cursor-pointer items-center justify-center rounded-md border border-cyan-500 p-2 px-4 text-center font-Inter text-xs font-bold leading-none tracking-tight lg:w-fit ${
-              filters.priceOrder == 'ASC' ? 'bg-cyan-500 text-white' : 'bg-transparent text-cyan-500'
+              filters.priceOrder == 'ASC' ? 'bg-cyan-500 text-primary-foreground' : 'bg-transparent text-cyan-500'
             }`}
           >
             PREÇO CRESCENTE
@@ -60,7 +60,7 @@ function FiltersMenu({ filters, setFilters }: FiltersMenuProps) {
           <div
             onClick={() => setFilters((prev) => ({ ...prev, powerOrder: null, priceOrder: prev.priceOrder == 'DESC' ? null : 'DESC' }))}
             className={`flex w-full cursor-pointer items-center justify-center rounded-md border border-cyan-500 p-2 px-4 text-center font-Inter text-xs font-bold leading-none tracking-tight lg:w-fit ${
-              filters.priceOrder == 'DESC' ? 'bg-cyan-500 text-white' : 'bg-transparent text-cyan-500'
+              filters.priceOrder == 'DESC' ? 'bg-cyan-500 text-primary-foreground' : 'bg-transparent text-cyan-500'
             }`}
           >
             PREÇO DECRESCENTE

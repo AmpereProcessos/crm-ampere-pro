@@ -61,7 +61,7 @@ function OpportunityHistory({ session, opportunityName, opportunityId, opportuni
             onClick={() => {
               setView((prev) => (prev === 'NEW INTERACTION' ? null : 'NEW INTERACTION'));
             }}
-            className='flex w-full items-center justify-center gap-2 rounded-sm bg-[#15599a] p-1.5 font-medium text-white hover:bg-blue-800 lg:w-fit'
+            className='flex w-full items-center justify-center gap-2 rounded-sm bg-[#15599a] p-1.5 font-medium text-primary-foreground hover:bg-blue-800 lg:w-fit'
           >
             <AiFillInteraction />
             <p className='text-xs font-normal'>Nova Interação</p>
@@ -71,7 +71,7 @@ function OpportunityHistory({ session, opportunityName, opportunityId, opportuni
             onClick={() => {
               setView((prev) => (prev === 'NEW ACTIVITY' ? null : 'NEW ACTIVITY'));
             }}
-            className='flex w-full items-center justify-center gap-2 rounded-sm bg-[#15599a] p-1.5 font-medium text-white hover:bg-blue-800 lg:w-fit'
+            className='flex w-full items-center justify-center gap-2 rounded-sm bg-[#15599a] p-1.5 font-medium text-primary-foreground hover:bg-blue-800 lg:w-fit'
           >
             <BsClipboardCheck />
             <p className='text-xs font-normal'>Nova Atividade</p>
@@ -81,7 +81,7 @@ function OpportunityHistory({ session, opportunityName, opportunityId, opportuni
             onClick={() => {
               setView((prev) => (prev === 'NEW NOTE' ? null : 'NEW NOTE'));
             }}
-            className='flex w-full items-center justify-center gap-2 rounded-sm bg-[#15599a] p-1.5 font-medium text-white hover:bg-blue-800 lg:w-fit'
+            className='flex w-full items-center justify-center gap-2 rounded-sm bg-[#15599a] p-1.5 font-medium text-primary-foreground hover:bg-blue-800 lg:w-fit'
           >
             <TbNotes />
             <p className='text-xs font-normal'>Nova Anotação</p>
@@ -174,7 +174,7 @@ function OpportunityHistory({ session, opportunityName, opportunityId, opportuni
                   );
                 })
               ) : (
-                <p className='flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/50'>
+                <p className='flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/70'>
                   Não foram encontrados registros do histórico dessa oportunidade.
                 </p>
               )

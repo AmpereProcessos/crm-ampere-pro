@@ -9,68 +9,70 @@ function LaudoFormularioVisitaUrbano({ analysis }: LaudoFormularioVisitaUrbanoPr
     <div className='h-[29.7cm] w-[21cm]'>
       <div className='flex h-full w-full flex-col'>
         <div className='flex flex-col'>
-          <h1 className='border-x border-black bg-[#15599a] text-center text-sm font-bold text-white'>INFORMAÇÕES DO CLIENTE</h1>
+          <h1 className='border-x border-black bg-[#15599a] text-center text-sm font-bold text-primary-foreground'>INFORMAÇÕES DO CLIENTE</h1>
           <div className='flex'>
             <div className='grid w-[60%] grid-rows-5'>
               <div className='grid grid-cols-2 border-b border-black'>
-                <p className='border-r border-black bg-[#fead61] p-1 text-center text-xs font-bold text-white'>CLIENTE</p>
+                <p className='border-r border-black bg-[#fead61] p-1 text-center text-xs font-bold text-primary-foreground'>CLIENTE</p>
                 <p className='border-r border-black p-1 text-center text-xs'>{analysis.nome}</p>
               </div>
               <div className='grid grid-cols-2 border-b border-black'>
-                <p className='border-r border-black bg-[#fead61] p-1 text-center text-xs font-bold text-white'>REPRESENTANTE</p>
+                <p className='border-r border-black bg-[#fead61] p-1 text-center text-xs font-bold text-primary-foreground'>REPRESENTANTE</p>
                 <p className='border-r border-black p-1 text-center text-xs'>{analysis.requerente.apelido || analysis.requerente.nome}</p>
               </div>
               <div className='grid grid-cols-2 border-b border-black'>
-                <p className='border-r border-black bg-[#fead61] p-1 text-center text-xs font-bold text-white'>ENDEREÇO</p>
+                <p className='border-r border-black bg-[#fead61] p-1 text-center text-xs font-bold text-primary-foreground'>ENDEREÇO</p>
                 <p className='border-r border-black p-1 text-center text-xs'>{analysis.localizacao.endereco}</p>
               </div>
               <div className='grid grid-cols-2 border-b border-black'>
-                <p className='border-r border-black bg-[#fead61] p-1 text-center text-xs font-bold text-white'>BAIRRO</p>
+                <p className='border-r border-black bg-[#fead61] p-1 text-center text-xs font-bold text-primary-foreground'>BAIRRO</p>
                 <p className='border-r border-black p-1 text-center text-xs'>{analysis.localizacao.bairro}</p>
               </div>
               <div className='grid grid-cols-2 border-b border-black'>
-                <p className='border-r border-black bg-[#fead61] p-1 text-center text-xs font-bold text-white'>DATA DA VISITA</p>
+                <p className='border-r border-black bg-[#fead61] p-1 text-center text-xs font-bold text-primary-foreground'>DATA DA VISITA</p>
                 <p className='border-r border-black p-1 text-center text-xs'>{dayjs().format('DD/MM/YYYY')}</p>
               </div>
             </div>
             <div className='grid w-[40%] grid-rows-5'>
               <div className='grid grid-cols-2 border-b border-black'>
-                <p className='border-r border-black bg-[#fead61] p-1 text-center text-xs font-bold text-white'>TELEFONE</p>
+                <p className='border-r border-black bg-[#fead61] p-1 text-center text-xs font-bold text-primary-foreground'>TELEFONE</p>
                 <p className='border-r border-black p-1 text-center text-xs'>-</p>
               </div>
               <div className='grid grid-cols-2 border-b border-black'>
-                <p className='border-r border-black bg-[#fead61] p-1 text-center text-xs font-bold text-white'>Nº DE PROJETO</p>
+                <p className='border-r border-black bg-[#fead61] p-1 text-center text-xs font-bold text-primary-foreground'>Nº DE PROJETO</p>
                 <p className='border-r border-black p-1 text-center text-xs'>{analysis.oportunidade.identificador || 'N/A'}</p>
               </div>
               <div className='grid grid-cols-2 border-b border-black'>
-                <p className='border-r border-black bg-[#fead61] p-1 text-center text-xs font-bold text-white'>NÚMERO</p>
+                <p className='border-r border-black bg-[#fead61] p-1 text-center text-xs font-bold text-primary-foreground'>NÚMERO</p>
                 <p className='border-r border-black p-1 text-center text-xs'>{analysis.localizacao.numeroOuIdentificador}</p>
               </div>
               <div className='grid grid-cols-2 border-b border-black'>
-                <p className='border-r border-black bg-[#fead61] p-1 text-center text-xs font-bold text-white'>MUNICÍPIO</p>
+                <p className='border-r border-black bg-[#fead61] p-1 text-center text-xs font-bold text-primary-foreground'>MUNICÍPIO</p>
                 <p className='border-r border-black p-1 text-center text-xs'>{analysis.localizacao.cidade}</p>
               </div>
               <div className='grid grid-cols-2 border-b border-black'>
-                <p className='border-r border-black bg-[#fead61] p-1 text-center text-xs font-bold text-white'>TIPO DE SOLICITAÇÃO</p>
+                <p className='border-r border-black bg-[#fead61] p-1 text-center text-xs font-bold text-primary-foreground'>TIPO DE SOLICITAÇÃO</p>
                 <p className='border-r border-black p-1 text-center text-xs'>{analysis.tipoSolicitacao}</p>
               </div>
             </div>
           </div>
         </div>
         <div className='flex flex-col'>
-          <h1 className='bg-[#15599a] text-center text-sm font-bold text-white'>EQUIPAMENTOS</h1>
+          <h1 className='bg-[#15599a] text-center text-sm font-bold text-primary-foreground'>EQUIPAMENTOS</h1>
           <div className='flex'>
-            <div className='flex h-full w-[20%] items-center justify-center bg-[#15599a] text-center font-bold text-white'>
+            <div className='flex h-full w-[20%] items-center justify-center bg-[#15599a] text-center font-bold text-primary-foreground'>
               DESCRIÇÃO DO SISTEMA FOTOVOLTAICO
             </div>
             <div className='flex w-[80%] flex-col'>
               <div className='flex w-full items-center'>
-                <div className='font-raleway w-1/2 border  border-b-0 border-black bg-[#fead61]  text-center text-sm font-bold text-white'>
+                <div className='font-raleway w-1/2 border  border-b-0 border-black bg-[#fead61]  text-center text-sm font-bold text-primary-foreground'>
                   TOPOLOGIA
                 </div>
                 <p className='w-1/2 p-1 text-center text-[0.6rem] font-bold'>{analysis.detalhes.topologia}</p>
               </div>
-              <h1 className='font-raleway border border-b-0  border-black bg-[#fead61] text-center  text-sm font-bold text-white'>INVERSORES</h1>
+              <h1 className='font-raleway border border-b-0  border-black bg-[#fead61] text-center  text-sm font-bold text-primary-foreground'>
+                INVERSORES
+              </h1>
               <div className='flex w-full flex-col border border-black'>
                 <div className='flex w-full items-center'>
                   <div className='w-1/3 bg-primary/30 p-1 text-center text-[0.6rem] font-bold'>QUANTIDADE</div>
@@ -89,7 +91,7 @@ function LaudoFormularioVisitaUrbano({ analysis }: LaudoFormularioVisitaUrbanoPr
                     </div>
                   ))}
               </div>
-              <h1 className='font-raleway border border-b-0 border-t-0  border-black bg-[#fead61] text-center  text-sm font-bold text-white'>
+              <h1 className='font-raleway border border-b-0 border-t-0  border-black bg-[#fead61] text-center  text-sm font-bold text-primary-foreground'>
                 MÓDULOS FOTOVOLTÁICOS
               </h1>
               <div className='flex w-full flex-col border border-black'>
@@ -118,7 +120,7 @@ function LaudoFormularioVisitaUrbano({ analysis }: LaudoFormularioVisitaUrbanoPr
           </div>
         </div>
         <div className='mt-6 flex flex-col'>
-          <h1 className='border-x border-black bg-[#15599a] text-center text-sm font-bold text-white'>PADRÃO</h1>
+          <h1 className='border-x border-black bg-[#15599a] text-center text-sm font-bold text-primary-foreground'>PADRÃO</h1>
           <div className='flex w-full border border-black'>
             <h1 className='w-[20%] border-r border-black bg-primary/30 p-1 text-center text-xs font-bold'>PADRÃO ESTÁ</h1>
             <div className='grid w-[80%] grid-cols-2'>
@@ -144,7 +146,7 @@ function LaudoFormularioVisitaUrbano({ analysis }: LaudoFormularioVisitaUrbanoPr
               <h1 className='col-span-3 p-1 text-end text-xs'>{'                 '}METROS</h1>
             </div>
           </div>
-          <h1 className='border-x border-black bg-[#15599a] text-center text-xs font-bold text-white'>CAIXA ÚNICA</h1>
+          <h1 className='border-x border-black bg-[#15599a] text-center text-xs font-bold text-primary-foreground'>CAIXA ÚNICA</h1>
           <div className='flex w-full border border-black'>
             <h1 className='w-[20%] border-r border-black bg-primary/30 p-1 text-center text-xs font-bold'>AMPERAGEM</h1>
             <div className='grid w-[80%] grid-cols-9'>
@@ -165,7 +167,7 @@ function LaudoFormularioVisitaUrbano({ analysis }: LaudoFormularioVisitaUrbanoPr
               <h1 className='border-black p-1 text-end text-xs'>CM-</h1>
             </div>
           </div>
-          <h1 className='border-x border-black bg-[#15599a] text-center text-xs font-bold text-white'>CAIXAS AGRUPADAS</h1>
+          <h1 className='border-x border-black bg-[#15599a] text-center text-xs font-bold text-primary-foreground'>CAIXAS AGRUPADAS</h1>
           <div className='flex w-full flex-col'>
             <div className='grid grid-cols-10 border border-black'>
               <div className='col-span-1 flex items-center justify-center border-r border-black bg-primary/30 text-center text-xs font-bold'>
@@ -238,8 +240,8 @@ function LaudoFormularioVisitaUrbano({ analysis }: LaudoFormularioVisitaUrbanoPr
           </div>
         </div>
         <div className='mt-6 flex flex-col'>
-          <h1 className='border-x border-black bg-[#15599a] text-center text-sm font-bold text-white'>OBRAS</h1>
-          <h1 className='border-x border-t border-black bg-[#fead61] text-center text-xs font-bold text-white'>ESTRUTURA DE MONTAGEM</h1>
+          <h1 className='border-x border-black bg-[#15599a] text-center text-sm font-bold text-primary-foreground'>OBRAS</h1>
+          <h1 className='border-x border-t border-black bg-[#fead61] text-center text-xs font-bold text-primary-foreground'>ESTRUTURA DE MONTAGEM</h1>
           <div className='grid grid-cols-2'>
             <div className='flex border border-r-0 border-black'>
               <h1 className='w-[60%] border-r border-black bg-primary/30 text-center text-xs font-bold'>TELHA RESERVA</h1>
@@ -299,7 +301,7 @@ function LaudoFormularioVisitaUrbano({ analysis }: LaudoFormularioVisitaUrbanoPr
               <div className='col-span-3 flex items-center justify-center text-center text-xs'>BARRACÃO A SER CONSTRUÍDO</div>
             </div>
           </div>
-          <h1 className='border-x border-black bg-[#fead61] text-center text-xs font-bold text-white'>INFRAESTRUTURA ELÉTRICA</h1>
+          <h1 className='border-x border-black bg-[#fead61] text-center text-xs font-bold text-primary-foreground'>INFRAESTRUTURA ELÉTRICA</h1>
           <div className='grid grid-cols-2'>
             <div className='flex border border-r-0 border-black'>
               <h1 className='w-[60%] border-r border-black bg-primary/30 text-center text-xs font-bold'>ESPAÇO NO QGBT</h1>
@@ -356,11 +358,13 @@ function LaudoFormularioVisitaUrbano({ analysis }: LaudoFormularioVisitaUrbanoPr
               <h1 className='w-[40%] pr-2 text-end text-xs'>METROS</h1>
             </div>
           </div>
-          <h1 className='border-x border-t-0 border-black bg-[#fead61] text-center text-xs font-bold text-white'>OBSERVAÇÕES</h1>
+          <h1 className='border-x border-t-0 border-black bg-[#fead61] text-center text-xs font-bold text-primary-foreground'>OBSERVAÇÕES</h1>
           <div className='h-[200px] border border-t-0 border-black'></div>
         </div>
         <div className='mt-6 flex flex-col'>
-          <h1 className='border border-black bg-[#15599a] text-center text-sm font-bold text-white'>CHECKLIST DE FOTOS E LOCALIZAÇÕES</h1>
+          <h1 className='border border-black bg-[#15599a] text-center text-sm font-bold text-primary-foreground'>
+            CHECKLIST DE FOTOS E LOCALIZAÇÕES
+          </h1>
           <div className='grid grid-cols-3 grid-rows-3 border border-black'>
             <div className='flex border-b border-black'>
               <div className='flex w-[20%] items-center justify-center border-r border-black bg-primary/30 text-center'>1</div>
@@ -420,7 +424,7 @@ function LaudoFormularioVisitaUrbano({ analysis }: LaudoFormularioVisitaUrbanoPr
               <div className='w-[20%] text-center text-xs'></div>
             </div>
           </div>
-          <h1 className='border border-t-0 border-black bg-[#15599a] text-center text-xs font-bold text-white'>GOIÁS</h1>
+          <h1 className='border border-t-0 border-black bg-[#15599a] text-center text-xs font-bold text-primary-foreground'>GOIÁS</h1>
           <div className='grid grid-cols-3'>
             <div className='flex border-b border-black'>
               <div className='flex w-[80%] items-center justify-center border-r border-black bg-primary/30 text-center text-xs'>
@@ -444,7 +448,7 @@ function LaudoFormularioVisitaUrbano({ analysis }: LaudoFormularioVisitaUrbanoPr
         </div>
         <div className='mt-6 flex flex-col'>
           <h1 className='border border-black text-center text-sm font-bold text-[#15599a]'>DESENHO TÉCNICO</h1>
-          <h1 className='border border-t-0 border-black bg-[#15599a] text-center text-xs font-bold text-white'>OBSERVAÇÕES</h1>
+          <h1 className='border border-t-0 border-black bg-[#15599a] text-center text-xs font-bold text-primary-foreground'>OBSERVAÇÕES</h1>
           <div className='mb-2 h-[100px] border border-t-0 border-black'></div>
         </div>
       </div>

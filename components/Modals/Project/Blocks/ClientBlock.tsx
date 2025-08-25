@@ -53,7 +53,7 @@ function ClientBlock({ infoHolder, setInfoHolder, changes, setChanges, userHasCl
   }
   return (
     <div className='flex w-full flex-col gap-2 rounded-sm border border-primary/80'>
-      <h1 className='w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-white'>INFORMAÇÕES DO CLIENTE</h1>
+      <h1 className='w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-primary-foreground'>INFORMAÇÕES DO CLIENTE</h1>
       <div className='flex w-full grow flex-col gap-2 p-2'>
         <div className='flex w-full flex-col items-center gap-2 lg:flex-row'>
           <div className='w-full lg:w-1/2'>
@@ -265,7 +265,7 @@ function ClientBlock({ infoHolder, setInfoHolder, changes, setChanges, userHasCl
             />
           </div>
         </div>
-        <h1 className='w-full rounded-md bg-blue-500 p-1 text-center text-sm font-bold text-white'>INFORMAÇÕES DE CONTATO</h1>
+        <h1 className='w-full rounded-md bg-blue-500 p-1 text-center text-sm font-bold text-primary-foreground'>INFORMAÇÕES DE CONTATO</h1>
         <div className='flex w-full flex-col items-center gap-2 lg:flex-row'>
           <div className='w-full lg:w-1/3'>
             <TextInput
@@ -325,7 +325,7 @@ function ClientBlock({ infoHolder, setInfoHolder, changes, setChanges, userHasCl
             />
           </div>
         </div>
-        <h1 className='w-full rounded-md bg-blue-500 p-1 text-center text-sm font-bold text-white'>INFORMAÇÕES DE ENDEREÇO</h1>
+        <h1 className='w-full rounded-md bg-blue-500 p-1 text-center text-sm font-bold text-primary-foreground'>INFORMAÇÕES DE ENDEREÇO</h1>
         <div className='my-1 flex w-full flex-col'>
           <p className='w-full text-center text-sm font-light tracking-tighter text-primary/70'>
             Preencha abaixo o endereço de correspondência do cliente.

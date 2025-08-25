@@ -129,7 +129,7 @@ function NewActivity({
         />
       </div>
       <div className='flex w-full items-center justify-end gap-3 border-t border-primary/30 p-1'>
-        <button onClick={() => setView('HISTORY')} className='text-primary/50 duration-300 ease-in-out disabled:opacity-50 hover:scale-105'>
+        <button onClick={() => setView('HISTORY')} className='text-primary/70 duration-300 ease-in-out disabled:opacity-50 hover:scale-105'>
           FECHAR
         </button>
         <button onClick={() => handleCreate()} className='font-bold text-[#15599a] duration-300 ease-in-out hover:scale-105'>

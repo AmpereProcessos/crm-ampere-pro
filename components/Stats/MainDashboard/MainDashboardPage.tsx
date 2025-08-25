@@ -179,7 +179,7 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
                 <VscDiffAdded className='h-4 w-4' />
               </div>
               <div className='mt-2 flex w-full flex-col'>
-                <div className='text-xl font-bold text-[#15599a]'>{data?.simplificado.ATUAL.projetosCriados || 0}</div>
+                <div className='text-xl font-bold text-[#15599a] dark:text-[#fead41]'>{data?.simplificado.ATUAL.projetosCriados || 0}</div>
                 <p className='text-xs text-primary/70 lg:text-[0.6rem]'>{data?.simplificado.ANTERIOR.projetosCriados || 0} no último período</p>
               </div>
             </div>
@@ -189,7 +189,7 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
                 <BsPatchCheck className='h-4 w-4' />
               </div>
               <div className='mt-2 flex w-full flex-col'>
-                <div className='text-xl font-bold text-[#15599a]'>{data?.simplificado.ATUAL.projetosGanhos || 0}</div>
+                <div className='text-xl font-bold text-[#15599a] dark:text-[#fead41]'>{data?.simplificado.ATUAL.projetosGanhos || 0}</div>
                 <p className='text-xs text-primary/70 lg:text-[0.6rem]'>{data?.simplificado.ANTERIOR.projetosGanhos || 0} no último período</p>
               </div>
             </div>
@@ -199,7 +199,7 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
                 <AiOutlineCloseCircle className='h-4 w-4' />
               </div>
               <div className='mt-2 flex w-full flex-col'>
-                <div className='text-xl font-bold text-[#15599a]'>{data?.simplificado.ATUAL.projetosPerdidos || 0}</div>
+                <div className='text-xl font-bold text-[#15599a] dark:text-[#fead41]'>{data?.simplificado.ATUAL.projetosPerdidos || 0}</div>
                 <p className='text-xs text-primary/70 lg:text-[0.6rem]'>{data?.simplificado.ANTERIOR.projetosPerdidos || 0} no último período</p>
               </div>
             </div>
@@ -209,7 +209,7 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
                 <FaBolt className='h-4 w-4' />
               </div>
               <div className='mt-2 flex w-full flex-col'>
-                <div className='text-xl font-bold text-[#15599a]'>
+                <div className='text-xl font-bold text-[#15599a] dark:text-[#fead41]'>
                   {data?.simplificado.ATUAL.potenciaVendida ? formatDecimalPlaces(data.simplificado.ATUAL.potenciaVendida) : 0} kWp
                 </div>
                 <p className='text-xs text-primary/70 lg:text-[0.6rem]'>
@@ -224,7 +224,7 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
                 <BsFileEarmarkText className='h-4 w-4' />
               </div>
               <div className='mt-2 flex w-full flex-col'>
-                <div className='text-xl font-bold text-[#15599a]'>
+                <div className='text-xl font-bold text-[#15599a] dark:text-[#fead41]'>
                   {data?.simplificado.ATUAL.totalVendido ? formatToMoney(data.simplificado.ATUAL.totalVendido) : 0}
                 </div>
                 <p className='text-xs text-primary/70 lg:text-[0.6rem]'>
@@ -238,7 +238,7 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
                 <BsTicketPerforated className='h-4 w-4' />
               </div>
               <div className='mt-2 flex w-full flex-col'>
-                <div className='text-xl font-bold text-[#15599a]'>
+                <div className='text-xl font-bold text-[#15599a] dark:text-[#fead41]'>
                   {data?.simplificado.ATUAL.totalVendido
                     ? formatToMoney(data.simplificado.ATUAL.totalVendido / data.simplificado.ATUAL.projetosGanhos)
                     : 0}
@@ -259,7 +259,7 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
                 <MousePointerClick className='h-4 w-4' />
               </div>
               <div className='mt-2 flex w-full flex-col'>
-                <div className='text-xl font-bold text-[#15599a]'>{data?.conecta.visualizacoes || 0}</div>
+                <div className='text-xl font-bold text-[#15599a] dark:text-[#fead41]'>{data?.conecta.visualizacoes || 0}</div>
               </div>
             </div>
             <div className='flex min-h-[50px] w-full flex-col rounded-xl border border-primary/30 bg-background p-6 shadow-md lg:w-1/2'>
@@ -268,7 +268,7 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
                 <UserRoundPlus className='h-4 w-4' />
               </div>
               <div className='mt-2 flex w-full flex-col'>
-                <div className='text-xl font-bold text-[#15599a]'>{data?.conecta.oportunidades || 0}</div>
+                <div className='text-xl font-bold text-[#15599a] dark:text-[#fead41]'>{data?.conecta.oportunidades || 0}</div>
               </div>
             </div>
           </div>

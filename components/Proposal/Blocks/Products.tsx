@@ -29,22 +29,22 @@ function Products({ infoHolder, setInfoHolder }: ProductsProps) {
                 <div className='flex w-full grow items-center justify-end gap-2 pl-2 lg:w-fit'>
                   <div className='flex items-center gap-1'>
                     <FaIndustry size={15} />
-                    <p className='text-[0.6rem] font-light text-primary/50'>{product.fabricante}</p>
+                    <p className='text-[0.6rem] font-light text-primary/70'>{product.fabricante}</p>
                   </div>
                   <div className='flex items-center gap-1'>
                     <ImPower size={15} />
-                    <p className='text-[0.6rem] font-light text-primary/50'>{product.potencia} W</p>
+                    <p className='text-[0.6rem] font-light text-primary/70'>{product.potencia} W</p>
                   </div>
                   <div className='flex items-center gap-1'>
                     <AiOutlineSafety size={15} />
-                    <p className='text-[0.6rem] font-light text-primary/50'>{product.garantia} ANOS</p>
+                    <p className='text-[0.6rem] font-light text-primary/70'>{product.garantia} ANOS</p>
                   </div>
                 </div>
               </div>
             </div>
           ))
         ) : (
-          <p className='w-full text-center text-sm italic text-primary/50'>Nenhum produto vinculado à proposta...</p>
+          <p className='w-full text-center text-sm italic text-primary/70'>Nenhum produto vinculado à proposta...</p>
         )}
       </div>
     </div>

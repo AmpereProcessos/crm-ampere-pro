@@ -15,7 +15,9 @@ function ProjectJourneyTypesBlock({ session }: ProjectJourneyTypesBlockProps) {
   const { data: journeyTypes, isLoading, isError, isSuccess } = useProjectJourneyTypes();
   return (
     <div className='flex min-h-[450px] w-full flex-col rounded-sm border border-[#b990e7]'>
-      <h1 className='w-full rounded-tl rounded-tr bg-[#b990e7] p-1 text-center text-sm font-bold text-white'>TIPOS DE JORNADA DE PROJETO</h1>
+      <h1 className='w-full rounded-tl rounded-tr bg-[#b990e7] p-1 text-center text-sm font-bold text-primary-foreground'>
+        TIPOS DE JORNADA DE PROJETO
+      </h1>
       <div className='my-1 flex w-full flex-col'>
         <p className='w-full text-center text-sm font-light tracking-tighter text-primary/70'>
           Os tipos de jornada de projeto aqui cadastrados serão opções na configuração do projeto.
@@ -32,7 +34,7 @@ function ProjectJourneyTypesBlock({ session }: ProjectJourneyTypesBlockProps) {
               </div>
             ))
           ) : (
-            <p className='flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/50'>
+            <p className='flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/70'>
               Nenhum tipo de jornada encontrado.
             </p>
           )
@@ -41,14 +43,14 @@ function ProjectJourneyTypesBlock({ session }: ProjectJourneyTypesBlockProps) {
       <div className='flex w-full items-center justify-end p-2'>
         {newProjectJourneyType ? (
           <button
-            className='rounded bg-red-500 p-1 px-4 text-sm font-medium text-white duration-300 ease-in-out hover:bg-red-600'
+            className='rounded bg-red-500 p-1 px-4 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-red-600'
             onClick={() => setNewProjectJourneyType(false)}
           >
             FECHAR MENU
           </button>
         ) : (
           <button
-            className='rounded bg-green-500 p-1 px-4 text-sm font-medium text-white duration-300 ease-in-out hover:bg-green-600'
+            className='rounded bg-green-500 p-1 px-4 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-green-600'
             onClick={() => setNewProjectJourneyType(true)}
           >
             NOVO TIPO DE JORNADA

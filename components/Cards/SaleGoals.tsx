@@ -50,7 +50,7 @@ function SaleGoals({ saleGoal, promoterId, handleClick }: SaleGoalsCardProps) {
         <div className='flex items-center gap-2'>
           <div className='flex items-center gap-1'>
             <ImPower />
-            <p className='text-xs leading-none tracking-tight text-primary/50'>POTÊNCIA PICO</p>
+            <p className='text-xs leading-none tracking-tight text-primary/70'>POTÊNCIA PICO</p>
           </div>
 
           <p className='text-xs font-bold'>{saleGoal.metas.potenciaVendida} kW</p>
@@ -58,14 +58,14 @@ function SaleGoals({ saleGoal, promoterId, handleClick }: SaleGoalsCardProps) {
         <div className='flex items-center gap-2'>
           <div className='flex items-center gap-1'>
             <MdSell />
-            <p className='text-xs leading-none tracking-tight text-primary/50'>PROJETOS VENDIDOS</p>
+            <p className='text-xs leading-none tracking-tight text-primary/70'>PROJETOS VENDIDOS</p>
           </div>
           <p className='text-xs font-bold'>{saleGoal.metas.projetosVendidos}</p>
         </div>
         <div className='flex items-center gap-2'>
           <div className='flex items-center gap-1'>
             <MdAttachMoney />
-            <p className='text-xs leading-none tracking-tight text-primary/50'>VALOR VENDIDO</p>
+            <p className='text-xs leading-none tracking-tight text-primary/70'>VALOR VENDIDO</p>
           </div>
           <p className='text-xs font-bold'>{saleGoal.metas.valorVendido ? formatToMoney(saleGoal.metas.valorVendido) : '-'}</p>
         </div>
@@ -74,21 +74,21 @@ function SaleGoals({ saleGoal, promoterId, handleClick }: SaleGoalsCardProps) {
         <div className='flex items-center gap-2'>
           <div className='flex items-center gap-1'>
             <FaPercentage />
-            <p className='text-xs leading-none tracking-tight text-primary/50'>CONVERSÃO</p>
+            <p className='text-xs leading-none tracking-tight text-primary/70'>CONVERSÃO</p>
           </div>
           <p className='text-xs font-bold'>{saleGoal.metas.conversao}</p>
         </div>
         <div className='flex items-center gap-2'>
           <div className='flex items-center gap-1'>
             <MdCreate />
-            <p className='text-xs leading-none tracking-tight text-primary/50'>PROJETOS CRIADOS</p>
+            <p className='text-xs leading-none tracking-tight text-primary/70'>PROJETOS CRIADOS</p>
           </div>
           <p className='text-xs font-bold'>{saleGoal.metas.projetosCriados}</p>
         </div>
         <div className='flex items-center gap-2'>
           <div className='flex items-center gap-1'>
             <GrSend />
-            <p className='text-xs leading-none tracking-tight text-primary/50'>PROJETOS ENVIADOS</p>
+            <p className='text-xs leading-none tracking-tight text-primary/70'>PROJETOS ENVIADOS</p>
           </div>
           <p className='text-xs font-bold'>{saleGoal.metas.projetosEnviados}</p>
         </div>

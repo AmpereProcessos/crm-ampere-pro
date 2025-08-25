@@ -295,7 +295,7 @@ function AdditionalServicesInfo({ requestInfo, setRequestInfo, files, setFiles, 
       </div>
 
       <div className='mt-2 flex w-full justify-between'>
-        <button onClick={() => goToPreviousStage()} className='rounded p-2 font-bold text-primary/50 duration-300 ease-in-out hover:scale-105'>
+        <button onClick={() => goToPreviousStage()} className='rounded p-2 font-bold text-primary/70 duration-300 ease-in-out hover:scale-105'>
           Voltar
         </button>
         <button
@@ -304,7 +304,7 @@ function AdditionalServicesInfo({ requestInfo, setRequestInfo, files, setFiles, 
               goToNextStage();
             }
           }}
-          className='rounded p-2 font-bold hover:bg-black hover:text-white'
+          className='rounded p-2 font-bold hover:bg-black hover:text-primary-foreground'
         >
           Prosseguir
         </button>

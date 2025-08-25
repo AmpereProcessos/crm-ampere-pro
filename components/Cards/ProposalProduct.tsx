@@ -70,28 +70,30 @@ function ProposalProduct({ product, proposal, opportunity, handleClick, userHasP
           </div>
           <p className='text-xs font-medium leading-none tracking-tight lg:text-sm'>{product.modelo}</p>
         </div>
-        <h1 className='rounded-full bg-black px-2 py-1 text-[0.65rem] font-bold text-white lg:text-xs'>{formatToMoney(proposalTotalPreview)}</h1>
+        <h1 className='rounded-full bg-black px-2 py-1 text-[0.65rem] font-bold text-primary-foreground lg:text-xs'>
+          {formatToMoney(proposalTotalPreview)}
+        </h1>
       </div>
       <div className='mt-2 flex w-full flex-col gap-1'>
         <div className='flex w-full items-center justify-end gap-2 pl-2'>
           {userHasPricingView ? (
             <div className='flex items-center gap-1'>
               <MdAttachMoney size={12} />
-              <p className='text-[0.6rem] font-light text-primary/50 lg:text-xs'>{formatToMoney(product.preco || 0)}</p>
+              <p className='text-[0.6rem] font-light text-primary/70 lg:text-xs'>{formatToMoney(product.preco || 0)}</p>
             </div>
           ) : null}
 
           <div className='flex items-center gap-1'>
             <FaIndustry size={12} />
-            <p className='text-[0.6rem] font-light text-primary/50 lg:text-xs'>{product.fabricante}</p>
+            <p className='text-[0.6rem] font-light text-primary/70 lg:text-xs'>{product.fabricante}</p>
           </div>
           <div className='flex items-center gap-1'>
             <ImPower size={12} />
-            <p className='text-[0.6rem] font-light text-primary/50 lg:text-xs'>{product.potencia} W</p>
+            <p className='text-[0.6rem] font-light text-primary/70 lg:text-xs'>{product.potencia} W</p>
           </div>
           <div className='flex items-center gap-1'>
             <AiOutlineSafety size={12} />
-            <p className='text-[0.6rem] font-light text-primary/50 lg:text-xs'>{product.garantia} ANOS</p>
+            <p className='text-[0.6rem] font-light text-primary/70 lg:text-xs'>{product.garantia} ANOS</p>
           </div>
         </div>
       </div>
@@ -108,7 +110,7 @@ function ProposalProduct({ product, proposal, opportunity, handleClick, userHasP
           onClick={() =>
             handleClick({ ...product, preco: qtyHolder * (product.preco || 0), qtde: qtyHolder, valorFinal: qtyHolder * proposalTotalPreview })
           }
-          className='rounded-full border border-cyan-500 p-1 text-cyan-500 duration-300 ease-in-out hover:bg-cyan-500 hover:text-white'
+          className='rounded-full border border-cyan-500 p-1 text-cyan-500 duration-300 ease-in-out hover:bg-cyan-500 hover:text-primary-foreground'
         >
           <IoMdAdd />
         </button>

@@ -40,7 +40,7 @@ function DescriptiveBlock({ infoHolder, setInfoHolder, changes, setChanges }: De
   return (
     <div className='mt-4 flex w-full flex-col'>
       <div className='flex w-full items-center justify-center gap-2 rounded-md bg-primary/80 p-2'>
-        <h1 className='font-bold text-white'>DESCRITIVO</h1>
+        <h1 className='font-bold text-primary-foreground'>DESCRITIVO</h1>
       </div>
       <div className='mt-2 flex w-full flex-col gap-2'>
         <div className='w-full self-center lg:w-[500px]'>
@@ -64,7 +64,7 @@ function DescriptiveBlock({ infoHolder, setInfoHolder, changes, setChanges }: De
         <div className='mb-2 flex w-full items-center justify-end'>
           <button
             onClick={addDescriptiveItem}
-            className='rounded border border-green-500 p-1 font-bold text-green-500 duration-300 ease-in-out hover:bg-green-500 hover:text-white'
+            className='rounded border border-green-500 p-1 font-bold text-green-500 duration-300 ease-in-out hover:bg-green-500 hover:text-primary-foreground'
           >
             ADICIONAR ITEM
           </button>
@@ -86,11 +86,11 @@ function DescriptiveBlock({ infoHolder, setInfoHolder, changes, setChanges }: De
               </button>
             </div>
 
-            <p className='mt-1 w-full text-center text-sm text-primary/50'>{item.descricao}</p>
+            <p className='mt-1 w-full text-center text-sm text-primary/70'>{item.descricao}</p>
           </div>
         ))
       ) : (
-        <p className='flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/50'>
+        <p className='flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/70'>
           Nenhum item adicionado à lista...
         </p>
       )}

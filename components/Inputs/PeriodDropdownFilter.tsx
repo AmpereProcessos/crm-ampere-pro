@@ -60,7 +60,7 @@ function PeriodDropdownFilter({ initialAfter, initialBefore, setDateParam }: Per
       <button
         type='button'
         onClick={() => setDropdownIsOpen((prev) => !prev)}
-        className='flex w-[46.6px] cursor-pointer items-center justify-center rounded-sm bg-[#fead61] p-2 shadow-md duration-300 ease-in-out hover:scale-105 hover:bg-[#eb8423] hover:text-white'
+        className='flex w-[46.6px] cursor-pointer items-center justify-center rounded-sm bg-[#fead61] p-2 shadow-md duration-300 ease-in-out hover:scale-105 hover:bg-[#eb8423] hover:text-primary-foreground'
       >
         <IoIosCalendar />
       </button>
@@ -69,7 +69,7 @@ function PeriodDropdownFilter({ initialAfter, initialBefore, setDateParam }: Per
           <h1 className='text-center text-sm font-medium text-primary/70'>SELECIONE UM PERÍODO DE FILTRO</h1>
           <div className='mt-2 flex w-full items-center justify-between'>
             <div className='flex flex-col items-start'>
-              <h3 className='text-xs text-primary/50'>DEPOIS DE:</h3>
+              <h3 className='text-xs text-primary/70'>DEPOIS DE:</h3>
               <input
                 type='date'
                 value={dateFilter.after ? formatDateForInputValue(dateFilter.after) : undefined}
@@ -83,7 +83,7 @@ function PeriodDropdownFilter({ initialAfter, initialBefore, setDateParam }: Per
               />
             </div>
             <div className='flex flex-col items-end'>
-              <h3 className='text-xs text-primary/50'>ANTES DE:</h3>
+              <h3 className='text-xs text-primary/70'>ANTES DE:</h3>
               <input
                 type='date'
                 value={dateFilter.before ? formatDateForInputValue(dateFilter.before) : undefined}
@@ -101,7 +101,7 @@ function PeriodDropdownFilter({ initialAfter, initialBefore, setDateParam }: Per
             {msg.text ? <p className={`text-xs ${msg.color} italic`}>{msg.text}</p> : <div></div>}
             <button
               onClick={handleFilter}
-              className='rounded bg-[#fead61] p-1 text-[#15599a] duration-300 ease-in-out hover:scale-105 hover:bg-[#15599a] hover:text-white'
+              className='rounded bg-[#fead61] p-1 text-[#15599a] duration-300 ease-in-out hover:scale-105 hover:bg-[#15599a] hover:text-primary-foreground'
             >
               <AiOutlineSearch />
             </button>

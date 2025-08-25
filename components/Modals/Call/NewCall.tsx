@@ -268,7 +268,7 @@ function NewCall({ opportunity, session, closeModal }: NewCallProps) {
       <div className='fixed left-[50%] top-[50%] z-100 h-[90%] w-[60%] translate-x-[-50%] translate-y-[-50%] rounded-md bg-background p-[10px]'>
         <div className='flex h-full flex-col'>
           <div className='flex flex-wrap items-center justify-between border-b border-primary/30 px-2 pb-2 text-lg'>
-            <h3 className='text-xl font-bold text-primary dark:text-white '>NOVO CHAMADO</h3>
+            <h3 className='text-xl font-bold text-primary  '>NOVO CHAMADO</h3>
             <button
               onClick={() => closeModal()}
               type='button'
@@ -282,14 +282,14 @@ function NewCall({ opportunity, session, closeModal }: NewCallProps) {
               <div className='flex items-center gap-2'>
                 <Avatar fallback={'U'} height={25} width={25} url={session?.user.avatar_url || undefined} />
 
-                <p className='text-xs font-medium text-primary/50'>{session?.user.nome}</p>
+                <p className='text-xs font-medium text-primary/70'>{session?.user.nome}</p>
               </div>
-              <div className='flex items-center gap-2 text-primary/50'>
+              <div className='flex items-center gap-2 text-primary/70'>
                 <BsCalendarFill />
                 <p className='text-xs font-medium'>{dayjs().format('DD/MM/YYYY HH:mm')}</p>
               </div>
             </div>
-            <h1 className='mt-4 w-full rounded-md bg-primary/80 p-2 text-center font-bold text-white'>TIPO DE SOLICITAÇÃO</h1>
+            <h1 className='mt-4 w-full rounded-md bg-primary/80 p-2 text-center font-bold text-primary-foreground'>TIPO DE SOLICITAÇÃO</h1>
             <SelectInput
               label='TIPO DE SOLICITAÇÃO'
               showLabel={false}
@@ -300,7 +300,7 @@ function NewCall({ opportunity, session, closeModal }: NewCallProps) {
               onReset={() => setInfoHolder((prev) => ({ ...prev, tipoSolicitacao: null }))}
               width='100%'
             />
-            <h1 className='mt-4 w-full rounded-tl-md rounded-tr-md bg-primary/80 p-2 text-center font-bold text-white'>ANOTAÇÕES</h1>
+            <h1 className='mt-4 w-full rounded-tl-md rounded-tr-md bg-primary/80 p-2 text-center font-bold text-primary-foreground'>ANOTAÇÕES</h1>
             <textarea
               value={infoHolder.observacoes}
               onChange={(e) => setInfoHolder((prev) => ({ ...prev, observacoes: e.target.value }))}
@@ -309,14 +309,14 @@ function NewCall({ opportunity, session, closeModal }: NewCallProps) {
             />
             {infoHolder.projeto ? (
               <>
-                <h1 className='mt-4 w-full rounded-md bg-primary/80 p-2 text-center font-bold text-white'>PROJETO</h1>
+                <h1 className='mt-4 w-full rounded-md bg-primary/80 p-2 text-center font-bold text-primary-foreground'>PROJETO</h1>
                 <div className='mt-4 flex flex-col items-center gap-1'>
                   <p className='w-full text-center font-Raleway font-bold text-[#fead41]'>#{infoHolder.projeto.codigo}</p>
                   <h1 className='w-full text-center font-Raleway text-xl font-bold leading-none tracking-tight'>{infoHolder.projeto.nome}</h1>
                 </div>
               </>
             ) : null}
-            <h1 className='mt-4 w-full rounded-md bg-primary/80 p-2 text-center font-bold text-white'>CLIENTE</h1>
+            <h1 className='mt-4 w-full rounded-md bg-primary/80 p-2 text-center font-bold text-primary-foreground'>CLIENTE</h1>
             <div className='mt-1 flex w-full flex-col items-center gap-2 lg:flex-row'>
               <div className='w-full lg:w-[50%]'>
                 <TextInput
@@ -469,7 +469,7 @@ function NewCall({ opportunity, session, closeModal }: NewCallProps) {
                 </div>
               </div>
             ) : null}
-            <h1 className='mt-4 w-full rounded-md bg-primary/80 p-2 text-center font-bold text-white'>PREMISSAS</h1>
+            <h1 className='mt-4 w-full rounded-md bg-primary/80 p-2 text-center font-bold text-primary-foreground'>PREMISSAS</h1>
             {infoHolder.tipoSolicitacao != 'ANÁLISE DE CRÉDITO' ? (
               <div className='mt-1 flex w-full flex-col items-center gap-2 lg:flex-row'>
                 <div className='w-full lg:w-1/3'>

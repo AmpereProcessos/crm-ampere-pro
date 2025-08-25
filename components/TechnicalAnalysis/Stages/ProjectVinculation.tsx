@@ -112,7 +112,7 @@ function ProjectVinculation({ requestInfo, setRequestInfo, resetSolicitationType
           />
         </div>
         {isExistingProject ? <OperationProjectsBlock handleVinculation={handleVinculation} handleUnvinculation={handleUnvinculation} /> : null}
-        <h1 className='rounded bg-black py-1 text-center text-lg font-bold uppercase text-white'>CONFIRMAÇÃO DAS INFORMAÇÕES</h1>
+        <h1 className='rounded bg-black py-1 text-center text-lg font-bold uppercase text-primary-foreground'>CONFIRMAÇÃO DAS INFORMAÇÕES</h1>
         <div className='flex w-full flex-col items-center gap-2 lg:flex-row'>
           <div className='w-full lg:w-[50%]'>
             <TextInput
@@ -252,14 +252,14 @@ function ProjectVinculation({ requestInfo, setRequestInfo, resetSolicitationType
         </div>
       </div>
       <div className='mt-2 flex w-full justify-between'>
-        <button onClick={() => resetSolicitationType()} className='rounded p-2 font-bold text-primary/50 duration-300 ease-in-out hover:scale-105'>
+        <button onClick={() => resetSolicitationType()} className='rounded p-2 font-bold text-primary/70 duration-300 ease-in-out hover:scale-105'>
           Voltar
         </button>
         <button
           onClick={() => {
             validateFields();
           }}
-          className='rounded p-2 font-bold hover:bg-black hover:text-white'
+          className='rounded p-2 font-bold hover:bg-black hover:text-primary-foreground'
         >
           Prosseguir
         </button>

@@ -206,16 +206,16 @@ function SystemInfo({ requestInfo, setRequestInfo, requireFiles = true, goToNext
               <FaSolarPanel />
               <h1 className='text-sm font-medium text-[#fead41]'>MÓDULOS</h1>
             </div>
-            <h1 className='text-xs font-medium text-primary/50'>{getModulesStr(proposal.kit.modulos, proposal.kit.tipo)}</h1>
+            <h1 className='text-xs font-medium text-primary/70'>{getModulesStr(proposal.kit.modulos, proposal.kit.tipo)}</h1>
             <div className='flex items-center gap-2'>
               <TbTopologyStar />
               <h1 className='text-sm font-medium text-[#fead41]'>INVERSORES</h1>
             </div>
-            <h1 className='text-xs font-medium text-primary/50'>{getInverterStr(proposal.kit.inversores, proposal.kit.tipo)}</h1>
+            <h1 className='text-xs font-medium text-primary/70'>{getInverterStr(proposal.kit.inversores, proposal.kit.tipo)}</h1>
             <div className='flex w-full items-center justify-end'>
               <button
                 onClick={() => selectKit(proposal.kit)}
-                className='rounded border border-black p-1 px-4 text-xs font-medium duration-300 ease-in-out hover:bg-black hover:text-white'
+                className='rounded border border-black p-1 px-4 text-xs font-medium duration-300 ease-in-out hover:bg-black hover:text-primary-foreground'
               >
                 UTILIZAR KIT
               </button>
@@ -228,14 +228,14 @@ function SystemInfo({ requestInfo, setRequestInfo, requireFiles = true, goToNext
             <>
               {selectedKits.map((kit, index) => (
                 <div key={index} className='flex w-full items-center justify-between pb-1'>
-                  <p className='italic text-primary/50'>{kit.nome}</p>
+                  <p className='italic text-primary/70'>{kit.nome}</p>
                   <button
                     onClick={() => {
                       var currentSelectedKitsCopy = [...selectedKits];
                       currentSelectedKitsCopy.splice(index, 1);
                       setSelectedKits(currentSelectedKitsCopy);
                     }}
-                    className='text-primary/50 hover:text-red-500'
+                    className='text-primary/70 hover:text-red-500'
                   >
                     <IoMdRemoveCircle />
                   </button>
@@ -252,7 +252,7 @@ function SystemInfo({ requestInfo, setRequestInfo, requireFiles = true, goToNext
             </>
           ) : (
             <div className='flex h-[80px] w-full items-center justify-center'>
-              <p className='text-sm italic text-primary/50'>Sem kits selecionados...</p>
+              <p className='text-sm italic text-primary/70'>Sem kits selecionados...</p>
             </div>
           )}
         </div>
@@ -274,7 +274,7 @@ function SystemInfo({ requestInfo, setRequestInfo, requireFiles = true, goToNext
                 <div
                   onClick={() => ordenateKitsByPower('ASC')}
                   className={`flex h-[46px] w-full cursor-pointer items-center justify-center rounded-md border border-[#FEAD41] p-1 text-center lg:w-fit ${
-                    filters.potOrder == 'ASC' ? 'bg-[#FEAD41] text-white' : 'bg-transparent text-[#FEAD41]'
+                    filters.potOrder == 'ASC' ? 'bg-[#FEAD41] text-primary-foreground' : 'bg-transparent text-[#FEAD41]'
                   }`}
                 >
                   POTÊNCIA CRESCENTE
@@ -282,7 +282,7 @@ function SystemInfo({ requestInfo, setRequestInfo, requireFiles = true, goToNext
                 <div
                   onClick={() => ordenateKitsByPower('DESC')}
                   className={`flex h-[46px] w-full cursor-pointer items-center justify-center rounded-md border border-[#FEAD41] p-1 text-center lg:w-fit ${
-                    filters.potOrder == 'DESC' ? 'bg-[#FEAD41] text-white' : 'bg-transparent text-[#FEAD41]'
+                    filters.potOrder == 'DESC' ? 'bg-[#FEAD41] text-primary-foreground' : 'bg-transparent text-[#FEAD41]'
                   }`}
                 >
                   POTÊNCIA DECRESCENTE
@@ -357,7 +357,7 @@ function SystemInfo({ requestInfo, setRequestInfo, requireFiles = true, goToNext
       </div>
 
       <div className='mt-2 flex w-full justify-between'>
-        <button onClick={() => goToPreviousStage()} className='rounded p-2 font-bold text-primary/50 duration-300 ease-in-out hover:scale-105'>
+        <button onClick={() => goToPreviousStage()} className='rounded p-2 font-bold text-primary/70 duration-300 ease-in-out hover:scale-105'>
           Voltar
         </button>
         <button
@@ -366,7 +366,7 @@ function SystemInfo({ requestInfo, setRequestInfo, requireFiles = true, goToNext
               formatAndProceed();
             }
           }}
-          className='rounded p-2 font-bold hover:bg-black hover:text-white'
+          className='rounded p-2 font-bold hover:bg-black hover:text-primary-foreground'
         >
           Prosseguir
         </button>

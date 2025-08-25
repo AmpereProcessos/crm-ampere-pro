@@ -551,7 +551,7 @@ function ReviewInfo({
                   comoChegouAoCliente: e.target.value,
                 })
               }
-              className='block h-[80px] w-full resize-none rounded-lg border border-primary/30 bg-gray-50 p-2.5 text-center text-primary/90 outline-hidden focus:border-blue-500 focus:ring-blue-500 dark:border-primary/60 dark:bg-primary/70 dark:text-white dark:placeholder-primary/40 dark:focus:border-blue-500 dark:focus:ring-blue-500'
+              className='block h-[80px] w-full resize-none rounded-lg border border-primary/30 bg-primary/10p-2.5 text-center text-primary/90 outline-hidden focus:border-blue-500 focus:ring-blue-500 dark:border-primary/60 dark:bg-primary/70  dark:placeholder-primary/40 dark:focus:border-blue-500 dark:focus:ring-blue-500'
             />
           </div>
           <div className='mt-2 flex w-full flex-col items-center self-center px-2'>
@@ -567,7 +567,7 @@ function ReviewInfo({
                   obsComercial: e.target.value,
                 })
               }
-              className='block h-[80px] w-full resize-none rounded-lg border border-primary/30 bg-gray-50 p-2.5 text-center text-primary/90 outline-hidden focus:border-blue-500 focus:ring-blue-500 dark:border-primary/60 dark:bg-primary/70 dark:text-white dark:placeholder-primary/40 dark:focus:border-blue-500 dark:focus:ring-blue-500'
+              className='block h-[80px] w-full resize-none rounded-lg border border-primary/30 bg-primary/10p-2.5 text-center text-primary/90 outline-hidden focus:border-blue-500 focus:ring-blue-500 dark:border-primary/60 dark:bg-primary/70  dark:placeholder-primary/40 dark:focus:border-blue-500 dark:focus:ring-blue-500'
             />
           </div>
         </div>
@@ -652,7 +652,7 @@ function ReviewInfo({
                     cuidadosContatoJornada: e.target.value,
                   })
                 }
-                className='block h-[80px] w-full resize-none rounded-lg border border-primary/30 bg-gray-50 p-2.5 text-center text-primary/90 outline-hidden focus:border-blue-500 focus:ring-blue-500 dark:border-primary/60 dark:bg-primary/70 dark:text-white dark:placeholder-primary/40 dark:focus:border-blue-500 dark:focus:ring-blue-500'
+                className='block h-[80px] w-full resize-none rounded-lg border border-primary/30 bg-primary/10p-2.5 text-center text-primary/90 outline-hidden focus:border-blue-500 focus:ring-blue-500 dark:border-primary/60 dark:bg-primary/70  dark:placeholder-primary/40 dark:focus:border-blue-500 dark:focus:ring-blue-500'
               />
             </div>
           </div>
@@ -953,7 +953,7 @@ function ReviewInfo({
               </div>
             </div>
           </div>
-          <h1 className='w-full text-start font-medium text-primary/50'>LISTA DE EQUIPAMENTOS</h1>
+          <h1 className='w-full text-start font-medium text-primary/70'>LISTA DE EQUIPAMENTOS</h1>
           <div className='flex w-full flex-col flex-wrap justify-around gap-2 lg:flex-row'>
             {proposeInfo.produtos.map((product, index) => (
               <div key={index} className='mt-1 flex w-full flex-col rounded-md border border-primary/30 p-2'>
@@ -969,23 +969,23 @@ function ReviewInfo({
                   <div className='flex w-full grow items-center justify-end gap-2 pl-2 lg:w-fit'>
                     <div className='flex items-center gap-1'>
                       <FaIndustry size={15} />
-                      <p className='text-[0.6rem] font-light text-primary/50'>{product.fabricante}</p>
+                      <p className='text-[0.6rem] font-light text-primary/70'>{product.fabricante}</p>
                     </div>
                     <div className='flex items-center gap-1'>
                       <ImPower size={15} />
-                      <p className='text-[0.6rem] font-light text-primary/50'>{product.potencia} W</p>
+                      <p className='text-[0.6rem] font-light text-primary/70'>{product.potencia} W</p>
                     </div>
                     <div className='flex items-center gap-1'>
                       <AiOutlineSafety size={15} />
-                      <p className='text-[0.6rem] font-light text-primary/50'>{product.garantia} ANOS</p>
+                      <p className='text-[0.6rem] font-light text-primary/70'>{product.garantia} ANOS</p>
                     </div>
                   </div>
                 </div>
               </div>
             ))}
           </div>
-          <h1 className='w-full rounded-md bg-[#fead41] p-1 text-center text-sm font-medium text-white'>SERVIÇOS</h1>
-          <h1 className='w-full text-start font-medium text-primary/50'>LISTA DE SERVIÇOS</h1>
+          <h1 className='w-full rounded-md bg-[#fead41] p-1 text-center text-sm font-medium text-primary-foreground'>SERVIÇOS</h1>
+          <h1 className='w-full text-start font-medium text-primary/70'>LISTA DE SERVIÇOS</h1>
           <div className='flex w-full flex-col flex-wrap justify-around gap-2 lg:flex-row'>
             {proposeInfo.servicos.map((service, index) => (
               <div key={index} className='mt-1 flex w-full flex-col rounded-md border border-primary/30 p-2'>
@@ -999,7 +999,7 @@ function ReviewInfo({
                   <div className='flex  grow items-center justify-end gap-2 pl-2'>
                     <div className='flex items-center gap-1'>
                       <AiOutlineSafety size={15} />
-                      <p className='text-[0.6rem] font-light text-primary/50'>{service.garantia} ANOS</p>
+                      <p className='text-[0.6rem] font-light text-primary/70'>{service.garantia} ANOS</p>
                     </div>
                   </div>
                 </div>
@@ -1435,7 +1435,7 @@ function ReviewInfo({
         </div>
         <div className='flex w-full flex-col bg-background pb-2'>
           <span className='py-2 text-center text-lg font-bold uppercase text-[#15599a]'>PLANO INTEGRADO DE OPERAÇÃO E MANUTENÇÃO</span>
-          <p className='text-center text-sm italic text-primary/50'>Escolha, se houver, o plano de Operação & Manutenção incluso no projeto.</p>
+          <p className='text-center text-sm italic text-primary/70'>Escolha, se houver, o plano de Operação & Manutenção incluso no projeto.</p>
           <div className='flex w-full items-center justify-center p-2'>
             {requestInfo.possuiOeM == 'SIM' ? (
               <div className='flex w-[350px] flex-col items-center rounded-sm border border-primary/50 p-3'>
@@ -1446,13 +1446,13 @@ function ReviewInfo({
                   <h1 className='text-sm font-black leading-none tracking-tight'>{requestInfo.planoOeM}</h1>
                 </div>
                 <div className='flex w-full items-center justify-end'>
-                  <h1 className='rounded-full bg-black px-2 py-1 text-[0.65rem] font-bold text-white lg:text-xs'>
+                  <h1 className='rounded-full bg-black px-2 py-1 text-[0.65rem] font-bold text-primary-foreground lg:text-xs'>
                     {formatToMoney(requestInfo.valorOeMOuSeguro || 0)}
                   </h1>
                 </div>
               </div>
             ) : (
-              <p className='text-sm tracking-tight text-primary/50'>PLANO NÃO DEFINIDO</p>
+              <p className='text-sm tracking-tight text-primary/70'>PLANO NÃO DEFINIDO</p>
             )}
           </div>
         </div>
@@ -1935,7 +1935,7 @@ function ReviewInfo({
                     descricaoNegociacao: e.target.value,
                   })
                 }
-                className='block h-[80px] w-full resize-none rounded-lg border border-primary/30 bg-gray-50 p-2.5 text-center text-primary/90 outline-hidden focus:border-blue-500 focus:ring-blue-500 dark:border-primary/60 dark:bg-primary/70 dark:text-white dark:placeholder-primary/40 dark:focus:border-blue-500 dark:focus:ring-blue-500'
+                className='block h-[80px] w-full resize-none rounded-lg border border-primary/30 bg-primary/10p-2.5 text-center text-primary/90 outline-hidden focus:border-blue-500 focus:ring-blue-500 dark:border-primary/60 dark:bg-primary/70  dark:placeholder-primary/40 dark:focus:border-blue-500 dark:focus:ring-blue-500'
               />
             </div>
           </div>
@@ -1988,7 +1988,7 @@ function ReviewInfo({
           <span className='py-2 text-center text-lg font-bold uppercase text-[#15599a]'>DOCUMENTAÇÃO</span>
           <div className='flex w-full flex-wrap items-start justify-around gap-2'>
             {Object.entries(documentsFile).map(([key, value]) => (
-              <div className='flex items-center gap-1 rounded-md bg-blue-800 px-2 py-1 text-white'>
+              <div className='flex items-center gap-1 rounded-md bg-blue-800 px-2 py-1 text-primary-foreground'>
                 <MdAttachFile />
                 <p className='text-sm'>{key}</p>
               </div>
@@ -2000,7 +2000,7 @@ function ReviewInfo({
             onClick={() => {
               goToPreviousStage();
             }}
-            className="rounded p-2 font-bold text-primary/50 duration-300 hover:scale-105"
+            className="rounded p-2 font-bold text-primary/70 duration-300 hover:scale-105"
           >
             Voltar
           </button> */}
@@ -2009,7 +2009,7 @@ function ReviewInfo({
               requestContract();
             }}
             disabled={isPending || isSuccess}
-            className='rounded p-2 font-bold hover:bg-black hover:text-white'
+            className='rounded p-2 font-bold hover:bg-black hover:text-primary-foreground'
           >
             {isPending ? 'Criando solicitação...' : null}
             {isSuccess ? 'Criação concluida!' : null}

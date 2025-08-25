@@ -205,7 +205,7 @@ function KitsSelection({
   }
   function renderSystemCompostion() {
     const data = getSystemCompositionData();
-    if (!data) return <p className='w-full text-center text-xs italic text-primary/50'>Nenhum kit selecionado para a composição do sistema...</p>;
+    if (!data) return <p className='w-full text-center text-xs italic text-primary/70'>Nenhum kit selecionado para a composição do sistema...</p>;
     const { nome, topologia, produtos, servicos, valor, potenciaPico } = data;
     return (
       <AnimatePresence>
@@ -231,7 +231,7 @@ function KitsSelection({
               <p className='text-[0.65rem] font-light lg:text-sm'>{topologia}</p>
             </div>
           </div>
-          <h1 className='mb-0 mt-2 text-xs font-bold leading-none tracking-tight text-primary/50 lg:text-sm'>PRODUTOS</h1>
+          <h1 className='mb-0 mt-2 text-xs font-bold leading-none tracking-tight text-primary/70 lg:text-sm'>PRODUTOS</h1>
           {produtos.map((product, index) => (
             <div key={index} className='mt-1 flex w-full flex-col rounded-md border border-primary/30 p-2'>
               <div className='flex w-full flex-col items-start justify-between gap-2 lg:flex-row lg:items-center'>
@@ -246,21 +246,21 @@ function KitsSelection({
                 <div className='flex w-full grow items-center justify-end gap-2 pl-2 lg:w-fit'>
                   <div className='flex items-center gap-1'>
                     <FaIndustry size={12} />
-                    <p className='text-[0.6rem] font-light text-primary/50'>{product.fabricante}</p>
+                    <p className='text-[0.6rem] font-light text-primary/70'>{product.fabricante}</p>
                   </div>
                   <div className='flex items-center gap-1'>
                     <ImPower size={12} />
-                    <p className='text-[0.6rem] font-light text-primary/50'>{product.potencia} W</p>
+                    <p className='text-[0.6rem] font-light text-primary/70'>{product.potencia} W</p>
                   </div>
                   <div className='flex items-center gap-1'>
                     <AiOutlineSafety size={12} />
-                    <p className='text-[0.6rem] font-light text-primary/50'>{product.garantia} ANOS</p>
+                    <p className='text-[0.6rem] font-light text-primary/70'>{product.garantia} ANOS</p>
                   </div>
                 </div>
               </div>
             </div>
           ))}
-          <h1 className='my-2 mb-0 text-xs font-bold leading-none tracking-tight text-primary/50 lg:text-sm'>SERVIÇOS</h1>
+          <h1 className='my-2 mb-0 text-xs font-bold leading-none tracking-tight text-primary/70 lg:text-sm'>SERVIÇOS</h1>
           {servicos.map((service, index) => (
             <div key={index} className='mt-1 flex w-full flex-col rounded-md border border-primary/30 p-2'>
               <div className='flex w-full items-center justify-between gap-2'>
@@ -282,14 +282,14 @@ function KitsSelection({
       return (
         <div className='flex items-center gap-1 rounded-lg bg-green-500 px-2 py-1 lg:py-2'>
           <TrendingUp size={15} color='white' />
-          <h1 className='text-[0.7rem] font-bold text-white'>{formatDecimalPlaces(achieved - expected)} kWp acima do esperado</h1>
+          <h1 className='text-[0.7rem] font-bold text-primary-foreground'>{formatDecimalPlaces(achieved - expected)} kWp acima do esperado</h1>
         </div>
       );
 
     return (
       <div className='flex items-center gap-1 rounded-lg bg-orange-500 px-2 py-1 lg:py-2'>
         <TrendingDown size={15} color='white' />
-        <h1 className='text-[0.7rem] font-bold text-white'>{formatDecimalPlaces(expected - achieved)} kWp abaixo do esperado</h1>
+        <h1 className='text-[0.7rem] font-bold text-primary-foreground'>{formatDecimalPlaces(expected - achieved)} kWp abaixo do esperado</h1>
       </div>
     );
   }
@@ -384,7 +384,7 @@ function KitsSelection({
         </h1>
       </div>
       <div className='flex w-full flex-col items-center justify-center'>
-        <h1 className='text-center font-light italic text-primary/50'>
+        <h1 className='text-center font-light italic text-primary/70'>
           Calculamos, com base nas premissas preenchidas, que a potência pico ideal para esse projeto é de aproximadamente:
         </h1>
         <h1 className='text-center font-medium italic text-primary/80'>{formatDecimalPlaces(ideal)} kWp</h1>
@@ -397,7 +397,9 @@ function KitsSelection({
             {renderPowerComparison({ expected: ideal, achieved: getSelectedKitsTotalPower(selectedKits) })}
             <div className='flex items-center gap-1 rounded-lg bg-cyan-500 px-2 py-1 lg:py-2'>
               <FaBolt size={12} color='white' />
-              <h1 className='text-[0.7rem] font-black text-white'>{formatDecimalPlaces(getSelectedKitsTotalPower(selectedKits), 2)} kWp</h1>
+              <h1 className='text-[0.7rem] font-black text-primary-foreground'>
+                {formatDecimalPlaces(getSelectedKitsTotalPower(selectedKits), 2)} kWp
+              </h1>
             </div>
           </div>
         </div>
@@ -411,7 +413,7 @@ function KitsSelection({
               {userHasKitEditPermission ? (
                 <button
                   onClick={() => setCreateProposalKitModalIsOpen(true)}
-                  className={`w-full rounded-sm border border-black bg-black px-2 py-1 font-bold tracking-tight text-white hover:bg-primary/80 lg:w-fit`}
+                  className={`w-full rounded-sm border border-black bg-black px-2 py-1 font-bold tracking-tight text-primary-foreground hover:bg-primary/80 lg:w-fit`}
                 >
                   CRIAR KIT PARA PROPOSTA
                 </button>
@@ -422,8 +424,8 @@ function KitsSelection({
                 className={cn(
                   'w-full rounded-sm border border-[#fead61] px-2 py-1 font-bold tracking-tight lg:w-fit',
                   queryType == 'KITS POR PREMISSA'
-                    ? 'bg-[#fead61] text-white hover:bg-transparent hover:text-[#fead61]'
-                    : 'text-[#fead61] hover:bg-[#fead61] hover:text-white'
+                    ? 'bg-[#fead61] text-primary-foreground hover:bg-transparent hover:text-[#fead61]'
+                    : 'text-[#fead61] hover:bg-[#fead61] hover:text-primary-foreground'
                 )}
               >
                 MOSTRAR KITS IDEAIS
@@ -433,8 +435,8 @@ function KitsSelection({
                 className={cn(
                   'w-full rounded-sm border border-[#15599a] px-2 py-1  font-bold tracking-tight lg:w-fit',
                   queryType == 'TODOS OS KITS'
-                    ? 'bg-[#15599a] text-white hover:bg-transparent hover:text-[#15599a]'
-                    : 'text-[#15599a] hover:bg-[#15599a] hover:text-white'
+                    ? 'bg-[#15599a] text-primary-foreground hover:bg-transparent hover:text-[#15599a]'
+                    : 'text-[#15599a] hover:bg-[#15599a] hover:text-primary-foreground'
                 )}
               >
                 MOSTRAR TODOS OS KITS
@@ -443,7 +445,7 @@ function KitsSelection({
                 onClick={() => setShowFilters((prev) => !prev)}
                 className={cn(
                   'flex w-full items-center justify-center rounded-sm border border-[#15599a] px-2 py-1 lg:w-fit',
-                  showFilters ? 'bg-[#15599a] text-white' : 'bg-background text-[#15599a]'
+                  showFilters ? 'bg-[#15599a] text-primary-foreground' : 'bg-background text-[#15599a]'
                 )}
               >
                 {showFilters ? <VscFilterFilled style={{ fontSize: '22px' }} /> : <VscFilter style={{ fontSize: '22px' }} />}
@@ -501,10 +503,10 @@ function KitsSelection({
         />
       ) : null}
       <div className='flex w-full items-center justify-between gap-2 px-1'>
-        <button onClick={() => moveToPreviousStage()} className='rounded p-2 font-bold text-primary/50 duration-300 hover:scale-105'>
+        <button onClick={() => moveToPreviousStage()} className='rounded p-2 font-bold text-primary/70 duration-300 hover:scale-105'>
           Voltar
         </button>
-        <button onClick={() => handleProceed()} className='rounded p-2 font-bold hover:bg-black hover:text-white'>
+        <button onClick={() => handleProceed()} className='rounded p-2 font-bold hover:bg-black hover:text-primary-foreground'>
           Prosseguir
         </button>
       </div>

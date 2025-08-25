@@ -90,11 +90,11 @@ function NewProposalPage({ session, opportunityId }: NewProposalPageprops) {
             </div>
             <div className='flex w-full flex-col items-center lg:w-1/3'>
               <h1 className='text-[0.55rem] text-primary/40 lg:text-sm'>NOME DA OPORTUNIDADE</h1>
-              <h1 className='font-bold text-white'>{opportunity.nome}</h1>
+              <h1 className='font-bold text-primary-foreground'>{opportunity.nome}</h1>
             </div>
             <div className='flex w-full flex-col items-center lg:w-1/3'>
               <h1 className='text-[0.55rem] text-primary/40 lg:text-sm'>CÓD. DO PROJETO</h1>
-              <h1 className='font-bold text-white'># {opportunity.identificador}</h1>
+              <h1 className='font-bold text-primary-foreground'># {opportunity.identificador}</h1>
             </div>
           </div>
           {saleCategory === 'KIT' ? (

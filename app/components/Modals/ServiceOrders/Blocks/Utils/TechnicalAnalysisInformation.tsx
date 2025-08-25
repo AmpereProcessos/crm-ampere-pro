@@ -14,19 +14,19 @@ function TechnicalAnalysisInformation({ analysis }: TechnicalAnalysisInformation
   return (
     <div className='flex w-full flex-col gap-y-2 py-2'>
       <>
-        <h1 className='w-full bg-primary/50 p-1 text-center text-xs font-medium text-white'>DETALHES</h1>
+        <h1 className='w-full bg-primary/50 p-1 text-center text-xs font-medium text-primary-foreground'>DETALHES</h1>
         <div className='flex w-full flex-col items-center justify-between gap-2 lg:flex-row'>
           <div className='flex flex-col items-center gap-1 lg:items-start'>
             <div className='flex items-center gap-1'>
               <TbAtom size={12} />
-              <p className='text-[0.65rem] font-medium text-primary/50'>MATERIAL DA ESTRUTURA</p>
+              <p className='text-[0.65rem] font-medium text-primary/70'>MATERIAL DA ESTRUTURA</p>
             </div>
             <p className='text-[0.6rem] font-medium leading-none tracking-tight'>{analysis.detalhes.materialEstrutura || 'NÃO DEFINIDO'}</p>
           </div>
           <div className='flex flex-col items-center gap-1 lg:items-end'>
             <div className='flex items-center gap-1'>
               <MdOutlineRoofing size={12} />
-              <p className='text-[0.65rem] font-medium text-primary/50'>TIPO DA ESTRUTURA</p>
+              <p className='text-[0.65rem] font-medium text-primary/70'>TIPO DA ESTRUTURA</p>
             </div>
             <p className='text-[0.6rem] font-medium leading-none tracking-tight'>{analysis.detalhes.tipoEstrutura || 'NÃO DEFINIDO'}</p>
           </div>
@@ -35,19 +35,19 @@ function TechnicalAnalysisInformation({ analysis }: TechnicalAnalysisInformation
           <div className='flex flex-col items-center gap-1 lg:items-start'>
             <div className='flex items-center gap-1'>
               <FaRegCompass size={12} />
-              <p className='text-[0.65rem] font-medium text-primary/50'>ORIENTAÇÃO</p>
+              <p className='text-[0.65rem] font-medium text-primary/70'>ORIENTAÇÃO</p>
             </div>
             <p className='text-[0.6rem] font-medium leading-none tracking-tight'>{analysis.detalhes.orientacao || 'NÃO DEFINIDO'}</p>
           </div>
           <div className='flex flex-col items-center gap-1 lg:items-end'>
             <div className='flex items-center gap-1'>
               <RxSquare size={12} />
-              <p className='text-[0.65rem] font-medium text-primary/50'>TIPO DA TELHA</p>
+              <p className='text-[0.65rem] font-medium text-primary/70'>TIPO DA TELHA</p>
             </div>
             <p className='text-[0.6rem] font-medium leading-none tracking-tight'>{analysis.detalhes.tipoTelha || 'NÃO DEFINIDO'}</p>
           </div>
         </div>
-        <h1 className='w-full bg-primary/50 p-1 text-center text-xs font-medium text-white'>PADRÕES</h1>
+        <h1 className='w-full bg-primary/50 p-1 text-center text-xs font-medium text-primary-foreground'>PADRÕES</h1>
         <div className='flex w-full flex-col gap-1'>
           {analysis.padrao.map((info, index) => (
             <div key={index} className='flex w-full flex-col rounded-sm border border-primary/50 p-3'>
@@ -63,14 +63,14 @@ function TechnicalAnalysisInformation({ analysis }: TechnicalAnalysisInformation
                 <div className='flex flex-col items-center gap-1 lg:items-start'>
                   <div className='flex items-center gap-1'>
                     <MdDashboard size={12} />
-                    <p className='text-[0.65rem] font-medium text-primary/50'>TIPO</p>
+                    <p className='text-[0.65rem] font-medium text-primary/70'>TIPO</p>
                   </div>
                   <p className='text-[0.6rem] font-medium leading-none tracking-tight'>{info.tipo}</p>
                 </div>
                 <div className='flex flex-col items-center gap-1 lg:items-end'>
                   <div className='flex items-center gap-1'>
                     <TbPlugConnected size={12} />
-                    <p className='text-[0.65rem] font-medium text-primary/50'>LIGAÇÃO</p>
+                    <p className='text-[0.65rem] font-medium text-primary/70'>LIGAÇÃO</p>
                   </div>
                   <p className='text-[0.6rem] font-medium leading-none tracking-tight'>{info.ligacao}</p>
                 </div>
@@ -79,14 +79,14 @@ function TechnicalAnalysisInformation({ analysis }: TechnicalAnalysisInformation
                 <div className='flex flex-col items-center gap-1 lg:items-start'>
                   <div className='flex items-center gap-1'>
                     <AiOutlineArrowDown size={12} />
-                    <p className='text-[0.65rem] font-medium text-primary/50'>ENTRADA</p>
+                    <p className='text-[0.65rem] font-medium text-primary/70'>ENTRADA</p>
                   </div>
                   <p className='text-[0.6rem] font-medium leading-none tracking-tight'>{info.tipoEntrada}</p>
                 </div>
                 <div className='flex flex-col items-center gap-1 lg:items-end'>
                   <div className='flex items-center gap-1'>
                     <AiOutlineArrowUp size={12} />
-                    <p className='text-[0.65rem] font-medium text-primary/50'>SAÍDA</p>
+                    <p className='text-[0.65rem] font-medium text-primary/70'>SAÍDA</p>
                   </div>
                   <p className='text-[0.6rem] font-medium leading-none tracking-tight'>{info.tipoSaida}</p>
                 </div>
@@ -96,14 +96,14 @@ function TechnicalAnalysisInformation({ analysis }: TechnicalAnalysisInformation
                   <div className='flex flex-col items-center gap-1 lg:items-start'>
                     <div className='flex items-center gap-1'>
                       <MdOutlineSettingsInputComponent size={12} />
-                      <p className='text-[0.65rem] font-medium text-primary/50'>NOVA AMPERAGEM</p>
+                      <p className='text-[0.65rem] font-medium text-primary/70'>NOVA AMPERAGEM</p>
                     </div>
                     <p className='text-[0.6rem] font-medium leading-none tracking-tight'>{info.novaAmperagem}</p>
                   </div>
                   <div className='flex flex-col items-center gap-1 lg:items-end'>
                     <div className='flex items-center gap-1'>
                       <TbPlugConnected size={12} />
-                      <p className='text-[0.65rem] font-medium text-primary/50'>NOVA LIGAÇÃO</p>
+                      <p className='text-[0.65rem] font-medium text-primary/70'>NOVA LIGAÇÃO</p>
                     </div>
                     <p className='text-[0.6rem] font-medium leading-none tracking-tight'>{info.novaLigacao || '-'}</p>
                   </div>
@@ -112,10 +112,10 @@ function TechnicalAnalysisInformation({ analysis }: TechnicalAnalysisInformation
             </div>
           ))}
         </div>
-        <h1 className='w-full bg-primary/50 p-1 text-center text-xs font-medium text-white'>SUPRIMENTOS</h1>
+        <h1 className='w-full bg-primary/50 p-1 text-center text-xs font-medium text-primary-foreground'>SUPRIMENTOS</h1>
         <div className='flex items-center gap-1'>
           <MdSettingsInputComponent size={12} />
-          <p className='text-[0.65rem] font-medium text-primary/50'>ITENS DE INSUMO</p>
+          <p className='text-[0.65rem] font-medium text-primary/70'>ITENS DE INSUMO</p>
         </div>
         <div className='flex w-full flex-wrap items-center gap-2'>
           {analysis.suprimentos?.itens.map((item, index) => (
@@ -138,14 +138,14 @@ function TechnicalAnalysisInformation({ analysis }: TechnicalAnalysisInformation
             <div key={index} className='flex w-full flex-col rounded-md border border-primary/50'>
               <div className='flex min-h-[25px] w-full flex-col items-start justify-between gap-1 lg:flex-row'>
                 <div className='flex w-full items-center justify-center rounded-br-md rounded-tl-md bg-cyan-700 lg:w-[40%]'>
-                  <p className='w-full text-center text-xs font-medium text-white'>{obs.topico}</p>
+                  <p className='w-full text-center text-xs font-medium text-primary-foreground'>{obs.topico}</p>
                 </div>
               </div>
-              <h1 className='w-full p-2 text-center text-xs font-medium tracking-tight text-primary/50'>{obs.descricao}</h1>
+              <h1 className='w-full p-2 text-center text-xs font-medium tracking-tight text-primary/70'>{obs.descricao}</h1>
             </div>
           ))
         ) : (
-          <p className='w-full text-center text-sm font-medium tracking-tight text-primary/50'>Nenhuma descritivo adicionado.</p>
+          <p className='w-full text-center text-sm font-medium tracking-tight text-primary/70'>Nenhuma descritivo adicionado.</p>
         )}
       </>
     </div>

@@ -16,7 +16,7 @@ function CustomizationBlock(node: TProcessSettingNode) {
             {node.data.entidade.identificacao == 'Notification' ? <Notification {...node} /> : null}
           </>
         ) : (
-          <h1 className='w-full max-w-full break-words rounded-sm border border-primary/50 bg-gray-50 p-1 text-center text-[0.65rem] tracking-tight text-primary/50'>
+          <h1 className='w-full max-w-full break-words rounded-sm border border-primary/50 bg-primary/10p-1 text-center text-[0.65rem] tracking-tight text-primary/70'>
             ESSA ENTIDADE DE RETORNO NÃO É CUSTOMIZÁVEL E SUAS INFORMAÇÕES SÃO OBTIDAS POR PADRÃO.
           </h1>
         )}

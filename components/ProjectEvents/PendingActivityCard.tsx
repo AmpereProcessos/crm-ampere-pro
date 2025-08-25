@@ -35,18 +35,18 @@ function PendingActivityCard({ activity }: PendingActivityCardProps) {
             <Link href={`/comercial/oportunidades/id/${info.oportunidade.id}`}>
               <div className='flex items-center gap-1'>
                 <BsCode color='#fead41' size={15} />
-                <p className='mt-1 font-bold text-primary/50 text-xs hover:text-cyan-500'>{info.oportunidade.nome}</p>
+                <p className='mt-1 font-bold text-primary/70 text-xs hover:text-cyan-500'>{info.oportunidade.nome}</p>
               </div>
             </Link>
           ) : null}
 
-          <h1 className='my-2 w-full rounded-md bg-primary/10 p-2 py-1 text-center font-medium text-primary/50 text-xs'>{activity.descricao}</h1>
-          <h1 className='text-primary/50 text-xs leading-none tracking-tight'>RESPONSÁVEIS</h1>
+          <h1 className='my-2 w-full rounded-md bg-primary/10 p-2 py-1 text-center font-medium text-primary/70 text-xs'>{activity.descricao}</h1>
+          <h1 className='text-primary/70 text-xs leading-none tracking-tight'>RESPONSÁVEIS</h1>
           <div className='flex grow flex-wrap items-center gap-2'>
             {activity.responsaveis.map((resp) => (
               <div className='flex items-center gap-2 rounded-lg border border-cyan-500 p-1 px-2 shadow-md' key={resp.id}>
                 <Avatar fallback={formatNameAsInitials(resp.nome)} height={15} url={resp.avatar_url || undefined} width={15} />
-                <p className='font-medium text-[0.65rem] text-primary/50 tracking-tight'>{resp.nome}</p>
+                <p className='font-medium text-[0.65rem] text-primary/70 tracking-tight'>{resp.nome}</p>
               </div>
             ))}
           </div>

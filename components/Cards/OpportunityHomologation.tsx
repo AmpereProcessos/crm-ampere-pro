@@ -22,7 +22,7 @@ function getTagColor(status: string) {
 function getStatusTag(status: string) {
   if (status == 'PENDENTE')
     return (
-      <h1 className={`w-fit self-center rounded-sm border border-primary/50 p-1 text-center text-[0.6rem] font-black text-primary/50`}>{status}</h1>
+      <h1 className={`w-fit self-center rounded-sm border border-primary/50 p-1 text-center text-[0.6rem] font-black text-primary/70`}>{status}</h1>
     );
   if (status == 'ELABORANDO DOCUMENTAÇÕES')
     return <h1 className={`w-fit self-center rounded-sm border border-blue-500 p-1 text-center text-[0.6rem] font-black text-blue-500`}>{status}</h1>;
@@ -43,7 +43,7 @@ function getStatusTag(status: string) {
       <h1 className={`w-fit self-center rounded-sm border border-green-500 p-1 text-center text-[0.6rem] font-black text-green-500`}>{status}</h1>
     );
   return (
-    <h1 className={`w-fit self-center rounded-sm border border-primary/50 p-1 text-center text-[0.6rem] font-black text-primary/50`}>{status}</h1>
+    <h1 className={`w-fit self-center rounded-sm border border-primary/50 p-1 text-center text-[0.6rem] font-black text-primary/70`}>{status}</h1>
   );
 }
 type OpportunityHomologationCardProps = {
@@ -61,7 +61,7 @@ function OpportunityHomologationCard({ homologation }: OpportunityHomologationCa
             </h1>
             <div className='flex items-center gap-1'>
               <BsCode />
-              <p className='text-xs font-medium tracking-tight text-primary/50'>INSTALAÇÃO Nº {homologation.instalacao.numeroInstalacao}</p>
+              <p className='text-xs font-medium tracking-tight text-primary/70'>INSTALAÇÃO Nº {homologation.instalacao.numeroInstalacao}</p>
             </div>
           </div>
 
@@ -69,17 +69,17 @@ function OpportunityHomologationCard({ homologation }: OpportunityHomologationCa
         </div>
         <div className='mt-2 flex w-full flex-col items-center justify-between gap-2 lg:flex-row'>
           <div className='flex flex-col items-center lg:items-start'>
-            <h1 className='text-[0.65rem] font-light leading-none tracking-tight text-primary/50 lg:text-xs'>REQUISITADO</h1>
+            <h1 className='text-[0.65rem] font-light leading-none tracking-tight text-primary/70 lg:text-xs'>REQUISITADO</h1>
             <div className='flex items-center gap-2'>
               <div className='flex items-center gap-1 rounded-sm p-1'>
                 <FaSolarPanel />
-                <p className='text-[0.55rem] font-medium tracking-tight text-primary/50 lg:text-xs'>
+                <p className='text-[0.55rem] font-medium tracking-tight text-primary/70 lg:text-xs'>
                   {formatDecimalPlaces(getModulesPeakPotByProducts(homologation.equipamentos as TProductItem[]))} kWp EM MÓDULOS
                 </p>
               </div>
               <div className='flex items-center gap-1 rounded-sm p-1'>
                 <ImPower />
-                <p className='text-[0.55rem] font-medium tracking-tight text-primary/50 lg:text-xs'>
+                <p className='text-[0.55rem] font-medium tracking-tight text-primary/70 lg:text-xs'>
                   {formatDecimalPlaces(getInverterPeakPowerByProducts(homologation.equipamentos as TProductItem[]))} kWp EM INVERSORES
                 </p>
               </div>
@@ -87,7 +87,7 @@ function OpportunityHomologationCard({ homologation }: OpportunityHomologationCa
           </div>
           {!!homologation.potencia && homologation.potencia > 0 ? (
             <div className='flex flex-col items-center lg:items-end'>
-              <h1 className='text-[0.65rem] font-light leading-none tracking-tight text-primary/50 lg:text-xs'>LIBERADO</h1>
+              <h1 className='text-[0.65rem] font-light leading-none tracking-tight text-primary/70 lg:text-xs'>LIBERADO</h1>
               <div className='flex items-center gap-1 rounded-sm bg-green-50 p-1 text-green-500'>
                 <FaBolt />
                 <p className='text-[0.55rem] font-medium tracking-tight lg:text-xs'>{formatDecimalPlaces(homologation.potencia)} kWp EM INVERSORES</p>
@@ -97,7 +97,7 @@ function OpportunityHomologationCard({ homologation }: OpportunityHomologationCa
         </div>
         <div className='mt-2 flex w-full flex-col items-center justify-center gap-2 lg:flex-row lg:justify-between'>
           <Link href={`/operacional/homologacoes/procuracao/${homologation._id}`}>
-            <button className='flex items-center gap-1 rounded-sm border border-primary/50 bg-gray-50 px-2 py-1 text-primary/50 duration-300 ease-in-out hover:bg-primary/10'>
+            <button className='flex items-center gap-1 rounded-sm border border-primary/50 bg-primary/10 px-2 py-1 text-primary/70 duration-300 ease-in-out hover:bg-primary/10'>
               <MdEditDocument />
               <p className='text-[0.6rem]'>PROCURAÇÃO</p>
             </button>
@@ -106,7 +106,7 @@ function OpportunityHomologationCard({ homologation }: OpportunityHomologationCa
           <div className='flex flex-col items-center gap-2 lg:flex-row'>
             <div className='flex items-center gap-1'>
               <BsCalendarPlus />
-              <p className='text-[0.65rem] font-medium text-primary/50'>{formatDateAsLocale(homologation.dataInsercao, true)}</p>
+              <p className='text-[0.65rem] font-medium text-primary/70'>{formatDateAsLocale(homologation.dataInsercao, true)}</p>
             </div>
             <div className='flex items-center gap-1'>
               <Avatar
@@ -115,7 +115,7 @@ function OpportunityHomologationCard({ homologation }: OpportunityHomologationCa
                 height={20}
                 width={20}
               />
-              <p className='text-[0.65rem] font-medium text-primary/50'>{homologation.autor.nome}</p>
+              <p className='text-[0.65rem] font-medium text-primary/70'>{homologation.autor.nome}</p>
             </div>
           </div>
         </div>

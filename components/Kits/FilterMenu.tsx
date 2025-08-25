@@ -183,7 +183,7 @@ function FilterMenu({ filters, setFilters }: FilterMenuProps) {
           <div
             onClick={() => setFilters((prev) => ({ ...prev, powerOrder: prev.powerOrder == 'ASC' ? null : 'ASC', priceOrder: null }))}
             className={`border-[rgb(239,68,68)] flex w-full cursor-pointer items-center justify-center rounded-md border p-2 px-4 text-center font-Inter text-xs font-bold leading-none tracking-tight lg:w-fit ${
-              filters.powerOrder == 'ASC' ? 'bg-[rgb(239,68,68)] text-white' : 'text-[rgb(239,68,68)] bg-transparent'
+              filters.powerOrder == 'ASC' ? 'bg-[rgb(239,68,68)] text-primary-foreground' : 'text-[rgb(239,68,68)] bg-transparent'
             }`}
           >
             POTÊNCIA CRESCENTE
@@ -191,7 +191,7 @@ function FilterMenu({ filters, setFilters }: FilterMenuProps) {
           <div
             onClick={() => setFilters((prev) => ({ ...prev, powerOrder: prev.powerOrder == 'DESC' ? null : 'DESC', priceOrder: null }))}
             className={`border-[rgb(239,68,68)] flex w-full cursor-pointer items-center justify-center rounded-md border p-2 px-4 text-center font-Inter text-xs font-bold leading-none tracking-tight lg:w-fit ${
-              filters.powerOrder == 'DESC' ? 'bg-[rgb(239,68,68)] text-white' : 'text-[rgb(239,68,68)] bg-transparent'
+              filters.powerOrder == 'DESC' ? 'bg-[rgb(239,68,68)] text-primary-foreground' : 'text-[rgb(239,68,68)] bg-transparent'
             }`}
           >
             POTÊNCIA DECRESCENTE
@@ -199,7 +199,7 @@ function FilterMenu({ filters, setFilters }: FilterMenuProps) {
           <div
             onClick={() => setFilters((prev) => ({ ...prev, powerOrder: null, priceOrder: prev.priceOrder == 'ASC' ? null : 'ASC' }))}
             className={`flex w-full cursor-pointer items-center justify-center rounded-md border border-cyan-500 p-2 px-4 text-center font-Inter text-xs font-bold leading-none tracking-tight lg:w-fit ${
-              filters.priceOrder == 'ASC' ? 'bg-cyan-500 text-white' : 'bg-transparent text-cyan-500'
+              filters.priceOrder == 'ASC' ? 'bg-cyan-500 text-primary-foreground' : 'bg-transparent text-cyan-500'
             }`}
           >
             PREÇO CRESCENTE
@@ -207,7 +207,7 @@ function FilterMenu({ filters, setFilters }: FilterMenuProps) {
           <div
             onClick={() => setFilters((prev) => ({ ...prev, powerOrder: null, priceOrder: prev.priceOrder == 'DESC' ? null : 'DESC' }))}
             className={`flex w-full cursor-pointer items-center justify-center rounded-md border border-cyan-500 p-2 px-4 text-center font-Inter text-xs font-bold leading-none tracking-tight lg:w-fit ${
-              filters.priceOrder == 'DESC' ? 'bg-cyan-500 text-white' : 'bg-transparent text-cyan-500'
+              filters.priceOrder == 'DESC' ? 'bg-cyan-500 text-primary-foreground' : 'bg-transparent text-cyan-500'
             }`}
           >
             PREÇO DECRESCENTE

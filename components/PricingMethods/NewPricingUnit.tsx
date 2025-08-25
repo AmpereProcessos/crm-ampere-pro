@@ -164,7 +164,7 @@ function NewPricingUnit({
           onClick={() => {
             addToUnitPricingItems(numberHolder?.toString());
           }}
-          className='min-h-[46px] rounded-md bg-green-500 p-2 text-sm text-white hover:bg-green-600'
+          className='min-h-[46px] rounded-md bg-green-500 p-2 text-sm text-primary-foreground hover:bg-green-600'
         >
           ADD
         </button>
@@ -178,7 +178,7 @@ function NewPricingUnit({
             <button
               key={index}
               onClick={() => addToUnitPricingItems(`[${va.value}]`)}
-              className='grow rounded-sm border border-primary/70 p-1 text-xs font-medium text-primary/70 duration-300 ease-in-out hover:bg-primary/70 hover:text-white'
+              className='grow rounded-sm border border-primary/70 p-1 text-xs font-medium text-primary/70 duration-300 ease-in-out hover:bg-primary/70 hover:text-primary-foreground'
             >
               {va.label}
             </button>
@@ -192,7 +192,7 @@ function NewPricingUnit({
             <button
               key={index}
               onClick={() => addToUnitPricingItems(`[${va.value}]`)}
-              className='grow rounded-sm border border-primary/70 p-1 text-xs font-medium text-primary/70 duration-300 ease-in-out hover:bg-primary/70 hover:text-white'
+              className='grow rounded-sm border border-primary/70 p-1 text-xs font-medium text-primary/70 duration-300 ease-in-out hover:bg-primary/70 hover:text-primary-foreground'
             >
               {va.label}
             </button>
@@ -206,7 +206,7 @@ function NewPricingUnit({
             <button
               key={index}
               onClick={() => addToUnitPricingItems(`[${va.value}]`)}
-              className='grow rounded-sm border border-primary/70 p-1 text-xs font-medium text-primary/70 duration-300 ease-in-out hover:bg-primary/70 hover:text-white'
+              className='grow rounded-sm border border-primary/70 p-1 text-xs font-medium text-primary/70 duration-300 ease-in-out hover:bg-primary/70 hover:text-primary-foreground'
             >
               {va.label}
             </button>
@@ -258,7 +258,7 @@ function NewPricingUnit({
         <p className='w-[50px] p-1 text-center text-xl font-black'>=</p>
         <div className='flex min-h-[52px] w-full items-center justify-center gap-1 rounded-md border border-blue-800 p-3'>
           {resultHolder.formulaArr.map((y, index) => (
-            <p key={index} className={`text-xs ${y.includes('[') ? 'rounded-sm bg-primary/70  p-1 text-white' : ''}`}>
+            <p key={index} className={`text-xs ${y.includes('[') ? 'rounded-sm bg-primary/70  p-1 text-primary-foreground' : ''}`}>
               {formatFormulaItem(y)}
             </p>
           ))}
@@ -283,8 +283,8 @@ function NewPricingUnit({
                 key={index}
                 onClick={() => setResultHolder((prev) => ({ ...prev, condicao: { ...prev.condicao, variavel: va.value, igual: null } }))}
                 className={`grow ${
-                  va.value == resultHolder.condicao.variavel ? 'bg-primary/70  text-white' : 'text-primary/70 '
-                } rounded border border-primary/70  p-1 text-xs font-medium  duration-300 ease-in-out hover:bg-primary/70  hover:text-white`}
+                  va.value == resultHolder.condicao.variavel ? 'bg-primary/70  text-primary-foreground' : 'text-primary/70 '
+                } rounded border border-primary/70  p-1 text-xs font-medium  duration-300 ease-in-out hover:bg-primary/70  hover:text-primary-foreground`}
               >
                 {va.label}
               </button>
@@ -305,7 +305,7 @@ function NewPricingUnit({
       {resultHolder.condicao.aplicavel ? <ConditionMenu resultHolder={resultHolder} setResultHolder={setResultHolder} partners={partners} /> : null}
       <div className='my-2 flex items-center justify-end gap-2'>
         <button
-          className='rounded bg-black p-1 px-4 text-xs font-medium text-white duration-300 ease-in-out disabled:bg-primary/40 disabled:text-primary enabled:hover:bg-primary/60'
+          className='rounded bg-black p-1 px-4 text-xs font-medium text-primary-foreground duration-300 ease-in-out disabled:bg-primary/40 disabled:text-primary enabled:hover:bg-primary/60'
           onClick={() => addResultFormula()}
         >
           ADICIONAR FÓRMULA
@@ -330,11 +330,11 @@ function NewPricingUnit({
               </h1> */}
               <div className='flex items-center gap-2 font-Inter'>
                 <div className='flex items-center gap-1'>
-                  <p className='text-xs text-primary/50'>MARGEM: </p>
+                  <p className='text-xs text-primary/70'>MARGEM: </p>
                   <p className='text-xs font-bold text-[#FFBB5C]'>{result.margemLucro}%</p>
                 </div>
                 <div className='flex items-center gap-1'>
-                  <p className='text-xs text-primary/50'>FATURÁVEL: </p>
+                  <p className='text-xs text-primary/70'>FATURÁVEL: </p>
                   <p className='text-xs font-bold text-[#FFBB5C]'>{result.faturavel ? 'SIM' : 'NÃO'}</p>
                 </div>
               </div>
@@ -342,7 +342,7 @@ function NewPricingUnit({
 
             <div className='flex  grow flex-wrap items-center justify-center gap-1 p-1'>
               {result.formulaArr.map((y, index2) => (
-                <p key={index2} className={`text-[0.7rem] ${y.includes('[') ? 'rounded-sm bg-blue-500 p-1 text-white' : ''}`}>
+                <p key={index2} className={`text-[0.7rem] ${y.includes('[') ? 'rounded-sm bg-blue-500 p-1 text-primary-foreground' : ''}`}>
                   {formatFormulaItem(y)}
                 </p>
               ))}
@@ -372,7 +372,7 @@ function NewPricingUnit({
       )}
       <div className='my-2 flex items-center justify-end gap-2'>
         <button
-          className='rounded bg-blue-600 p-1 px-4 text-xs font-medium text-white duration-300 ease-in-out hover:bg-blue-800'
+          className='rounded bg-blue-600 p-1 px-4 text-xs font-medium text-primary-foreground duration-300 ease-in-out hover:bg-blue-800'
           onClick={() => createPricingUnit()}
         >
           CADASTRAR UNIDADE DE PREÇO

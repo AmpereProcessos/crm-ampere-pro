@@ -40,7 +40,7 @@ function OpportunityClient({ opportunityId, client, responsibles, session }: Opp
       <div className='mt-3 flex w-full grow flex-col gap-2'>
         <div className='flex w-full flex-col items-center justify-between gap-2 lg:flex-row'>
           <div className='flex flex-col items-center gap-1 lg:items-start'>
-            <p className='text-[0.65rem] font-medium text-primary/50'>GERAIS</p>
+            <p className='text-[0.65rem] font-medium text-primary/70'>GERAIS</p>
             <div className='flex flex-wrap items-center justify-center gap-2 lg:justify-start'>
               <div className='flex items-center gap-1'>
                 <UserRound size={15} />
@@ -65,7 +65,7 @@ function OpportunityClient({ opportunityId, client, responsibles, session }: Opp
         </div>
         <div className='flex w-full flex-col items-center justify-between gap-2 lg:flex-row'>
           <div className='flex flex-col items-center gap-1 lg:items-start'>
-            <p className='text-[0.65rem] font-medium text-primary/50'>CONTATOS</p>
+            <p className='text-[0.65rem] font-medium text-primary/70'>CONTATOS</p>
             <div className='flex flex-wrap items-center justify-center gap-2 lg:justify-start'>
               <div className='flex items-center gap-1'>
                 <Phone size={12} />
@@ -78,7 +78,7 @@ function OpportunityClient({ opportunityId, client, responsibles, session }: Opp
             </div>
           </div>
           <div className='flex flex-col items-center gap-1 lg:items-end'>
-            <p className='text-[0.65rem] font-medium text-primary/50'>AQUISIÇÃO</p>
+            <p className='text-[0.65rem] font-medium text-primary/70'>AQUISIÇÃO</p>
             <div className='flex flex-wrap items-center justify-center gap-2 lg:justify-start'>
               <div className='flex items-center gap-1'>
                 <Filter size={12} />
@@ -89,7 +89,7 @@ function OpportunityClient({ opportunityId, client, responsibles, session }: Opp
         </div>
         <div className='flex w-full flex-col items-center justify-between gap-2 lg:flex-row'>
           <div className='flex flex-col items-center gap-1 lg:items-start'>
-            <p className='text-[0.65rem] font-medium text-primary/50'>LOCALIZAÇÃO</p>
+            <p className='text-[0.65rem] font-medium text-primary/70'>LOCALIZAÇÃO</p>
             <div className='flex flex-wrap items-center justify-center gap-2 lg:justify-start'>
               <div className='flex items-center gap-1'>
                 <FaLocationDot size={12} />
@@ -112,7 +112,7 @@ function OpportunityClient({ opportunityId, client, responsibles, session }: Opp
             </div>
           </div>
           <div className='flex flex-col items-center gap-1 lg:items-end'>
-            <p className='text-[0.65rem] font-medium text-primary/50'>ESTADO CIVIL</p>
+            <p className='text-[0.65rem] font-medium text-primary/70'>ESTADO CIVIL</p>
             <div className='flex flex-wrap items-center justify-center gap-2 lg:justify-start'>
               <div className='flex items-center gap-1'>
                 <FaRing size={15} />
@@ -123,7 +123,7 @@ function OpportunityClient({ opportunityId, client, responsibles, session }: Opp
         </div>
         <div className='flex w-full flex-col items-center justify-between gap-2 lg:flex-row'>
           <div className='flex flex-col items-center gap-1 lg:items-start'>
-            <p className='text-[0.65rem] font-medium text-primary/50'>TRABALHO</p>
+            <p className='text-[0.65rem] font-medium text-primary/70'>TRABALHO</p>
             <div className='flex flex-wrap items-center justify-center gap-2 lg:justify-start'>
               <div className='flex items-center gap-1'>
                 <BriefcaseBusiness size={12} />
@@ -136,7 +136,7 @@ function OpportunityClient({ opportunityId, client, responsibles, session }: Opp
             </div>
           </div>
           <div className='flex flex-col items-center gap-1 lg:items-end'>
-            <p className='text-[0.65rem] font-medium text-primary/50'>DEFICIÊNCIA</p>
+            <p className='text-[0.65rem] font-medium text-primary/70'>DEFICIÊNCIA</p>
             <div className='flex flex-wrap items-center justify-center gap-2 lg:justify-start'>
               <div className='flex items-center gap-1'>
                 <Accessibility size={15} />
@@ -146,7 +146,7 @@ function OpportunityClient({ opportunityId, client, responsibles, session }: Opp
           </div>
         </div>
         <div className='flex flex-col items-center gap-1'>
-          <p className='text-[0.65rem] font-medium text-primary/50'>INDICAÇÃO</p>
+          <p className='text-[0.65rem] font-medium text-primary/70'>INDICAÇÃO</p>
           <div className='flex flex-wrap items-center justify-center gap-2 lg:justify-center'>
             {client.indicador.nome ? (
               <>
@@ -168,11 +168,11 @@ function OpportunityClient({ opportunityId, client, responsibles, session }: Opp
       <div className='flex w-full items-center justify-end gap-2'>
         <div className={'flex items-center gap-1'}>
           <BsCalendarPlus />
-          <p className='text-[0.65rem] font-medium text-primary/50'>{formatDateAsLocale(client.dataInsercao, true)}</p>
+          <p className='text-[0.65rem] font-medium text-primary/70'>{formatDateAsLocale(client.dataInsercao, true)}</p>
         </div>
         <div className='flex items-center gap-1'>
           <Avatar fallback={'R'} url={client.autor.avatar_url || undefined} height={20} width={20} />
-          <p className='text-[0.65rem] font-medium text-primary/50'>{client.autor.nome}</p>
+          <p className='text-[0.65rem] font-medium text-primary/70'>{client.autor.nome}</p>
         </div>
       </div>
       {editModalIsOpen ? (

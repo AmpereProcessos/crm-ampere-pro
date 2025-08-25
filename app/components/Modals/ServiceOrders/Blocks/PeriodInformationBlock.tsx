@@ -13,7 +13,7 @@ type PeriodInformationBlockProps = {
 function PeriodInformationBlock({ infoHolder, setInfoHolder, session }: PeriodInformationBlockProps) {
   return (
     <div className='flex w-full flex-col gap-y-2'>
-      <h1 className='w-full bg-primary/70  p-1 text-center font-medium text-white'>PERÍODO DE EXECUÇÃO</h1>
+      <h1 className='w-full bg-primary/70  p-1 text-center font-medium text-primary-foreground'>PERÍODO DE EXECUÇÃO</h1>
       <div className='flex w-full flex-col gap-1'>
         <div className='flex w-full flex-col items-center justify-center gap-2 lg:flex-row'>
           <div className='w-1/2 lg:w-full'>

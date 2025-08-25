@@ -21,7 +21,7 @@ function RevenueCard({ revenue, session }: RevenueCardProps) {
           <h1 className='text-[0.65rem] font-bold tracking-tight text-primary/80 lg:text-xs'>{revenue.titulo}</h1>
           <button
             onClick={() => setEditModal({ id: revenue._id, isOpen: true })}
-            className='flex items-center justify-center rounded-full border border-primary/90 bg-gray-50 p-1 text-primary/90'
+            className='flex items-center justify-center rounded-full border border-primary/90 bg-primary/10p-1 text-primary/90'
           >
             <MdEdit size={10} />
             <p className='text-xxs'>EDITAR</p>
@@ -35,11 +35,13 @@ function RevenueCard({ revenue, session }: RevenueCardProps) {
                 </div>
               ))
             ) : (
-              <p className='text-[0.6rem] font-medium leading-none tracking-tight text-primary/50'>SEM CATEGORIAS DEFINIDAS</p>
+              <p className='text-[0.6rem] font-medium leading-none tracking-tight text-primary/70'>SEM CATEGORIAS DEFINIDAS</p>
             )}
           </div>
         </div>
-        <h1 className='rounded-lg bg-black px-2 py-0.5 text-center text-[0.65rem] font-bold text-white lg:py-1'>{formatToMoney(revenue.total)}</h1>
+        <h1 className='rounded-lg bg-black px-2 py-0.5 text-center text-[0.65rem] font-bold text-primary-foreground lg:py-1'>
+          {formatToMoney(revenue.total)}
+        </h1>
       </div>
 
       {editModal.id && editModal.isOpen ? (

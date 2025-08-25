@@ -38,7 +38,7 @@ function EditSalePromoter({ promoterId, session, closeModal }: EditSalePromoterP
       <div className='fixed left-[50%] top-[50%] z-100 h-[80%] w-[90%] translate-x-[-50%] translate-y-[-50%] rounded-md bg-background p-[10px] lg:w-[70%]'>
         <div className='flex h-full flex-col'>
           <div className='flex flex-col items-center justify-between border-b border-primary/30 px-2 pb-2 text-lg lg:flex-row'>
-            <h3 className='text-xl font-bold text-primary dark:text-white '>PROMOTOR DE VENDAS</h3>
+            <h3 className='text-xl font-bold text-primary  '>PROMOTOR DE VENDAS</h3>
             <button
               onClick={() => closeModal()}
               type='button'
@@ -55,7 +55,7 @@ function EditSalePromoter({ promoterId, session, closeModal }: EditSalePromoterP
                 <Avatar height={50} width={50} url={promoter.avatar_url || undefined} fallback={formatNameAsInitials(promoter.nome)} />
                 <h1 className='w-full text-center font-bold leading-none tracking-tight'>{promoter.nome}</h1>
               </div>
-              <h1 className='w-full rounded-sm bg-cyan-500 p-1 text-center text-xs font-medium text-white'>RESULTADOS</h1>
+              <h1 className='w-full rounded-sm bg-cyan-500 p-1 text-center text-xs font-medium text-primary-foreground'>RESULTADOS</h1>
               <div className='flex w-full items-center justify-between gap-2'>
                 <SelectInput
                   label='ANO DO PRIMEIRO PERÍODO'

@@ -22,11 +22,11 @@ function CreditorUtil({ creditor }: CreditorUtilProps) {
         <div className='flex items-center gap-2'>
           <div className={'flex items-center gap-1'}>
             <BsCalendarPlus />
-            <p className='text-[0.65rem] font-medium text-primary/50'>{formatDateAsLocale(creditor.dataInsercao)}</p>
+            <p className='text-[0.65rem] font-medium text-primary/70'>{formatDateAsLocale(creditor.dataInsercao)}</p>
           </div>
           <div className='flex items-center gap-1'>
             <Avatar fallback={'R'} url={creditor.autor.avatar_url || undefined} height={20} width={20} />
-            <p className='text-[0.65rem] font-medium text-primary/50'>{creditor.autor.nome}</p>
+            <p className='text-[0.65rem] font-medium text-primary/70'>{creditor.autor.nome}</p>
           </div>
         </div>
       </div>

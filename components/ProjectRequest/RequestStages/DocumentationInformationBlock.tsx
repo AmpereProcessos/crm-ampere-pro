@@ -35,7 +35,7 @@ function DocumentationInformationBlock({
   }
   return (
     <div className='flex w-full grow flex-col gap-2'>
-      <h1 className='w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-white'>DOCUMENTAÇÃO</h1>
+      <h1 className='w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-primary-foreground'>DOCUMENTAÇÃO</h1>
       <h1 className='my-2 w-full text-center text-xs font-medium tracking-tight lg:text-base'>
         Anexe aqui os documentos necessários para solicitação de projeto.
       </h1>
@@ -65,13 +65,13 @@ function DocumentationInformationBlock({
           onClick={() => {
             moveToPreviousStage();
           }}
-          className='rounded p-2 font-bold text-primary/50 duration-300 hover:scale-105'
+          className='rounded p-2 font-bold text-primary/70 duration-300 hover:scale-105'
         >
           VOLTAR
         </button>
         <button
           onClick={() => validateAndProceed()}
-          className='rounded bg-black px-4 py-1 text-sm font-medium text-white duration-300 ease-in-out hover:bg-primary/70'
+          className='rounded bg-black px-4 py-1 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-primary/70'
         >
           PROSSEGUIR
         </button>

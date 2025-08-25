@@ -19,8 +19,8 @@ function ProposalTemplatesInformationBlock({ infoHolder, setInfoHolder }: Propos
   }
   return (
     <div className='flex w-full flex-col gap-y-2'>
-      <h1 className='w-full bg-primary/70  p-1 text-center font-medium text-white'>MODELOS DE PROPOSTA</h1>
-      <p className='my-2 w-full text-center text-primary/50'>
+      <h1 className='w-full bg-primary/70  p-1 text-center font-medium text-primary-foreground'>MODELOS DE PROPOSTA</h1>
+      <p className='my-2 w-full text-center text-primary/70'>
         Escolha, dentro do nosso de banco de templates, um opção que poderá ser utilizada para esse tipo de projeto.
       </p>
       <h1 className='my-2 w-full text-start text-xs font-black text-[#FF9B50]'>MODELOS DISPONÍVEIS</h1>
@@ -29,7 +29,7 @@ function ProposalTemplatesInformationBlock({ infoHolder, setInfoHolder }: Propos
           <button
             key={index}
             onClick={() => addTemplate(template)}
-            className='w-fit  cursor-pointer rounded-sm border border-primary/70 p-1 text-xs font-medium text-primary/70 duration-300 ease-in-out hover:bg-primary/70 hover:text-white'
+            className='w-fit  cursor-pointer rounded-sm border border-primary/70 p-1 text-xs font-medium text-primary/70 duration-300 ease-in-out hover:bg-primary/70 hover:text-primary-foreground'
           >
             {template.label}
           </button>

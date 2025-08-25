@@ -27,7 +27,7 @@ function EditPlanPrice({ infoHolder, setInfoHolder, planIndex, alterationLimit, 
       <div className='fixed left-[50%] top-[50%] z-100 h-fit w-[90%] translate-x-[-50%] translate-y-[-50%] rounded-md bg-background p-[10px]  lg:w-[25%]'>
         <div className='flex h-full flex-col'>
           <div className='flex flex-wrap items-center justify-between border-b border-primary/30 px-2 pb-2 text-lg'>
-            <h3 className='text-xl font-bold text-primary dark:text-white '>ALTERAÇÃO DE PREÇOS</h3>
+            <h3 className='text-xl font-bold text-primary  '>ALTERAÇÃO DE PREÇOS</h3>
             <button
               onClick={() => closeModal()}
               type='button'
@@ -50,7 +50,7 @@ function EditPlanPrice({ infoHolder, setInfoHolder, planIndex, alterationLimit, 
           <div className='flex w-full items-center justify-end py-2'>
             <button
               onClick={() => handlePriceCorrection(priceHolder)}
-              className='rounded bg-primary/90 px-4 py-2 text-xs font-medium text-white shadow-sm disabled:bg-primary/50 disabled:text-white enabled:hover:bg-primary/80 enabled:hover:text-white'
+              className='rounded bg-primary/90 px-4 py-2 text-xs font-medium text-primary-foreground shadow-sm disabled:bg-primary/50 disabled:text-primary-foreground enabled:hover:bg-primary/80 enabled:hover:text-primary-foreground'
             >
               EFETIVAR
             </button>

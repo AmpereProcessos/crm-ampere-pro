@@ -10,9 +10,9 @@ function getBarColor({ active }: { active: boolean }) {
   return 'bg-blue-500';
 }
 function getStatusTag({ active }: { active: boolean }) {
-  if (!active) return <h1 className='rounded-full bg-primary/60 px-2 py-1 text-[0.65rem] font-bold text-white lg:text-xs'>INATIVO</h1>;
+  if (!active) return <h1 className='rounded-full bg-primary/60 px-2 py-1 text-[0.65rem] font-bold text-primary-foreground lg:text-xs'>INATIVO</h1>;
 
-  return <h1 className='rounded-full bg-blue-600 px-2 py-1 text-[0.65rem] font-bold text-white lg:text-xs'>ATIVO</h1>;
+  return <h1 className='rounded-full bg-blue-600 px-2 py-1 text-[0.65rem] font-bold text-primary-foreground lg:text-xs'>ATIVO</h1>;
 }
 type SignaturePlanCardProps = {
   plan: TSignaturePlanDTO;
@@ -62,7 +62,7 @@ function SignaturePlanCard({ plan, handleOpenModal, userHasEditPermission, userH
             </div>
           </div>
           <div className='flex w-full grow flex-col'>
-            <h1 className='my-2 mb-0 text-[0.65rem] font-bold leading-none tracking-tight text-primary/50 lg:text-xs'>DESCRITIVO</h1>
+            <h1 className='my-2 mb-0 text-[0.65rem] font-bold leading-none tracking-tight text-primary/70 lg:text-xs'>DESCRITIVO</h1>
             {plan.descritivo.map((d) => (
               <div className='flex w-full items-center gap-1 self-center'>
                 <div className='w-fit'>
@@ -76,12 +76,12 @@ function SignaturePlanCard({ plan, handleOpenModal, userHasEditPermission, userH
             <div className={`flex items-center gap-2`}>
               <div className='ites-center flex gap-1'>
                 <BsCalendarPlus />
-                <p className={`text-[0.65rem] font-medium text-primary/50`}>{formatDateAsLocale(plan.dataInsercao)}</p>
+                <p className={`text-[0.65rem] font-medium text-primary/70`}>{formatDateAsLocale(plan.dataInsercao)}</p>
               </div>
             </div>
             <div className='flex items-center justify-center gap-1'>
               <Avatar fallback={'U'} height={20} width={20} url={plan.autor?.avatar_url || undefined} />
-              <p className='text-[0.65rem] font-medium text-primary/50'>{plan.autor?.nome}</p>
+              <p className='text-[0.65rem] font-medium text-primary/70'>{plan.autor?.nome}</p>
             </div>
           </div>
         </div>

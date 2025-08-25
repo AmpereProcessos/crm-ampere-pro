@@ -29,13 +29,13 @@ function OpportunityTechnicalAnalysis({ session, opportunity }: OpportunityTechn
         <div className='flex items-center gap-2'>
           <button
             onClick={() => setNewTechnicalAnalysisBlockIsOpen(true)}
-            className='hidden rounded-sm bg-green-600 p-1 text-[0.7rem] font-bold text-white lg:flex'
+            className='hidden rounded-sm bg-green-600 p-1 text-[0.7rem] font-bold text-primary-foreground lg:flex'
           >
             SOLICITAR ANÁLISE
           </button>
           <button
             onClick={() => setNewTechnicalAnalysisBlockIsOpen(true)}
-            className='flex rounded-sm bg-green-600 p-1 text-sm font-bold text-white lg:hidden'
+            className='flex rounded-sm bg-green-600 p-1 text-sm font-bold text-primary-foreground lg:hidden'
           >
             <MdAdd />
           </button>
@@ -58,7 +58,7 @@ function OpportunityTechnicalAnalysis({ session, opportunity }: OpportunityTechn
             analysis.length > 0 ? (
               analysis.map((analysis) => <OpportunityTechnicalAnalysisItem key={analysis._id} analysis={analysis} session={session} />)
             ) : (
-              <p className='flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/50'>
+              <p className='flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/70'>
                 Sem análises técnicas vinculadas a essa oportunidade.
               </p>
             )

@@ -41,7 +41,7 @@ function InProgressResults({ after, before, responsibles, partners, projectTypes
       <div className='mt-2 flex w-full flex-col items-start gap-6'>
         {stats?.map((stat, index) => (
           <div key={stat.funnel} className='flex w-full flex-col '>
-            <div className='mb-4 flex w-full items-center justify-center gap-2 rounded-xs bg-[#fead41] text-white'>
+            <div className='mb-4 flex w-full items-center justify-center gap-2 rounded-xs bg-[#fead41] text-primary-foreground'>
               <h1 className='text-lg font-medium uppercase tracking-tight'>{stat.funnel}</h1>
               <BsFunnelFill />
             </div>
@@ -52,33 +52,6 @@ function InProgressResults({ after, before, responsibles, partners, projectTypes
             </div>
           </div>
         ))}
-        {/* {funnels?.map((funnel, funnelIndex) => (
-          <div key={funnelIndex} className="flex w-full flex-col ">
-            <div className="mb-4 flex w-full items-center justify-center gap-2 rounded-xs bg-[#fead41] text-white">
-              <h1 className="text-lg font-medium uppercase tracking-tight">{funnel.nome}</h1>
-              <BsFunnelFill />
-            </div>
-            <div className="flex w-full flex-wrap items-start justify-around gap-4">
-              {funnel.etapas.map((stage, stageIndex) => (
-                <div
-                  key={stageIndex}
-                  className={`flex w-[350px] min-w-[350px] max-w-[350px] grow flex-col rounded-xl border border-primary/30 bg-background p-6 shadow-md`}
-                >
-                  <div className="flex w-full items-center justify-between">
-                    <h1 className="text-sm font-medium uppercase tracking-tight">{stage.nome}</h1>
-                    <BsFillBookmarkFill />
-                  </div>
-                  <h1 className="text-center text-2xl font-bold text-[#15599a]">
-                    {getFunnelStageData({ funnelName: funnel.nome, stageName: stage.nome, stats: stats }).projetos}
-                  </h1>
-                  <h1 className="text-center text-2xl font-bold text-green-800">
-                    {formatToMoney(getFunnelStageData({ funnelName: funnel.nome, stageName: stage.nome, stats: stats }).valor)}
-                  </h1>
-                </div>
-              ))}
-            </div>
-          </div>
-        ))} */}
       </div>
     </div>
   );

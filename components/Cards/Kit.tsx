@@ -19,10 +19,10 @@ function renderCategoryIcon(category: TProductItem['categoria']) {
   return renderIcon(CategoryInfo.icon);
 }
 function getStatusTag({ active, expiryDate }: { active: boolean; expiryDate?: string | null }) {
-  if (!active) return <h1 className='rounded-full bg-primary/60 px-2 py-1 text-[0.65rem] font-bold text-white lg:text-xs'>INATIVO</h1>;
+  if (!active) return <h1 className='rounded-full bg-primary/60 px-2 py-1 text-[0.65rem] font-bold text-primary-foreground lg:text-xs'>INATIVO</h1>;
   if (expiryDate && dayjs(expiryDate).isBefore(new Date()))
-    return <h1 className='rounded-full bg-orange-600 px-2 py-1 text-[0.65rem] font-bold text-white lg:text-xs'>VENCIDO</h1>;
-  return <h1 className='rounded-full bg-blue-600 px-2 py-1 text-[0.65rem] font-bold text-white lg:text-xs'>ATIVO</h1>;
+    return <h1 className='rounded-full bg-orange-600 px-2 py-1 text-[0.65rem] font-bold text-primary-foreground lg:text-xs'>VENCIDO</h1>;
+  return <h1 className='rounded-full bg-blue-600 px-2 py-1 text-[0.65rem] font-bold text-primary-foreground lg:text-xs'>ATIVO</h1>;
 }
 type KitCardProps = {
   kit: TKitDTO;
@@ -72,7 +72,7 @@ function Kit({ kit, handleClick, userHasEditPermission, userHasPricingViewPermis
               <p className='text-[0.65rem] font-light lg:text-xs'>{kit.topologia}</p>
             </div>
           </div>
-          <h1 className='my-2 mb-0 text-[0.65rem] font-bold leading-none tracking-tight text-primary/50 lg:text-xs'>PRODUTOS</h1>
+          <h1 className='my-2 mb-0 text-[0.65rem] font-bold leading-none tracking-tight text-primary/70 lg:text-xs'>PRODUTOS</h1>
           {kit.produtos.map((product, index) => (
             <div key={index} className='mt-1 flex w-full flex-col rounded-md border border-primary/30 p-2'>
               <div className='flex w-full flex-col items-start justify-between gap-2 lg:flex-row lg:items-center'>
@@ -87,22 +87,22 @@ function Kit({ kit, handleClick, userHasEditPermission, userHasPricingViewPermis
                 <div className='flex w-full grow items-center justify-end gap-2 pl-2 lg:w-fit'>
                   <div className='flex items-center gap-1'>
                     <FaIndustry size={12} />
-                    <p className='text-[0.6rem] font-light text-primary/50'>{product.fabricante}</p>
+                    <p className='text-[0.6rem] font-light text-primary/70'>{product.fabricante}</p>
                   </div>
                   <div className='flex items-center gap-1'>
                     <ImPower size={12} />
-                    <p className='text-[0.6rem] font-light text-primary/50'>{product.potencia} W</p>
+                    <p className='text-[0.6rem] font-light text-primary/70'>{product.potencia} W</p>
                   </div>
                   <div className='flex items-center gap-1'>
                     <AiOutlineSafety size={12} />
-                    <p className='text-[0.6rem] font-light text-primary/50'>{product.garantia} ANOS</p>
+                    <p className='text-[0.6rem] font-light text-primary/70'>{product.garantia} ANOS</p>
                   </div>
                 </div>
               </div>
             </div>
             // <ProductItem product={module} index={index} removeProductFromKit={(index) => console.log()} showRemoveButton={false} />
           ))}
-          <h1 className='my-2 mb-0 text-[0.65rem] font-bold leading-none tracking-tight text-primary/50 lg:text-xs'>SERVIÇOS</h1>
+          <h1 className='my-2 mb-0 text-[0.65rem] font-bold leading-none tracking-tight text-primary/70 lg:text-xs'>SERVIÇOS</h1>
           <div className='flex w-full flex-wrap items-center gap-2'>
             {kit.servicos.map((service, index) => (
               <div key={index} className='mt-1 flex flex-col gap-1 rounded-md border border-primary/30 p-2'>
@@ -116,7 +116,7 @@ function Kit({ kit, handleClick, userHasEditPermission, userHasPricingViewPermis
                 </div>
                 <div className='flex w-full items-center justify-end gap-1'>
                   <AiOutlineSafety size={12} />
-                  <p className='text-[0.6rem] font-light text-primary/50'>
+                  <p className='text-[0.6rem] font-light text-primary/70'>
                     {service.garantia > 1 ? `${service.garantia} ANOS` : `${service.garantia} ANO`}{' '}
                   </p>
                 </div>
@@ -127,9 +127,9 @@ function Kit({ kit, handleClick, userHasEditPermission, userHasPricingViewPermis
         <div className='mt-2 flex w-full items-center justify-between gap-2'>
           <div className='flex items-center gap-2'>
             {kit.dataValidade ? (
-              <div className={`flex items-center gap-2 text-primary/50`}>
+              <div className={`flex items-center gap-2 text-primary/70`}>
                 <BsCalendarEvent />
-                <p className='text-[0.65rem] font-medium text-primary/50'>
+                <p className='text-[0.65rem] font-medium text-primary/70'>
                   Valido até: <strong className='text-orange-500'>{formatDateAsLocale(kit.dataValidade)}</strong>{' '}
                 </p>
               </div>
@@ -138,11 +138,11 @@ function Kit({ kit, handleClick, userHasEditPermission, userHasPricingViewPermis
           <div className='flex items-center gap-2'>
             <div className={`flex items-center gap-1`}>
               <BsCalendarPlus />
-              <p className='text-[0.65rem] font-medium text-primary/50'>{formatDateAsLocale(kit.dataInsercao, true)}</p>
+              <p className='text-[0.65rem] font-medium text-primary/70'>{formatDateAsLocale(kit.dataInsercao, true)}</p>
             </div>
             <div className='flex items-center gap-1'>
               <Avatar fallback={'R'} url={kit.autor.avatar_url || undefined} height={20} width={20} />
-              <p className='text-[0.65rem] font-medium text-primary/50'>{kit.autor.nome}</p>
+              <p className='text-[0.65rem] font-medium text-primary/70'>{kit.autor.nome}</p>
             </div>
           </div>
         </div>

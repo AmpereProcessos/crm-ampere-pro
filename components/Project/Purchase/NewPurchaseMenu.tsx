@@ -165,7 +165,7 @@ function NewPurchaseMenu({ session, project, closeMenu }: NewPurchaseMenuProps) 
         handleChange={(value) => setInfoHolder((prev) => ({ ...prev, anotacoes: value }))}
       />
       <PurchaseCompositionBlock infoHolder={infoHolder} setInfoHolder={setInfoHolder} />
-      <h1 className='w-full text-start text-sm font-light text-primary/50'>PEDIDO</h1>
+      <h1 className='w-full text-start text-sm font-light text-primary/70'>PEDIDO</h1>
       <div className='flex w-full flex-col items-center gap-2 lg:flex-row'>
         <div className='w-full lg:w-1/3'>
           <DateInput
@@ -198,7 +198,7 @@ function NewPurchaseMenu({ session, project, closeMenu }: NewPurchaseMenuProps) 
           />
         </div>
       </div>
-      <h1 className='w-full text-start text-sm font-light text-primary/50'>FRETE</h1>
+      <h1 className='w-full text-start text-sm font-light text-primary/70'>FRETE</h1>
       <div className='flex w-full flex-col items-center gap-2 lg:flex-row'>
         <div className='w-full lg:w-1/3'>
           <TextInput
@@ -238,7 +238,7 @@ function NewPurchaseMenu({ session, project, closeMenu }: NewPurchaseMenuProps) 
           />
         </div>
       </div>
-      <h1 className='w-full text-start text-sm font-light text-primary/50'>FATURAMENTO</h1>
+      <h1 className='w-full text-start text-sm font-light text-primary/70'>FATURAMENTO</h1>
       <div className='flex w-full flex-col items-center gap-2 lg:flex-row'>
         <div className='w-full lg:w-1/2'>
           <DateInput
@@ -260,7 +260,7 @@ function NewPurchaseMenu({ session, project, closeMenu }: NewPurchaseMenuProps) 
           />
         </div>
       </div>
-      <h1 className='w-full text-start text-sm font-light text-primary/50'>ENTREGA</h1>
+      <h1 className='w-full text-start text-sm font-light text-primary/70'>ENTREGA</h1>
       <div className='flex w-full flex-col items-center gap-2 lg:flex-row'>
         <div className='w-full lg:w-1/3'>
           <SelectInput
@@ -461,7 +461,7 @@ function NewPurchaseMenu({ session, project, closeMenu }: NewPurchaseMenuProps) 
             // @ts-ignore
             handleCreatePurchase({ info: { ...infoHolder, liberacao: { ...infoHolder.liberacao, autor: author } } });
           }}
-          className='h-9 whitespace-nowrap rounded-sm bg-green-700 px-4 py-2 text-sm font-medium text-white shadow-sm disabled:bg-primary/50 disabled:text-white enabled:hover:bg-green-600 enabled:hover:text-white'
+          className='h-9 whitespace-nowrap rounded-sm bg-green-700 px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm disabled:bg-primary/50 disabled:text-primary-foreground enabled:hover:bg-green-600 enabled:hover:text-primary-foreground'
         >
           CRIAR COMPRA
         </button>

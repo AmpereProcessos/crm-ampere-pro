@@ -43,12 +43,12 @@ function renderPagesIcons({
         // sm-screen sizes
         'max-w-7 min-w-7 min-h-7 h-7 max-h-7 w-7',
         {
-          'border-black bg-black text-white': activePage === p,
+          'border-black bg-black text-primary-foreground': activePage === p,
           'border-transparent text-primary hover:bg-primary/50': activePage !== p,
         }
       )}
       // className={`${
-      //   activePage === p ? 'border-black bg-black text-white' : 'border-transparent text-primary hover:bg-primary/50'
+      //   activePage === p ? 'border-black bg-black text-primary-foreground' : 'border-transparent text-primary hover:bg-primary/50'
       // } max-w-10 min-w-10 min-h-10 h-10 max-h-10 w-10 rounded-full border text-xs font-medium`}
     >
       {p}
@@ -69,7 +69,7 @@ function ClientsPagination({ totalPages, activePage, selectPage, clientsMatched,
     <div className='my-2 flex w-full flex-col items-center gap-1 '>
       {totalPages > 1 ? (
         <>
-          <p className='w-full text-center text-sm leading-none tracking-tight text-primary/50'>
+          <p className='w-full text-center text-sm leading-none tracking-tight text-primary/70'>
             Um número grande de clientes foi encontrado, separamos em páginas para facilitar a visualização. Clique na página desejada para visualizar
             os demais clientes.
           </p>
@@ -130,10 +130,10 @@ function ClientsPagination({ totalPages, activePage, selectPage, clientsMatched,
         </>
       ) : null}
 
-      <p className='w-full text-center text-sm leading-none tracking-tight text-primary/50'>
+      <p className='w-full text-center text-sm leading-none tracking-tight text-primary/70'>
         {clientsMatched ? (clientsMatched > 0 ? `${clientsMatched} clientes encontrados.` : `${clientsMatched} cliente encontrado.`) : '...'}
       </p>
-      <p className='w-full text-center text-sm leading-none tracking-tight text-primary/50'>
+      <p className='w-full text-center text-sm leading-none tracking-tight text-primary/70'>
         {clientsShowing ? (clientsShowing > 0 ? `Mostrando ${clientsShowing} clientes.` : `Mostrando ${clientsShowing} cliente.`) : '...'}
       </p>
     </div>

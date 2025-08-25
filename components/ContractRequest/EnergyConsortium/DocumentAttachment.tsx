@@ -69,7 +69,7 @@ function DocumentAttachment({
           onClick={() => {
             goToPreviousStage();
           }}
-          className='rounded p-2 font-bold text-primary/50 duration-300 hover:scale-105'
+          className='rounded p-2 font-bold text-primary/70 duration-300 hover:scale-105'
         >
           Voltar
         </button>
@@ -79,7 +79,7 @@ function DocumentAttachment({
             validateDocuments(documentsFile);
           }}
           disabled={isPending || isSuccess}
-          className='rounded p-2 font-bold hover:bg-black hover:text-white'
+          className='rounded p-2 font-bold hover:bg-black hover:text-primary-foreground'
         >
           {isPending ? 'Criando solicitação...' : null}
           {isSuccess ? 'Criação concluida!' : null}

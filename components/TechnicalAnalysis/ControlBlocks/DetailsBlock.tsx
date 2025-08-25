@@ -14,7 +14,7 @@ function DetailsBlock({ infoHolder, setInfoHolder, changes, setChanges }: Detail
   return (
     <div className='mt-4 flex w-full flex-col'>
       <div className='flex w-full items-center justify-center gap-2 rounded-md bg-primary/80 p-2'>
-        <h1 className='font-bold text-white'>DETALHES ADICIONAIS</h1>
+        <h1 className='font-bold text-primary-foreground'>DETALHES ADICIONAIS</h1>
       </div>
       <div className='mt-2 flex w-full flex-col gap-2'>
         <div className='flex w-full flex-col justify-around gap-2 lg:flex-row'>

@@ -36,17 +36,17 @@ function PricingMethod({ partnerId, author, goToNextStage, goToPreviousStage }: 
   });
   return (
     <div className='flex grow flex-col gap-y-2'>
-      <h1 className='mt-4 w-full text-center text-lg tracking-tight text-primary/50'>
+      <h1 className='mt-4 w-full text-center text-lg tracking-tight text-primary/70'>
         Nós possibilitamos que você defina suas metodologias de precificação. Essas podem ser vinculadas aos kits que você eventualmente criar, de
         modo que as proposta geradas utilizando-os sejam precificadas com a metodologia que você definiu.
       </h1>
-      <h1 className='mb-4 w-full text-center text-lg tracking-tight text-primary/50'>
+      <h1 className='mb-4 w-full text-center text-lg tracking-tight text-primary/70'>
         Se desejar, você pode pular essa etapa e definir suas metodologias posteriormente.
       </h1>
-      <h1 className='w-full bg-[#fead41] p-1 text-center font-bold text-white'>METODOLOGIA DE PRECIFICAÇÃO</h1>
+      <h1 className='w-full bg-[#fead41] p-1 text-center font-bold text-primary-foreground'>METODOLOGIA DE PRECIFICAÇÃO</h1>
       <div className='my-5 flex flex-col px-2'>
-        <p className='text-primary/50'>Construa metodologias de precificação a serem aplicadas ao seus kits.</p>
-        <p className='text-primary/50'>
+        <p className='text-primary/70'>Construa metodologias de precificação a serem aplicadas ao seus kits.</p>
+        <p className='text-primary/70'>
           Crie unidades de preço para composição da sua precificação. Utilize <strong className='text-[#E25E3E]'>variáveis</strong>, aplique{' '}
           <strong className='text-[#E25E3E]'>condições</strong> , e tenha flexibilidade na criação de fórmulas de{' '}
           <strong className='text-[#E25E3E]'>cálculo de custo.</strong>
@@ -62,13 +62,13 @@ function PricingMethod({ partnerId, author, goToNextStage, goToPreviousStage }: 
         />
       </div>
 
-      <h1 className='mt-2 w-full bg-primary/70 p-1 text-center text-sm font-bold text-white '>UNIDADES DE PREÇO</h1>
+      <h1 className='mt-2 w-full bg-primary/70 p-1 text-center text-sm font-bold text-primary-foreground '>UNIDADES DE PREÇO</h1>
       {newPriceUnitMenuIsOpen ? (
         <NewPricingUnit methodology={methodology} setMethodology={setMethodology} closeMenu={() => setNewPriceUnitMenuIsOpen(false)} />
       ) : (
         <div className='flex w-full items-center justify-end px-2'>
           <button
-            className='rounded bg-green-500 p-1 px-4 text-sm font-medium text-white duration-300 ease-in-out hover:bg-green-600'
+            className='rounded bg-green-500 p-1 px-4 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-green-600'
             onClick={() => setNewPriceUnitMenuIsOpen(true)}
           >
             NOVA UNIDADE DE PREÇO
@@ -91,11 +91,11 @@ function PricingMethod({ partnerId, author, goToNextStage, goToPreviousStage }: 
                     </h1>
                     <div className='flex items-center gap-2 font-Inter'>
                       <div className='flex items-center gap-1'>
-                        <p className='text-xs text-primary/50'>MARGEM: </p>
+                        <p className='text-xs text-primary/70'>MARGEM: </p>
                         <p className='text-xs font-bold text-[#FFBB5C]'>{result.margemLucro}%</p>
                       </div>
                       <div className='flex items-center gap-1'>
-                        <p className='text-xs text-primary/50'>IMPOSTO: </p>
+                        <p className='text-xs text-primary/70'>IMPOSTO: </p>
                         <p className='text-xs font-bold text-[#FFBB5C]'>{result.taxaImposto}%</p>
                       </div>
                     </div>
@@ -103,7 +103,9 @@ function PricingMethod({ partnerId, author, goToNextStage, goToPreviousStage }: 
 
                   <div className='flex  grow flex-wrap items-center justify-center gap-1 p-1'>
                     {result.formulaArr.map((y) => (
-                      <p className={`text-[0.7rem] ${y.includes('[') ? 'rounded-sm bg-blue-500 p-1 text-white' : ''}`}>{formatFormulaItem(y)}</p>
+                      <p className={`text-[0.7rem] ${y.includes('[') ? 'rounded-sm bg-blue-500 p-1 text-primary-foreground' : ''}`}>
+                        {formatFormulaItem(y)}
+                      </p>
                     ))}
                   </div>
                 </div>
@@ -116,14 +118,14 @@ function PricingMethod({ partnerId, author, goToNextStage, goToPreviousStage }: 
       )}
       <div className='flex w-full items-center justify-end gap-2 px-2'>
         <button
-          className='rounded bg-primary/50 p-1 px-4 text-xs font-medium text-white duration-300 ease-in-out hover:bg-primary/60'
+          className='rounded bg-primary/50 p-1 px-4 text-xs font-medium text-primary-foreground duration-300 ease-in-out hover:bg-primary/60'
           // @ts-ignore
           onClick={() => goToNextStage()}
         >
           PULAR
         </button>
         <button
-          className='rounded bg-black p-1 px-4 text-xs font-medium text-white duration-300 ease-in-out disabled:bg-primary/40 disabled:text-primary enabled:hover:bg-primary/60'
+          className='rounded bg-black p-1 px-4 text-xs font-medium text-primary-foreground duration-300 ease-in-out disabled:bg-primary/40 disabled:text-primary enabled:hover:bg-primary/60'
           disabled={isPending}
           // @ts-ignore
           onClick={() => handleCreatePricingMethod({ info: methodology })}

@@ -46,7 +46,7 @@ function NewSizingSection({ infoHolder, setInfoHolder, addSection, closeMenu }: 
           <VscChromeClose style={{ color: 'red' }} />
         </button>
       </div>
-      <p className='my-2 text-center text-sm tracking-tight text-primary/50'>
+      <p className='my-2 text-center text-sm tracking-tight text-primary/70'>
         Escolha um nome para uma seção de campos de preenchimento e escolha os campos que comporão essa seção.
       </p>
       <input
@@ -61,13 +61,13 @@ function NewSizingSection({ infoHolder, setInfoHolder, addSection, closeMenu }: 
       <div className='my-2 flex flex-wrap items-center gap-2'>
         {AutomaticPremissesBySaleCategory[infoHolder.categoriaVenda].length > 0 ? (
           AutomaticPremissesBySaleCategory[infoHolder.categoriaVenda].map((field) => (
-            <div className='font-xs flex items-center gap-1 rounded-sm bg-primary/60 p-1 text-xs text-white'>
+            <div className='font-xs flex items-center gap-1 rounded-sm bg-primary/60 p-1 text-xs text-primary-foreground'>
               <IoMdLock />
               <p>{findFieldLabel(field)}</p>
             </div>
           ))
         ) : (
-          <p className='flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/50'>
+          <p className='flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/70'>
             Sem campos automáticos.
           </p>
         )}
@@ -81,7 +81,7 @@ function NewSizingSection({ infoHolder, setInfoHolder, addSection, closeMenu }: 
             <button
               key={index}
               onClick={() => addField(option as keyof TProposalPremisses)}
-              className='grow cursor-pointer rounded-sm border border-primary/70 p-1 text-xs font-medium text-primary/70 duration-300 ease-in-out hover:bg-primary/70 hover:text-white'
+              className='grow cursor-pointer rounded-sm border border-primary/70 p-1 text-xs font-medium text-primary/70 duration-300 ease-in-out hover:bg-primary/70 hover:text-primary-foreground'
             >
               {findFieldLabel(option)}
             </button>
@@ -101,7 +101,7 @@ function NewSizingSection({ infoHolder, setInfoHolder, addSection, closeMenu }: 
       <div className='my-2 flex items-center justify-end gap-2'>
         <button
           onClick={() => addSection(sizingHolder)}
-          className='rounded bg-blue-600 p-1 px-4 text-xs font-medium text-white duration-300 ease-in-out hover:bg-blue-800'
+          className='rounded bg-blue-600 p-1 px-4 text-xs font-medium text-primary-foreground duration-300 ease-in-out hover:bg-blue-800'
         >
           CADASTRAR SEÇÃO
         </button>

@@ -11,7 +11,7 @@ type DocumentationInformationProps = {
 function DocumentationInformation({ infoHolder, setInfoHolder }: DocumentationInformationProps) {
   return (
     <div className='flex w-full flex-col gap-2'>
-      <h1 className='w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-white'>INFORMAÇÕES SOBRE A DOCUMENTAÇÃO</h1>
+      <h1 className='w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-primary-foreground'>INFORMAÇÕES SOBRE A DOCUMENTAÇÃO</h1>
       <div className='flex w-full flex-col items-center gap-2 lg:flex-row'>
         <div className='w-full lg:w-1/2'>
           <DateInput

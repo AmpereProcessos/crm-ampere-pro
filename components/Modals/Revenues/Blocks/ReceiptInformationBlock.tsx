@@ -35,7 +35,7 @@ function RevenueReceiptInformationBlock({ infoHolder, setInfoHolder }: RevenueRe
 
   return (
     <div className='flex w-full flex-col gap-y-2'>
-      <h1 className='w-full bg-primary/70  p-1 text-center font-medium text-white'>INFORMAÇÕES DE RECEBIMENTO</h1>
+      <h1 className='w-full bg-primary/70  p-1 text-center font-medium text-primary-foreground'>INFORMAÇÕES DE RECEBIMENTO</h1>
       <div className='flex w-full flex-col gap-1'>
         <div className='flex w-full items-center justify-center lg:justify-end'>
           <DateInput
@@ -44,7 +44,7 @@ function RevenueReceiptInformationBlock({ infoHolder, setInfoHolder }: RevenueRe
             handleChange={(value) => setInfoHolder((prev) => ({ ...prev, dataCompetencia: formatDateOnInputChange(value) || prev.dataCompetencia }))}
           />
         </div>
-        <h1 className='w-full bg-primary/50 p-1 text-center text-xs font-medium text-white'>RECEBIMENTOS DA RECEITA</h1>
+        <h1 className='w-full bg-primary/50 p-1 text-center text-xs font-medium text-primary-foreground'>RECEBIMENTOS DA RECEITA</h1>
         <div className='flex w-full flex-col gap-2'>
           <div className='flex w-full flex-col items-center gap-2 lg:flex-row'>
             <div className='w-full lg:w-[25%]'>
@@ -103,7 +103,7 @@ function RevenueReceiptInformationBlock({ infoHolder, setInfoHolder }: RevenueRe
           </div>
           <div className='flex items-center justify-end'>
             <button
-              className='rounded bg-black p-1 px-4 text-sm font-medium text-white duration-300 ease-in-out hover:bg-primary/70'
+              className='rounded bg-black p-1 px-4 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-primary/70'
               onClick={() => addReceipt(receiptHolder)}
             >
               ADICIONAR RECEBIMENTO

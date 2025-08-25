@@ -10,13 +10,13 @@ function ActiveHomologationBlock({ infoHolder, setInfoHolder }: ActiveHomologati
   const activeHomologation = infoHolder.homologacaoDados;
   return (
     <div className='flex w-full flex-col gap-2 rounded-sm border border-primary/80'>
-      <h1 className='w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-white'>HOMOLOGAÇÃO ATIVA</h1>
+      <h1 className='w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-primary-foreground'>HOMOLOGAÇÃO ATIVA</h1>
       <div className='flex w-full grow flex-col gap-2 p-2'>
         {!!activeHomologation ? (
           <ActiveHomologation homologation={activeHomologation} />
         ) : (
           <div className='flex items-center justify-center p-2'>
-            <h1 className='text-center font-medium italic tracking-tight text-primary/50'>
+            <h1 className='text-center font-medium italic tracking-tight text-primary/70'>
               Não foi possível encontrar nenhuma homologação ativa para o projeto.
             </h1>
           </div>

@@ -15,9 +15,9 @@ function TechnicalAnalysisVinculationCard({ analysis, selectedId, handleClick }:
         <div className='flex w-full items-center justify-between gap-2'>
           <h1 className='font-Inter font-bold leading-none tracking-tight'>{analysis.nome}</h1>
           {selectedId == analysis._id ? (
-            <button className='rounded-full bg-green-500 px-2 py-1 text-xs font-bold text-white'>SELECIONADO</button>
+            <button className='rounded-full bg-green-500 px-2 py-1 text-xs font-bold text-primary-foreground'>SELECIONADO</button>
           ) : (
-            <button onClick={() => handleClick(analysis)} className='rounded-full bg-cyan-500 px-2 py-1 text-xs font-bold text-white'>
+            <button onClick={() => handleClick(analysis)} className='rounded-full bg-cyan-500 px-2 py-1 text-xs font-bold text-primary-foreground'>
               SELECIONAR ANÁLISE
             </button>
           )}

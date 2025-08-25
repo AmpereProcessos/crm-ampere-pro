@@ -23,14 +23,14 @@ function ProjectInformationBlock({ expenseId, session, infoHolder, setInfoHolder
   const [showFiles, setShowFiles] = useState<boolean>(false);
   return (
     <div className='flex w-full flex-col gap-y-2'>
-      <h1 className='w-full bg-primary/70  p-1 text-center font-medium text-white'>INFORMAÇÕES DO PROJETO</h1>
+      <h1 className='w-full bg-primary/70  p-1 text-center font-medium text-primary-foreground'>INFORMAÇÕES DO PROJETO</h1>
       <div className='flex w-full flex-col gap-1'>
         {infoHolder.projetoDados ? (
           <>
-            <h1 className='w-full bg-primary/50 p-1 text-center text-xs font-medium text-white'>GERAIS</h1>
+            <h1 className='w-full bg-primary/50 p-1 text-center text-xs font-medium text-primary-foreground'>GERAIS</h1>
             <div className='flex w-full flex-col items-center justify-between gap-2 lg:flex-row'>
               <div className='flex flex-col items-center gap-1 lg:items-start'>
-                <p className='text-[0.65rem] font-medium text-primary/50'>PROJETO</p>
+                <p className='text-[0.65rem] font-medium text-primary/70'>PROJETO</p>
                 <div className='flex flex-wrap items-center justify-center gap-4 lg:justify-start'>
                   <div className='flex items-center gap-1'>
                     <FaUserAlt />
@@ -49,13 +49,13 @@ function ProjectInformationBlock({ expenseId, session, infoHolder, setInfoHolder
                 </div>
               </div>
             </div>
-            <h1 className='w-full bg-primary/50 p-1 text-center text-xs font-medium text-white'>OBSERVAÇÕES</h1>
+            <h1 className='w-full bg-primary/50 p-1 text-center text-xs font-medium text-primary-foreground'>OBSERVAÇÕES</h1>
             {infoHolder.projetoDados.observacoes.length > 0 ? (
               infoHolder.projetoDados.observacoes.map((obs, index) => (
                 <div key={index} className='flex w-full flex-col rounded-md border border-primary/50'>
                   <div className='flex min-h-[25px] w-full flex-col items-start justify-between gap-1 lg:flex-row'>
                     <div className='flex w-full items-center justify-center rounded-br-md rounded-tl-md bg-cyan-700 lg:w-[40%]'>
-                      <p className='w-full text-center text-xs font-medium text-white'>{obs.assunto}</p>
+                      <p className='w-full text-center text-xs font-medium text-primary-foreground'>{obs.assunto}</p>
                     </div>
                     <div className='flex grow items-center justify-end gap-2 p-2'>
                       <div className='flex items-center gap-2'>
@@ -70,11 +70,11 @@ function ProjectInformationBlock({ expenseId, session, infoHolder, setInfoHolder
                       </div>
                     </div>
                   </div>
-                  <h1 className='w-full p-2 text-center text-xs font-medium tracking-tight text-primary/50'>{obs.descricao}</h1>
+                  <h1 className='w-full p-2 text-center text-xs font-medium tracking-tight text-primary/70'>{obs.descricao}</h1>
                 </div>
               ))
             ) : (
-              <p className='w-full text-center text-sm font-medium tracking-tight text-primary/50'>Nenhuma observação adicionada ao projeto.</p>
+              <p className='w-full text-center text-sm font-medium tracking-tight text-primary/70'>Nenhuma observação adicionada ao projeto.</p>
             )}
             {expenseId ? (
               <>

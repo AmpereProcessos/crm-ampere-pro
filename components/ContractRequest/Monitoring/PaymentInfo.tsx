@@ -65,7 +65,7 @@ function PaymentInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNextS
       <div className='flex w-full grow flex-col'>
         <button
           onClick={() => setPaymentInfoSameAsContract()}
-          className='w-fit self-center rounded-sm bg-[#15599a] p-2 text-xs font-medium text-white'
+          className='w-fit self-center rounded-sm bg-[#15599a] p-2 text-xs font-medium text-primary-foreground'
         >
           Usar mesmas informações preenchidas para contrato
         </button>
@@ -343,7 +343,7 @@ function PaymentInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNextS
                 descricaoNegociacao: e.target.value,
               })
             }
-            className='block h-[80px] w-full resize-none rounded-lg border border-primary/30 bg-gray-50 p-2.5 text-center text-primary/90 outline-hidden focus:border-blue-500 focus:ring-blue-500 dark:border-primary/60 dark:bg-primary/70 dark:text-white dark:placeholder-primary/40 dark:focus:border-blue-500 dark:focus:ring-blue-500'
+            className='block h-[80px] w-full resize-none rounded-lg border border-primary/30 bg-primary/10p-2.5 text-center text-primary/90 outline-hidden focus:border-blue-500 focus:ring-blue-500 dark:border-primary/60 dark:bg-primary/70  dark:placeholder-primary/40 dark:focus:border-blue-500 dark:focus:ring-blue-500'
           />
         </div>
       </div>
@@ -352,7 +352,7 @@ function PaymentInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNextS
           onClick={() => {
             goToPreviousStage();
           }}
-          className='rounded p-2 font-bold text-primary/50 duration-300 hover:scale-105'
+          className='rounded p-2 font-bold text-primary/70 duration-300 hover:scale-105'
         >
           Voltar
         </button>
@@ -360,7 +360,7 @@ function PaymentInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNextS
           onClick={() => {
             if (validateFields()) goToNextStage();
           }}
-          className='rounded p-2 font-bold hover:bg-black hover:text-white'
+          className='rounded p-2 font-bold hover:bg-black hover:text-primary-foreground'
         >
           Prosseguir
         </button>

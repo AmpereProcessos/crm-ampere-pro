@@ -50,7 +50,7 @@ function DocumentationInput({ label, value, handleChange, description, obligator
           ) : null}
         </div>
       </div>
-      <div className='my-2 text-start text-[0.65rem] tracking-tight text-primary/50 lg:text-xs'>{description || 'NENHUMA DESCRIÇÃO DEFINIDA.'}</div>
+      <div className='my-2 text-start text-[0.65rem] tracking-tight text-primary/70 lg:text-xs'>{description || 'NENHUMA DESCRIÇÃO DEFINIDA.'}</div>
       <div className='relative mt-2 flex w-full items-center justify-center'>
         <label
           htmlFor={inputIdentifier}
@@ -58,11 +58,11 @@ function DocumentationInput({ label, value, handleChange, description, obligator
         >
           <div className='flex w-full items-center gap-2'>
             {value ? (
-              <p className='grow text-center text-xs leading-none tracking-tight text-primary/50 lg:text-base'>
+              <p className='grow text-center text-xs leading-none tracking-tight text-primary/70 lg:text-base'>
                 {typeof value != 'string' ? (value.length > 1 ? `${value[0].name}, outros...` : value[0].name) : 'ARQUIVO DE REFERÊNCIA'}
               </p>
             ) : (
-              <p className='grow text-center text-xs leading-none tracking-tight text-primary/50 lg:text-base'>
+              <p className='grow text-center text-xs leading-none tracking-tight text-primary/70 lg:text-base'>
                 <span className='font-semibold text-cyan-500'>Clique para escolher um arquivo</span> ou o arraste para a àrea demarcada
               </p>
             )}
@@ -113,13 +113,13 @@ function DocumentationInput({ label, value, handleChange, description, obligator
                       {handleRenderIcon(reference.formato, 12)}
                       <a
                         href={reference.url}
-                        className='text-[0.65rem] font-bold leading-none tracking-tight text-primary/50 duration-300 ease-in-out hover:text-cyan-500'
+                        className='text-[0.65rem] font-bold leading-none tracking-tight text-primary/70 duration-300 ease-in-out hover:text-cyan-500'
                       >
                         {reference.titulo}
                       </a>
                     </div>
                     {value == reference.url ? (
-                      <h1 className='rounded-md bg-green-600 px-2 py-1 text-[0.55rem] font-medium text-white'>ESCOLHIDO</h1>
+                      <h1 className='rounded-md bg-green-600 px-2 py-1 text-[0.55rem] font-medium text-primary-foreground'>ESCOLHIDO</h1>
                     ) : (
                       <button
                         onClick={() => {
@@ -129,14 +129,14 @@ function DocumentationInput({ label, value, handleChange, description, obligator
                           });
                           setShowReferencesMenu(false);
                         }}
-                        className='rounded-md bg-cyan-600 px-2 py-1 text-[0.55rem] font-medium text-white hover:bg-cyan-500'
+                        className='rounded-md bg-cyan-600 px-2 py-1 text-[0.55rem] font-medium text-primary-foreground hover:bg-cyan-500'
                       >
                         USAR ARQUIVO
                       </button>
                     )}
                   </div>
                   <div className='mt-1 flex w-full items-center justify-between gap-2'>
-                    <h1 className='text-center text-[0.6rem] font-medium italic text-primary/50'>{reference.formato}</h1>
+                    <h1 className='text-center text-[0.6rem] font-medium italic text-primary/70'>{reference.formato}</h1>
                   </div>
                 </div>
               ))

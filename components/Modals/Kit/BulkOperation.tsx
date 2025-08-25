@@ -191,7 +191,7 @@ function KitBulkOperation({ session, closeModal }: KitBulkOperationProps) {
       <div className='fixed left-[50%] top-[50%] z-100 h-[80%] w-[90%] translate-x-[-50%] translate-y-[-50%] rounded-md bg-background p-[10px] lg:w-[70%]'>
         <div className='flex h-full flex-col'>
           <div className='flex flex-col items-center justify-between border-b border-primary/30 px-2 pb-2 text-lg lg:flex-row'>
-            <h3 className='text-xl font-bold text-primary dark:text-white '>OPERAÇÃO EM MASSA</h3>
+            <h3 className='text-xl font-bold text-primary  '>OPERAÇÃO EM MASSA</h3>
             <button
               onClick={() => closeModal()}
               type='button'
@@ -205,15 +205,15 @@ function KitBulkOperation({ session, closeModal }: KitBulkOperationProps) {
             <div className='relative mb-4 flex w-full items-center justify-center'>
               <label
                 htmlFor='dropzone-file'
-                className='dark:hover:bg-bray-800 flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-primary/30 bg-gray-50 hover:bg-primary/10 dark:border-primary/60 dark:bg-primary/70 dark:hover:border-primary/50 dark:hover:bg-primary/60'
+                className='dark:hover:bg-bray-800 flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-primary/30 bg-primary/10hover:bg-primary/10 dark:border-primary/60 dark:bg-primary/70 dark:hover:border-primary/50 dark:hover:bg-primary/60'
               >
                 <div className='flex flex-col items-center justify-center pb-6 pt-5 text-primary/80'>
                   <BsCloudUploadFill color={'rgb(31,41,55)'} size={50} />
 
                   {fileHolder ? (
-                    <p className='mb-2 text-sm text-primary/50 dark:text-primary/40'>{fileHolder.name}</p>
+                    <p className='mb-2 text-sm text-primary/70 dark:text-primary/40'>{fileHolder.name}</p>
                   ) : (
-                    <p className='mb-2 px-2 text-center text-sm text-primary/50 dark:text-primary/40'>
+                    <p className='mb-2 px-2 text-center text-sm text-primary/70 dark:text-primary/40'>
                       <span className='font-semibold'>Clique para escolher um arquivo</span> ou o arraste para a àrea demarcada
                     </p>
                   )}
@@ -233,21 +233,21 @@ function KitBulkOperation({ session, closeModal }: KitBulkOperationProps) {
             <div className='flex w-full items-center justify-end'>
               <button
                 onClick={() => handleExtracting(fileHolder)}
-                className='h-9 whitespace-nowrap rounded-sm bg-primary/90 px-4 py-2 text-sm font-medium text-white shadow-sm disabled:bg-primary/50 disabled:text-white enabled:hover:bg-primary/80 enabled:hover:text-white'
+                className='h-9 whitespace-nowrap rounded-sm bg-primary/90 px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm disabled:bg-primary/50 disabled:text-primary-foreground enabled:hover:bg-primary/80 enabled:hover:text-primary-foreground'
               >
                 IDENTIFICAR KITS
               </button>
             </div>
             {kitsHolder.length > 0 ? (
               <div className='flex w-full flex-col'>
-                <h1 className='rounded bg-primary/80 p-1 text-center font-bold text-white'>KITS IDENTIFICADOS</h1>
-                <p className='text-sm font-medium text-primary/50'>
+                <h1 className='rounded bg-primary/80 p-1 text-center font-bold text-primary-foreground'>KITS IDENTIFICADOS</h1>
+                <p className='text-sm font-medium text-primary/70'>
                   Foram identificados <strong className='text-[#f25041]'>{creatingCount}</strong> kits para criação.
                 </p>
-                <p className='text-sm font-medium text-primary/50'>
+                <p className='text-sm font-medium text-primary/70'>
                   Foram identificados <strong className='text-[#f25041]'>{updateCount}</strong> kits para atualização.
                 </p>
-                <p className='text-sm font-medium text-primary/50'>
+                <p className='text-sm font-medium text-primary/70'>
                   Foram identificados <strong className='text-[#f25041]'>{deleteCount}</strong> kits para exclusão.
                 </p>
                 <div className='mt-2 flex w-full flex-col gap-1'>
@@ -307,7 +307,7 @@ function KitBulkOperation({ session, closeModal }: KitBulkOperationProps) {
                   // @ts-ignore
                   handleKitsOperation(kitsHolder);
                 }}
-                className='h-9 whitespace-nowrap rounded-sm bg-blue-800 px-4 py-2 text-sm font-medium text-white shadow-sm disabled:bg-primary/50 disabled:text-white enabled:hover:bg-blue-800 enabled:hover:text-white'
+                className='h-9 whitespace-nowrap rounded-sm bg-blue-800 px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm disabled:bg-primary/50 disabled:text-primary-foreground enabled:hover:bg-blue-800 enabled:hover:text-primary-foreground'
               >
                 REALIZAR OPERAÇÃO
               </button>

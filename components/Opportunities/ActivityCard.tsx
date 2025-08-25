@@ -50,18 +50,18 @@ function ActivityCard({ event, opportunityId }: ActivityCardProps) {
         {event.dataConclusao ? (
           <div className='flex items-center gap-2'>
             <BsFillCalendarCheckFill style={{ fontSize: '15px', color: 'rgb(34,197,94)' }} />
-            <p className='text-xs font-medium text-primary/50'>{dayjs(event.dataConclusao).format('DD/MM/YYYY HH:mm')}</p>{' '}
+            <p className='text-xs font-medium text-primary/70'>{dayjs(event.dataConclusao).format('DD/MM/YYYY HH:mm')}</p>{' '}
           </div>
         ) : (
           <div className='flex items-center gap-2'>
             <BsFillCalendarCheckFill style={{ fontSize: '15px', color: 'rgb(249,115,22)' }} />
-            <p className='text-xs font-medium text-primary/50'>{dayjs(event.dataVencimento).format('DD/MM/YYYY HH:mm')}</p>{' '}
+            <p className='text-xs font-medium text-primary/70'>{dayjs(event.dataVencimento).format('DD/MM/YYYY HH:mm')}</p>{' '}
           </div>
         )}
       </div>
       {event.observacoes ? (
         <div className='flex w-full items-center'>
-          <p className='w-full rounded-sm border border-primary/30 bg-primary/10 p-3 text-center font-Inter text-xs text-primary/50'>
+          <p className='w-full rounded-sm border border-primary/30 bg-primary/10 p-3 text-center font-Inter text-xs text-primary/70'>
             {event.observacoes}
           </p>
         </div>
@@ -69,15 +69,15 @@ function ActivityCard({ event, opportunityId }: ActivityCardProps) {
       <div className='flex w-full items-center justify-between'>
         <div className='flex items-center gap-2'>
           <Avatar fallback={'R'} url={event.autor?.avatar_url || undefined} height={22} width={22} />
-          <p className='text-xs font-medium text-primary/50'>{event.autor?.nome}</p>
+          <p className='text-xs font-medium text-primary/70'>{event.autor?.nome}</p>
         </div>
         <div className='flex items-center gap-2'>
           <div className='hidden items-center gap-2 lg:flex'>
             <Avatar fallback={'R'} url={event.autor?.avatar_url || undefined} height={22} width={22} />
-            <p className='text-xs text-primary/50'>Criada por: {event.autor?.nome}</p>
+            <p className='text-xs text-primary/70'>Criada por: {event.autor?.nome}</p>
           </div>
           <BsCalendar style={{ fontSize: '15px' }} />
-          <p className='text-xs font-medium text-primary/50'>
+          <p className='text-xs font-medium text-primary/70'>
             {event.dataInsercao ? dayjs(event.dataInsercao).format('DD/MM/YYYY HH:mm') : null}
           </p>{' '}
         </div>

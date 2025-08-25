@@ -8,24 +8,24 @@ function getCardStatus({ approved, contractMade }: { approved?: boolean | null; 
   if (approved && contractMade)
     return (
       <div className='flex min-w-fit items-center gap-2 rounded-full bg-green-600 px-2 py-1 '>
-        <h1 className='text-[0.65rem] font-medium text-white lg:text-xs'>FINALIZADO</h1>
+        <h1 className='text-[0.65rem] font-medium text-primary-foreground lg:text-xs'>FINALIZADO</h1>
       </div>
     );
   if (approved)
     return (
       <div className='flex min-w-fit items-center gap-2 rounded-full bg-blue-500 px-2 py-1 '>
-        <h1 className='text-[0.65rem] font-medium text-white lg:text-xs'>APROVADO</h1>
+        <h1 className='text-[0.65rem] font-medium text-primary-foreground lg:text-xs'>APROVADO</h1>
       </div>
     );
   if (approved == false)
     return (
       <div className='flex min-w-fit items-center gap-2 rounded-full bg-red-500 px-2 py-1 '>
-        <h1 className='text-[0.65rem] font-medium text-white lg:text-xs'>REPROVADO</h1>
+        <h1 className='text-[0.65rem] font-medium text-primary-foreground lg:text-xs'>REPROVADO</h1>
       </div>
     );
   return (
     <div className='flex min-w-fit items-center gap-2 rounded-full bg-orange-500 px-2 py-1 '>
-      <h1 className='text-[0.65rem] font-medium text-white lg:text-xs'>PENDENTE</h1>
+      <h1 className='text-[0.65rem] font-medium text-primary-foreground lg:text-xs'>PENDENTE</h1>
     </div>
   );
 }
@@ -48,37 +48,37 @@ function RequestCard({ request, openModal }: RequestCardProps) {
       <div className='mt-2 flex items-center justify-between gap-2'>
         <div className='flex items-center gap-2'>
           <FaCity />
-          <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/50 lg:text-xs'>{request.cidade}</p>
+          <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/70 lg:text-xs'>{request.cidade}</p>
         </div>
         <div className='flex items-center gap-2 text-blue-800'>
           <FaUser color={'rgb(30,64,175)'} />
-          <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/50 lg:text-xs'>{request.nomeVendedor}</p>
+          <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/70 lg:text-xs'>{request.nomeVendedor}</p>
         </div>
       </div>
       <div className='mt-2 flex items-center justify-between gap-2'>
         <div className='flex items-center gap-2'>
           {request.idProjetoCRM ? <FaCode color={'rgb(34,197,94)'} /> : null}
-          <h1 className='text-[0.6rem] leading-none tracking-tight text-primary/50'>
+          <h1 className='text-[0.6rem] leading-none tracking-tight text-primary/70'>
             IDENTIFICADOR: <strong>{request.codigoSVB}</strong>
           </h1>
         </div>
         {request.idVisitaTecnica ? (
           <div className='flex items-center gap-2'>
             {request.idVisitaTecnica ? <FaCode color={'rgb(34,197,94)'} /> : null}
-            <h1 className='text-[0.6rem] leading-none tracking-tight text-primary/50'>VISITA VINCULADA</h1>
+            <h1 className='text-[0.6rem] leading-none tracking-tight text-primary/70'>VISITA VINCULADA</h1>
           </div>
         ) : (
-          <h1 className='text-[0.6rem] leading-none tracking-tight text-primary/50'>SEM VISITA VINCULADA</h1>
+          <h1 className='text-[0.6rem] leading-none tracking-tight text-primary/70'>SEM VISITA VINCULADA</h1>
         )}
       </div>
       <div className='mt-2 flex items-center justify-between gap-2'>
         <div className={`flex items-center gap-2`}>
           <TbCategoryFilled />
-          <p className='text-xs font-medium text-primary/50'>{request.tipoDeServico}</p>
+          <p className='text-xs font-medium text-primary/70'>{request.tipoDeServico}</p>
         </div>
         <div className={`flex items-center gap-2`}>
           <BsCalendarPlus />
-          <p className='text-xs font-medium text-primary/50'>{formatDateAsLocale(request.dataSolicitacao)}</p>
+          <p className='text-xs font-medium text-primary/70'>{formatDateAsLocale(request.dataSolicitacao)}</p>
         </div>
       </div>
     </div>

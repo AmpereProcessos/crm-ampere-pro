@@ -9,10 +9,10 @@ function TechnicalAnalysisBlock({ analysisId }: TechnicalAnalysisBlockProps) {
   const [showInfo, setShowInfo] = useState<boolean>(false);
   return (
     <div className='flex w-full flex-col gap-y-2'>
-      <h1 className='w-full rounded-sm bg-primary/70 p-1 text-center font-bold text-white'>INFORMAÇÕES DA ANÁLISE TÉCNICA</h1>
+      <h1 className='w-full rounded-sm bg-primary/70 p-1 text-center font-bold text-primary-foreground'>INFORMAÇÕES DA ANÁLISE TÉCNICA</h1>
       <div className='flex w-full grow flex-wrap justify-around gap-2'>
         {!analysisId ? (
-          <p className='w-full text-center text-xs font-medium italic text-primary/50'>Não há análise técnica disponível.</p>
+          <p className='w-full text-center text-xs font-medium italic text-primary/70'>Não há análise técnica disponível.</p>
         ) : (
           <div className='flex w-full items-center justify-center py-2'>
             <div className='w-fit'>

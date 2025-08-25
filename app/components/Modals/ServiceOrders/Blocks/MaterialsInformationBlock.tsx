@@ -48,7 +48,7 @@ function MaterialsInformationBlock({ infoHolder, setInfoHolder }: MaterialsInfor
   ];
   return (
     <div className='flex w-full flex-col gap-y-2'>
-      <h1 className='w-full bg-primary/70  p-1 text-center font-medium text-white'>INFORMAÇÕES DE MATERIAIS</h1>
+      <h1 className='w-full bg-primary/70  p-1 text-center font-medium text-primary-foreground'>INFORMAÇÕES DE MATERIAIS</h1>
       <div className='flex w-full flex-col gap-2'>
         <div className='flex w-full flex-col items-center gap-2 lg:flex-row'>
           <div className='w-full lg:w-[30%]'>
@@ -114,13 +114,13 @@ function MaterialsInformationBlock({ infoHolder, setInfoHolder }: MaterialsInfor
         </div>
         <div className='flex flex-col items-center justify-end gap-1 lg:flex-row lg:gap-4'>
           <button
-            className='rounded bg-[#fead41] p-1 px-4 text-xs font-medium text-white duration-300 ease-in-out hover:bg-yellow-400'
+            className='rounded bg-[#fead41] p-1 px-4 text-xs font-medium text-primary-foreground duration-300 ease-in-out hover:bg-yellow-400'
             onClick={() => addAsAvailable(materialHolder)}
           >
             ADICIONAR COMO DISPONÍVEL
           </button>
           <button
-            className='rounded bg-[#15599a] p-1 px-4 text-xs font-medium text-white duration-300 ease-in-out hover:bg-blue-800'
+            className='rounded bg-[#15599a] p-1 px-4 text-xs font-medium text-primary-foreground duration-300 ease-in-out hover:bg-blue-800'
             onClick={() => addForExtraction(materialHolder)}
           >
             ADICIONAR PARA RETIRADA

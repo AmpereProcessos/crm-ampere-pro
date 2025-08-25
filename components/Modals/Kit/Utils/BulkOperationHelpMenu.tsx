@@ -20,13 +20,13 @@ function BulkOperationHelpMenu({ session, pricingMethods, partners }: BulkOperat
         <h1 className='font-black'>AJUDA</h1>
       </div>
       <div className='flex flex-col items-center'>
-        <p className='text-sm tracking-tight text-primary/50'>Faça operações em massa nos seus kits através da nossa planilha modelo.</p>
-        <p className='text-sm tracking-tight text-primary/50'>Adicione, altere e/ou exclua diversos kits simultaneamente.</p>
-        <p className='text-sm tracking-tight text-primary/50'>
+        <p className='text-sm tracking-tight text-primary/70'>Faça operações em massa nos seus kits através da nossa planilha modelo.</p>
+        <p className='text-sm tracking-tight text-primary/70'>Adicione, altere e/ou exclua diversos kits simultaneamente.</p>
+        <p className='text-sm tracking-tight text-primary/70'>
           Linhas com a <strong className='text-[#E25E3E]'>coluna ID</strong> preenchida serão utilizadas para{' '}
           <strong className='text-[#E25E3E]'>atualização de um kit existente.</strong>
         </p>
-        <p className='text-sm tracking-tight text-primary/50'>
+        <p className='text-sm tracking-tight text-primary/70'>
           Linhas com a <strong className='text-[#E25E3E]'>coluna EXCLUIR preenchida com SIM</strong> serão utilizadas para{' '}
           <strong className='text-[#E25E3E]'>exclusão de um kit existente.</strong>
         </p>

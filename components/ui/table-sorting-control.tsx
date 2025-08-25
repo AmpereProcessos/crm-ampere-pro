@@ -134,7 +134,7 @@ export function TableSortingControl<T>({
               variant='outline'
               size={size === 'sm' ? 'xs' : size === 'md' ? 'sm' : 'default'}
               className={cn(
-                'border-primary/30 bg-background hover:text-white hover:border-[${accentColor}] transition-all duration-200',
+                'border-primary/30 bg-background hover:text-primary-foreground hover:border-[${accentColor}] transition-all duration-200',
                 currentSize.button
               )}
               style={
@@ -167,7 +167,7 @@ export function TableSortingControl<T>({
 
           {showCurrentSelection && (
             <div className={cn('hidden sm:flex items-center gap-2 bg-background border border-primary/30 rounded-md', currentSize.status)}>
-              <div className='flex items-center gap-2 text-primary/50'>
+              <div className='flex items-center gap-2 text-primary/70'>
                 <span>Ordenando por:</span>
                 <span className='font-semibold' style={{ color: accentColor }}>
                   {sortOptions.find((opt) => opt.value === sortConfig.field)?.label}

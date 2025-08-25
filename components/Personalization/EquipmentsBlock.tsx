@@ -16,7 +16,7 @@ function EquipmentsBlock({ session }: EquipmentsBlockProps) {
   const { data: equipments, isLoading, isError, isSuccess } = useEquipments({ category: categoryFilter });
   return (
     <div className='flex min-h-[450px] w-full flex-col rounded-sm border border-black'>
-      <h1 className='w-full rounded-tl rounded-tr bg-black p-1 text-center text-sm font-bold text-white'>EQUIPAMENTOS</h1>
+      <h1 className='w-full rounded-tl rounded-tr bg-black p-1 text-center text-sm font-bold text-primary-foreground'>EQUIPAMENTOS</h1>
       <div className='my-1 flex w-full flex-col'>
         <p className='w-full text-center text-sm font-light tracking-tighter text-primary/70'>
           Os equipamentos aqui cadastrados estarão disponíveis nas listas de equipamentos, como MÓDULOS E INVERSORES.
@@ -30,7 +30,7 @@ function EquipmentsBlock({ session }: EquipmentsBlockProps) {
           <button
             key={index}
             onClick={() => setCategoryFilter(category as TEquipment['categoria'])}
-            className={`rounded-lg ${categoryFilter == category ? 'bg-blue-500 text-white' : 'bg-transparent text-blue-500'} border border-blue-500 px-2 py-1 text-xs font-bold`}
+            className={`rounded-lg ${categoryFilter == category ? 'bg-blue-500 text-primary-foreground' : 'bg-transparent text-blue-500'} border border-blue-500 px-2 py-1 text-xs font-bold`}
           >
             {category}
           </button>
@@ -47,7 +47,7 @@ function EquipmentsBlock({ session }: EquipmentsBlockProps) {
               </div>
             ))
           ) : (
-            <p className='flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/50'>
+            <p className='flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/70'>
               Nenhum equipamento encontrado.
             </p>
           )
@@ -56,14 +56,14 @@ function EquipmentsBlock({ session }: EquipmentsBlockProps) {
       <div className='flex w-full items-center justify-end p-2'>
         {newEquipmentMenuIsOpen ? (
           <button
-            className='rounded bg-red-500 p-1 px-4 text-sm font-medium text-white duration-300 ease-in-out hover:bg-red-600'
+            className='rounded bg-red-500 p-1 px-4 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-red-600'
             onClick={() => setNewEquipmentMenuIsOpen(false)}
           >
             FECHAR MENU
           </button>
         ) : (
           <button
-            className='rounded bg-green-500 p-1 px-4 text-sm font-medium text-white duration-300 ease-in-out hover:bg-green-600'
+            className='rounded bg-green-500 p-1 px-4 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-green-600'
             onClick={() => setNewEquipmentMenuIsOpen(true)}
           >
             NOVO EQUIPAMENTO

@@ -34,7 +34,7 @@ function AcquisitionChannelsBlock({ session }: AcquisitionChannelsBlockProps) {
   });
   return (
     <div className='flex min-h-[450px] w-full flex-col rounded-sm border border-blue-500'>
-      <h1 className='w-full rounded-tl rounded-tr bg-blue-500 p-1 text-center text-sm font-bold text-white'>CANAIS DE AQUISIÇÃO</h1>
+      <h1 className='w-full rounded-tl rounded-tr bg-blue-500 p-1 text-center text-sm font-bold text-primary-foreground'>CANAIS DE AQUISIÇÃO</h1>
       <div className='my-1 flex w-full flex-col'>
         <p className='w-full text-center text-sm font-light tracking-tighter text-primary/70'>
           Os canais de aquisição aqui cadastrados serão utilizados para classificar os clientes que entram no sistema.
@@ -54,14 +54,16 @@ function AcquisitionChannelsBlock({ session }: AcquisitionChannelsBlockProps) {
               </div>
             ))
           ) : (
-            <p className='flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/50'>
+            <p className='flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/70'>
               Nenhum canal de aquisição encontrado.
             </p>
           )
         ) : null}
       </div>
       <div className='flex w-full flex-col gap-2'>
-        <h1 className='w-full rounded-bl rounded-br bg-[#fead41] p-1 text-center text-xs font-bold text-white'>CADASTRO DE CANAL DE AQUISIÇÃO</h1>
+        <h1 className='w-full rounded-bl rounded-br bg-[#fead41] p-1 text-center text-xs font-bold text-primary-foreground'>
+          CADASTRO DE CANAL DE AQUISIÇÃO
+        </h1>
         <div className='flex w-full items-center gap-4 p-3 flex-col lg:flex-row'>
           <div className='w-full lg:w-2/3'>
             <input
@@ -72,7 +74,7 @@ function AcquisitionChannelsBlock({ session }: AcquisitionChannelsBlockProps) {
               type='text'
               placeholder='Preencha um nome para o canal de aquisição...'
               onBlur={() => setAcquisitionChannelHolder((prev) => ({ ...prev, slug: formatToSlug(prev.value) }))}
-              className='w-full rounded-sm border border-primary/30 p-1 text-center text-xs tracking-tight text-primary/50 shadow-md outline-hidden placeholder:italic'
+              className='w-full rounded-sm border border-primary/30 p-1 text-center text-xs tracking-tight text-primary/70 shadow-md outline-hidden placeholder:italic'
             />
           </div>
           <div className='w-full lg:w-1/3'>
@@ -83,7 +85,7 @@ function AcquisitionChannelsBlock({ session }: AcquisitionChannelsBlockProps) {
               }}
               type='text'
               placeholder='Preencha um slug para o canal de aquisição...'
-              className='w-full rounded-sm border border-primary/30 p-1 text-center text-xs tracking-tight text-primary/50 shadow-md outline-hidden placeholder:italic'
+              className='w-full rounded-sm border border-primary/30 p-1 text-center text-xs tracking-tight text-primary/70 shadow-md outline-hidden placeholder:italic'
             />
           </div>
         </div>
@@ -105,7 +107,7 @@ function AcquisitionChannelsBlock({ session }: AcquisitionChannelsBlockProps) {
               };
               handleCreateAcquisitionChannel({ info: util });
             }}
-            className='rounded bg-black px-4 py-1 text-sm font-medium text-white duration-300 ease-in-out hover:bg-primary/70'
+            className='rounded bg-black px-4 py-1 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-primary/70'
           >
             CADASTRAR
           </button>
@@ -136,11 +138,11 @@ function AcquisitionChannelUtil({ acquisitionChannel }: { acquisitionChannel: TA
         <div className='flex items-center gap-2'>
           <div className={'flex items-center gap-1'}>
             <BsCalendarPlus />
-            <p className='text-[0.65rem] font-medium text-primary/50'>{formatDateAsLocale(acquisitionChannel.dataInsercao)}</p>
+            <p className='text-[0.65rem] font-medium text-primary/70'>{formatDateAsLocale(acquisitionChannel.dataInsercao)}</p>
           </div>
           <div className='flex items-center gap-1'>
             <Avatar fallback={'R'} url={acquisitionChannel.autor.avatar_url || undefined} height={20} width={20} />
-            <p className='text-[0.65rem] font-medium text-primary/50'>{acquisitionChannel.autor.nome}</p>
+            <p className='text-[0.65rem] font-medium text-primary/70'>{acquisitionChannel.autor.nome}</p>
           </div>
         </div>
       </div>

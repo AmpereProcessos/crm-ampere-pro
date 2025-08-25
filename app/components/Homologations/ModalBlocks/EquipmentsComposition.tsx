@@ -131,7 +131,7 @@ function EquipmentsComposition({ infoHolder, setInfoHolder, activeProposalId }: 
   }
   return (
     <div className='flex w-full flex-col gap-2'>
-      <h1 className='w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-white'>EQUIPAMENTOS</h1>
+      <h1 className='w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-primary-foreground'>EQUIPAMENTOS</h1>
       <div className='flex w-full flex-col gap-1'>
         <div className='flex w-full flex-col items-center gap-2 lg:flex-row'>
           <div className='w-full lg:w-3/4'>
@@ -189,7 +189,7 @@ function EquipmentsComposition({ infoHolder, setInfoHolder, activeProposalId }: 
         </div>
         <div className='flex items-center justify-end'>
           <button
-            className='rounded bg-black p-1 px-4 text-sm font-medium text-white duration-300 ease-in-out hover:bg-primary/70'
+            className='rounded bg-black p-1 px-4 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-primary/70'
             onClick={() => addInverterToEquipments()}
           >
             ADICIONAR INVERSOR
@@ -253,7 +253,7 @@ function EquipmentsComposition({ infoHolder, setInfoHolder, activeProposalId }: 
         </div>
         <div className='flex items-center justify-end'>
           <button
-            className='rounded bg-black p-1 px-4 text-sm font-medium text-white duration-300 ease-in-out hover:bg-primary/70'
+            className='rounded bg-black p-1 px-4 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-primary/70'
             onClick={() => addModuleToEquipments()}
           >
             ADICIONAR MÓDULO
@@ -345,7 +345,7 @@ function EquipmentsComposition({ infoHolder, setInfoHolder, activeProposalId }: 
         </div>
         <div className='flex items-center justify-end'>
           <button
-            className='rounded bg-black p-1 px-4 text-sm font-medium text-white duration-300 ease-in-out hover:bg-primary/70'
+            className='rounded bg-black p-1 px-4 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-primary/70'
             onClick={() => addPersonalizedEquipment()}
           >
             ADICIONAR PRODUTO PERSONALIZADO
@@ -362,13 +362,13 @@ function EquipmentsComposition({ infoHolder, setInfoHolder, activeProposalId }: 
       <div className='mt-2 flex w-full items-center justify-between gap-2'>
         <h1 className='mb-2 text-start font-Inter font-bold leading-none tracking-tight'>EQUIPAMENTOS A SEREM HOMOLOGADOS</h1>
         <div className='flex items-center gap-2'>
-          <div className='flex items-center gap-1 rounded-md bg-[#15599a] px-2 py-1 text-white'>
+          <div className='flex items-center gap-1 rounded-md bg-[#15599a] px-2 py-1 text-primary-foreground'>
             <FaSolarPanel />
             <p className='text-xs font-medium tracking-tight'>
               {getModulesPeakPotByProducts(infoHolder.equipamentos as TProductItem[])} kWp EM MÓDULOS
             </p>
           </div>
-          <div className='flex items-center gap-1 rounded-md bg-[#fead41] px-2 py-1 text-white'>
+          <div className='flex items-center gap-1 rounded-md bg-[#fead41] px-2 py-1 text-primary-foreground'>
             <ImPower />
             <p className='tracking-tigh text-xs font-medium'>
               {getInverterPeakPowerByProducts(infoHolder.equipamentos as TProductItem[])} kWp EM INVERSORES
@@ -403,17 +403,17 @@ function EquipmentsComposition({ infoHolder, setInfoHolder, activeProposalId }: 
               <div className='mt-1 flex w-full items-center justify-end gap-2 pl-2'>
                 <div className='flex items-center gap-1'>
                   <FaIndustry size={12} />
-                  <p className='text-[0.7rem] font-light text-primary/50 lg:text-xs'>{product.fabricante}</p>
+                  <p className='text-[0.7rem] font-light text-primary/70 lg:text-xs'>{product.fabricante}</p>
                 </div>
                 <div className='flex items-center gap-1'>
                   <ImPower size={12} />
-                  <p className='text-[0.7rem] font-light text-primary/50 lg:text-xs'>{product.potencia} W</p>
+                  <p className='text-[0.7rem] font-light text-primary/70 lg:text-xs'>{product.potencia} W</p>
                 </div>
               </div>
             </div>
           ))
         ) : (
-          <div className='text-center font-light text-primary/50'>Nenhum produto adicionado</div>
+          <div className='text-center font-light text-primary/70'>Nenhum produto adicionado</div>
         )}
       </div>
     </div>

@@ -216,7 +216,7 @@ export default function OpportunitiesKanbanModePage({
               <button
                 type='button'
                 onClick={() => handleSetMode('card')}
-                className='flex items-center gap-1 px-2 text-xs text-primary/50 duration-300 ease-out hover:text-primary/80'
+                className='flex items-center gap-1 px-2 text-xs text-primary/70 duration-300 ease-out hover:text-primary/80'
               >
                 <FaRotate />
                 <h1 className='font-medium'>ALTERAR MODO</h1>
@@ -227,7 +227,7 @@ export default function OpportunitiesKanbanModePage({
               <button
                 type='button'
                 onClick={() => handleExportData()}
-                className='flex h-[46.6px] items-center justify-center gap-2 rounded-md border bg-[#2c6e49] p-2 px-3 text-sm font-medium text-white shadow-md duration-300 ease-in-out hover:scale-105'
+                className='flex h-[46.6px] items-center justify-center gap-2 rounded-md border bg-[#2c6e49] p-2 px-3 text-sm font-medium text-primary-foreground shadow-md duration-300 ease-in-out hover:scale-105'
               >
                 <BsDownload style={{ fontSize: '18px' }} />
               </button>
@@ -236,7 +236,7 @@ export default function OpportunitiesKanbanModePage({
               <button
                 type='button'
                 onClick={() => setNewProjectModalIsOpen(true)}
-                className='flex h-[46.6px] items-center justify-center gap-2 rounded-md border bg-[#15599a] p-2 px-3 text-sm font-medium text-white shadow-md duration-300 ease-in-out hover:scale-105'
+                className='flex h-[46.6px] items-center justify-center gap-2 rounded-md border bg-[#15599a] p-2 px-3 text-sm font-medium text-primary-foreground shadow-md duration-300 ease-in-out hover:scale-105'
               >
                 <AiOutlinePlus style={{ fontSize: '18px' }} />
               </button>
@@ -249,7 +249,7 @@ export default function OpportunitiesKanbanModePage({
               <button
                 type='button'
                 className={cn('flex items-center justify-center p-2 max-h-[36px] min-h-[36px] border border-[#3e53b2] rounded-md transition-colors', {
-                  'bg-[#3e53b2] text-white': params.isFromMarketing,
+                  'bg-[#3e53b2] text-primary-foreground': params.isFromMarketing,
                   'text-[#3e53b2]': !params.isFromMarketing,
                 })}
                 onClick={() => setParams((prev) => ({ ...prev, isFromMarketing: !prev.isFromMarketing }))}
@@ -260,7 +260,7 @@ export default function OpportunitiesKanbanModePage({
                 onClick={() => setParams((prev) => ({ ...prev, isFromIndication: !prev.isFromIndication }))}
                 type='button'
                 className={cn('flex items-center justify-center p-2 max-h-[36px] min-h-[36px] border border-[#06b6d4] rounded-md transition-colors', {
-                  'bg-[#06b6d4] text-white': params.isFromIndication,
+                  'bg-[#06b6d4] text-primary-foreground': params.isFromIndication,
                   'text-[#06b6d4]': !params.isFromIndication,
                 })}
               >

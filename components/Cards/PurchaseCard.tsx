@@ -15,24 +15,24 @@ function renderDeliveryText(delivery: TPurchaseDTO['entrega']) {
 
 function getStatusTag(status?: string | null) {
   if (status == 'AGUARDANDO LIBERAÇÃO')
-    return <h1 className='rounded-md bg-primary/50 px-2 py-0.5 text-xxs font-medium text-white lg:text-[0.6rem]'>{status}</h1>;
+    return <h1 className='rounded-md bg-primary/50 px-2 py-0.5 text-xxs font-medium text-primary-foreground lg:text-[0.6rem]'>{status}</h1>;
 
   if (status == 'AGUARDANDO PAGAMENTO')
-    return <h1 className='rounded-md bg-blue-500 px-2 py-0.5 text-xxs font-medium text-white lg:text-[0.6rem]'>{status}</h1>;
+    return <h1 className='rounded-md bg-blue-500 px-2 py-0.5 text-xxs font-medium text-primary-foreground lg:text-[0.6rem]'>{status}</h1>;
 
   if (status == 'PENDÊNCIA COMERCIAL')
-    return <h1 className='rounded-md bg-green-800 px-2 py-0.5 text-xxs font-medium text-white lg:text-[0.6rem]'>{status}</h1>;
+    return <h1 className='rounded-md bg-green-800 px-2 py-0.5 text-xxs font-medium text-primary-foreground lg:text-[0.6rem]'>{status}</h1>;
 
   if (status == 'PENDÊNCIA OPERACIONAL')
-    return <h1 className='rounded-md bg-blue-800 px-2 py-0.5 text-xxs font-medium text-white lg:text-[0.6rem]'>{status}</h1>;
+    return <h1 className='rounded-md bg-blue-800 px-2 py-0.5 text-xxs font-medium text-primary-foreground lg:text-[0.6rem]'>{status}</h1>;
 
   if (status == 'PENDÊNCIA EXTERNA')
-    return <h1 className='rounded-md bg-primary/80 px-2 py-0.5 text-xxs font-medium text-white lg:text-[0.6rem]'>{status}</h1>;
+    return <h1 className='rounded-md bg-primary/80 px-2 py-0.5 text-xxs font-medium text-primary-foreground lg:text-[0.6rem]'>{status}</h1>;
 
   if (status == 'CONCLUÍDA')
-    return <h1 className='rounded-md bg-green-500 px-2 py-0.5 text-xxs font-medium text-white lg:text-[0.6rem]'>{status}</h1>;
+    return <h1 className='rounded-md bg-green-500 px-2 py-0.5 text-xxs font-medium text-primary-foreground lg:text-[0.6rem]'>{status}</h1>;
 
-  return <h1 className='rounded-md bg-primary/50 px-2 py-0.5 text-xxs font-medium text-white lg:text-[0.6rem]'>NÃO DEFINIDO</h1>;
+  return <h1 className='rounded-md bg-primary/50 px-2 py-0.5 text-xxs font-medium text-primary-foreground lg:text-[0.6rem]'>NÃO DEFINIDO</h1>;
 }
 type PurchaseCardProps = {
   purchase: TPurchaseDTO;
@@ -57,7 +57,9 @@ function PurchaseCard({ purchase, handleClick }: PurchaseCardProps) {
             <h1 className='text-sm font-black leading-none tracking-tight'>{purchase.titulo}</h1>
           )}
         </div>
-        <h1 className='rounded-lg bg-black px-2 py-0.5 text-center text-[0.65rem] font-bold text-white lg:py-1'>{formatToMoney(purchase.total)}</h1>
+        <h1 className='rounded-lg bg-black px-2 py-0.5 text-center text-[0.65rem] font-bold text-primary-foreground lg:py-1'>
+          {formatToMoney(purchase.total)}
+        </h1>
       </div>
       <div className='flex w-full flex-col items-center justify-between gap-2 lg:flex-row'>
         <div className='flex items-center gap-2'>
@@ -87,7 +89,7 @@ function PurchaseCard({ purchase, handleClick }: PurchaseCardProps) {
           </div>
           <div className={`flex items-center gap-1`}>
             <BsCalendarPlus />
-            <p className='text-[0.65rem] font-medium text-primary/50'>{formatDateAsLocale(purchase.dataInsercao, true)}</p>
+            <p className='text-[0.65rem] font-medium text-primary/70'>{formatDateAsLocale(purchase.dataInsercao, true)}</p>
           </div>
         </div>
       </div>
@@ -95,7 +97,7 @@ function PurchaseCard({ purchase, handleClick }: PurchaseCardProps) {
       <div className="flex flex-col gap-1">
         <div className="flex items-center gap-1">
           <BsPatchCheck size={12} />
-          <p className="text-[0.65rem] font-medium text-primary/50">LIBERAÇÃO</p>
+          <p className="text-[0.65rem] font-medium text-primary/70">LIBERAÇÃO</p>
         </div>
         {!!purchase.liberacao.data ? (
           <div className="flex items-center gap-2">
@@ -116,7 +118,7 @@ function PurchaseCard({ purchase, handleClick }: PurchaseCardProps) {
       <div className="flex w-full flex-col gap-1">
         <div className="flex items-center gap-1">
           <BsCart size={12} />
-          <p className="text-[0.65rem] font-medium text-primary/50">COMPOSIÇÃO</p>
+          <p className="text-[0.65rem] font-medium text-primary/70">COMPOSIÇÃO</p>
         </div>
         <div className="flex w-full flex-wrap items-center gap-2">
           {purchase.composicao.map((item, index) => (
@@ -132,7 +134,7 @@ function PurchaseCard({ purchase, handleClick }: PurchaseCardProps) {
         <div className="flex flex-col items-center gap-1 lg:items-start">
           <div className="flex items-center gap-1">
             <BsTagFill size={12} />
-            <p className="text-[0.65rem] font-medium text-primary/50">PEDIDO</p>
+            <p className="text-[0.65rem] font-medium text-primary/70">PEDIDO</p>
           </div>
           {!!purchase.pedido.data ? (
             <div className="flex items-center gap-2">
@@ -147,7 +149,7 @@ function PurchaseCard({ purchase, handleClick }: PurchaseCardProps) {
         <div className="flex flex-col items-center gap-1 lg:items-end">
           <div className="flex items-center gap-1">
             <FaTruck size={12} />
-            <p className="text-[0.65rem] font-medium text-primary/50">TRANSPORTE</p>
+            <p className="text-[0.65rem] font-medium text-primary/70">TRANSPORTE</p>
           </div>
           {purchase.transporte.transportadora.nome.trim().length > 0 ? (
             <div className="flex items-center gap-2">
@@ -162,7 +164,7 @@ function PurchaseCard({ purchase, handleClick }: PurchaseCardProps) {
         <div className="flex flex-col items-center gap-1 lg:items-start">
           <div className="flex items-center gap-1">
             <FaTruck size={12} />
-            <p className="text-[0.65rem] font-medium text-primary/50">FATURAMENTO</p>
+            <p className="text-[0.65rem] font-medium text-primary/70">FATURAMENTO</p>
           </div>
           {!!purchase.faturamento.data ? (
             <div className="flex items-center gap-2">
@@ -177,7 +179,7 @@ function PurchaseCard({ purchase, handleClick }: PurchaseCardProps) {
         <div className="flex flex-col items-center gap-1 lg:items-end">
           <div className="flex items-center gap-1">
             <BsBox2 size={12} />
-            <p className="text-[0.65rem] font-medium text-primary/50">ENTREGA</p>
+            <p className="text-[0.65rem] font-medium text-primary/70">ENTREGA</p>
           </div>
           {renderDeliveryText(purchase.entrega).dates ? (
             <p className="text-[0.6rem] font-medium leading-none tracking-tight">{renderDeliveryText(purchase.entrega).dates}</p>
@@ -195,7 +197,7 @@ function PurchaseCard({ purchase, handleClick }: PurchaseCardProps) {
       <div className="flex w-full items-center justify-end">
         <div className={`flex items-center gap-1`}>
           <BsCalendarPlus />
-          <p className="text-[0.65rem] font-medium text-primary/50">{formatDateAsLocale(purchase.dataInsercao, true)}</p>
+          <p className="text-[0.65rem] font-medium text-primary/70">{formatDateAsLocale(purchase.dataInsercao, true)}</p>
         </div>
       </div> */}
     </div>

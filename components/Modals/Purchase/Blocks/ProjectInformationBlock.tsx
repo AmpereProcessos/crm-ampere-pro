@@ -16,13 +16,13 @@ function ProjectInformationBlock({ purchaseId, project, session }: ProjectInform
   const [showFiles, setShowFiles] = useState<boolean>(false);
   return (
     <div className='flex w-full flex-col gap-y-2'>
-      <h1 className='w-full bg-primary/70 p-1 text-center font-medium text-white'>INFORMAÇÕES DO PROJETO</h1>
+      <h1 className='w-full bg-primary/70 p-1 text-center font-medium text-primary-foreground'>INFORMAÇÕES DO PROJETO</h1>
       <div className='flex w-full flex-col gap-1 pb-2'>
         <div className='flex items-center gap-1 self-center'>
           <BsCode />
           <p className='font-raleway text-sm font-medium duration-300 ease-in-out hover:text-cyan-500'>{project.nome}</p>
         </div>
-        <h1 className='w-full bg-primary/50 p-1 text-center text-xs font-medium text-white'>EQUIPAMENTOS</h1>
+        <h1 className='w-full bg-primary/50 p-1 text-center text-xs font-medium text-primary-foreground'>EQUIPAMENTOS</h1>
         <div className='flex w-full flex-wrap items-center justify-start gap-2'>
           {project.produtos.map((product, index) => (
             <div className='w-full lg:w-[400px]'>
@@ -30,10 +30,10 @@ function ProjectInformationBlock({ purchaseId, project, session }: ProjectInform
             </div>
           ))}
         </div>
-        <h1 className='w-full bg-primary/50 p-1 text-center text-xs font-medium text-white'>PAGAMENTO</h1>
+        <h1 className='w-full bg-primary/50 p-1 text-center text-xs font-medium text-primary-foreground'>PAGAMENTO</h1>
         <div className='flex w-full flex-col items-center justify-between gap-2 lg:flex-row'>
           <div className='flex flex-col items-center gap-1 lg:items-start'>
-            <p className='text-[0.65rem] font-medium text-primary/50'>PAGADOR</p>
+            <p className='text-[0.65rem] font-medium text-primary/70'>PAGADOR</p>
             <div className='flex flex-wrap items-center justify-center gap-4 lg:justify-start'>
               <div className='flex items-center gap-1'>
                 <FaUserAlt />
@@ -50,7 +50,7 @@ function ProjectInformationBlock({ purchaseId, project, session }: ProjectInform
             </div>
           </div>
           <div className='flex flex-col items-center gap-1 lg:items-end'>
-            <p className='text-[0.65rem] font-medium text-primary/50'>CREDOR</p>
+            <p className='text-[0.65rem] font-medium text-primary/70'>CREDOR</p>
             <div className='flex flex-wrap items-center justify-center gap-4 lg:justify-start'>
               <div className='flex items-center gap-1'>
                 <BsBank />

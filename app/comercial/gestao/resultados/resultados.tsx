@@ -207,7 +207,7 @@ function ManagementComercialResults({ session }: ComercialResultsProps) {
           <button
             type='button'
             onClick={() => handleDataExport()}
-            className='flex w-full lg:w-fit min-h-[34px] items-center justify-center gap-2 rounded-md border bg-[#2c6e49] p-2 px-3 text-sm font-medium text-white shadow-md duration-300 ease-in-out hover:scale-[1.02]'
+            className='flex w-full lg:w-fit min-h-[34px] items-center justify-center gap-2 rounded-md border bg-[#2c6e49] p-2 px-3 text-sm font-medium text-primary-foreground shadow-md duration-300 ease-in-out hover:scale-[1.02]'
           >
             <BsDownload className='w-3.5 h-3.5' />
           </button>

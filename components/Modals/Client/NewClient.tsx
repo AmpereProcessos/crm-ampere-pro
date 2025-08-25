@@ -122,7 +122,7 @@ function NewClient({ session, partnerId, closeModal }: NewClientModalProps) {
       <div className='fixed left-[50%] top-[50%] z-100 h-[80%] w-[93%] translate-x-[-50%] translate-y-[-50%] rounded-md bg-background p-[10px]'>
         <div className='flex h-full flex-col'>
           <div className='flex flex-col items-center justify-between border-b border-primary/30 px-2 pb-2 text-lg lg:flex-row'>
-            <h3 className='text-xl font-bold text-primary dark:text-white '>NOVO CLIENTE</h3>
+            <h3 className='text-xl font-bold text-primary  '>NOVO CLIENTE</h3>
             <button
               onClick={closeModal}
               type='button'
@@ -132,7 +132,7 @@ function NewClient({ session, partnerId, closeModal }: NewClientModalProps) {
             </button>
           </div>
           <div className='flex grow flex-col gap-y-2 overflow-y-auto overscroll-y-auto border-b border-primary/30 py-2 scrollbar-thin scrollbar-track-primary/10 scrollbar-thumb-primary/30'>
-            <h1 className='w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-white'>INFORMAÇÕES PESSOAIS</h1>
+            <h1 className='w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-primary-foreground'>INFORMAÇÕES PESSOAIS</h1>
             <div className='flex w-full flex-col items-center gap-2 lg:flex-row'>
               <div className='w-full lg:w-1/2'>
                 <TextInput
@@ -250,7 +250,7 @@ function NewClient({ session, partnerId, closeModal }: NewClientModalProps) {
                 />
               </div>
             </div>
-            <h1 className='w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-white'>INFORMAÇÕES DE CONTATO</h1>
+            <h1 className='w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-primary-foreground'>INFORMAÇÕES DE CONTATO</h1>
             <div className='flex w-full flex-col items-center gap-2 lg:flex-row'>
               <div className='w-full lg:w-1/3'>
                 <TextInput
@@ -290,7 +290,7 @@ function NewClient({ session, partnerId, closeModal }: NewClientModalProps) {
                 />
               </div>
             </div>
-            <h1 className='w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-white'>INFORMAÇÕES DE ENDEREÇO</h1>
+            <h1 className='w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-primary-foreground'>INFORMAÇÕES DE ENDEREÇO</h1>
             <div className='grid grid-cols-1 grid-rows-3 items-center gap-6 px-2 lg:grid-cols-3 lg:grid-rows-1'>
               <TextInput
                 label='CEP'
@@ -385,7 +385,7 @@ function NewClient({ session, partnerId, closeModal }: NewClientModalProps) {
               disabled={isPending}
               // @ts-ignore
               onClick={() => handleCreateClient({ info: clientInfo })}
-              className='rounded bg-green-500 px-4 py-1 text-sm font-medium text-white duration-300 ease-in-out disabled:bg-primary/50 disabled:text-primary enabled:hover:bg-green-700'
+              className='rounded bg-green-500 px-4 py-1 text-sm font-medium text-primary-foreground duration-300 ease-in-out disabled:bg-primary/50 disabled:text-primary enabled:hover:bg-green-700'
             >
               CRIAR
             </button>

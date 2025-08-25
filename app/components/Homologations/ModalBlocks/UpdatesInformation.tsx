@@ -42,7 +42,7 @@ function UpdatesInformation({ session, infoHolder, setInfoHolder }: UpdatesInfor
   }
   return (
     <div className='flex w-full flex-col gap-2'>
-      <h1 className='w-full rounded-sm bg-cyan-800 p-1 text-center font-bold text-white'>ATUALIZAÇÕES</h1>
+      <h1 className='w-full rounded-sm bg-cyan-800 p-1 text-center font-bold text-primary-foreground'>ATUALIZAÇÕES</h1>
       <div className='flex w-full flex-col items-center gap-2 lg:flex-row'>
         <div className='w-full lg:w-1/2'>
           <TextInput
@@ -67,7 +67,7 @@ function UpdatesInformation({ session, infoHolder, setInfoHolder }: UpdatesInfor
       </div>
       <div className='flex items-center justify-end'>
         <button
-          className='rounded bg-black p-1 px-4 text-sm font-medium text-white duration-300 ease-in-out hover:bg-primary/70'
+          className='rounded bg-black p-1 px-4 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-primary/70'
           onClick={() => addUpdate(updateHolder)}
         >
           ADICIONAR ATUALIZAÇÃO
@@ -87,7 +87,7 @@ function UpdatesInformation({ session, infoHolder, setInfoHolder }: UpdatesInfor
                   </div>
                   <div className='flex items-center gap-1'>
                     <Avatar fallback={'R'} url={update.autor.avatar_url || undefined} height={20} width={20} />
-                    <p className='text-xs font-medium text-primary/50'>{update.autor.nome}</p>
+                    <p className='text-xs font-medium text-primary/70'>{update.autor.nome}</p>
                   </div>
                 </div>
                 <button
@@ -98,13 +98,13 @@ function UpdatesInformation({ session, infoHolder, setInfoHolder }: UpdatesInfor
                   <MdDelete style={{ color: 'red' }} size={15} />
                 </button>
               </div>
-              <div className='flex w-full items-center justify-center rounded-md bg-primary/10 p-2 text-center text-xs font-medium text-primary/50'>
+              <div className='flex w-full items-center justify-center rounded-md bg-primary/10 p-2 text-center text-xs font-medium text-primary/70'>
                 {update.descricao}
               </div>
             </div>
           ))
         ) : (
-          <p className='flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/50'>
+          <p className='flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/70'>
             Sem atualizações adicionadas.
           </p>
         )}

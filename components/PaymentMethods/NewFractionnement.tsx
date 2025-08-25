@@ -115,7 +115,7 @@ function NewFractionnement({ addFractionnement, removeFractionnement, missingPer
       ) : null}
       <div className='my-2 flex items-center justify-end gap-2'>
         <button
-          className='rounded bg-black p-1 px-4 text-xs font-medium text-white duration-300 ease-in-out disabled:bg-primary/40 disabled:text-primary enabled:hover:bg-primary/60'
+          className='rounded bg-black p-1 px-4 text-xs font-medium text-primary-foreground duration-300 ease-in-out disabled:bg-primary/40 disabled:text-primary enabled:hover:bg-primary/60'
           onClick={() => validateAndAddFractionnement()}
         >
           ADICIONAR FRACIONAMENTO

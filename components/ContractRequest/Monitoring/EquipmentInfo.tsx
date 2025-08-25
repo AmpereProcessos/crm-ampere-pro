@@ -152,7 +152,7 @@ function Equipment({ requestInfo, setRequestInfo, goToNextStage, goToPreviousSta
         </div>
         <div className='flex items-center justify-end'>
           <button
-            className='rounded bg-black p-1 px-4 text-sm font-medium text-white duration-300 ease-in-out hover:bg-primary/70'
+            className='rounded bg-black p-1 px-4 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-primary/70'
             onClick={() => addToList(equipmentHolder)}
           >
             ADICIONAR EQUIPAMENTO
@@ -186,13 +186,13 @@ function Equipment({ requestInfo, setRequestInfo, goToNextStage, goToPreviousSta
                   <div className='mt-1 flex w-full items-center justify-end gap-2 pl-2'>
                     <div className='flex items-center gap-1'>
                       <ImPower size={12} />
-                      <p className='text-[0.6rem] font-light text-primary/50 lg:text-xs'>{product.potencia} W</p>
+                      <p className='text-[0.6rem] font-light text-primary/70 lg:text-xs'>{product.potencia} W</p>
                     </div>
                   </div>
                 </div>
               ))
             ) : (
-              <div className='text-center font-light text-primary/50'>Nenhum produto adicionado</div>
+              <div className='text-center font-light text-primary/70'>Nenhum produto adicionado</div>
             )}
           </div>
         </div>
@@ -202,7 +202,7 @@ function Equipment({ requestInfo, setRequestInfo, goToNextStage, goToPreviousSta
           onClick={() => {
             goToPreviousStage();
           }}
-          className='rounded p-2 font-bold text-primary/50 duration-300 hover:scale-105'
+          className='rounded p-2 font-bold text-primary/70 duration-300 hover:scale-105'
         >
           Voltar
         </button>
@@ -210,7 +210,7 @@ function Equipment({ requestInfo, setRequestInfo, goToNextStage, goToPreviousSta
           onClick={() => {
             handleProceed();
           }}
-          className='rounded p-2 font-bold hover:bg-black hover:text-white'
+          className='rounded p-2 font-bold hover:bg-black hover:text-primary-foreground'
         >
           Prosseguir
         </button>

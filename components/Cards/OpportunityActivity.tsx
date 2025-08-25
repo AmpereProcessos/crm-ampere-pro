@@ -72,13 +72,13 @@ function OpportunityActivity({ opportunityId, activity, session, callbacks }: Op
           {activity.dataVencimento ? (
             <div className='flex items-center gap-1 text-orange-500'>
               <BsCalendar4Event color='rgb(249,115,22)' size={17} />
-              <p className='text-[0.55rem] font-medium text-primary/50 lg:text-xs'>{formatDateAsLocale(activity.dataVencimento, true)}</p>
+              <p className='text-[0.55rem] font-medium text-primary/70 lg:text-xs'>{formatDateAsLocale(activity.dataVencimento, true)}</p>
             </div>
           ) : null}
           {activity.dataConclusao ? (
             <div className='flex items-center gap-1'>
               <BsCalendarCheck color='rgb(34,197,94)' />
-              <p className='text-[0.55rem] font-medium text-primary/50 lg:text-xs'>{formatDateAsLocale(activity.dataConclusao, true)}</p>
+              <p className='text-[0.55rem] font-medium text-primary/70 lg:text-xs'>{formatDateAsLocale(activity.dataConclusao, true)}</p>
             </div>
           ) : null}
           <Button onClick={() => setEditActivityModalIsOpen(true)} variant='ghost' size='fit' className='rounded-full p-1'>
@@ -86,15 +86,15 @@ function OpportunityActivity({ opportunityId, activity, session, callbacks }: Op
           </Button>
         </div>
       </div>
-      <h1 className='my-2 w-full rounded-md bg-primary/10 p-2 py-1 text-center text-xs font-medium text-primary/50'>{activity.descricao}</h1>
+      <h1 className='my-2 w-full rounded-md bg-primary/10 p-2 py-1 text-center text-xs font-medium text-primary/70'>{activity.descricao}</h1>
       <div className='flex w-full flex-col items-center justify-between gap-2 lg:flex-row'>
         <div className='flex grow flex-col items-center gap-1 lg:flex-row'>
-          <h1 className='mr-2 text-[0.6rem] leading-none tracking-tight text-primary/50 lg:text-xs'>RESPONSÁVEIS</h1>
+          <h1 className='mr-2 text-[0.6rem] leading-none tracking-tight text-primary/70 lg:text-xs'>RESPONSÁVEIS</h1>
           <div className='flex grow flex-wrap items-center gap-2'>
             {activity.responsaveis.map((resp) => (
               <div key={resp.id} className='flex items-center gap-2 rounded-lg border border-cyan-500 p-1 px-2 shadow-md'>
                 <Avatar width={20} height={20} url={resp.avatar_url || undefined} fallback={formatNameAsInitials(resp.nome)} />
-                <p className='text-[0.65rem] font-medium tracking-tight text-primary/50 lg:text-xs'>{resp.nome}</p>
+                <p className='text-[0.65rem] font-medium tracking-tight text-primary/70 lg:text-xs'>{resp.nome}</p>
               </div>
             ))}
           </div>
@@ -102,14 +102,14 @@ function OpportunityActivity({ opportunityId, activity, session, callbacks }: Op
         <div className='mt-2 flex min-w-fit grow flex-col items-center justify-end gap-1 lg:mt-0 lg:flex-row'>
           <div className='flex items-center gap-1'>
             <BsCalendarPlus />
-            <h1 className='mr-2 text-[0.65rem] font-medium tracking-tight text-primary/50 lg:text-xs'>
+            <h1 className='mr-2 text-[0.65rem] font-medium tracking-tight text-primary/70 lg:text-xs'>
               {formatDateAsLocale(activity.dataInsercao, true)}
             </h1>
           </div>
           <div className='flex items-center gap-1'>
-            <h1 className='text-[0.65rem] leading-none tracking-tight text-primary/50 lg:text-xs'>CRIADO POR</h1>
+            <h1 className='text-[0.65rem] leading-none tracking-tight text-primary/70 lg:text-xs'>CRIADO POR</h1>
             <Avatar width={20} height={20} url={activity.autor.avatar_url || ''} fallback={formatNameAsInitials(activity.autor.nome)} />
-            <h1 className='text-[0.65rem] font-medium tracking-tight text-primary/50 lg:text-xs'>{activity.autor.nome}</h1>
+            <h1 className='text-[0.65rem] font-medium tracking-tight text-primary/70 lg:text-xs'>{activity.autor.nome}</h1>
           </div>
         </div>
       </div>

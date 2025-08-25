@@ -576,7 +576,7 @@ function ContractInfo({ requestInfo, setRequestInfo, goToNextStage }: ContractIn
               comoChegouAoCliente: e.target.value,
             })
           }
-          className='block h-[80px] w-full resize-none rounded-lg border border-primary/30 bg-gray-50 p-2.5 text-center text-primary/90 outline-hidden focus:border-blue-500 focus:ring-blue-500 dark:border-primary/60 dark:bg-primary/70 dark:text-white dark:placeholder-primary/40 dark:focus:border-blue-500 dark:focus:ring-blue-500'
+          className='block h-[80px] w-full resize-none rounded-lg border border-primary/30 bg-primary/10p-2.5 text-center text-primary/90 outline-hidden focus:border-blue-500 focus:ring-blue-500 dark:border-primary/60 dark:bg-primary/70  dark:placeholder-primary/40 dark:focus:border-blue-500 dark:focus:ring-blue-500'
         />
       </div>
       <div className='mt-2 flex w-full flex-col items-center self-center px-2'>
@@ -592,7 +592,7 @@ function ContractInfo({ requestInfo, setRequestInfo, goToNextStage }: ContractIn
               obsComercial: e.target.value,
             })
           }
-          className='block h-[80px] w-full resize-none rounded-lg border border-primary/30 bg-gray-50 p-2.5 text-center text-primary/90 outline-hidden focus:border-blue-500 focus:ring-blue-500 dark:border-primary/60 dark:bg-primary/70 dark:text-white dark:placeholder-primary/40 dark:focus:border-blue-500 dark:focus:ring-blue-500'
+          className='block h-[80px] w-full resize-none rounded-lg border border-primary/30 bg-primary/10p-2.5 text-center text-primary/90 outline-hidden focus:border-blue-500 focus:ring-blue-500 dark:border-primary/60 dark:bg-primary/70  dark:placeholder-primary/40 dark:focus:border-blue-500 dark:focus:ring-blue-500'
         />
       </div>
       <div className='mt-2 flex w-full justify-end'>
@@ -602,7 +602,7 @@ function ContractInfo({ requestInfo, setRequestInfo, goToNextStage }: ContractIn
               goToNextStage();
             }
           }}
-          className='rounded p-2 font-bold hover:bg-black hover:text-white'
+          className='rounded p-2 font-bold hover:bg-black hover:text-primary-foreground'
         >
           Prosseguir
         </button>

@@ -66,7 +66,7 @@ function OpportunitiesCardModePage({
               </div>
               <button
                 onClick={() => handleSetMode('kanban')}
-                className='flex items-center gap-1 px-2 text-xs text-primary/50 duration-300 ease-out hover:text-primary/80'
+                className='flex items-center gap-1 px-2 text-xs text-primary/70 duration-300 ease-out hover:text-primary/80'
               >
                 <FaRotate />
                 <h1 className='font-medium'>ALTERAR MODO</h1>
@@ -76,7 +76,7 @@ function OpportunitiesCardModePage({
               <button
                 onClick={() => setFilterMenuIsOpen((prev) => !prev)}
                 className={cn(
-                  'flex h-[46.6px] items-center justify-center gap-2 rounded-md border bg-[#fead41] p-2 px-3 text-sm font-medium text-white shadow-md duration-300 ease-in-out hover:scale-105 hover:bg-orange-500',
+                  'flex h-[46.6px] items-center justify-center gap-2 rounded-md border bg-[#fead41] p-2 px-3 text-sm font-medium text-primary-foreground shadow-md duration-300 ease-in-out hover:scale-105 hover:bg-orange-500',
                   filterMenuIsOpen && 'bg-orange-600'
                 )}
               >
@@ -84,7 +84,7 @@ function OpportunitiesCardModePage({
               </button>
               <button
                 onClick={() => setNewProjectModalIsOpen(true)}
-                className='flex h-[46.6px] items-center justify-center gap-2 rounded-md border bg-[#15599a] p-2 px-3 text-sm font-medium text-white shadow-md duration-300 ease-in-out hover:scale-105'
+                className='flex h-[46.6px] items-center justify-center gap-2 rounded-md border bg-[#15599a] p-2 px-3 text-sm font-medium text-primary-foreground shadow-md duration-300 ease-in-out hover:scale-105'
               >
                 <AiOutlinePlus style={{ fontSize: '18px' }} />
               </button>
@@ -127,7 +127,7 @@ function OpportunitiesCardModePage({
                 </div>
               ))
             ) : (
-              <p className='w-full text-center italic text-primary/50'>Nenhuma oportunidade encontrada...</p>
+              <p className='w-full text-center italic text-primary/70'>Nenhuma oportunidade encontrada...</p>
             )
           ) : null}
         </div>

@@ -13,11 +13,11 @@ function ExecutionBlock({ infoHolder, setInfoHolder, changes, setChanges }: Exec
   return (
     <div className='mt-4 flex w-full flex-col'>
       <div className='flex w-full items-center justify-center gap-2 rounded-md bg-primary/80 p-2'>
-        <h1 className='font-bold text-white'>INFORMAÇÕES DE EXECUÇÃO</h1>
+        <h1 className='font-bold text-primary-foreground'>INFORMAÇÕES DE EXECUÇÃO</h1>
       </div>
       <div className='mt-2 flex w-full flex-col gap-2'>
         <div className='flex w-full flex-col'>
-          <h1 className='w-full rounded-tl-sm rounded-tr-sm bg-primary/50 p-1 text-center font-bold text-white'>OBSERVAÇÕES</h1>
+          <h1 className='w-full rounded-tl-sm rounded-tr-sm bg-primary/50 p-1 text-center font-bold text-primary-foreground'>OBSERVAÇÕES</h1>
           <textarea
             placeholder='SEM OBSERVAÇÕES PREENCHIDAS...'
             value={infoHolder.execucao?.observacoes || ''}

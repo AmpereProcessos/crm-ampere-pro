@@ -80,7 +80,7 @@ function ChargeMenu({ addCharge, removeCharge, charges }: ChargeMenuProps) {
       <div className='flex items-center justify-center'>
         <button
           onClick={handleChargeAdd}
-          className='w-fit rounded-sm border border-green-500 p-1 font-bold text-green-500 duration-300 ease-in-out hover:bg-green-500 hover:text-white'
+          className='w-fit rounded-sm border border-green-500 p-1 font-bold text-green-500 duration-300 ease-in-out hover:bg-green-500 hover:text-primary-foreground'
         >
           ADICIONAR CARGA
         </button>
@@ -90,7 +90,7 @@ function ChargeMenu({ addCharge, removeCharge, charges }: ChargeMenuProps) {
           <div key={index} className='flex w-full items-center justify-between gap-2 rounded-md border border-cyan-500 p-2 lg:w-[50%]'>
             <div className='flex items-center gap-2'>
               <GiBatteryPack color='rgb(6,182,212)' size={'20px'} />
-              <p className='text-sm text-primary/50'>
+              <p className='text-sm text-primary/70'>
                 <strong className='text-cyan-500'>{charge.qtde}</strong> x <strong className='text-cyan-500'>{charge.descricao}</strong> de{' '}
                 <strong className='text-cyan-500'>{charge.potencia}W</strong> por{' '}
                 <strong className='text-cyan-500'>{charge.horasFuncionamento} horas</strong>
@@ -103,7 +103,7 @@ function ChargeMenu({ addCharge, removeCharge, charges }: ChargeMenuProps) {
           </div>
         ))
       ) : (
-        <p className='py-1 text-sm italic text-primary/50'>Sem cargas adicionadas...</p>
+        <p className='py-1 text-sm italic text-primary/70'>Sem cargas adicionadas...</p>
       )}
     </div>
   );

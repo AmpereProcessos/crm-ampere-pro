@@ -108,7 +108,7 @@ function HomologationForm({ requestInfo, setRequestInfo, proposeInfo, client, se
     return (
       <div className='flex w-full grow flex-col items-center justify-center gap-2 text-green-500'>
         <BsFillClipboardCheckFill color='rgb(34,197,94)' size={35} />
-        <p className='text-lg font-medium tracking-tight text-primary/50'>Contrato requisitado com sucesso !</p>
+        <p className='text-lg font-medium tracking-tight text-primary/70'>Contrato requisitado com sucesso !</p>
       </div>
     );
   if (!isPending && !isError && !isSuccess)

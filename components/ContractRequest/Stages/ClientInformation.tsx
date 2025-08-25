@@ -64,7 +64,7 @@ function ClientInformation({ client, requestInfo, setRequestInfo, goToNextState 
   return (
     <div className='flex w-full grow flex-col gap-2'>
       <div className='flex w-full grow flex-col gap-2'>
-        <h1 className='w-full rounded-md bg-[#fead41] p-1 text-center text-sm font-medium text-white'>DADOS DO CLIENTE</h1>
+        <h1 className='w-full rounded-md bg-[#fead41] p-1 text-center text-sm font-medium text-primary-foreground'>DADOS DO CLIENTE</h1>
         <div className='flex w-full flex-col items-center gap-2 lg:flex-row'>
           <div className='w-full lg:w-1/3'>
             <TextInput
@@ -232,7 +232,7 @@ function ClientInformation({ client, requestInfo, setRequestInfo, goToNextState 
             />
           </div>
         </div>
-        <h1 className='w-full rounded-md bg-primary/80 p-0.5 text-center text-xs font-medium text-white'>ENDEREÇO</h1>
+        <h1 className='w-full rounded-md bg-primary/80 p-0.5 text-center text-xs font-medium text-primary-foreground'>ENDEREÇO</h1>
         <div className='flex w-full flex-col items-center gap-2 lg:flex-row'>
           <div className='w-full lg:w-1/3'>
             <TextInput
@@ -347,7 +347,7 @@ function ClientInformation({ client, requestInfo, setRequestInfo, goToNextState 
         <button
           type='button'
           onClick={() => validateAndProceed()}
-          className='rounded bg-black px-4 py-1 text-sm font-medium text-white duration-300 ease-in-out hover:bg-primary/70'
+          className='rounded bg-black px-4 py-1 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-primary/70'
         >
           PROSSEGUIR
         </button>

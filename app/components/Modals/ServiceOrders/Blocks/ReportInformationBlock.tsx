@@ -32,7 +32,7 @@ function ReportInformationBlock({ orderId, infoHolder, setInfoHolder }: ReportIn
 
   return (
     <div className='flex w-full flex-col gap-y-2'>
-      <h1 className='w-full rounded-sm bg-primary/70 p-1 text-center font-bold text-white'>RELATÓRIO DE CONCLUSÃO</h1>
+      <h1 className='w-full rounded-sm bg-primary/70 p-1 text-center font-bold text-primary-foreground'>RELATÓRIO DE CONCLUSÃO</h1>
       <div className='flex w-full items-center justify-center py-2'>
         <div className='w-fit'>
           <CheckboxInput
@@ -47,12 +47,12 @@ function ReportInformationBlock({ orderId, infoHolder, setInfoHolder }: ReportIn
       </div>
       {infoHolder.relatorio.aplicavel && infoHolder.relatorio.secoes.length == 0 ? (
         <div className='flex w-full flex-col items-center justify-center gap-1'>
-          <p className='w-full text-center text-sm tracking-tight text-primary/50'>
+          <p className='w-full text-center text-sm tracking-tight text-primary/70'>
             Com base na categoria da ordem de serviço, você pode utilizar um modelo de relatório clicando abaixo:{' '}
           </p>
           <button
             onClick={() => useReportModel(infoHolder)}
-            className='self-cente w-fit bg-blue-800 px-2 py-1 text-sm font-bold tracking-tight text-white'
+            className='self-cente w-fit bg-blue-800 px-2 py-1 text-sm font-bold tracking-tight text-primary-foreground'
           >
             UTILIZAR MODELO
           </button>
@@ -60,7 +60,7 @@ function ReportInformationBlock({ orderId, infoHolder, setInfoHolder }: ReportIn
       ) : null}
       {infoHolder.relatorio.aplicavel && orderId ? (
         <Link href={`/operacional/ordens-servico/relatorio/${orderId}`}>
-          <button className='rounded bg-blue-800 px-2 py-1 text-sm font-bold text-white'>PÁGINA DE RELATÓRIO</button>
+          <button className='rounded bg-blue-800 px-2 py-1 text-sm font-bold text-primary-foreground'>PÁGINA DE RELATÓRIO</button>
         </Link>
       ) : null}
       {infoHolder.relatorio.secoes.map((session, index) => (

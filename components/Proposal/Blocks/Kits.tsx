@@ -25,7 +25,7 @@ function Kits({ infoHolder, setInfoHolder }: KitsProps) {
             </div>
           ))
         ) : (
-          <p className='w-full text-center text-sm italic text-primary/50'>Nenhum kit vinculado à proposta...</p>
+          <p className='w-full text-center text-sm italic text-primary/70'>Nenhum kit vinculado à proposta...</p>
         )}
       </div>
     </div>

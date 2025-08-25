@@ -127,7 +127,7 @@ function ComissionProjectTypeCard({
   return (
     <div className='flex w-full flex-col gap-3 rounded-sm border border-primary/30 bg-background p-2 shadow-md'>
       <div className='flex items-center gap-2 w-full'>
-        <div className='flex items-center gap-2 bg-[#15599a] text-white rounded-lg px-2 py-1'>
+        <div className='flex items-center gap-2 bg-[#15599a] text-primary-foreground rounded-lg px-2 py-1'>
           <MdDashboard className='w-4 h-4 min-w-4 min-h-4' />
           <h1 className='text-xs font-bold leading-none tracking-tight'>{projectType.nome}</h1>
         </div>
@@ -157,7 +157,7 @@ function ComissionProjectTypeCard({
             <button
               type='button'
               onClick={() => setNewComissionMenuActiveRole(role)}
-              className='flex items-center gap-1 rounded-lg px-2 py-1 text-[0.6rem] text-primary hover:bg-blue-600 hover:text-white transition-colors'
+              className='flex items-center gap-1 rounded-lg px-2 py-1 text-[0.6rem] text-primary hover:bg-blue-600 hover:text-primary-foreground transition-colors'
             >
               <Plus className='w-4 h-4 min-w-4 min-h-4' />
               <p>DEFINIR COMISSÃO</p>
@@ -212,7 +212,7 @@ function ComissionProjectTypeComissionConfigCard({
           <button
             type='button'
             onClick={() => setNewResultModalIsOpen(true)}
-            className='flex items-center gap-1 rounded-lg px-2 py-1 text-[0.6rem] text-primary hover:bg-green-500 hover:text-white transition-colors'
+            className='flex items-center gap-1 rounded-lg px-2 py-1 text-[0.6rem] text-primary hover:bg-green-500 hover:text-primary-foreground transition-colors'
           >
             <Plus className='w-4 h-4 min-w-4 min-h-4' />
             <p>NOVO RESULTADO</p>
@@ -260,7 +260,7 @@ function ComissionProjectTypeCardResult({ result, updateResult, partners }: Comi
         <button
           type='button'
           onClick={() => setEditModalIsOpen(true)}
-          className='flex items-center gap-1 rounded-lg px-2 py-1 text-[0.6rem] text-primary hover:bg-orange-500 hover:text-white transition-colors'
+          className='flex items-center gap-1 rounded-lg px-2 py-1 text-[0.6rem] text-primary hover:bg-orange-500 hover:text-primary-foreground transition-colors'
         >
           <MdEdit width={10} height={10} />
           <p>EDITAR</p>
@@ -271,7 +271,7 @@ function ComissionProjectTypeCardResult({ result, updateResult, partners }: Comi
           <p
             key={`${y}`}
             className={cn('rounded-lg p-1 text-[0.55rem] font-medium', {
-              'bg-primary/80 px-2 text-white dark:bg-primary/20': y.includes('[') && y.includes(']'),
+              'bg-primary/80 px-2 text-primary-foreground dark:bg-primary/20': y.includes('[') && y.includes(']'),
             })}
           >
             {formatComissionFormulaIndividualItemLabel({ item: y, definitions: SaleDefinitions })}

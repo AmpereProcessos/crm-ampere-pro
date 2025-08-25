@@ -79,15 +79,15 @@ function PricingTable({ pricing, setPricing, proposal, opportunity, userHasPrici
             onClick={() => handleRecalculateCumulatives({ pricing, keepFinalValues: false })}
             className='flex flex-col items-center rounded-sm bg-cyan-600 px-4 py-1'
           >
-            <h1 className='text-[0.55rem] font-bold text-white'>RECALCULAR ACUMULÁVEIS</h1>
-            <p className='text-[0.45rem] font-light text-white'>GERAL</p>
+            <h1 className='text-[0.55rem] font-bold text-primary-foreground'>RECALCULAR ACUMULÁVEIS</h1>
+            <p className='text-[0.45rem] font-light text-primary-foreground'>GERAL</p>
           </button>
           <button
             onClick={() => handleRecalculateCumulatives({ pricing, keepFinalValues: true })}
             className='flex flex-col items-center rounded-sm bg-cyan-800 px-4 py-1'
           >
-            <h1 className='text-[0.55rem] font-bold text-white'>RECALCULAR ACUMULÁVEIS</h1>
-            <p className='text-[0.45rem] font-light text-white'>SOMENTE CUSTOS</p>
+            <h1 className='text-[0.55rem] font-bold text-primary-foreground'>RECALCULAR ACUMULÁVEIS</h1>
+            <p className='text-[0.45rem] font-light text-primary-foreground'>SOMENTE CUSTOS</p>
           </button>
           <div className='w-fit'>
             <CheckboxInput
@@ -102,16 +102,16 @@ function PricingTable({ pricing, setPricing, proposal, opportunity, userHasPrici
         <div className='hidden w-full grow flex-col gap-1 lg:flex'>
           <div className='flex w-full items-center rounded-sm bg-cyan-500'>
             <div className='flex w-6/12 items-center justify-center p-1'>
-              <h1 className='font-bold text-white'>ITEM</h1>
+              <h1 className='font-bold text-primary-foreground'>ITEM</h1>
             </div>
             <div className='flex w-2/12 items-center justify-center p-1'>
-              <h1 className='font-bold text-white'>CUSTO</h1>
+              <h1 className='font-bold text-primary-foreground'>CUSTO</h1>
             </div>
             <div className='flex w-2/12 items-center justify-center p-1'>
-              <h1 className='font-bold text-white'>LUCRO</h1>
+              <h1 className='font-bold text-primary-foreground'>LUCRO</h1>
             </div>
             <div className='flex w-2/12 items-center justify-center p-1'>
-              <h1 className='font-bold text-white'>VENDA</h1>
+              <h1 className='font-bold text-primary-foreground'>VENDA</h1>
             </div>
           </div>
           {pricing.map((pricingItem, index) => (
@@ -130,32 +130,32 @@ function PricingTable({ pricing, setPricing, proposal, opportunity, userHasPrici
               <div className="flex w-full flex-col">
                 <div className={`flex w-full items-center rounded-sm ${Math.abs(valorFinal - valorCalculado) > 1 ? 'bg-orange-200' : ''}`} key={index}>
                   <div className="flex w-6/12 flex-col items-center justify-center p-1">
-                    <h1 className="text-primary/50">{descricao}</h1>
+                    <h1 className="text-primary/70">{descricao}</h1>
                     <div className="flex w-full items-center justify-center gap-2">
                       <div className="flex items-center gap-1 px-1 py-0.5">
                         <TbPercentage color="rgb(34,197,94)" />
-                        <p className="text-[0.55rem] tracking-tight text-primary/50">MARGEM DE {formatDecimalPlaces(margemLucro)}%</p>
+                        <p className="text-[0.55rem] tracking-tight text-primary/70">MARGEM DE {formatDecimalPlaces(margemLucro)}%</p>
                       </div>
                       <div className="flex items-center gap-1 px-1 py-0.5">
                         <MdSignalCellularAlt color={'#fead41'} />
-                        <p className="text-[0.55rem] tracking-tight text-primary/50">{faturavel ? 'FATURÁVEL' : 'NÃO FATURÁVEL'}</p>
+                        <p className="text-[0.55rem] tracking-tight text-primary/70">{faturavel ? 'FATURÁVEL' : 'NÃO FATURÁVEL'}</p>
                       </div>
                       {priceItem.formulaArr ? (
                         <button className="group flex items-center gap-1 rounded-sm px-1 py-0.5 duration-300 hover:bg-cyan-50">
                           <TbMathFunction color={'rgb(6,182,212)'} />
-                          <p className="text-[0.55rem] tracking-tight text-primary/50 duration-300 group-hover:text-cyan-500">FÓRMULA</p>
+                          <p className="text-[0.55rem] tracking-tight text-primary/70 duration-300 group-hover:text-cyan-500">FÓRMULA</p>
                         </button>
                       ) : null}
                     </div>
                   </div>
                   <div className="flex w-2/12 items-center justify-center p-1">
-                    <h1 className="text-primary/50">{formatToMoney(custoFinal)}</h1>
+                    <h1 className="text-primary/70">{formatToMoney(custoFinal)}</h1>
                   </div>
                   <div className="flex w-2/12 items-center justify-center p-1">
-                    <h1 className="text-primary/50">{formatToMoney(valorFinal * profitMarginPercentage)}</h1>
+                    <h1 className="text-primary/70">{formatToMoney(valorFinal * profitMarginPercentage)}</h1>
                   </div>
                   <div className="flex w-2/12 items-center justify-center gap-4 p-1">
-                    <h1 className="w-full text-center text-primary/50 lg:w-1/2">{formatToMoney(valorFinal)}</h1>
+                    <h1 className="w-full text-center text-primary/70 lg:w-1/2">{formatToMoney(valorFinal)}</h1>
                     {userHasPricingEditPermission ? (
                       <button onClick={() => setEditPriceModal({ isOpen: true, priceItemIndex: index })} className="text-md text-primary/40 hover:text-[#fead61]">
                         <AiFillEdit />
@@ -185,7 +185,7 @@ function PricingTable({ pricing, setPricing, proposal, opportunity, userHasPrici
         <div className='flex w-full grow flex-col gap-1 lg:hidden'>
           <div className='flex w-full items-center rounded-sm bg-cyan-500'>
             <div className='flex w-full items-center justify-center p-1'>
-              <h1 className='font-bold text-white'>PRECIFICAÇÃO</h1>
+              <h1 className='font-bold text-primary-foreground'>PRECIFICAÇÃO</h1>
             </div>
           </div>
           {pricing.map((pricingItem, index) => (
@@ -215,17 +215,17 @@ function PricingTable({ pricing, setPricing, proposal, opportunity, userHasPrici
                 <div className="flex w-full items-center gap-2">
                   <div className="flex items-center gap-1">
                     <TbPercentage color="rgb(34,197,94)" />
-                    <p className="text-[0.6rem] tracking-tight text-primary/50">MARGEM DE {formatDecimalPlaces(margemLucro)}%</p>
+                    <p className="text-[0.6rem] tracking-tight text-primary/70">MARGEM DE {formatDecimalPlaces(margemLucro)}%</p>
                   </div>
                   <div className="flex items-center gap-1">
                     <MdSignalCellularAlt color={'#fead41'} />
-                    <p className="text-[0.6rem] tracking-tight text-primary/50">{faturavel ? 'FATURÁVEL' : 'NÃO FATURÁVEL'}</p>
+                    <p className="text-[0.6rem] tracking-tight text-primary/70">{faturavel ? 'FATURÁVEL' : 'NÃO FATURÁVEL'}</p>
                   </div>
                 </div>
                 <div className="mt-1 flex w-full items-center justify-around gap-2">
                   <div className="flex flex-col items-center rounded-md border border-primary/50 px-2 py-1">
-                    <h1 className="text-[0.48rem] tracking-tight text-primary/50">CUSTO</h1>
-                    <h1 className="text-xxs font-medium tracking-tight text-primary/50">{formatToMoney(custoFinal)}</h1>
+                    <h1 className="text-[0.48rem] tracking-tight text-primary/70">CUSTO</h1>
+                    <h1 className="text-xxs font-medium tracking-tight text-primary/70">{formatToMoney(custoFinal)}</h1>
                   </div>
                   <div className="flex flex-col items-center rounded-md border border-green-500 px-2 py-1">
                     <h1 className="text-[0.48rem] tracking-tight text-green-500">LUCRO</h1>
@@ -240,12 +240,12 @@ function PricingTable({ pricing, setPricing, proposal, opportunity, userHasPrici
             )
           })} */}
           <div className='flex w-full items-center justify-center rounded-sm bg-primary/80 p-1'>
-            <h1 className='text-xs font-bold text-white'>TOTAIS</h1>
+            <h1 className='text-xs font-bold text-primary-foreground'>TOTAIS</h1>
           </div>
           <div className='flex w-full flex-col items-center gap-2'>
             <div className='flex w-full flex-col rounded-md border border-primary/50 p-2'>
-              <h1 className='text-[0.65rem] tracking-tight text-primary/50'>CUSTO</h1>
-              <h1 className='w-full text-center text-[0.7rem] font-bold tracking-tight text-primary/50'>
+              <h1 className='text-[0.65rem] tracking-tight text-primary/70'>CUSTO</h1>
+              <h1 className='w-full text-center text-[0.7rem] font-bold tracking-tight text-primary/70'>
                 {formatToMoney(getPricingTotals(pricing).cost)}
               </h1>
             </div>
@@ -277,7 +277,7 @@ function PricingTable({ pricing, setPricing, proposal, opportunity, userHasPrici
     <div className='flex w-full grow flex-col gap-1'>
       <div className='flex w-full items-center rounded-sm bg-cyan-500'>
         <div className='flex w-full items-center justify-center p-1'>
-          <h1 className='font-bold text-white'>ITEM</h1>
+          <h1 className='font-bold text-primary-foreground'>ITEM</h1>
         </div>
       </div>
       {pricing.map((priceItem, index) => {
@@ -285,7 +285,7 @@ function PricingTable({ pricing, setPricing, proposal, opportunity, userHasPrici
         return (
           <div className={`flex w-full items-center rounded-sm ${Math.abs(valorFinal - valorCalculado) > 1 ? 'bg-orange-200' : ''}`} key={index}>
             <div className='flex w-full items-center justify-center p-1'>
-              <h1 className='text-primary/50'>{descricao}</h1>
+              <h1 className='text-primary/70'>{descricao}</h1>
             </div>
           </div>
         );

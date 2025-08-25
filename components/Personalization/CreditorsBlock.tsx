@@ -25,7 +25,7 @@ function CreditorsBlock({ session }: CreditorsBlockProps) {
   });
   return (
     <div className='flex min-h-[450px] w-full flex-col rounded-sm border border-blue-500'>
-      <h1 className='w-full rounded-tl rounded-tr bg-blue-500 p-1 text-center text-sm font-bold text-white'>CREDORES</h1>
+      <h1 className='w-full rounded-tl rounded-tr bg-blue-500 p-1 text-center text-sm font-bold text-primary-foreground'>CREDORES</h1>
       <div className='my-1 flex w-full flex-col'>
         <p className='w-full text-center text-sm font-light tracking-tighter text-primary/70'>
           Os credores aqui cadastrados serão utilizados como opção na solicitação de projeto em casos de financiamento, por exemplo.
@@ -45,14 +45,14 @@ function CreditorsBlock({ session }: CreditorsBlockProps) {
               </div>
             ))
           ) : (
-            <p className='flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/50'>
+            <p className='flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/70'>
               Nenhum credor encontrado.
             </p>
           )
         ) : null}
       </div>
       <div className='flex w-full flex-col gap-2'>
-        <h1 className='w-full rounded-bl rounded-br bg-[#fead41] p-1 text-center text-xs font-bold text-white'>CADASTRO DE CREDOR</h1>
+        <h1 className='w-full rounded-bl rounded-br bg-[#fead41] p-1 text-center text-xs font-bold text-primary-foreground'>CADASTRO DE CREDOR</h1>
         <div className='flex w-full items-center gap-4 p-3'>
           <input
             value={creditorHolder}
@@ -61,7 +61,7 @@ function CreditorsBlock({ session }: CreditorsBlockProps) {
             }}
             type='text'
             placeholder='Preencha um nome para o credor...'
-            className='grow rounded-sm border border-primary/30 p-1 text-center text-xs tracking-tight text-primary/50 shadow-md outline-hidden placeholder:italic'
+            className='grow rounded-sm border border-primary/30 p-1 text-center text-xs tracking-tight text-primary/70 shadow-md outline-hidden placeholder:italic'
           />
           <button
             type='button'
@@ -80,7 +80,7 @@ function CreditorsBlock({ session }: CreditorsBlockProps) {
               // @ts-ignore
               handleCreateCreditor({ info: util });
             }}
-            className='rounded bg-black px-4 py-1 text-sm font-medium text-white duration-300 ease-in-out hover:bg-primary/70'
+            className='rounded bg-black px-4 py-1 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-primary/70'
           >
             CADASTRAR
           </button>

@@ -20,7 +20,7 @@ function GeneralQueryPaginationMenu({
     <div className='my-2 flex w-full flex-col items-center gap-1 '>
       {totalPages > 1 ? (
         <>
-          <p className='w-full text-center text-sm leading-none tracking-tight text-primary/50'>
+          <p className='w-full text-center text-sm leading-none tracking-tight text-primary/70'>
             Um número grande de itens foi encontrado, separamos em páginas para facilitar a visualização. Clique na página desejada para visualizar os
             demais itens.
           </p>
@@ -76,10 +76,10 @@ function GeneralQueryPaginationMenu({
         </>
       ) : null}
 
-      <p className='w-full text-center text-sm leading-none tracking-tight text-primary/50'>
+      <p className='w-full text-center text-sm leading-none tracking-tight text-primary/70'>
         {itemsMatched ? (itemsMatched > 0 ? `${itemsMatched} itens encontrados.` : `${itemsMatched} item encontrado.`) : 'Nenhum item encontrado.'}
       </p>
-      <p className='w-full text-center text-sm leading-none tracking-tight text-primary/50'>
+      <p className='w-full text-center text-sm leading-none tracking-tight text-primary/70'>
         {itemsShowing ? (itemsShowing > 0 ? `Mostrando ${itemsShowing} itens.` : `Mostrando ${itemsShowing} item.`) : null}
       </p>
     </div>

@@ -18,7 +18,7 @@ function TriggerBlock(node: TProcessFlowReferenceNode) {
     <div className='flex w-full flex-col gap-2'>
       <h1 className='w-full rounded-sm p-1 text-center text-xs font-bold text-blue-500'>GATILHO</h1>
       <div className='flex w-full flex-col gap-2 p-2'>
-        <h1 className='w-full text-xs font-light tracking-tight text-primary/50'>VARIÁVEL</h1>
+        <h1 className='w-full text-xs font-light tracking-tight text-primary/70'>VARIÁVEL</h1>
         <div className='flex flex-wrap items-center gap-2'>
           {activationAutomationReference.triggerConditions.map((c, index) => (
             <button
@@ -35,14 +35,14 @@ function TriggerBlock(node: TProcessFlowReferenceNode) {
                 });
               }}
               className={`grow ${
-                c.value == data.ativacao.gatilho.variavel ? 'bg-blue-700  text-white' : 'text-blue-700 '
-              } rounded border border-blue-700  p-1 text-xs font-medium  duration-300 ease-in-out hover:bg-blue-700  hover:text-white`}
+                c.value == data.ativacao.gatilho.variavel ? 'bg-blue-700  text-primary-foreground' : 'text-blue-700 '
+              } rounded border border-blue-700  p-1 text-xs font-medium  duration-300 ease-in-out hover:bg-blue-700  hover:text-primary-foreground`}
             >
               {c.label}
             </button>
           ))}
         </div>
-        <h1 className='w-full text-xs font-light tracking-tight text-primary/50'>COMPARAÇÃO</h1>
+        <h1 className='w-full text-xs font-light tracking-tight text-primary/70'>COMPARAÇÃO</h1>
         <div className='flex flex-wrap items-center gap-2'>
           {getProcessAutomationComparationMethods({ entity: activationAutomationReference, variable: data.ativacao.gatilho.variavel }).map(
             (method) => (
@@ -68,8 +68,8 @@ function TriggerBlock(node: TProcessFlowReferenceNode) {
                   });
                 }}
                 className={`grow ${
-                  method.value == data.ativacao.gatilho.tipo ? 'bg-orange-700  text-white' : 'text-orange-700 '
-                } rounded border border-orange-700  p-1 text-xs font-medium  duration-300 ease-in-out hover:bg-orange-700  hover:text-white`}
+                  method.value == data.ativacao.gatilho.tipo ? 'bg-orange-700  text-primary-foreground' : 'text-orange-700 '
+                } rounded border border-orange-700  p-1 text-xs font-medium  duration-300 ease-in-out hover:bg-orange-700  hover:text-primary-foreground`}
               >
                 {method.label}
               </button>
@@ -80,7 +80,7 @@ function TriggerBlock(node: TProcessFlowReferenceNode) {
           <SelectInput
             editable={!data.dataExecucao}
             label='IGUAL A:'
-            labelClassName='w-full text-start text-xs font-light tracking-tight text-primary/50'
+            labelClassName='w-full text-start text-xs font-light tracking-tight text-primary/70'
             value={data.ativacao.gatilho.igual}
             // options={options[infoHolder.gatilho.variavel as keyof typeof options]?.map((op, index) => ({ id: index + 1, label: op, value: op })) || []}
             options={getProcessAutomationConditionOptions({
@@ -98,7 +98,7 @@ function TriggerBlock(node: TProcessFlowReferenceNode) {
           <NumberInput
             editable={!data.dataExecucao}
             label='IGUAL A:'
-            labelClassName='w-full text-start text-xs font-light tracking-tight text-primary/50'
+            labelClassName='w-full text-start text-xs font-light tracking-tight text-primary/70'
             placeholder='Preencha o valor para comparação.'
             value={data.ativacao.gatilho.igual != null && data.ativacao.gatilho.igual != undefined ? Number(data.ativacao.gatilho.igual) : null}
             handleChange={(value) =>
@@ -111,7 +111,7 @@ function TriggerBlock(node: TProcessFlowReferenceNode) {
           <NumberInput
             editable={!data.dataExecucao}
             label='MAIOR QUE:'
-            labelClassName='w-full text-start text-xs font-light tracking-tight text-primary/50'
+            labelClassName='w-full text-start text-xs font-light tracking-tight text-primary/70'
             placeholder='Preencha o valor para comparação.'
             value={
               data.ativacao.gatilho.maiorQue != null && data.ativacao.gatilho.maiorQue != undefined ? Number(data.ativacao.gatilho.maiorQue) : null
@@ -126,7 +126,7 @@ function TriggerBlock(node: TProcessFlowReferenceNode) {
           <NumberInput
             editable={!data.dataExecucao}
             label='MENOR QUE:'
-            labelClassName='w-full text-start text-xs font-light tracking-tight text-primary/50'
+            labelClassName='w-full text-start text-xs font-light tracking-tight text-primary/70'
             placeholder='Preencha o valor para comparação.'
             value={
               data.ativacao.gatilho.menorQue != null && data.ativacao.gatilho.menorQue != undefined ? Number(data.ativacao.gatilho.menorQue) : null
@@ -143,7 +143,7 @@ function TriggerBlock(node: TProcessFlowReferenceNode) {
               <NumberInput
                 editable={!data.dataExecucao}
                 label='MAIOR QUE:'
-                labelClassName='w-full text-start text-xs font-light tracking-tight text-primary/50'
+                labelClassName='w-full text-start text-xs font-light tracking-tight text-primary/70'
                 placeholder='Preencha o valor mínimo do intervalo.'
                 value={
                   data.ativacao.gatilho.entre?.minimo != null && data.ativacao.gatilho.entre?.minimo != undefined
@@ -169,7 +169,7 @@ function TriggerBlock(node: TProcessFlowReferenceNode) {
               <NumberInput
                 editable={!data.dataExecucao}
                 label='MENOR QUE:'
-                labelClassName='w-full text-start text-xs font-light tracking-tight text-primary/50'
+                labelClassName='w-full text-start text-xs font-light tracking-tight text-primary/70'
                 placeholder='Preencha o valor máximo do intervalo.'
                 value={
                   data.ativacao.gatilho.entre?.maximo != null && data.ativacao.gatilho.entre?.maximo != undefined
@@ -197,7 +197,7 @@ function TriggerBlock(node: TProcessFlowReferenceNode) {
           <MultipleSelectInput
             editable={!data.dataExecucao}
             label='INCLUSO EM:'
-            labelClassName='w-full text-start text-xs font-light tracking-tight text-primary/50'
+            labelClassName='w-full text-start text-xs font-light tracking-tight text-primary/70'
             selected={data.ativacao.gatilho.inclui || null}
             options={getProcessAutomationConditionOptions({
               variable: data.ativacao.gatilho.variavel as keyof TProcessAutomationConditionData,

@@ -24,14 +24,14 @@ function RevenueProjectInformationBlockEdit({ infoHolder, setInfoHolder, session
   const [showFiles, setShowFiles] = useState<boolean>(false);
   return (
     <div className='flex w-full flex-col gap-y-2'>
-      <h1 className='w-full bg-primary/70  p-1 text-center font-medium text-white'>INFORMAÇÕES DO PROJETO</h1>
+      <h1 className='w-full bg-primary/70  p-1 text-center font-medium text-primary-foreground'>INFORMAÇÕES DO PROJETO</h1>
       <div className='flex w-full flex-col gap-1'>
         {infoHolder.projetoDados ? (
           <>
-            <h1 className='w-full bg-primary/50 p-1 text-center text-xs font-medium text-white'>GERAIS</h1>
+            <h1 className='w-full bg-primary/50 p-1 text-center text-xs font-medium text-primary-foreground'>GERAIS</h1>
             <div className='flex w-full flex-col items-center justify-between gap-2 lg:flex-row'>
               <div className='flex flex-col items-center gap-1 lg:items-start'>
-                <p className='text-[0.65rem] font-medium text-primary/50'>PROJETO</p>
+                <p className='text-[0.65rem] font-medium text-primary/70'>PROJETO</p>
                 <div className='flex flex-wrap items-center justify-center gap-4 lg:justify-start'>
                   <div className='flex items-center gap-1'>
                     <FaUserAlt />
@@ -50,13 +50,13 @@ function RevenueProjectInformationBlockEdit({ infoHolder, setInfoHolder, session
                 </div>
               </div>
             </div>
-            <h1 className='w-full bg-primary/50 p-1 text-center text-xs font-medium text-white'>OBSERVAÇÕES</h1>
+            <h1 className='w-full bg-primary/50 p-1 text-center text-xs font-medium text-primary-foreground'>OBSERVAÇÕES</h1>
             {infoHolder.projetoDados.observacoes.length > 0 ? (
               infoHolder.projetoDados.observacoes.map((obs, index) => (
                 <div key={index} className='flex w-full flex-col rounded-md border border-primary/50'>
                   <div className='flex min-h-[25px] w-full flex-col items-start justify-between gap-1 lg:flex-row'>
                     <div className='flex w-full items-center justify-center rounded-br-md rounded-tl-md bg-cyan-700 lg:w-[40%]'>
-                      <p className='w-full text-center text-xs font-medium text-white'>{obs.assunto}</p>
+                      <p className='w-full text-center text-xs font-medium text-primary-foreground'>{obs.assunto}</p>
                     </div>
                     <div className='flex grow items-center justify-end gap-2 p-2'>
                       <div className='flex items-center gap-2'>
@@ -71,16 +71,16 @@ function RevenueProjectInformationBlockEdit({ infoHolder, setInfoHolder, session
                       </div>
                     </div>
                   </div>
-                  <h1 className='w-full p-2 text-center text-xs font-medium tracking-tight text-primary/50'>{obs.descricao}</h1>
+                  <h1 className='w-full p-2 text-center text-xs font-medium tracking-tight text-primary/70'>{obs.descricao}</h1>
                 </div>
               ))
             ) : (
-              <p className='w-full text-center text-sm font-medium tracking-tight text-primary/50'>Nenhuma observação adicionada ao projeto.</p>
+              <p className='w-full text-center text-sm font-medium tracking-tight text-primary/70'>Nenhuma observação adicionada ao projeto.</p>
             )}
-            <h1 className='w-full bg-primary/50 p-1 text-center text-xs font-medium text-white'>PAGAMENTO</h1>
+            <h1 className='w-full bg-primary/50 p-1 text-center text-xs font-medium text-primary-foreground'>PAGAMENTO</h1>
             <div className='flex w-full flex-col items-center justify-between gap-2 lg:flex-row'>
               <div className='flex flex-col items-center gap-1 lg:items-start'>
-                <p className='text-[0.65rem] font-medium text-primary/50'>PAGADOR</p>
+                <p className='text-[0.65rem] font-medium text-primary/70'>PAGADOR</p>
                 <div className='flex flex-wrap items-center justify-center gap-4 lg:justify-start'>
                   <div className='flex items-center gap-1'>
                     <FaUserAlt />
@@ -97,7 +97,7 @@ function RevenueProjectInformationBlockEdit({ infoHolder, setInfoHolder, session
                 </div>
               </div>
               <div className='flex flex-col items-center gap-1 lg:items-end'>
-                <p className='text-[0.65rem] font-medium text-primary/50'>CREDOR</p>
+                <p className='text-[0.65rem] font-medium text-primary/70'>CREDOR</p>
                 <div className='flex flex-wrap items-center justify-center gap-4 lg:justify-start'>
                   <div className='flex items-center gap-1'>
                     <BsBank />
@@ -124,31 +124,31 @@ function RevenueProjectInformationBlockEdit({ infoHolder, setInfoHolder, session
                 </div>
               </div>
             </div>
-            <p className='text-[0.65rem] font-medium text-primary/50'>FRACIONAMENTO</p>
+            <p className='text-[0.65rem] font-medium text-primary/70'>FRACIONAMENTO</p>
             <div className='flex w-full flex-wrap items-center justify-start gap-2'>
               {infoHolder.projetoDados.pagamento.metodo.fracionamento.map((fractionnement, itemIndex) => (
                 <div key={itemIndex} className={`flex w-[450px] flex-col rounded-md border border-primary/50 p-2  shadow-md`}>
                   <div className='flex w-full items-center justify-between gap-2'>
                     <h1 className='text-xs font-black leading-none tracking-tight lg:text-sm'>FRAÇÃO DE {fractionnement.porcentagem}%</h1>
-                    <h1 className='rounded-full bg-primary/80 px-2 py-1 text-[0.65rem] font-medium text-white lg:text-xs'>
+                    <h1 className='rounded-full bg-primary/80 px-2 py-1 text-[0.65rem] font-medium text-primary-foreground lg:text-xs'>
                       {formatToMoney(getFractionnementValue({ fractionnement, proposalValue: infoHolder.projetoDados?.valor || 0 }))}
                     </h1>
                   </div>
                   <div className='mt-2 flex w-full flex-wrap items-center justify-between'>
                     <div className='flex items-center gap-2'>
                       <MdPayment color={'#76c893'} />
-                      <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/50 lg:text-xs'>{fractionnement.metodo}</p>
+                      <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/70 lg:text-xs'>{fractionnement.metodo}</p>
                     </div>
                     <div className='flex items-center gap-2'>
                       <BsCircleHalf color='#ed174c' />
-                      <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/50 lg:text-xs'>
+                      <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/70 lg:text-xs'>
                         {fractionnement.parcelas} {fractionnement.parcelas ? (fractionnement.parcelas > 1 ? 'PARCELAS' : 'PARCELA') : null}
                       </p>
                     </div>
                     {fractionnement.taxaJuros ? (
                       <div className='flex items-center gap-2'>
                         <FaPercentage />
-                        <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/50 lg:text-xs'>
+                        <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/70 lg:text-xs'>
                           {fractionnement.taxaJuros} DE JUROS
                         </p>
                       </div>
@@ -156,7 +156,7 @@ function RevenueProjectInformationBlockEdit({ infoHolder, setInfoHolder, session
                     {fractionnement.taxaUnica ? (
                       <div className='flex items-center gap-2'>
                         <FaPercentage />
-                        <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/50 lg:text-xs'>
+                        <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/70 lg:text-xs'>
                           {fractionnement.taxaUnica} DE USO
                         </p>
                       </div>

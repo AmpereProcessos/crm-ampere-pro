@@ -21,12 +21,12 @@ function PaymentMethods({ session }: PaymentMethodsProps) {
     <div className='flex h-full grow flex-col'>
       <div className='flex w-full items-center justify-between border-b border-primary/30 pb-2'>
         <div className='flex flex-col'>
-          <h1 className={`text-lg font-bold`}>Controle de métodos de pagamento</h1>
+          <h1 className={`text-lg font-bold uppercase`}>Controle de métodos de pagamento</h1>
           <p className='text-sm text-[#71717A]'>Gerencie, adicione e edite os métodos de pagamento</p>
         </div>
         <button
           onClick={() => setNewPaymentMethodModalIsOpen(true)}
-          className='h-9 whitespace-nowrap rounded-sm bg-primary/90 px-4 py-2 text-sm font-medium text-white shadow-sm disabled:bg-primary/50 disabled:text-white enabled:hover:bg-primary/80 enabled:hover:text-white'
+          className='h-9 whitespace-nowrap rounded-sm bg-primary/90 px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm disabled:bg-primary/50 disabled:text-primary-foreground enabled:hover:bg-primary/80 enabled:hover:text-primary-foreground'
         >
           NOVO MÉTODO
         </button>
@@ -50,24 +50,26 @@ function PaymentMethods({ session }: PaymentMethodsProps) {
                     {method.nome}
                   </p>
                 </div>
-                <h1 className='"w-full mt-2 text-start text-xs font-medium'>FRACIONAMENTO</h1>
-                <div className='flex w-full flex-wrap items-center justify-start gap-2'>
-                  {method.fracionamento.map((item, itemIndex) => (
-                    <div key={itemIndex} className='rounded-lg border border-primary/30 bg-gray-50 px-2 py-1 text-[0.57rem] font-medium'>
-                      {item.porcentagem}% {item.metodo}
-                    </div>
-                  ))}
+                <div className='flex w-full flex-col gap-2'>
+                  <h1 className='"w-full mt-2 text-start text-xs font-medium'>FRACIONAMENTO</h1>
+                  <div className='flex w-full flex-wrap items-center justify-start gap-2'>
+                    {method.fracionamento.map((item, itemIndex) => (
+                      <div key={itemIndex} className='rounded-lg border border-primary/30 bg-primary/20 px-2 py-1 text-[0.57rem] font-medium'>
+                        {item.porcentagem}% {item.metodo}
+                      </div>
+                    ))}
+                  </div>
                 </div>
                 <div className='mt-2 flex w-full items-center justify-end gap-2'>
                   <div className={`flex items-center gap-2`}>
                     <div className='ites-center flex gap-1'>
                       <BsCalendarPlus />
-                      <p className={`text-xs font-medium text-primary/50`}>{formatDateAsLocale(method.dataInsercao, true)}</p>
+                      <p className={`text-xs font-medium text-primary/70`}>{formatDateAsLocale(method.dataInsercao, true)}</p>
                     </div>
                   </div>
                   <div className='flex items-center justify-center gap-1'>
                     <Avatar fallback={'U'} height={20} width={20} url={method.autor?.avatar_url || undefined} />
-                    <p className='text-xs font-medium text-primary/50'>{method.autor?.nome}</p>
+                    <p className='text-xs font-medium text-primary/70'>{method.autor?.nome}</p>
                   </div>
                 </div>
               </div>

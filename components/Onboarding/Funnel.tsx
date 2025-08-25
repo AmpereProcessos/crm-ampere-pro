@@ -60,11 +60,11 @@ function Funnel({ partnerId, author, goToNextStage, goToPreviousStage }: FunnelP
   });
   return (
     <div className='flex grow flex-col gap-y-2'>
-      <h1 className='mt-4 w-full text-center text-lg tracking-tight text-primary/50'>
+      <h1 className='mt-4 w-full text-center text-lg tracking-tight text-primary/70'>
         Para gerenciar o relacionamento com os seus clientes, precisamos estabelecer os funis de venda.
       </h1>
-      <h1 className='mb-4 w-full text-center text-lg tracking-tight text-primary/50'>Nessa etapa, defina um funil inicial e suas etapas.</h1>
-      <h1 className='w-full bg-[#fead41] p-1 text-center font-bold text-white'>FUNIL DE VENDAS</h1>
+      <h1 className='mb-4 w-full text-center text-lg tracking-tight text-primary/70'>Nessa etapa, defina um funil inicial e suas etapas.</h1>
+      <h1 className='w-full bg-[#fead41] p-1 text-center font-bold text-primary-foreground'>FUNIL DE VENDAS</h1>
       <div className='flex w-full flex-col items-center gap-2 px-2 lg:flex-row'>
         <div className='w-full lg:w-1/2'>
           <TextInput
@@ -108,7 +108,7 @@ function Funnel({ partnerId, author, goToNextStage, goToPreviousStage }: FunnelP
       <div className='flex w-full items-center justify-end px-2'>
         <button
           onClick={addStage}
-          className='whitespace-nowrap rounded-sm bg-primary/90 px-4 py-2 text-xs font-medium text-white shadow-sm disabled:bg-primary/50 disabled:text-white enabled:hover:bg-primary/80 enabled:hover:text-white'
+          className='whitespace-nowrap rounded-sm bg-primary/90 px-4 py-2 text-xs font-medium text-primary-foreground shadow-sm disabled:bg-primary/50 disabled:text-primary-foreground enabled:hover:bg-primary/80 enabled:hover:text-primary-foreground'
         >
           ADICIONAR ETAPA
         </button>
@@ -133,12 +133,12 @@ function Funnel({ partnerId, author, goToNextStage, goToPreviousStage }: FunnelP
             </div>
           ))
         ) : (
-          <p className='w-full py-4 text-center text-sm italic text-primary/50'>Sem etapas adicionadas...</p>
+          <p className='w-full py-4 text-center text-sm italic text-primary/70'>Sem etapas adicionadas...</p>
         )}
       </div>
       <div className='flex w-full items-center justify-end px-2'>
         <button
-          className='rounded bg-black p-1 px-4 text-xs font-medium text-white duration-300 ease-in-out disabled:bg-primary/40 disabled:text-primary enabled:hover:bg-primary/60'
+          className='rounded bg-black p-1 px-4 text-xs font-medium text-primary-foreground duration-300 ease-in-out disabled:bg-primary/40 disabled:text-primary enabled:hover:bg-primary/60'
           disabled={isPending}
           onClick={() => mutate()}
         >

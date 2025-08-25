@@ -143,16 +143,16 @@ function ProposalPage({ proposalId, session }: ProposalPageProps) {
               <Link href={`/comercial/oportunidades/id/${proposal.oportunidade.id}`}>
                 <div className='flex items-center gap-2 rounded-sm'>
                   <BsFillFunnelFill style={{ color: '#15599a', fontSize: '15px' }} />
-                  <p className='text-[0.65rem] font-medium text-primary/50'>{proposal?.oportunidade.nome}</p>
+                  <p className='text-[0.65rem] font-medium text-primary/70'>{proposal?.oportunidade.nome}</p>
                 </div>
               </Link>
               <div className='flex items-center gap-2'>
                 <div className={'flex items-center gap-2'}>
-                  <p className='text-[0.65rem] font-medium text-primary/50'>CRIADA EM:</p>
+                  <p className='text-[0.65rem] font-medium text-primary/70'>CRIADA EM:</p>
                   <BsCalendarPlus />
-                  <p className='text-[0.65rem] font-medium text-primary/50'>{formatDateAsLocale(proposal.dataInsercao, true)}</p>
+                  <p className='text-[0.65rem] font-medium text-primary/70'>{formatDateAsLocale(proposal.dataInsercao, true)}</p>
                   <Avatar url={proposal.autor.avatar_url || undefined} fallback={formatNameAsInitials(proposal.autor.nome)} height={25} width={25} />
-                  <p className='text-[0.65rem] font-medium text-primary/50'>{proposal?.autor?.nome}</p>
+                  <p className='text-[0.65rem] font-medium text-primary/70'>{proposal?.autor?.nome}</p>
                 </div>
               </div>
             </div>
@@ -182,7 +182,7 @@ function ProposalPage({ proposalId, session }: ProposalPageProps) {
                   type='button'
                   // @ts-ignore
                   onClick={() => handleSetActiveProposal({ proposalId, opportunityId: proposal.oportunidade.id })}
-                  className='flex w-fit items-center gap-2 rounded-sm bg-blue-700 p-2 text-xs font-black text-white hover:bg-blue-800'
+                  className='flex w-fit items-center gap-2 rounded-sm bg-blue-700 p-2 text-xs font-black text-primary-foreground hover:bg-blue-800'
                 >
                   <h1>USAR COMO PROPOSTA ATIVA</h1>
                   <AiFillStar />
@@ -200,7 +200,7 @@ function ProposalPage({ proposalId, session }: ProposalPageProps) {
                       appProjectId: proposal.oportunidadeDados.ganho.idProjeto || undefined,
                     })
                   }
-                  className='flex w-fit items-center gap-2 rounded-sm bg-green-700 p-2 text-xs font-black text-white hover:bg-green-800'
+                  className='flex w-fit items-center gap-2 rounded-sm bg-green-700 p-2 text-xs font-black text-primary-foreground hover:bg-green-800'
                 >
                   <h1>USAR COMO PROPOSTA GANHA</h1>
                   <FaTrophy />
@@ -211,25 +211,25 @@ function ProposalPage({ proposalId, session }: ProposalPageProps) {
               <div className='flex h-full w-full flex-col rounded-sm border border-primary/50 bg-background p-6 shadow-md lg:w-1/4'>
                 <div className='mb-2 flex w-full flex-col items-center'>
                   <h1 className='w-full text-center font-Raleway text-lg font-bold text-[#15599a]'>INFORMAÇÕES GERAIS</h1>
-                  <p className='text-center text-xs italic text-primary/50'>Essas são informações sobre a proposta.</p>
+                  <p className='text-center text-xs italic text-primary/70'>Essas são informações sobre a proposta.</p>
                 </div>
                 <div className='flex w-full grow flex-col justify-around gap-3'>
                   <div className='flex w-full flex-col items-center justify-between gap-1 lg:flex-row'>
-                    <p className='text-xs font-medium leading-none tracking-tight text-primary/50'>NOME DA PROPOSTA</p>
+                    <p className='text-xs font-medium leading-none tracking-tight text-primary/70'>NOME DA PROPOSTA</p>
                     <p className='text-base font-medium leading-none tracking-tight lg:text-xs'>{proposal.nome}</p>
                   </div>
                   <div className='flex w-full flex-col items-center justify-between gap-1 lg:flex-row'>
-                    <p className='text-xs font-medium leading-none tracking-tight text-primary/50'>VALOR DA PROPOSTA</p>
+                    <p className='text-xs font-medium leading-none tracking-tight text-primary/70'>VALOR DA PROPOSTA</p>
                     <p className='text-base font-medium leading-none tracking-tight lg:text-xs'>{formatToMoney(proposal.valor)}</p>
                   </div>
                   <div className='flex w-full flex-col items-center justify-between gap-1 lg:flex-row'>
-                    <p className='text-xs font-medium leading-none tracking-tight text-primary/50'>POTÊNCIA PICO</p>
+                    <p className='text-xs font-medium leading-none tracking-tight text-primary/70'>POTÊNCIA PICO</p>
                     <p className='text-base font-medium leading-none tracking-tight lg:text-xs'>
                       {formatDecimalPlaces(proposal.potenciaPico || 0)} kWp
                     </p>
                   </div>
                   <div className='flex w-full flex-col items-center justify-between gap-1 lg:flex-row'>
-                    <p className='text-xs font-medium leading-none tracking-tight text-primary/50'>GERAÇÃO ESTIMADA</p>
+                    <p className='text-xs font-medium leading-none tracking-tight text-primary/70'>GERAÇÃO ESTIMADA</p>
                     <p className='text-base font-medium leading-none tracking-tight lg:text-xs'>
                       {formatDecimalPlaces(
                         getEstimatedGen(
@@ -243,26 +243,26 @@ function ProposalPage({ proposalId, session }: ProposalPageProps) {
                     </p>
                   </div>
                   <div className='flex w-full flex-col items-center justify-between gap-1 lg:flex-row'>
-                    <p className='text-xs font-medium leading-none tracking-tight text-primary/50'>METODOLOGIA</p>
+                    <p className='text-xs font-medium leading-none tracking-tight text-primary/70'>METODOLOGIA</p>
                     <p className='text-end text-sm font-medium leading-none tracking-tight lg:text-xs'>
                       {getPricingMethodById({ methods: pricingMethods, id: proposal.idMetodologiaPrecificacao })}
                     </p>
                   </div>
                   <div className='flex w-full flex-col items-center justify-between gap-1 lg:flex-row'>
-                    <p className='text-xs font-medium leading-none tracking-tight text-primary/50'>KIT</p>
+                    <p className='text-xs font-medium leading-none tracking-tight text-primary/70'>KIT</p>
                     <p className='text-end text-sm font-medium leading-none tracking-tight lg:text-xs'>
                       {proposal.kits.length > 0 ? proposal.kits.map((p) => p.nome).join(' + ') : 'SEM KITS'}
                     </p>
                   </div>
                   <div className='flex w-full flex-col items-center justify-between gap-1 lg:flex-row'>
-                    <p className='text-xs font-medium leading-none tracking-tight text-primary/50'>PLANOS</p>
+                    <p className='text-xs font-medium leading-none tracking-tight text-primary/70'>PLANOS</p>
                     <p className='text-end text-sm font-medium leading-none tracking-tight lg:text-xs'>
                       {proposal.planos.length > 0 ? proposal.planos.map((p) => p.nome).join(' + ') : 'SEM PLANOS'}
                     </p>
                   </div>
                   {proposal.urlArquivo ? (
                     <div className='flex w-full flex-col items-center justify-between gap-1 lg:flex-row'>
-                      <p className='text-xs font-medium leading-none tracking-tight text-primary/50'>ARQUIVO</p>
+                      <p className='text-xs font-medium leading-none tracking-tight text-primary/70'>ARQUIVO</p>
                       <div className='flex flex-col items-center justify-center gap-2 lg:flex-row lg:justify-end'>
                         <button
                           type='button'
@@ -298,14 +298,14 @@ function ProposalPage({ proposalId, session }: ProposalPageProps) {
               <div className='flex h-full w-full flex-col rounded-sm border border-primary/50 bg-background p-6 shadow-md lg:w-1/4'>
                 <div className='mb-2 flex w-full flex-col items-center'>
                   <h1 className='w-full text-center font-Raleway text-lg font-bold text-[#15599a]'>PREMISSAS</h1>
-                  <p className='text-center text-xs italic text-primary/50'>Essas são as premissas de dimensionamento dessa proposta.</p>
+                  <p className='text-center text-xs italic text-primary/70'>Essas são as premissas de dimensionamento dessa proposta.</p>
                 </div>
                 <div className='flex w-full grow flex-col justify-around gap-3'>
                   {Object.entries(proposal.premissas)
                     .filter(([key, value]) => !!value)
                     .map(([key, value], index) => (
                       <div key={`${key}`} className='flex w-full flex-col items-center justify-between gap-1 lg:flex-row'>
-                        <h1 className='text-xs font-medium uppercase leading-none tracking-tight text-primary/50'>
+                        <h1 className='text-xs font-medium uppercase leading-none tracking-tight text-primary/70'>
                           {formatProposalPremissesLabel(key as keyof TProposalPremisses)}
                         </h1>
                         <h1 className='text-end text-sm font-medium leading-none tracking-tight lg:text-xs'>
@@ -318,7 +318,7 @@ function ProposalPage({ proposalId, session }: ProposalPageProps) {
               <div className='flex h-full w-full flex-col rounded-sm border border-primary/50 bg-background p-6 shadow-md lg:w-1/4'>
                 <div className='mb-2 flex w-full flex-col items-center'>
                   <h1 className='w-full text-center font-Raleway text-lg font-bold text-[#15599a]'>PRODUTOS</h1>
-                  <p className='text-center text-xs italic text-primary/50'>Esses são os produtos vinculados à essa proposta</p>
+                  <p className='text-center text-xs italic text-primary/70'>Esses são os produtos vinculados à essa proposta</p>
                   <div className='mt-2 flex w-full flex-col gap-2'>
                     {proposal.produtos.length > 0 ? (
                       proposal.produtos.map((product, index) => (
@@ -338,22 +338,22 @@ function ProposalPage({ proposalId, session }: ProposalPageProps) {
                             <div className='flex w-full grow items-end justify-end gap-2 pl-2'>
                               <div className='flex items-center gap-1'>
                                 <FaIndustry size={15} />
-                                <p className='text-[0.6rem] font-light text-primary/50'>{product.fabricante}</p>
+                                <p className='text-[0.6rem] font-light text-primary/70'>{product.fabricante}</p>
                               </div>
                               <div className='flex items-center gap-1'>
                                 <ImPower size={15} />
-                                <p className='text-[0.6rem] font-light text-primary/50'>{product.potencia} W</p>
+                                <p className='text-[0.6rem] font-light text-primary/70'>{product.potencia} W</p>
                               </div>
                               <div className='flex items-center gap-1'>
                                 <AiOutlineSafety size={15} />
-                                <p className='text-[0.6rem] font-light text-primary/50'>{product.garantia} ANOS</p>
+                                <p className='text-[0.6rem] font-light text-primary/70'>{product.garantia} ANOS</p>
                               </div>
                             </div>
                           </div>
                         </div>
                       ))
                     ) : (
-                      <p className='w-full text-center text-sm italic text-primary/50'>Nenhum produto vinculado à proposta...</p>
+                      <p className='w-full text-center text-sm italic text-primary/70'>Nenhum produto vinculado à proposta...</p>
                     )}
                   </div>
                 </div>
@@ -361,7 +361,7 @@ function ProposalPage({ proposalId, session }: ProposalPageProps) {
               <div className='flex h-full w-full flex-col rounded-sm border border-primary/50 bg-background p-6 shadow-md lg:w-1/4'>
                 <div className='mb-2 flex w-full flex-col items-center'>
                   <h1 className='w-full text-center font-Raleway text-lg font-bold text-[#15599a]'>SERVIÇOS</h1>
-                  <p className='text-center text-xs italic text-primary/50'>Esses são os serviços vinculados à essa proposta</p>
+                  <p className='text-center text-xs italic text-primary/70'>Esses são os serviços vinculados à essa proposta</p>
                   <div className='mt-2 flex w-full flex-col gap-2'>
                     {proposal.servicos.length > 0 ? (
                       proposal.servicos.map((service, index) => (
@@ -376,14 +376,14 @@ function ProposalPage({ proposalId, session }: ProposalPageProps) {
                             <div className='flex  grow items-center justify-end gap-2 pl-2'>
                               <div className='flex items-center gap-1'>
                                 <AiOutlineSafety size={15} />
-                                <p className='text-[0.6rem] font-light text-primary/50'>{service.garantia} ANOS</p>
+                                <p className='text-[0.6rem] font-light text-primary/70'>{service.garantia} ANOS</p>
                               </div>
                             </div>
                           </div>
                         </div>
                       ))
                     ) : (
-                      <p className='w-full text-center text-sm italic text-primary/50'>Nenhum serviço vinculado à proposta...</p>
+                      <p className='w-full text-center text-sm italic text-primary/70'>Nenhum serviço vinculado à proposta...</p>
                     )}
                   </div>
                 </div>
@@ -391,8 +391,8 @@ function ProposalPage({ proposalId, session }: ProposalPageProps) {
             </div>
             {proposal.descricao ? (
               <div className='my-4 flex w-full flex-col gap-1'>
-                <h1 className='text-center text-xs font-medium leading-none tracking-tight text-primary/50'>DESCRIÇÃO/ANOTAÇÃO</h1>
-                <p className='w-full text-center  text-sm italic leading-none text-primary/50'>{proposal.descricao}</p>
+                <h1 className='text-center text-xs font-medium leading-none tracking-tight text-primary/70'>DESCRIÇÃO/ANOTAÇÃO</h1>
+                <p className='w-full text-center  text-sm italic leading-none text-primary/70'>{proposal.descricao}</p>
               </div>
             ) : null}
             {proposal.planos.length > 1 ? (

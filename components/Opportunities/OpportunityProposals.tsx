@@ -79,7 +79,7 @@ function OpportunityProposals({
                   return toast.error('Por favor, preecha a cidade e o estado do cliente antes de prosseguir para geração de propostas.');
                 router.push(`/comercial/oportunidades/proposta/${opportunityId}`);
               }}
-              className='hidden rounded-sm bg-green-600 p-1 text-[0.7rem] font-bold text-white lg:flex'
+              className='hidden rounded-sm bg-green-600 p-1 text-[0.7rem] font-bold text-primary-foreground lg:flex'
             >
               GERAR PROPOSTA
             </button>
@@ -92,7 +92,7 @@ function OpportunityProposals({
                   router.push(`/comercial/oportunidades/proposta/${opportunityId}`);
                 }
               }}
-              className='flex rounded-sm bg-green-600 p-1 text-sm font-bold text-white lg:hidden'
+              className='flex rounded-sm bg-green-600 p-1 text-sm font-bold text-primary-foreground lg:hidden'
             >
               <MdAdd />
             </button>
@@ -123,7 +123,7 @@ function OpportunityProposals({
               />
             ))
           ) : (
-            <p className='flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/50'>
+            <p className='flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/70'>
               Sem propostas vinculadas a essa oportunidade.
             </p>
           )
@@ -155,7 +155,7 @@ function OpportunityProposals({
   //             onClick={() => {
   //               router.push(`/comercial/oportunidades/proposta/${opportunityId}`)
   //             }}
-  //             className="hidden rounded-sm bg-green-600 p-1 text-[0.7rem] font-bold text-white lg:flex"
+  //             className="hidden rounded-sm bg-green-600 p-1 text-[0.7rem] font-bold text-primary-foreground lg:flex"
   //           >
   //             GERAR PROPOSTA
   //           </button>
@@ -167,7 +167,7 @@ function OpportunityProposals({
   //                 router.push(`/comercial/oportunidades/id/${opportunityId}`)
   //               }
   //             }}
-  //             className="flex rounded-sm bg-green-600 p-1 text-sm font-bold text-white lg:hidden"
+  //             className="flex rounded-sm bg-green-600 p-1 text-sm font-bold text-primary-foreground lg:hidden"
   //           >
   //             <MdAdd />
   //           </button>
@@ -193,7 +193,7 @@ function OpportunityProposals({
   //             />
   //           ))
   //         ) : (
-  //           <p className="flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/50">
+  //           <p className="flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/70">
   //             Sem propostas vinculadas a essa oportunidade.
   //           </p>
   //         )

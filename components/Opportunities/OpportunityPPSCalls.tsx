@@ -31,11 +31,14 @@ function OpportunityPPSCallsBlock({ session, opportunity }: OpportunityTechnical
         <div className='flex items-center gap-2'>
           <button
             onClick={() => setNewPPSCallModalIsOpen(true)}
-            className='hidden rounded-sm bg-green-600 p-1 text-[0.7rem] font-bold text-white lg:flex'
+            className='hidden rounded-sm bg-green-600 p-1 text-[0.7rem] font-bold text-primary-foreground lg:flex'
           >
             ABRIR CHAMADO
           </button>
-          <button onClick={() => setNewPPSCallModalIsOpen(true)} className='flex rounded-sm bg-green-600 p-1 text-sm font-bold text-white lg:hidden'>
+          <button
+            onClick={() => setNewPPSCallModalIsOpen(true)}
+            className='flex rounded-sm bg-green-600 p-1 text-sm font-bold text-primary-foreground lg:hidden'
+          >
             <MdAdd />
           </button>
           {blockIsOpen ? (
@@ -57,7 +60,7 @@ function OpportunityPPSCallsBlock({ session, opportunity }: OpportunityTechnical
             calls.length > 0 ? (
               calls.map((call) => <OpenPPSCall key={call._id} session={session} call={call} />)
             ) : (
-              <p className='flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/50'>
+              <p className='flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/70'>
                 Sem chamados vinculados a essa oportunidade.
               </p>
             )

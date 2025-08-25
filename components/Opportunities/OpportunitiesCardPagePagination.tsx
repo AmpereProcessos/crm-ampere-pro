@@ -20,7 +20,7 @@ function OpportunitiesCardPagePagination({
     <div className='my-2 flex w-full flex-col items-center gap-1'>
       {totalPages > 1 ? (
         <>
-          <p className='w-full text-center text-sm leading-none tracking-tight text-primary/50'>
+          <p className='w-full text-center text-sm leading-none tracking-tight text-primary/70'>
             Um número grande de oportunidades foi encontrado, separamos em páginas para facilitar a visualização. Clique na página desejada para
             visualizar os demais oportunidades.
           </p>
@@ -75,14 +75,14 @@ function OpportunitiesCardPagePagination({
           </div>
         </>
       ) : null}
-      <p className='w-full text-center text-sm leading-none tracking-tight text-primary/50'>
+      <p className='w-full text-center text-sm leading-none tracking-tight text-primary/70'>
         {opportunitiesMatched != null
           ? opportunitiesMatched > 0
             ? `${opportunitiesMatched} oportunidades encontradas.`
             : `${opportunitiesMatched} oportunidade encontrada.`
           : '...'}
       </p>
-      <p className='w-full text-center text-sm leading-none tracking-tight text-primary/50'>
+      <p className='w-full text-center text-sm leading-none tracking-tight text-primary/70'>
         {opportunitiesShowing != null
           ? opportunitiesShowing > 0
             ? `Mostrando ${opportunitiesShowing} oportunidades.`

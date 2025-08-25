@@ -196,7 +196,7 @@ function Drawing({
   }
   return (
     <div className='flex w-full grow flex-col gap-2 overflow-y-auto overscroll-y-auto bg-background px-2 py-1 scrollbar-thin scrollbar-track-primary/10 scrollbar-thumb-primary/30'>
-      <h1 className='w-full rounded-md  bg-primary/70 p-1 text-center font-medium text-white'>INFORMAÇÕES GERAIS</h1>
+      <h1 className='w-full rounded-md  bg-primary/70 p-1 text-center font-medium text-primary-foreground'>INFORMAÇÕES GERAIS</h1>
       <div className='flex w-full flex-col gap-2'>
         <div className='flex w-full flex-col items-center justify-center gap-2 lg:flex-row'>
           <TextInput
@@ -207,7 +207,7 @@ function Drawing({
             handleChange={(value) => setInfoHolder((prev) => ({ ...prev, nome: value }))}
           />
         </div>
-        <p className='my-2 w-full text-center text-sm leading-none tracking-tight text-primary/50'>
+        <p className='my-2 w-full text-center text-sm leading-none tracking-tight text-primary/70'>
           Preencha abaixo a localização de <strong className='text-cyan-500'>instalação</strong> do sistema fotovoltaico.
         </p>
         <div className='flex w-full flex-col items-center gap-2 lg:flex-row'>
@@ -300,8 +300,8 @@ function Drawing({
           </div>
         </div>
       </div>
-      <h1 className='w-full rounded-md  bg-primary/70 p-1 text-center font-medium text-white'>INFORMAÇÕES DOS EQUIPAMENTOS</h1>
-      <p className='my-2 w-full text-center text-sm leading-none tracking-tight text-primary/50'>
+      <h1 className='w-full rounded-md  bg-primary/70 p-1 text-center font-medium text-primary-foreground'>INFORMAÇÕES DOS EQUIPAMENTOS</h1>
+      <p className='my-2 w-full text-center text-sm leading-none tracking-tight text-primary/70'>
         Preencha abaixo os <strong className='text-cyan-500'>equipamentos</strong> a serem análisados, ou, escolha um dos kits ativos.
       </p>
       <div className='flex w-full flex-col gap-1'>
@@ -375,7 +375,7 @@ function Drawing({
         </div>
         <div className='flex items-center justify-end'>
           <button
-            className='rounded bg-black p-1 px-4 text-sm font-medium text-white duration-300 ease-in-out hover:bg-primary/70'
+            className='rounded bg-black p-1 px-4 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-primary/70'
             onClick={() => addInverterToEquipments(inverterHolder)}
           >
             ADICIONAR INVERSOR
@@ -453,7 +453,7 @@ function Drawing({
         </div>
         <div className='flex items-center justify-end'>
           <button
-            className='rounded bg-black p-1 px-4 text-sm font-medium text-white duration-300 ease-in-out hover:bg-primary/70'
+            className='rounded bg-black p-1 px-4 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-primary/70'
             onClick={() => addModuleToEquipments(moduleHolder)}
           >
             ADICIONAR MÓDULO
@@ -543,7 +543,7 @@ function Drawing({
 
         <div className='flex items-center justify-end'>
           <button
-            className='rounded bg-black p-1 px-4 text-sm font-medium text-white duration-300 ease-in-out hover:bg-primary/70'
+            className='rounded bg-black p-1 px-4 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-primary/70'
             onClick={() => addPersonalizedEquipment(personalizedProductHolder)}
           >
             ADICIONAR PRODUTO PERSONALIZADO
@@ -556,16 +556,16 @@ function Drawing({
           getProducts={(products) => setInfoHolder((prev) => ({ ...prev, equipamentos: products }))}
         />
       ) : null}
-      <p className='w-full text-center text-sm leading-none tracking-tight text-primary/50'>
+      <p className='w-full text-center text-sm leading-none tracking-tight text-primary/70'>
         Deseja utilizar os equipamentos de um kit específico ? Abra o menu e <strong className='text-cyan-500'>Escolha uma das opções de kit.</strong>
       </p>
       <div className='my-2 flex w-full items-center justify-center'>
         {showKits ? (
-          <button onClick={() => setShowKits(false)} className='rounded-md bg-red-500 px-2 py-1 text-sm font-bold text-white'>
+          <button onClick={() => setShowKits(false)} className='rounded-md bg-red-500 px-2 py-1 text-sm font-bold text-primary-foreground'>
             FECHAR MENU DE KITS
           </button>
         ) : (
-          <button onClick={() => setShowKits(true)} className='rounded-md bg-cyan-500 px-2 py-1 text-sm font-bold text-white'>
+          <button onClick={() => setShowKits(true)} className='rounded-md bg-cyan-500 px-2 py-1 text-sm font-bold text-primary-foreground'>
             MOSTRAR MENU KITS
           </button>
         )}
@@ -606,20 +606,20 @@ function Drawing({
               <div className='flex w-full items-center justify-end gap-2 pl-2'>
                 <div className='flex items-center gap-1'>
                   <FaIndustry size={15} />
-                  <p className='text-[0.6rem] font-light text-primary/50'>{equipment.fabricante}</p>
+                  <p className='text-[0.6rem] font-light text-primary/70'>{equipment.fabricante}</p>
                 </div>
                 <div className='flex items-center gap-1'>
                   <ImPower size={15} />
-                  <p className='text-[0.6rem] font-light text-primary/50'>{equipment.potencia} W</p>
+                  <p className='text-[0.6rem] font-light text-primary/70'>{equipment.potencia} W</p>
                 </div>
               </div>
             </div>
           ))
         ) : (
-          <p className='w-full text-center text-sm font-medium tracking-tight text-primary/50'>Nenhum equipamento adicionado à lista.</p>
+          <p className='w-full text-center text-sm font-medium tracking-tight text-primary/70'>Nenhum equipamento adicionado à lista.</p>
         )}
       </div>
-      <h1 className='mt-4 w-full rounded-md  bg-primary/70 p-1 text-center font-medium text-white'>INFORMAÇÕES DO DESENHO</h1>
+      <h1 className='mt-4 w-full rounded-md  bg-primary/70 p-1 text-center font-medium text-primary-foreground'>INFORMAÇÕES DO DESENHO</h1>
       <div className='flex w-full flex-col items-center justify-center'>
         <div className='w-full self-center lg:w-1/2'>
           <SelectInput
@@ -649,7 +649,7 @@ function Drawing({
         </div>
       </div>
       <div className='mt-2 flex w-full flex-col'>
-        <h1 className='w-full rounded-tl-sm rounded-tr-sm bg-primary/50 p-1 text-center font-bold text-white'>OBSERVAÇÕES</h1>
+        <h1 className='w-full rounded-tl-sm rounded-tr-sm bg-primary/50 p-1 text-center font-bold text-primary-foreground'>OBSERVAÇÕES</h1>
         <textarea
           placeholder='SEM OBSERVAÇÕES PREENCHIDAS...'
           value={infoHolder.desenho?.observacoes || ''}
@@ -680,11 +680,11 @@ function Drawing({
         </div>
       </div>
       <div className='mt-2 flex w-full flex-wrap justify-between  gap-2'>
-        <button onClick={() => resetSolicitationType()} className='rounded p-2 font-bold text-primary/50 duration-300 hover:scale-105'>
+        <button onClick={() => resetSolicitationType()} className='rounded p-2 font-bold text-primary/70 duration-300 hover:scale-105'>
           Voltar
         </button>
         <button
-          className='rounded p-2 font-bold hover:bg-black hover:text-white'
+          className='rounded p-2 font-bold hover:bg-black hover:text-primary-foreground'
           onClick={() => handleRequestAnalysis({ info: infoHolder, files: files })}
         >
           SOLICITAR ANÁLISE

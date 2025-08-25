@@ -36,8 +36,8 @@ function ConditionMenu({ resultHolder, setResultHolder }: ConditionMenuProps) {
               }))
             }
             className={`grow ${
-              va.value == resultHolder.condicao.tipo ? 'bg-blue-700  text-white' : 'text-blue-700 '
-            } rounded border border-blue-700  p-1 text-xs font-medium  duration-300 ease-in-out hover:bg-blue-700  hover:text-white`}
+              va.value == resultHolder.condicao.tipo ? 'bg-blue-700  text-primary-foreground' : 'text-blue-700 '
+            } rounded border border-blue-700  p-1 text-xs font-medium  duration-300 ease-in-out hover:bg-blue-700  hover:text-primary-foreground`}
           >
             {va.label}
           </button>
@@ -66,8 +66,8 @@ function ConditionMenu({ resultHolder, setResultHolder }: ConditionMenuProps) {
                     }))
                   }
                   className={`grow ${
-                    va.value == resultHolder.condicao.variavel ? 'bg-primary/70  text-white' : 'text-primary/70 '
-                  } rounded border border-primary/70  p-1 text-xs font-medium  duration-300 ease-in-out hover:bg-primary/70  hover:text-white`}
+                    va.value == resultHolder.condicao.variavel ? 'bg-primary/70  text-primary-foreground' : 'text-primary/70 '
+                  } rounded border border-primary/70  p-1 text-xs font-medium  duration-300 ease-in-out hover:bg-primary/70  hover:text-primary-foreground`}
                 >
                   {va.label}
                 </button>

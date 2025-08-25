@@ -28,13 +28,13 @@ function OpportunityHomologations({ opportunity, session }: OpportunityHomologat
         <div className='flex items-center gap-2'>
           <button
             onClick={() => setNewHomologationModalIsOpen(true)}
-            className='hidden rounded-sm bg-green-600 p-1 text-[0.7rem] font-bold text-white lg:flex'
+            className='hidden rounded-sm bg-green-600 p-1 text-[0.7rem] font-bold text-primary-foreground lg:flex'
           >
             SOLICITAR HOMOLOGAÇÃO
           </button>
           <button
             onClick={() => setNewHomologationModalIsOpen(true)}
-            className='flex rounded-sm bg-green-600 p-1 text-sm font-bold text-white lg:hidden'
+            className='flex rounded-sm bg-green-600 p-1 text-sm font-bold text-primary-foreground lg:hidden'
           >
             <MdAdd />
           </button>
@@ -57,7 +57,7 @@ function OpportunityHomologations({ opportunity, session }: OpportunityHomologat
             homologations.length > 0 ? (
               homologations.map((homologation) => <OpportunityHomologationCard key={homologation._id} homologation={homologation} />)
             ) : (
-              <p className='flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/50'>
+              <p className='flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/70'>
                 Sem homologações vinculadas a essa oportunidade.
               </p>
             )

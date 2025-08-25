@@ -21,13 +21,13 @@ function ProposalPlan({ plan, definePlan, editPrice, enableSelection, userHasPri
           </button>
         ) : null}
       </div>
-      <p className='w-full text-start text-sm text-primary/50'>{plan?.descricao || '...'}</p>
+      <p className='w-full text-start text-sm text-primary/70'>{plan?.descricao || '...'}</p>
       <div className='my-4 flex w-full items-end justify-center gap-1'>
         <h1 className='text-4xl font-black'>{formatToMoney(plan.valor || 0)}</h1>
-        <h1 className='text-xs font-light text-primary/50'>/ {plan?.intervalo.tipo}</h1>
+        <h1 className='text-xs font-light text-primary/70'>/ {plan?.intervalo.tipo}</h1>
       </div>
       <div className='my-4 flex grow flex-col gap-1'>
-        <h1 className='text-[0.6rem] tracking-tight text-primary/50'>DESCRITIVO</h1>
+        <h1 className='text-[0.6rem] tracking-tight text-primary/70'>DESCRITIVO</h1>
         <div className='flex grow flex-col gap-2'>
           {plan.descritivo.map((d, idx) => (
             <div key={idx} className='flex items-center gap-1'>
@@ -42,7 +42,10 @@ function ProposalPlan({ plan, definePlan, editPrice, enableSelection, userHasPri
       {enableSelection ? (
         <>
           <div className='flex w-full items-center justify-end'>
-            <button onClick={() => definePlan(plan)} className='rounded-full bg-blue-600 px-2 py-1 text-[0.65rem] font-bold text-white lg:text-xs'>
+            <button
+              onClick={() => definePlan(plan)}
+              className='rounded-full bg-blue-600 px-2 py-1 text-[0.65rem] font-bold text-primary-foreground lg:text-xs'
+            >
               SELECIONAR
             </button>
           </div>

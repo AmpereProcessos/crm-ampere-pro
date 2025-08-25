@@ -59,7 +59,7 @@ function OpportunityVinculationMenu({ vinculatedId, infoHolder, setInfoHolder, c
       <div className='mt-1 flex w-full items-center justify-end'>
         <button
           onClick={() => handleVinculation({ id: selectedOpportunityId, opportunities })}
-          className='flex items-center gap-1 rounded-sm bg-black px-4 py-1 text-sm font-medium text-white duration-300 ease-in-out hover:bg-primary/70'
+          className='flex items-center gap-1 rounded-sm bg-black px-4 py-1 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-primary/70'
         >
           <FaLink />
           <p>VINCULAR</p>

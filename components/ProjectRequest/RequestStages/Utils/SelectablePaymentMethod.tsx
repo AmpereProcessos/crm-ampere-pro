@@ -24,7 +24,7 @@ function SelectablePaymentMethod({ method, saleValue, selectMethod }: Selectable
           </div>
           <p className='text-sm font-medium leading-none tracking-tight'>{method.nome}</p>
         </div>
-        <h1 className='text-sm text-primary/50'>
+        <h1 className='text-sm text-primary/70'>
           VALOR FINAL DE: <strong className='text-primary'>{formatToMoney(getPaymentMethodFinalValue({ method, proposalValue: saleValue }))}</strong>
         </h1>
       </div>
@@ -35,18 +35,18 @@ function SelectablePaymentMethod({ method, saleValue, selectMethod }: Selectable
           <div key={itemIndex} className={`flex w-[450px] flex-col rounded-md border border-primary/50 p-2  shadow-md`}>
             <div className='flex w-full items-center justify-between gap-2'>
               <h1 className='text-xs font-black leading-none tracking-tight lg:text-sm'>FRAÇÃO DE {fractionnement.porcentagem}%</h1>
-              <h1 className='rounded-full bg-primary/80 px-2 py-1 text-[0.65rem] font-medium text-white lg:text-xs'>
+              <h1 className='rounded-full bg-primary/80 px-2 py-1 text-[0.65rem] font-medium text-primary-foreground lg:text-xs'>
                 {formatToMoney(getFractionnementValue({ fractionnement, proposalValue: saleValue }))}
               </h1>
             </div>
             <div className='mt-2 flex w-full flex-wrap items-center justify-between'>
               <div className='flex items-center gap-2'>
                 <MdPayment color={'#76c893'} />
-                <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/50 lg:text-xs'>{fractionnement.metodo}</p>
+                <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/70 lg:text-xs'>{fractionnement.metodo}</p>
               </div>
               <div className='flex items-center gap-2'>
                 <BsCircleHalf color='#ed174c' />
-                <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/50 lg:text-xs'>
+                <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/70 lg:text-xs'>
                   {fractionnement.maximoParcelas}{' '}
                   {fractionnement.maximoParcelas ? (fractionnement.maximoParcelas > 1 ? 'PARCELAS MÁX' : 'PARCELA MÁX') : null}
                 </p>
@@ -54,7 +54,7 @@ function SelectablePaymentMethod({ method, saleValue, selectMethod }: Selectable
               {fractionnement.taxaJuros ? (
                 <div className='flex items-center gap-2'>
                   <FaPercentage />
-                  <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/50 lg:text-xs'>
+                  <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/70 lg:text-xs'>
                     {fractionnement.taxaJuros} DE JUROS
                   </p>
                 </div>
@@ -62,7 +62,7 @@ function SelectablePaymentMethod({ method, saleValue, selectMethod }: Selectable
               {fractionnement.taxaUnica ? (
                 <div className='flex items-center gap-2'>
                   <FaPercentage />
-                  <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/50 lg:text-xs'>
+                  <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/70 lg:text-xs'>
                     {fractionnement.taxaUnica} DE USO
                   </p>
                 </div>
@@ -84,9 +84,9 @@ function SelectablePaymentMethod({ method, saleValue, selectMethod }: Selectable
                   setMethodHolder((prev) => ({ ...prev, fracionamento: fractionnements }));
                 }}
                 type='number'
-                className='rounded-lg border border-primary/30 p-1 text-center text-[0.6rem] tracking-tight text-primary/50 shadow-md outline-hidden placeholder:italic'
+                className='rounded-lg border border-primary/30 p-1 text-center text-[0.6rem] tracking-tight text-primary/70 shadow-md outline-hidden placeholder:italic'
               />
-              <p className='text-[0.6rem] font-medium leading-none tracking-tight text-primary/50'>PARCELAS</p>
+              <p className='text-[0.6rem] font-medium leading-none tracking-tight text-primary/70'>PARCELAS</p>
             </div>
           </div>
         ))}
@@ -94,7 +94,7 @@ function SelectablePaymentMethod({ method, saleValue, selectMethod }: Selectable
       <div className='mt-1 flex w-full items-center justify-end'>
         <button
           onClick={() => selectMethod(methodHolder)}
-          className='rounded-full bg-blue-600 px-2 py-1 text-[0.65rem] font-bold text-white duration-300 ease-in-out hover:bg-blue-700 lg:text-xs'
+          className='rounded-full bg-blue-600 px-2 py-1 text-[0.65rem] font-bold text-primary-foreground duration-300 ease-in-out hover:bg-blue-700 lg:text-xs'
         >
           SELECIONAR
         </button>

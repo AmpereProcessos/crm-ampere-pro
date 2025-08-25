@@ -15,13 +15,13 @@ function AttachFile({ files, setFiles, clientIdentifier }: AttachFileProps) {
   if (clientIdentifier.length < 14)
     return (
       <div className='flex w-full flex-col gap-2'>
-        <h1 className='mt-4 w-full rounded-md bg-primary/80 p-2 text-center font-bold text-white'>ANEXO DE ARQUIVOS</h1>
+        <h1 className='mt-4 w-full rounded-md bg-primary/80 p-2 text-center font-bold text-primary-foreground'>ANEXO DE ARQUIVOS</h1>
         <p className='py-2 text-center text-sm italic text-red-500'>Preencha um CPF/CNPJ válido.</p>
       </div>
     );
   return (
     <div className='flex w-full flex-col gap-2'>
-      <h1 className='mt-4 w-full rounded-md bg-primary/80 p-2 text-center font-bold text-white'>ANEXO DE ARQUIVOS</h1>
+      <h1 className='mt-4 w-full rounded-md bg-primary/80 p-2 text-center font-bold text-primary-foreground'>ANEXO DE ARQUIVOS</h1>
       {isCPF ? (
         <>
           <div className='flex w-full flex-col'>

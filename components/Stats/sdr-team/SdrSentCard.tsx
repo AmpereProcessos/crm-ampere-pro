@@ -63,7 +63,7 @@ function SdrSentCard({ stats, promoters }: SdrSentCardProps) {
                     fallback={formatNameAsInitials(promoter.nome)}
                   />
                 </div>
-                <p className='hidden min-w-[150px] max-w-[150px] font-medium uppercase tracking-tight text-primary/50 md:flex lg:text-sm'>
+                <p className='hidden min-w-[150px] max-w-[150px] font-medium uppercase tracking-tight text-primary/70 md:flex lg:text-sm'>
                   {promoter.nome}
                 </p>
               </div>
@@ -79,7 +79,7 @@ function SdrSentCard({ stats, promoters }: SdrSentCardProps) {
             </div>
             {promoter.porVendedor.map((seller) => (
               <div key={seller.vendedor} className='flex w-full justify-between'>
-                <p className='pl-4 text-xxs font-medium uppercase tracking-tight text-primary/50 lg:text-xs'>{seller.vendedor}</p>
+                <p className='pl-4 text-xxs font-medium uppercase tracking-tight text-primary/70 lg:text-xs'>{seller.vendedor}</p>
                 <div className='flex items-center gap-2'>
                   <div className='flex items-center gap-1 text-blue-700'>
                     <GrSend size={12} />

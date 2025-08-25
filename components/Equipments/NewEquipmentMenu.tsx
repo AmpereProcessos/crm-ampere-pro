@@ -51,7 +51,9 @@ function NewEquipmentMenu({ session, affectQueryKey }: NewEquipmentMenuProps) {
   });
   return (
     <div className='flex w-full flex-col gap-2'>
-      <h1 className='w-full rounded-bl rounded-br bg-[#fead41] p-1 text-center text-xs font-bold text-white'>CADASTRO DE EQUIPAMENTOS</h1>
+      <h1 className='w-full rounded-bl rounded-br bg-[#fead41] p-1 text-center text-xs font-bold text-primary-foreground'>
+        CADASTRO DE EQUIPAMENTOS
+      </h1>
       <div className='flex w-full flex-col items-center justify-center gap-2 px-2 lg:flex-row'>
         <div className='w-full lg:w-1/2'>
           <SelectInput
@@ -129,7 +131,7 @@ function NewEquipmentMenu({ session, affectQueryKey }: NewEquipmentMenuProps) {
             // @ts-ignore
             handleCreateEquipment({ info: equipment });
           }}
-          className='rounded bg-black px-4 py-1 text-sm font-medium text-white duration-300 ease-in-out hover:bg-primary/70'
+          className='rounded bg-black px-4 py-1 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-primary/70'
         >
           CADASTRAR
         </button>

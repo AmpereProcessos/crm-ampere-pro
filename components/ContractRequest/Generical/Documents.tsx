@@ -104,7 +104,7 @@ function Documents({
             onClick={() => {
               goToPreviousStage();
             }}
-            className='rounded p-2 font-bold text-primary/50 duration-300 hover:scale-105'
+            className='rounded p-2 font-bold text-primary/70 duration-300 hover:scale-105'
           >
             Voltar
           </button>
@@ -113,7 +113,7 @@ function Documents({
             onClick={() => {
               validateDocumentsAndProcceed(documentsFile);
             }}
-            className='rounded p-2 font-bold hover:bg-black hover:text-white'
+            className='rounded p-2 font-bold hover:bg-black hover:text-primary-foreground'
           >
             Prosseguir
           </button>
@@ -172,7 +172,7 @@ function AttachmentsMenu({ requiredDocumentsKeys, files, addFiles, removeFile }:
             <button
               type='button'
               onClick={() => removeFile(f.title)}
-              className='flex items-center gap-1 rounded-lg bg-red-600 px-2 py-1 text-[0.6rem] text-white hover:bg-red-500'
+              className='flex items-center gap-1 rounded-lg bg-red-600 px-2 py-1 text-[0.6rem] text-primary-foreground hover:bg-red-500'
             >
               <MdDelete width={10} height={10} />
               <p>REMOVER</p>
@@ -221,7 +221,7 @@ function NewAttachmentsMenu({ addFiles }: NewAttachmentsMenuProps) {
       exit='exit'
       className='flex w-full flex-col gap-2 rounded-sm border border-green-600 bg-background shadow-md'
     >
-      <h1 className='rounded-tl rounded-tr bg-green-600 p-1 text-center text-xs text-white'>NOVOS ANEXOS</h1>
+      <h1 className='rounded-tl rounded-tr bg-green-600 p-1 text-center text-xs text-primary-foreground'>NOVOS ANEXOS</h1>
       <div className='flex w-full flex-col gap-2 p-3'>
         <div className='relative flex w-full items-center justify-center'>
           <label
@@ -264,7 +264,7 @@ function NewAttachmentsMenu({ addFiles }: NewAttachmentsMenuProps) {
               <button
                 type='button'
                 onClick={() => removeAttachment(index)}
-                className='flex items-center gap-1 rounded-lg bg-red-600 px-2 py-1 text-[0.6rem] text-white hover:bg-red-500'
+                className='flex items-center gap-1 rounded-lg bg-red-600 px-2 py-1 text-[0.6rem] text-primary-foreground hover:bg-red-500'
               >
                 <MdDelete width={10} height={10} />
                 <p>REMOVER</p>

@@ -29,20 +29,20 @@ function FileReferenceCard({ info, handleClick }: FileReferenceCardProps) {
     <div className='flex w-full flex-col rounded-md border border-cyan-500 p-2'>
       <div className='flex w-full items-center gap-2'>
         {handleRenderIcon(info.formato)}
-        <a href={info.url} className='text-sm font-bold leading-none tracking-tight text-primary/50 duration-300 ease-in-out hover:text-cyan-500'>
+        <a href={info.url} className='text-sm font-bold leading-none tracking-tight text-primary/70 duration-300 ease-in-out hover:text-cyan-500'>
           {info.titulo}
         </a>
       </div>
       <div className='mt-1 flex  w-full flex-col items-center justify-between gap-2 lg:flex-row'>
-        <h1 className='text-center text-xs font-medium italic text-primary/50'>{info.formato}</h1>
+        <h1 className='text-center text-xs font-medium italic text-primary/70'>{info.formato}</h1>
         <div className='flex flex-col items-center gap-2 lg:flex-row'>
           <div className={'flex items-center gap-1'}>
             <BsCalendarPlus />
-            <p className='text-[0.65rem] font-medium text-primary/50'>{formatDateAsLocale(info.dataInsercao, true)}</p>
+            <p className='text-[0.65rem] font-medium text-primary/70'>{formatDateAsLocale(info.dataInsercao, true)}</p>
           </div>
           <div className='flex items-center gap-1'>
             <Avatar fallback={'R'} url={info.autor.avatar_url || undefined} height={20} width={20} />
-            <p className='text-[0.65rem] font-medium text-primary/50'>{info.autor.nome}</p>
+            <p className='text-[0.65rem] font-medium text-primary/70'>{info.autor.nome}</p>
           </div>
           <button
             type='button'

@@ -76,19 +76,21 @@ function ProposalService({
           </div>
           <p className='text-xs font-medium leading-none tracking-tight lg:text-sm'>{service.descricao}</p>
         </div>
-        <h1 className='rounded-full bg-black px-2 py-1 text-[0.65rem] font-bold text-white lg:text-xs'>{formatToMoney(proposalTotalPreview)}</h1>
+        <h1 className='rounded-full bg-black px-2 py-1 text-[0.65rem] font-bold text-primary-foreground lg:text-xs'>
+          {formatToMoney(proposalTotalPreview)}
+        </h1>
       </div>
       <div className='mt-2 flex w-full items-center justify-end gap-2 pl-2'>
         <div className='flex items-center gap-1'>
           {userHasPricingView ? (
             <div className='flex items-center gap-1'>
               <MdAttachMoney size={12} />
-              <p className='text-[0.6rem] font-light text-primary/50 lg:text-xs'>{formatToMoney(service.preco || 0)}</p>
+              <p className='text-[0.6rem] font-light text-primary/70 lg:text-xs'>{formatToMoney(service.preco || 0)}</p>
             </div>
           ) : null}
 
           <AiOutlineSafety size={12} />
-          <p className='text-[0.6rem] font-light text-primary/50 lg:text-xs'>{service.garantia} ANOS</p>
+          <p className='text-[0.6rem] font-light text-primary/70 lg:text-xs'>{service.garantia} ANOS</p>
         </div>
       </div>
 
@@ -96,14 +98,14 @@ function ProposalService({
         {!selectedIds.includes(service._id) ? (
           <button
             onClick={() => handleSelect({ ...service, valorFinal: proposalTotalPreview })}
-            className='rounded-full border border-cyan-500 p-1 text-cyan-500 duration-300 ease-in-out hover:bg-cyan-500 hover:text-white'
+            className='rounded-full border border-cyan-500 p-1 text-cyan-500 duration-300 ease-in-out hover:bg-cyan-500 hover:text-primary-foreground'
           >
             <IoMdAdd />
           </button>
         ) : (
           <button
             onClick={() => handleRemove(index)}
-            className='rounded-full border border-red-500 p-1 text-red-500 duration-300 ease-in-out hover:bg-red-500 hover:text-white'
+            className='rounded-full border border-red-500 p-1 text-red-500 duration-300 ease-in-out hover:bg-red-500 hover:text-primary-foreground'
           >
             <MdOutlineRemove />
           </button>

@@ -32,12 +32,12 @@ function ReviewPaymentInformationBlock({ infoHolder, setInfoHolder, client }: Re
   const isFinancing = infoHolder.pagamento.metodo.fracionamento.some((f) => f.metodo == 'FINANCIAMENTO');
   return (
     <div className='flex w-full grow flex-col gap-2'>
-      <h1 className='w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-white'>INFORMAÇÕES DE PAGAMENTO</h1>
+      <h1 className='w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-primary-foreground'>INFORMAÇÕES DE PAGAMENTO</h1>
       <div className='flex w-full grow flex-col gap-2'>
         <div className='my-2 flex w-full items-center justify-center'>
           <button
             onClick={() => useClientDataInPayment(client)}
-            className='rounded-lg bg-blue-500 px-2 py-1 text-center text-xs font-medium tracking-tight text-white duration-300 ease-in-out hover:bg-blue-600'
+            className='rounded-lg bg-blue-500 px-2 py-1 text-center text-xs font-medium tracking-tight text-primary-foreground duration-300 ease-in-out hover:bg-blue-600'
           >
             UTILIZAR DOS DADOS DO CLIENTE
           </button>
@@ -126,7 +126,7 @@ function ReviewPaymentInformationBlock({ infoHolder, setInfoHolder, client }: Re
             />
           </div>
         </div>
-        <h1 className='w-full rounded-md bg-blue-500 p-1 text-center text-sm font-bold text-white'>MÉTODO DE PAGAMENTO</h1>
+        <h1 className='w-full rounded-md bg-blue-500 p-1 text-center text-sm font-bold text-primary-foreground'>MÉTODO DE PAGAMENTO</h1>
         <div className='my-1 flex w-full flex-col'>
           <p className='w-full text-center text-sm font-light tracking-tighter text-primary/70'>
             Escolha a metodologia de pagamento aplicável à esse projeto.
@@ -137,7 +137,7 @@ function ReviewPaymentInformationBlock({ infoHolder, setInfoHolder, client }: Re
         </div>
 
         <div className='mb-6 flex w-full flex-col items-center justify-center rounded-sm border border-green-500'>
-          <h1 className='w-full rounded-md rounded-tl rounded-tr bg-green-500 p-1 text-center text-sm font-bold text-white'>
+          <h1 className='w-full rounded-md rounded-tl rounded-tr bg-green-500 p-1 text-center text-sm font-bold text-primary-foreground'>
             MÉTODO DE PAGAMENTO ATIVO
           </h1>
           <div className='flex w-full items-center justify-center p-2'>

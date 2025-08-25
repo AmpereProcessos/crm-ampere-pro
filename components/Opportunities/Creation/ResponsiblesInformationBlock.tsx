@@ -94,7 +94,7 @@ function ResponsiblesInformationBlock({ session, opportunity, setOpportunity, op
         <button
           type='button'
           onClick={() => addOpportunityResponsible(responsibleHolder)}
-          className='whitespace-nowrap rounded-sm bg-primary/80 px-4 py-2 text-xs font-medium text-white shadow-sm disabled:bg-primary/50 disabled:text-white enabled:hover:bg-primary/70 enabled:hover:text-white'
+          className='whitespace-nowrap rounded-sm bg-primary/80 px-4 py-2 text-xs font-medium text-primary-foreground shadow-sm disabled:bg-primary/50 disabled:text-primary-foreground enabled:hover:bg-primary/70 enabled:hover:text-primary-foreground'
         >
           ADICIONAR RESPONSÁVEL
         </button>
@@ -104,7 +104,7 @@ function ResponsiblesInformationBlock({ session, opportunity, setOpportunity, op
           <div key={resp.id} className='flex w-full justify-between rounded-md border border-primary/30 p-3 font-Inter'>
             <div className='flex grow items-center gap-1'>
               <Avatar width={20} height={20} url={resp.avatar_url || undefined} fallback={resp.nome} />
-              <p className='text-sm font-medium leading-none tracking-tight text-primary/50'>{resp.nome}</p>{' '}
+              <p className='text-sm font-medium leading-none tracking-tight text-primary/70'>{resp.nome}</p>{' '}
               <p className='ml-1 rounded-md border border-cyan-400 p-1 text-xxs font-bold text-cyan-400'>{resp.papel}</p>
             </div>
             <button
@@ -117,7 +117,7 @@ function ResponsiblesInformationBlock({ session, opportunity, setOpportunity, op
           </div>
         ))
       ) : (
-        <p className='w-full text-center text-xs italic leading-none tracking-tight text-primary/50'>Sem responsáveis vinculados...</p>
+        <p className='w-full text-center text-xs italic leading-none tracking-tight text-primary/70'>Sem responsáveis vinculados...</p>
       )}
     </div>
   );

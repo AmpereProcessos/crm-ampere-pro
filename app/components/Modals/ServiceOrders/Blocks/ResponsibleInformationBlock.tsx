@@ -57,11 +57,11 @@ function ResponsibleInformationBlock({ infoHolder, setInfoHolder }: ResponsibleI
 
   return (
     <div className='flex w-full flex-col gap-y-2'>
-      <h1 className='w-full bg-primary/70  p-1 text-center font-medium text-white'>RESPONSÁVEIS</h1>
+      <h1 className='w-full bg-primary/70  p-1 text-center font-medium text-primary-foreground'>RESPONSÁVEIS</h1>
       <div className='flex w-full flex-col gap-1'>
         {infoHolder.responsaveis.length > 0 ? (
           <div className='flex w-full flex-col gap-1'>
-            <h1 className='w-full text-center text-sm font-medium tracking-tight text-primary/50 lg:text-start'>
+            <h1 className='w-full text-center text-sm font-medium tracking-tight text-primary/70 lg:text-start'>
               Os responsáveis pela execução do serviço são:
             </h1>
             <div className='flex flex-wrap items-center justify-center gap-2 lg:gap-6'>
@@ -78,7 +78,7 @@ function ResponsibleInformationBlock({ infoHolder, setInfoHolder }: ResponsibleI
             </div>
           </div>
         ) : (
-          <p className='w-full text-center text-sm font-medium tracking-tight text-primary/50'>Nenhum responsável adicionado ao serviço.</p>
+          <p className='w-full text-center text-sm font-medium tracking-tight text-primary/70'>Nenhum responsável adicionado ao serviço.</p>
         )}
 
         <div className='flex w-full flex-col gap-1'>
@@ -137,7 +137,7 @@ function ResponsibleInformationBlock({ infoHolder, setInfoHolder }: ResponsibleI
               />
             </div>
             <button
-              className='rounded bg-black p-1 px-4 text-sm font-medium text-white duration-300 ease-in-out hover:bg-primary/70'
+              className='rounded bg-black p-1 px-4 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-primary/70'
               onClick={() => addResponsible(newResponsibleHolder)}
             >
               ADICIONAR RESPONSÁVEL

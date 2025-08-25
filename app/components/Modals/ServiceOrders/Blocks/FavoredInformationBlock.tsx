@@ -30,7 +30,7 @@ type FavoredInformationBlockProps = {
 function FavoredInformationBlock({ infoHolder, setInfoHolder }: FavoredInformationBlockProps) {
   return (
     <div className='flex w-full flex-col gap-y-2'>
-      <h1 className='w-full bg-primary/70  p-1 text-center font-medium text-white'>FAVORECIDO</h1>
+      <h1 className='w-full bg-primary/70  p-1 text-center font-medium text-primary-foreground'>FAVORECIDO</h1>
       <div className='flex w-full flex-col gap-1'>
         <div className='flex w-full flex-col items-center gap-2 lg:flex-row'>
           <div className='w-full lg:w-1/2'>
@@ -58,7 +58,7 @@ function FavoredInformationBlock({ infoHolder, setInfoHolder }: FavoredInformati
   // return (
   //   <div className="flex w-full flex-col gap-2">
   //     <div className="flex w-full items-center justify-center gap-2 rounded-md bg-primary/80 p-2">
-  //       <h1 className="font-bold text-white">INFORMAÇÕES DO FAVORECIDO</h1>
+  //       <h1 className="font-bold text-primary-foreground">INFORMAÇÕES DO FAVORECIDO</h1>
   //       <button onClick={() => setEditModeEnable((prev) => !prev)}>
   //         {!editModeEnable ? <AiFillEdit color="white" /> : <AiFillCloseCircle color="#ff1736" />}
   //       </button>

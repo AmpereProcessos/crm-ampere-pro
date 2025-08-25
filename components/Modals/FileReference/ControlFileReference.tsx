@@ -196,7 +196,7 @@ function ControlFileReferenceFileAttachment({ fileReference, attachmentHolder, u
           {imageUrl ? (
             <Image src={imageUrl} alt={fileReference.titulo} fill={true} />
           ) : (
-            <h1 className='rounded-lg bg-blue-600 px-4 py-1 text-[0.65rem] font-bold text-white'>{getFileTypeTitle(fileType)}</h1>
+            <h1 className='rounded-lg bg-blue-600 px-4 py-1 text-[0.65rem] font-bold text-primary-foreground'>{getFileTypeTitle(fileType)}</h1>
           )}
         </div>
       </div>

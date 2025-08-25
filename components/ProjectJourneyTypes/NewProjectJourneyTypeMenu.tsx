@@ -58,7 +58,7 @@ function NewProjectJourneyTypeMenu({ session }: NewProjectJourneyTypeMenuProps) 
       exit='exit'
       className='flex w-full flex-col gap-2'
     >
-      <h1 className='w-full rounded-bl rounded-br bg-[#fead41] p-1 text-center text-xs font-bold text-white'>CADASTRO</h1>
+      <h1 className='w-full rounded-bl rounded-br bg-[#fead41] p-1 text-center text-xs font-bold text-primary-foreground'>CADASTRO</h1>
       <div className='flex w-full flex-col gap-2 p-2'>
         <TextInput
           label='NOME DO TIPO DE JORNADA'
@@ -90,7 +90,7 @@ function NewProjectJourneyTypeMenu({ session }: NewProjectJourneyTypeMenuProps) 
           />
           <div className='flex items-center justify-end'>
             <button
-              className='rounded bg-blue-600 p-1 px-4 text-xs font-medium text-white duration-300 ease-in-out hover:bg-blue-800'
+              className='rounded bg-blue-600 p-1 px-4 text-xs font-medium text-primary-foreground duration-300 ease-in-out hover:bg-blue-800'
               onClick={() => addStage({ titulo: stageHolder.titulo, descricao: stageHolder.descricao })}
             >
               CADASTRAR ETAPA
@@ -123,7 +123,7 @@ function NewProjectJourneyTypeMenu({ session }: NewProjectJourneyTypeMenuProps) 
               // @ts-ignore
               handleCreateProjectJourneyType({ info: infoHolder });
             }}
-            className='rounded bg-black px-4 py-1 text-sm font-medium text-white duration-300 ease-in-out hover:bg-primary/70'
+            className='rounded bg-black px-4 py-1 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-primary/70'
           >
             CADASTRAR TIPO
           </button>

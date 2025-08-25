@@ -98,7 +98,7 @@ function EditPromoter({ session, closeModal, promoter }: EditPromoterProps) {
       <div className='fixed left-[50%] top-[50%] z-100 h-[80%] w-[90%] translate-x-[-50%] translate-y-[-50%] rounded-md bg-background p-[10px] xl:w-[60%]'>
         <div className='flex h-full flex-col'>
           <div className='flex flex-col items-center justify-between border-b border-primary/30 px-2 pb-2 text-lg lg:flex-row'>
-            <h3 className='text-xl font-bold text-primary dark:text-white '>CONTROLE DE METAS</h3>
+            <h3 className='text-xl font-bold text-primary  '>CONTROLE DE METAS</h3>
             <button
               onClick={closeModal}
               type='button'
@@ -115,11 +115,11 @@ function EditPromoter({ session, closeModal, promoter }: EditPromoterProps) {
                 <div className='flex items-center gap-2'>
                   <div className='flex items-center gap-2'>
                     <BsTelephone />
-                    <p className='text-sm text-primary/50'>{promoter.telefone}</p>
+                    <p className='text-sm text-primary/70'>{promoter.telefone}</p>
                   </div>
                   <div className='flex items-center gap-2'>
                     <HiOutlineMail />
-                    <p className='text-sm text-primary/50'>{promoter.email}</p>
+                    <p className='text-sm text-primary/70'>{promoter.email}</p>
                   </div>
                 </div>
               </div>
@@ -244,7 +244,7 @@ function EditPromoter({ session, closeModal, promoter }: EditPromoterProps) {
                 goals.length > 0 ? (
                   goals.map((goal) => <SaleGoals key={goal._id} saleGoal={goal} handleClick={handleSaleGoalClick} promoterId={promoter._id} />)
                 ) : (
-                  <p className='w-full py-2 text-center italic text-primary/50'>Sem metas definidas...</p>
+                  <p className='w-full py-2 text-center italic text-primary/70'>Sem metas definidas...</p>
                 )
               ) : null}
             </div>

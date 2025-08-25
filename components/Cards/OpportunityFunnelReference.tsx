@@ -55,16 +55,16 @@ function renderLogs({ activeStageId, stages, funnelId, funnels }: RenderLogsPara
         <div className='flex items-center gap-2'>
           <div className='flex items-center gap-1'>
             <TbDownload color='rgb(22,163,74)' />
-            <p className='text-[0.55rem] text-primary/50'>{arrival || '-'}</p>
+            <p className='text-[0.55rem] text-primary/70'>{arrival || '-'}</p>
           </div>
           <div className='flex items-center gap-1'>
             <TbUpload color='rgb(220,38,38)' />
-            <p className='text-[0.55rem] text-primary/50'>{exit || '-'}</p>
+            <p className='text-[0.55rem] text-primary/70'>{exit || '-'}</p>
           </div>
           {diff ? (
             <div className='flex items-center gap-1'>
               <MdTimer color='rgb(37,99,235)' />
-              <p className='text-[0.55rem] text-primary/50'>{formatDecimalPlaces(diff, 0, 2)}h</p>
+              <p className='text-[0.55rem] text-primary/70'>{formatDecimalPlaces(diff, 0, 2)}h</p>
             </div>
           ) : null}
         </div>
@@ -154,7 +154,7 @@ function OpportunityFunnelReference({ reference, referenceIndex, funnels, opport
               // @ts-ignore
               handleUpdateOpportunityFunnelReference({ id: reference._id, newStageId: reference.idEstagioFunil })
             }
-            className='flex items-end justify-center text-green-200 duration-300 ease-in-out disabled:text-primary/50 enabled:hover:text-green-500'
+            className='flex items-end justify-center text-green-200 duration-300 ease-in-out disabled:text-primary/70 enabled:hover:text-green-500'
           >
             <AiOutlineCheck
               style={{
@@ -187,7 +187,7 @@ function OpportunityFunnelReference({ reference, referenceIndex, funnels, opport
         />
       </div>
       <div className='mt-1 flex w-full items-center justify-start'>
-        <button onClick={() => setLogsMenuIsOpen((prev) => !prev)} className='flex items-center gap-1 py-1 text-[0.6rem] text-primary/50'>
+        <button onClick={() => setLogsMenuIsOpen((prev) => !prev)} className='flex items-center gap-1 py-1 text-[0.6rem] text-primary/70'>
           <FaClipboardList />
           <p className='font-medium'>MOSTRAR HISTÓRICO</p>
         </button>

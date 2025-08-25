@@ -1,18 +1,18 @@
-import React from 'react'
-import { motion } from 'framer-motion'
+import { motion } from 'framer-motion';
+import React from 'react';
 type RotativeIconButtonProps = {
-  active: boolean
-  setActive: React.Dispatch<React.SetStateAction<boolean>>
-  rotation?: number
-  icon: React.ReactNode
-  styling?: string
-}
+  active: boolean;
+  setActive: React.Dispatch<React.SetStateAction<boolean>>;
+  rotation?: number;
+  icon: React.ReactNode;
+  styling?: string;
+};
 function RotativeIconButton({
   active,
   setActive,
   rotation = 180,
   icon,
-  styling = 'flex items-center justify-center min-w-fit text-white',
+  styling = 'flex items-center justify-center min-w-fit text-primary-foreground',
 }: RotativeIconButtonProps) {
   return (
     <motion.button
@@ -30,7 +30,7 @@ function RotativeIconButton({
     >
       {icon}
     </motion.button>
-  )
+  );
 }
 
-export default RotativeIconButton
+export default RotativeIconButton;

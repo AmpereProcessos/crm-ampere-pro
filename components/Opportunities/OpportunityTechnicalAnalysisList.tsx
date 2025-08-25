@@ -37,10 +37,16 @@ function TechAnalysisListBlock({ opportunityId, setBlockMode }: TechAnalysisList
           </h1>
         </div>
 
-        <button onClick={() => setRequestModalIsOpen(true)} className='hidden rounded-sm bg-green-600 p-1 text-sm font-bold text-white lg:flex'>
+        <button
+          onClick={() => setRequestModalIsOpen(true)}
+          className='hidden rounded-sm bg-green-600 p-1 text-sm font-bold text-primary-foreground lg:flex'
+        >
           SOLICITAR ANÁLISE
         </button>
-        <button onClick={() => setRequestModalIsOpen(true)} className='flex rounded-sm bg-green-600 p-1 text-sm font-bold text-white lg:hidden'>
+        <button
+          onClick={() => setRequestModalIsOpen(true)}
+          className='flex rounded-sm bg-green-600 p-1 text-sm font-bold text-primary-foreground lg:hidden'
+        >
           <MdAdd />
         </button>
       </div>
@@ -54,7 +60,7 @@ function TechAnalysisListBlock({ opportunityId, setBlockMode }: TechAnalysisList
           technicalAnalysis?.length > 0 ? (
             technicalAnalysis?.map((analysis, index) => <TechAnalysisItem key={analysis._id} info={analysis} />)
           ) : (
-            <p className='flex grow items-center justify-center italic text-primary/50'>
+            <p className='flex grow items-center justify-center italic text-primary/70'>
               Não foram encontradas análises técnicas vinculadas a esse projeto...
             </p>
           )

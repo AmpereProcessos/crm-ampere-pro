@@ -51,7 +51,7 @@ function RDStationIntegrationBlock({ session }: RDStationIntegrationBlockProps) 
           {hasConfig ? (
             <>
               <div className='mt-1 flex w-full items-center justify-center gap-2'>
-                <h1 className=' text-center text-sm font-bold text-primary/50'>Sua configuração com a RD Station está ativa.</h1>
+                <h1 className=' text-center text-sm font-bold text-primary/70'>Sua configuração com a RD Station está ativa.</h1>
                 <BsPatchCheckFill color='#2c6e49' />
                 {!showToken ? (
                   <button
@@ -70,11 +70,11 @@ function RDStationIntegrationBlock({ session }: RDStationIntegrationBlockProps) 
                 )}
               </div>
               {showToken ? (
-                <h1 className='mt-2 w-[80%] self-center break-words rounded-md border border-primary/30 bg-primary/10 p-2 text-center text-[0.6rem] font-bold text-primary/50'>
+                <h1 className='mt-2 w-[80%] self-center break-words rounded-md border border-primary/30 bg-primary/10 p-2 text-center text-[0.6rem] font-bold text-primary/70'>
                   {integrationConfig.access_token}
                 </h1>
               ) : null}
-              <h1 className='mt-2 text-xs font-medium leading-none tracking-tight text-primary/50'>WEBHOOK DE OPORTUNIDADES</h1>
+              <h1 className='mt-2 text-xs font-medium leading-none tracking-tight text-primary/70'>WEBHOOK DE OPORTUNIDADES</h1>
               <div className='mt-2 flex w-full items-center justify-center gap-2'>
                 <h1 className='text-center text-xs font-bold text-blue-800'>{`https://erp-rose.vercel.app/api/integration/rd-station/opportunities?partnerId=${session.user.idParceiro}`}</h1>
                 <button
@@ -86,14 +86,14 @@ function RDStationIntegrationBlock({ session }: RDStationIntegrationBlockProps) 
                   <MdContentCopy />
                 </button>
               </div>
-              <h1 className='mt-2 text-center text-xs font-medium leading-none tracking-tight text-primary/50'>
+              <h1 className='mt-2 text-center text-xs font-medium leading-none tracking-tight text-primary/70'>
                 Para configurar um Webhook para envio automático de oportunidades no RD Station, você pode utilizar o link acima.
               </h1>
               <LeadReceiversBlock />
               <div className='flex w-full items-center justify-end'>
                 <div className={`flex items-center gap-2`}>
                   <BsCalendarCheck />
-                  <p className='text-xs font-medium text-primary/50'>
+                  <p className='text-xs font-medium text-primary/70'>
                     Ultima atualização em: {formatDateAsLocale(integrationConfig.dataValidacaoToken, true)}
                   </p>
                 </div>
@@ -101,8 +101,8 @@ function RDStationIntegrationBlock({ session }: RDStationIntegrationBlockProps) 
             </>
           ) : (
             <>
-              <h1 className='mt-1 w-full text-center text-sm font-medium text-primary/50'>É parceiro da RD Station ? Faça a aqui sua integração.</h1>
-              <h1 className='mt-2 text-xs font-medium leading-none tracking-tight text-primary/50'>WEBHOOK DE OPORTUNIDADES</h1>
+              <h1 className='mt-1 w-full text-center text-sm font-medium text-primary/70'>É parceiro da RD Station ? Faça a aqui sua integração.</h1>
+              <h1 className='mt-2 text-xs font-medium leading-none tracking-tight text-primary/70'>WEBHOOK DE OPORTUNIDADES</h1>
               <div className='mt-2 flex w-full items-center justify-center gap-2'>
                 <h1 className='text-center text-xs font-bold text-blue-800'>{`https://erp-rose.vercel.app/api/integration/rd-station/opportunities?partnerId=${session.user.idParceiro}`}</h1>
                 <button
@@ -114,10 +114,10 @@ function RDStationIntegrationBlock({ session }: RDStationIntegrationBlockProps) 
                   <MdContentCopy />
                 </button>
               </div>
-              <h1 className='mt-2 text-center text-xs font-medium leading-none tracking-tight text-primary/50'>
+              <h1 className='mt-2 text-center text-xs font-medium leading-none tracking-tight text-primary/70'>
                 Para configurar um Webhook para envio automático de oportunidades no RD Station, você pode utilizar o link acima.
               </h1>
-              <h1 className='mt-2 text-xs font-medium leading-none tracking-tight text-primary/50'>COMUNICAÇÃO DE GANHOS E PERDAS</h1>
+              <h1 className='mt-2 text-xs font-medium leading-none tracking-tight text-primary/70'>COMUNICAÇÃO DE GANHOS E PERDAS</h1>
               <div className='mt-2 flex w-full flex-col items-center gap-2 lg:flex-row'>
                 <div className='w-full lg:w-1/2'>
                   <TextInput
@@ -138,10 +138,10 @@ function RDStationIntegrationBlock({ session }: RDStationIntegrationBlockProps) 
                   />
                 </div>
               </div>
-              <h1 className='mt-2 text-center text-xs font-medium leading-none tracking-tight text-primary/50'>
+              <h1 className='mt-2 text-center text-xs font-medium leading-none tracking-tight text-primary/70'>
                 Preencha os IDs do seu aplicativo na plataforma do RD Station para configurar a comunicação de perda e ganho de oportunidades.
               </h1>
-              <h1 className='mt-2 text-center text-xs font-medium leading-none tracking-tight text-primary/50'>
+              <h1 className='mt-2 text-center text-xs font-medium leading-none tracking-tight text-primary/70'>
                 Não sabe como encontrar os IDs,{' '}
                 <a href='https://developers.rdstation.com/reference/criar-aplicativo-appstore' className='text-blue-300 hover:text-blue-500'>
                   clique aqui
@@ -150,7 +150,7 @@ function RDStationIntegrationBlock({ session }: RDStationIntegrationBlockProps) 
               </h1>
               <div className='mt-2 flex w-full items-center justify-end'>
                 <button
-                  className='rounded bg-black p-1 px-4 text-sm font-medium text-white duration-300 ease-in-out hover:bg-primary/70'
+                  className='rounded bg-black p-1 px-4 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-primary/70'
                   onClick={() => handleConfiguration()}
                 >
                   REALIZAR CONFIGURAÇÃO

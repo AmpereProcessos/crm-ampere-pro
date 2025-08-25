@@ -7,11 +7,14 @@ import EditReceipt from '../Revenues/Utils/EditReceipt';
 import { Dialog, DialogTrigger } from '../ui/dialog';
 
 function getPaymentStatusTag({ paymentDate, isPaid }: { paymentDate: string | null; isPaid: boolean }) {
-  if (!!isPaid) return <div className='rounded-md bg-green-600 px-2 py-0.5 text-xxs font-medium text-white lg:text-[0.6rem]'>RECEBIDO</div>;
-  if (!paymentDate) return <div className='rounded-md bg-yellow-600 px-2 py-0.5 text-xxs font-medium text-white lg:text-[0.6rem]'>A RECEBER</div>;
+  if (!!isPaid)
+    return <div className='rounded-md bg-green-600 px-2 py-0.5 text-xxs font-medium text-primary-foreground lg:text-[0.6rem]'>RECEBIDO</div>;
+  if (!paymentDate)
+    return <div className='rounded-md bg-yellow-600 px-2 py-0.5 text-xxs font-medium text-primary-foreground lg:text-[0.6rem]'>A RECEBER</div>;
   const isOverDue = dayjs(new Date()).isAfter(paymentDate);
-  if (!isOverDue) return <div className='rounded-md bg-yellow-600 px-2 py-0.5 text-xxs font-medium text-white lg:text-[0.6rem]'>A RECEBER</div>;
-  return <div className='rounded-md bg-red-600 px-2 py-0.5 text-xxs font-medium text-white lg:text-[0.6rem]'>EM ATRASO</div>;
+  if (!isOverDue)
+    return <div className='rounded-md bg-yellow-600 px-2 py-0.5 text-xxs font-medium text-primary-foreground lg:text-[0.6rem]'>A RECEBER</div>;
+  return <div className='rounded-md bg-red-600 px-2 py-0.5 text-xxs font-medium text-primary-foreground lg:text-[0.6rem]'>EM ATRASO</div>;
 }
 function getPaymentDateTag({ paymentDate, isPaid }: { paymentDate: string | null; isPaid: boolean }) {
   if (!!isPaid)
@@ -51,7 +54,7 @@ function ReceiptCard({ receipt, affectedQueryKey }: ReceiptCardProps) {
             {getPaymentStatusTag({ paymentDate: receipt.recebimentos.dataRecebimento || null, isPaid: receipt.recebimentos.efetivado })}
             <h1 className='text-[0.65rem] font-bold tracking-tight text-primary/80 lg:text-xs'>{receipt.titulo}</h1>
             <DialogTrigger asChild>
-              <button className='flex items-center justify-center rounded-full border border-primary/90 bg-gray-50 p-1 text-primary/90'>
+              <button className='flex items-center justify-center rounded-full border border-primary/90 bg-primary/10p-1 text-primary/90'>
                 <MdEdit size={10} />
                 <p className='text-xxs'>EDITAR</p>
               </button>
@@ -59,7 +62,7 @@ function ReceiptCard({ receipt, affectedQueryKey }: ReceiptCardProps) {
           </div>
           <div className='flex w-full items-center justify-end gap-2 lg:w-fit'>
             {getPaymentDateTag({ paymentDate: receipt.recebimentos.dataRecebimento || null, isPaid: receipt.recebimentos.efetivado })}
-            <h1 className='rounded-lg bg-black px-2 py-0.5 text-center text-[0.65rem] font-bold text-white lg:py-1'>
+            <h1 className='rounded-lg bg-black px-2 py-0.5 text-center text-[0.65rem] font-bold text-primary-foreground lg:py-1'>
               {formatToMoney(receipt.recebimentos.valor)}
             </h1>
           </div>

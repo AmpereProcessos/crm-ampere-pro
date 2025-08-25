@@ -122,7 +122,7 @@ function ProductsSelection({
   }
   function renderComposition() {
     const data = getCompositionData();
-    if (!data) return <p className='w-full text-center text-xs italic text-primary/50'>Nenhum produto selecionado para a composição do sistema...</p>;
+    if (!data) return <p className='w-full text-center text-xs italic text-primary/70'>Nenhum produto selecionado para a composição do sistema...</p>;
     const { nome, topologia, produtos, valor, potenciaPico } = data;
     return (
       <div className='flex w-full flex-col gap-1'>
@@ -137,7 +137,7 @@ function ProductsSelection({
             <p className='text-[0.65rem] font-bold lg:text-sm'>{potenciaPico} kW</p>
           </div>
         </div>
-        <h1 className='mb-0 mt-2 text-xs font-bold leading-none tracking-tight text-primary/50 lg:text-sm'>PRODUTOS</h1>
+        <h1 className='mb-0 mt-2 text-xs font-bold leading-none tracking-tight text-primary/70 lg:text-sm'>PRODUTOS</h1>
         {produtos.map((product, index) => (
           <div key={index} className='mt-1 flex w-full flex-col rounded-md border border-primary/30 p-2'>
             <div className='flex w-full flex-col items-start justify-between gap-2'>
@@ -152,15 +152,15 @@ function ProductsSelection({
               <div className='flex w-full items-center justify-end gap-2 pl-2'>
                 <div className='flex items-center gap-1'>
                   <FaIndustry size={12} />
-                  <p className='text-[0.6rem] font-light text-primary/50 lg:text-xs'>{product.fabricante}</p>
+                  <p className='text-[0.6rem] font-light text-primary/70 lg:text-xs'>{product.fabricante}</p>
                 </div>
                 <div className='flex items-center gap-1'>
                   <ImPower size={12} />
-                  <p className='text-[0.6rem] font-light text-primary/50 lg:text-xs'>{product.potencia} W</p>
+                  <p className='text-[0.6rem] font-light text-primary/70 lg:text-xs'>{product.potencia} W</p>
                 </div>
                 <div className='flex items-center gap-1'>
                   <AiOutlineSafety size={12} />
-                  <p className='text-[0.6rem] font-light text-primary/50 lg:text-xs'>{product.garantia} ANOS</p>
+                  <p className='text-[0.6rem] font-light text-primary/70 lg:text-xs'>{product.garantia} ANOS</p>
                 </div>
               </div>
             </div>
@@ -272,7 +272,7 @@ function ProductsSelection({
             ) : (
               <div className='flex flex-col items-center justify-center gap-4'>
                 <ImSad style={{ fontSize: '50px', color: '#fead61' }} />
-                <p className='flex w-full items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/50'>
+                <p className='flex w-full items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/70'>
                   Nenhum produto encontrado.
                 </p>
               </div>
@@ -281,10 +281,10 @@ function ProductsSelection({
         </div>
       </div>
       <div className='flex w-full items-center justify-between gap-2 px-1'>
-        <button onClick={() => moveToPreviousStage()} className='rounded p-2 font-bold text-primary/50 duration-300 hover:scale-105'>
+        <button onClick={() => moveToPreviousStage()} className='rounded p-2 font-bold text-primary/70 duration-300 hover:scale-105'>
           Voltar
         </button>
-        <button onClick={() => handleProceed()} className='rounded p-2 font-bold hover:bg-black hover:text-white'>
+        <button onClick={() => handleProceed()} className='rounded p-2 font-bold hover:bg-black hover:text-primary-foreground'>
           Prosseguir
         </button>
       </div>

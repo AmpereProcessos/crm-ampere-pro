@@ -28,7 +28,7 @@ function CompositionItemsTableItem({ item, handleUpdate, handleRemove }: Composi
             <div className='flex w-[30%] items-center gap-1'>
               <div className='flex flex-col'>
                 <h1 className='text-xs tracking-tight'>{item.descricao}</h1>
-                <p className='text-[0.65rem] font-light italic leading-none tracking-tight text-primary/50'>{item.categoria}</p>
+                <p className='text-[0.65rem] font-light italic leading-none tracking-tight text-primary/70'>{item.categoria}</p>
               </div>
               <button
                 onClick={() => setEditMenuIsOpen((prev) => !prev)}
@@ -62,7 +62,7 @@ function CompositionItemsTableItem({ item, handleUpdate, handleRemove }: Composi
               </div>
               {item.valor > 0 ? (
                 <div className='flex min-w-fit items-center gap-2 rounded-full bg-primary/80 px-2 py-1 '>
-                  <h1 className='text-[0.65rem] font-medium text-white lg:text-xs'>{formatToMoney(item.qtde * item.valor)}</h1>
+                  <h1 className='text-[0.65rem] font-medium text-primary-foreground lg:text-xs'>{formatToMoney(item.qtde * item.valor)}</h1>
                 </div>
               ) : null}
             </div>
@@ -70,12 +70,12 @@ function CompositionItemsTableItem({ item, handleUpdate, handleRemove }: Composi
               <div className='flex items-center gap-2'>
                 <div className='flex items-center gap-1'>
                   <TbRulerMeasure />
-                  <p className='text-[0.6rem] italic text-primary/50 lg:text-xs'>{renderUnitLabel(item.unidade)}</p>
+                  <p className='text-[0.6rem] italic text-primary/70 lg:text-xs'>{renderUnitLabel(item.unidade)}</p>
                 </div>
                 {item.valor > 0 ? (
                   <div className='flex items-center gap-1'>
                     <FaDollarSign />
-                    <p className='text-[0.6rem] italic text-primary/50 lg:text-xs'>
+                    <p className='text-[0.6rem] italic text-primary/70 lg:text-xs'>
                       {formatToMoney(item.valor)}/{item.unidade}
                     </p>
                   </div>
@@ -199,7 +199,7 @@ function CompositionItemsTableItem({ item, handleUpdate, handleRemove }: Composi
                 onClick={() => {
                   setEditMenuIsOpen(false);
                 }}
-                className='rounded bg-red-800 p-1 px-4 text-[0.6rem] font-medium text-white duration-300 ease-in-out hover:bg-red-700'
+                className='rounded bg-red-800 p-1 px-4 text-[0.6rem] font-medium text-primary-foreground duration-300 ease-in-out hover:bg-red-700'
               >
                 FECHAR
               </button>
@@ -208,7 +208,7 @@ function CompositionItemsTableItem({ item, handleUpdate, handleRemove }: Composi
                   handleUpdate(itemHolder);
                   setEditMenuIsOpen(false);
                 }}
-                className='rounded bg-blue-800 p-1 px-4 text-[0.6rem] font-medium text-white duration-300 ease-in-out hover:bg-blue-700'
+                className='rounded bg-blue-800 p-1 px-4 text-[0.6rem] font-medium text-primary-foreground duration-300 ease-in-out hover:bg-blue-700'
               >
                 ATUALIZAR ITEM
               </button>

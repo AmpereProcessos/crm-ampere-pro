@@ -17,7 +17,7 @@ function ProposalUpdateRecords({ proposalId }: ProposalUpdateRecordsProps) {
           records.length > 0 ? (
             records.map((record) => <ProposalUpdateRecord key={record._id} record={record} />)
           ) : (
-            <p className='flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/50'>
+            <p className='flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/70'>
               Sem registros de alteração.
             </p>
           )

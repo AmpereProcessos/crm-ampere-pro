@@ -30,7 +30,7 @@ function SizingInformationBlock({ infoHolder, setInfoHolder }: SizingInformation
   }
   return (
     <div className='flex w-full flex-col gap-y-2'>
-      <h1 className='w-full bg-primary/70  p-1 text-center font-medium text-white'>DIMENSIONAMENTO</h1>
+      <h1 className='w-full bg-primary/70  p-1 text-center font-medium text-primary-foreground'>DIMENSIONAMENTO</h1>
       {newSizingSectionMenuIsOpen ? (
         <NewSizingSection
           infoHolder={infoHolder}
@@ -41,7 +41,7 @@ function SizingInformationBlock({ infoHolder, setInfoHolder }: SizingInformation
       ) : (
         <div className='flex w-full items-center justify-end'>
           <button
-            className='rounded bg-green-500 p-1 px-4 text-sm font-medium text-white duration-300 ease-in-out hover:bg-green-600'
+            className='rounded bg-green-500 p-1 px-4 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-green-600'
             onClick={() => setNewSizingSectionMenuIsOpen(true)}
           >
             NOVA SEÇÃO
@@ -68,14 +68,15 @@ function SizingInformationBlock({ infoHolder, setInfoHolder }: SizingInformation
                 <MdDelete style={{ color: 'red' }} />
               </button>
             </div>
-
-            <h1 className='"w-full mt-2 text-start text-xs font-medium'>CAMPOS</h1>
-            <div className='flex w-full items-center justify-start gap-2'>
-              {sizing.campos.map((field, itemIndex) => (
-                <div key={itemIndex} className='rounded-lg border border-primary/30 bg-gray-50 px-2 py-1 text-[0.57rem] font-medium'>
-                  {findFieldLabel(field)}
-                </div>
-              ))}
+            <div className='flex w-full flex-col gap-2'>
+              <h1 className='"w-full mt-2 text-start text-xs font-medium'>CAMPOS</h1>
+              <div className='flex w-full items-center justify-start gap-2'>
+                {sizing.campos.map((field, itemIndex) => (
+                  <div key={itemIndex} className='rounded-lg border border-primary/30 bg-primary/20 px-2 py-1 text-[0.57rem] font-medium'>
+                    {findFieldLabel(field)}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         ))}

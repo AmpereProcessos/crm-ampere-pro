@@ -36,7 +36,7 @@ function PaymentsInformationBlock({ infoHolder, setInfoHolder }: PaymentsInforma
 
   return (
     <div className='flex w-full flex-col gap-y-2'>
-      <h1 className='w-full bg-primary/70  p-1 text-center font-medium text-white'>INFORMAÇÕES DE PAGAMENTO</h1>
+      <h1 className='w-full bg-primary/70  p-1 text-center font-medium text-primary-foreground'>INFORMAÇÕES DE PAGAMENTO</h1>
       <div className='flex w-full flex-col gap-1'>
         <div className='flex w-full items-center justify-center lg:justify-end'>
           <DateInput
@@ -45,7 +45,7 @@ function PaymentsInformationBlock({ infoHolder, setInfoHolder }: PaymentsInforma
             handleChange={(value) => setInfoHolder((prev) => ({ ...prev, dataCompetencia: formatDateOnInputChange(value) || prev.dataCompetencia }))}
           />
         </div>
-        <h1 className='w-full bg-primary/50 p-1 text-center text-xs font-medium text-white'>PAGAMENTOS DA DESPESA</h1>
+        <h1 className='w-full bg-primary/50 p-1 text-center text-xs font-medium text-primary-foreground'>PAGAMENTOS DA DESPESA</h1>
         <div className='flex w-full flex-col gap-2'>
           <div className='flex w-full flex-col items-center gap-2 lg:flex-row'>
             <div className='w-full lg:w-[25%]'>
@@ -104,7 +104,7 @@ function PaymentsInformationBlock({ infoHolder, setInfoHolder }: PaymentsInforma
           </div>
           <div className='flex items-center justify-end'>
             <button
-              className='rounded bg-black p-1 px-4 text-sm font-medium text-white duration-300 ease-in-out hover:bg-primary/70'
+              className='rounded bg-black p-1 px-4 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-primary/70'
               onClick={() => addPayment(paymentHolder)}
             >
               ADICIONAR PAGAMENTO

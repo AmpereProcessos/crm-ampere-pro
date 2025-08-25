@@ -69,7 +69,7 @@ function EditPartner({ partnerId, closeModal }: EditPartnerProps) {
       <div className='fixed left-[50%] top-[50%] z-100 h-[90%] w-[90%] translate-x-[-50%] translate-y-[-50%] rounded-md bg-background p-[10px] lg:h-[80%] lg:w-[60%]'>
         <div className='flex h-full flex-col'>
           <div className='flex flex-wrap items-center justify-between border-b border-primary/30 px-2 pb-2 text-lg'>
-            <h3 className='text-xl font-bold text-primary dark:text-white '>EDITAR PARCEIRO</h3>
+            <h3 className='text-xl font-bold text-primary  '>EDITAR PARCEIRO</h3>
             <button
               onClick={() => closeModal()}
               type='button'
@@ -92,7 +92,7 @@ function EditPartner({ partnerId, closeModal }: EditPartnerProps) {
                         </div>
                         <button
                           onClick={() => setEditImage(true)}
-                          className='w-fit rounded-sm border border-black p-1 font-Raleway text-xs font-medium duration-300 ease-in-out hover:bg-black hover:text-white'
+                          className='w-fit rounded-sm border border-black p-1 font-Raleway text-xs font-medium duration-300 ease-in-out hover:bg-black hover:text-primary-foreground'
                         >
                           EDITAR IMAGEM
                         </button>
@@ -129,7 +129,7 @@ function EditPartner({ partnerId, closeModal }: EditPartnerProps) {
                 <button
                   // @ts-ignore
                   onClick={() => handleEditPartner({ id: partnerId, info: infoHolder, logo: image })}
-                  className='h-9 whitespace-nowrap rounded-sm bg-primary/90 px-4 py-2 text-sm font-medium text-white shadow-sm disabled:bg-primary/50 disabled:text-white enabled:hover:bg-primary/80 enabled:hover:text-white'
+                  className='h-9 whitespace-nowrap rounded-sm bg-primary/90 px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm disabled:bg-primary/50 disabled:text-primary-foreground enabled:hover:bg-primary/80 enabled:hover:text-primary-foreground'
                 >
                   EDITAR
                 </button>

@@ -40,7 +40,7 @@ function NewService({ session, closeModal }: NewServiceProps) {
       <div className='fixed left-[50%] top-[50%] z-100 h-[60%] w-[90%] translate-x-[-50%] translate-y-[-50%] rounded-md bg-background p-[10px] lg:w-[80%]'>
         <div className='flex h-full flex-col'>
           <div className='flex flex-col items-center justify-between border-b border-primary/30 px-2 pb-2 text-lg lg:flex-row'>
-            <h3 className='text-xl font-bold text-primary dark:text-white '>NOVO SERVIÇO</h3>
+            <h3 className='text-xl font-bold text-primary  '>NOVO SERVIÇO</h3>
             <button
               onClick={() => closeModal()}
               type='button'
@@ -51,11 +51,11 @@ function NewService({ session, closeModal }: NewServiceProps) {
           </div>
           <div className='flex grow flex-col gap-y-2 overflow-y-auto overscroll-y-auto px-2 py-1 scrollbar-thin scrollbar-track-primary/10 scrollbar-thumb-primary/30'>
             <div className='my-5 flex flex-col'>
-              <p className='w-full text-center text-primary/50'>Crie aqui um serviço pra ser utilizado na composição de suas propostas comerciais.</p>
+              <p className='w-full text-center text-primary/70'>Crie aqui um serviço pra ser utilizado na composição de suas propostas comerciais.</p>
             </div>
             <GeneralInformationBlock infoHolder={infoHolder} setInfoHolder={setInfoHolder} />
             <div className='flex w-full flex-col'>
-              <h1 className='w-full rounded-tl-sm rounded-tr-sm bg-primary/50 p-1 text-center font-bold text-white'>OBSERVAÇÕES</h1>
+              <h1 className='w-full rounded-tl-sm rounded-tr-sm bg-primary/50 p-1 text-center font-bold text-primary-foreground'>OBSERVAÇÕES</h1>
               <textarea
                 placeholder='SEM OBSERVAÇÕES PREENCHIDA...'
                 value={infoHolder.observacoes || ''}
@@ -74,7 +74,7 @@ function NewService({ session, closeModal }: NewServiceProps) {
               disabled={isPending}
               //@ts-ignore
               onClick={() => handleCreateService({ info: infoHolder })}
-              className='h-9 whitespace-nowrap rounded-sm bg-green-800 px-4 py-2 text-sm font-medium text-white shadow-sm disabled:bg-primary/50 disabled:text-white enabled:hover:bg-green-800 enabled:hover:text-white'
+              className='h-9 whitespace-nowrap rounded-sm bg-green-800 px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm disabled:bg-primary/50 disabled:text-primary-foreground enabled:hover:bg-green-800 enabled:hover:text-primary-foreground'
             >
               CRIAR SERVIÇO
             </button>

@@ -136,7 +136,9 @@ function PreviousEquipmentMenu({ infoHolder, setInfoHolder }: PreviousEquipmentM
   return (
     <AnimatePresence>
       <motion.div variants={GeneralVisibleHiddenExitMotionVariants} initial='hidden' animate='visible' exit='exit' className='flex w-full flex-col'>
-        <h1 className='w-full rounded-md  bg-orange-700 p-1 text-center font-medium text-white'>INFORMAÇÕES DOS EQUIPAMENTOS ANTERIORES</h1>
+        <h1 className='w-full rounded-md  bg-orange-700 p-1 text-center font-medium text-primary-foreground'>
+          INFORMAÇÕES DOS EQUIPAMENTOS ANTERIORES
+        </h1>
         <div className='flex w-full flex-col gap-1'>
           <div className='flex w-full flex-col items-center gap-2 lg:flex-row'>
             <div className='w-full lg:w-2/4'>
@@ -208,7 +210,7 @@ function PreviousEquipmentMenu({ infoHolder, setInfoHolder }: PreviousEquipmentM
           </div>
           <div className='flex items-center justify-end'>
             <button
-              className='rounded bg-black p-1 px-4 text-sm font-medium text-white duration-300 ease-in-out hover:bg-primary/70'
+              className='rounded bg-black p-1 px-4 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-primary/70'
               onClick={() => addInverterToEquipments(inverterHolder)}
             >
               ADICIONAR INVERSOR
@@ -286,7 +288,7 @@ function PreviousEquipmentMenu({ infoHolder, setInfoHolder }: PreviousEquipmentM
           </div>
           <div className='flex items-center justify-end'>
             <button
-              className='rounded bg-black p-1 px-4 text-sm font-medium text-white duration-300 ease-in-out hover:bg-primary/70'
+              className='rounded bg-black p-1 px-4 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-primary/70'
               onClick={() => addModuleToEquipments(moduleHolder)}
             >
               ADICIONAR MÓDULO
@@ -376,7 +378,7 @@ function PreviousEquipmentMenu({ infoHolder, setInfoHolder }: PreviousEquipmentM
 
           <div className='flex items-center justify-end'>
             <button
-              className='rounded bg-black p-1 px-4 text-sm font-medium text-white duration-300 ease-in-out hover:bg-primary/70'
+              className='rounded bg-black p-1 px-4 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-primary/70'
               onClick={() => addPersonalizedEquipment(personalizedProductHolder)}
             >
               ADICIONAR PRODUTO PERSONALIZADO
@@ -407,17 +409,17 @@ function PreviousEquipmentMenu({ infoHolder, setInfoHolder }: PreviousEquipmentM
                 <div className='flex w-full items-center justify-end gap-2 pl-2'>
                   <div className='flex items-center gap-1'>
                     <FaIndustry size={15} />
-                    <p className='text-[0.6rem] font-light text-primary/50'>{equipment.fabricante}</p>
+                    <p className='text-[0.6rem] font-light text-primary/70'>{equipment.fabricante}</p>
                   </div>
                   <div className='flex items-center gap-1'>
                     <ImPower size={15} />
-                    <p className='text-[0.6rem] font-light text-primary/50'>{equipment.potencia} W</p>
+                    <p className='text-[0.6rem] font-light text-primary/70'>{equipment.potencia} W</p>
                   </div>
                 </div>
               </div>
             ))
           ) : (
-            <p className='w-full text-center text-sm font-medium tracking-tight text-primary/50'>Nenhum equipamento anterior adicionado à lista.</p>
+            <p className='w-full text-center text-sm font-medium tracking-tight text-primary/70'>Nenhum equipamento anterior adicionado à lista.</p>
           )}
         </div>
       </motion.div>

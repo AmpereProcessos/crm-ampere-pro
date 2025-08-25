@@ -115,7 +115,7 @@ function OpportunityFunnelReferencesBlock({ opportunity, setOpportunity }: Oppor
   });
   return (
     <div className=' flex w-full flex-col gap-2'>
-      <h1 className='w-full rounded-md bg-[#fead41] p-1 text-center text-sm font-medium text-white'>FUNIS</h1>
+      <h1 className='w-full rounded-md bg-[#fead41] p-1 text-center text-sm font-medium text-primary-foreground'>FUNIS</h1>
       <div className='flex flex-col gap-2'>
         {opportunity.referenciasFunil.map((funnelReference, index) => (
           <OpportunityFunnelReference
@@ -135,7 +135,7 @@ function OpportunityFunnelReferencesBlock({ opportunity, setOpportunity }: Oppor
               onClick={() => setNewFunnelReferenceMenuIsOpen((prev) => !prev)}
               className={`${
                 newFunnelReferenceMenuIsOpen ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'
-              } rounded  p-1 px-4 text-xs font-medium text-white duration-300 ease-in-out `}
+              } rounded  p-1 px-4 text-xs font-medium text-primary-foreground duration-300 ease-in-out `}
             >
               {newFunnelReferenceMenuIsOpen ? 'FECHAR' : 'ADICIONAR FUNIL'}
             </button>
@@ -180,7 +180,7 @@ function OpportunityFunnelReferencesBlock({ opportunity, setOpportunity }: Oppor
                   // @ts-ignore
                   onClick={() => handleAddNewOpportunityFunnelReference(newFunnelReference)}
                   className={
-                    'rounded-sm bg-green-500 p-1 px-4 text-xs font-medium text-white duration-300 ease-in-out disabled:bg-primary/50 enabled:hover:bg-green-600'
+                    'rounded-sm bg-green-500 p-1 px-4 text-xs font-medium text-primary-foreground duration-300 ease-in-out disabled:bg-primary/50 enabled:hover:bg-green-600'
                   }
                 >
                   ADICIONAR

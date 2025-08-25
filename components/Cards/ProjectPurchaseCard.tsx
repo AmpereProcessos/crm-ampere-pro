@@ -18,7 +18,7 @@ function renderDeliveryText(delivery: TPurchaseDTO['entrega']) {
 function getStatusTag(status?: string | null) {
   if (status == 'AGUARDANDO LIBERAÇÃO')
     return (
-      <h1 className={`w-fit self-center rounded-sm border border-primary/50 p-1 text-center text-[0.6rem] font-black text-primary/50`}>{status}</h1>
+      <h1 className={`w-fit self-center rounded-sm border border-primary/50 p-1 text-center text-[0.6rem] font-black text-primary/70`}>{status}</h1>
     );
 
   if (status == 'AGUARDANDO PAGAMENTO')
@@ -43,7 +43,7 @@ function getStatusTag(status?: string | null) {
     );
 
   return (
-    <h1 className={`w-fit self-center rounded-sm border border-primary/50 p-1 text-center text-[0.6rem] font-black text-primary/50`}>NÃO DEFINIDO</h1>
+    <h1 className={`w-fit self-center rounded-sm border border-primary/50 p-1 text-center text-[0.6rem] font-black text-primary/70`}>NÃO DEFINIDO</h1>
   );
 }
 type ProjectPurchaseCardProps = {
@@ -61,7 +61,7 @@ function ProjectPurchaseCard({ purchase }: ProjectPurchaseCardProps) {
       <div className='flex flex-col gap-1'>
         <div className='flex items-center gap-1'>
           <BsPatchCheck size={12} />
-          <p className='text-[0.65rem] font-medium text-primary/50'>LIBERAÇÃO</p>
+          <p className='text-[0.65rem] font-medium text-primary/70'>LIBERAÇÃO</p>
         </div>
         {!!purchase.liberacao.data ? (
           <div className='flex items-center gap-2'>
@@ -82,7 +82,7 @@ function ProjectPurchaseCard({ purchase }: ProjectPurchaseCardProps) {
       <div className='flex w-full flex-col gap-1'>
         <div className='flex items-center gap-1'>
           <BsCart size={12} />
-          <p className='text-[0.65rem] font-medium text-primary/50'>COMPOSIÇÃO</p>
+          <p className='text-[0.65rem] font-medium text-primary/70'>COMPOSIÇÃO</p>
         </div>
         <div className='flex w-full flex-wrap items-center gap-2'>
           {purchase.composicao.map((item, index) => (
@@ -98,7 +98,7 @@ function ProjectPurchaseCard({ purchase }: ProjectPurchaseCardProps) {
         <div className='flex flex-col items-center gap-1 lg:items-start'>
           <div className='flex items-center gap-1'>
             <BsTagFill size={12} />
-            <p className='text-[0.65rem] font-medium text-primary/50'>PEDIDO</p>
+            <p className='text-[0.65rem] font-medium text-primary/70'>PEDIDO</p>
           </div>
           {!!purchase.pedido.data ? (
             <div className='flex items-center gap-2'>
@@ -113,7 +113,7 @@ function ProjectPurchaseCard({ purchase }: ProjectPurchaseCardProps) {
         <div className='flex flex-col items-center gap-1 lg:items-end'>
           <div className='flex items-center gap-1'>
             <FaTruck size={12} />
-            <p className='text-[0.65rem] font-medium text-primary/50'>TRANSPORTE</p>
+            <p className='text-[0.65rem] font-medium text-primary/70'>TRANSPORTE</p>
           </div>
           {purchase.transporte.transportadora.nome.trim().length > 0 ? (
             <div className='flex items-center gap-2'>
@@ -130,7 +130,7 @@ function ProjectPurchaseCard({ purchase }: ProjectPurchaseCardProps) {
         <div className='flex flex-col items-center gap-1 lg:items-start'>
           <div className='flex items-center gap-1'>
             <FaTruck size={12} />
-            <p className='text-[0.65rem] font-medium text-primary/50'>FATURAMENTO</p>
+            <p className='text-[0.65rem] font-medium text-primary/70'>FATURAMENTO</p>
           </div>
           {!!purchase.faturamento.data ? (
             <div className='flex items-center gap-2'>
@@ -145,7 +145,7 @@ function ProjectPurchaseCard({ purchase }: ProjectPurchaseCardProps) {
         <div className='flex flex-col items-center gap-1 lg:items-end'>
           <div className='flex items-center gap-1'>
             <BsBox2 size={12} />
-            <p className='text-[0.65rem] font-medium text-primary/50'>ENTREGA</p>
+            <p className='text-[0.65rem] font-medium text-primary/70'>ENTREGA</p>
           </div>
           {renderDeliveryText(purchase.entrega).dates ? (
             <p className='text-[0.6rem] font-medium leading-none tracking-tight'>{renderDeliveryText(purchase.entrega).dates}</p>

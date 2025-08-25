@@ -73,7 +73,7 @@ function GeneralInfo({ goToNextStage, resetSolicitationType, infoHolder, setInfo
   }
   return (
     <div className='flex w-full grow flex-col bg-background px-2'>
-      <h1 className='w-full rounded-md  bg-primary/70 p-1 text-center font-medium text-white'>INFORMAÇÕES GERAIS</h1>
+      <h1 className='w-full rounded-md  bg-primary/70 p-1 text-center font-medium text-primary-foreground'>INFORMAÇÕES GERAIS</h1>
       <div className='flex w-full grow flex-col gap-2'>
         <div className='flex w-full flex-col items-center justify-center gap-2 lg:flex-row'>
           <TextInput
@@ -84,7 +84,7 @@ function GeneralInfo({ goToNextStage, resetSolicitationType, infoHolder, setInfo
             handleChange={(value) => setInfoHolder((prev) => ({ ...prev, nome: value }))}
           />
         </div>
-        <p className='my-2 w-full text-center text-sm leading-none tracking-tight text-primary/50'>
+        <p className='my-2 w-full text-center text-sm leading-none tracking-tight text-primary/70'>
           Preencha abaixo a localização de <strong className='text-cyan-500'>instalação</strong> do sistema fotovoltaico.
         </p>
         <div className='flex w-full flex-col items-center gap-2 lg:flex-row'>
@@ -182,7 +182,7 @@ function GeneralInfo({ goToNextStage, resetSolicitationType, infoHolder, setInfo
           handleChange={(value) => setFiles((prev) => ({ ...prev, ['COMPROVANTE DE LOCALIZAÇÃO']: value }))}
         />
         <div className='flex w-full flex-col gap-1 rounded-sm border border-orange-700 p-2'>
-          <p className='my-2 w-full text-center text-sm leading-none tracking-tight text-primary/50'>
+          <p className='my-2 w-full text-center text-sm leading-none tracking-tight text-primary/70'>
             Deseja utilizar uma <strong className='text-orange-700'>análise técnica existente de referência</strong>, para alterações ou afins ?
             Marque a opção abaixo para abrir o menu de seleção.
           </p>
@@ -203,14 +203,14 @@ function GeneralInfo({ goToNextStage, resetSolicitationType, infoHolder, setInfo
       </div>
 
       <div className='mt-2 flex w-full justify-between'>
-        <button onClick={() => resetSolicitationType()} className='rounded p-2 font-bold text-primary/50 duration-300 ease-in-out hover:scale-105'>
+        <button onClick={() => resetSolicitationType()} className='rounded p-2 font-bold text-primary/70 duration-300 ease-in-out hover:scale-105'>
           Voltar
         </button>
         <button
           onClick={() => {
             validateFields();
           }}
-          className='rounded p-2 font-bold hover:bg-black hover:text-white'
+          className='rounded p-2 font-bold hover:bg-black hover:text-primary-foreground'
         >
           Prosseguir
         </button>

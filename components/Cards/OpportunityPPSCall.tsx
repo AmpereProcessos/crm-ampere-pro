@@ -46,7 +46,7 @@ function PPSCallCard({ call, session }: PPSCallCardProps) {
               <h1 className='w-full text-center text-sm font-bold leading-none tracking-tight  lg:text-start'>
                 {call.tipoSolicitacao || 'NÃO DEFINIDO'}
               </h1>
-              <p className='mt-1 w-full text-center text-[0.6rem] font-medium text-primary/50 lg:text-start'>#{call._id}</p>
+              <p className='mt-1 w-full text-center text-[0.6rem] font-medium text-primary/70 lg:text-start'>#{call._id}</p>
             </div>
             <div className='w-full min-w-fit lg:w-fit'>{getStatusTag(call.status)}</div>
           </div>
@@ -57,7 +57,7 @@ function PPSCallCard({ call, session }: PPSCallCardProps) {
               width={20}
               height={20}
             />
-            <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/50 lg:text-xs'>
+            <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/70 lg:text-xs'>
               REQUERIDO POR <strong className='text-cyan-500'>{call.requerente.nomeCRM?.toUpperCase() || 'NÃO DEFINIDO'}</strong>
             </p>
           </div>
@@ -66,17 +66,17 @@ function PPSCallCard({ call, session }: PPSCallCardProps) {
           <div className={`flex items-center gap-2`}>
             <div className='ites-center flex gap-1'>
               <BsCalendarPlus />
-              <p className={`text-[0.65rem] font-medium text-primary/50`}>{formatDateAsLocale(call.dataInsercao, true)}</p>
+              <p className={`text-[0.65rem] font-medium text-primary/70`}>{formatDateAsLocale(call.dataInsercao, true)}</p>
             </div>
             {call.dataEfetivacao ? (
               <div className='ites-center flex gap-1'>
                 <BsCalendarCheck color='rgb(34,197,94)' />
-                <p className={`text-[0.65rem] font-medium text-primary/50`}>{formatDateAsLocale(call.dataEfetivacao, true)}</p>
+                <p className={`text-[0.65rem] font-medium text-primary/70`}>{formatDateAsLocale(call.dataEfetivacao, true)}</p>
               </div>
             ) : null}
           </div>
           <div className='flex items-center justify-center gap-1'>
-            <p className='text-[0.65rem] font-medium text-primary/50'>VOLTS</p>
+            <p className='text-[0.65rem] font-medium text-primary/70'>VOLTS</p>
           </div>
         </div>
       </div>

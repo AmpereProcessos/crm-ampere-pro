@@ -74,7 +74,7 @@ function NotificationCard({ notification, session }: NotificationCardProps) {
         <Link href={`/comercial/oportunidades/id/${notification.oportunidade.id}`}>
           <div className='flex items-center gap-1'>
             <BsCode color='#fead41' size={15} />
-            <p className='text-[0.65rem] font-medium uppercase tracking-tight text-primary/50 duration-300 ease-in-out hover:text-cyan-500'>
+            <p className='text-[0.65rem] font-medium uppercase tracking-tight text-primary/70 duration-300 ease-in-out hover:text-cyan-500'>
               {notification.oportunidade.nome}
             </p>
           </div>
@@ -87,12 +87,12 @@ function NotificationCard({ notification, session }: NotificationCardProps) {
         <div className='flex items-center gap-2'>
           <div className={'flex items-center gap-1'}>
             <BsCalendarPlus />
-            <p className='text-[0.65rem] font-medium text-primary/50'>{formatDateAsLocale(notification.dataInsercao, true)}</p>
+            <p className='text-[0.65rem] font-medium text-primary/70'>{formatDateAsLocale(notification.dataInsercao, true)}</p>
           </div>
           {userReadingInformation ? (
             <div className={'flex items-center gap-1'}>
               <BsCalendarCheck color='rgb(34,197,94)' />
-              <p className='text-[0.65rem] font-medium text-primary/50'>{formatDateAsLocale(userReadingInformation.dataLeitura, true)}</p>
+              <p className='text-[0.65rem] font-medium text-primary/70'>{formatDateAsLocale(userReadingInformation.dataLeitura, true)}</p>
             </div>
           ) : null}
         </div>
@@ -102,7 +102,7 @@ function NotificationCard({ notification, session }: NotificationCardProps) {
             disabled={isPending}
             // @ts-ignore
             onClick={() => handleUpdateNotification({ notification: notification, read: false, user: session.user })}
-            className='flex items-center justify-center text-green-500 duration-300 ease-in-out disabled:text-primary/50 enabled:hover:text-primary/50'
+            className='flex items-center justify-center text-green-500 duration-300 ease-in-out disabled:text-primary/70 enabled:hover:text-primary/70'
           >
             <BsCheck2All />
           </button>
@@ -112,7 +112,7 @@ function NotificationCard({ notification, session }: NotificationCardProps) {
             disabled={isPending}
             // @ts-ignore
             onClick={() => handleUpdateNotification({ notification: notification, read: true, user: session.user })}
-            className='flex items-center justify-center text-primary/50 duration-300 ease-in-out disabled:text-primary/50 enabled:hover:text-green-500'
+            className='flex items-center justify-center text-primary/70 duration-300 ease-in-out disabled:text-primary/70 enabled:hover:text-green-500'
           >
             <BsCheck2 />
           </button>

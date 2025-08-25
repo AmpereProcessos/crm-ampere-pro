@@ -12,7 +12,7 @@ function RevenueProjectInformationBlockNew({ infoHolder, setInfoHolder }: Revenu
   const [vinculationMenuIsOpen, setVinculationMenuIsOpen] = useState<boolean>(false);
   return (
     <div className='flex w-full flex-col gap-y-2'>
-      <h1 className='w-full bg-primary/70  p-1 text-center font-medium text-white'>INFORMAÇÕES DO PROJETO</h1>
+      <h1 className='w-full bg-primary/70  p-1 text-center font-medium text-primary-foreground'>INFORMAÇÕES DO PROJETO</h1>
       <div className='flex w-full flex-col gap-1'>
         <div className='flex w-full items-center justify-center py-2'>
           <div className='w-fit'>

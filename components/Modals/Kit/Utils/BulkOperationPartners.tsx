@@ -20,7 +20,7 @@ function BulkOperationPartners({ session, partners }: BulkOperationPartnersProps
     <AnimatePresence>
       <div className='flex w-full flex-col gap-2'>
         <div className='flex w-full items-center justify-between gap-2'>
-          <h1 className='text-xs font-medium tracking-tight text-primary/50'>RESTRIÇÕES DE PARCEIRO (COMO USAR)</h1>
+          <h1 className='text-xs font-medium tracking-tight text-primary/70'>RESTRIÇÕES DE PARCEIRO (COMO USAR)</h1>
           <button
             data-block-open={blockIsOpen ? 'true' : 'false'}
             onClick={() => setBlockIsOpen((prev) => !prev)}
@@ -38,14 +38,14 @@ function BulkOperationPartners({ session, partners }: BulkOperationPartnersProps
             exit='exit'
             className='flex w-full flex-col gap-2 p-2'
           >
-            <p className='text-sm tracking-tight text-primary/50'>
+            <p className='text-sm tracking-tight text-primary/70'>
               A coluna <strong className='text-[#E25E3E]'>VISIBILIDADE DE PARCEIRO</strong> será referência para a restrição de visibilidade de
               parceiros do kit.
             </p>
-            <p className='text-sm tracking-tight text-primary/50'>
+            <p className='text-sm tracking-tight text-primary/70'>
               Para facilitar, abaixo estão listas os parceiros cadastrados. Clique em um deles para copiar o texto a ser preenchido na coluna.
             </p>
-            <p className='text-sm tracking-tight text-primary/50'>
+            <p className='text-sm tracking-tight text-primary/70'>
               Se restrição não aplicável, preencha <strong>N/A</strong>.
             </p>
             <div className='mt-2 flex w-full flex-wrap items-start gap-2'>
@@ -61,7 +61,7 @@ function BulkOperationPartners({ session, partners }: BulkOperationPartnersProps
                   </button>
                 ))
               ) : (
-                <p className='flex w-full grow animate-pulse items-center justify-center py-2 text-center text-sm font-medium italic tracking-tight text-primary/50'>
+                <p className='flex w-full grow animate-pulse items-center justify-center py-2 text-center text-sm font-medium italic tracking-tight text-primary/70'>
                   Carregando parceiros...
                 </p>
               )}

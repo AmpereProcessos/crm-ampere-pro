@@ -20,7 +20,7 @@ function getStatusTag({ startDate, conclusionDate }: { startDate: string | null;
     return (
       <div className='flex items-center gap-1'>
         <BsPatchCheck color='rgb(22,163,74)' />
-        <h1 className='text-xs tracking-tight text-primary/50'>
+        <h1 className='text-xs tracking-tight text-primary/70'>
           CONCLUÍDO COM <strong className='text-green-600'>{getTimeFormattedTextFromHours(hoursTaken).toUpperCase()}</strong>{' '}
         </h1>
       </div>
@@ -31,7 +31,7 @@ function getStatusTag({ startDate, conclusionDate }: { startDate: string | null;
   return (
     <div className='flex items-center gap-1'>
       <TbProgress color='rgb(234,88,12)' />
-      <h1 className='text-xs tracking-tight text-primary/50'>
+      <h1 className='text-xs tracking-tight text-primary/70'>
         EM ANDAMENTO COM <strong className='text-orange-600'>{getTimeFormattedTextFromHours(hoursTaken).toUpperCase()}</strong>
       </h1>
     </div>
@@ -55,33 +55,33 @@ function ProjectFollowUpCard({ project }: ProjectFollowUpCardProps) {
           {getStatusTag({ startDate, conclusionDate })}
         </div>
         <div className='flex items-center gap-2'>
-          <h1 className='rounded-full bg-primary/80 px-2 py-1 text-[0.65rem] font-bold text-white lg:text-xs'>{project.indexador}</h1>
+          <h1 className='rounded-full bg-primary/80 px-2 py-1 text-[0.65rem] font-bold text-primary-foreground lg:text-xs'>{project.indexador}</h1>
         </div>
       </div>
       <div className='flex w-full flex-wrap items-center gap-2'>
         <div className='flex items-center gap-1'>
           <MdDashboard />
-          <h1 className='text-xs font-medium leading-none text-primary/50'>{project.tipo}</h1>
+          <h1 className='text-xs font-medium leading-none text-primary/70'>{project.tipo}</h1>
         </div>
         <div className='flex items-center gap-1'>
           <BsCode />
           {project.idProjetoCRM ? (
             <Link href={`/comercial/oportunidades/id/${project.idProjetoCRM}`}>
-              <h1 className='text-xs font-medium tracking-tight text-primary/50 duration-300 ease-in-out hover:text-cyan-500'>
+              <h1 className='text-xs font-medium tracking-tight text-primary/70 duration-300 ease-in-out hover:text-cyan-500'>
                 {project.identificador}
               </h1>
             </Link>
           ) : (
-            <h1 className='text-xs font-medium tracking-tight text-primary/50'>{project.identificador}</h1>
+            <h1 className='text-xs font-medium tracking-tight text-primary/70'>{project.identificador}</h1>
           )}
         </div>
         <div className='flex items-center gap-1'>
           <FaCity />
-          <h1 className='text-xs font-medium leading-none text-primary/50'>{project.cidade}</h1>
+          <h1 className='text-xs font-medium leading-none text-primary/70'>{project.cidade}</h1>
         </div>
         <div className='flex items-center gap-1'>
           <FaBolt />
-          <h1 className='text-xs font-medium leading-none text-primary/50'>{formatDecimalPlaces(project.potenciaPico)} kWp</h1>
+          <h1 className='text-xs font-medium leading-none text-primary/70'>{formatDecimalPlaces(project.potenciaPico)} kWp</h1>
         </div>
       </div>
       <h1 className='w-full text-start text-xs font-medium'>PROCESSOS</h1>
@@ -100,7 +100,7 @@ function ProjectFollowUpCard({ project }: ProjectFollowUpCardProps) {
             );
           else
             return (
-              <div key={processIndex} className='rounded-lg border border-primary/50 bg-gray-50 px-2 py-1 text-[0.57rem] font-medium'>
+              <div key={processIndex} className='rounded-lg border border-primary/50 bg-primary/10 px-2 py-1 text-[0.57rem] font-medium'>
                 <h1>{process.processo}</h1>
               </div>
             );

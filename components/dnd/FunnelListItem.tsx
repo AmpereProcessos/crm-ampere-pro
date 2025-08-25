@@ -82,7 +82,7 @@ function FunnelListItem({ item, session, index }: FunnelListItemProps) {
                   e.stopPropagation();
                   setActivitiesModalIsOpen((prev) => !prev);
                 }}
-                className={`absolute right-2 top-9 flex h-[15px] w-[15px] cursor-pointer items-center justify-center rounded-full text-white  ${getTagColor(item.statusAtividades)}`}
+                className={`absolute right-2 top-9 flex h-[15px] w-[15px] cursor-pointer items-center justify-center rounded-full text-primary-foreground  ${getTagColor(item.statusAtividades)}`}
               >
                 <AiOutlineRight style={{ fontSize: '10px' }} />
               </button>

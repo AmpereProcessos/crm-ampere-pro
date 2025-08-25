@@ -25,7 +25,7 @@ function RevenueCategoriesMenu({ infoHolder, setInfoHolder }: RevenueCategoriesM
   }
   return (
     <div className='flex w-full flex-col gap-y-2'>
-      <h1 className='w-full bg-primary/50 p-1 text-center text-xs font-medium text-white'>CATEGORIAS</h1>
+      <h1 className='w-full bg-primary/50 p-1 text-center text-xs font-medium text-primary-foreground'>CATEGORIAS</h1>
       <div className='my-2 flex w-full flex-wrap items-center gap-2'>
         {infoHolder.categorias.length > 0 ? (
           infoHolder.categorias.map((category, index) => (
@@ -43,7 +43,7 @@ function RevenueCategoriesMenu({ infoHolder, setInfoHolder }: RevenueCategoriesM
             </div>
           ))
         ) : (
-          <p className='flex w-full grow items-center justify-center py-2 text-center text-sm font-medium italic tracking-tight text-primary/50'>
+          <p className='flex w-full grow items-center justify-center py-2 text-center text-sm font-medium italic tracking-tight text-primary/70'>
             Sem categorias adicionadas.
           </p>
         )}
@@ -63,7 +63,7 @@ function RevenueCategoriesMenu({ infoHolder, setInfoHolder }: RevenueCategoriesM
           <div className='w-fit'>
             <button
               onClick={() => addCategory(categoryHolder)}
-              className='rounded-md bg-black p-3 text-sm font-medium text-white duration-300 ease-in-out hover:bg-primary/70'
+              className='rounded-md bg-black p-3 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-primary/70'
             >
               ADICIONAR
             </button>

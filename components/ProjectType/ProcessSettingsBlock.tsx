@@ -17,7 +17,7 @@ function ProcessSettingsBlock({ projectTypeId }: ProcessSettingsBlockProps) {
   });
   return (
     <div className='flex w-full flex-col gap-y-2'>
-      <h1 className='w-full bg-primary/70  p-1 text-center font-medium text-white'>CONFIGURAÇÕES DE PROCESSO</h1>
+      <h1 className='w-full bg-primary/70  p-1 text-center font-medium text-primary-foreground'>CONFIGURAÇÕES DE PROCESSO</h1>
       {newProcessSettingMenu.isOpen ? (
         <NewProcessSettingMenu
           projectTypeId={projectTypeId}
@@ -28,7 +28,7 @@ function ProcessSettingsBlock({ projectTypeId }: ProcessSettingsBlockProps) {
       ) : (
         <div className='flex w-full items-center justify-end'>
           <button
-            className='rounded bg-green-500 p-1 px-4 text-sm font-medium text-white duration-300 ease-in-out hover:bg-green-600'
+            className='rounded bg-green-500 p-1 px-4 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-green-600'
             onClick={() => setNewProcessSettingMenu({ dependency: { id: null, entity: null }, isOpen: true })}
           >
             NOVA CONFIGURAÇÃO

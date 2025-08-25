@@ -27,7 +27,7 @@ function UserGroup({ group, openModal }: UserGroupProps) {
           <p className='text-sm font-medium leading-none tracking-tight'>{group.titulo}</p>
         )}
       </div>
-      <div className='my-2 text-start text-xs tracking-tight text-primary/50'>{group.descricao || 'NENHUMA DESCRIÇÃO DEFINIDA.'}</div>
+      <div className='my-2 text-start text-xs tracking-tight text-primary/70'>{group.descricao || 'NENHUMA DESCRIÇÃO DEFINIDA.'}</div>
       {group.usuarios ? (
         <>
           <div className='mt-2 flex w-full items-center justify-start gap-2'>
@@ -35,7 +35,7 @@ function UserGroup({ group, openModal }: UserGroupProps) {
               <FaRegUserCircle />
               <h1 className='font-Inter text-xs font-bold'>{group.usuarios.length}</h1>
             </div>
-            <h1 className='font-Inter text-xs text-primary/50'>USUÁRIOS</h1>
+            <h1 className='font-Inter text-xs text-primary/70'>USUÁRIOS</h1>
           </div>
           <div className='mt-2 flex w-full flex-wrap items-start justify-start gap-2'>
             {group.usuarios.map((user, index) => {
@@ -43,22 +43,22 @@ function UserGroup({ group, openModal }: UserGroupProps) {
                 return (
                   <div key={user._id} className='flex items-center gap-1'>
                     <Avatar url={user.avatar_url || undefined} fallback={formatNameAsInitials(user.nome)} height={15} width={15} />
-                    <p className='font-Inter text-xs font-medium text-primary/50'>{user.nome}</p>
+                    <p className='font-Inter text-xs font-medium text-primary/70'>{user.nome}</p>
                   </div>
                 );
             })}
-            {group.usuarios.length > 10 ? <p className='font-Inter text-xs font-medium text-primary/50'>E MAIS...</p> : null}
+            {group.usuarios.length > 10 ? <p className='font-Inter text-xs font-medium text-primary/70'>E MAIS...</p> : null}
           </div>
         </>
       ) : null}
       <div className='flex w-full items-center justify-end gap-2'>
         <div className={`flex items-center gap-1`}>
           <BsCalendarPlus />
-          <p className='text-[0.65rem] font-medium text-primary/50'>{formatDateAsLocale(group.dataInsercao, true)}</p>
+          <p className='text-[0.65rem] font-medium text-primary/70'>{formatDateAsLocale(group.dataInsercao, true)}</p>
         </div>
         <div className='flex items-center gap-1'>
           <Avatar fallback={formatNameAsInitials(group.autor.nome)} url={group.autor.avatar_url || undefined} height={20} width={20} />
-          <p className='text-[0.65rem] font-medium text-primary/50'>{group.autor.nome}</p>
+          <p className='text-[0.65rem] font-medium text-primary/70'>{group.autor.nome}</p>
         </div>
       </div>
     </div>

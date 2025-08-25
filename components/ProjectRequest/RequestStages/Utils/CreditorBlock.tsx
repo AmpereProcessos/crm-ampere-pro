@@ -16,7 +16,7 @@ function CreditorBlock({ infoHolder, setInfoHolder, changes, setChanges }: Credi
   const { data: creditors } = useCreditors();
   return (
     <div className='flex w-full flex-col gap-2 rounded-md border border-blue-800'>
-      <h1 className='w-full rounded-tl-md rounded-tr-md bg-blue-500 p-1 text-center text-sm font-bold text-white'>CRÉDITO</h1>
+      <h1 className='w-full rounded-tl-md rounded-tr-md bg-blue-500 p-1 text-center text-sm font-bold text-primary-foreground'>CRÉDITO</h1>
       <div className='flex w-full flex-col gap-2 p-2'>
         <div className='my-1 flex w-full flex-col'>
           <p className='w-full text-center text-sm font-light tracking-tighter text-primary/70'>

@@ -101,7 +101,7 @@ function CreditDistributionInfo({ requestInfo, setRequestInfo, goToPreviousStage
                     })
                   }
                 />
-                <button onClick={addCreditDist} className='rounded bg-[#fead61] p-1 font-bold hover:bg-[#15599a] hover:text-white'>
+                <button onClick={addCreditDist} className='rounded bg-[#fead61] p-1 font-bold hover:bg-[#15599a] hover:text-primary-foreground'>
                   ADICIONAR
                 </button>
               </div>
@@ -138,7 +138,7 @@ function CreditDistributionInfo({ requestInfo, setRequestInfo, goToPreviousStage
           onClick={() => {
             goToPreviousStage();
           }}
-          className='rounded p-2 font-bold text-primary/50 duration-300 hover:scale-105'
+          className='rounded p-2 font-bold text-primary/70 duration-300 hover:scale-105'
         >
           Voltar
         </button>
@@ -146,7 +146,7 @@ function CreditDistributionInfo({ requestInfo, setRequestInfo, goToPreviousStage
           onClick={() => {
             if (validateFields()) goToNextStage();
           }}
-          className='rounded p-2 font-bold hover:bg-black hover:text-white'
+          className='rounded p-2 font-bold hover:bg-black hover:text-primary-foreground'
         >
           Prosseguir
         </button>

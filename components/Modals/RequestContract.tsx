@@ -128,7 +128,7 @@ function ContractRequest({ session, closeModal, proposalInfo, client }: Contract
       <div className='fixed left-[50%] top-[50%] z-100 h-[80%] w-[90%] translate-x-[-50%] translate-y-[-50%] rounded-md bg-background p-[10px] lg:w-[70%]'>
         <div className='flex h-full flex-col'>
           <div className='flex flex-col items-center justify-between border-b border-primary/30 px-2 pb-2 text-lg lg:flex-row'>
-            <h3 className='text-sm font-bold text-primary dark:text-white lg:text-xl '>SOLICITAÇÃO DE CONTRATO</h3>
+            <h3 className='text-sm font-bold text-primary  lg:text-xl '>SOLICITAÇÃO DE CONTRATO</h3>
             <button
               onClick={closeModal}
               type='button'
@@ -143,7 +143,7 @@ function ContractRequest({ session, closeModal, proposalInfo, client }: Contract
               {proposalInfo.oportunidadeDados.responsaveis.map((resp) => (
                 <div className='flex items-center gap-1'>
                   <Avatar width={20} height={20} url={resp.avatar_url || undefined} fallback={resp.nome} />
-                  <p className='text-sm font-medium leading-none tracking-tight text-primary/50'>{resp.nome}</p>{' '}
+                  <p className='text-sm font-medium leading-none tracking-tight text-primary/70'>{resp.nome}</p>{' '}
                   <p className='ml-1 rounded-md border border-cyan-400 p-1 text-xxs font-bold text-cyan-400'>{resp.papel}</p>
                 </div>
               ))}

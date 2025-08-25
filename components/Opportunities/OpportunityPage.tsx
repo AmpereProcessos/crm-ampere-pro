@@ -68,7 +68,7 @@ function OpportunityPage({ session, opportunityId }: OpportunityPageProps) {
           <div className='flex w-full flex-col gap-3 border-b border-primary/80 pb-2'>
             <div className='flex w-full flex-col justify-center gap-2 lg:flex-row lg:justify-between'>
               <div className='flex flex-col items-center gap-3 lg:flex-row'>
-                <div className='flex items-center gap-1 rounded-sm bg-[#15599a] px-2 py-1 text-white'>
+                <div className='flex items-center gap-1 rounded-sm bg-[#15599a] px-2 py-1 text-primary-foreground'>
                   <BsCode />
                   <h1 className='text-sm font-black'>{opportunity.identificador}</h1>
                 </div>
@@ -80,7 +80,7 @@ function OpportunityPage({ session, opportunityId }: OpportunityPageProps) {
                     <button
                       type='button'
                       disabled={isPending}
-                      className='p-2 rounded-full flex items-center justify-center bg-red-500 text-white'
+                      className='p-2 rounded-full flex items-center justify-center bg-red-500 text-primary-foreground'
                       onClick={() =>
                         mutateDeleteOpportunity({
                           id: opportunityId,
@@ -93,7 +93,7 @@ function OpportunityPage({ session, opportunityId }: OpportunityPageProps) {
                 ) : null}
                 {opportunity.dataExclusao ? (
                   <div className={'flex items-center gap-2'}>
-                    <p className='text-[0.65rem] font-medium text-primary/50'>EXCLUÍDA EM:</p>
+                    <p className='text-[0.65rem] font-medium text-primary/70'>EXCLUÍDA EM:</p>
                     <BsCalendarX color='#ef4444' />
                     <p className='text-[0.65rem] font-medium text-red-500'>{formatDateAsLocale(opportunity.dataExclusao, true)}</p>
                   </div>
@@ -118,7 +118,7 @@ function OpportunityPage({ session, opportunityId }: OpportunityPageProps) {
             {opportunity.descricao ? (
               <div className='flex w-full flex-col gap-1 rounded-lg bg-primary/10 p-2'>
                 <h1 className='block text-[0.6rem] font-medium tracking-tight lg:hidden'>ANOTAÇÕES</h1>
-                <p className='text-center text-xs italic text-primary/50 lg:text-start'>{opportunity.descricao}</p>
+                <p className='text-center text-xs italic text-primary/70 lg:text-start'>{opportunity.descricao}</p>
               </div>
             ) : null}
             <div className='flex w-full flex-col items-center justify-between gap-2 lg:flex-row'>
@@ -127,16 +127,16 @@ function OpportunityPage({ session, opportunityId }: OpportunityPageProps) {
                 {opportunity.responsaveis.map((resp) => (
                   <div key={resp.id} className='flex items-center gap-1'>
                     <Avatar width={20} height={20} url={resp.avatar_url || undefined} fallback={formatNameAsInitials(resp.nome)} />
-                    <p className='text-xs font-medium leading-none tracking-tight text-primary/50'>{resp.nome}</p>{' '}
+                    <p className='text-xs font-medium leading-none tracking-tight text-primary/70'>{resp.nome}</p>{' '}
                     <p className='ml-1 rounded-md border border-cyan-400 p-1 text-xxs font-bold text-cyan-400'>{resp.papel}</p>
                   </div>
                 ))}
               </div>
               <div className='flex w-full flex-col items-center justify-center gap-2 lg:min-w-fit lg:flex-row lg:justify-end'>
                 <div className={'flex items-center gap-2'}>
-                  <p className='text-[0.65rem] font-medium text-primary/50'>CRIADA EM:</p>
+                  <p className='text-[0.65rem] font-medium text-primary/70'>CRIADA EM:</p>
                   <BsCalendarPlus />
-                  <p className='text-[0.65rem] font-medium text-primary/50'>{formatDateAsLocale(opportunity.dataInsercao, true)}</p>
+                  <p className='text-[0.65rem] font-medium text-primary/70'>{formatDateAsLocale(opportunity.dataInsercao, true)}</p>
                 </div>
                 {opportunity.ganho.data ? null : (
                   <OpportunityLossBlock

@@ -69,7 +69,7 @@ function EditFunnel({ session, funnelId, closeModal }: EditFunnelProps) {
       <div className='fixed left-[50%] top-[50%] z-100 h-[80%] w-[90%] translate-x-[-50%] translate-y-[-50%] rounded-md bg-background p-[10px] lg:w-[30%]'>
         <div className='flex h-full w-full flex-col'>
           <div className='flex flex-col items-center justify-between border-b border-primary/30 px-2 pb-2 text-lg lg:flex-row'>
-            <h3 className='text-xl font-bold text-primary dark:text-white '>NOVO USUÁRIO</h3>
+            <h3 className='text-xl font-bold text-primary  '>NOVO USUÁRIO</h3>
             <button
               onClick={closeModal}
               type='button'
@@ -135,7 +135,7 @@ function EditFunnel({ session, funnelId, closeModal }: EditFunnelProps) {
                 <div className='flex w-full items-center justify-end'>
                   <button
                     onClick={addStage}
-                    className='whitespace-nowrap rounded-sm bg-primary/90 px-4 py-2 text-xs font-medium text-white shadow-sm disabled:bg-primary/50 disabled:text-white enabled:hover:bg-primary/80 enabled:hover:text-white'
+                    className='whitespace-nowrap rounded-sm bg-primary/90 px-4 py-2 text-xs font-medium text-primary-foreground shadow-sm disabled:bg-primary/50 disabled:text-primary-foreground enabled:hover:bg-primary/80 enabled:hover:text-primary-foreground'
                   >
                     ADICIONAR ETAPA
                   </button>
@@ -160,7 +160,7 @@ function EditFunnel({ session, funnelId, closeModal }: EditFunnelProps) {
                       </div>
                     ))
                   ) : (
-                    <p className='w-full py-4 text-center text-sm italic text-primary/50'>Sem etapas adicionadas...</p>
+                    <p className='w-full py-4 text-center text-sm italic text-primary/70'>Sem etapas adicionadas...</p>
                   )}
                 </div>
                 <div className='flex w-full items-center justify-end'>
@@ -168,7 +168,7 @@ function EditFunnel({ session, funnelId, closeModal }: EditFunnelProps) {
                     disabled={isPending}
                     // @ts-ignore
                     onClick={() => handleEditFunnel({ id: funnelId, changes: infoHolder })}
-                    className='h-9 whitespace-nowrap rounded-sm bg-blue-800 px-4 py-2 text-sm font-medium text-white shadow-sm disabled:bg-primary/50 disabled:text-white enabled:hover:bg-blue-800 enabled:hover:text-white'
+                    className='h-9 whitespace-nowrap rounded-sm bg-blue-800 px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm disabled:bg-primary/50 disabled:text-primary-foreground enabled:hover:bg-blue-800 enabled:hover:text-primary-foreground'
                   >
                     ATUALIZAR FUNIL
                   </button>

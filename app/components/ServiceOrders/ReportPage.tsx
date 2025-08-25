@@ -168,12 +168,12 @@ function ReportPage({ user, order }: ReportPageProps) {
     return (
       <div className='flex w-full grow flex-col items-center justify-center gap-2 text-green-500'>
         <BsFillClipboardCheckFill color='rgb(34,197,94)' size={35} />
-        <p className='text-lg font-medium tracking-tight text-primary/50'>RELATÓRIO FINALIZADO COM SUCESSO !</p>
+        <p className='text-lg font-medium tracking-tight text-primary/70'>RELATÓRIO FINALIZADO COM SUCESSO !</p>
       </div>
     );
   return (
     <div className='flex h-full w-full flex-col gap-6'>
-      <h1 className='w-full bg-black px-8 py-4 text-center text-base font-black tracking-tight text-white lg:text-xl'>
+      <h1 className='w-full bg-black px-8 py-4 text-center text-base font-black tracking-tight text-primary-foreground lg:text-xl'>
         RELATÓRIO DE CONCLUSÃO DE ORDEM DE SERVIÇO
       </h1>
       <div className='flex w-full flex-col gap-3 px-6 py-2'>
@@ -181,7 +181,7 @@ function ReportPage({ user, order }: ReportPageProps) {
           <div className='flex w-full flex-col gap-3 p-3 lg:w-1/2'>
             <h1 className='text-start font-black leading-none tracking-tight'>INFORMAÇÕES GERAIS</h1>
             <div className='flex w-full flex-col items-start gap-1'>
-              <h1 className='w-full text-start text-[0.85rem] tracking-tight text-primary/50'>SERVIÇO</h1>
+              <h1 className='w-full text-start text-[0.85rem] tracking-tight text-primary/70'>SERVIÇO</h1>
               <div className='flex w-full items-center justify-start gap-1'>
                 <MdMenu />
                 <h1 className='text-[0.85rem] font-semibold tracking-tight'>{order.descricao}</h1>
@@ -198,7 +198,7 @@ function ReportPage({ user, order }: ReportPageProps) {
               </div>
             </div>
             <div className='flex w-full flex-col items-center justify-start gap-1'>
-              <h1 className='w-full text-start text-[0.85rem] tracking-tight text-primary/50'>RESPONSÁVEIS</h1>
+              <h1 className='w-full text-start text-[0.85rem] tracking-tight text-primary/70'>RESPONSÁVEIS</h1>
               <div className='flex w-full flex-wrap items-center justify-start gap-1'>
                 {order.responsaveis.map((responsible, index) => (
                   <div key={index} className='flex items-center gap-2 rounded-sm border border-primary/50 bg-[#f8f8f8] px-2 py-1 shadow-md'>
@@ -209,7 +209,7 @@ function ReportPage({ user, order }: ReportPageProps) {
               </div>
             </div>
             <div className='flex w-full flex-col items-center justify-start gap-1'>
-              <h1 className='w-full text-start text-[0.85rem] tracking-tight text-primary/50'>FAVORECIDO</h1>
+              <h1 className='w-full text-start text-[0.85rem] tracking-tight text-primary/70'>FAVORECIDO</h1>
               <div className='flex w-full flex-col items-start justify-start gap-2 lg:flex-row lg:items-center lg:gap-6'>
                 <div className='flex w-fit items-center gap-1'>
                   <FaUser />
@@ -231,7 +231,7 @@ function ReportPage({ user, order }: ReportPageProps) {
           <div className='flex w-full flex-col gap-3 p-3 lg:w-1/2'>
             <h1 className='text-start font-black leading-none tracking-tight'>DETALHES SOBRE A EXECUÇÃO</h1>
             <div className='flex w-full flex-col items-center justify-center gap-1'>
-              <h1 className='w-full text-[0.85rem] font-medium tracking-tight text-primary/50 lg:text-start'>
+              <h1 className='w-full text-[0.85rem] font-medium tracking-tight text-primary/70 lg:text-start'>
                 ESSAS SÃO AS OBSERVAÇÕES DEFINIDAS PARA EXECUÇÃO DESSA ORDEM DE SERVIÇO:
               </h1>
               {renderExecutionObservations(order.observacoes)}
@@ -242,7 +242,7 @@ function ReportPage({ user, order }: ReportPageProps) {
           <h1 className='text-start font-black leading-none tracking-tight'>MATERIAIS</h1>
           <div className='flex w-full flex-col gap-3 lg:flex-row'>
             <div className='flex w-full flex-col gap-1 rounded-sm border border-primary/80 lg:w-1/2'>
-              <h1 className='w-full bg-primary/80 px-2 py-1 text-center text-sm font-bold text-white'>MATERIAIS DISPONÍVEIS IN LOCO</h1>
+              <h1 className='w-full bg-primary/80 px-2 py-1 text-center text-sm font-bold text-primary-foreground'>MATERIAIS DISPONÍVEIS IN LOCO</h1>
               <div className='flex w-full flex-col gap-1 p-2'>
                 {order.materiais.disponiveis.length > 0 ? (
                   order.materiais.disponiveis.map((material, index) => (
@@ -263,7 +263,7 @@ function ReportPage({ user, order }: ReportPageProps) {
               </div>
             </div>
             <div className='flex w-full flex-col gap-1 rounded-sm border border-primary/80 lg:w-1/2'>
-              <h1 className='w-full bg-primary/80 px-2 py-1 text-center text-sm font-bold text-white'>MATERIAIS PARA RETIRADA</h1>
+              <h1 className='w-full bg-primary/80 px-2 py-1 text-center text-sm font-bold text-primary-foreground'>MATERIAIS PARA RETIRADA</h1>
               <div className='flex w-full flex-col gap-1 p-2'>
                 {order.materiais.retiraveis.length > 0 ? (
                   order.materiais.retiraveis.map((material, index) => (
@@ -294,7 +294,7 @@ function ReportPage({ user, order }: ReportPageProps) {
             onClick={() => {
               handleFinishReport();
             }}
-            className='h-9 w-full whitespace-nowrap rounded-sm bg-green-700 px-4 py-2 text-sm font-medium text-white shadow-sm disabled:bg-primary/50 disabled:text-white enabled:hover:bg-green-600 enabled:hover:text-white lg:w-[350px]'
+            className='h-9 w-full whitespace-nowrap rounded-sm bg-green-700 px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm disabled:bg-primary/50 disabled:text-primary-foreground enabled:hover:bg-green-600 enabled:hover:text-primary-foreground lg:w-[350px]'
           >
             FINALIZAR RELATÓRIO
           </button>
@@ -304,7 +304,7 @@ function ReportPage({ user, order }: ReportPageProps) {
             onClick={() => {
               handleMoveToNextSession();
             }}
-            className='h-9 w-full whitespace-nowrap rounded-sm bg-blue-700 px-4 py-2 text-sm font-medium text-white shadow-sm disabled:bg-primary/50 disabled:text-white enabled:hover:bg-blue-600 enabled:hover:text-white lg:w-[350px]'
+            className='h-9 w-full whitespace-nowrap rounded-sm bg-blue-700 px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm disabled:bg-primary/50 disabled:text-primary-foreground enabled:hover:bg-blue-600 enabled:hover:text-primary-foreground lg:w-[350px]'
           >
             PRÓXIMA ETAPA
           </button>

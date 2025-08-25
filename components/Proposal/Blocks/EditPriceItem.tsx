@@ -17,7 +17,7 @@ function EditPriceItem({ itemIndex, pricing, setPricing, closeModal }: EditPrice
       <div className='fixed left-[50%] top-[50%] z-100 h-fit w-[90%] translate-x-[-50%] translate-y-[-50%] rounded-md bg-background p-[10px]  lg:w-[30%]'>
         <div className='flex h-full flex-col'>
           <div className='flex flex-wrap items-center justify-between border-b border-primary/30 px-2 pb-2 text-lg'>
-            <h3 className='text-xl font-bold text-primary dark:text-white '>ALTERAÇÃO DE PREÇOS</h3>
+            <h3 className='text-xl font-bold text-primary  '>ALTERAÇÃO DE PREÇOS</h3>
             <button
               onClick={() => closeModal()}
               type='button'

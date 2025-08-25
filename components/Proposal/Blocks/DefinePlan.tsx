@@ -107,7 +107,7 @@ function DefinePlan({
     <div id='edit-final-price' className='fixed bottom-0 left-0 right-0 top-0 z-100 bg-[rgba(0,0,0,.85)]'>
       <div className='fixed left-[50%] top-[50%] z-100 flex h-fit max-h-[90%] w-[90%] translate-x-[-50%] translate-y-[-50%] flex-col rounded-md bg-background p-[10px] lg:w-[80%]'>
         <div className='flex flex-wrap items-center justify-between border-b border-primary/30 px-2 pb-2 text-lg'>
-          <h3 className='text-xl font-bold text-primary dark:text-white '>DEFINIÇÃO DE PLANO</h3>
+          <h3 className='text-xl font-bold text-primary  '>DEFINIÇÃO DE PLANO</h3>
           <button
             onClick={() => closeModal()}
             type='button'
@@ -117,13 +117,13 @@ function DefinePlan({
           </button>
         </div>
         <div className='flex grow flex-col gap-y-2 overflow-y-auto overscroll-y-auto py-1 scrollbar-thin scrollbar-track-primary/10 scrollbar-thumb-primary/30'>
-          <p className='w-full text-center text-sm tracking-tight text-primary/50'>
+          <p className='w-full text-center text-sm tracking-tight text-primary/70'>
             Escolha somente quando houver certeza do plano de assinatura a ser vendido.
           </p>
-          <p className='w-full text-center text-sm tracking-tight text-primary/50'>
+          <p className='w-full text-center text-sm tracking-tight text-primary/70'>
             A ação de escolha do plano é <strong className='text-orange-500'>irreversível.</strong>{' '}
           </p>
-          <p className='w-full text-center text-sm tracking-tight text-primary/50'>
+          <p className='w-full text-center text-sm tracking-tight text-primary/70'>
             Ao escolher um plano, sua proposta perderá as opções dos demais planos selecionados.
           </p>
           {userHasPricingViewPermission ? (
@@ -144,7 +144,7 @@ function DefinePlan({
               handleDefineProposalPlan({ newPricing: pricing });
             }}
             disabled={isPending}
-            className='h-9 whitespace-nowrap rounded-sm bg-blue-800 px-4 py-2 text-sm font-medium text-white shadow-sm disabled:bg-primary/50 disabled:text-white enabled:hover:bg-blue-800 enabled:hover:text-white'
+            className='h-9 whitespace-nowrap rounded-sm bg-blue-800 px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm disabled:bg-primary/50 disabled:text-primary-foreground enabled:hover:bg-blue-800 enabled:hover:text-primary-foreground'
           >
             ESCOLHER PLANO
           </button>

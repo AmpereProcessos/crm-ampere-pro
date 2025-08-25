@@ -132,15 +132,15 @@ function NewFileReference({ opportunityId, clientId, session, closeModal }: NewF
             <div className='relative mb-4 flex w-full items-center justify-center'>
               <label
                 htmlFor='dropzone-file'
-                className='dark:hover:bg-bray-800 flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-primary/30 bg-gray-50 hover:bg-primary/10 dark:border-primary/60 dark:bg-primary/70 dark:hover:border-primary/50 dark:hover:bg-primary/60'
+                className='dark:hover:bg-bray-800 flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-primary/30 bg-primary/10hover:bg-primary/10 dark:border-primary/60 dark:bg-primary/70 dark:hover:border-primary/50 dark:hover:bg-primary/60'
               >
                 <div className='flex flex-col items-center justify-center pb-6 pt-5 text-primary/80'>
                   <BsCloudUploadFill color={'rgb(31,41,55)'} size={50} />
 
                   {fileHolder ? (
-                    <p className='mb-2 text-sm text-primary/50 dark:text-primary/40'>{fileHolder.name}</p>
+                    <p className='mb-2 text-sm text-primary/70 dark:text-primary/40'>{fileHolder.name}</p>
                   ) : (
-                    <p className='mb-2 px-2 text-center text-sm text-primary/50 dark:text-primary/40'>
+                    <p className='mb-2 px-2 text-center text-sm text-primary/70 dark:text-primary/40'>
                       <span className='font-semibold'>Clique para escolher um arquivo</span> ou o arraste para a àrea demarcada
                     </p>
                   )}
@@ -194,7 +194,7 @@ function NewFileReference({ opportunityId, clientId, session, closeModal }: NewF
               // @ts-ignore
               disabled={isPending}
               onClick={() => mutate()}
-              className='h-9 whitespace-nowrap rounded-sm bg-primary/90 px-4 py-2 text-sm font-medium text-white shadow-sm disabled:bg-primary/50 disabled:text-white enabled:hover:bg-primary/80 enabled:hover:text-white'
+              className='h-9 whitespace-nowrap rounded-sm bg-primary/90 px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm disabled:bg-primary/50 disabled:text-primary-foreground enabled:hover:bg-primary/80 enabled:hover:text-primary-foreground'
             >
               ANEXAR
             </button>

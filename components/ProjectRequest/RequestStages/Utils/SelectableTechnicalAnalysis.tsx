@@ -73,13 +73,13 @@ function SelectableTechnicalAnalysis({ analysis, userHasPricingViewPermission, s
               <h1 className='w-full text-center text-sm font-bold leading-none tracking-tight duration-300 lg:text-start'>
                 {analysis.tipoSolicitacao || 'NÃO DEFINIDO'}
               </h1>
-              <p className='mt-1 w-full text-center text-[0.6rem] font-medium text-primary/50 lg:text-start'>#{analysis._id}</p>
+              <p className='mt-1 w-full text-center text-[0.6rem] font-medium text-primary/70 lg:text-start'>#{analysis._id}</p>
             </div>
             <div className='flex w-full min-w-fit items-center justify-center lg:w-fit'>{getStatusColor(analysis.status)}</div>
           </div>
         </div>
-        <h1 className='my-2 mb-0 text-[0.65rem] font-bold leading-none tracking-tight text-primary/50 lg:text-xs'>CONCLUSÃO</h1>
-        <h1 className='w-full rounded-md bg-primary/10 p-2 py-1 text-center text-xs font-medium text-primary/50'>
+        <h1 className='my-2 mb-0 text-[0.65rem] font-bold leading-none tracking-tight text-primary/70 lg:text-xs'>CONCLUSÃO</h1>
+        <h1 className='w-full rounded-md bg-primary/10 p-2 py-1 text-center text-xs font-medium text-primary/70'>
           {analysis.conclusao.observacoes || 'SEM OBSERVAÇÃO PARA A ANÁLISE'}
         </h1>
         <div className='mt-2 flex w-full flex-wrap items-center justify-around gap-2'>
@@ -105,13 +105,13 @@ function SelectableTechnicalAnalysis({ analysis, userHasPricingViewPermission, s
             </p>
           </div>
         </div>
-        <h1 className='my-2 text-[0.65rem] font-bold leading-none tracking-tight text-primary/50 lg:text-xs'>CUSTOS ADICIONAIS</h1>
+        <h1 className='my-2 text-[0.65rem] font-bold leading-none tracking-tight text-primary/70 lg:text-xs'>CUSTOS ADICIONAIS</h1>
         <div className='mt-1 flex w-full flex-wrap items-center justify-around gap-2'>
           {analysis.custos.map((cost, index) => (
             <div key={index} className='flex items-center gap-2 rounded-sm border border-primary/50 p-2'>
               <h1 className='text-xs font-medium leading-none tracking-tight lg:text-sm'>{cost.descricao}</h1>
               {userHasPricingViewPermission ? (
-                <h1 className='min-w-fit rounded-full bg-primary/80 px-2 py-1 text-[0.58rem] font-medium text-white lg:text-xs'>
+                <h1 className='min-w-fit rounded-full bg-primary/80 px-2 py-1 text-[0.58rem] font-medium text-primary-foreground lg:text-xs'>
                   {formatToMoney(cost.total || 0)}
                 </h1>
               ) : null}
@@ -122,12 +122,12 @@ function SelectableTechnicalAnalysis({ analysis, userHasPricingViewPermission, s
           {analysis.dataEfetivacao ? (
             <div className={`flex items-center gap-1`}>
               <BsCalendarCheck color='rgb(34,197,94)' />
-              <p className='text-[0.65rem] font-medium text-primary/50'>{formatDateAsLocale(analysis.dataEfetivacao, true)}</p>
+              <p className='text-[0.65rem] font-medium text-primary/70'>{formatDateAsLocale(analysis.dataEfetivacao, true)}</p>
             </div>
           ) : null}
           <div className={`flex items-center gap-1`}>
             <BsCalendarPlus />
-            <p className='text-[0.65rem] font-medium text-primary/50'>{formatDateAsLocale(analysis.dataInsercao, true)}</p>
+            <p className='text-[0.65rem] font-medium text-primary/70'>{formatDateAsLocale(analysis.dataInsercao, true)}</p>
           </div>
           <div className='flex items-center gap-1'>
             <Avatar
@@ -136,13 +136,13 @@ function SelectableTechnicalAnalysis({ analysis, userHasPricingViewPermission, s
               height={20}
               width={20}
             />
-            <p className='text-[0.65rem] font-medium text-primary/50'>{analysis.requerente.nome}</p>
+            <p className='text-[0.65rem] font-medium text-primary/70'>{analysis.requerente.nome}</p>
           </div>
         </div>
         <div className='mt-1 flex w-full items-center justify-end'>
           <button
             onClick={() => selectAnalysis(analysis._id)}
-            className='rounded-full bg-blue-600 px-2 py-1 text-[0.65rem] font-bold text-white duration-300 ease-in-out hover:bg-blue-700 lg:text-xs'
+            className='rounded-full bg-blue-600 px-2 py-1 text-[0.65rem] font-bold text-primary-foreground duration-300 ease-in-out hover:bg-blue-700 lg:text-xs'
           >
             SELECIONAR
           </button>

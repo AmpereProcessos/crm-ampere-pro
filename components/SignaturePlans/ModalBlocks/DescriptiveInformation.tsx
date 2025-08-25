@@ -26,10 +26,10 @@ function DescriptiveInformation({ infoHolder, setInfoHolder }: DescriptiveInform
   }
   return (
     <div className='flex w-full flex-col gap-1'>
-      <h1 className='w-full bg-primary/70  p-1 text-center font-medium text-white'>DESCRITIVO</h1>
+      <h1 className='w-full bg-primary/70  p-1 text-center font-medium text-primary-foreground'>DESCRITIVO</h1>
       <div className='my-2 flex w-full flex-col gap-0.5'>
-        <p className='w-full text-center font-medium tracking-tight text-primary/50'>Adicione aqui itens os quais o plano contempla.</p>
-        <p className='w-full text-center font-medium tracking-tight text-primary/50'>
+        <p className='w-full text-center font-medium tracking-tight text-primary/70'>Adicione aqui itens os quais o plano contempla.</p>
+        <p className='w-full text-center font-medium tracking-tight text-primary/70'>
           Esses itens serão utilizados na visualização dos planos em uma eventual proposta comercial, de modo a promover os benefícios do plano em
           questão.
         </p>
@@ -43,7 +43,7 @@ function DescriptiveInformation({ infoHolder, setInfoHolder }: DescriptiveInform
       />
       <div className='flex items-center justify-end'>
         <button
-          className='rounded bg-black p-1 px-4 text-sm font-medium text-white duration-300 ease-in-out hover:bg-primary/70'
+          className='rounded bg-black p-1 px-4 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-primary/70'
           onClick={() => addItem(descriptiveHolder)}
         >
           ADICIONAR ITEM
@@ -59,11 +59,11 @@ function DescriptiveInformation({ infoHolder, setInfoHolder }: DescriptiveInform
                 className='flex w-fit cursor-pointer items-center justify-center gap-2 rounded-md bg-transparent px-2 py-1 hover:bg-red-100'
               >
                 <BsCheckCircleFill color='rgb(21,128,61)' />
-                <p className='text-sm font-bold tracking-tight text-primary/50'>{product.descricao}</p>
+                <p className='text-sm font-bold tracking-tight text-primary/70'>{product.descricao}</p>
               </div>
             ))
           ) : (
-            <div className='text-center font-light text-primary/50'>Nenhum item adicionado ao descritivo.</div>
+            <div className='text-center font-light text-primary/70'>Nenhum item adicionado ao descritivo.</div>
           )}
         </div>
       </div>

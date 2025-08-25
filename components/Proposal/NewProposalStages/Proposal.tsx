@@ -48,7 +48,7 @@ function renderProposalPreview({
   if (proposal.idModeloAnvil)
     return (
       <div className='relative flex h-fit w-full flex-col items-center justify-center overflow-hidden bg-background lg:h-[297mm] lg:w-[210mm]'>
-        <p className='w-full text-center text-lg font-medium italic tracking-tight text-primary/50'>
+        <p className='w-full text-center text-lg font-medium italic tracking-tight text-primary/70'>
           Oops, o preview não está disponível para templates específicos.
         </p>
       </div>
@@ -152,23 +152,23 @@ function Proposal({ opportunity, projectTypes, infoHolder, setInfoHolder, moveTo
       {isSuccess ? (
         <div className='flex min-h-[350px] w-full flex-col items-center justify-center gap-1'>
           <p className='text-center font-bold text-[#15599a]'>A proposta foi gerada com sucesso e vinculada à oportunidade em questão.</p>
-          <p className='text-center text-primary/50'>Você pode voltar a acessá-la no futuro através da área de controle da oportunidade.</p>
+          <p className='text-center text-primary/70'>Você pode voltar a acessá-la no futuro através da área de controle da oportunidade.</p>
           <Link href={`/comercial/oportunidades/id/${opportunity._id}`}>
-            <button className='flex items-center gap-2 rounded-sm bg-primary/50 px-2 py-1 text-[0.6rem] font-bold tracking-tight text-white duration-300 ease-in-out hover:bg-primary/60'>
+            <button className='flex items-center gap-2 rounded-sm bg-primary/50 px-2 py-1 text-[0.6rem] font-bold tracking-tight text-primary-foreground duration-300 ease-in-out hover:bg-primary/60'>
               VOLTAR À OPORTUNIDADE
             </button>
           </Link>
           {data?.fileUrl ? (
             <a
               href={data.fileUrl}
-              className='flex items-center gap-1 rounded-sm bg-blue-600 px-2 py-1 text-[0.7rem] font-black text-white duration-300 ease-in-out hover:bg-blue-700'
+              className='flex items-center gap-1 rounded-sm bg-blue-600 px-2 py-1 text-[0.7rem] font-black text-primary-foreground duration-300 ease-in-out hover:bg-blue-700'
             >
               CLIQUE AQUI PARA VISUALIZAR A PROPOSTA
               <Eye size={18} />
             </a>
           ) : (
             <Link href={`/comercial/proposta/documento/${data.id}`}>
-              <button className='flex items-center gap-1 rounded-sm bg-blue-600 px-2 py-1 text-[0.7rem] font-black text-white duration-300 ease-in-out hover:bg-blue-700'>
+              <button className='flex items-center gap-1 rounded-sm bg-blue-600 px-2 py-1 text-[0.7rem] font-black text-primary-foreground duration-300 ease-in-out hover:bg-blue-700'>
                 CLIQUE AQUI PARA ACESSAR A PROPOSTA
                 <Eye size={18} />
               </button>
@@ -184,7 +184,7 @@ function Proposal({ opportunity, projectTypes, infoHolder, setInfoHolder, moveTo
       {!isPending && !isSuccess ? (
         <>
           <div className='mt-4 flex w-full items-center justify-between'>
-            <button onClick={() => moveToPreviousStage()} className='rounded pl-4 font-bold text-primary/50 duration-300 hover:scale-105'>
+            <button onClick={() => moveToPreviousStage()} className='rounded pl-4 font-bold text-primary/70 duration-300 hover:scale-105'>
               Voltar
             </button>
             <button
@@ -197,14 +197,14 @@ function Proposal({ opportunity, projectTypes, infoHolder, setInfoHolder, moveTo
                   idAnvil: infoHolder.idModeloAnvil,
                 })
               }
-              className='rounded bg-primary/90 px-4 py-2 text-sm font-medium text-white shadow-sm disabled:bg-primary/50 disabled:text-white enabled:hover:bg-primary/80 enabled:hover:text-white'
+              className='rounded bg-primary/90 px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm disabled:bg-primary/50 disabled:text-primary-foreground enabled:hover:bg-primary/80 enabled:hover:text-primary-foreground'
             >
               CRIAR PROPOSTA
             </button>
           </div>
           <div className='flex w-full flex-col gap-4 xl:flex-row'>
             <div className='hidden flex-col rounded-md border border-primary/30 p-2 md:flex'>
-              <h1 className='w-full rounded-tl-md rounded-tr-md bg-cyan-500 p-2 text-center font-bold leading-none tracking-tight text-white'>
+              <h1 className='w-full rounded-tl-md rounded-tr-md bg-cyan-500 p-2 text-center font-bold leading-none tracking-tight text-primary-foreground'>
                 PREVIEW DA PROPOSTA
               </h1>
               {renderProposalPreview({ proposal: infoHolder, opportunity: opportunity, partner: partner })}

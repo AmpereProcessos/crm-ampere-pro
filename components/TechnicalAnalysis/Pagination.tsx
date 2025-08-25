@@ -35,7 +35,7 @@ function renderPagesIcons({
         return selectPage(p);
       }}
       className={`${
-        activePage == p ? 'border-black bg-black text-white' : 'border-transparent text-primary hover:bg-primary/50'
+        activePage == p ? 'border-black bg-black text-primary-foreground' : 'border-transparent text-primary hover:bg-primary/50'
       } max-w-10 lg:min-w-10 lg:min-h-10 min-h-8 min-w-8 h-8 max-h-10 w-8 rounded-full border text-xs font-medium lg:h-10 lg:w-10`}
     >
       {p}
@@ -63,7 +63,7 @@ function TechnicalAnalysisPagination({
     <div className='my-2 flex w-full flex-col items-center gap-1 '>
       {totalPages > 1 ? (
         <>
-          <p className='w-full text-center text-sm leading-none tracking-tight text-primary/50'>
+          <p className='w-full text-center text-sm leading-none tracking-tight text-primary/70'>
             Um número grande de análises foi encontrado, separamos em páginas para facilitar a visualização. Clique na página desejada para visualizar
             os demais análises.
           </p>
@@ -117,10 +117,10 @@ function TechnicalAnalysisPagination({
         </>
       ) : null}
 
-      <p className='w-full text-center text-sm leading-none tracking-tight text-primary/50'>
+      <p className='w-full text-center text-sm leading-none tracking-tight text-primary/70'>
         {analysisMatched ? (analysisMatched > 0 ? `${analysisMatched} análises encontrados.` : `${analysisMatched} análise encontrado.`) : '...'}
       </p>
-      <p className='w-full text-center text-sm leading-none tracking-tight text-primary/50'>
+      <p className='w-full text-center text-sm leading-none tracking-tight text-primary/70'>
         {analysisShowing ? (analysisShowing > 0 ? `Mostrando ${analysisShowing} análises.` : `Mostrando ${analysisShowing} análise.`) : '...'}
       </p>
     </div>

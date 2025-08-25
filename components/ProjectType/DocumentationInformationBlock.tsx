@@ -28,13 +28,13 @@ function DocumentationInformationBlock({ infoHolder, setInfoHolder }: Documentat
   }
   return (
     <div className='flex w-full flex-col gap-y-2'>
-      <h1 className='w-full bg-primary/70  p-1 text-center font-medium text-white'>DOCUMENTAÇÃO</h1>
+      <h1 className='w-full bg-primary/70  p-1 text-center font-medium text-primary-foreground'>DOCUMENTAÇÃO</h1>
       {newDocumentMenuIsOpen ? (
         <NewDocumentMenu addDocument={(document) => addDocument(document)} closeMenu={() => setNewDocumentMenuIsOpen(false)} />
       ) : (
         <div className='flex w-full items-center justify-end'>
           <button
-            className='rounded bg-green-500 p-1 px-4 text-sm font-medium text-white duration-300 ease-in-out hover:bg-green-600'
+            className='rounded bg-green-500 p-1 px-4 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-green-600'
             onClick={() => setNewDocumentMenuIsOpen(true)}
           >
             NOVO DOCUMENTO
@@ -83,7 +83,7 @@ function DocumentationInformationBlock({ infoHolder, setInfoHolder }: Documentat
                   </div>
                 ) : null}
               </div>
-              <div className='my-2 text-start text-xs tracking-tight text-primary/50'>{document.descricao || 'NENHUMA DESCRIÇÃO DEFINIDA.'}</div>
+              <div className='my-2 text-start text-xs tracking-tight text-primary/70'>{document.descricao || 'NENHUMA DESCRIÇÃO DEFINIDA.'}</div>
               {document.condicao.aplicavel ? (
                 <div className='flex w-full flex-wrap items-center justify-start gap-2'>
                   <h1 className='text-xs font-medium'>CONDIÇÃO DE OBRIGATORIEDADE</h1>
@@ -96,7 +96,7 @@ function DocumentationInformationBlock({ infoHolder, setInfoHolder }: Documentat
             </div>
           ))
         ) : (
-          <p className='flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/50'>
+          <p className='flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/70'>
             Sem documentação definida para solicitação de projeto.
           </p>
         )}

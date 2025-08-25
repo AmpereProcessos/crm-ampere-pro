@@ -248,14 +248,14 @@ function ReviewInfo({
   }
   return (
     <div className='flex w-full grow flex-col bg-background px-2'>
-      <h1 className='w-full rounded-md  bg-green-700 px-1 py-2 text-center text-lg font-bold text-white'>REVISÃO DAS INFORMAÇÕES</h1>
-      <p className='my-2 w-full text-center text-sm leading-none tracking-tight text-primary/50'>
+      <h1 className='w-full rounded-md  bg-green-700 px-1 py-2 text-center text-lg font-bold text-primary-foreground'>REVISÃO DAS INFORMAÇÕES</h1>
+      <p className='my-2 w-full text-center text-sm leading-none tracking-tight text-primary/70'>
         Nessa etapa estão condensadas todas as informações preenchidas ao longo das etapas anteriores para que você possa{' '}
         <strong className='text-cyan-500'>revisá-las</strong> e então <strong className='text-cyan-500'>requisitar</strong> sua análise técnica.
       </p>
       <div className='flex w-full grow flex-col gap-2 overflow-y-auto overscroll-y-auto px-2 py-1 scrollbar-thin scrollbar-track-primary/10 scrollbar-thumb-primary/30'>
         {/*GENERAL INFORMATION */}
-        <h1 className='w-full rounded-md  bg-primary/70 p-1 text-center font-medium text-white'>INFORMAÇÕES GERAIS</h1>
+        <h1 className='w-full rounded-md  bg-primary/70 p-1 text-center font-medium text-primary-foreground'>INFORMAÇÕES GERAIS</h1>
         <div className='flex w-full flex-col items-center justify-center gap-2 lg:flex-row'>
           <TextInput
             label={'NOME DO CLIENTE'}
@@ -265,7 +265,7 @@ function ReviewInfo({
             handleChange={(value) => setInfoHolder((prev) => ({ ...prev, nome: value }))}
           />
         </div>
-        <p className='my-2 w-full text-center text-sm leading-none tracking-tight text-primary/50'>
+        <p className='my-2 w-full text-center text-sm leading-none tracking-tight text-primary/70'>
           Preencha abaixo a localização de <strong className='text-cyan-500'>instalação</strong> do sistema fotovoltaico.
         </p>
         <div className='flex w-full flex-col items-center gap-2 lg:flex-row'>
@@ -358,8 +358,8 @@ function ReviewInfo({
           </div>
         </div>
         {/*SYSTEM INFORMATION */}
-        <h1 className='w-full rounded-md  bg-primary/70 p-1 text-center font-medium text-white'>INFORMAÇÕES DOS EQUIPAMENTOS</h1>
-        <p className='my-2 w-full text-center text-sm leading-none tracking-tight text-primary/50'>
+        <h1 className='w-full rounded-md  bg-primary/70 p-1 text-center font-medium text-primary-foreground'>INFORMAÇÕES DOS EQUIPAMENTOS</h1>
+        <p className='my-2 w-full text-center text-sm leading-none tracking-tight text-primary/70'>
           Preencha abaixo os <strong className='text-cyan-500'>equipamentos</strong> a serem análisados, ou, escolha um dos kits ativos.
         </p>
         <div className='flex w-full flex-col gap-1'>
@@ -433,7 +433,7 @@ function ReviewInfo({
           </div>
           <div className='flex items-center justify-end'>
             <button
-              className='rounded bg-black p-1 px-4 text-sm font-medium text-white duration-300 ease-in-out hover:bg-primary/70'
+              className='rounded bg-black p-1 px-4 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-primary/70'
               onClick={() => addInverterToEquipments()}
             >
               ADICIONAR INVERSOR
@@ -511,7 +511,7 @@ function ReviewInfo({
           </div>
           <div className='flex items-center justify-end'>
             <button
-              className='rounded bg-black p-1 px-4 text-sm font-medium text-white duration-300 ease-in-out hover:bg-primary/70'
+              className='rounded bg-black p-1 px-4 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-primary/70'
               onClick={() => addModuleToEquipments()}
             >
               ADICIONAR MÓDULO
@@ -601,24 +601,24 @@ function ReviewInfo({
 
           <div className='flex items-center justify-end'>
             <button
-              className='rounded bg-black p-1 px-4 text-sm font-medium text-white duration-300 ease-in-out hover:bg-primary/70'
+              className='rounded bg-black p-1 px-4 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-primary/70'
               onClick={() => addPersonalizedEquipment()}
             >
               ADICIONAR PRODUTO PERSONALIZADO
             </button>
           </div>
         </div>
-        <p className='w-full text-center text-sm leading-none tracking-tight text-primary/50'>
+        <p className='w-full text-center text-sm leading-none tracking-tight text-primary/70'>
           Deseja utilizar os equipamentos de um kit específico ? Abra o menu e{' '}
           <strong className='text-cyan-500'>Escolha uma das opções de kit.</strong>
         </p>
         <div className='my-2 flex w-full items-center justify-center'>
           {showKits ? (
-            <button onClick={() => setShowKits(false)} className='rounded-md bg-red-500 px-2 py-1 text-sm font-bold text-white'>
+            <button onClick={() => setShowKits(false)} className='rounded-md bg-red-500 px-2 py-1 text-sm font-bold text-primary-foreground'>
               FECHAR MENU DE KITS
             </button>
           ) : (
-            <button onClick={() => setShowKits(true)} className='rounded-md bg-cyan-500 px-2 py-1 text-sm font-bold text-white'>
+            <button onClick={() => setShowKits(true)} className='rounded-md bg-cyan-500 px-2 py-1 text-sm font-bold text-primary-foreground'>
               MOSTRAR MENU KITS
             </button>
           )}
@@ -659,22 +659,22 @@ function ReviewInfo({
                 <div className='flex w-full items-center justify-end gap-2 pl-2'>
                   <div className='flex items-center gap-1'>
                     <FaIndustry size={15} />
-                    <p className='text-[0.6rem] font-light text-primary/50'>{equipment.fabricante}</p>
+                    <p className='text-[0.6rem] font-light text-primary/70'>{equipment.fabricante}</p>
                   </div>
                   <div className='flex items-center gap-1'>
                     <ImPower size={15} />
-                    <p className='text-[0.6rem] font-light text-primary/50'>{equipment.potencia} W</p>
+                    <p className='text-[0.6rem] font-light text-primary/70'>{equipment.potencia} W</p>
                   </div>
                 </div>
               </div>
             ))
           ) : (
-            <p className='w-full text-center text-sm font-medium tracking-tight text-primary/50'>Nenhum equipamento adicionado à lista.</p>
+            <p className='w-full text-center text-sm font-medium tracking-tight text-primary/70'>Nenhum equipamento adicionado à lista.</p>
           )}
         </div>
         {/*PA INFORMATION */}
-        <h1 className='w-full rounded-md  bg-primary/70 p-1 text-center font-medium text-white'>INFORMAÇÕES DO PADRÃO DE ENERGIA</h1>
-        <p className='my-2 w-full self-center text-center text-sm leading-none tracking-tight text-primary/50 lg:w-[60%]'>
+        <h1 className='w-full rounded-md  bg-primary/70 p-1 text-center font-medium text-primary-foreground'>INFORMAÇÕES DO PADRÃO DE ENERGIA</h1>
+        <p className='my-2 w-full self-center text-center text-sm leading-none tracking-tight text-primary/70 lg:w-[60%]'>
           Preencha abaixo as informações do padrão de energia instalação e clique em{' '}
           <strong className='font-bold text-green-500'>adicionar (+)</strong>. Se necessário, você pode adicionar mais de um padrão de energia à
           lista.
@@ -779,7 +779,7 @@ function ReviewInfo({
         <div className='mt-2 flex w-full items-center justify-end'>
           <button
             onClick={addEnergyPA}
-            className='rounded border border-green-500 p-1 font-bold text-green-500 duration-300 ease-in-out hover:bg-green-500 hover:text-white'
+            className='rounded border border-green-500 p-1 font-bold text-green-500 duration-300 ease-in-out hover:bg-green-500 hover:text-primary-foreground'
           >
             ADICIONAR ITEM
           </button>
@@ -792,7 +792,9 @@ function ReviewInfo({
                 <div className='flex w-full items-center justify-between gap-1'>
                   <div className='flex items-center gap-1'>
                     <h1 className='font-black leading-none tracking-tight'>PADRÃO {paInfo.ligacao}</h1>
-                    <h1 className='rounded-full bg-primary/80 px-2 py-1 text-[0.65rem] font-medium text-white lg:text-xs'>{paInfo.amperagem}</h1>
+                    <h1 className='rounded-full bg-primary/80 px-2 py-1 text-[0.65rem] font-medium text-primary-foreground lg:text-xs'>
+                      {paInfo.amperagem}
+                    </h1>
                   </div>
                   <button
                     onClick={() => removeEnergyPA(index)}
@@ -803,18 +805,18 @@ function ReviewInfo({
                 </div>
                 <div className='flex items-center gap-1'>
                   <TbCategory2 />
-                  <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/50 lg:text-xs'>{paInfo.tipo}</p>
+                  <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/70 lg:text-xs'>{paInfo.tipo}</p>
                 </div>
                 <div className='mt-4 flex w-full items-center justify-between gap-2'>
                   <div className='flex items-center gap-1'>
                     <AiOutlineArrowDown />
-                    <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/50 lg:text-xs'>
+                    <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/70 lg:text-xs'>
                       <strong className='text-cyan-500'>ENTRADA:</strong> {paInfo.tipoEntrada}
                     </p>
                   </div>
                   <div className='flex items-center gap-1'>
                     <AiOutlineArrowUp />
-                    <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/50 lg:text-xs'>
+                    <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/70 lg:text-xs'>
                       <strong className='text-cyan-500'>SAÍDA:</strong> {paInfo.tipoSaida}
                     </p>
                   </div>
@@ -822,13 +824,13 @@ function ReviewInfo({
                 <div className='mt-2 flex w-full items-center justify-between gap-2'>
                   <div className='flex items-center gap-1'>
                     <IoMdBarcode />
-                    <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/50 lg:text-xs'>
+                    <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/70 lg:text-xs'>
                       <strong className='text-cyan-500'>Nº DO MEDIDOR:</strong> {paInfo.codigoMedidor}
                     </p>
                   </div>
                   <div className='flex items-center gap-1'>
                     <TbBoxModel2 />
-                    <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/50 lg:text-xs'>
+                    <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/70 lg:text-xs'>
                       <strong className='text-cyan-500'>MODELO DA CAIXA:</strong>: {paInfo.modeloCaixaMedidor || 'NÃO DEFINIDO'}
                     </p>
                   </div>
@@ -837,7 +839,7 @@ function ReviewInfo({
                   {paInfo.codigoPosteDerivacao ? (
                     <div className='flex w-1/2 items-center gap-2 lg:w-fit'>
                       <IoMdBarcode />
-                      <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/50 lg:text-xs'>
+                      <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/70 lg:text-xs'>
                         <strong className='text-cyan-500'>Nº DO POSTE DE DERIVAÇÃO:</strong> {paInfo.codigoPosteDerivacao}
                       </p>
                     </div>
@@ -846,11 +848,13 @@ function ReviewInfo({
               </div>
             ))
           ) : (
-            <p className='w-full text-center text-sm font-medium tracking-tight text-primary/50'>Nenhum padrão de energia adicionado à lista.</p>
+            <p className='w-full text-center text-sm font-medium tracking-tight text-primary/70'>Nenhum padrão de energia adicionado à lista.</p>
           )}
         </div>
         {/*TRANSFORMER INFORMATION */}
-        <h1 className='w-full rounded-md  bg-primary/70 p-1 text-center font-medium text-white'>INFORMAÇÕES DO TRANSFORMADOR DE ENERGIA</h1>
+        <h1 className='w-full rounded-md  bg-primary/70 p-1 text-center font-medium text-primary-foreground'>
+          INFORMAÇÕES DO TRANSFORMADOR DE ENERGIA
+        </h1>
         <div className='w-full self-center lg:w-1/3'>
           <CheckboxInput
             labelFalse='TRANSFORMADOR E PADRÃO ACOPLADOS'
@@ -880,7 +884,7 @@ function ReviewInfo({
           </div>
         </div>
         {/*STRUCTURE INFORMATION */}
-        <h1 className='w-full rounded-md  bg-primary/70 p-1 text-center font-medium text-white'>INFORMAÇÕES DA ESTRUTURA DE MONTAGEM</h1>
+        <h1 className='w-full rounded-md  bg-primary/70 p-1 text-center font-medium text-primary-foreground'>INFORMAÇÕES DA ESTRUTURA DE MONTAGEM</h1>
         <div className='flex w-full flex-col items-center gap-2 lg:flex-row'>
           <div className='w-full lg:w-1/2'>
             <SelectInput
@@ -1048,7 +1052,7 @@ function ReviewInfo({
           </div>
         </div>
         {/*INSTALLATION INFORMATION */}
-        <h1 className='w-full rounded-md  bg-primary/70 p-1 text-center font-medium text-white'>INFORMAÇÕES SOBRE A INSTALAÇÃO </h1>
+        <h1 className='w-full rounded-md  bg-primary/70 p-1 text-center font-medium text-primary-foreground'>INFORMAÇÕES SOBRE A INSTALAÇÃO </h1>
         <div className='flex w-full flex-col gap-2 lg:flex-row'>
           <div className='w-full lg:w-1/3'>
             <TextInput
@@ -1120,7 +1124,9 @@ function ReviewInfo({
           </div>
         </div>
         <div className='flex w-full flex-col'>
-          <h1 className='w-full rounded-tl-sm rounded-tr-sm bg-primary/50 p-1 text-center font-bold text-white'>COMENTÁRIOS COMPLEMENTARES</h1>
+          <h1 className='w-full rounded-tl-sm rounded-tr-sm bg-primary/50 p-1 text-center font-bold text-primary-foreground'>
+            COMENTÁRIOS COMPLEMENTARES
+          </h1>
           <textarea
             placeholder='Preencha comentários relevantes para execução da análise.'
             value={infoHolder.comentarios || ''}
@@ -1135,11 +1141,11 @@ function ReviewInfo({
         </div>
       </div>
       <div className='mt-2 flex w-full flex-wrap justify-between  gap-2'>
-        <button onClick={() => {}} className='rounded p-2 font-bold text-primary/50 duration-300 hover:scale-105'>
+        <button onClick={() => {}} className='rounded p-2 font-bold text-primary/70 duration-300 hover:scale-105'>
           Voltar
         </button>
         <button
-          className='rounded p-2 font-bold hover:bg-black hover:text-white'
+          className='rounded p-2 font-bold hover:bg-black hover:text-primary-foreground'
           onClick={() => handleRequestAnalysis({ info: infoHolder, files: files })}
         >
           SOLICITAR ANÁLISE

@@ -15,7 +15,7 @@ function BulkOperationPricingMethods({ pricingMethods }: BulkOperationPricingMet
     <AnimatePresence>
       <div className='flex w-full flex-col'>
         <div className='flex w-full items-center justify-between gap-2'>
-          <h1 className='text-xs font-medium tracking-tight text-primary/50'>METODOLOGIAS DE PRECIFICAÇÃO (COMO USAR)</h1>
+          <h1 className='text-xs font-medium tracking-tight text-primary/70'>METODOLOGIAS DE PRECIFICAÇÃO (COMO USAR)</h1>
           <button
             data-block-open={blockIsOpen ? 'true' : 'false'}
             onClick={() => setBlockIsOpen((prev) => !prev)}
@@ -33,11 +33,11 @@ function BulkOperationPricingMethods({ pricingMethods }: BulkOperationPricingMet
             exit='exit'
             className='flex w-full flex-col gap-2 p-2'
           >
-            <p className='text-sm tracking-tight text-primary/50'>
+            <p className='text-sm tracking-tight text-primary/70'>
               A coluna <strong className='text-[#E25E3E]'>METODOLOGIA DE PRECIFICAÇÃO</strong> será referência para a metodologia utilizar para
               estabelecer os preços de uma proposta comercial num eventual uso dos kits.
             </p>
-            <p className='text-sm tracking-tight text-primary/50'>
+            <p className='text-sm tracking-tight text-primary/70'>
               Para facilitar, abaixo estão listas as metodologias de precificação disponíveis. Clique em uma delas para copiar o texto a ser
               preenchido na coluna.
             </p>
@@ -54,7 +54,7 @@ function BulkOperationPricingMethods({ pricingMethods }: BulkOperationPricingMet
                   </button>
                 ))
               ) : (
-                <p className='flex w-full grow animate-pulse items-center justify-center py-2 text-center text-sm font-medium italic tracking-tight text-primary/50'>
+                <p className='flex w-full grow animate-pulse items-center justify-center py-2 text-center text-sm font-medium italic tracking-tight text-primary/70'>
                   Carregando metodologias...
                 </p>
               )}

@@ -91,7 +91,7 @@ function AddPricingItem({ pricing, setPricing, proposal, closeModal }: AddPricin
       <div className='fixed left-[50%] top-[50%] z-100 h-[80%] w-[90%] translate-x-[-50%] translate-y-[-50%] rounded-md bg-background p-[10px]  lg:w-[60%]'>
         <div className='flex h-full flex-col'>
           <div className='flex flex-wrap items-center justify-between border-b border-primary/30 px-2 pb-2 text-lg'>
-            <h3 className='text-xl font-bold text-primary dark:text-white '>ADIÇÃO DE PREÇO</h3>
+            <h3 className='text-xl font-bold text-primary  '>ADIÇÃO DE PREÇO</h3>
             <button
               onClick={() => closeModal()}
               type='button'
@@ -111,14 +111,14 @@ function AddPricingItem({ pricing, setPricing, proposal, closeModal }: AddPricin
               />
             </div>
             <div className='flex w-full flex-col gap-1'>
-              <h1 className='w-full text-center text-[0.65rem] font-bold leading-none tracking-tight text-primary/50 lg:text-xs'>TIPO DE CUSTO</h1>
+              <h1 className='w-full text-center text-[0.65rem] font-bold leading-none tracking-tight text-primary/70 lg:text-xs'>TIPO DE CUSTO</h1>
               <div className='flex w-full items-center justify-center gap-4'>
                 <button
                   onClick={() => {
                     setItemHolder((prev) => ({ ...prev, formulaArr: null }));
                     setType('DEFINED COST');
                   }}
-                  className={`rounded-lg ${type == 'DEFINED COST' ? 'bg-blue-500 text-white' : 'bg-transparent text-blue-500'} border border-blue-500 px-2 py-1 text-xs font-bold`}
+                  className={`rounded-lg ${type == 'DEFINED COST' ? 'bg-blue-500 text-primary-foreground' : 'bg-transparent text-blue-500'} border border-blue-500 px-2 py-1 text-xs font-bold`}
                 >
                   CUSTO DEFINIDO
                 </button>
@@ -127,7 +127,7 @@ function AddPricingItem({ pricing, setPricing, proposal, closeModal }: AddPricin
                     setItemHolder((prev) => ({ ...prev, custoFinal: 0, custoCalculado: 0, valorCalculado: 0, valorFinal: 0 }));
                     setType('CALCULATE COST');
                   }}
-                  className={`rounded-lg ${type == 'CALCULATE COST' ? 'bg-cyan-500 text-white' : 'bg-transparent text-cyan-500'} border border-cyan-500 px-2 py-1 text-xs font-bold`}
+                  className={`rounded-lg ${type == 'CALCULATE COST' ? 'bg-cyan-500 text-primary-foreground' : 'bg-transparent text-cyan-500'} border border-cyan-500 px-2 py-1 text-xs font-bold`}
                 >
                   CUSTO CALCULADO
                 </button>
@@ -171,7 +171,7 @@ function AddPricingItem({ pricing, setPricing, proposal, closeModal }: AddPricin
                     onClick={() => {
                       if (numberHolder) addToUnitPricingItems(numberHolder?.toString());
                     }}
-                    className='min-h-[46px] rounded-md bg-green-500 p-2 text-sm text-white hover:bg-green-600'
+                    className='min-h-[46px] rounded-md bg-green-500 p-2 text-sm text-primary-foreground hover:bg-green-600'
                   >
                     ADD
                   </button>
@@ -185,7 +185,7 @@ function AddPricingItem({ pricing, setPricing, proposal, closeModal }: AddPricin
                       <button
                         key={index}
                         onClick={() => addToUnitPricingItems(`[${va.value}]`)}
-                        className='grow rounded-sm border border-primary/70 p-1 text-xs font-medium text-primary/70 duration-300 ease-in-out hover:bg-primary/70 hover:text-white'
+                        className='grow rounded-sm border border-primary/70 p-1 text-xs font-medium text-primary/70 duration-300 ease-in-out hover:bg-primary/70 hover:text-primary-foreground'
                       >
                         {va.label}
                       </button>
@@ -199,7 +199,7 @@ function AddPricingItem({ pricing, setPricing, proposal, closeModal }: AddPricin
                       <button
                         key={index}
                         onClick={() => addToUnitPricingItems(`[${va.value}]`)}
-                        className='grow rounded-sm border border-primary/70 p-1 text-xs font-medium text-primary/70 duration-300 ease-in-out hover:bg-primary/70 hover:text-white'
+                        className='grow rounded-sm border border-primary/70 p-1 text-xs font-medium text-primary/70 duration-300 ease-in-out hover:bg-primary/70 hover:text-primary-foreground'
                       >
                         {va.label}
                       </button>
@@ -213,7 +213,7 @@ function AddPricingItem({ pricing, setPricing, proposal, closeModal }: AddPricin
                       <button
                         key={index}
                         onClick={() => addToUnitPricingItems(`[${va.value}]`)}
-                        className='grow rounded-sm border border-primary/70 p-1 text-xs font-medium text-primary/70 duration-300 ease-in-out hover:bg-primary/70 hover:text-white'
+                        className='grow rounded-sm border border-primary/70 p-1 text-xs font-medium text-primary/70 duration-300 ease-in-out hover:bg-primary/70 hover:text-primary-foreground'
                       >
                         {va.label}
                       </button>
@@ -242,7 +242,7 @@ function AddPricingItem({ pricing, setPricing, proposal, closeModal }: AddPricin
                   <p className='w-[50px] p-1 text-center text-xl font-black'>=</p>
                   <div className='flex min-h-[52px] w-full items-center justify-center gap-1 rounded-md border border-blue-800 p-3'>
                     {itemHolder.formulaArr?.map((y, index) => (
-                      <p key={index} className={`text-xs ${y.includes('[') ? 'rounded-sm bg-primary/70  p-1 text-white' : ''}`}>
+                      <p key={index} className={`text-xs ${y.includes('[') ? 'rounded-sm bg-primary/70  p-1 text-primary-foreground' : ''}`}>
                         {formatFormulaItem(y)}
                       </p>
                     ))}
@@ -291,7 +291,7 @@ function AddPricingItem({ pricing, setPricing, proposal, closeModal }: AddPricin
           <div className='flex w-full items-center justify-end py-2'>
             <button
               onClick={() => addNewPriceItem(itemHolder)}
-              className='rounded bg-primary/90 px-4 py-2 text-xs font-medium text-white shadow-sm disabled:bg-primary/50 disabled:text-white enabled:hover:bg-primary/80 enabled:hover:text-white'
+              className='rounded bg-primary/90 px-4 py-2 text-xs font-medium text-primary-foreground shadow-sm disabled:bg-primary/50 disabled:text-primary-foreground enabled:hover:bg-primary/80 enabled:hover:text-primary-foreground'
             >
               EFETIVAR
             </button>

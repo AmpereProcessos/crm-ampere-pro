@@ -61,7 +61,7 @@ function NewOpportunityInteractionMenu({ session, opportunity, closeMenu }: NewO
               }
               type='button'
               className={cn('flex items-center gap-1 rounded-sm border border-black px-2 py-1 text-primary', {
-                'bg-black text-white': interactionType.value === (newInteractionHolder as TOpportunityInteraction).tipoInteracao,
+                'bg-black text-primary-foreground': interactionType.value === (newInteractionHolder as TOpportunityInteraction).tipoInteracao,
               })}
             >
               {renderIcon(interactionType.icon)}
@@ -71,7 +71,7 @@ function NewOpportunityInteractionMenu({ session, opportunity, closeMenu }: NewO
         </div>
       </div>
       <div className='flex w-full flex-col rounded-md border border-primary/30 p-2 shadow-md'>
-        <h1 className='text-sm font-medium leading-none tracking-tight text-primary/50'>CONTEÚDO DA INTERAÇÃO</h1>
+        <h1 className='text-sm font-medium leading-none tracking-tight text-primary/70'>CONTEÚDO DA INTERAÇÃO</h1>
         <input
           value={newInteractionHolder.conteudo}
           onChange={(e) => setNewInteractionHolder((prev) => ({ ...prev, conteudo: e.target.value }))}
@@ -84,7 +84,7 @@ function NewOpportunityInteractionMenu({ session, opportunity, closeMenu }: NewO
         <button
           type='button'
           onClick={() => closeMenu()}
-          className='whitespace-nowrap rounded-sm bg-primary/50 px-4 py-2 text-sm font-medium text-white shadow-sm disabled:bg-primary/50 disabled:text-white enabled:hover:bg-primary/80 enabled:hover:text-white'
+          className='whitespace-nowrap rounded-sm bg-primary/50 px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm disabled:bg-primary/50 disabled:text-primary-foreground enabled:hover:bg-primary/80 enabled:hover:text-primary-foreground'
         >
           FECHAR
         </button>
@@ -93,7 +93,7 @@ function NewOpportunityInteractionMenu({ session, opportunity, closeMenu }: NewO
           disabled={isPending}
           // @ts-ignore
           onClick={() => handleCreateOpportunityHistory({ info: newInteractionHolder })}
-          className='whitespace-nowrap rounded-sm bg-primary/90 px-4 py-2 text-sm font-medium text-white shadow-sm disabled:bg-primary/50 disabled:text-white enabled:hover:bg-primary/80 enabled:hover:text-white'
+          className='whitespace-nowrap rounded-sm bg-primary/90 px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm disabled:bg-primary/50 disabled:text-primary-foreground enabled:hover:bg-primary/80 enabled:hover:text-primary-foreground'
         >
           CRIAR INTERAÇÃO
         </button>

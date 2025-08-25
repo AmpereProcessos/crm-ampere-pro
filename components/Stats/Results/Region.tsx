@@ -13,7 +13,7 @@ function RegionResults({ after, before, responsibles, partners, projectTypes }: 
 
   return (
     <div className='flex w-full flex-col'>
-      <h1 className='mt-4 rounded-md bg-[#15599a] text-center text-xl font-black text-white'>RESULTADOS POR REGIÃO</h1>
+      <h1 className='mt-4 rounded-md bg-[#15599a] text-center text-xl font-black text-primary-foreground'>RESULTADOS POR REGIÃO</h1>
       <div className='flex w-full flex-col gap-2 rounded-xl border border-primary/30 bg-background p-6 shadow-md'>
         <div className='hidden w-full items-center gap-2 lg:flex'>
           <div className='flex w-1/5 items-center justify-center'>
@@ -38,10 +38,10 @@ function RegionResults({ after, before, responsibles, partners, projectTypes }: 
               {/** WEB */}
               <div className='hidden w-full items-center gap-2 rounded-sm border border-primary/30 p-2 lg:flex'>
                 <div className='flex w-1/5 items-center justify-center'>
-                  <h1 className='text-sm font-black text-primary/50'>{stat.CIDADE}</h1>
+                  <h1 className='text-sm font-black text-primary/70'>{stat.CIDADE}</h1>
                 </div>
                 <div className='flex w-1/5 flex-col items-center justify-center'>
-                  <h1 className='text-sm font-black text-primary/50'>
+                  <h1 className='text-sm font-black text-primary/70'>
                     {stat['OPORTUNIDADES CRIADAS'].INBOUND + stat['OPORTUNIDADES CRIADAS'].OUTBOUND}
                   </h1>
                   <div className='flex w-full items-center justify-center gap-2'>
@@ -56,7 +56,7 @@ function RegionResults({ after, before, responsibles, partners, projectTypes }: 
                   </div>
                 </div>
                 <div className='flex w-1/5 flex-col items-center justify-center'>
-                  <h1 className='text-sm font-black text-primary/50'>
+                  <h1 className='text-sm font-black text-primary/70'>
                     {stat['OPORTUNIDADES GANHAS'].INBOUND + stat['OPORTUNIDADES GANHAS'].OUTBOUND}
                   </h1>
                   <div className='flex w-full items-center justify-center gap-2'>
@@ -71,7 +71,7 @@ function RegionResults({ after, before, responsibles, partners, projectTypes }: 
                   </div>
                 </div>
                 <div className='flex w-1/5 flex-col items-center justify-center'>
-                  <h1 className='text-sm font-black text-primary/50'>
+                  <h1 className='text-sm font-black text-primary/70'>
                     {stat['OPORTUNIDADES PERDIDAS'].INBOUND + stat['OPORTUNIDADES PERDIDAS'].OUTBOUND}
                   </h1>
                   <div className='flex w-full items-center justify-center gap-2'>
@@ -86,7 +86,7 @@ function RegionResults({ after, before, responsibles, partners, projectTypes }: 
                   </div>
                 </div>
                 <div className='flex w-1/5 flex-col items-center justify-center'>
-                  <h1 className='text-sm font-black text-primary/50'>
+                  <h1 className='text-sm font-black text-primary/70'>
                     {formatToMoney(stat['VALOR VENDIDO'].INBOUND + stat['VALOR VENDIDO'].OUTBOUND)}
                   </h1>
                   <div className='flex w-full items-center justify-center gap-2'>
@@ -109,7 +109,7 @@ function RegionResults({ after, before, responsibles, partners, projectTypes }: 
                 <div className='flex w-full flex-wrap items-center justify-center gap-2'>
                   <div className='flex w-fit flex-col items-center justify-center rounded-sm border border-primary/30 p-2'>
                     <h1 className='text-xs font-black'>OPORTUNIDADES CRIADAS</h1>
-                    <h1 className='text-[0.65rem] font-black text-primary/50'>
+                    <h1 className='text-[0.65rem] font-black text-primary/70'>
                       {stat['OPORTUNIDADES CRIADAS'].INBOUND + stat['OPORTUNIDADES CRIADAS'].OUTBOUND}
                     </h1>
                     <div className='flex w-full items-center justify-center gap-2'>
@@ -125,7 +125,7 @@ function RegionResults({ after, before, responsibles, partners, projectTypes }: 
                   </div>
                   <div className='flex w-fit flex-col items-center justify-center rounded-sm border border-primary/30 p-2'>
                     <h1 className='text-xs font-black'>OPORTUNIDADES GANHAS</h1>
-                    <h1 className='text-[0.65rem] font-black text-primary/50'>
+                    <h1 className='text-[0.65rem] font-black text-primary/70'>
                       {stat['OPORTUNIDADES GANHAS'].INBOUND + stat['OPORTUNIDADES GANHAS'].OUTBOUND}
                     </h1>
                     <div className='flex w-full items-center justify-center gap-2'>
@@ -141,7 +141,7 @@ function RegionResults({ after, before, responsibles, partners, projectTypes }: 
                   </div>
                   <div className='flex w-fit flex-col items-center justify-center rounded-sm border border-primary/30 p-2'>
                     <h1 className='text-xs font-black'>OPORTUNIDADES PERDIDAS</h1>
-                    <h1 className='text-[0.65rem] font-black text-primary/50'>
+                    <h1 className='text-[0.65rem] font-black text-primary/70'>
                       {stat['OPORTUNIDADES PERDIDAS'].INBOUND + stat['OPORTUNIDADES PERDIDAS'].OUTBOUND}
                     </h1>
                     <div className='flex w-full items-center justify-center gap-2'>
@@ -157,7 +157,7 @@ function RegionResults({ after, before, responsibles, partners, projectTypes }: 
                   </div>
                   <div className='flex w-fit flex-col items-center justify-center rounded-sm border border-primary/30 p-2'>
                     <h1 className='text-xs font-black'>VALOR VENDIDO</h1>
-                    <h1 className='text-[0.65rem] font-black text-primary/50'>
+                    <h1 className='text-[0.65rem] font-black text-primary/70'>
                       {formatToMoney(stat['VALOR VENDIDO'].INBOUND + stat['VALOR VENDIDO'].OUTBOUND)}
                     </h1>
                     <div className='flex w-full items-center justify-center gap-2'>

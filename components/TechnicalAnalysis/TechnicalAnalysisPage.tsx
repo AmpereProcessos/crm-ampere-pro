@@ -68,7 +68,7 @@ function TechnicalAnalysisPage({ session }: TechnicalAnalysisPageParams) {
             {userHasOperationalResultsViewPermission ? (
               <button
                 onClick={() => setStatsBlockIsOpen(true)}
-                className='flex items-center gap-1 font-bold tracking-tight text-primary/50 duration-300 ease-in-out hover:text-cyan-500'
+                className='flex items-center gap-1 font-bold tracking-tight text-primary/70 duration-300 ease-in-out hover:text-cyan-500'
               >
                 <p className='text-sm'>ACOMPANHAMENTO DE RESULTADOS</p>
                 <AiOutlineTeam />

@@ -42,7 +42,7 @@ function Notifications({ sidebarExtended, session, closeModal, notifications }: 
               notifications.map((notification, index) => <NotificationCard key={notification._id} notification={notification} session={session} />)
             ) : (
               <div className='flex grow items-center justify-center'>
-                <h1 className='text-sm italic text-primary/50'>Sem notificações encontradas.</h1>
+                <h1 className='text-sm italic text-primary/70'>Sem notificações encontradas.</h1>
               </div>
             )
           ) : null}

@@ -219,7 +219,7 @@ function ProductsAndServices({ editable, requestInfo, setRequestInfo, showAction
             onClick={() => {
               goToPreviousStage();
             }}
-            className='rounded p-2 font-bold text-primary/50 duration-300 hover:scale-105'
+            className='rounded p-2 font-bold text-primary/70 duration-300 hover:scale-105'
           >
             Voltar
           </button>
@@ -228,7 +228,7 @@ function ProductsAndServices({ editable, requestInfo, setRequestInfo, showAction
             onClick={() => {
               handleValidateAndProcceed();
             }}
-            className='rounded p-2 font-bold hover:bg-black hover:text-white'
+            className='rounded p-2 font-bold hover:bg-black hover:text-primary-foreground'
           >
             Prosseguir
           </button>
@@ -300,7 +300,7 @@ function NewProductMenu({ addProduct }: NewProductMenuProps) {
       exit='exit'
       className='flex w-full flex-col gap-2 rounded-sm border border-green-600 bg-background shadow-md'
     >
-      <h1 className='rounded-tl rounded-tr bg-green-600 p-1 text-center text-xs text-white'>NOVO PRODUTO</h1>
+      <h1 className='rounded-tl rounded-tr bg-green-600 p-1 text-center text-xs text-primary-foreground'>NOVO PRODUTO</h1>
       <div className='flex w-full flex-col gap-2 p-3'>
         <div className='flex w-full flex-col gap-2'>
           <div className='flex w-full flex-col items-center gap-2 lg:flex-row'>
@@ -571,17 +571,17 @@ function ProductItem({
             <div className='flex grow items-center gap-2'>
               <div className='flex items-center gap-1'>
                 <FaIndustry size={12} />
-                <p className='text-[0.6rem] font-light text-primary/50 lg:text-xs'>{product.fabricante}</p>
+                <p className='text-[0.6rem] font-light text-primary/70 lg:text-xs'>{product.fabricante}</p>
               </div>
               {product.potencia ? (
                 <div className='flex items-center gap-1'>
                   <FaBolt size={12} />
-                  <p className='text-[0.6rem] font-light text-primary/50 lg:text-xs'>{product.potencia} W</p>
+                  <p className='text-[0.6rem] font-light text-primary/70 lg:text-xs'>{product.potencia} W</p>
                 </div>
               ) : null}
               <div className='flex items-center gap-1'>
                 <AiOutlineSafety size={12} />
-                <p className='text-[0.6rem] font-light text-primary/50 lg:text-xs'>
+                <p className='text-[0.6rem] font-light text-primary/70 lg:text-xs'>
                   {product.garantia} {product.garantia && product.garantia > 0 ? 'ANOS' : 'ANO'}
                 </p>
               </div>
@@ -592,7 +592,7 @@ function ProductItem({
               <button
                 type='button'
                 onClick={() => setEditMenuIsOpen((prev) => !prev)}
-                className='flex items-center gap-1 rounded-lg bg-orange-600 px-2 py-1 text-[0.6rem] text-white hover:bg-orange-500'
+                className='flex items-center gap-1 rounded-lg bg-orange-600 px-2 py-1 text-[0.6rem] text-primary-foreground hover:bg-orange-500'
               >
                 <MdEdit width={10} height={10} />
                 <p>EDITAR</p>
@@ -600,7 +600,7 @@ function ProductItem({
               <button
                 type='button'
                 onClick={() => handleRemove()}
-                className='flex items-center gap-1 rounded-lg bg-red-600 px-2 py-1 text-[0.6rem] text-white hover:bg-red-500'
+                className='flex items-center gap-1 rounded-lg bg-red-600 px-2 py-1 text-[0.6rem] text-primary-foreground hover:bg-red-500'
               >
                 <MdDelete width={10} height={10} />
                 <p>REMOVER</p>
@@ -731,7 +731,7 @@ function ProductItem({
                 onClick={() => {
                   setEditMenuIsOpen(false);
                 }}
-                className='rounded bg-red-800 p-1 px-4 text-[0.6rem] font-medium text-white duration-300 ease-in-out hover:bg-red-700'
+                className='rounded bg-red-800 p-1 px-4 text-[0.6rem] font-medium text-primary-foreground duration-300 ease-in-out hover:bg-red-700'
               >
                 FECHAR
               </button>
@@ -741,7 +741,7 @@ function ProductItem({
                   handleUpdate(itemHolder);
                   setEditMenuIsOpen(false);
                 }}
-                className='rounded bg-blue-800 p-1 px-4 text-[0.6rem] font-medium text-white duration-300 ease-in-out hover:bg-blue-700'
+                className='rounded bg-blue-800 p-1 px-4 text-[0.6rem] font-medium text-primary-foreground duration-300 ease-in-out hover:bg-blue-700'
               >
                 ATUALIZAR ITEM
               </button>
@@ -780,7 +780,7 @@ function NewServiceMenu({ addSaleService }: NewServiceMenuProps) {
       exit='exit'
       className='flex w-full flex-col gap-2 rounded-sm border border-green-600 bg-background shadow-md'
     >
-      <h1 className='rounded-tl rounded-tr bg-green-600 p-1 text-center text-xs text-white'>NOVO SERVIÇO</h1>
+      <h1 className='rounded-tl rounded-tr bg-green-600 p-1 text-center text-xs text-primary-foreground'>NOVO SERVIÇO</h1>
       <div className='flex w-full flex-col gap-2 p-3'>
         <div className='flex w-full flex-col items-center gap-2 lg:flex-row'>
           <div className='w-full lg:w-3/4'>
@@ -844,7 +844,7 @@ function ServiceItem({
             <div className='flex grow items-center gap-2'>
               <div className='flex items-center gap-1'>
                 <AiOutlineSafety size={12} />
-                <p className='text-[0.6rem] font-light text-primary/50 lg:text-xs'>
+                <p className='text-[0.6rem] font-light text-primary/70 lg:text-xs'>
                   {service.garantia} {service.garantia && service.garantia > 0 ? 'ANOS' : 'ANO'}
                 </p>
               </div>
@@ -860,7 +860,7 @@ function ServiceItem({
               <button
                 type='button'
                 onClick={() => setEditMenuIsOpen((prev) => !prev)}
-                className='flex items-center gap-1 rounded-lg bg-orange-600 px-2 py-1 text-[0.6rem] text-white hover:bg-orange-500'
+                className='flex items-center gap-1 rounded-lg bg-orange-600 px-2 py-1 text-[0.6rem] text-primary-foreground hover:bg-orange-500'
               >
                 <MdEdit width={10} height={10} />
                 <p>EDITAR</p>
@@ -868,7 +868,7 @@ function ServiceItem({
               <button
                 type='button'
                 onClick={() => handleRemove()}
-                className='flex items-center gap-1 rounded-lg bg-red-600 px-2 py-1 text-[0.6rem] text-white hover:bg-red-500'
+                className='flex items-center gap-1 rounded-lg bg-red-600 px-2 py-1 text-[0.6rem] text-primary-foreground hover:bg-red-500'
               >
                 <MdDelete width={10} height={10} />
                 <p>REMOVER</p>
@@ -921,7 +921,7 @@ function ServiceItem({
                 onClick={() => {
                   setEditMenuIsOpen(false);
                 }}
-                className='rounded bg-red-800 p-1 px-4 text-[0.6rem] font-medium text-white duration-300 ease-in-out hover:bg-red-700'
+                className='rounded bg-red-800 p-1 px-4 text-[0.6rem] font-medium text-primary-foreground duration-300 ease-in-out hover:bg-red-700'
               >
                 FECHAR
               </button>
@@ -931,7 +931,7 @@ function ServiceItem({
                   handleUpdate(itemHolder);
                   setEditMenuIsOpen(false);
                 }}
-                className='rounded bg-blue-800 p-1 px-4 text-[0.6rem] font-medium text-white duration-300 ease-in-out hover:bg-blue-700'
+                className='rounded bg-blue-800 p-1 px-4 text-[0.6rem] font-medium text-primary-foreground duration-300 ease-in-out hover:bg-blue-700'
               >
                 ATUALIZAR ITEM
               </button>
@@ -1111,7 +1111,7 @@ function OemItem({
         <button
           type='button'
           onClick={() => handleRemove()}
-          className='flex items-center gap-1 rounded-lg bg-red-600 px-2 py-1 text-[0.6rem] text-white hover:bg-red-500'
+          className='flex items-center gap-1 rounded-lg bg-red-600 px-2 py-1 text-[0.6rem] text-primary-foreground hover:bg-red-500'
         >
           <MdDelete width={10} height={10} />
           <p>REMOVER</p>

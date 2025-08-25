@@ -105,7 +105,7 @@ function ProposalKit({ kit, proposal, opportunity, handleClick, userHasPricingVi
               <p className='text-[0.65rem] font-light lg:text-[0.8rem]'>{kit.topologia}</p>
             </div>
           </div>
-          <h1 className='my-2 mb-0 text-xs font-bold leading-none tracking-tight text-primary/50 lg:text-sm'>PRODUTOS</h1>
+          <h1 className='my-2 mb-0 text-xs font-bold leading-none tracking-tight text-primary/70 lg:text-sm'>PRODUTOS</h1>
           {kit.produtos.map((product, index) => (
             <div key={index} className='mt-1 flex w-full flex-col rounded-md border border-primary/30 p-2'>
               <div className='flex w-full flex-col items-start justify-between gap-2 lg:flex-row lg:items-center'>
@@ -120,22 +120,22 @@ function ProposalKit({ kit, proposal, opportunity, handleClick, userHasPricingVi
                 <div className='flex w-full grow items-center justify-end gap-2 pl-2 lg:w-fit'>
                   <div className='flex items-center gap-1'>
                     <FaIndustry size={12} />
-                    <p className='text-[0.6rem] font-light text-primary/50'>{product.fabricante}</p>
+                    <p className='text-[0.6rem] font-light text-primary/70'>{product.fabricante}</p>
                   </div>
                   <div className='flex items-center gap-1'>
                     <ImPower size={12} />
-                    <p className='text-[0.6rem] font-light text-primary/50'>{product.potencia} W</p>
+                    <p className='text-[0.6rem] font-light text-primary/70'>{product.potencia} W</p>
                   </div>
                   <div className='flex items-center gap-1'>
                     <AiOutlineSafety size={12} />
-                    <p className='text-[0.6rem] font-light text-primary/50'>{product.garantia} ANOS</p>
+                    <p className='text-[0.6rem] font-light text-primary/70'>{product.garantia} ANOS</p>
                   </div>
                 </div>
               </div>
             </div>
             // <ProductItem product={module} index={index} removeProductFromKit={(index) => console.log()} showRemoveButton={false} />
           ))}
-          <h1 className='my-2 mb-0 text-xs font-bold leading-none tracking-tight text-primary/50 lg:text-sm'>SERVIÇOS</h1>
+          <h1 className='my-2 mb-0 text-xs font-bold leading-none tracking-tight text-primary/70 lg:text-sm'>SERVIÇOS</h1>
           <div className='flex w-full flex-wrap items-center gap-2'>
             {kit.servicos.map((service, index) => (
               <div key={index} className='mt-1 flex flex-col rounded-md border border-primary/30 p-2'>
@@ -154,7 +154,7 @@ function ProposalKit({ kit, proposal, opportunity, handleClick, userHasPricingVi
         <div className='mt-2 flex w-full items-center justify-between'>
           <div className='flex items-center gap-2'>
             {kit.dataValidade ? (
-              <div className={`flex items-center gap-2 text-primary/50`}>
+              <div className={`flex items-center gap-2 text-primary/70`}>
                 <BsCalendar3EventFill />
                 <p className='text-[0.6rem] font-medium'>
                   Valido até: <strong className='text-orange-500'>{formatDateAsLocale(kit.dataValidade)}</strong>{' '}
@@ -164,13 +164,13 @@ function ProposalKit({ kit, proposal, opportunity, handleClick, userHasPricingVi
           </div>
 
           <div className='flex items-center gap-2'>
-            <div className={`hidden items-center gap-2 text-primary/50 lg:flex`}>
+            <div className={`hidden items-center gap-2 text-primary/70 lg:flex`}>
               <BsCalendarPlusFill />
               <p className='text-[0.6rem] font-medium'>{formatDateAsLocale(kit.dataInsercao)}</p>
             </div>
             <button
               onClick={() => handleClick({ ...kit, valorFinal: proposalTotalPreview })}
-              className='rounded-full border border-cyan-500 p-1 text-cyan-500 duration-300 ease-in-out hover:bg-cyan-500 hover:text-white'
+              className='rounded-full border border-cyan-500 p-1 text-cyan-500 duration-300 ease-in-out hover:bg-cyan-500 hover:text-primary-foreground'
             >
               <IoMdAdd />
             </button>

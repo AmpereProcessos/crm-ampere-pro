@@ -49,7 +49,7 @@ function OpportunityLossBlock({ opportunityId, opportunityIsLost, opportunityLos
   function ReactivationBlock({ lossDate }: ReactivationBlockProps) {
     return (
       <div className='flex items-center gap-2'>
-        <div className='flex items-center gap-4 rounded-lg bg-red-500 px-4 py-1 text-white'>
+        <div className='flex items-center gap-4 rounded-lg bg-red-500 px-4 py-1 text-primary-foreground'>
           <h1 className='text-center font-Raleway text-xs font-bold tracking-tight'>PERDIDO</h1>
           <div className='flex items-center gap-1'>
             <BsCalendarX size={12} />
@@ -60,7 +60,7 @@ function OpportunityLossBlock({ opportunityId, opportunityIsLost, opportunityLos
           type='button'
           disabled={isPending}
           onClick={() => handleReactiveProject()}
-          className='flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-1 text-white duration-300 ease-in-out hover:bg-blue-800'
+          className='flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-1 text-primary-foreground duration-300 ease-in-out hover:bg-blue-800'
         >
           <h1 className='text-center font-Raleway text-xs font-bold tracking-tight'>RESETAR</h1>
           <RxReload size={12} />
@@ -74,7 +74,7 @@ function OpportunityLossBlock({ opportunityId, opportunityIsLost, opportunityLos
         <button
           type='button'
           onClick={() => setMenuIsOpen(true)}
-          className='flex min-w-fit items-center justify-center gap-2 rounded-sm bg-red-500 px-2 py-0.5 text-[0.6rem] font-medium text-white duration-300 hover:bg-red-700'
+          className='flex min-w-fit items-center justify-center gap-2 rounded-sm bg-red-500 px-2 py-0.5 text-[0.6rem] font-medium text-primary-foreground duration-300 hover:bg-red-700'
         >
           PERDER PROJETO
         </button>
@@ -130,7 +130,7 @@ function OpportunityLossMenu({ opportunityId, idMarketing, opportunityEmail, clo
       <Dialog.Content className='fixed left-[50%] top-[50%] z-100 h-fit w-[80%] translate-x-[-50%] translate-y-[-50%] rounded-md bg-background p-[10px] lg:w-[40%]'>
         <div className='flex h-full flex-col'>
           <div className='flex flex-col items-center justify-between border-b border-primary/30 px-2 pb-2 text-lg lg:flex-row'>
-            <h3 className='text-xl font-bold text-primary dark:text-white '>PERDER OPORTUNIDADE</h3>
+            <h3 className='text-xl font-bold text-primary  '>PERDER OPORTUNIDADE</h3>
             <Dialog.Close asChild>
               <button
                 type='button'

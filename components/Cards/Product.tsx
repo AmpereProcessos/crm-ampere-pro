@@ -9,9 +9,9 @@ import { MdAttachMoney } from 'react-icons/md';
 import Avatar from '../utils/Avatar';
 
 function getStatusTag({ active }: { active: boolean }) {
-  if (!active) return <h1 className='rounded-full bg-primary/60 px-2 py-1 text-[0.65rem] font-bold text-white lg:text-xs'>INATIVO</h1>;
+  if (!active) return <h1 className='rounded-full bg-primary/60 px-2 py-1 text-[0.65rem] font-bold text-primary-foreground lg:text-xs'>INATIVO</h1>;
 
-  return <h1 className='rounded-full bg-blue-600 px-2 py-1 text-[0.65rem] font-bold text-white lg:text-xs'>ATIVO</h1>;
+  return <h1 className='rounded-full bg-blue-600 px-2 py-1 text-[0.65rem] font-bold text-primary-foreground lg:text-xs'>ATIVO</h1>;
 }
 
 type ProductProps = {
@@ -70,12 +70,12 @@ function Product({ product, handleClick, userHasEditPermission, userHasPricingVi
           <div className={`flex items-center gap-2`}>
             <div className='ites-center flex gap-1'>
               <BsCalendarPlus />
-              <p className={`text-[0.65rem] font-medium text-primary/50`}>{formatDateAsLocale(product.dataInsercao, true)}</p>
+              <p className={`text-[0.65rem] font-medium text-primary/70`}>{formatDateAsLocale(product.dataInsercao, true)}</p>
             </div>
           </div>
           <div className='flex items-center justify-center gap-1'>
             <Avatar fallback={'U'} height={20} width={20} url={product.autor?.avatar_url || undefined} />
-            <p className='text-[0.65rem] font-medium text-primary/50'>{product.autor?.nome}</p>
+            <p className='text-[0.65rem] font-medium text-primary/70'>{product.autor?.nome}</p>
           </div>
         </div>
       </div>

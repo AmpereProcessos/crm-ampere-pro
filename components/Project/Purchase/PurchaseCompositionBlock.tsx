@@ -49,7 +49,7 @@ function PurchaseCompositionBlock({ infoHolder, setInfoHolder }: PurchaseComposi
   return (
     <div className='flex w-full flex-col gap-2'>
       <div className='flex w-full items-center justify-between gap-2'>
-        <h1 className='text-start font-Inter text-xs font-bold leading-none tracking-tight text-primary/50'>COMPOSIÇÃO DA COMPRA</h1>
+        <h1 className='text-start font-Inter text-xs font-bold leading-none tracking-tight text-primary/70'>COMPOSIÇÃO DA COMPRA</h1>
         <h1 className='rounded border border-green-600 bg-green-50 p-1 text-xs font-medium text-green-600'>
           TOTAL: {formatToMoney(infoHolder.total)}
         </h1>
@@ -138,7 +138,7 @@ function PurchaseCompositionBlock({ infoHolder, setInfoHolder }: PurchaseComposi
         </div>
         <div className='flex items-center justify-end'>
           <button
-            className='rounded bg-black p-1 px-4 text-sm font-medium text-white duration-300 ease-in-out hover:bg-primary/70'
+            className='rounded bg-black p-1 px-4 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-primary/70'
             onClick={() => addItem(compositionItem)}
           >
             ADICIONAR ITEM
@@ -159,7 +159,7 @@ function PurchaseCompositionBlock({ infoHolder, setInfoHolder }: PurchaseComposi
               </div>
               {item.valor > 0 ? (
                 <div className='flex min-w-fit items-center gap-2 rounded-full bg-primary/80 px-2 py-1 '>
-                  <h1 className='text-[0.65rem] font-medium text-white lg:text-xs'>{formatToMoney(item.qtde * item.valor)}</h1>
+                  <h1 className='text-[0.65rem] font-medium text-primary-foreground lg:text-xs'>{formatToMoney(item.qtde * item.valor)}</h1>
                 </div>
               ) : null}
             </div>
@@ -167,12 +167,12 @@ function PurchaseCompositionBlock({ infoHolder, setInfoHolder }: PurchaseComposi
               <div className='flex items-center gap-2'>
                 <div className='flex items-center gap-1'>
                   <TbRulerMeasure />
-                  <p className='text-xs italic text-primary/50'>{renderUnitLabel(item.unidade)}</p>
+                  <p className='text-xs italic text-primary/70'>{renderUnitLabel(item.unidade)}</p>
                 </div>
                 {item.valor > 0 ? (
                   <div className='flex items-center gap-1'>
                     <FaDollarSign />
-                    <p className='text-xs italic text-primary/50'>
+                    <p className='text-xs italic text-primary/70'>
                       {formatToMoney(item.valor)}/{item.unidade}
                     </p>
                   </div>

@@ -65,7 +65,7 @@ function Kits() {
               )}
               <div className='flex flex-col gap-1'>
                 <h1 className='text-xl font-black leading-none tracking-tight md:text-2xl'>BANCO DE KITS</h1>
-                <p className='text-sm leading-none tracking-tight text-primary/50'>
+                <p className='text-sm leading-none tracking-tight text-primary/70'>
                   {kits?.length ? (kits.length > 0 ? `${kits.length} kits cadastrados` : `${kits.length} kit cadastrado`) : '...'}
                 </p>
               </div>
@@ -75,7 +75,7 @@ function Kits() {
                 <button
                   type='button'
                   onClick={() => setBulkOperationModalIsOpen(true)}
-                  className='h-9 whitespace-nowrap rounded-sm bg-primary/90 px-4 py-2 text-sm font-medium text-white shadow-sm disabled:bg-primary/50 disabled:text-white enabled:hover:bg-primary/80 enabled:hover:text-white'
+                  className='h-9 whitespace-nowrap rounded-sm bg-primary/90 px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm disabled:bg-primary/50 disabled:text-primary-foreground enabled:hover:bg-primary/80 enabled:hover:text-primary-foreground'
                 >
                   OPERAÇÃO EM MASSA
                 </button>
@@ -84,7 +84,7 @@ function Kits() {
                 <button
                   type='button'
                   onClick={() => setNewKitModalIsOpen(true)}
-                  className='h-9 whitespace-nowrap rounded-sm bg-primary/90 px-4 py-2 text-sm font-medium text-white shadow-sm disabled:bg-primary/50 disabled:text-white enabled:hover:bg-primary/80 enabled:hover:text-white'
+                  className='h-9 whitespace-nowrap rounded-sm bg-primary/90 px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm disabled:bg-primary/50 disabled:text-primary-foreground enabled:hover:bg-primary/80 enabled:hover:text-primary-foreground'
                 >
                   CRIAR KIT
                 </button>

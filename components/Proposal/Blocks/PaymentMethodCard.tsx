@@ -80,14 +80,14 @@ function PaymentMethodCard({
           >
             <div className='flex w-full items-center justify-between gap-2'>
               <h1 className='text-xs font-black leading-none tracking-tight lg:text-sm'>FRAÇÃO DE {fractionnement.porcentagem}%</h1>
-              <h1 className='rounded-full bg-primary/80 px-2 py-1 text-[0.65rem] font-medium text-white lg:text-xs'>
+              <h1 className='rounded-full bg-primary/80 px-2 py-1 text-[0.65rem] font-medium text-primary-foreground lg:text-xs'>
                 {formatToMoney(getFractionnementValue({ fractionnement, proposalValue }))}
               </h1>
             </div>
             <div className='mt-2 flex w-full flex-wrap items-center justify-between'>
               <div className='flex items-center gap-2'>
                 <MdPayment color={'#76c893'} />
-                <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/50 lg:text-xs'>{fractionnement.metodo}</p>
+                <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/70 lg:text-xs'>{fractionnement.metodo}</p>
               </div>
               <div className='flex items-center gap-2'>
                 <BsCircleHalf color='#ed174c' />
@@ -112,16 +112,16 @@ function PaymentMethodCard({
                     }
                   }}
                   type='number'
-                  className='w-[40px] rounded-lg border border-primary/30 p-1 text-center text-[0.6rem] tracking-tight text-primary/50 shadow-md outline-hidden placeholder:italic'
+                  className='w-[40px] rounded-lg border border-primary/30 p-1 text-center text-[0.6rem] tracking-tight text-primary/70 shadow-md outline-hidden placeholder:italic'
                 />
-                <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/50 lg:text-xs'>
+                <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/70 lg:text-xs'>
                   {(fractionnement.parcelas || 0) > 1 ? 'PARCELAS' : 'PARCELA'} ({fractionnement.maximoParcelas} MÁX)
                 </p>
               </div>
               {fractionnement.taxaJuros ? (
                 <div className='flex items-center gap-2'>
                   <FaPercentage />
-                  <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/50 lg:text-xs'>
+                  <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/70 lg:text-xs'>
                     {fractionnement.taxaJuros} DE JUROS
                   </p>
                 </div>
@@ -129,7 +129,7 @@ function PaymentMethodCard({
               {fractionnement.taxaUnica ? (
                 <div className='flex items-center gap-2'>
                   <FaPercentage />
-                  <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/50 lg:text-xs'>
+                  <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/70 lg:text-xs'>
                     {fractionnement.taxaUnica} DE USO
                   </p>
                 </div>
@@ -139,7 +139,7 @@ function PaymentMethodCard({
         ))}
       </div>
       <div className='mt-2 flex w-full items-center justify-end'>
-        <h1 className='text-sm text-primary/50'>
+        <h1 className='text-sm text-primary/70'>
           VALOR FINAL DE:{' '}
           <strong className='text-primary'>{formatToMoney(getPaymentMethodFinalValue({ method: methodHolder, proposalValue }))}</strong>
         </h1>

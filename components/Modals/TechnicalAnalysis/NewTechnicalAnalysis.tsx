@@ -230,7 +230,7 @@ function NewTechnicalAnalysis({ session, opportunity, closeModal }: NewTechnical
       <div className='relative left-[50%] top-[50%] z-100 h-[80%] max-h-[80%] w-[90%] translate-x-[-50%] translate-y-[-50%] overflow-hidden rounded-md bg-background p-[10px] lg:w-[80%]'>
         <div className='flex h-full w-full flex-col'>
           <div className='flex flex-col items-center justify-between border-b border-primary/30 px-2 pb-2 text-lg lg:flex-row'>
-            <h3 className='text-xl font-bold text-primary dark:text-white '>NOVA ANÁLISE TÉCNICA</h3>
+            <h3 className='text-xl font-bold text-primary  '>NOVA ANÁLISE TÉCNICA</h3>
             <button
               onClick={() => closeModal()}
               type='button'
@@ -245,7 +245,7 @@ function NewTechnicalAnalysis({ session, opportunity, closeModal }: NewTechnical
             {isSuccess ? (
               <div className='flex w-full grow flex-col items-center justify-center gap-2 text-green-500'>
                 <BsFillClipboardCheckFill color='rgb(34,197,94)' size={35} />
-                <p className='text-lg font-medium tracking-tight text-primary/50'>Análise técnica requisitada com sucesso !</p>
+                <p className='text-lg font-medium tracking-tight text-primary/70'>Análise técnica requisitada com sucesso !</p>
               </div>
             ) : null}
             {!isPending && !isError && !isSuccess ? (

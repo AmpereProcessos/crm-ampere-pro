@@ -15,7 +15,7 @@ function UserGroupPermissionsPannel({ infoHolder, setInfoHolder, session }: User
     <>
       <h1 className='w-full pt-4 text-center text-sm font-medium'>PERMISSÕES BASE DO GRUPO</h1>
       {/**USUÁRIOS */}
-      <h1 className='w-full text-start text-sm text-primary/50'>USUÁRIOS</h1>
+      <h1 className='w-full text-start text-sm text-primary/70'>USUÁRIOS</h1>
       <CheckboxInput
         labelFalse='APTO A VISUALIZAR TODOS OS USUÁRIOS'
         labelTrue='APTO A VISUALIZAR TODOS OS USUÁRIOS'
@@ -65,7 +65,7 @@ function UserGroupPermissionsPannel({ infoHolder, setInfoHolder, session }: User
         }
       />
       {/**COMISSÕES */}
-      <h1 className='w-full text-start text-sm text-primary/50'>COMISSÕES</h1>
+      <h1 className='w-full text-start text-sm text-primary/70'>COMISSÕES</h1>
       <CheckboxInput
         labelFalse='APTO A VISUALIZAR COMISSÕES'
         labelTrue='APTO A VISUALIZAR COMISSÕES'
@@ -99,7 +99,7 @@ function UserGroupPermissionsPannel({ infoHolder, setInfoHolder, session }: User
         }
       />
       {/**KITS */}
-      <h1 className='w-full text-start text-sm text-primary/50'>KITS</h1>
+      <h1 className='w-full text-start text-sm text-primary/70'>KITS</h1>
       <CheckboxInput
         labelFalse='APTO A VISUALIZAR TODOS OS KITS'
         labelTrue='APTO A VISUALIZAR TODOS OS KITS'
@@ -149,7 +149,7 @@ function UserGroupPermissionsPannel({ infoHolder, setInfoHolder, session }: User
         }
       />
       {/**PRODUTOS */}
-      <h1 className='w-full text-start text-sm text-primary/50'>PRODUTOS</h1>
+      <h1 className='w-full text-start text-sm text-primary/70'>PRODUTOS</h1>
       <CheckboxInput
         labelFalse='APTO A VISUALIZAR TODOS OS PRODUTOS'
         labelTrue='APTO A VISUALIZAR TODOS OS PRODUTOS'
@@ -199,7 +199,7 @@ function UserGroupPermissionsPannel({ infoHolder, setInfoHolder, session }: User
         }
       />
       {/**SERVIÇOS */}
-      <h1 className='w-full text-start text-sm text-primary/50'>SERVIÇOS</h1>
+      <h1 className='w-full text-start text-sm text-primary/70'>SERVIÇOS</h1>
       <CheckboxInput
         labelFalse='APTO A VISUALIZAR TODOS OS SERVIÇOS'
         labelTrue='APTO A VISUALIZAR TODOS OS SERVIÇOS'
@@ -249,7 +249,7 @@ function UserGroupPermissionsPannel({ infoHolder, setInfoHolder, session }: User
         }
       />
       {/**PLANOS */}
-      <h1 className='w-full text-start text-sm text-primary/50'>PLANOS</h1>
+      <h1 className='w-full text-start text-sm text-primary/70'>PLANOS</h1>
       <CheckboxInput
         labelFalse='APTO A VISUALIZAR TODOS OS PLANOS'
         labelTrue='APTO A VISUALIZAR TODOS OS PLANOS'
@@ -300,7 +300,7 @@ function UserGroupPermissionsPannel({ infoHolder, setInfoHolder, session }: User
       />
       {/**CLIENTES */}
       <div className='flex w-full items-center justify-between'>
-        <h1 className='w-full text-start text-sm text-primary/50'>CLIENTES</h1>
+        <h1 className='w-full text-start text-sm text-primary/70'>CLIENTES</h1>
       </div>
       <CheckboxInput
         labelFalse='APTO A VISUALIZAR TODOS OS CLIENTES'
@@ -355,7 +355,7 @@ function UserGroupPermissionsPannel({ infoHolder, setInfoHolder, session }: User
       />
       {/**OPORTUNIDADES */}
       <div className='flex w-full items-center justify-between'>
-        <h1 className='w-full text-start text-sm text-primary/50'>OPORTUNIDADES</h1>
+        <h1 className='w-full text-start text-sm text-primary/70'>OPORTUNIDADES</h1>
       </div>
       <CheckboxInput
         labelFalse='APTO A VISUALIZAR OPORTUNIDADES'
@@ -407,7 +407,7 @@ function UserGroupPermissionsPannel({ infoHolder, setInfoHolder, session }: User
       />
       {/**ANÁLISES TÉCNICAS */}
       <div className='flex w-full items-center justify-between'>
-        <h1 className='w-full text-start text-sm text-primary/50'>ANÁLISES TÉCNICAS</h1>
+        <h1 className='w-full text-start text-sm text-primary/70'>ANÁLISES TÉCNICAS</h1>
       </div>
       <CheckboxInput
         labelFalse='APTO A VISUALIZAR ANÁLISES TÉCNICAS'
@@ -459,7 +459,7 @@ function UserGroupPermissionsPannel({ infoHolder, setInfoHolder, session }: User
       />
       {/**HOMOLOGAÇÕES*/}
       <div className='flex w-full items-center justify-between'>
-        <h1 className='w-full text-start text-sm text-primary/50'>HOMOLOGAÇÕES</h1>
+        <h1 className='w-full text-start text-sm text-primary/70'>HOMOLOGAÇÕES</h1>
       </div>
       <CheckboxInput
         labelFalse='APTO A VISUALIZAR HOMOLOGAÇÕES'
@@ -511,7 +511,7 @@ function UserGroupPermissionsPannel({ infoHolder, setInfoHolder, session }: User
       />
       {/**PARCEIROS */}
       <div className='flex w-full items-center justify-between'>
-        <h1 className='w-full text-start text-sm text-primary/50'>PARCEIROS</h1>
+        <h1 className='w-full text-start text-sm text-primary/70'>PARCEIROS</h1>
       </div>
       <CheckboxInput
         labelFalse='APTO A VISUALIZAR PARCEIROS'
@@ -563,7 +563,7 @@ function UserGroupPermissionsPannel({ infoHolder, setInfoHolder, session }: User
       />
       {/**PROPOSTAS */}
       <div className='flex w-full items-center justify-between'>
-        <h1 className='w-full text-start text-sm text-primary/50'>PROPOSTAS</h1>
+        <h1 className='w-full text-start text-sm text-primary/70'>PROPOSTAS</h1>
       </div>
       <CheckboxInput
         labelFalse='APTO A VISUALIZAR PROPOSTAS'
@@ -614,7 +614,7 @@ function UserGroupPermissionsPannel({ infoHolder, setInfoHolder, session }: User
         }
       />
       {/**PREÇOS */}
-      <h1 className='w-full text-start text-sm text-primary/50'>PREÇOS</h1>
+      <h1 className='w-full text-start text-sm text-primary/70'>PREÇOS</h1>
       <CheckboxInput
         labelFalse='APTO A VISUALIZAR DESCRITIVO DE PRECIFICAÇÃO'
         labelTrue='APTO A VISUALIZAR DESCRITIVO DE PRECIFICAÇÃO'
@@ -649,7 +649,7 @@ function UserGroupPermissionsPannel({ infoHolder, setInfoHolder, session }: User
       />
       {/**RESULTADOS */}
       <div className='flex w-full items-center justify-between'>
-        <h1 className='w-full text-start text-sm text-primary/50'>RESULTADOS</h1>
+        <h1 className='w-full text-start text-sm text-primary/70'>RESULTADOS</h1>
       </div>
       <CheckboxInput
         labelFalse='APTO A VISUALIZAR RESULTADOS COMERCIAIS'
@@ -683,7 +683,7 @@ function UserGroupPermissionsPannel({ infoHolder, setInfoHolder, session }: User
           }))
         }
       />
-      <h1 className='w-full text-start text-sm text-primary/50'>CONFIGURAÇÕES</h1>
+      <h1 className='w-full text-start text-sm text-primary/70'>CONFIGURAÇÕES</h1>
       {session.user.permissoes.configuracoes.parceiro ? (
         <CheckboxInput
           labelFalse='APTO A CONFIGURAR PARCEIRO'
@@ -792,7 +792,7 @@ function UserGroupPermissionsPannel({ infoHolder, setInfoHolder, session }: User
         />
       ) : null}
       {/**INTEGRAÇÕES */}
-      <h1 className='w-full text-start text-sm text-primary/50'>INTEGRAÇÕES</h1>
+      <h1 className='w-full text-start text-sm text-primary/70'>INTEGRAÇÕES</h1>
       <CheckboxInput
         labelFalse='APTO A RECEBER LEADS'
         labelTrue='APTO A RECEBER LEADS'

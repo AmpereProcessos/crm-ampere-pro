@@ -28,11 +28,11 @@ function Partner({ partner, handleClick }: PartnerProps) {
           <div className='flex w-full items-center gap-2'>
             <div className='flex items-center gap-2'>
               <BsTelephone size={12} />
-              <p className='text-xs font-light text-primary/50'>{partner.contatos.telefonePrimario}</p>
+              <p className='text-xs font-light text-primary/70'>{partner.contatos.telefonePrimario}</p>
             </div>
             <div className='flex items-center gap-2'>
               <MdOutlineEmail size={15} />
-              <p className='text-xs font-light text-primary/50'>{partner.contatos.email}</p>
+              <p className='text-xs font-light text-primary/70'>{partner.contatos.email}</p>
             </div>
           </div>
           {partner.usuarios ? (
@@ -42,7 +42,7 @@ function Partner({ partner, handleClick }: PartnerProps) {
                   <FaRegUserCircle />
                   <h1 className='font-Inter text-xs font-bold'>{partner.usuarios.length}</h1>
                 </div>
-                <h1 className='font-Inter text-xs text-primary/50'>USUÁRIOS</h1>
+                <h1 className='font-Inter text-xs text-primary/70'>USUÁRIOS</h1>
               </div>
               <div className='mt-2 flex w-full flex-wrap items-start justify-start gap-2'>
                 {partner.usuarios.map((user, index) => {
@@ -50,18 +50,18 @@ function Partner({ partner, handleClick }: PartnerProps) {
                     return (
                       <div key={user._id} className='flex items-center gap-1'>
                         <Avatar url={user.avatar_url || undefined} fallback={formatNameAsInitials(user.nome)} height={15} width={15} />
-                        <p className='font-Inter text-xs font-medium text-primary/50'>{user.nome}</p>
+                        <p className='font-Inter text-xs font-medium text-primary/70'>{user.nome}</p>
                       </div>
                     );
                 })}
-                {partner.usuarios.length > 10 ? <p className='font-Inter text-xs font-medium text-primary/50'>E MAIS...</p> : null}
+                {partner.usuarios.length > 10 ? <p className='font-Inter text-xs font-medium text-primary/70'>E MAIS...</p> : null}
               </div>
             </>
           ) : null}
         </div>
         <div className='mt-2 flex w-full items-center justify-end gap-2'>
           <BsCalendarPlus />
-          <p className='text-sm font-light text-primary/50'>{formatDateAsLocale(partner.dataInsercao)}</p>
+          <p className='text-sm font-light text-primary/70'>{formatDateAsLocale(partner.dataInsercao)}</p>
         </div>
       </div>
     </div>

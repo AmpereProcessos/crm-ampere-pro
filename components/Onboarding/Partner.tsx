@@ -73,11 +73,11 @@ function Partner({ partner, goToNextStage }: PartnerProps) {
   });
   return (
     <div className='flex h-full w-full flex-col gap-y-2'>
-      <h1 className='mt-4 w-full text-center text-lg tracking-tight text-primary/50'>Bem vindo ao processo de onboarding.</h1>
-      <h1 className='mb-4 w-full text-center text-lg tracking-tight text-primary/50'>
+      <h1 className='mt-4 w-full text-center text-lg tracking-tight text-primary/70'>Bem vindo ao processo de onboarding.</h1>
+      <h1 className='mb-4 w-full text-center text-lg tracking-tight text-primary/70'>
         Passaremos por algumas etapas para configurar informações da empresa e de outros detalhes.
       </h1>
-      <h1 className='w-full bg-[#fead41] p-1 text-center font-bold text-white'>DADOS DA EMPRESA</h1>
+      <h1 className='w-full bg-[#fead41] p-1 text-center font-bold text-primary-foreground'>DADOS DA EMPRESA</h1>
       <div className='flex w-full flex-col items-center gap-2 px-2 lg:flex-row'>
         <div className='relative flex h-[200px] w-[200px] flex-col items-center justify-center gap-2 rounded-full '>
           {partner.logo_url && !editImage.enabled ? (
@@ -87,7 +87,7 @@ function Partner({ partner, goToNextStage }: PartnerProps) {
               </div>
               <button
                 onClick={() => setEditImage((prev) => ({ ...prev, enabled: true }))}
-                className='w-fit rounded-sm border border-black p-1 font-Raleway text-xs font-medium duration-300 ease-in-out hover:bg-black hover:text-white'
+                className='w-fit rounded-sm border border-black p-1 font-Raleway text-xs font-medium duration-300 ease-in-out hover:bg-black hover:text-primary-foreground'
               >
                 EDITAR IMAGEM
               </button>
@@ -130,12 +130,12 @@ function Partner({ partner, goToNextStage }: PartnerProps) {
           <textarea
             value={partnerHolder.descricao}
             onChange={(e) => setPartnerHolder((prev) => ({ ...prev, descricao: e.target.value }))}
-            className='h-[120px] w-full resize-none rounded-sm border border-primary/30 bg-gray-50 p-3 outline-hidden'
+            className='h-[120px] w-full resize-none rounded-sm border border-primary/30 bg-primary/10p-3 outline-hidden'
             placeholder='Quem são vocês, o que vocês fazem de melhor, por que um cliente deveria escolher vocês, etc...'
           />
         </div>
       </div>
-      <h1 className='w-full  bg-primary/60 p-0.5 text-center text-xs font-bold text-white'>CONTATOS</h1>
+      <h1 className='w-full  bg-primary/60 p-0.5 text-center text-xs font-bold text-primary-foreground'>CONTATOS</h1>
       <div className='grid grid-cols-1 grid-rows-2 items-center gap-6 px-2 lg:grid-cols-2 lg:grid-rows-1'>
         <TextInput
           label='TELEFONE'
@@ -168,7 +168,7 @@ function Partner({ partner, goToNextStage }: PartnerProps) {
           width='100%'
         />
       </div>
-      <h1 className='w-full  bg-primary/60 p-0.5 text-center text-xs font-bold text-white'>INFORMAÇÕES DE ENDEREÇO DA EMPRESA</h1>
+      <h1 className='w-full  bg-primary/60 p-0.5 text-center text-xs font-bold text-primary-foreground'>INFORMAÇÕES DE ENDEREÇO DA EMPRESA</h1>
       <div className='grid grid-cols-1 grid-rows-3 items-center gap-6 px-2 lg:grid-cols-3 lg:grid-rows-1'>
         <TextInput
           label='CEP'
@@ -320,7 +320,7 @@ function Partner({ partner, goToNextStage }: PartnerProps) {
       <div className='flex w-full items-center justify-end px-2 py-2'>
         <button
           disabled={isPending}
-          className='rounded bg-black p-1 px-4 text-xs font-medium text-white duration-300 ease-in-out disabled:bg-primary/40 disabled:text-primary enabled:hover:bg-primary/60'
+          className='rounded bg-black p-1 px-4 text-xs font-medium text-primary-foreground duration-300 ease-in-out disabled:bg-primary/40 disabled:text-primary enabled:hover:bg-primary/60'
           onClick={() => mutate()}
         >
           PROSSEGUIR

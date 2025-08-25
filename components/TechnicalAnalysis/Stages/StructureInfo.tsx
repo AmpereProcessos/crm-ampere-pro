@@ -41,7 +41,7 @@ function StructureInfo({ infoHolder, setInfoHolder, files, setFiles, goToNextSta
   }
   return (
     <div className='flex w-full grow flex-col bg-background px-2'>
-      <h1 className='w-full rounded-md  bg-primary/70 p-1 text-center font-medium text-white'>INFORMAÇÕES DA ESTRUTURA DE MONTAGEM</h1>
+      <h1 className='w-full rounded-md  bg-primary/70 p-1 text-center font-medium text-primary-foreground'>INFORMAÇÕES DA ESTRUTURA DE MONTAGEM</h1>
       <div className='flex w-full grow flex-col gap-2'>
         <div className='flex w-full flex-col items-center gap-2 lg:flex-row'>
           <div className='w-full lg:w-1/2'>
@@ -236,7 +236,7 @@ function StructureInfo({ infoHolder, setInfoHolder, files, setFiles, goToNextSta
       </div>
 
       <div className='mt-2 flex w-full items-end justify-between bg-background'>
-        <button onClick={() => goToPreviousStage()} className='rounded p-2 font-bold text-primary/50 duration-300 ease-in-out hover:scale-105'>
+        <button onClick={() => goToPreviousStage()} className='rounded p-2 font-bold text-primary/70 duration-300 ease-in-out hover:scale-105'>
           Voltar
         </button>
         <button
@@ -245,7 +245,7 @@ function StructureInfo({ infoHolder, setInfoHolder, files, setFiles, goToNextSta
               goToNextStage();
             }
           }}
-          className=' rounded-sm p-2 font-bold hover:bg-black hover:text-white'
+          className=' rounded-sm p-2 font-bold hover:bg-black hover:text-primary-foreground'
         >
           Prosseguir
         </button>

@@ -14,7 +14,7 @@ function FilesBlock({ auxiliarFilesLink, analysisId, session }: FilesBlockProps)
   return (
     <div className='mt-4 flex w-full flex-col'>
       <div className='flex w-full items-center justify-center gap-2 rounded-md bg-primary/80 p-2'>
-        <h1 className='font-bold text-white'>ARQUIVOS</h1>
+        <h1 className='font-bold text-primary-foreground'>ARQUIVOS</h1>
       </div>
       <div className='flex w-full flex-col items-center'>
         <h1 className='font-sans font-bold  text-primary'>LINK PARA ARQUIVOS AUXILIARES</h1>
@@ -25,7 +25,7 @@ function FilesBlock({ auxiliarFilesLink, analysisId, session }: FilesBlockProps)
             </p>
           </Link>
         ) : (
-          <p className='w-full py-2 text-center text-xs font-medium italic text-primary/50'>Link não preenchido.</p>
+          <p className='w-full py-2 text-center text-xs font-medium italic text-primary/70'>Link não preenchido.</p>
         )}
       </div>
       <div className='mt-2 flex w-full flex-wrap justify-around gap-2'>
@@ -36,7 +36,7 @@ function FilesBlock({ auxiliarFilesLink, analysisId, session }: FilesBlockProps)
             </div>
           ))
         ) : (
-          <p className='w-full text-center text-xs font-medium italic text-primary/50'>Nenhum arquivo adicionado.</p>
+          <p className='w-full text-center text-xs font-medium italic text-primary/70'>Nenhum arquivo adicionado.</p>
         )}
       </div>
       <div className='mt-2 w-full'>

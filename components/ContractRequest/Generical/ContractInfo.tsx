@@ -899,7 +899,7 @@ function ContractInfo({ requestInfo, setRequestInfo, showActions, goToNextStage 
                 goToNextStage();
               }
             }}
-            className='rounded p-2 font-bold hover:bg-black hover:text-white'
+            className='rounded p-2 font-bold hover:bg-black hover:text-primary-foreground'
           >
             Prosseguir
           </button>

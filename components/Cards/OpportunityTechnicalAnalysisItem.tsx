@@ -60,9 +60,9 @@ function getStatusColor(status: string) {
   }
   if (status == 'PENDENTE')
     return (
-      <h1 className='w-fit self-center rounded-sm border border-primary/50 p-1 text-center text-[0.6rem] font-black text-primary/50'>PENDENTE</h1>
+      <h1 className='w-fit self-center rounded-sm border border-primary/50 p-1 text-center text-[0.6rem] font-black text-primary/70'>PENDENTE</h1>
     );
-  return <h1 className='w-fit self-center rounded-sm border border-primary/50 p-1 text-center text-[0.6rem] font-black text-primary/50'>PENDENTE</h1>;
+  return <h1 className='w-fit self-center rounded-sm border border-primary/50 p-1 text-center text-[0.6rem] font-black text-primary/70'>PENDENTE</h1>;
 }
 
 type OpportunityTechnicalAnalysisItemProps = {
@@ -85,7 +85,7 @@ function OpportunityTechnicalAnalysisItem({ analysis, session }: OpportunityTech
               <h1 className='w-full text-center text-sm font-bold leading-none tracking-tight duration-300 lg:text-start'>
                 {analysis.tipoSolicitacao || 'NÃO DEFINIDO'}
               </h1>
-              <p className='mt-1 w-full text-center text-[0.6rem] font-medium text-primary/50 lg:text-start'>#{analysis._id}</p>
+              <p className='mt-1 w-full text-center text-[0.6rem] font-medium text-primary/70 lg:text-start'>#{analysis._id}</p>
             </div>
             <div className='flex w-full min-w-fit items-center justify-center lg:w-fit'>{getStatusColor(analysis.status)}</div>
           </div>
@@ -94,14 +94,17 @@ function OpportunityTechnicalAnalysisItem({ analysis, session }: OpportunityTech
           <div className='flex items-center gap-2'>
             {analysis.dataEfetivacao || analysis.status == 'CONCLUIDO' ? (
               <button
-                className='rounded bg-cyan-500 px-2 py-1 text-center text-[0.6rem] font-bold text-white'
+                className='rounded bg-cyan-500 px-2 py-1 text-center text-[0.6rem] font-bold text-primary-foreground'
                 onClick={() => setReportsMenuIsOpen((prev) => !prev)}
               >
                 LAUDOS
               </button>
             ) : null}
             {analysis.status == 'PENDÊNCIA COMERCIAL' && userHasPartialEditPermission ? (
-              <button onClick={() => setEditModalIsOpen(true)} className='rounded bg-black px-2 py-1 text-center text-[0.6rem] font-bold text-white'>
+              <button
+                onClick={() => setEditModalIsOpen(true)}
+                className='rounded bg-black px-2 py-1 text-center text-[0.6rem] font-bold text-primary-foreground'
+              >
                 REALIMENTAR ANÁLISE
               </button>
             ) : null}
@@ -111,16 +114,16 @@ function OpportunityTechnicalAnalysisItem({ analysis, session }: OpportunityTech
             {analysis.dataEfetivacao ? (
               <div className={`flex items-center gap-1`}>
                 <BsCalendarCheck color='rgb(34,197,94)' />
-                <p className='text-[0.65rem] font-medium text-primary/50'>{formatDateAsLocale(analysis.dataEfetivacao, true)}</p>
+                <p className='text-[0.65rem] font-medium text-primary/70'>{formatDateAsLocale(analysis.dataEfetivacao, true)}</p>
               </div>
             ) : null}
             <div className={`flex items-center gap-1`}>
               <BsCalendarPlus />
-              <p className='text-[0.65rem] font-medium text-primary/50'>{formatDateAsLocale(analysis.dataInsercao, true)}</p>
+              <p className='text-[0.65rem] font-medium text-primary/70'>{formatDateAsLocale(analysis.dataInsercao, true)}</p>
             </div>
             <div className='flex items-center gap-1'>
               <Avatar fallback={'R'} url={analysis.requerente.avatar_url || undefined} height={20} width={20} />
-              <p className='text-[0.65rem] font-medium text-primary/50'>{analysis.requerente.nome}</p>
+              <p className='text-[0.65rem] font-medium text-primary/70'>{analysis.requerente.nome}</p>
             </div>
           </div>
         </div>
@@ -142,13 +145,13 @@ function OpportunityTechnicalAnalysisItem({ analysis, session }: OpportunityTech
           </div>
           <div className='flex w-full grow flex-col gap-2 overflow-y-auto py-2 scrollbar-thin scrollbar-track-primary/10 scrollbar-thumb-primary/30'>
             <Link href={`/operacional/analises-tecnicas/laudo/${analysis._id}?type=LAUDO SIMPLES(URBANO)`}>
-              <p className='w-full text-center text-xs font-medium text-primary/50 hover:text-cyan-500'>LAUDO SIMPLES(URBANO)</p>
+              <p className='w-full text-center text-xs font-medium text-primary/70 hover:text-cyan-500'>LAUDO SIMPLES(URBANO)</p>
             </Link>
             <Link href={`/operacional/analises-tecnicas/laudo/${analysis._id}?type=LAUDO INTERMEDIÁRIO (URBANO)`}>
-              <p className='w-full text-center text-xs font-medium text-primary/50 hover:text-cyan-500'>LAUDO INTERMEDIÁRIO (URBANO)</p>
+              <p className='w-full text-center text-xs font-medium text-primary/70 hover:text-cyan-500'>LAUDO INTERMEDIÁRIO (URBANO)</p>
             </Link>
             <Link href={`/operacional/analises-tecnicas/laudo/${analysis._id}?type=LAUDO SIMPLES (RURAL)`}>
-              <p className='w-full text-center text-xs font-medium text-primary/50 hover:text-cyan-500'>LAUDO SIMPLES (RURAL)</p>
+              <p className='w-full text-center text-xs font-medium text-primary/70 hover:text-cyan-500'>LAUDO SIMPLES (RURAL)</p>
             </Link>
           </div>
         </div>

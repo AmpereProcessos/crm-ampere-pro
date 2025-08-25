@@ -161,7 +161,7 @@ function NewProjectRequest({ opportunity, proposal, session, closeModal }: NewPr
       <div className='fixed left-[50%] top-[50%] z-100 h-[80%] w-[90%] translate-x-[-50%] translate-y-[-50%] rounded-md bg-background p-[10px] lg:w-[70%]'>
         <div className='flex h-full flex-col'>
           <div className='flex flex-col items-center justify-between border-b border-primary/30 px-2 pb-2 text-lg lg:flex-row'>
-            <h3 className='text-xl font-bold text-primary dark:text-white '>SOLICITAÇÃO DE NOVO PROJETO</h3>
+            <h3 className='text-xl font-bold text-primary  '>SOLICITAÇÃO DE NOVO PROJETO</h3>
             <button
               onClick={closeModal}
               type='button'

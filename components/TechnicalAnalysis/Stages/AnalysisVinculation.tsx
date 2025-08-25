@@ -48,7 +48,7 @@ function getStatusColor(status: string) {
     return 'border-red-500 text-red-500';
   }
 
-  return 'border-primary/50 text-primary/50';
+  return 'border-primary/50 text-primary/70';
 }
 function AnalysisVinculation({ requestInfo, setRequestInfo, resetSolicitationType, goToNextStage }: AnalysisVinculationProps) {
   const {
@@ -74,11 +74,11 @@ function AnalysisVinculation({ requestInfo, setRequestInfo, resetSolicitationTyp
   return (
     <div className='flex w-full grow flex-col bg-background px-2'>
       <span className='text-center text-lg font-bold uppercase text-[#15599a]'>VINCULO DE ANÁLISE PRÉVIA</span>
-      <p className='mb-4 text-center text-primary/50'>
+      <p className='mb-4 text-center text-primary/70'>
         Utilizaremos das informações de uma análise prévia para que você possa reutilizar informações já preenchidas e alterar somente o que desejar.
       </p>
       <div className='flex w-full grow flex-col gap-2'>
-        <span className='rounded bg-black py-2 text-center text-lg font-bold uppercase text-white'>ANÁLISES TÉCNICAS PRÉVIAS</span>
+        <span className='rounded bg-black py-2 text-center text-lg font-bold uppercase text-primary-foreground'>ANÁLISES TÉCNICAS PRÉVIAS</span>
         {isError ? <ErrorComponent msg='Erro ao buscar clientes similares...' /> : null}
         {isLoading ? <LoadingComponent /> : null}
         {isSuccess ? (
@@ -99,7 +99,7 @@ function AnalysisVinculation({ requestInfo, setRequestInfo, resetSolicitationTyp
                       <div className='flex flex-col'>
                         <h1 className='w-full text-start text-sm font-bold leading-none tracking-tight'>{analysis.tipoSolicitacao}</h1>
 
-                        <p className='mt-1 text-[0.6rem] font-bold text-primary/50'>
+                        <p className='mt-1 text-[0.6rem] font-bold text-primary/70'>
                           <strong className='text-[#fead41]'>{analysis.projeto.identificador}</strong> {analysis.projeto.nome}
                         </p>
                       </div>
@@ -113,7 +113,7 @@ function AnalysisVinculation({ requestInfo, setRequestInfo, resetSolicitationTyp
                     <div className='mt-1 flex w-full items-center justify-between'>
                       <div className='flex items-center gap-2'>
                         <p className='text-xs font-medium'>{analysis.requerente.nomeCRM || analysis.requerente.apelido}</p>
-                        <div className={`flex items-center gap-2 text-primary/50`}>
+                        <div className={`flex items-center gap-2 text-primary/70`}>
                           <BsCalendarFill />
                           <p className='text-xs font-medium'>{dayjs(analysis.dataInsercao).format('DD/MM/YYYY HH:mm')}</p>
                         </div>
@@ -127,7 +127,7 @@ function AnalysisVinculation({ requestInfo, setRequestInfo, resetSolicitationTyp
                       </div>
                       <button
                         onClick={() => handleVinculation(analysis)}
-                        className='rounded border border-cyan-500 p-1 text-xs font-medium text-cyan-500 duration-300 ease-in-out hover:bg-cyan-500 hover:text-white'
+                        className='rounded border border-cyan-500 p-1 text-xs font-medium text-cyan-500 duration-300 ease-in-out hover:bg-cyan-500 hover:text-primary-foreground'
                       >
                         VINCULAR
                       </button>
@@ -137,14 +137,14 @@ function AnalysisVinculation({ requestInfo, setRequestInfo, resetSolicitationTyp
               ))
             ) : (
               <div className='flex items-center justify-center'>
-                <p className='text-center text-primary/50'>Oops, não conseguimos encontrar nenhuma visita recente requirida por você.</p>
+                <p className='text-center text-primary/70'>Oops, não conseguimos encontrar nenhuma visita recente requirida por você.</p>
               </div>
             )}
           </div>
         ) : null}
 
         <div className='mt-2 flex w-full justify-between'>
-          <button onClick={() => resetSolicitationType()} className='rounded p-2 font-bold text-primary/50 duration-300 ease-in-out hover:scale-105'>
+          <button onClick={() => resetSolicitationType()} className='rounded p-2 font-bold text-primary/70 duration-300 ease-in-out hover:scale-105'>
             Voltar
           </button>
           {/* <button
@@ -153,7 +153,7 @@ function AnalysisVinculation({ requestInfo, setRequestInfo, resetSolicitationTyp
                 goToNextStage()
               }
             }}
-            className="rounded p-2 font-bold hover:bg-black hover:text-white"
+            className="rounded p-2 font-bold hover:bg-black hover:text-primary-foreground"
           >
             Prosseguir
           </button> */}

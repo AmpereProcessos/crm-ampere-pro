@@ -57,10 +57,10 @@ function ValueSoldTracking({ data, firstPeriodAfter, firstPeriodBefore, secondPe
         <div className='flex w-full flex-col gap-2 p-3'>
           <div className='flex w-full flex-col overflow-hidden rounded-sm border border-black p-3'>
             {/* <div className="flex w-full items-center justify-between gap-2 bg-black p-1 px-4">
-              <h1 className="text-[0.6rem] text-white">PRIMEIRO PERÍODO</h1>
+              <h1 className="text-[0.6rem] text-primary-foreground">PRIMEIRO PERÍODO</h1>
               <div className="flex items-center gap-1">
                 <BsCalendar size={12} color="#fff" />
-                <h1 className="text-[0.6rem] font-bold text-white">
+                <h1 className="text-[0.6rem] font-bold text-primary-foreground">
                   {formatDateAsLocale(firstPeriodAfter)} até {formatDateAsLocale(firstPeriodBefore)}
                 </h1>
               </div>

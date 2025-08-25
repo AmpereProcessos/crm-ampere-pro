@@ -36,7 +36,7 @@ function CompositionInformationBlock({ infoHolder, setInfoHolder }: CompositionI
   }
   return (
     <div className='flex w-full flex-col gap-y-2'>
-      <h1 className='w-full bg-primary/70  p-1 text-center font-medium text-white'>COMPOSIÇÃO DA COMPRA</h1>
+      <h1 className='w-full bg-primary/70  p-1 text-center font-medium text-primary-foreground'>COMPOSIÇÃO DA COMPRA</h1>
       <div className='flex w-full flex-col gap-1'>
         <div className='flex w-full flex-col gap-1'>
           <div className='flex w-full flex-col gap-2'>
@@ -123,7 +123,7 @@ function CompositionInformationBlock({ infoHolder, setInfoHolder }: CompositionI
             </div>
             <div className='flex items-center justify-end'>
               <button
-                className='rounded bg-black p-1 px-4 text-sm font-medium text-white duration-300 ease-in-out hover:bg-primary/70'
+                className='rounded bg-black p-1 px-4 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-primary/70'
                 onClick={() => addItem(compositionItem)}
               >
                 ADICIONAR ITEM

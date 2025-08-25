@@ -16,7 +16,7 @@ function OperationProjectsBlock({ handleVinculation, handleUnvinculation }: Oper
   const { data: operationProjects, isLoading, isSuccess, isError, filters, setFilters } = useOperationProjects();
   return (
     <div className='flex w-full flex-col gap-2'>
-      <span className='rounded bg-black py-1 text-center text-lg font-bold uppercase text-white'>PROJETOS EXISTENTES</span>
+      <span className='rounded bg-black py-1 text-center text-lg font-bold uppercase text-primary-foreground'>PROJETOS EXISTENTES</span>
       {isError ? <ErrorComponent msg='Erro ao buscar projetos existentes...' /> : null}
       {isLoading ? <LoadingComponent /> : null}
       {isSuccess ? (
@@ -38,7 +38,7 @@ function OperationProjectsBlock({ handleVinculation, handleUnvinculation }: Oper
                     <h1 className='w-full font-bold leading-none tracking-tight'>
                       <strong className='text-[#fead41]'>({project.qtde})</strong> {project.nomeDoContrato}
                     </h1>
-                    <p className='mt-1 text-xs text-primary/50'>{project.vendedor?.nome}</p>
+                    <p className='mt-1 text-xs text-primary/70'>{project.vendedor?.nome}</p>
                     <div className='mt-4 flex w-full items-end justify-between lg:items-center'>
                       <div className='flex flex-col items-start gap-2 lg:flex-row lg:items-center'>
                         <div className='flex items-center gap-2'>
@@ -63,7 +63,7 @@ function OperationProjectsBlock({ handleVinculation, handleUnvinculation }: Oper
                           setSelectProject(project);
                           handleVinculation(project);
                         }}
-                        className='rounded border border-cyan-500 p-1 text-xs font-medium text-cyan-500 duration-300 ease-in-out hover:bg-cyan-500 hover:text-white'
+                        className='rounded border border-cyan-500 p-1 text-xs font-medium text-cyan-500 duration-300 ease-in-out hover:bg-cyan-500 hover:text-primary-foreground'
                       >
                         VINCULAR
                       </button>
@@ -76,7 +76,7 @@ function OperationProjectsBlock({ handleVinculation, handleUnvinculation }: Oper
                 <h1 className='w-full font-bold leading-none tracking-tight'>
                   <strong className='text-[#fead41]'>({selectedProject.qtde})</strong> {selectedProject.nomeDoContrato}
                 </h1>
-                <p className='mt-1 text-xs text-primary/50'>{selectedProject.vendedor?.nome}</p>
+                <p className='mt-1 text-xs text-primary/70'>{selectedProject.vendedor?.nome}</p>
                 <div className='mt-4 flex w-full items-end justify-between lg:items-center'>
                   <div className='flex flex-col items-start gap-2 lg:flex-row lg:items-center'>
                     <div className='flex items-center gap-2'>
@@ -99,7 +99,7 @@ function OperationProjectsBlock({ handleVinculation, handleUnvinculation }: Oper
                   <div className='flex items-center gap-2'>
                     <div className='flex items-center gap-1'>
                       <BiCheckDouble color='rgb(34,197,94)' size={'20px'} />
-                      <p className='text-sm font-medium text-primary/50'>Vinculado</p>
+                      <p className='text-sm font-medium text-primary/70'>Vinculado</p>
                     </div>
 
                     <button
@@ -107,7 +107,7 @@ function OperationProjectsBlock({ handleVinculation, handleUnvinculation }: Oper
                         setSelectProject(null);
                         handleUnvinculation();
                       }}
-                      className='flex items-center rounded-sm border border-primary/50 p-1 text-primary/50 duration-300 ease-in-out hover:bg-primary/50 hover:text-white'
+                      className='flex items-center rounded-sm border border-primary/50 p-1 text-primary/70 duration-300 ease-in-out hover:bg-primary/50 hover:text-primary-foreground'
                     >
                       <p className='text-xs font-medium'>LIMPAR</p>
                       <MdOutlineCleaningServices />

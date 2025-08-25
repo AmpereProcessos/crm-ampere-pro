@@ -27,7 +27,7 @@ function OeMPlansInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNext
   return (
     <div className='flex w-full grow flex-col bg-background pb-2'>
       <span className='py-2 text-center text-lg font-bold uppercase text-[#15599a]'>PLANO INTEGRADO DE OPERAÇÃO E MANUTENÇÃO</span>
-      <p className='text-center text-sm italic text-primary/50'>Escolha, se houver, o plano de Operação & Manutenção incluso no projeto.</p>
+      <p className='text-center text-sm italic text-primary/70'>Escolha, se houver, o plano de Operação & Manutenção incluso no projeto.</p>
       <div className='flex grow flex-wrap items-start justify-around gap-2 py-2'>
         {getOeMPlans(signaturePlans).map((plan) => (
           <SignaturePlanOptionCard
@@ -65,7 +65,7 @@ function OeMPlansInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNext
             <h1 className="text-center text-xs font-medium text-[#fead61]">ITENS DO PLANO</h1>
             <div className="flex w-full items-center">
               <div className="flex w-[80%] items-center justify-center">
-                <h1 className="text-center text-xs font-medium text-primary/50">MANUTENÇÃO ELÉTRICA INVERSORES + QUADROS ELÉTRICOS</h1>
+                <h1 className="text-center text-xs font-medium text-primary/70">MANUTENÇÃO ELÉTRICA INVERSORES + QUADROS ELÉTRICOS</h1>
               </div>
               <div className="flex w-[20%] items-center justify-end text-green-500">
                 <BsPatchCheckFill />
@@ -73,7 +73,7 @@ function OeMPlansInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNext
             </div>
             <div className="flex w-full items-center">
               <div className="flex w-[80%] items-center justify-center">
-                <h1 className="text-center text-xs font-medium text-primary/50">REAPERTO CONEXÕES ELÉTRICAS</h1>
+                <h1 className="text-center text-xs font-medium text-primary/70">REAPERTO CONEXÕES ELÉTRICAS</h1>
               </div>
               <div className="flex w-[20%] items-center justify-end text-green-500">
                 <BsPatchCheckFill />
@@ -81,7 +81,7 @@ function OeMPlansInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNext
             </div>
             <div className="flex w-full items-center">
               <div className="flex w-[80%] items-center justify-center">
-                <h1 className="text-center text-xs font-medium text-primary/50">ANÁLISE E CONFERÊNCIA DE GRANDEZAS ELÉTRICAS DOS EQUIPAMENTOS ELÉTRICOS</h1>
+                <h1 className="text-center text-xs font-medium text-primary/70">ANÁLISE E CONFERÊNCIA DE GRANDEZAS ELÉTRICAS DOS EQUIPAMENTOS ELÉTRICOS</h1>
               </div>
               <div className="flex w-[20%] items-center justify-end text-green-500">
                 <BsPatchCheckFill />
@@ -89,7 +89,7 @@ function OeMPlansInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNext
             </div>
             <div className="flex w-full items-center">
               <div className="flex w-[80%] items-center justify-center">
-                <h1 className="text-center text-xs font-medium text-primary/50">LIMPEZA NOS MÓDULOS FOTOVOLTAICOS</h1>
+                <h1 className="text-center text-xs font-medium text-primary/70">LIMPEZA NOS MÓDULOS FOTOVOLTAICOS</h1>
               </div>
               <div className="flex w-[20%] items-center justify-end text-green-500">
                 <BsPatchCheckFill />
@@ -97,7 +97,7 @@ function OeMPlansInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNext
             </div>
             <div className="flex w-full items-center">
               <div className="flex w-[80%] items-center justify-center">
-                <h1 className="text-center text-xs font-medium text-primary/50">DISTRIBUIÇÃO DE CRÉDITOS</h1>
+                <h1 className="text-center text-xs font-medium text-primary/70">DISTRIBUIÇÃO DE CRÉDITOS</h1>
               </div>
               <div className="flex w-[20%] items-center justify-end text-red-500">
                 <AiFillCloseCircle />
@@ -137,7 +137,7 @@ function OeMPlansInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNext
             <h1 className="text-center text-xs font-medium text-[#fead61]">ITENS DO PLANO</h1>
             <div className="flex w-full items-center">
               <div className="flex w-[80%] items-center justify-center">
-                <h1 className="text-center text-xs font-medium text-primary/50">MANUTENÇÃO ELÉTRICA INVERSORES + QUADROS ELÉTRICOS</h1>
+                <h1 className="text-center text-xs font-medium text-primary/70">MANUTENÇÃO ELÉTRICA INVERSORES + QUADROS ELÉTRICOS</h1>
               </div>
               <div className="flex w-[20%] items-center justify-end text-green-500">
                 <BsPatchCheckFill />
@@ -145,7 +145,7 @@ function OeMPlansInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNext
             </div>
             <div className="flex w-full items-center">
               <div className="flex w-[80%] items-center justify-center">
-                <h1 className="text-center text-xs font-medium text-primary/50">REAPERTO CONEXÕES ELÉTRICAS</h1>
+                <h1 className="text-center text-xs font-medium text-primary/70">REAPERTO CONEXÕES ELÉTRICAS</h1>
               </div>
               <div className="flex w-[20%] items-center justify-end text-green-500">
                 <BsPatchCheckFill />
@@ -153,7 +153,7 @@ function OeMPlansInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNext
             </div>
             <div className="flex w-full items-center">
               <div className="flex w-[80%] items-center justify-center">
-                <h1 className="text-center text-xs font-medium text-primary/50">ANÁLISE E CONFERÊNCIA DE GRANDEZAS ELÉTRICAS DOS EQUIPAMENTOS ELÉTRICOS</h1>
+                <h1 className="text-center text-xs font-medium text-primary/70">ANÁLISE E CONFERÊNCIA DE GRANDEZAS ELÉTRICAS DOS EQUIPAMENTOS ELÉTRICOS</h1>
               </div>
               <div className="flex w-[20%] items-center justify-end text-green-500">
                 <BsPatchCheckFill />
@@ -161,7 +161,7 @@ function OeMPlansInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNext
             </div>
             <div className="flex w-full items-center">
               <div className="flex w-[80%] items-center justify-center">
-                <h1 className="text-center text-xs font-medium text-primary/50">LIMPEZA NOS MÓDULOS FOTOVOLTAICOS</h1>
+                <h1 className="text-center text-xs font-medium text-primary/70">LIMPEZA NOS MÓDULOS FOTOVOLTAICOS</h1>
               </div>
               <div className="flex w-[20%] items-center justify-end text-green-500">
                 <BsPatchCheckFill />
@@ -172,7 +172,7 @@ function OeMPlansInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNext
             </div>
             <div className="flex w-full items-center">
               <div className="flex w-[80%] items-center justify-center">
-                <h1 className="text-center text-xs font-medium text-primary/50">DISTRIBUIÇÃO DE CRÉDITOS</h1>
+                <h1 className="text-center text-xs font-medium text-primary/70">DISTRIBUIÇÃO DE CRÉDITOS</h1>
               </div>
               <div className="flex w-[20%] items-center justify-end gap-2 text-green-500">
                 2x <BsPatchCheckFill />
@@ -212,7 +212,7 @@ function OeMPlansInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNext
             <h1 className="text-center text-xs font-medium text-[#fead61]">ITENS DO PLANO</h1>
             <div className="flex w-full items-center">
               <div className="flex w-[80%] items-center justify-center">
-                <h1 className="text-center text-xs font-medium text-primary/50">MANUTENÇÃO ELÉTRICA INVERSORES + QUADROS ELÉTRICOS</h1>
+                <h1 className="text-center text-xs font-medium text-primary/70">MANUTENÇÃO ELÉTRICA INVERSORES + QUADROS ELÉTRICOS</h1>
               </div>
               <div className="flex w-[20%] items-center justify-end text-green-500">
                 <BsPatchCheckFill />
@@ -220,7 +220,7 @@ function OeMPlansInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNext
             </div>
             <div className="flex w-full items-center">
               <div className="flex w-[80%] items-center justify-center">
-                <h1 className="text-center text-xs font-medium text-primary/50">REAPERTO CONEXÕES ELÉTRICAS</h1>
+                <h1 className="text-center text-xs font-medium text-primary/70">REAPERTO CONEXÕES ELÉTRICAS</h1>
               </div>
               <div className="flex w-[20%] items-center justify-end text-green-500">
                 <BsPatchCheckFill />
@@ -228,7 +228,7 @@ function OeMPlansInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNext
             </div>
             <div className="flex w-full items-center">
               <div className="flex w-[80%] items-center justify-center">
-                <h1 className="text-center text-xs font-medium text-primary/50">ANÁLISE E CONFERÊNCIA DE GRANDEZAS ELÉTRICAS DOS EQUIPAMENTOS ELÉTRICOS</h1>
+                <h1 className="text-center text-xs font-medium text-primary/70">ANÁLISE E CONFERÊNCIA DE GRANDEZAS ELÉTRICAS DOS EQUIPAMENTOS ELÉTRICOS</h1>
               </div>
               <div className="flex w-[20%] items-center justify-end text-green-500">
                 <BsPatchCheckFill />
@@ -236,7 +236,7 @@ function OeMPlansInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNext
             </div>
             <div className="flex w-full items-center">
               <div className="flex w-[80%] items-center justify-center">
-                <h1 className="text-center text-xs font-medium text-primary/50">LIMPEZA NOS MÓDULOS FOTOVOLTAICOS</h1>
+                <h1 className="text-center text-xs font-medium text-primary/70">LIMPEZA NOS MÓDULOS FOTOVOLTAICOS</h1>
               </div>
               <div className="flex w-[20%] items-center justify-end text-green-500">
                 <BsPatchCheckFill />
@@ -247,7 +247,7 @@ function OeMPlansInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNext
             </div>
             <div className="flex w-full items-center">
               <div className="flex w-[80%] items-center justify-center">
-                <h1 className="text-center text-xs font-medium text-primary/50">DISTRIBUIÇÃO DE CRÉDITOS</h1>
+                <h1 className="text-center text-xs font-medium text-primary/70">DISTRIBUIÇÃO DE CRÉDITOS</h1>
               </div>
               <div className="flex w-[20%] items-center justify-end text-green-500">ILIMITADO</div>
             </div>
@@ -272,7 +272,7 @@ function OeMPlansInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNext
           onClick={() => {
             goToPreviousStage();
           }}
-          className='rounded p-2 font-bold text-primary/50 duration-300 hover:scale-105'
+          className='rounded p-2 font-bold text-primary/70 duration-300 hover:scale-105'
         >
           Voltar
         </button>
@@ -281,7 +281,7 @@ function OeMPlansInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNext
             setRequestInfo((prev) => ({ ...prev, possuiOeM: 'NÃO', planoOeM: 'NÃO SE APLICA' }));
             goToNextStage();
           }}
-          className='rounded p-2 font-bold hover:bg-black hover:text-white'
+          className='rounded p-2 font-bold hover:bg-black hover:text-primary-foreground'
         >
           Prosseguir sem plano
         </button>

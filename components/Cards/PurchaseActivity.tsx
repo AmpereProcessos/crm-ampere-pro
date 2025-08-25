@@ -46,36 +46,36 @@ function PurchaseActivity({ purchaseId, activity }: PurchaseActivityProps) {
           {activity.dataVencimento ? (
             <div className='flex items-center gap-1 text-orange-500'>
               <BsCalendar4Event color='rgb(249,115,22)' size={17} />
-              <p className='text-xs font-medium text-primary/50'>{formatDateAsLocale(activity.dataVencimento, true)}</p>
+              <p className='text-xs font-medium text-primary/70'>{formatDateAsLocale(activity.dataVencimento, true)}</p>
             </div>
           ) : null}
           {activity.dataConclusao ? (
             <div className='flex items-center gap-1'>
               <BsCalendarCheck color='rgb(34,197,94)' />
-              <p className='text-xs font-medium text-primary/50'>{formatDateAsLocale(activity.dataConclusao, true)}</p>
+              <p className='text-xs font-medium text-primary/70'>{formatDateAsLocale(activity.dataConclusao, true)}</p>
             </div>
           ) : null}
         </div>
       </div>
-      <h1 className='my-2 w-full rounded-md bg-primary/10 p-2 py-1 text-center text-xs font-medium text-primary/50'>{activity.descricao}</h1>
+      <h1 className='my-2 w-full rounded-md bg-primary/10 p-2 py-1 text-center text-xs font-medium text-primary/70'>{activity.descricao}</h1>
       <div className='flex w-full flex-col items-center justify-between gap-2 lg:flex-row'>
         <div className='flex grow items-center gap-1'>
-          <h1 className='mr-2 text-sm leading-none tracking-tight text-primary/50'>RESPONSÁVEIS</h1>
+          <h1 className='mr-2 text-sm leading-none tracking-tight text-primary/70'>RESPONSÁVEIS</h1>
           <div className='flex grow items-center gap-2'>
             {activity.responsaveis.map((resp) => (
               <div className='flex items-center gap-2 rounded-lg border border-cyan-500 p-1 px-2 shadow-md'>
                 <Avatar width={20} height={20} url={resp.avatar_url || undefined} fallback={formatNameAsInitials(resp.nome)} />
-                <p className='text-xs font-medium tracking-tight text-primary/50'>{resp.nome}</p>
+                <p className='text-xs font-medium tracking-tight text-primary/70'>{resp.nome}</p>
               </div>
             ))}
           </div>
         </div>
         <div className='flex w-full items-center justify-end gap-1 lg:w-fit'>
           <BsCalendarPlus />
-          <h1 className='mr-2 text-xs font-medium tracking-tight text-primary/50'>{formatDateAsLocale(activity.dataInsercao, true)}</h1>
-          <h1 className='hidden text-sm leading-none tracking-tight text-primary/50 lg:flex'>CRIADO POR</h1>
+          <h1 className='mr-2 text-xs font-medium tracking-tight text-primary/70'>{formatDateAsLocale(activity.dataInsercao, true)}</h1>
+          <h1 className='hidden text-sm leading-none tracking-tight text-primary/70 lg:flex'>CRIADO POR</h1>
           <Avatar width={20} height={20} url={activity.autor.avatar_url || ''} fallback={formatNameAsInitials(activity.autor.nome)} />
-          <h1 className='text-xs font-medium tracking-tight text-primary/50'>{activity.autor.nome}</h1>
+          <h1 className='text-xs font-medium tracking-tight text-primary/70'>{activity.autor.nome}</h1>
         </div>
       </div>
     </div>

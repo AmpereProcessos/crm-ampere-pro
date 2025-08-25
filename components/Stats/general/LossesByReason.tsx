@@ -26,7 +26,7 @@ function LossesByReason({ stats }: LossesByReasonProps) {
       <div className='mt-4 flex w-full flex-col flex-wrap items-start justify-between gap-2 md:flex-row'>
         {getListOrdenated(stats).map((reasonStat, index) => (
           <div key={index} className='flex min-h-[70px] w-full items-center justify-between gap-1 rounded-sm border border-[#F31559] md:w-[250px]'>
-            <div className='flex h-full min-h-[70px] w-[30px] min-w-[30px] items-center justify-center bg-[#F31559] font-bold text-white'>
+            <div className='flex h-full min-h-[70px] w-[30px] min-w-[30px] items-center justify-center bg-[#F31559] font-bold text-primary-foreground'>
               {index + 1}º
             </div>
             <div className='flex h-full min-h-[70px] grow flex-col items-center justify-between gap-1 p-2'>

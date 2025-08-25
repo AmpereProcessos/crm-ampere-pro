@@ -6,8 +6,8 @@ function SignedVsLost({ data }: SignedVsLostProps) {
   return (
     <div className='rounded- flex w-full flex-col bg-background p-2 shadow-lg'>
       <div className='flex w-full flex-col border-b border-primary/30 pb-1'>
-        <h1 className='w-full text-center text-sm text-primary/50'>PROJETOS</h1>
-        <h1 className='w-full text-center text-xs text-primary/50'>
+        <h1 className='w-full text-center text-sm text-primary/70'>PROJETOS</h1>
+        <h1 className='w-full text-center text-xs text-primary/70'>
           <strong className='text-[#15599a]'>CRIADOS</strong>x<strong className='text-green-500'>GANHOS</strong>x
           <strong className='text-red-500'>PERDIDOS</strong>
         </h1>

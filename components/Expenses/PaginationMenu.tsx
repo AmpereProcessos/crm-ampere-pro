@@ -13,7 +13,7 @@ function ExpensePaginationMenu({ activePage, selectPage, totalPages, expensesMat
     <div className='my-2 flex w-full flex-col items-center gap-1 '>
       {totalPages > 1 ? (
         <>
-          <p className='w-full text-center text-sm leading-none tracking-tight text-primary/50'>
+          <p className='w-full text-center text-sm leading-none tracking-tight text-primary/70'>
             Um número grande de despesas foi encontrado, separamos em páginas para facilitar a visualização. Clique na página desejada para visualizar
             os demais despesas.
           </p>
@@ -69,10 +69,10 @@ function ExpensePaginationMenu({ activePage, selectPage, totalPages, expensesMat
         </>
       ) : null}
 
-      <p className='w-full text-center text-sm leading-none tracking-tight text-primary/50'>
+      <p className='w-full text-center text-sm leading-none tracking-tight text-primary/70'>
         {expensesMatched ? (expensesMatched > 1 ? `${expensesMatched} despesas encontrados.` : `${expensesMatched} despesa encontrado.`) : null}
       </p>
-      <p className='w-full text-center text-sm leading-none tracking-tight text-primary/50'>
+      <p className='w-full text-center text-sm leading-none tracking-tight text-primary/70'>
         {expensesShowing ? (expensesShowing > 1 ? `Mostrando ${expensesShowing} despesas.` : `Mostrando ${expensesShowing} despesa.`) : null}
       </p>
     </div>

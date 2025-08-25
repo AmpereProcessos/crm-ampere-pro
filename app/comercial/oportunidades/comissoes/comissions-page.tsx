@@ -217,7 +217,7 @@ function ComissionsPage({ session }: ComissionsPageProps) {
                   />
                 ))
               ) : (
-                <p className='w-full text-center italic text-primary/50'>Nenhuma comissão para o período selecionado encontrada...</p>
+                <p className='w-full text-center italic text-primary/70'>Nenhuma comissão para o período selecionado encontrada...</p>
               )}
             </>
           ) : null}

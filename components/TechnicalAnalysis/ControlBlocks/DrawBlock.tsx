@@ -9,11 +9,11 @@ import { TTechnicalAnalysisDTO } from '@/utils/schemas/technical-analysis.schema
 function renderInputText(file: File | null) {
   if (!file)
     return (
-      <p className='text-sm1 mb-2 px-2 text-center text-primary/50 dark:text-primary/40'>
+      <p className='text-sm1 mb-2 px-2 text-center text-primary/70 dark:text-primary/40'>
         <span className='font-semibold'>Clique para escolher um arquivo</span> ou o arraste para a àrea demarcada
       </p>
     );
-  return <p className='mb-2 text-sm text-primary/50 dark:text-primary/40'>{file.name}</p>;
+  return <p className='mb-2 text-sm text-primary/70 dark:text-primary/40'>{file.name}</p>;
 }
 
 type DrawBlockProps = {
@@ -49,7 +49,7 @@ function DrawBlock({ infoHolder, setInfoHolder, changes, setChanges, updateAnaly
   return (
     <div className='mt-4 flex w-full flex-col'>
       <div className='flex w-full items-center justify-center gap-2 rounded-md bg-primary/80 p-2'>
-        <h1 className='font-bold text-white'>DESENHO</h1>
+        <h1 className='font-bold text-primary-foreground'>DESENHO</h1>
       </div>
       <div className='flex w-full flex-col'>
         <div className='w-full self-center lg:w-1/2'>
@@ -80,7 +80,7 @@ function DrawBlock({ infoHolder, setInfoHolder, changes, setChanges, updateAnaly
           />
         </div>
         <div className='mt-2 flex w-full flex-col'>
-          <h1 className='w-full rounded-tl-sm rounded-tr-sm bg-primary/50 p-1 text-center font-bold text-white'>OBSERVAÇÕES</h1>
+          <h1 className='w-full rounded-tl-sm rounded-tr-sm bg-primary/50 p-1 text-center font-bold text-primary-foreground'>OBSERVAÇÕES</h1>
           <textarea
             placeholder='SEM OBSERVAÇÕES PREENCHIDAS...'
             value={infoHolder.desenho?.observacoes || ''}
@@ -112,13 +112,13 @@ function DrawBlock({ infoHolder, setInfoHolder, changes, setChanges, updateAnaly
           </div>
         ) : (
           <div className='flex h-[300px] w-full items-center justify-center'>
-            <p className='text-sm font-medium italic text-primary/50'>Nenhuma imagem de desenho vinculada.</p>
+            <p className='text-sm font-medium italic text-primary/70'>Nenhuma imagem de desenho vinculada.</p>
           </div>
         )}
         <div className='relative flex w-full items-center justify-center'>
           <label
             htmlFor='dropzone-file'
-            className='dark:hover:bg-bray-800 flex h-32 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-primary/30 bg-gray-50 hover:bg-primary/10 dark:border-primary/60 dark:bg-primary/70 dark:hover:border-primary/50 dark:hover:bg-primary/60'
+            className='dark:hover:bg-bray-800 flex h-32 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-primary/30 bg-primary/10hover:bg-primary/10 dark:border-primary/60 dark:bg-primary/70 dark:hover:border-primary/50 dark:hover:bg-primary/60'
           >
             <div className='flex flex-col items-center justify-center pb-6 pt-5 text-primary/80'>
               <BiSolidCloudDownload color={'rgb(31,41,55)'} size={50} />
@@ -137,7 +137,7 @@ function DrawBlock({ infoHolder, setInfoHolder, changes, setChanges, updateAnaly
         <div className='mb-2 flex w-full items-center justify-end'>
           <button
             onClick={handleDrawImageUpload}
-            className='rounded border border-[#15599a] p-1 font-bold text-[#15599a] duration-300 ease-in-out hover:bg-[#15599a] hover:text-white'
+            className='rounded border border-[#15599a] p-1 font-bold text-[#15599a] duration-300 ease-in-out hover:bg-[#15599a] hover:text-primary-foreground'
           >
             VINCULAR IMAGEM
           </button>

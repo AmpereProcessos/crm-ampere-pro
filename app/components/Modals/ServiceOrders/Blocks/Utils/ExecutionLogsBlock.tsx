@@ -48,12 +48,12 @@ function ExecutionLogsBlock({ infoHolder, setInfoHolder, session }: ExecutionLog
   }
   return (
     <div className='flex w-full flex-col gap-y-2'>
-      <h1 className='w-full bg-primary/50 p-1 text-center text-xs font-medium text-white'>REGISTROS DE EXECUÇÃO</h1>
+      <h1 className='w-full bg-primary/50 p-1 text-center text-xs font-medium text-primary-foreground'>REGISTROS DE EXECUÇÃO</h1>
 
       <div className='flex w-full flex-col gap-1'>
         {infoHolder.registros.length > 0 ? (
           <div className='flex w-full flex-col gap-1'>
-            <h1 className='w-full text-start text-sm font-medium tracking-tight text-primary/50'>
+            <h1 className='w-full text-start text-sm font-medium tracking-tight text-primary/70'>
               Aqui estão os registros de execução da ordem de serviço.
             </h1>
 
@@ -63,11 +63,11 @@ function ExecutionLogsBlock({ infoHolder, setInfoHolder, session }: ExecutionLog
                   <div className='flex items-center gap-2'>
                     <div className='flex items-center gap-2'>
                       <Avatar fallback={'R'} url={registry.autor?.avatar_url || undefined} height={22} width={22} />
-                      <p className='text-xs font-medium text-primary/50'>{registry.autor.nome}</p>
+                      <p className='text-xs font-medium text-primary/70'>{registry.autor.nome}</p>
                     </div>
                     <div className='flex items-center gap-2'>
                       <BsCalendar style={{ fontSize: '20px' }} />
-                      <p className='text-xs font-medium text-primary/50'>
+                      <p className='text-xs font-medium text-primary/70'>
                         {formatDateAsLocale(registry.inicio, true)} até {formatDateAsLocale(registry.fim, true) || 'NÃO DEFINIDO'}
                       </p>
                     </div>
@@ -81,13 +81,13 @@ function ExecutionLogsBlock({ infoHolder, setInfoHolder, session }: ExecutionLog
                   </button>
                 </div>
                 <div className='flex w-full items-center justify-center border border-primary/30 bg-[#F4F0BB] p-2'>
-                  <p className='w-full text-center text-sm text-primary/50'>{registry.anotacoes || '...'}</p>
+                  <p className='w-full text-center text-sm text-primary/70'>{registry.anotacoes || '...'}</p>
                 </div>
               </div>
             ))}
           </div>
         ) : (
-          <p className='w-full text-center text-sm font-medium tracking-tight text-primary/50'>Nenhum observação de execução definida.</p>
+          <p className='w-full text-center text-sm font-medium tracking-tight text-primary/70'>Nenhum observação de execução definida.</p>
         )}
         <div className='flex w-full flex-col items-center gap-2 lg:flex-row'>
           <div className='w-1/2 lg:w-full'>
@@ -117,7 +117,7 @@ function ExecutionLogsBlock({ infoHolder, setInfoHolder, session }: ExecutionLog
         />
         <div className='flex items-center justify-end gap-4'>
           <button
-            className='rounded bg-black p-1 px-4 text-sm font-medium text-white duration-300 ease-in-out hover:bg-primary/70'
+            className='rounded bg-black p-1 px-4 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-primary/70'
             onClick={() => addExecutionLog(executionLogHolder)}
           >
             ADICIONAR REGISTRO

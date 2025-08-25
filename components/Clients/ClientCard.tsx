@@ -78,7 +78,7 @@ function ClientCard({ client, openModal, callbacks }: ClientCard) {
           disabled={isPending}
           onClick={() => handleCreateConectaInvite({ clientId: client._id })}
           type='button'
-          className='flex items-center justify-center gap-1 p-1 rounded-xl bg-cyan-500 text-white disabled:bg-primary/30'
+          className='flex items-center justify-center gap-1 p-1 rounded-xl bg-cyan-500 text-primary-foreground disabled:bg-primary/30'
         >
           <Send size={10} />
           <p className='tracking-tight leading-none'>ENVIAR CONVITE</p>

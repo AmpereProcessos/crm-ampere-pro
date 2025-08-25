@@ -116,7 +116,7 @@ function ClientBlock({ infoHolder, setInfoHolder, moveToNextStage, moveToPreviou
   if (isError) return <ErrorComponent msg='Oops, houve um erro desconhecido ao buscar informações do cliente.' />;
   return (
     <div className='flex w-full flex-col gap-2'>
-      <h1 className='w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-white'>INFORMAÇÕES DO CLIENTE</h1>
+      <h1 className='w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-primary-foreground'>INFORMAÇÕES DO CLIENTE</h1>
       <div className='flex w-full grow flex-col gap-2'>
         <div className='flex w-full flex-col items-center gap-2 lg:flex-row'>
           <div className='w-full lg:w-1/2'>
@@ -265,7 +265,7 @@ function ClientBlock({ infoHolder, setInfoHolder, moveToNextStage, moveToPreviou
             />
           </div>
         </div>
-        <h1 className='w-full rounded-md bg-blue-500 p-1 text-center text-sm font-bold text-white'>INFORMAÇÕES DE CONTATO</h1>
+        <h1 className='w-full rounded-md bg-blue-500 p-1 text-center text-sm font-bold text-primary-foreground'>INFORMAÇÕES DE CONTATO</h1>
         <div className='flex w-full flex-col items-center gap-2 lg:flex-row'>
           <div className='w-full lg:w-1/3'>
             <TextInput
@@ -305,7 +305,7 @@ function ClientBlock({ infoHolder, setInfoHolder, moveToNextStage, moveToPreviou
             />
           </div>
         </div>
-        <h1 className='w-full rounded-md bg-blue-500 p-1 text-center text-sm font-bold text-white'>INFORMAÇÕES DE ENDEREÇO</h1>
+        <h1 className='w-full rounded-md bg-blue-500 p-1 text-center text-sm font-bold text-primary-foreground'>INFORMAÇÕES DE ENDEREÇO</h1>
         <div className='my-1 flex w-full flex-col'>
           <p className='w-full text-center text-sm font-light tracking-tighter text-primary/70'>
             Preencha abaixo o endereço de correspondência do cliente.
@@ -404,13 +404,13 @@ function ClientBlock({ infoHolder, setInfoHolder, moveToNextStage, moveToPreviou
           onClick={() => {
             moveToPreviousStage();
           }}
-          className='rounded p-2 font-bold text-primary/50 duration-300 hover:scale-105'
+          className='rounded p-2 font-bold text-primary/70 duration-300 hover:scale-105'
         >
           VOLTAR
         </button>
         <button
           onClick={() => validateAndProceed()}
-          className='rounded bg-black px-4 py-1 text-sm font-medium text-white duration-300 ease-in-out hover:bg-primary/70'
+          className='rounded bg-black px-4 py-1 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-primary/70'
         >
           PROSSEGUIR
         </button>

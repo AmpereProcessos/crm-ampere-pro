@@ -33,7 +33,7 @@ function SimilarClients({ clients, selectedClientId, isSuccess, isLoading, isErr
               />
             ))
           ) : (
-            <p className='flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/50'>
+            <p className='flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/70'>
               Nenhum cliente similar encontrado.
             </p>
           )

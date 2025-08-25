@@ -63,7 +63,7 @@ function TechnicalAnalysisVinculation({ infoHolder, setInfoHolder, opportunityId
     <div>
       {analysisSuccess ? (
         <div className='mt-2 flex w-full flex-col'>
-          <h1 className='w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-white'>ANÁLISES TÉCNICAS</h1>
+          <h1 className='w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-primary-foreground'>ANÁLISES TÉCNICAS</h1>
           <div className='flex w-full flex-col gap-1 py-2'>
             {analysis.length > 0 ? (
               analysis.map((analysis) => (
@@ -77,7 +77,7 @@ function TechnicalAnalysisVinculation({ infoHolder, setInfoHolder, opportunityId
                 />
               ))
             ) : (
-              <p className='flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/50'>
+              <p className='flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/70'>
                 Sem análises técnicas concluídas disponíveis.
               </p>
             )}

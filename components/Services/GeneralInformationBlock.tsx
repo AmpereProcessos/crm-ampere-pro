@@ -21,7 +21,7 @@ function GeneralInformationBlock({ infoHolder, setInfoHolder }: GeneralInformati
 
   return (
     <div className='flex w-full flex-col gap-y-2'>
-      <h1 className='w-full bg-primary/70  p-1 text-center font-medium text-white'>INFORMAÇÕES GERAIS</h1>
+      <h1 className='w-full bg-primary/70  p-1 text-center font-medium text-primary-foreground'>INFORMAÇÕES GERAIS</h1>
       <div className='flex w-full items-center justify-center gap-2 py-2'>
         <div className='w-fit'>
           <CheckboxInput

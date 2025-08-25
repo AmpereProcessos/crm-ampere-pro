@@ -29,14 +29,14 @@ function DocumentFileInput({ label, value, handleChange, fileReferences, multipl
           !showMenu ? (
             <button
               onClick={() => setShowMenu(true)}
-              className='min-w-fit rounded-md bg-blue-800 px-2 py-1 text-[0.55rem] font-medium text-white hover:bg-blue-600'
+              className='min-w-fit rounded-md bg-blue-800 px-2 py-1 text-[0.55rem] font-medium text-primary-foreground hover:bg-blue-600'
             >
               MOSTRAR OPÇÕES
             </button>
           ) : (
             <button
               onClick={() => setShowMenu(false)}
-              className='min-w-fit rounded-md bg-red-600 px-2 py-1 text-[0.55rem] font-medium text-white hover:bg-red-500'
+              className='min-w-fit rounded-md bg-red-600 px-2 py-1 text-[0.55rem] font-medium text-primary-foreground hover:bg-red-500'
             >
               FECHAR OPÇÕES
             </button>
@@ -50,11 +50,11 @@ function DocumentFileInput({ label, value, handleChange, fileReferences, multipl
         >
           <div className='flex w-full items-center gap-2'>
             {value ? (
-              <p className='grow text-center leading-none tracking-tight text-primary/50'>
+              <p className='grow text-center leading-none tracking-tight text-primary/70'>
                 {typeof value != 'string' ? value.name : formatLongString(value, 30)}
               </p>
             ) : (
-              <p className='grow text-center leading-none tracking-tight text-primary/50'>
+              <p className='grow text-center leading-none tracking-tight text-primary/70'>
                 <span className='font-semibold text-cyan-500'>Clique para escolher um arquivo</span> ou o arraste para a àrea demarcada
               </p>
             )}
@@ -81,24 +81,24 @@ function DocumentFileInput({ label, value, handleChange, fileReferences, multipl
                   {handleRenderIcon(reference.formato, 12)}
                   <a
                     href={reference.url}
-                    className='text-[0.65rem] font-bold leading-none tracking-tight text-primary/50 duration-300 ease-in-out hover:text-cyan-500'
+                    className='text-[0.65rem] font-bold leading-none tracking-tight text-primary/70 duration-300 ease-in-out hover:text-cyan-500'
                   >
                     {reference.titulo}
                   </a>
                 </div>
                 {value == reference.url ? (
-                  <h1 className='rounded-md bg-green-600 px-2 py-1 text-[0.55rem] font-medium text-white'>ESCOLHIDO</h1>
+                  <h1 className='rounded-md bg-green-600 px-2 py-1 text-[0.55rem] font-medium text-primary-foreground'>ESCOLHIDO</h1>
                 ) : (
                   <button
                     onClick={() => handleChange(reference.url)}
-                    className='rounded-md bg-cyan-600 px-2 py-1 text-[0.55rem] font-medium text-white hover:bg-cyan-500'
+                    className='rounded-md bg-cyan-600 px-2 py-1 text-[0.55rem] font-medium text-primary-foreground hover:bg-cyan-500'
                   >
                     USAR ARQUIVO
                   </button>
                 )}
               </div>
               <div className='mt-1 flex w-full items-center justify-between gap-2'>
-                <h1 className='text-center text-[0.6rem] font-medium italic text-primary/50'>{reference.formato}</h1>
+                <h1 className='text-center text-[0.6rem] font-medium italic text-primary/70'>{reference.formato}</h1>
               </div>
             </div>
           ))}

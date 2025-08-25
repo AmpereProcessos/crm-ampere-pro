@@ -200,7 +200,7 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
             handleUpdateOpportunity={handleUpdateOpportunity}
           />
           <OpportunityFunnelReferencesBlock opportunity={infoHolder} setOpportunity={setInfoHolder} />
-          <h1 className='w-full rounded-md bg-[#fead41] p-1 text-center text-sm font-medium text-white'>DADOS DA LOCALIZAÇÃO</h1>
+          <h1 className='w-full rounded-md bg-[#fead41] p-1 text-center text-sm font-medium text-primary-foreground'>DADOS DA LOCALIZAÇÃO</h1>
           <div className='flex w-full gap-2'>
             <div className='flex grow items-center gap-1'>
               <div className='w-1/3'>
@@ -366,7 +366,7 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
               />
             </button>
           </div>
-          <h1 className='w-full rounded-md bg-[#fead41] p-1 text-center text-sm font-medium text-white'>DADOS ADICIONAIS DO CLIENTE</h1>
+          <h1 className='w-full rounded-md bg-[#fead41] p-1 text-center text-sm font-medium text-primary-foreground'>DADOS ADICIONAIS DO CLIENTE</h1>
           <div className='flex w-full gap-2'>
             <div className='grow'>
               <TextInput
@@ -622,7 +622,7 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
               />
             </button>
           </div>
-          <h1 className='w-full rounded-md bg-[#fead41] p-1 text-center text-sm font-medium text-white'>DADOS DA INSTALAÇÃO</h1>
+          <h1 className='w-full rounded-md bg-[#fead41] p-1 text-center text-sm font-medium text-primary-foreground'>DADOS DA INSTALAÇÃO</h1>
           <div className='flex w-full gap-2'>
             <div className='grow'>
               <TextInput

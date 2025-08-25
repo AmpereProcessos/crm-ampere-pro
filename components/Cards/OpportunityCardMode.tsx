@@ -42,26 +42,26 @@ function OpportunityCardMode({ opportunity }: OpportunitiesCardModeProps) {
           </div>
         </div>
         <div className='my-2 flex w-full grow flex-col rounded-md border border-primary/30 p-2'>
-          <h1 className='text-[0.6rem] font-extralight text-primary/50'>PROPOSTA ATIVA</h1>
+          <h1 className='text-[0.6rem] font-extralight text-primary/70'>PROPOSTA ATIVA</h1>
           {opportunity.proposta?.nome ? (
             <div className='flex w-full flex-col justify-between'>
               <p className='text-xs font-medium text-cyan-500'>{opportunity.proposta.nome}</p>
               <div className='flex  items-center justify-between'>
                 <div className='flex items-center gap-1'>
                   <FaBolt color='rgb(6,182,212)' />
-                  <p className='text-xs  text-primary/50'>
+                  <p className='text-xs  text-primary/70'>
                     {formatDecimalPlaces(opportunity.proposta.potenciaPico || 0)}
                     kWp
                   </p>
                 </div>
                 <div className='flex items-center gap-1'>
                   <MdAttachMoney color='rgb(6,182,212)' />
-                  <p className='text-xs  text-primary/50'>{formatToMoney(opportunity.proposta.valor)}</p>
+                  <p className='text-xs  text-primary/70'>{formatToMoney(opportunity.proposta.valor)}</p>
                 </div>
               </div>
             </div>
           ) : (
-            <h1 className='py-2 text-xs font-medium text-primary/50'>NENHUMA PROPOSTA ATIVA</h1>
+            <h1 className='py-2 text-xs font-medium text-primary/70'>NENHUMA PROPOSTA ATIVA</h1>
           )}
         </div>
         <div className='mt-2 flex w-full items-center justify-between gap-2'>
@@ -81,7 +81,7 @@ function OpportunityCardMode({ opportunity }: OpportunitiesCardModeProps) {
           <div className={`flex items-center gap-2`}>
             <div className='ites-center flex gap-1'>
               <BsCalendarPlus />
-              <p className={`text-[0.65rem] font-medium text-primary/50`}>{formatDateAsLocale(opportunity.dataInsercao, true)}</p>
+              <p className={`text-[0.65rem] font-medium text-primary/70`}>{formatDateAsLocale(opportunity.dataInsercao, true)}</p>
             </div>
           </div>
         </div>

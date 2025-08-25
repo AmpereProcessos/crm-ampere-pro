@@ -444,7 +444,7 @@ function FormulaManagementBlock({ formula, addToFormula, removeFromFormula }: Fo
                 key={`${index}-${y}`}
                 onClick={() => removeFromFormula(index)}
                 className={cn('cursor-pointer rounded-lg p-1 text-[0.65rem] font-medium duration-300 hover:bg-primary/20 dark:hover:bg-primary/50', {
-                  'bg-primary/80 px-4 text-white dark:bg-primary/20': y.includes('[') && y.includes(']'),
+                  'bg-primary/80 px-4 text-primary-foreground dark:bg-primary/20': y.includes('[') && y.includes(']'),
                 })}
               >
                 {formatComissionFormulaIndividualItemLabel({ item: y, definitions: SaleDefinitions })}

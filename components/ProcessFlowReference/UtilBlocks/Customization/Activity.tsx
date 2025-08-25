@@ -56,7 +56,7 @@ function Activity(node: TProcessFlowReferenceNode) {
         width='100%'
       />
       <div className='flex w-full flex-col rounded-md border border-primary/30 p-2 shadow-md'>
-        <h1 className='text-sm font-medium leading-none tracking-tight text-primary/50'>DESCRIÇÃO DA ATIVIDADE</h1>
+        <h1 className='text-sm font-medium leading-none tracking-tight text-primary/70'>DESCRIÇÃO DA ATIVIDADE</h1>
         <input
           value={data.entidade.customizacao.descricao}
           onChange={(e) =>
@@ -94,7 +94,7 @@ function Activity(node: TProcessFlowReferenceNode) {
           onClick={() =>
             vinculateResponsible({ userId: newResponsibleHolder, users: users || [], previousResponsibles: data.entidade.customizacao.responsaveis })
           }
-          className='min-h-[46.6px]  rounded-sm border border-orange-500 px-4 py-2 text-sm font-medium text-orange-500 shadow-sm hover:bg-orange-500 hover:text-white'
+          className='min-h-[46.6px]  rounded-sm border border-orange-500 px-4 py-2 text-sm font-medium text-orange-500 shadow-sm hover:bg-orange-500 hover:text-primary-foreground'
         >
           VINCULAR
         </button>
@@ -108,7 +108,7 @@ function Activity(node: TProcessFlowReferenceNode) {
             className='flex items-center gap-2 rounded-lg border border-cyan-500 p-2 shadow-md'
           >
             <Avatar width={15} height={15} url={resp.avatar_url || undefined} fallback={formatNameAsInitials(resp.nome)} />
-            <p className='text-[0.6rem] font-medium tracking-tight text-primary/50'>{resp.nome}</p>
+            <p className='text-[0.6rem] font-medium tracking-tight text-primary/70'>{resp.nome}</p>
           </div>
         ))}
       </div>

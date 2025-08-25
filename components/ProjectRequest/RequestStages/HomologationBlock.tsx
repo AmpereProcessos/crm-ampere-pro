@@ -47,7 +47,7 @@ function HomologationBlock({
   }
   return (
     <div className='flex w-full grow flex-col gap-2'>
-      <h1 className='w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-white'>INFORMAÇÕES DA HOMOLOGAÇÃO</h1>
+      <h1 className='w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-primary-foreground'>INFORMAÇÕES DA HOMOLOGAÇÃO</h1>
       <div className='flex w-full grow flex-col gap-2'>
         {isLoading ? <LoadingComponent /> : null}
         {isError ? <ErrorComponent msg='Oops, houve um erro ao buscar as homologações vinculadas a oportunidade.' /> : null}
@@ -55,7 +55,7 @@ function HomologationBlock({
           <>
             {activeHomologation ? (
               <div className='mb-6 flex w-full flex-col items-center justify-center rounded-sm border border-green-500'>
-                <h1 className='w-full rounded-md rounded-tl rounded-tr bg-green-500 p-1 text-center text-sm font-bold text-white'>
+                <h1 className='w-full rounded-md rounded-tl rounded-tr bg-green-500 p-1 text-center text-sm font-bold text-primary-foreground'>
                   HOMOLOGAÇÃO ATIVA
                 </h1>
                 <div className='flex w-full items-center justify-center p-2'>
@@ -63,7 +63,7 @@ function HomologationBlock({
                 </div>
               </div>
             ) : null}
-            <h1 className='text-[0.65rem] font-bold leading-none tracking-tight text-primary/50 lg:text-xs'>LISTA DE HOMOLOGAÇÕES DA OPORTUNIDADE</h1>
+            <h1 className='text-[0.65rem] font-bold leading-none tracking-tight text-primary/70 lg:text-xs'>LISTA DE HOMOLOGAÇÕES DA OPORTUNIDADE</h1>
             {selectableHomologations ? (
               selectableHomologations.length > 0 ? (
                 selectableHomologations.map((homologation) => (
@@ -74,7 +74,7 @@ function HomologationBlock({
                   />
                 ))
               ) : (
-                <p className='w-full text-center text-sm font-medium tracking-tight text-primary/50'>Nenhuma homologação encontrada.</p>
+                <p className='w-full text-center text-sm font-medium tracking-tight text-primary/70'>Nenhuma homologação encontrada.</p>
               )
             ) : null}
           </>
@@ -85,21 +85,21 @@ function HomologationBlock({
           onClick={() => {
             moveToPreviousStage();
           }}
-          className='rounded p-2 font-bold text-primary/50 duration-300 hover:scale-105'
+          className='rounded p-2 font-bold text-primary/70 duration-300 hover:scale-105'
         >
           VOLTAR
         </button>
         {activeHomologation ? (
           <button
             onClick={() => validateAndProceed()}
-            className='rounded bg-black px-4 py-1 text-sm font-medium text-white duration-300 ease-in-out hover:bg-primary/70'
+            className='rounded bg-black px-4 py-1 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-primary/70'
           >
             PROSSEGUIR
           </button>
         ) : (
           <button
             onClick={() => validateAndProceed()}
-            className='rounded bg-orange-700 px-4 py-1 text-sm font-medium text-white duration-300 ease-in-out hover:bg-orange-800'
+            className='rounded bg-orange-700 px-4 py-1 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-orange-800'
           >
             PROSSEGUIR SEM HOMOLOGAÇÃO
           </button>

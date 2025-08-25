@@ -21,7 +21,7 @@ function Avatar({ url, width, height, fallback, radiusPercentage = '100%', backg
           minWidth: width,
         }}
       >
-        <p style={{ fontSize: width * 0.4 }} className='font-bold text-white'>
+        <p style={{ fontSize: width * 0.4 }} className='font-bold text-primary-foreground'>
           {fallback || 'U'}
         </p>
       </div>

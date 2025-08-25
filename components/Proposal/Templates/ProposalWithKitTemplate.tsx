@@ -26,20 +26,20 @@ function ProposalWithKitTemplate({ proposalDocumentRef, proposal, opportunity, p
       <div className='flex h-fit w-full items-center justify-between rounded-bl-md rounded-br-md bg-black p-4'>
         <div className='flex flex-col gap-1'>
           <div className='flex items-center gap-2'>
-            <p className='text-xs font-medium text-white'>CLIENTE</p>
-            <p className='text-xs font-medium text-white'>{opportunity.nome}</p>
+            <p className='text-xs font-medium text-primary-foreground'>CLIENTE</p>
+            <p className='text-xs font-medium text-primary-foreground'>{opportunity.nome}</p>
           </div>
           <div className='flex items-center gap-2'>
-            <p className='text-xs font-medium text-white'>CPF/CNPJ</p>
-            <p className='text-xs font-medium text-white'>{opportunity.cliente.cpfCnpj}</p>
+            <p className='text-xs font-medium text-primary-foreground'>CPF/CNPJ</p>
+            <p className='text-xs font-medium text-primary-foreground'>{opportunity.cliente.cpfCnpj}</p>
           </div>
           <div className='flex items-center gap-2'>
-            <p className='text-xs font-medium text-white'>CIDADE</p>
-            <p className='text-xs font-medium text-white'>{opportunity.localizacao.cidade}</p>
+            <p className='text-xs font-medium text-primary-foreground'>CIDADE</p>
+            <p className='text-xs font-medium text-primary-foreground'>{opportunity.localizacao.cidade}</p>
           </div>
           <div className='flex items-center gap-2'>
-            <p className='text-xs font-medium text-white'>ENDEREÇO</p>
-            <p className='text-xs font-medium text-white'>{formatLocation({ location: opportunity.localizacao })}</p>
+            <p className='text-xs font-medium text-primary-foreground'>ENDEREÇO</p>
+            <p className='text-xs font-medium text-primary-foreground'>{formatLocation({ location: opportunity.localizacao })}</p>
           </div>
         </div>
         <div className='flex flex-col items-end'>
@@ -68,16 +68,16 @@ function ProposalWithKitTemplate({ proposalDocumentRef, proposal, opportunity, p
                 <div className='flex w-full items-center justify-end gap-2 pl-2'>
                   <div className='flex items-center gap-1'>
                     <FaIndustry size={12} />
-                    <p className='text-[0.6rem] font-light text-primary/50 lg:text-xs'>{product.fabricante}</p>
+                    <p className='text-[0.6rem] font-light text-primary/70 lg:text-xs'>{product.fabricante}</p>
                   </div>
                   <div className='flex items-center gap-1'>
                     <ImPower size={12} />
-                    <p className='text-[0.6rem] font-light text-primary/50 lg:text-xs'>{product.potencia} W</p>
+                    <p className='text-[0.6rem] font-light text-primary/70 lg:text-xs'>{product.potencia} W</p>
                   </div>
                   {product.garantia ? (
                     <div className='flex items-center gap-1'>
                       <AiOutlineSafety size={12} />
-                      <p className='whitespace-nowrap text-[0.6rem] font-light text-primary/50 lg:text-xs'>
+                      <p className='whitespace-nowrap text-[0.6rem] font-light text-primary/70 lg:text-xs'>
                         {product.garantia > 1 ? `${product.garantia} ANOS` : `${product.garantia} ANO`}
                       </p>
                     </div>
@@ -101,14 +101,14 @@ function ProposalWithKitTemplate({ proposalDocumentRef, proposal, opportunity, p
                   </div>
                 </div>
                 {service.observacoes.trim().length > 0 ? (
-                  <p className='w-full text-start text-[0.65rem] text-primary/50'>{service.observacoes || '...'}</p>
+                  <p className='w-full text-start text-[0.65rem] text-primary/70'>{service.observacoes || '...'}</p>
                 ) : null}
 
                 <div className='flex w-full items-center justify-end gap-2 pl-2'>
                   {service.garantia ? (
                     <div className='flex items-center gap-1 whitespace-nowrap'>
                       <AiOutlineSafety size={12} />
-                      <p className='whitespace-nowrap text-[0.6rem] font-light text-primary/50 lg:text-xs'>
+                      <p className='whitespace-nowrap text-[0.6rem] font-light text-primary/70 lg:text-xs'>
                         {service.garantia > 1 ? `${service.garantia} ANOS` : `${service.garantia} ANO`}
                       </p>
                     </div>
@@ -157,8 +157,8 @@ function ProposalWithKitTemplate({ proposalDocumentRef, proposal, opportunity, p
           ENTRE AS PARTES.
         </span>
         <div className='flex w-full items-center justify-between gap-1 rounded-bl-md rounded-br-md bg-black p-3'>
-          <h1 className='min-w-fit text-[0.7rem] font-bold text-white'>INVESTIMENTO ESPERADO</h1>
-          <h1 className='whitespace-nowrap text-sm font-black text-white'>{formatToMoney(proposal.valor)} À VISTA</h1>
+          <h1 className='min-w-fit text-[0.7rem] font-bold text-primary-foreground'>INVESTIMENTO ESPERADO</h1>
+          <h1 className='whitespace-nowrap text-sm font-black text-primary-foreground'>{formatToMoney(proposal.valor)} À VISTA</h1>
         </div>
         <div className='mt-2 flex min-h-[100px] w-full items-end justify-between'>
           <div className='flex w-[45%] flex-col lg:w-1/3'>
@@ -177,38 +177,38 @@ function ProposalWithKitTemplate({ proposalDocumentRef, proposal, opportunity, p
 
       <div className='mt-4 flex w-full flex-col gap-4 bg-black p-4'>
         <div className='flex w-full flex-wrap items-center justify-center gap-2'>
-          <div className='flex items-center gap-1 text-white'>
+          <div className='flex items-center gap-1 text-primary-foreground'>
             <FaLocationDot size={20} />
             <p className='text-xs tracking-tight'>
               {partner.localizacao.cidade}/{partner.localizacao.uf}, {formatLocation({ location: partner.localizacao })}
             </p>
           </div>
-          <div className='flex items-center gap-1 text-white'>
+          <div className='flex items-center gap-1 text-primary-foreground'>
             <MdEmail size={20} />
             <p className='text-xs tracking-tight'>{partner.contatos.email}</p>
           </div>
         </div>
         <div className='flex w-full flex-wrap items-center justify-around gap-6 gap-y-2'>
           {partner.midias.website ? (
-            <div className='flex items-center gap-1 text-white'>
+            <div className='flex items-center gap-1 text-primary-foreground'>
               <TbWorld size={20} />
               <p className='text-xs tracking-tight'>{partner.midias.website}</p>
             </div>
           ) : null}
 
           {partner.midias.instagram ? (
-            <div className='flex items-center gap-1 text-white'>
+            <div className='flex items-center gap-1 text-primary-foreground'>
               <FaInstagram size={20} />
               <p className='text-xs tracking-tight'>{partner.midias.instagram}</p>
             </div>
           ) : null}
 
-          <div className='flex items-center gap-1 text-white'>
+          <div className='flex items-center gap-1 text-primary-foreground'>
             <FaPhone size={20} />
             <p className='text-xs tracking-tight'>{partner.contatos.telefonePrimario}</p>
           </div>
         </div>
-        {partner.slogan ? <h1 className='w-full whitespace-nowrap text-center font-black text-white'>{partner.slogan}</h1> : null}
+        {partner.slogan ? <h1 className='w-full whitespace-nowrap text-center font-black text-primary-foreground'>{partner.slogan}</h1> : null}
       </div>
     </div>
   );

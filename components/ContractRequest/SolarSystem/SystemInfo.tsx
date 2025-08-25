@@ -58,7 +58,7 @@ function SystemInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNextSt
           </div>
         </div>
       </div>
-      <h1 className='w-full text-start font-medium text-primary/50'>LISTA DE EQUIPAMENTOS</h1>
+      <h1 className='w-full text-start font-medium text-primary/70'>LISTA DE EQUIPAMENTOS</h1>
       <div className='flex w-full flex-col flex-wrap justify-around gap-2 lg:flex-row'>
         {proposal.produtos.map((product, index) => (
           <div key={index} className='mt-1 flex w-full flex-col rounded-md border border-primary/30 p-2'>
@@ -74,23 +74,23 @@ function SystemInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNextSt
               <div className='flex w-full grow items-center justify-end gap-2 pl-2 lg:w-fit'>
                 <div className='flex items-center gap-1'>
                   <FaIndustry size={15} />
-                  <p className='text-[0.6rem] font-light text-primary/50'>{product.fabricante}</p>
+                  <p className='text-[0.6rem] font-light text-primary/70'>{product.fabricante}</p>
                 </div>
                 <div className='flex items-center gap-1'>
                   <ImPower size={15} />
-                  <p className='text-[0.6rem] font-light text-primary/50'>{product.potencia} W</p>
+                  <p className='text-[0.6rem] font-light text-primary/70'>{product.potencia} W</p>
                 </div>
                 <div className='flex items-center gap-1'>
                   <AiOutlineSafety size={15} />
-                  <p className='text-[0.6rem] font-light text-primary/50'>{product.garantia} ANOS</p>
+                  <p className='text-[0.6rem] font-light text-primary/70'>{product.garantia} ANOS</p>
                 </div>
               </div>
             </div>
           </div>
         ))}
       </div>
-      <h1 className='w-full rounded-md bg-[#fead41] p-1 text-center text-sm font-medium text-white'>SERVIÇOS</h1>
-      <h1 className='w-full text-start font-medium text-primary/50'>LISTA DE SERVIÇOS</h1>
+      <h1 className='w-full rounded-md bg-[#fead41] p-1 text-center text-sm font-medium text-primary-foreground'>SERVIÇOS</h1>
+      <h1 className='w-full text-start font-medium text-primary/70'>LISTA DE SERVIÇOS</h1>
       <div className='flex w-full flex-col flex-wrap justify-around gap-2 lg:flex-row'>
         {proposal.servicos.map((service, index) => (
           <div key={index} className='mt-1 flex w-full flex-col rounded-md border border-primary/30 p-2'>
@@ -104,7 +104,7 @@ function SystemInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNextSt
               <div className='flex  grow items-center justify-end gap-2 pl-2'>
                 <div className='flex items-center gap-1'>
                   <AiOutlineSafety size={15} />
-                  <p className='text-[0.6rem] font-light text-primary/50'>{service.garantia} ANOS</p>
+                  <p className='text-[0.6rem] font-light text-primary/70'>{service.garantia} ANOS</p>
                 </div>
               </div>
             </div>
@@ -116,7 +116,7 @@ function SystemInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNextSt
           onClick={() => {
             goToPreviousStage();
           }}
-          className='rounded p-2 font-bold text-primary/50 duration-300 hover:scale-105'
+          className='rounded p-2 font-bold text-primary/70 duration-300 hover:scale-105'
         >
           Voltar
         </button>
@@ -124,7 +124,7 @@ function SystemInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNextSt
           onClick={() => {
             goToNextStage();
           }}
-          className='rounded p-2 font-bold hover:bg-black hover:text-white'
+          className='rounded p-2 font-bold hover:bg-black hover:text-primary-foreground'
         >
           Prosseguir
         </button>

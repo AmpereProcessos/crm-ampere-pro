@@ -58,17 +58,17 @@ function CardUserControl({ userInfo, admin, openModal }: CardUserControlProps) {
         </div>
         <div className='flex h-full grow flex-col justify-center p-3'>
           <h5 className='font-Raleway font-black leading-none tracking-tight'>{userInfo.nome}</h5>
-          <span className='text-[0.65rem] text-primary/50 lg:text-sm'>{userInfo.email}</span>
+          <span className='text-[0.65rem] text-primary/70 lg:text-sm'>{userInfo.email}</span>
           <div className='mt-2 flex w-full items-center justify-between'>
             <div className='flex items-center gap-1 text-xs'>
               <BsFillCalendarFill />
-              <p className='leading-none tracking-tight text-primary/50'>
+              <p className='leading-none tracking-tight text-primary/70'>
                 {userInfo.dataInsercao ? formatDateAsLocale(userInfo.dataInsercao) : 'NÃO DEFINIDO'}
               </p>
             </div>
             <button
               onClick={() => openModal(userInfo._id.toString())}
-              className='text-sm text-primary/50 duration-300 ease-in-out hover:text-cyan-500'
+              className='text-sm text-primary/70 duration-300 ease-in-out hover:text-cyan-500'
             >
               <AiFillEdit />
             </button>

@@ -53,7 +53,7 @@ function OpportunityClientInformationBlock({
       </div>
       {similarClient ? (
         <div className='flex w-full flex-col gap-2 rounded-md border border-primary/50 bg-background font-Inter shadow-md'>
-          <h1 className='w-full rounded-tl rounded-tr bg-cyan-500 text-center font-bold text-white'>CLIENTE VINCULADO</h1>
+          <h1 className='w-full rounded-tl rounded-tr bg-cyan-500 text-center font-bold text-primary-foreground'>CLIENTE VINCULADO</h1>
           <div className='flex w-full flex-col gap-2 p-4'>
             <div className='flex w-full items-center justify-between gap-2'>
               <div className='flex  items-center gap-1'>
@@ -63,30 +63,30 @@ function OpportunityClientInformationBlock({
                 <p className='text-sm font-black leading-none tracking-tight'>{client.nome}</p>
               </div>
 
-              <h1 className='rounded-full bg-green-600 px-2 py-1 text-[0.65rem] font-bold text-white lg:text-xs'>SELECIONADO</h1>
+              <h1 className='rounded-full bg-green-600 px-2 py-1 text-[0.65rem] font-bold text-primary-foreground lg:text-xs'>SELECIONADO</h1>
             </div>
             <div className='mt-2 flex w-full flex-wrap items-center justify-between'>
               <div className='flex items-center gap-2'>
                 <MdLocationPin />
-                <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/50 lg:text-xs'>
+                <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/70 lg:text-xs'>
                   {formatLocation({ location, includeCity: true, includeUf: true })}
                 </p>
               </div>
               <div className='flex items-center gap-2'>
                 <FaPhone />
-                <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/50 lg:text-xs'>{client.telefonePrimario}</p>
+                <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/70 lg:text-xs'>{client.telefonePrimario}</p>
               </div>
             </div>
             <div className='flex w-full flex-wrap items-center justify-between'>
               <div className='flex items-center gap-2'>
                 <MdEmail />
-                <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/50 lg:text-xs'>
+                <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/70 lg:text-xs'>
                   {client.email || 'NÃO PREENCHIDO'}
                 </p>
               </div>
               <div className='flex items-center gap-2'>
                 <FaRegIdCard />
-                <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/50 lg:text-xs'>
+                <p className='text-[0.65rem] font-medium leading-none tracking-tight text-primary/70 lg:text-xs'>
                   {client.cpfCnpj || 'NÃO PREENCHIDO'}
                 </p>
               </div>
@@ -95,17 +95,17 @@ function OpportunityClientInformationBlock({
               <div className='flex items-center gap-2'>
                 <div className={'flex items-center gap-2'}>
                   <BsCalendarPlus />
-                  <p className='text-xs font-medium text-primary/50'>{formatDateAsLocale(client.dataInsercao)}</p>
+                  <p className='text-xs font-medium text-primary/70'>{formatDateAsLocale(client.dataInsercao)}</p>
                 </div>
                 <div className='flex items-center justify-center gap-2'>
                   <Avatar fallback={'U'} height={25} width={25} url={client.autor?.avatar_url || undefined} />
-                  <p className='text-xs font-medium text-primary/50'>{client.autor?.nome}</p>
+                  <p className='text-xs font-medium text-primary/70'>{client.autor?.nome}</p>
                 </div>
               </div>
               <button
                 type='button'
                 onClick={() => clearSimilarClient()}
-                className='rounded-full bg-primary/60 px-2 py-1 text-[0.65rem] font-bold text-white lg:text-xs'
+                className='rounded-full bg-primary/60 px-2 py-1 text-[0.65rem] font-bold text-primary-foreground lg:text-xs'
               >
                 LIMPAR
               </button>

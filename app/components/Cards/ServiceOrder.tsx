@@ -7,35 +7,36 @@ import { FaLocationDot } from 'react-icons/fa6';
 import { TbUrgent } from 'react-icons/tb';
 
 function getStatusTag(effectivationDate: string | null) {
-  if (!effectivationDate) return <h1 className='rounded-md bg-primary/50 px-2 py-0.5 text-xxs font-medium text-white lg:text-[0.6rem]'>PENDENTE</h1>;
+  if (!effectivationDate)
+    return <h1 className='rounded-md bg-primary/50 px-2 py-0.5 text-xxs font-medium text-primary-foreground lg:text-[0.6rem]'>PENDENTE</h1>;
 
-  return <h1 className='rounded-md bg-green-500 px-2 py-0.5 text-xxs font-medium text-white lg:text-[0.6rem]'>CONCLUÍDA</h1>;
+  return <h1 className='rounded-md bg-green-500 px-2 py-0.5 text-xxs font-medium text-primary-foreground lg:text-[0.6rem]'>CONCLUÍDA</h1>;
 }
 function getUrgencyTag(urgency: TServiceOrderDTO['urgencia']) {
   if (urgency == 'EMERGÊNCIA')
     return (
-      <div className='flex items-center gap-1 rounded-lg bg-red-600 px-2 py-0.5 text-white'>
+      <div className='flex items-center gap-1 rounded-lg bg-red-600 px-2 py-0.5 text-primary-foreground'>
         <TbUrgent size={16} />
         <p className='text-[0.6rem] font-medium leading-none tracking-tight'>{urgency}</p>
       </div>
     );
   if (urgency == 'URGENTE')
     return (
-      <div className='flex items-center gap-1 rounded-lg bg-orange-600 px-2 py-0.5 text-white'>
+      <div className='flex items-center gap-1 rounded-lg bg-orange-600 px-2 py-0.5 text-primary-foreground'>
         <TbUrgent size={16} />
         <p className='text-[0.6rem] font-medium leading-none tracking-tight'>{urgency}</p>
       </div>
     );
   if (urgency == 'POUCO URGENTE')
     return (
-      <div className='flex items-center gap-1 rounded-lg bg-blue-600 px-2 py-0.5 text-white'>
+      <div className='flex items-center gap-1 rounded-lg bg-blue-600 px-2 py-0.5 text-primary-foreground'>
         <TbUrgent size={16} />
         <p className='text-[0.6rem] font-medium leading-none tracking-tight'>{urgency}</p>
       </div>
     );
   if (!urgency)
     return (
-      <div className='flex items-center gap-1 rounded-lg bg-primary/60 px-2 py-0.5 text-white'>
+      <div className='flex items-center gap-1 rounded-lg bg-primary/60 px-2 py-0.5 text-primary-foreground'>
         <TbUrgent size={16} />
         <p className='text-[0.6rem] font-medium leading-none tracking-tight'>URGÊNCIA INDEFINIDA</p>
       </div>
@@ -63,7 +64,9 @@ function ServiceOrder({ serviceOrder, handleClick }: ServiceOrderProps) {
           )}
           {getUrgencyTag(serviceOrder.urgencia)}
         </div>
-        <h1 className='rounded-lg bg-black px-2 py-0.5 text-center text-[0.65rem] font-bold text-white lg:py-1'>{serviceOrder.categoria}</h1>
+        <h1 className='rounded-lg bg-black px-2 py-0.5 text-center text-[0.65rem] font-bold text-primary-foreground lg:py-1'>
+          {serviceOrder.categoria}
+        </h1>
       </div>
       <div className='flex w-full flex-col items-center justify-between gap-2 lg:flex-row'>
         <div className='flex grow flex-col items-center gap-2 lg:flex-row'>
@@ -89,16 +92,16 @@ function ServiceOrder({ serviceOrder, handleClick }: ServiceOrderProps) {
           {serviceOrder.dataEfetivacao ? (
             <div className={`flex items-center gap-1`}>
               <BsCalendarCheck color='rgb(34,197,94)' />
-              <p className='text-[0.65rem] font-medium text-primary/50'>{formatDateAsLocale(serviceOrder.dataEfetivacao, true)}</p>
+              <p className='text-[0.65rem] font-medium text-primary/70'>{formatDateAsLocale(serviceOrder.dataEfetivacao, true)}</p>
             </div>
           ) : null}
           <div className={`flex items-center gap-1`}>
             <BsCalendarPlus />
-            <p className='text-[0.65rem] font-medium text-primary/50'>{formatDateAsLocale(serviceOrder.dataInsercao, true)}</p>
+            <p className='text-[0.65rem] font-medium text-primary/70'>{formatDateAsLocale(serviceOrder.dataInsercao, true)}</p>
           </div>
           <div className='flex items-center gap-1'>
             <Avatar fallback={'R'} url={serviceOrder.autor.avatar_url || undefined} height={20} width={20} />
-            <p className='text-[0.65rem] font-medium text-primary/50'>{serviceOrder.autor.nome}</p>
+            <p className='text-[0.65rem] font-medium text-primary/70'>{serviceOrder.autor.nome}</p>
           </div>
         </div>
       </div>

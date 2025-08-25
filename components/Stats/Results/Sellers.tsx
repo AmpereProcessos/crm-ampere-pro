@@ -14,17 +14,18 @@ import { MdOutlineTrendingDown, MdOutlineTrendingUp } from 'react-icons/md';
 import { VscDiffAdded } from 'react-icons/vsc';
 
 function renderPerformance({ achieved, goal }: { achieved?: number | null; goal?: number | null }) {
-  if (!goal) return <div className={cn('flex items-center gap-1 rounded-lg bg-black px-2 py-0.5 text-[0.6rem] font-medium text-white')}>N/A</div>;
+  if (!goal)
+    return <div className={cn('flex items-center gap-1 rounded-lg bg-black px-2 py-0.5 text-[0.6rem] font-medium text-primary-foreground')}>N/A</div>;
   const performance = (100 * (achieved || 0)) / goal;
   if (performance > 100)
     return (
-      <div className={cn('flex items-center gap-1 rounded-lg bg-green-500 px-2 py-0.5 text-[0.6rem] font-medium text-white')}>
+      <div className={cn('flex items-center gap-1 rounded-lg bg-green-500 px-2 py-0.5 text-[0.6rem] font-medium text-primary-foreground')}>
         <h1 className='text-[0.55rem]'>{formatDecimalPlaces(performance)}%</h1>
         <MdOutlineTrendingUp />
       </div>
     );
   return (
-    <div className={cn('flex items-center gap-1 rounded-lg bg-red-500 px-2 py-0.5 text-[0.6rem] font-medium text-white')}>
+    <div className={cn('flex items-center gap-1 rounded-lg bg-red-500 px-2 py-0.5 text-[0.6rem] font-medium text-primary-foreground')}>
       <h1 className='text-[0.55rem]'>{formatDecimalPlaces(performance)}%</h1>
       <MdOutlineTrendingDown />
     </div>
@@ -42,7 +43,7 @@ function Sellers({ after, before, session }: SellersProps) {
 
   return (
     <div className='flex w-full flex-col'>
-      <h1 className='mt-4 rounded-md bg-black text-center text-xl font-black text-white'>PROMOTORES DE VENDA</h1>
+      <h1 className='mt-4 rounded-md bg-black text-center text-xl font-black text-primary-foreground'>PROMOTORES DE VENDA</h1>
       <div className='mt-2 flex grow flex-col flex-wrap justify-around gap-2 py-2 lg:flex-row'>
         {isSuccess ? (
           data.map((responsible, index) => {
@@ -54,7 +55,7 @@ function Sellers({ after, before, session }: SellersProps) {
                     <p className='text-sm font-bold leading-none tracking-tight'>{responsible.nome}</p>
                   </div>
                 </div>
-                <h1 className='w-full py-0.5 text-start text-[0.6rem] font-medium italic text-primary/50'>RESULTADOS</h1>
+                <h1 className='w-full py-0.5 text-start text-[0.6rem] font-medium italic text-primary/70'>RESULTADOS</h1>
                 <div className='flex w-full flex-col justify-between gap-2 lg:flex-row'>
                   <div className='flex w-full items-center justify-center gap-1 lg:w-1/2 lg:justify-start'>
                     <VscDiffAdded width={10} height={10} />
@@ -114,7 +115,7 @@ function Sellers({ after, before, session }: SellersProps) {
                   <button
                     type='button'
                     onClick={() => setSalePromoterViewModal({ id: responsible.id, isOpen: true })}
-                    className='flex items-center gap-1 rounded-lg bg-black px-2 py-1 text-[0.6rem] text-white'
+                    className='flex items-center gap-1 rounded-lg bg-black px-2 py-1 text-[0.6rem] text-primary-foreground'
                   >
                     <Eye width={10} height={10} />
                     <p>VISUALIZAR</p>

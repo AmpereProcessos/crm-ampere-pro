@@ -27,24 +27,26 @@ function renderPricingChanges({ previousPricing, newPricing }: { previousPricing
     .filter((p) => !!p.diferente);
   if (mescled.length == 0)
     return (
-      <h1 className='flex w-full grow items-center justify-start py-2 text-center text-xs font-medium italic tracking-tight text-primary/50'>
+      <h1 className='flex w-full grow items-center justify-start py-2 text-center text-xs font-medium italic tracking-tight text-primary/70'>
         Não foi possível identificar alterações nos items da precificação.
       </h1>
     );
   return mescled.map((record, index) => (
     <div key={index} className='flex flex-col rounded-md border border-primary/50'>
-      <h1 className='w-full rounded-tl-md rounded-tr-md bg-primary/50 py-1 text-center text-xs tracking-tight text-white'>{record.descricao}</h1>
+      <h1 className='w-full rounded-tl-md rounded-tr-md bg-primary/50 py-1 text-center text-xs tracking-tight text-primary-foreground'>
+        {record.descricao}
+      </h1>
       <div className='flex w-full items-center gap-2 p-2'>
         <div className='flex flex-col items-center'>
           <h1 className='text-xxs text-cyan-500'>CUSTO</h1>
           <div className='flex items-center gap-2'>
             <div className='flex items-center gap-1'>
               <MdArrowCircleDown color='rgb(254,173,65)' size={20} />
-              <p className='text-[0.55rem] font-medium text-primary/50'>{formatToMoney(record.custoAnterior || 0)}</p>
+              <p className='text-[0.55rem] font-medium text-primary/70'>{formatToMoney(record.custoAnterior || 0)}</p>
             </div>
             <div className='flex items-center gap-1'>
               <MdArrowCircleUp color='rgb(34,197,94)' size={20} />
-              <p className='text-[0.55rem] font-medium text-primary/50'>{formatToMoney(record.custoNovo || 0)}</p>
+              <p className='text-[0.55rem] font-medium text-primary/70'>{formatToMoney(record.custoNovo || 0)}</p>
             </div>
           </div>
         </div>
@@ -53,11 +55,11 @@ function renderPricingChanges({ previousPricing, newPricing }: { previousPricing
           <div className='flex items-center gap-2'>
             <div className='flex items-center gap-1'>
               <MdArrowCircleDown color='rgb(254,173,65)' size={20} />
-              <p className='text-[0.55rem] font-medium text-primary/50'>{formatToMoney(record.valorAnterior || 0)}</p>
+              <p className='text-[0.55rem] font-medium text-primary/70'>{formatToMoney(record.valorAnterior || 0)}</p>
             </div>
             <div className='flex items-center gap-1'>
               <MdArrowCircleUp color='rgb(34,197,94)' size={20} />
-              <p className='text-[0.55rem] font-medium text-primary/50'>{formatToMoney(record.valorFinal || 0)}</p>
+              <p className='text-[0.55rem] font-medium text-primary/70'>{formatToMoney(record.valorFinal || 0)}</p>
             </div>
           </div>
         </div>
@@ -87,11 +89,11 @@ function ProposalUpdateRecord({ record }: ProposalUpdateRecordProps) {
         <div className='flex w-full items-center justify-start gap-2'>
           <div className='flex items-center gap-2'>
             <MdArrowCircleDown color='rgb(254,173,65)' size={20} />
-            <p className='text-sm font-medium text-primary/50'>{formatToMoney(record.anterior.valor || 0)}</p>
+            <p className='text-sm font-medium text-primary/70'>{formatToMoney(record.anterior.valor || 0)}</p>
           </div>
           <div className='flex items-center gap-2'>
             <MdArrowCircleUp color='rgb(34,197,94)' size={20} />
-            <p className='text-sm font-medium text-primary/50'>{formatToMoney(record.novo.valor || 0)}</p>
+            <p className='text-sm font-medium text-primary/70'>{formatToMoney(record.novo.valor || 0)}</p>
           </div>
         </div>
       </div>
@@ -104,11 +106,11 @@ function ProposalUpdateRecord({ record }: ProposalUpdateRecordProps) {
       <div className='flex w-full items-center gap-2'>
         <div className='flex items-center gap-2'>
           <BsCalendarPlus />
-          <p className='text-[0.6rem] font-medium text-primary/50'>{formatDateAsLocale(record.dataInsercao, true)}</p>
+          <p className='text-[0.6rem] font-medium text-primary/70'>{formatDateAsLocale(record.dataInsercao, true)}</p>
         </div>
         <div className='flex items-center gap-2'>
           <Avatar fallback={'R'} url={record.autor.avatar_url || undefined} height={20} width={20} />
-          <p className='text-[0.6rem] font-medium text-primary/50'>{record.autor.nome}</p>
+          <p className='text-[0.6rem] font-medium text-primary/70'>{record.autor.nome}</p>
         </div>
       </div>
     </div>

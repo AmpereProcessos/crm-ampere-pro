@@ -64,7 +64,7 @@ function SignaturePlanOptionCard({ activePlanName, plan, proposal, opportunity, 
           <div className='flex w-full items-center justify-between gap-2'>
             <h1 className='grow  text-center text-sm font-black leading-none tracking-tight lg:text-start'>{plan.nome || 'NÃO DEFINIDO'}</h1>
             {plan.nome == activePlanName ? (
-              <h1 className='rounded-full bg-green-600 px-2 py-1 text-[0.65rem] font-bold text-white lg:text-xs'>SELECIONADO</h1>
+              <h1 className='rounded-full bg-green-600 px-2 py-1 text-[0.65rem] font-bold text-primary-foreground lg:text-xs'>SELECIONADO</h1>
             ) : null}
           </div>
           <div className='mt-2 flex w-full items-center gap-2'>
@@ -78,7 +78,7 @@ function SignaturePlanOptionCard({ activePlanName, plan, proposal, opportunity, 
             </div>
           </div>
           <div className='flex w-full grow flex-col'>
-            <h1 className='my-2 mb-0 text-xs font-bold leading-none tracking-tight text-primary/50 lg:text-sm'>SERVIÇOS</h1>
+            <h1 className='my-2 mb-0 text-xs font-bold leading-none tracking-tight text-primary/70 lg:text-sm'>SERVIÇOS</h1>
             <div className='flex w-full flex-wrap items-center gap-2'>
               {plan.servicos.map((service, index) => (
                 <div key={index} className='mt-1 flex flex-col gap-1 rounded-md border border-primary/30 p-2'>
@@ -92,7 +92,7 @@ function SignaturePlanOptionCard({ activePlanName, plan, proposal, opportunity, 
                   </div>
                   <div className='flex w-full items-center justify-end gap-1'>
                     <AiOutlineSafety size={12} />
-                    <p className='text-[0.6rem] font-light text-primary/50'>
+                    <p className='text-[0.6rem] font-light text-primary/70'>
                       {service.garantia > 1 ? `${service.garantia} ANOS` : `${service.garantia} ANO`}{' '}
                     </p>
                   </div>
@@ -103,7 +103,7 @@ function SignaturePlanOptionCard({ activePlanName, plan, proposal, opportunity, 
           <div className='mt-2 flex w-full items-center justify-end gap-2'>
             <button
               onClick={() => handleSelect({ ...plan, valorTotal: proposalTotalPreview })}
-              className='rounded-full border border-cyan-500 p-1 text-cyan-500 duration-300 ease-in-out hover:bg-cyan-500 hover:text-white'
+              className='rounded-full border border-cyan-500 p-1 text-cyan-500 duration-300 ease-in-out hover:bg-cyan-500 hover:text-primary-foreground'
             >
               <IoMdAdd />
             </button>

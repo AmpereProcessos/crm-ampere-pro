@@ -65,7 +65,7 @@ function InsuranceInfo({ requestInfo, setRequestInfo, goToNextStage, goToPreviou
           onClick={() => {
             goToPreviousStage();
           }}
-          className='rounded p-2 font-bold text-primary/50 duration-300 hover:scale-105'
+          className='rounded p-2 font-bold text-primary/70 duration-300 hover:scale-105'
         >
           Voltar
         </button>
@@ -73,7 +73,7 @@ function InsuranceInfo({ requestInfo, setRequestInfo, goToNextStage, goToPreviou
           onClick={() => {
             validateAndProceed();
           }}
-          className='rounded p-2 font-bold hover:bg-black hover:text-white'
+          className='rounded p-2 font-bold hover:bg-black hover:text-primary-foreground'
         >
           Prosseguir
         </button>

@@ -119,8 +119,8 @@ function PAInfo({ requestInfo, setRequestInfo, requireFiles = true, files, setFi
       <span className='py-2 text-center text-lg font-bold uppercase text-[#15599a]'>DADOS DO PADRÃO</span>
 
       <div className='flex w-full grow flex-col gap-2'>
-        <p className='text-center text-xs italic text-primary/50'>Você agora pode adicionar múltiplos padrões, em caso de caixa conjugada.</p>
-        <p className='text-center text-sm font-medium text-primary/50'>
+        <p className='text-center text-xs italic text-primary/70'>Você agora pode adicionar múltiplos padrões, em caso de caixa conjugada.</p>
+        <p className='text-center text-sm font-medium text-primary/70'>
           Preencha as informações e clique em <strong className='font-bold text-green-500'>adicionar (+)</strong>.
         </p>
         <div className='flex w-full flex-col justify-around gap-2 lg:flex-row'>
@@ -224,7 +224,7 @@ function PAInfo({ requestInfo, setRequestInfo, requireFiles = true, files, setFi
         <div className='mt-2 flex w-full items-center justify-end'>
           <button
             onClick={addEnergyPA}
-            className='rounded border border-green-500 p-1 font-bold text-green-500 duration-300 ease-in-out hover:bg-green-500 hover:text-white'
+            className='rounded border border-green-500 p-1 font-bold text-green-500 duration-300 ease-in-out hover:bg-green-500 hover:text-primary-foreground'
           >
             ADICIONAR ITEM
           </button>
@@ -233,7 +233,7 @@ function PAInfo({ requestInfo, setRequestInfo, requireFiles = true, files, setFi
           {requestInfo.padrao.map((paInfo, index) => (
             <div key={index} className='flex w-full flex-col border border-primary/30 p-2 shadow-md'>
               <div className='flex w-full items-center justify-between'>
-                <h1 className='font-medium leading-none tracking-tight text-primary/50'>
+                <h1 className='font-medium leading-none tracking-tight text-primary/70'>
                   PADRÃO <strong className='text-[#fead41]'>{paInfo.ligacao} </strong> de{' '}
                   <strong className='text-[#fead41]'>{paInfo.amperagem}</strong>
                 </h1>
@@ -547,7 +547,7 @@ function PAInfo({ requestInfo, setRequestInfo, requireFiles = true, files, setFi
       </div>
 
       <div className='mt-2 flex w-full items-end justify-between bg-background'>
-        <button onClick={() => goToPreviousStage()} className='rounded p-2 font-bold text-primary/50 duration-300 ease-in-out hover:scale-105'>
+        <button onClick={() => goToPreviousStage()} className='rounded p-2 font-bold text-primary/70 duration-300 ease-in-out hover:scale-105'>
           Voltar
         </button>
         <button
@@ -556,7 +556,7 @@ function PAInfo({ requestInfo, setRequestInfo, requireFiles = true, files, setFi
               goToNextStage();
             }
           }}
-          className=' rounded-sm p-2 font-bold hover:bg-black hover:text-white'
+          className=' rounded-sm p-2 font-bold hover:bg-black hover:text-primary-foreground'
         >
           Prosseguir
         </button>

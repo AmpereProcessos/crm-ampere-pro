@@ -20,7 +20,7 @@ function OverallResults({ after, before, responsibles, partners, projectTypes }:
 
   return (
     <div className='flex w-full flex-col'>
-      <h1 className='mt-4 rounded-md bg-[#15599a] text-center text-xl font-black text-white'>GERAL</h1>
+      <h1 className='mt-4 rounded-md bg-[#15599a] text-center text-xl font-black text-primary-foreground'>GERAL</h1>
       <div className='mt-2 flex w-full flex-col items-center justify-around gap-2 lg:flex-row'>
         <div className='flex min-h-[110px] w-full flex-col rounded-xl border border-primary/30 bg-background p-6 shadow-md lg:w-1/6'>
           <div className='flex items-center justify-between'>

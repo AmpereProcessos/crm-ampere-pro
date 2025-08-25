@@ -15,7 +15,7 @@ function ModuleOrientationBlock({ infoHolder, setInfoHolder, changes, setChanges
   return (
     <div className='mt-4 flex w-full flex-col'>
       <div className='flex w-full items-center justify-center gap-2 rounded-md bg-primary/80 p-2'>
-        <h1 className='font-bold text-white'>ALOCAÇÃO DE MÓDULOS</h1>
+        <h1 className='font-bold text-primary-foreground'>ALOCAÇÃO DE MÓDULOS</h1>
       </div>
       <div className='mt-2 flex w-full flex-col'>
         <div className='grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-4'>

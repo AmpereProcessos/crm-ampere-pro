@@ -18,7 +18,7 @@ function ServiceCard({ service }: ServiceCardProps) {
       </div>
       <div className='flex w-full items-center justify-end gap-1'>
         <AiOutlineSafety size={15} />
-        <p className='text-[0.6rem] font-light text-primary/50'>{service.garantia > 1 ? `${service.garantia} ANOS` : `${service.garantia} ANO`} </p>
+        <p className='text-[0.6rem] font-light text-primary/70'>{service.garantia > 1 ? `${service.garantia} ANOS` : `${service.garantia} ANO`} </p>
       </div>
     </div>
   );

@@ -542,7 +542,7 @@ function ReviewInfo({
                   comoChegouAoCliente: e.target.value,
                 })
               }
-              className='block h-[80px] w-full resize-none rounded-lg border border-primary/30 bg-gray-50 p-2.5 text-center text-primary/90 outline-hidden focus:border-blue-500 focus:ring-blue-500 dark:border-primary/60 dark:bg-primary/70 dark:text-white dark:placeholder-primary/40 dark:focus:border-blue-500 dark:focus:ring-blue-500'
+              className='block h-[80px] w-full resize-none rounded-lg border border-primary/30 bg-primary/10p-2.5 text-center text-primary/90 outline-hidden focus:border-blue-500 focus:ring-blue-500 dark:border-primary/60 dark:bg-primary/70  dark:placeholder-primary/40 dark:focus:border-blue-500 dark:focus:ring-blue-500'
             />
           </div>
           <div className='mt-2 flex w-full flex-col items-center self-center px-2'>
@@ -558,7 +558,7 @@ function ReviewInfo({
                   obsComercial: e.target.value,
                 })
               }
-              className='block h-[80px] w-full resize-none rounded-lg border border-primary/30 bg-gray-50 p-2.5 text-center text-primary/90 outline-hidden focus:border-blue-500 focus:ring-blue-500 dark:border-primary/60 dark:bg-primary/70 dark:text-white dark:placeholder-primary/40 dark:focus:border-blue-500 dark:focus:ring-blue-500'
+              className='block h-[80px] w-full resize-none rounded-lg border border-primary/30 bg-primary/10p-2.5 text-center text-primary/90 outline-hidden focus:border-blue-500 focus:ring-blue-500 dark:border-primary/60 dark:bg-primary/70  dark:placeholder-primary/40 dark:focus:border-blue-500 dark:focus:ring-blue-500'
             />
           </div>
         </div>
@@ -643,7 +643,7 @@ function ReviewInfo({
                     cuidadosContatoJornada: e.target.value,
                   })
                 }
-                className='block h-[80px] w-full resize-none rounded-lg border border-primary/30 bg-gray-50 p-2.5 text-center text-primary/90 outline-hidden focus:border-blue-500 focus:ring-blue-500 dark:border-primary/60 dark:bg-primary/70 dark:text-white dark:placeholder-primary/40 dark:focus:border-blue-500 dark:focus:ring-blue-500'
+                className='block h-[80px] w-full resize-none rounded-lg border border-primary/30 bg-primary/10p-2.5 text-center text-primary/90 outline-hidden focus:border-blue-500 focus:ring-blue-500 dark:border-primary/60 dark:bg-primary/70  dark:placeholder-primary/40 dark:focus:border-blue-500 dark:focus:ring-blue-500'
               />
             </div>
           </div>
@@ -1385,19 +1385,19 @@ function ReviewInfo({
         </div>
         <div className='flex w-full flex-col bg-background pb-2'>
           <span className='py-2 text-center text-lg font-bold uppercase text-[#15599a]'>PLANO INTEGRADO DE OPERAÇÃO E MANUTENÇÃO</span>
-          <p className='text-center text-sm italic text-primary/50'>Escolha, se houver, o plano de Operação & Manutenção incluso no projeto.</p>
+          <p className='text-center text-sm italic text-primary/70'>Escolha, se houver, o plano de Operação & Manutenção incluso no projeto.</p>
           <div className='flex grow flex-wrap items-start justify-center gap-2 py-2'>
             <div className='flex w-[450px] flex-col rounded-lg border border-primary/50 bg-background p-6 shadow-lg'>
               <div className='flex w-full items-center justify-between gap-2'>
                 <h1 className='font-black'>{proposeInfo.planos[0]?.nome}</h1>
               </div>
-              <p className='w-full text-start text-sm text-primary/50'>{proposeInfo.planos[0]?.descricao || '...'}</p>
+              <p className='w-full text-start text-sm text-primary/70'>{proposeInfo.planos[0]?.descricao || '...'}</p>
               <div className='my-4 flex w-full items-end justify-center gap-1'>
                 <h1 className='text-4xl font-black'>{formatToMoney(proposeInfo.planos[0]?.valor || 0)}</h1>
-                <h1 className='text-xs font-light text-primary/50'>/ {proposeInfo.planos[0]?.intervalo.tipo}</h1>
+                <h1 className='text-xs font-light text-primary/70'>/ {proposeInfo.planos[0]?.intervalo.tipo}</h1>
               </div>
               <div className='my-4 flex grow flex-col gap-1'>
-                <h1 className='text-[0.6rem] tracking-tight text-primary/50'>DESCRITIVO</h1>
+                <h1 className='text-[0.6rem] tracking-tight text-primary/70'>DESCRITIVO</h1>
                 <div className='flex grow flex-col gap-2'>
                   {proposeInfo.planos[0]?.descritivo.map((d, idx) => (
                     <div key={idx} className='flex items-center gap-1'>
@@ -1747,7 +1747,7 @@ function ReviewInfo({
                     descricaoNegociacao: e.target.value,
                   })
                 }
-                className='block h-[80px] w-full resize-none rounded-lg border border-primary/30 bg-gray-50 p-2.5 text-center text-primary/90 outline-hidden focus:border-blue-500 focus:ring-blue-500 dark:border-primary/60 dark:bg-primary/70 dark:text-white dark:placeholder-primary/40 dark:focus:border-blue-500 dark:focus:ring-blue-500'
+                className='block h-[80px] w-full resize-none rounded-lg border border-primary/30 bg-primary/10p-2.5 text-center text-primary/90 outline-hidden focus:border-blue-500 focus:ring-blue-500 dark:border-primary/60 dark:bg-primary/70  dark:placeholder-primary/40 dark:focus:border-blue-500 dark:focus:ring-blue-500'
               />
             </div>
           </div>
@@ -1814,7 +1814,7 @@ function ReviewInfo({
                   />
                   <button
                     onClick={addCreditDist}
-                    className="rounded bg-[#fead61] p-1 font-bold hover:bg-[#15599a] hover:text-white"
+                    className="rounded bg-[#fead61] p-1 font-bold hover:bg-[#15599a] hover:text-primary-foreground"
                   >
                     ADICIONAR
                   </button>
@@ -1850,7 +1850,7 @@ function ReviewInfo({
           <span className='py-2 text-center text-lg font-bold uppercase text-[#15599a]'>DOCUMENTAÇÃO</span>
           <div className='flex w-full flex-wrap items-start justify-around gap-2'>
             {Object.entries(documentsFile).map(([key, value]) => (
-              <div className='flex items-center gap-1 rounded-md bg-blue-800 px-2 py-1 text-white'>
+              <div className='flex items-center gap-1 rounded-md bg-blue-800 px-2 py-1 text-primary-foreground'>
                 <MdAttachFile />
                 <p className='text-sm'>{key}</p>
               </div>
@@ -1862,7 +1862,7 @@ function ReviewInfo({
             onClick={() => {
               goToPreviousStage();
             }}
-            className="rounded p-2 font-bold text-primary/50 duration-300 hover:scale-105"
+            className="rounded p-2 font-bold text-primary/70 duration-300 hover:scale-105"
           >
             Voltar
           </button> */}
@@ -1871,7 +1871,7 @@ function ReviewInfo({
               requestContract();
             }}
             disabled={isPending || isSuccess}
-            className='rounded p-2 font-bold hover:bg-black hover:text-white'
+            className='rounded p-2 font-bold hover:bg-black hover:text-primary-foreground'
           >
             {isPending ? 'Criando solicitação...' : null}
             {isSuccess ? 'Criação concluida!' : null}

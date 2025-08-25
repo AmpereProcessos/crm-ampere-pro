@@ -35,7 +35,7 @@ function ProposalViewPlansBlock({
   const [editPriceModal, setEditPriceModal] = useState<TEditPriceModal>({ isOpen: false, index: null });
   return (
     <div className='mt-4 flex w-full flex-col gap-2 rounded-sm border border-primary/50 bg-background'>
-      <h1 className='w-full rounded-sm bg-primary/80 py-2 text-center font-bold text-white '>PLANOS DE ASSINATURA</h1>
+      <h1 className='w-full rounded-sm bg-primary/80 py-2 text-center font-bold text-primary-foreground '>PLANOS DE ASSINATURA</h1>
       <div className='my-4 flex h-fit w-full flex-wrap items-stretch justify-center gap-2 py-2'>
         {plans.map((plan, index) => (
           <ProposalPlan

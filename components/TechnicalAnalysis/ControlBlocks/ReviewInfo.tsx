@@ -384,7 +384,7 @@ function ReviewInfo({ requestInfo, setRequestInfo, requireFiles = true, files, s
 
           <div className='flex w-full flex-col  bg-background pb-2'>
             <span className='py-2 text-center text-lg font-bold uppercase text-[#15599a]'>DADOS DO SISTEMA</span>
-            <p className='text-center text-lg italic text-primary/50'>
+            <p className='text-center text-lg italic text-primary/70'>
               {getJoinedSystemInfo({
                 brand: requestInfo.equipamentos.modulos.modelo || '',
                 qty: requestInfo.equipamentos.modulos.qtde || '',
@@ -495,7 +495,7 @@ function ReviewInfo({ requestInfo, setRequestInfo, requireFiles = true, files, s
             <div className='mt-2 flex w-full items-center justify-end'>
               <button
                 onClick={addEnergyPA}
-                className='rounded border border-green-500 p-1 font-bold text-green-500 duration-300 ease-in-out hover:bg-green-500 hover:text-white'
+                className='rounded border border-green-500 p-1 font-bold text-green-500 duration-300 ease-in-out hover:bg-green-500 hover:text-primary-foreground'
               >
                 ADICIONAR ITEM
               </button>
@@ -504,7 +504,7 @@ function ReviewInfo({ requestInfo, setRequestInfo, requireFiles = true, files, s
               {requestInfo.padrao.map((paInfo, index) => (
                 <div key={index} className='flex w-full flex-col border border-primary/30 p-2 shadow-md'>
                   <div className='flex w-full items-center justify-between'>
-                    <h1 className='font-medium leading-none tracking-tight text-primary/50'>
+                    <h1 className='font-medium leading-none tracking-tight text-primary/70'>
                       PADRÃO <strong className='text-[#fead41]'>{paInfo.ligacao} </strong> de{' '}
                       <strong className='text-[#fead41]'>{paInfo.amperagem}</strong>
                     </h1>
@@ -838,7 +838,7 @@ function ReviewInfo({ requestInfo, setRequestInfo, requireFiles = true, files, s
               </div>
             </div>
             <div className='flex w-full flex-col'>
-              <h1 className='w-full rounded-tl-sm rounded-tr-sm bg-primary/50 p-1 text-center font-bold text-white'>OBSERVAÇÕES</h1>
+              <h1 className='w-full rounded-tl-sm rounded-tr-sm bg-primary/50 p-1 text-center font-bold text-primary-foreground'>OBSERVAÇÕES</h1>
               <textarea
                 placeholder='SEM OBSERVAÇÕES PREENCHIDAS...'
                 value={requestInfo.comentarios || ''}
@@ -1098,14 +1098,14 @@ function ReviewInfo({ requestInfo, setRequestInfo, requireFiles = true, files, s
               ? Object.keys(files).map((key, index) => {
                   return (
                     <div key={index} className='flex items-center justify-center gap-2'>
-                      <p className='text-sm italic text-primary/50'>{files[key].title}</p>
+                      <p className='text-sm italic text-primary/70'>{files[key].title}</p>
                       <ImAttachment />
                     </div>
                   );
                 })
               : requestInfo.arquivos.map((file, index) => (
                   <div key={index} className='flex items-center justify-center gap-2'>
-                    <p className='text-sm italic text-primary/50'>{file.descricao}</p>
+                    <p className='text-sm italic text-primary/70'>{file.descricao}</p>
                     <ImAttachment />
                   </div>
                 ))}
@@ -1116,13 +1116,13 @@ function ReviewInfo({ requestInfo, setRequestInfo, requireFiles = true, files, s
             onClick={() => {
               goToPreviousStage();
             }}
-            className="rounded p-2 font-bold text-primary/50 duration-300 hover:scale-105"
+            className="rounded p-2 font-bold text-primary/70 duration-300 hover:scale-105"
           >
             Voltar
           </button> */}
           <button
             disabled={isLoading || isSuccess || uploadingFiles}
-            className='rounded p-2 font-bold hover:bg-black hover:text-white'
+            className='rounded p-2 font-bold hover:bg-black hover:text-primary-foreground'
             onClick={() => {
               createTechAnalysisRequest();
             }}

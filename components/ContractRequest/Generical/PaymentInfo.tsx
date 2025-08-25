@@ -332,7 +332,7 @@ function PaymentInfo({ requestInfo, setRequestInfo, showActions, goToPreviousSta
             onClick={() => {
               goToPreviousStage();
             }}
-            className='rounded p-2 font-bold text-primary/50 duration-300 hover:scale-105'
+            className='rounded p-2 font-bold text-primary/70 duration-300 hover:scale-105'
           >
             Voltar
           </button>
@@ -343,7 +343,7 @@ function PaymentInfo({ requestInfo, setRequestInfo, showActions, goToPreviousSta
                 goToNextStage();
               }
             }}
-            className='rounded p-2 font-bold hover:bg-black hover:text-white'
+            className='rounded p-2 font-bold hover:bg-black hover:text-primary-foreground'
           >
             Prosseguir
           </button>

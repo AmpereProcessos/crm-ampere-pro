@@ -25,7 +25,7 @@ function GeneralInformationBlock({ infoHolder, setInfoHolder, pricingMethods }: 
   const { data: paymentMethods } = usePaymentMethods();
   return (
     <div className='flex w-full flex-col gap-y-2'>
-      <h1 className='w-full bg-primary/70  p-1 text-center font-medium text-white'>INFORMAÇÕES GERAIS</h1>
+      <h1 className='w-full bg-primary/70  p-1 text-center font-medium text-primary-foreground'>INFORMAÇÕES GERAIS</h1>
       <div className='flex w-full flex-col gap-1'>
         <div className='flex w-full items-center justify-center gap-2'>
           <div className='w-fit'>
@@ -178,7 +178,8 @@ function GeneralInformationBlock({ infoHolder, setInfoHolder, pricingMethods }: 
             <DateInput
               label='DATA DE VALIDADE (SE HOUVER)'
               value={formatDateForInputValue(infoHolder.dataValidade)}
-              handleChange={(value) => setInfoHolder((prev) => ({ ...prev, dataValidade: formatDateOnInputChange(value) }))}
+              handleChange={(value) => setInfoHolder((prev) => ({ ...prev, dataValidade: formatDateOnInputChange(value, 'string') }))}
+              width='100%'
             />
           </div>
         </div>

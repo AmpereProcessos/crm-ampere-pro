@@ -168,7 +168,7 @@ export default function PartialControlTechnicalAnalysis({ analysisId, session, c
       <div className='relative left-[50%] top-[50%] z-100 h-[80%] max-h-[80%] w-[90%] translate-x-[-50%] translate-y-[-50%] overflow-hidden rounded-md bg-background p-[10px] lg:w-[90%]'>
         <div className='flex h-full w-full flex-col'>
           <div className='flex flex-col items-center justify-between border-b border-primary/30 px-2 pb-2 text-lg lg:flex-row'>
-            <h3 className='text-xl font-bold text-primary dark:text-white '>{infoHolder.nome || 'CONTROLAR ANÁLISE TÉCNICA'}</h3>
+            <h3 className='text-xl font-bold text-primary  '>{infoHolder.nome || 'CONTROLAR ANÁLISE TÉCNICA'}</h3>
             <button
               onClick={() => closeModal()}
               type='button'
@@ -186,9 +186,9 @@ export default function PartialControlTechnicalAnalysis({ analysisId, session, c
                   <div className='mt-2 flex items-center justify-center gap-4'>
                     <div className='flex items-center gap-2'>
                       <Avatar fallback={'U'} height={25} width={25} url={infoHolder?.requerente?.avatar_url || undefined} />
-                      <p className='text-xs font-medium text-primary/50'>{infoHolder?.requerente?.nome || 'Autor não identificado'}</p>
+                      <p className='text-xs font-medium text-primary/70'>{infoHolder?.requerente?.nome || 'Autor não identificado'}</p>
                     </div>
-                    <div className='flex items-center gap-2 text-primary/50'>
+                    <div className='flex items-center gap-2 text-primary/70'>
                       <BsCalendarFill />
                       <p className='text-xs font-medium'>{formatDateAsLocale(infoHolder.dataInsercao, true)}</p>
                     </div>
@@ -225,7 +225,7 @@ export default function PartialControlTechnicalAnalysis({ analysisId, session, c
                     </div>
                   </div>
                   <div className='flex w-full items-center justify-center gap-2 rounded-md bg-primary/80 p-2'>
-                    <h1 className='font-bold text-white'>PROJETO</h1>
+                    <h1 className='font-bold text-primary-foreground'>PROJETO</h1>
                   </div>
                   {analysis.oportunidade ? (
                     <div className='flex w-full flex-col items-center justify-center gap-2 md:flex-row md:gap-4'>
@@ -249,10 +249,10 @@ export default function PartialControlTechnicalAnalysis({ analysisId, session, c
                       </div>
                     </div>
                   ) : (
-                    <p className='w-full py-2 text-center text-sm italic text-primary/50'>Sem informações do projeto...</p>
+                    <p className='w-full py-2 text-center text-sm italic text-primary/70'>Sem informações do projeto...</p>
                   )}
                   <div className='flex w-full flex-col'>
-                    <h1 className='w-full rounded-tl-sm rounded-tr-sm bg-primary/50 p-1 text-center font-bold text-white'>
+                    <h1 className='w-full rounded-tl-sm rounded-tr-sm bg-primary/50 p-1 text-center font-bold text-primary-foreground'>
                       COMENTÁRIOS DO REQUERENTE
                     </h1>
                     <textarea
@@ -295,12 +295,12 @@ export default function PartialControlTechnicalAnalysis({ analysisId, session, c
                     updateAnalysis={(change) => {}}
                   />
                   <div className='mt-4 flex w-full items-center justify-center gap-2 rounded-md bg-primary/80 p-2'>
-                    <h1 className='font-bold text-white'>TIPOS DE LAUDO</h1>
+                    <h1 className='font-bold text-primary-foreground'>TIPOS DE LAUDO</h1>
                   </div>
                   <div className='flex w-full flex-wrap items-center justify-center gap-2 px-4'>
                     {TechnicalAnalysisReportTypes.map((type) => (
                       <Link key={type.id} href={`/operacional/analises-tecnicas/laudo/${analysisId}?type=${type.value}`}>
-                        <p className='w-fit rounded-sm border border-black px-2 py-1 text-center font-bold shadow-md hover:bg-black hover:text-white'>
+                        <p className='w-fit rounded-sm border border-black px-2 py-1 text-center font-bold shadow-md hover:bg-black hover:text-primary-foreground'>
                           {type.value}
                         </p>
                       </Link>
@@ -312,7 +312,7 @@ export default function PartialControlTechnicalAnalysis({ analysisId, session, c
                     disabled={isPending}
                     // @ts-ignore
                     onClick={() => handleEditTechnicalAnalysis({ id: analysisId, changes: changes })}
-                    className='h-9 whitespace-nowrap rounded-sm bg-primary/90 px-4 py-2 text-sm font-medium text-white shadow-sm disabled:bg-primary/50 disabled:text-white enabled:hover:bg-primary/80 enabled:hover:text-white'
+                    className='h-9 whitespace-nowrap rounded-sm bg-primary/90 px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm disabled:bg-primary/50 disabled:text-primary-foreground enabled:hover:bg-primary/80 enabled:hover:text-primary-foreground'
                   >
                     SALVAR ALTERAÇÕES
                   </button>

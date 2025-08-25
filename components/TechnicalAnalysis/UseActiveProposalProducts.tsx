@@ -24,11 +24,14 @@ function UseActiveProposalProducts({ activeProposalId, getProducts }: UseActiveP
   }
   return (
     <div className='my-2 flex w-full flex-col gap-1'>
-      <p className='w-full text-center text-sm leading-none tracking-tight text-primary/50'>
+      <p className='w-full text-center text-sm leading-none tracking-tight text-primary/70'>
         Deseja utilizar os equipamentos da proposta ativa ? <strong className='text-cyan-500'>Clique no botão abaixo</strong>
       </p>
       <div className='flex w-full items-center justify-center'>
-        <button onClick={() => handleUseProducts(activeProposalId)} className='rounded-md bg-black px-2 py-1 text-sm font-bold text-white'>
+        <button
+          onClick={() => handleUseProducts(activeProposalId)}
+          className='rounded-md bg-black px-2 py-1 text-sm font-bold text-primary-foreground'
+        >
           UTILIZAR EQUIPAMENTOS
         </button>
       </div>

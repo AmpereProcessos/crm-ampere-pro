@@ -7,7 +7,7 @@ function StatListSkeleton() {
           <div className='h-[25px] grow animate-pulse bg-primary/30'></div>
           <div className='flex w-fit flex-col items-end justify-end gap-1 lg:min-w-[100px]'>
             <p className='h-[16px] w-[50px] animate-pulse bg-primary/30 text-xs font-medium uppercase tracking-tight lg:text-sm'></p>
-            <p className='h-[12px] w-[50px] animate-pulse bg-primary/30 text-[0.4rem]  italic text-primary/50 lg:text-[0.65rem]'></p>
+            <p className='h-[12px] w-[50px] animate-pulse bg-primary/30 text-[0.4rem]  italic text-primary/70 lg:text-[0.65rem]'></p>
           </div>
         </div>
       ))}

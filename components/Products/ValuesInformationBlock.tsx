@@ -13,7 +13,7 @@ function ValuesInformationBlock({ infoHolder, setInfoHolder }: ValuesInformation
 
   return (
     <div className='flex w-full flex-col gap-y-2'>
-      <h1 className='w-full bg-primary/70  p-1 text-center font-medium text-white'>VALORES</h1>
+      <h1 className='w-full bg-primary/70  p-1 text-center font-medium text-primary-foreground'>VALORES</h1>
       <div className='flex w-full flex-col items-center gap-2 lg:flex-row'>
         <div className='w-full lg:w-1/2'>
           <NumberInput

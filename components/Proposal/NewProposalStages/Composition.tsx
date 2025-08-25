@@ -28,16 +28,16 @@ function Composition({ opportunity, infoHolder, setInfoHolder, moveToNextStage, 
               <FaSolarPanel style={{ fontSize: '17px' }} />
               <h1 className='font-black'>KIT</h1>
             </div>
-            <p className='text-center tracking-tight text-primary/50'>Uma proposta de venda única.</p>
-            <p className='text-center tracking-tight text-primary/50'>Contemplando produtos e serviços.</p>
+            <p className='text-center tracking-tight text-primary/70'>Uma proposta de venda única.</p>
+            <p className='text-center tracking-tight text-primary/70'>Contemplando produtos e serviços.</p>
           </div>
           <div className='flex w-[50%] flex-col border border-primary/50 p-3'>
             <div className='flex w-full items-center justify-center gap-2'>
               <BsBookmarksFill style={{ fontSize: '17px' }} />
               <h1 className='font-black'>PLANO</h1>
             </div>
-            <p className='text-center tracking-tight text-primary/50'>Uma proposta de plano de assinatura.</p>
-            <p className='text-center tracking-tight text-primary/50'>Contemplando serviços.</p>
+            <p className='text-center tracking-tight text-primary/70'>Uma proposta de plano de assinatura.</p>
+            <p className='text-center tracking-tight text-primary/70'>Contemplando serviços.</p>
           </div>
         </div>
       </div>

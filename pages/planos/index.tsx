@@ -36,7 +36,7 @@ function SignaturePlans() {
               )}
               <div className='flex flex-col gap-1'>
                 <h1 className='text-xl font-black leading-none tracking-tight md:text-2xl'>CONTROLE DE PLANOS DE ASSINATURA</h1>
-                <p className='text-sm leading-none tracking-tight text-primary/50'>
+                <p className='text-sm leading-none tracking-tight text-primary/70'>
                   {plans?.length ? (plans.length > 0 ? `${plans.length} planos cadastrados` : `${plans.length} plano cadastrado`) : '...'}
                 </p>
               </div>
@@ -46,7 +46,7 @@ function SignaturePlans() {
               <button
                 type='button'
                 onClick={() => setNewPlanModalIsOpen(true)}
-                className='h-9 whitespace-nowrap rounded-sm bg-primary/90 px-4 py-2 text-sm font-medium text-white shadow-sm disabled:bg-primary/50 disabled:text-white enabled:hover:bg-primary/80 enabled:hover:text-white'
+                className='h-9 whitespace-nowrap rounded-sm bg-primary/90 px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm disabled:bg-primary/50 disabled:text-primary-foreground enabled:hover:bg-primary/80 enabled:hover:text-primary-foreground'
               >
                 CRIAR PLANO
               </button>
@@ -69,7 +69,7 @@ function SignaturePlans() {
                 />
               ))
             ) : (
-              <p className='flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/50'>
+              <p className='flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/70'>
                 Sem planos cadastrados.
               </p>
             )

@@ -32,7 +32,7 @@ function Goals({ session }: GoalsProps) {
             <p className='text-[#71717A] text-sm'>Gerencie as metas.</p>
           </div>
           <button
-            className='h-9 whitespace-nowrap rounded-sm bg-primary/90 px-4 py-2 font-medium text-sm text-white shadow-sm enabled:hover:bg-primary/80 enabled:hover:text-white disabled:bg-primary/50 disabled:text-white'
+            className='h-9 whitespace-nowrap rounded-sm bg-primary/90 px-4 py-2 font-medium text-sm text-primary-foreground shadow-sm enabled:hover:bg-primary/80 enabled:hover:text-primary-foreground disabled:bg-primary/50 disabled:text-primary-foreground'
             onClick={() => setNewGoalModalIsOpen(true)}
             type='button'
           >

@@ -21,11 +21,11 @@ function DocumentsBlock({ projectId, clientId, opportunityId, analysisId, homolo
   } = useFileReferences({ projectId, clientId, opportunityId, analysisId, homologationId });
   return (
     <div className='flex w-full flex-col gap-2 rounded-sm border border-primary/80'>
-      <h1 className='w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-white'>ARQUIVOS</h1>
+      <h1 className='w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-primary-foreground'>ARQUIVOS</h1>
       <div className='flex w-full grow flex-wrap justify-around gap-2 p-2'>
         {isLoading ? (
           <div className='flex min-h-[80px] items-center justify-center'>
-            <p className='w-full animate-pulse text-center font-medium tracking-tight text-primary/50'>Buscando arquivos...</p>
+            <p className='w-full animate-pulse text-center font-medium tracking-tight text-primary/70'>Buscando arquivos...</p>
           </div>
         ) : null}
         {isError ? <ErrorComponent msg='Oops, houve um erro ao buscar arquivos.' /> : null}
@@ -36,7 +36,7 @@ function DocumentsBlock({ projectId, clientId, opportunityId, analysisId, homolo
             </div>
           ))
         ) : (
-          <p className='w-full text-center text-xs font-medium italic text-primary/50'>Nenhum arquivo adicionado.</p>
+          <p className='w-full text-center text-xs font-medium italic text-primary/70'>Nenhum arquivo adicionado.</p>
         )}
       </div>
       <ProjectFileAttachmentMenu

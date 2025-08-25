@@ -22,12 +22,12 @@ function Partner({ session }: PartnerProps) {
     <div className='flex h-full grow flex-col'>
       <div className='flex w-full flex-col items-center justify-between border-b border-primary/30 pb-2 lg:flex-row'>
         <div className='flex flex-col'>
-          <h1 className={`text-lg font-bold`}>Informações da Empresa</h1>
+          <h1 className={`text-lg font-bold uppercase`}>Informações da Empresa</h1>
           <p className='text-sm text-[#71717A]'>Gerencie e configure informações e personalizações da empresa</p>
         </div>
         <button
           onClick={() => setEditModalIsOpen(true)}
-          className='h-9 whitespace-nowrap rounded-sm bg-primary/90 px-4 py-2 text-sm font-medium text-white shadow-sm disabled:bg-primary/50 disabled:text-white enabled:hover:bg-primary/80 enabled:hover:text-white'
+          className='h-9 whitespace-nowrap rounded-sm bg-primary/90 px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm disabled:bg-primary/50 disabled:text-primary-foreground enabled:hover:bg-primary/80 enabled:hover:text-primary-foreground'
         >
           EDITAR
         </button>
@@ -44,7 +44,7 @@ function Partner({ session }: PartnerProps) {
             <div className='flex grow flex-col'>
               <h1 className='text-lg font-bold leading-none tracking-tight'>{partner.nome}</h1>
               <h1 className='mt-2 text-xs font-medium text-primary/80'>DESCRIÇÃO</h1>
-              <p className='text-sm text-primary/50'>{partner.descricao || 'Descrição ainda não preenchida.'}</p>
+              <p className='text-sm text-primary/70'>{partner.descricao || 'Descrição ainda não preenchida.'}</p>
             </div>
           </div>
           <div className='flex w-full flex-col'>
@@ -52,11 +52,11 @@ function Partner({ session }: PartnerProps) {
             <div className='mt-1 flex flex-col items-center gap-2 lg:flex-row'>
               <div className='flex items-center gap-1'>
                 <MdOutlineEmail size={18} />
-                <p className='text-sm text-primary/50'>{partner.contatos.email || 'NÃO POSSUI'}</p>
+                <p className='text-sm text-primary/70'>{partner.contatos.email || 'NÃO POSSUI'}</p>
               </div>
               <div className='flex items-center gap-1'>
                 <BsTelephone size={14} />
-                <p className='text-sm text-primary/50'>
+                <p className='text-sm text-primary/70'>
                   {partner.contatos.telefonePrimario} {partner.contatos.telefoneSecundario ? ` e/ou ${partner.contatos.telefoneSecundario}` : null}
                 </p>
               </div>
@@ -65,15 +65,15 @@ function Partner({ session }: PartnerProps) {
             <div className='mt-1 flex flex-col items-center gap-2 lg:flex-row'>
               <div className='flex items-center gap-1'>
                 <GiBrazil size={16} />
-                <p className='text-sm text-primary/50'>{partner.localizacao.uf || 'NÃO PREENCHIDO'}</p>
+                <p className='text-sm text-primary/70'>{partner.localizacao.uf || 'NÃO PREENCHIDO'}</p>
               </div>
               <div className='flex items-center gap-1'>
                 <FaCity size={14} />
-                <p className='text-sm text-primary/50'>{partner.localizacao.cidade}</p>
+                <p className='text-sm text-primary/70'>{partner.localizacao.cidade}</p>
               </div>
               <div className='flex items-center gap-1'>
                 <IoLocationSharp size={14} />
-                <p className='text-sm text-primary/50'>{formatLocation({ location: partner.localizacao })}</p>
+                <p className='text-sm text-primary/70'>{formatLocation({ location: partner.localizacao })}</p>
               </div>
             </div>
           </div>

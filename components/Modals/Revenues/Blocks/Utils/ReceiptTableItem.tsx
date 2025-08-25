@@ -33,12 +33,12 @@ function ReceiptTableItem({ item, revenueTotal, handleUpdate, handleRemove }: Re
                 <div className='flex items-center gap-2'>
                   <div className='flex items-center gap-1'>
                     <FaPercentage size={10} />
-                    <p className='text-[0.65rem] font-light italic leading-none tracking-tight text-primary/50'>
+                    <p className='text-[0.65rem] font-light italic leading-none tracking-tight text-primary/70'>
                       {formatDecimalPlaces((item.valor / revenueTotal) * 100)}%
                     </p>
                   </div>
                 </div>
-                {/* <p className="text-[0.65rem] font-light italic leading-none tracking-tight text-primary/50">{item.categoria}</p> */}
+                {/* <p className="text-[0.65rem] font-light italic leading-none tracking-tight text-primary/70">{item.categoria}</p> */}
               </div>
               <button
                 onClick={() => setEditMenuIsOpen((prev) => !prev)}
@@ -70,7 +70,7 @@ function ReceiptTableItem({ item, revenueTotal, handleUpdate, handleRemove }: Re
             </div>
             {item.valor > 0 ? (
               <div className='flex min-w-fit items-center gap-2 rounded-full bg-primary/80 px-2 py-1 '>
-                <h1 className='text-[0.65rem] font-medium text-white lg:text-xs'>{formatToMoney(item.valor)}</h1>
+                <h1 className='text-[0.65rem] font-medium text-primary-foreground lg:text-xs'>{formatToMoney(item.valor)}</h1>
               </div>
             ) : null}
           </div>
@@ -95,12 +95,12 @@ function ReceiptTableItem({ item, revenueTotal, handleUpdate, handleRemove }: Re
               {item.efetivado ? (
                 <div className='flex items-center gap-1'>
                   <BsPatchCheck color='rgb(34,197,94)' />
-                  <p className='text-[0.6rem] text-primary/50 lg:text-xs'>EFETIVADO</p>
+                  <p className='text-[0.6rem] text-primary/70 lg:text-xs'>EFETIVADO</p>
                 </div>
               ) : null}
               <div className='flex items-center gap-1'>
                 {item.efetivado ? <BsCalendarCheck /> : <BsCalendar />}
-                <p className='text-[0.6rem] text-primary/50 lg:text-xs'>{formatDateAsLocale(item.dataRecebimento || undefined)}</p>
+                <p className='text-[0.6rem] text-primary/70 lg:text-xs'>{formatDateAsLocale(item.dataRecebimento || undefined)}</p>
               </div>
             </div>
           </div>
@@ -173,7 +173,7 @@ function ReceiptTableItem({ item, revenueTotal, handleUpdate, handleRemove }: Re
                 onClick={() => {
                   setEditMenuIsOpen(false);
                 }}
-                className='rounded bg-red-800 p-1 px-4 text-[0.6rem] font-medium text-white duration-300 ease-in-out hover:bg-red-700'
+                className='rounded bg-red-800 p-1 px-4 text-[0.6rem] font-medium text-primary-foreground duration-300 ease-in-out hover:bg-red-700'
               >
                 FECHAR
               </button>
@@ -182,7 +182,7 @@ function ReceiptTableItem({ item, revenueTotal, handleUpdate, handleRemove }: Re
                   handleUpdate(itemHolder);
                   setEditMenuIsOpen(false);
                 }}
-                className='rounded bg-blue-800 p-1 px-4 text-[0.6rem] font-medium text-white duration-300 ease-in-out hover:bg-blue-700'
+                className='rounded bg-blue-800 p-1 px-4 text-[0.6rem] font-medium text-primary-foreground duration-300 ease-in-out hover:bg-blue-700'
               >
                 ATUALIZAR ITEM
               </button>

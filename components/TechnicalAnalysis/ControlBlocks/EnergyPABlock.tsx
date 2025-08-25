@@ -62,7 +62,7 @@ function EnergyPABlock({ infoHolder, setInfoHolder, changes, setChanges }: Energ
   return (
     <div className='mt-4 flex w-full flex-col'>
       <div className='flex w-full items-center justify-center gap-2 rounded-md bg-primary/80 p-2'>
-        <h1 className='font-bold text-white'>PADRÕES</h1>
+        <h1 className='font-bold text-primary-foreground'>PADRÕES</h1>
       </div>
       <div className='mt-2 flex w-full flex-col gap-2'>
         <div className='flex w-full flex-col justify-around gap-2 lg:flex-row'>
@@ -207,19 +207,19 @@ function EnergyPABlock({ infoHolder, setInfoHolder, changes, setChanges }: Energ
         <div className='mt-2 flex w-full items-center justify-end'>
           <button
             onClick={addEnergyPA}
-            className='rounded border border-green-500 p-1 font-bold text-green-500 duration-300 ease-in-out hover:bg-green-500 hover:text-white'
+            className='rounded border border-green-500 p-1 font-bold text-green-500 duration-300 ease-in-out hover:bg-green-500 hover:text-primary-foreground'
           >
             ADICIONAR ITEM
           </button>
         </div>
       </div>
       <div className='mt-2 flex w-full flex-col gap-2'>
-        <h1 className='w-full rounded-tl-sm rounded-tr-sm bg-primary/50 p-1 text-center font-bold text-white'>LISTA DE PADRÕES</h1>
+        <h1 className='w-full rounded-tl-sm rounded-tr-sm bg-primary/50 p-1 text-center font-bold text-primary-foreground'>LISTA DE PADRÕES</h1>
         {infoHolder.padrao.length > 0 ? (
           infoHolder.padrao.map((paInfo, index) => (
             <div key={index} className='flex w-full flex-col border border-primary/30 p-2 shadow-md'>
               <div className='flex w-full items-center justify-between'>
-                <h1 className='font-medium leading-none tracking-tight text-primary/50'>
+                <h1 className='font-medium leading-none tracking-tight text-primary/70'>
                   PADRÃO <strong className='text-[#fead41]'>{paInfo.ligacao} </strong> de{' '}
                   <strong className='text-[#fead41]'>{paInfo.amperagem}</strong>
                 </h1>
@@ -296,7 +296,7 @@ function EnergyPABlock({ infoHolder, setInfoHolder, changes, setChanges }: Energ
             </div>
           ))
         ) : (
-          <p className='flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/50'>
+          <p className='flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/70'>
             Nenhum padrão adicionado à lista...
           </p>
         )}

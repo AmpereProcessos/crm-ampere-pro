@@ -40,7 +40,7 @@ function ControlPricingUnit({ methodology, setMethodology }: ControlPricingUnitP
   }
   return (
     <div className='flex w-full flex-col gap-y-2'>
-      <h1 className='mt-2 w-full rounded-md bg-primary/70 p-1 text-center text-sm font-bold text-white'>UNIDADES DE PREÇO</h1>
+      <h1 className='mt-2 w-full rounded-md bg-primary/70 p-1 text-center text-sm font-bold text-primary-foreground'>UNIDADES DE PREÇO</h1>
       {newPriceUnitMenuIsOpen ? (
         <NewPricingUnit
           pricingHolder={pricingHolder}
@@ -55,7 +55,7 @@ function ControlPricingUnit({ methodology, setMethodology }: ControlPricingUnitP
       ) : (
         <div className='flex w-full items-center justify-end'>
           <button
-            className='rounded bg-green-500 p-1 px-4 text-sm font-medium text-white duration-300 ease-in-out hover:bg-green-600'
+            className='rounded bg-green-500 p-1 px-4 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-green-600'
             onClick={() => setNewPriceUnitMenuIsOpen(true)}
           >
             NOVA UNIDADE DE PREÇO
@@ -114,11 +114,11 @@ function ControlPricingUnit({ methodology, setMethodology }: ControlPricingUnitP
                     </h1> */}
                     <div className='flex items-center gap-2 font-Inter'>
                       <div className='flex items-center gap-1'>
-                        <p className='text-xs text-primary/50'>MARGEM: </p>
+                        <p className='text-xs text-primary/70'>MARGEM: </p>
                         <p className='text-xs font-bold text-[#FFBB5C]'>{result.margemLucro}%</p>
                       </div>
                       <div className='flex items-center gap-1'>
-                        <p className='text-xs text-primary/50'>FATURÁVEL: </p>
+                        <p className='text-xs text-primary/70'>FATURÁVEL: </p>
                         <p className='text-xs font-bold text-[#FFBB5C]'>{result.faturavel ? 'SIM' : 'NÃO'}</p>
                       </div>
                     </div>
@@ -127,7 +127,7 @@ function ControlPricingUnit({ methodology, setMethodology }: ControlPricingUnitP
                         setResultHolder((prev) => ({ ...prev, formulaArr: [...prev.formulaArr, ...result.formulaArr] }));
                         return toast.success('Formula adicionada a área de trabalho');
                       }}
-                      className='flex w-fit items-center gap-1 rounded-md bg-primary/90 px-2 py-1 text-white hover:bg-primary/80'
+                      className='flex w-fit items-center gap-1 rounded-md bg-primary/90 px-2 py-1 text-primary-foreground hover:bg-primary/80'
                     >
                       <MdContentCopy size={15} />
                       <p className='text-[0.6rem] tracking-tight'>COPIAR PARA ÁREA DE TRABALHO</p>
@@ -135,7 +135,9 @@ function ControlPricingUnit({ methodology, setMethodology }: ControlPricingUnitP
                   </div>
                   <div className='flex  grow flex-wrap items-center justify-center gap-1 p-1'>
                     {result.formulaArr.map((y) => (
-                      <p className={`text-[0.7rem] ${y.includes('[') ? 'rounded-sm bg-blue-500 p-1 text-white' : ''}`}>{formatFormulaItem(y)}</p>
+                      <p className={`text-[0.7rem] ${y.includes('[') ? 'rounded-sm bg-blue-500 p-1 text-primary-foreground' : ''}`}>
+                        {formatFormulaItem(y)}
+                      </p>
                     ))}
                   </div>
                 </div>
