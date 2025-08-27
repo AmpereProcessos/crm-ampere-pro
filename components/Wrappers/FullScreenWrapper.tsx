@@ -4,7 +4,7 @@ import type { PropsWithChildren } from 'react';
 
 const raleway = Raleway({
   variable: '--font-raleway',
-  subsets: ['cyrillic', 'cyrillic-ext'],
+  subsets: ['latin'],
 });
 
 function FullScreenWrapper({ children }: PropsWithChildren) {

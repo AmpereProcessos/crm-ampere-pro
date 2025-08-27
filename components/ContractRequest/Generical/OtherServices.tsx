@@ -1,6 +1,7 @@
 import CheckboxInput from '@/components/Inputs/CheckboxInput';
 import NumberInput from '@/components/Inputs/NumberInput';
 import SelectInput from '@/components/Inputs/SelectInput';
+import { Button } from '@/components/ui/button';
 import { structureTypes } from '@/utils/constants';
 import type { TContractRequest } from '@/utils/schemas/integrations/app-ampere/contract-request.schema';
 import { ChevronRight, Hammer } from 'lucide-react';
@@ -446,26 +447,25 @@ function OtherServices({ requestInfo, setRequestInfo, showActions, goToPreviousS
       </div>
       {showActions ? (
         <div className='mt-2 flex w-full flex-wrap justify-between  gap-2'>
-          <button
+          <Button
             type='button'
             onClick={() => {
               goToPreviousStage();
             }}
-            className='rounded p-2 font-bold text-primary/70 duration-300 hover:scale-105'
+            variant='outline'
           >
             Voltar
-          </button>
-          <button
+          </Button>
+          <Button
             type='button'
             onClick={() => {
               if (validateFields()) {
                 goToNextStage();
               }
             }}
-            className='rounded p-2 font-bold hover:bg-black hover:text-primary-foreground'
           >
             Prosseguir
-          </button>
+          </Button>
         </div>
       ) : null}
     </div>

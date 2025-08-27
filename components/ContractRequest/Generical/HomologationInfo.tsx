@@ -337,26 +337,25 @@ function HomologationInfo({ requestInfo, setRequestInfo, showActions, goToPrevio
       </div>
       {showActions ? (
         <div className='mt-2 flex w-full flex-wrap justify-between  gap-2'>
-          <button
+          <Button
             type='button'
             onClick={() => {
               goToPreviousStage();
             }}
-            className='rounded p-2 font-bold text-primary/70 duration-300 hover:scale-105'
+            variant='outline'
           >
             Voltar
-          </button>
-          <button
+          </Button>
+          <Button
             type='button'
             onClick={() => {
               if (validateFields()) {
                 goToNextStage();
               }
             }}
-            className='rounded p-2 font-bold hover:bg-black hover:text-primary-foreground'
           >
             Prosseguir
-          </button>
+          </Button>
         </div>
       ) : null}
     </div>

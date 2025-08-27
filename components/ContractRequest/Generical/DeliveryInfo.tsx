@@ -4,6 +4,7 @@ import { useState, type Dispatch, type SetStateAction } from 'react';
 import CheckboxInput from '@/components/Inputs/CheckboxInput';
 import SelectInput from '@/components/Inputs/SelectInput';
 import TextInput from '@/components/Inputs/TextInput';
+import { Button } from '@/components/ui/button';
 import { BrazilianCitiesOptionsFromUF, BrazilianStatesOptions } from '@/utils/estados_cidades';
 import { formatToCEP, getCEPInfo } from '@/utils/methods';
 import { ChevronRight, Truck } from 'lucide-react';
@@ -230,24 +231,23 @@ function DeliveryInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNext
       </div>
       {showActions ? (
         <div className='mt-2 flex w-full flex-wrap justify-between  gap-2'>
-          <button
+          <Button
             type='button'
             onClick={() => {
               goToPreviousStage();
             }}
-            className='rounded p-2 font-bold text-primary/70 duration-300 hover:scale-105'
+            variant='outline'
           >
             Voltar
-          </button>
-          <button
+          </Button>
+          <Button
             type='button'
             onClick={() => {
               goToNextStage();
             }}
-            className='rounded p-2 font-bold hover:bg-black hover:text-primary-foreground'
           >
             Prosseguir
-          </button>
+          </Button>
         </div>
       ) : null}
     </div>

@@ -6,6 +6,7 @@ import SelectInput from '@/components/Inputs/SelectInput';
 import TextInput from '@/components/Inputs/TextInput';
 
 import TextareaInput from '@/components/Inputs/TextareaInput';
+import { Button } from '@/components/ui/button';
 import { formatDateOnInputChange } from '@/lib/methods/formatting';
 import { BrazilianCitiesOptionsFromUF, BrazilianStatesOptions } from '@/utils/estados_cidades';
 import { formatDateForInputValue, formatToCEP, formatToCPForCNPJ, formatToPhone, getCEPInfo } from '@/utils/methods';
@@ -892,17 +893,16 @@ function ContractInfo({ requestInfo, setRequestInfo, showActions, goToNextStage 
 
       {showActions ? (
         <div className='mt-2 flex w-full justify-end'>
-          <button
+          <Button
             type='button'
             onClick={() => {
               if (validateFields()) {
                 goToNextStage();
               }
             }}
-            className='rounded p-2 font-bold hover:bg-black hover:text-primary-foreground'
           >
             Prosseguir
-          </button>
+          </Button>
         </div>
       ) : null}
     </div>
