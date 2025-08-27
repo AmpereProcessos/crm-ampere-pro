@@ -222,8 +222,8 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
             <CardStat
               title='Ticket Médio'
               icon={<BsTicketPerforated className='h-4 w-4' />}
-              current={data?.simplificado.ATUAL.totalVendido || 0 / (data?.simplificado.ATUAL.projetosGanhos || 0)}
-              previous={data?.simplificado.ANTERIOR.totalVendido || 0 / (data?.simplificado.ANTERIOR.projetosGanhos || 0)}
+              current={(data?.simplificado.ATUAL.totalVendido || 0) / (data?.simplificado.ATUAL.projetosGanhos || 0)}
+              previous={(data?.simplificado.ANTERIOR.totalVendido || 0) / (data?.simplificado.ANTERIOR.projetosGanhos || 0)}
               formatCurrent={(value) => `${formatToMoney(value)}`}
               formatPrevious={(value) => `${formatToMoney(value)}`}
               className='w-full lg:w-1/6'
