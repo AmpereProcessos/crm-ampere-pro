@@ -1,14 +1,19 @@
 'use client';
+import { TGetGraphDataRouteInput } from '@/app/api/stats/graph/route';
 import UserConectaIndicationCodeFlag from '@/components/Conecta/UserConectaIndicationCodeFlag';
 import DateInput from '@/components/Inputs/DateInput';
 import MultipleSelectInput from '@/components/Inputs/MultipleSelectInput';
 import { Sidebar } from '@/components/Sidebar';
+import { Button } from '@/components/ui/button';
+import { ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import type { TUserSession } from '@/lib/auth/session';
 import { formatDateOnInputChange, formatDecimalPlaces, formatToMoney } from '@/lib/methods/formatting';
+import { cn } from '@/lib/utils';
 import { formatDateForInputValue } from '@/utils/methods';
-import { useStats, useStatsQueryOptions } from '@/utils/queries/stats';
+import { useGraphData, useStats, useStatsQueryOptions } from '@/utils/queries/stats';
 import dayjs from 'dayjs';
-import { MousePointerClick, UserRoundPlus } from 'lucide-react';
+import { BadgeDollarSign, CirclePlus, CircleX, MousePointerClick, TrendingDown, TrendingUp, UserRoundPlus } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
 import { AiOutlineCloseCircle, AiOutlineTeam } from 'react-icons/ai';
@@ -16,6 +21,7 @@ import { BsFileEarmarkText, BsPatchCheck, BsTicketPerforated } from 'react-icons
 import { FaBolt } from 'react-icons/fa';
 import { FaListCheck } from 'react-icons/fa6';
 import { VscDiffAdded } from 'react-icons/vsc';
+import { Area, CartesianGrid, ComposedChart, XAxis, YAxis } from 'recharts';
 import OpenActivitiesBlock from './OpenActivitiesBlock';
 import PendingWinsBlock from './PendingWinsBlock';
 import PPSOpenCallsBlock from './PPSOpenCallsBlock';
@@ -93,7 +99,7 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
             ) : null}
           </div>
         </div>
-        <div className='flex grow flex-col py-2'>
+        <div className='flex grow flex-col py-2 gap-4'>
           <div className='flex w-full flex-col items-end justify-end gap-2 lg:flex-row'>
             <div className='w-full lg:w-[300px]'>
               <MultipleSelectInput
@@ -172,107 +178,90 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
               </div>
             </div>
           </div>
-          <div className='mt-2 flex w-full flex-col items-center justify-around gap-2 lg:flex-row'>
-            <div className='flex min-h-[110px] w-full flex-col rounded-xl border border-primary/30 bg-background p-6 shadow-md lg:w-1/6'>
+          <div className='flex w-full flex-col items-center justify-around gap-2 lg:flex-row'>
+            <CardStat
+              title='Projetos Criados'
+              icon={<VscDiffAdded className='h-4 w-4' />}
+              current={data?.simplificado.ATUAL.projetosCriados || 0}
+              previous={data?.simplificado.ANTERIOR.projetosCriados || 0}
+              className='w-full lg:w-1/6'
+            />
+            <CardStat
+              title='Projetos Ganhos'
+              icon={<BsPatchCheck className='h-4 w-4' />}
+              current={data?.simplificado.ATUAL.projetosGanhos || 0}
+              previous={data?.simplificado.ANTERIOR.projetosGanhos || 0}
+              className='w-full lg:w-1/6'
+            />
+            <CardStat
+              title='Projetos Perdidos'
+              icon={<AiOutlineCloseCircle className='h-4 w-4' />}
+              current={data?.simplificado.ATUAL.projetosPerdidos || 0}
+              previous={data?.simplificado.ANTERIOR.projetosPerdidos || 0}
+              className='w-full lg:w-1/6'
+              lowerIsBetter={true}
+            />
+            <CardStat
+              title='Potência Vendida'
+              icon={<FaBolt className='h-4 w-4' />}
+              current={data?.simplificado.ATUAL.potenciaVendida || 0}
+              previous={data?.simplificado.ANTERIOR.potenciaVendida || 0}
+              formatCurrent={(value) => `${formatDecimalPlaces(value)}kWp`}
+              formatPrevious={(value) => `${formatDecimalPlaces(value)}kWp`}
+              className='w-full lg:w-1/6'
+            />
+            <CardStat
+              title='Total Vendido'
+              icon={<BsFileEarmarkText className='h-4 w-4' />}
+              current={data?.simplificado.ATUAL.totalVendido || 0}
+              previous={data?.simplificado.ANTERIOR.totalVendido || 0}
+              formatCurrent={(value) => `${formatToMoney(value)}`}
+              formatPrevious={(value) => `${formatToMoney(value)}`}
+              className='w-full lg:w-1/6'
+            />
+            <CardStat
+              title='Ticket Médio'
+              icon={<BsTicketPerforated className='h-4 w-4' />}
+              current={data?.simplificado.ATUAL.totalVendido || 0}
+              previous={data?.simplificado.ANTERIOR.totalVendido || 0}
+              formatCurrent={(value) => `${formatToMoney(value)}`}
+              formatPrevious={(value) => `${formatToMoney(value)}`}
+              className='w-full lg:w-1/6'
+            />
+          </div>
+          <GraphData
+            after={queryFilters.period.after}
+            before={queryFilters.period.before}
+            responsibles={queryFilters.responsibles}
+            partners={queryFilters.partners}
+            projectTypes={queryFilters.projectTypes}
+          />
+
+          <div className='flex w-full flex-col items-center justify-around gap-2 lg:flex-row'>
+            <div className={cn('bg-card border-primary/20 flex w-full flex-col gap-1 rounded-xl border px-3 py-4 shadow-xs lg:w-1/2')}>
               <div className='flex items-center justify-between'>
-                <h1 className='text-sm font-medium uppercase tracking-tight'>Projetos Criados</h1>
-                <VscDiffAdded className='h-4 w-4' />
-              </div>
-              <div className='mt-2 flex w-full flex-col'>
-                <div className='text-xl font-bold text-[#15599a] dark:text-[#fead41]'>{data?.simplificado.ATUAL.projetosCriados || 0}</div>
-                <p className='text-xs text-primary/70 lg:text-[0.6rem]'>{data?.simplificado.ANTERIOR.projetosCriados || 0} no último período</p>
-              </div>
-            </div>
-            <div className='flex min-h-[110px] w-full flex-col rounded-xl border border-primary/30 bg-background p-6 shadow-md lg:w-1/6'>
-              <div className='flex items-center justify-between'>
-                <h1 className='text-sm font-medium uppercase tracking-tight'>Projetos Ganhos</h1>
-                <BsPatchCheck className='h-4 w-4' />
-              </div>
-              <div className='mt-2 flex w-full flex-col'>
-                <div className='text-xl font-bold text-[#15599a] dark:text-[#fead41]'>{data?.simplificado.ATUAL.projetosGanhos || 0}</div>
-                <p className='text-xs text-primary/70 lg:text-[0.6rem]'>{data?.simplificado.ANTERIOR.projetosGanhos || 0} no último período</p>
-              </div>
-            </div>
-            <div className='flex min-h-[110px] w-full flex-col rounded-xl border border-primary/30 bg-background p-6 shadow-md lg:w-1/6'>
-              <div className='flex items-center justify-between'>
-                <h1 className='text-sm font-medium uppercase tracking-tight'>Projetos Perdidos</h1>
-                <AiOutlineCloseCircle className='h-4 w-4' />
-              </div>
-              <div className='mt-2 flex w-full flex-col'>
-                <div className='text-xl font-bold text-[#15599a] dark:text-[#fead41]'>{data?.simplificado.ATUAL.projetosPerdidos || 0}</div>
-                <p className='text-xs text-primary/70 lg:text-[0.6rem]'>{data?.simplificado.ANTERIOR.projetosPerdidos || 0} no último período</p>
-              </div>
-            </div>
-            <div className='flex min-h-[110px] w-full flex-col rounded-xl border border-primary/30 bg-background p-6 shadow-md lg:w-1/6'>
-              <div className='flex items-center justify-between'>
-                <h1 className='text-sm font-medium uppercase tracking-tight'>Potência Vendida</h1>
-                <FaBolt className='h-4 w-4' />
-              </div>
-              <div className='mt-2 flex w-full flex-col'>
-                <div className='text-xl font-bold text-[#15599a] dark:text-[#fead41]'>
-                  {data?.simplificado.ATUAL.potenciaVendida ? formatDecimalPlaces(data.simplificado.ATUAL.potenciaVendida) : 0} kWp
+                <h1 className='text-xs font-medium tracking-tight uppercase'>Visualizações do Conecta Link</h1>
+                <div className='flex items-center gap-2'>
+                  <MousePointerClick className='h-4 w-4' />
                 </div>
-                <p className='text-xs text-primary/70 lg:text-[0.6rem]'>
-                  {data?.simplificado.ANTERIOR.potenciaVendida ? formatDecimalPlaces(data.simplificado.ANTERIOR.potenciaVendida) : 0} kWp no último
-                  período
-                </p>
+              </div>
+              <div className='flex w-full flex-col'>
+                <div className='text-2xl font-bold text-[#15599a] dark:text-[#fead61]'>{data?.conecta.visualizacoes || 0}</div>
               </div>
             </div>
-            <div className='flex min-h-[110px] w-full flex-col rounded-xl border border-primary/30 bg-background p-6 shadow-md lg:w-1/6'>
+            <div className={cn('bg-card border-primary/20 flex w-full flex-col gap-1 rounded-xl border px-3 py-4 shadow-xs lg:w-1/2')}>
               <div className='flex items-center justify-between'>
-                <h1 className='text-sm font-medium uppercase tracking-tight'>Total Vendido</h1>
-                <BsFileEarmarkText className='h-4 w-4' />
-              </div>
-              <div className='mt-2 flex w-full flex-col'>
-                <div className='text-xl font-bold text-[#15599a] dark:text-[#fead41]'>
-                  {data?.simplificado.ATUAL.totalVendido ? formatToMoney(data.simplificado.ATUAL.totalVendido) : 0}
+                <h1 className='text-xs font-medium tracking-tight uppercase'>Oportunidades do Conecta Link</h1>
+                <div className='flex items-center gap-2'>
+                  <UserRoundPlus className='h-4 w-4' />
                 </div>
-                <p className='text-xs text-primary/70 lg:text-[0.6rem]'>
-                  {data?.simplificado.ANTERIOR.totalVendido ? formatToMoney(data.simplificado.ANTERIOR.totalVendido) : 0} no último período
-                </p>
               </div>
-            </div>
-            <div className='flex min-h-[110px] w-full flex-col rounded-xl border border-primary/30 bg-background p-6 shadow-md lg:w-1/6'>
-              <div className='flex items-center justify-between'>
-                <h1 className='text-sm font-medium uppercase tracking-tight'>Ticket Médio</h1>
-                <BsTicketPerforated className='h-4 w-4' />
-              </div>
-              <div className='mt-2 flex w-full flex-col'>
-                <div className='text-xl font-bold text-[#15599a] dark:text-[#fead41]'>
-                  {data?.simplificado.ATUAL.totalVendido
-                    ? formatToMoney(data.simplificado.ATUAL.totalVendido / data.simplificado.ATUAL.projetosGanhos)
-                    : 0}
-                </div>
-                <p className='text-xs text-primary/70 lg:text-[0.6rem]'>
-                  {data?.simplificado.ANTERIOR.totalVendido
-                    ? formatToMoney(data.simplificado.ANTERIOR.totalVendido / data.simplificado.ANTERIOR.projetosGanhos)
-                    : 0}{' '}
-                  no último período
-                </p>
+              <div className='flex w-full flex-col'>
+                <div className='text-2xl font-bold text-[#15599a] dark:text-[#fead61]'>{data?.conecta.oportunidades || 0}</div>
               </div>
             </div>
           </div>
-          <div className='mt-1 flex w-full flex-col items-center justify-around gap-2 lg:flex-row'>
-            <div className='flex min-h-[50px] w-full flex-col rounded-xl border border-primary/30 bg-background p-6 shadow-md lg:w-1/2'>
-              <div className='flex items-center justify-between'>
-                <h1 className='text-sm font-medium uppercase tracking-tight'>Visualizações do Conecta Link</h1>
-                <MousePointerClick className='h-4 w-4' />
-              </div>
-              <div className='mt-2 flex w-full flex-col'>
-                <div className='text-xl font-bold text-[#15599a] dark:text-[#fead41]'>{data?.conecta.visualizacoes || 0}</div>
-              </div>
-            </div>
-            <div className='flex min-h-[50px] w-full flex-col rounded-xl border border-primary/30 bg-background p-6 shadow-md lg:w-1/2'>
-              <div className='flex items-center justify-between'>
-                <h1 className='text-sm font-medium uppercase tracking-tight'>Oportunidades do Conecta Link</h1>
-                <UserRoundPlus className='h-4 w-4' />
-              </div>
-              <div className='mt-2 flex w-full flex-col'>
-                <div className='text-xl font-bold text-[#15599a] dark:text-[#fead41]'>{data?.conecta.oportunidades || 0}</div>
-              </div>
-            </div>
-          </div>
-          <div className='mt-4 flex w-full flex-col items-center justify-around gap-2 lg:flex-row'>
+          <div className='flex w-full flex-col items-center justify-around gap-2 lg:flex-row'>
             <div className='w-full lg:w-[40%]'>
               <PendingWinsBlock data={data?.ganhosPendentes || []} session={session} />
             </div>
@@ -280,7 +269,7 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
               <WinsBlock data={data?.ganhos || []} session={session} />
             </div>
           </div>
-          <div className='mt-4 flex w-full flex-col items-center gap-2 lg:flex-row'>
+          <div className='flex w-full flex-col items-center gap-2 lg:flex-row'>
             <div className='w-full lg:w-[50%]'>
               <PPSOpenCallsBlock session={session} />
             </div>
@@ -295,3 +284,218 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
 }
 
 export default MainDashboardPage;
+
+type CardStatProps = {
+  title: string;
+  icon: React.ReactNode;
+  current: number;
+  previous: number;
+  formatCurrent?: (n: number) => string;
+  formatPrevious?: (n: number) => string;
+  lowerIsBetter?: boolean;
+  className?: string;
+};
+function CardStat({ title, icon, current, previous, formatCurrent, formatPrevious, lowerIsBetter, className }: CardStatProps) {
+  const change = (() => {
+    if (previous === 0) {
+      if (current === 0) return 0;
+      return 100;
+    }
+    return ((current - previous) / Math.abs(previous)) * 100;
+  })();
+
+  const isGood = lowerIsBetter ? change < 0 : change > 0;
+  const isNeutral = change === 0;
+  const changeAbs = Math.abs(change);
+
+  return (
+    <div className={cn('bg-card border-primary/20 flex w-full flex-col gap-1 rounded-xl border px-3 py-4 shadow-xs', className)}>
+      <div className='flex items-center justify-between'>
+        <h1 className='text-xs font-medium tracking-tight uppercase'>{title}</h1>
+        <div className='flex items-center gap-2'>
+          {!isNeutral && (
+            <div
+              className={
+                `inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[0.65rem] font-bold ` +
+                (isGood ? 'bg-green-200 text-green-700' : 'bg-red-200 text-red-700')
+              }
+            >
+              {isGood ? <TrendingUp className='h-3 min-h-3 w-3 min-w-3' /> : <TrendingDown className='h-3 min-h-3 w-3 min-w-3' />}
+              {formatDecimalPlaces(changeAbs)}%
+            </div>
+          )}
+          {icon}
+        </div>
+      </div>
+      <div className='flex w-full flex-col'>
+        <div className='text-2xl font-bold text-[#15599a] dark:text-[#fead61]'>{formatCurrent ? formatCurrent(current) : String(current)}</div>
+        <p className='text-primary/60 text-xs tracking-tight'>NO MÊS ANTERIOR: {formatPrevious ? formatPrevious(previous) : String(previous || 0)}</p>
+      </div>
+    </div>
+  );
+}
+
+type TGraphDataProps = {
+  after: string;
+  before: string;
+  responsibles: TGetGraphDataRouteInput['responsibles'];
+  partners: TGetGraphDataRouteInput['partners'];
+  projectTypes: TGetGraphDataRouteInput['projectTypes'];
+};
+function GraphData({ after, before, responsibles, partners, projectTypes }: TGraphDataProps) {
+  const [graphType, setGraphType] = useState<TGetGraphDataRouteInput['graphType']>('opportunities-created');
+  const { data } = useGraphData({ after, before, filters: { graphType, responsibles, partners, projectTypes } });
+
+  const METRIC_LABELS: Record<
+    TGetGraphDataRouteInput['graphType'],
+    { title: string; chartLabel: string; valorFormatting: (value: number) => string; icon: React.ReactNode }
+  > = {
+    'total-sold': {
+      title: 'VALOR VENDIDO',
+      chartLabel: 'VALOR (R$)',
+      valorFormatting: (value: number) => `${formatToMoney(value)}`,
+      icon: <BadgeDollarSign className='h-4 min-h-4 w-4 min-w-4' />,
+    },
+    'opportunities-won': {
+      title: 'PROJETOS VENDIDOS',
+      chartLabel: 'PROJETOS',
+      valorFormatting: (value: number) => String(value),
+      icon: <CirclePlus className='h-4 min-h-4 w-4 min-w-4' />,
+    },
+    'opportunities-lost': {
+      title: 'PROJETOS PERDIDOS',
+      chartLabel: 'PROJETOS',
+      valorFormatting: (value: number) => String(value),
+      icon: <CircleX className='h-4 min-h-4 w-4 min-w-4' />,
+    },
+    'opportunities-created': {
+      title: 'PROJETOS CRIADOS',
+      chartLabel: 'PROJETOS',
+      valorFormatting: (value: number) => String(value),
+      icon: <CirclePlus className='h-4 min-h-4 w-4 min-w-4' />,
+    },
+  };
+
+  const firstPeriodChartConfig = {
+    identificador: {
+      color: '#15599a',
+      label: 'Identificador',
+    },
+    valor: {
+      label: METRIC_LABELS[graphType].chartLabel,
+      color: '#15599a',
+    },
+  };
+  return (
+    <div className='bg-card border-primary/20 flex w-full flex-col gap-3 rounded-xl border px-3 py-4 shadow-xs'>
+      <div className='flex items-center justify-between'>
+        <h1 className='text-xs font-medium tracking-tight uppercase'>{METRIC_LABELS[graphType].title}</h1>
+        <div className='flex items-center gap-2'>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant={graphType === 'opportunities-created' ? 'default' : 'ghost'}
+                size='fit'
+                className='rounded-lg p-2'
+                onClick={() => setGraphType('opportunities-created')}
+              >
+                {METRIC_LABELS['opportunities-created'].icon}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{METRIC_LABELS['opportunities-created'].title}</p>
+            </TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant={graphType === 'total-sold' ? 'default' : 'ghost'}
+                size='fit'
+                className='rounded-lg p-2'
+                onClick={() => setGraphType('total-sold')}
+              >
+                {METRIC_LABELS['total-sold'].icon}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{METRIC_LABELS['total-sold'].title}</p>
+            </TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant={graphType === 'opportunities-won' ? 'default' : 'ghost'}
+                size='fit'
+                className='rounded-lg p-2'
+                onClick={() => setGraphType('opportunities-won')}
+              >
+                {METRIC_LABELS['opportunities-won'].icon}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{METRIC_LABELS['opportunities-won'].title}</p>
+            </TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant={graphType === 'opportunities-lost' ? 'default' : 'ghost'}
+                size='fit'
+                className='rounded-lg p-2'
+                onClick={() => setGraphType('opportunities-lost')}
+              >
+                {METRIC_LABELS['opportunities-lost'].icon}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{METRIC_LABELS['opportunities-lost'].title}</p>
+            </TooltipContent>
+          </Tooltip>
+        </div>
+      </div>
+      <div className='flex w-full items-center gap-4'>
+        <div className='flex max-h-[400px] min-h-[400px] w-full items-center justify-center lg:max-h-[350px] lg:min-h-[350px]'>
+          <ChartContainer config={firstPeriodChartConfig} className='aspect-auto h-[350px] w-full lg:h-[250px]'>
+            <ComposedChart
+              data={data || []}
+              margin={{
+                top: 0,
+                right: 15,
+                left: 15,
+                bottom: 0,
+              }}
+            >
+              <defs>
+                <linearGradient id='firstGradient' x1='0' y1='0' x2='0' y2='1'>
+                  <stop offset='10%' stopColor={firstPeriodChartConfig.valor.color} stopOpacity={0.9} />
+                  <stop offset='90%' stopColor={firstPeriodChartConfig.valor.color} stopOpacity={0.1} />
+                </linearGradient>
+              </defs>
+              <CartesianGrid vertical={false} />
+              <XAxis
+                dataKey='identificador'
+                tickLine={false}
+                axisLine={false}
+                tickMargin={8}
+                minTickGap={32}
+                // tickFormatter={(value) => formatDateAsLocale(value) || ''}
+                interval='preserveStartEnd' // Mostra primeiro e último valor
+                angle={-15} // Rotaciona os labels para melhor legibilidade
+                textAnchor='end' // Alinhamento do texto
+              />
+              <YAxis
+                orientation='left'
+                tickFormatter={(value) => METRIC_LABELS[graphType].valorFormatting(value)}
+                stroke={firstPeriodChartConfig.valor.color}
+              />
+
+              <ChartTooltip cursor={false} content={<ChartTooltipContent indicator='dot' />} />
+              <Area dataKey='valor' type='monotone' fill='url(#firstGradient)' stroke={firstPeriodChartConfig.valor.color} />
+              <ChartLegend content={<ChartLegendContent payload={[]} />} />
+            </ComposedChart>
+          </ChartContainer>
+        </div>
+      </div>
+    </div>
+  );
+}

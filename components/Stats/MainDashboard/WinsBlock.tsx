@@ -13,13 +13,17 @@ type WinsBlockProps = {
 };
 function WinsBlock({ data, session }: WinsBlockProps) {
   return (
-    <div className='flex h-[650px] w-full flex-col rounded-xl  border border-primary/30 bg-background p-6 shadow-md lg:h-[450px]'>
+    <div className='bg-card border-primary/20 flex h-[650px] lg:h-[450px] w-full flex-col gap-1 rounded-xl border px-3 py-4 shadow-xs'>
       <div className='flex min-h-[42px] w-full flex-col'>
         <div className='flex items-center justify-between'>
-          <h1 className='text-sm font-medium uppercase tracking-tight'>Projetos ganhos</h1>
-          <MdSell />
+          <h1 className='text-xs font-medium tracking-tight uppercase'>Projetos ganhos</h1>
+          <div className='flex items-center gap-2'>
+            <MdSell className='h-4 w-4' />
+          </div>
         </div>
-        <p className='text-sm text-primary/70'>{data.length || 0} no período de escolha</p>
+        <div className='flex items-center justify-between'>
+          <p className='text-sm text-primary/70'>{data ? data.length : 0} projetos ganhos</p>
+        </div>
       </div>
       <div className='flex grow flex-col justify-start gap-2 overflow-y-auto overscroll-y-auto py-2 scrollbar-thin scrollbar-track-primary/10 scrollbar-thumb-primary/30'>
         {data.length > 0 ? (

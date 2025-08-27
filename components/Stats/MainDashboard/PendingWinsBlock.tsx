@@ -21,11 +21,13 @@ function PendingWinsBlock({ data, session }: PendingWinsBlockProps) {
     return total;
   }
   return (
-    <div className='flex h-[450px] w-full flex-col items-center rounded-xl border border-primary/30 bg-background p-6 shadow-md'>
+    <div className='bg-card border-primary/20 flex h-[450px] w-full flex-col gap-1 rounded-xl border px-3 py-4 shadow-xs'>
       <div className='flex min-h-[42px] w-full flex-col'>
         <div className='flex items-center justify-between'>
-          <h1 className='text-sm font-medium uppercase tracking-tight'>Contratos para Assinar</h1>
-          <FaSignature />
+          <h1 className='text-xs font-medium tracking-tight uppercase'>Contratos para Assinar</h1>
+          <div className='flex items-center gap-2'>
+            <FaSignature className='h-4 w-4' />
+          </div>
         </div>
         <div className='flex items-center justify-between'>
           <p className='text-sm text-primary/70'>{data ? data.length : 0} assinaturas para coletar</p>
