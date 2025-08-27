@@ -155,7 +155,7 @@ export const Sidebar = ({ session }: SidebarProps) => {
       <div
         className={`sticky  z-90 flex flex-col ${sidebarExtended ? 'h-fit' : 'h-[50px] '} w-full items-center border-t border-primary/30 bg-background pb-4 md:hidden`}
       >
-        <div className='grid h-[50px] w-full grid-cols-4'>
+        <div className='grid h-[50px] w-full grid-cols-3'>
           <div className='col-span-1 flex items-center justify-center gap-2'>
             {session?.user.avatar_url ? (
               <div className='flex h-full w-fit items-center justify-center'>
@@ -188,10 +188,9 @@ export const Sidebar = ({ session }: SidebarProps) => {
               </Link>
             </div>
           </div>
-          <div className='col-span-1 flex items-center justify-center'>
+          <div className='col-span-1 flex items-center justify-center gap-1'>
             <ThemeToggle />
-          </div>
-          <div className='col-span-1 flex items-center justify-center'>
+
             <motion.div
               animate={sidebarExtended ? 'active' : 'inactive'}
               variants={{
@@ -204,9 +203,7 @@ export const Sidebar = ({ session }: SidebarProps) => {
               }}
               transition={{ duration: 0.1 }}
               onClick={() => setSidebarExtended((prev) => !prev)}
-              className={
-                'my-2 flex w-fit cursor-pointer items-center justify-center self-center rounded-sm p-2  text-[#264653] duration-300 ease-in hover:scale-105'
-              }
+              className={'my-2 flex w-fit cursor-pointer items-center justify-center self-center rounded-sm p-2 duration-300 ease-in hover:scale-105'}
             >
               <TfiAngleRight />
             </motion.div>
@@ -223,49 +220,54 @@ export const Sidebar = ({ session }: SidebarProps) => {
             transition={{ duration: 0.25 }}
             className='flex min-h-[40px] w-full flex-wrap items-center justify-center gap-2'
           >
-            <div className='flex items-center justify-center p-2 text-[#264653] duration-300 ease-in hover:scale-105 hover:bg-blue-100 dark:hover:bg-primary/30'>
+            <div className='flex items-center justify-center p-2 duration-300 ease-in hover:scale-105 hover:bg-blue-100 dark:hover:bg-primary/30'>
               <Link href={'/'}>
                 <BiStats className='w-3.5 h-3.5 min-w-3.5 min-h-3.5' />
               </Link>
             </div>
-            <div className='flex items-center justify-center p-2 text-[#264653] duration-300 ease-in hover:scale-105 hover:bg-blue-100 dark:hover:bg-primary/30'>
+            <div className='flex items-center justify-center p-2 duration-300 ease-in hover:scale-105 hover:bg-blue-100 dark:hover:bg-primary/30'>
               <Link href={'/comercial/oportunidades'}>
-                <BsFillFunnelFill />
+                <BsFillFunnelFill className='w-3.5 h-3.5 min-w-3.5 min-h-3.5' />
               </Link>
             </div>
-            <div className='flex items-center justify-center p-2 text-[#264653] duration-300 ease-in hover:scale-105 hover:bg-blue-100 dark:hover:bg-primary/30'>
+            <div className='flex items-center justify-center p-2 duration-300 ease-in hover:scale-105 hover:bg-blue-100 dark:hover:bg-primary/30'>
+              <Link href={'/comercial/oportunidades/comissoes'}>
+                <FaPercent className='w-3.5 h-3.5 min-w-3.5 min-h-3.5' />
+              </Link>
+            </div>
+            <div className='flex items-center justify-center p-2 duration-300 ease-in hover:scale-105 hover:bg-blue-100 dark:hover:bg-primary/30'>
               <Link href={'/clientes'}>
-                <FaUser />
+                <FaUser className='w-3.5 h-3.5 min-w-3.5 min-h-3.5' />
               </Link>
             </div>
-            <div className='flex items-center justify-center p-2 text-[#264653] duration-300 ease-in hover:scale-105 hover:bg-blue-100 dark:hover:bg-primary/30'>
+            <div className='flex items-center justify-center p-2 duration-300 ease-in hover:scale-105 hover:bg-blue-100 dark:hover:bg-primary/30'>
               <Link href={'/kits'}>
-                <FaTag />
+                <FaTag className='w-3.5 h-3.5 min-w-3.5 min-h-3.5' />
               </Link>
             </div>
-            <div className='flex items-center justify-center p-2 text-[#264653] duration-300 ease-in hover:scale-105 hover:bg-blue-100 dark:hover:bg-primary/30'>
+            <div className='flex items-center justify-center p-2 duration-300 ease-in hover:scale-105 hover:bg-blue-100 dark:hover:bg-primary/30'>
               <Link href={'/planos'}>
-                <BsBookmarksFill />
+                <BsBookmarksFill className='w-3.5 h-3.5 min-w-3.5 min-h-3.5' />
               </Link>
             </div>
-            <div className='flex items-center justify-center p-2 text-[#264653] duration-300 ease-in hover:scale-105 hover:bg-blue-100 dark:hover:bg-primary/30'>
+            <div className='flex items-center justify-center p-2 duration-300 ease-in hover:scale-105 hover:bg-blue-100 dark:hover:bg-primary/30'>
               <Link href={'/produtos'}>
-                <BsCart />
+                <BsCart className='w-3.5 h-3.5 min-w-3.5 min-h-3.5' />
               </Link>
             </div>
-            <div className='flex items-center justify-center p-2 text-[#264653] duration-300 ease-in hover:scale-105 hover:bg-blue-100 dark:hover:bg-primary/30'>
+            <div className='flex items-center justify-center p-2 duration-300 ease-in hover:scale-105 hover:bg-blue-100 dark:hover:bg-primary/30'>
               <Link href={'/servicos'}>
-                <MdOutlineMiscellaneousServices />
+                <MdOutlineMiscellaneousServices className='w-3.5 h-3.5 min-w-3.5 min-h-3.5' />
               </Link>
             </div>
-            <div className='flex items-center justify-center p-2 text-[#264653] duration-300 ease-in hover:scale-105 hover:bg-blue-100 dark:hover:bg-primary/30'>
+            <div className='flex items-center justify-center p-2 duration-300 ease-in hover:scale-105 hover:bg-blue-100 dark:hover:bg-primary/30'>
               <Link href={'/operacional/homologacoes'}>
-                <FaProjectDiagram />
+                <FaProjectDiagram className='w-3.5 h-3.5 min-w-3.5 min-h-3.5' />
               </Link>
             </div>
-            <div className='flex items-center justify-center p-2 text-[#264653] duration-300 ease-in hover:scale-105 hover:bg-blue-100 dark:hover:bg-primary/30'>
+            <div className='flex items-center justify-center p-2 duration-300 ease-in hover:scale-105 hover:bg-blue-100 dark:hover:bg-primary/30'>
               <Link href={'/operacional/analises-tecnicas'}>
-                <BsFillClipboardDataFill />
+                <BsFillClipboardDataFill className='w-3.5 h-3.5 min-w-3.5 min-h-3.5' />
               </Link>
             </div>
           </motion.div>
