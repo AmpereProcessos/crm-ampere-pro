@@ -5,8 +5,9 @@ import MultipleSelectInput from '@/components/Inputs/MultipleSelectInput';
 import { Sidebar } from '@/components/Sidebar';
 import type { TUserSession } from '@/lib/auth/session';
 import { formatDateOnInputChange, formatDecimalPlaces, formatToMoney } from '@/lib/methods/formatting';
-import { formatDateForInputValue, getFirstDayOfMonth, getLastDayOfMonth } from '@/utils/methods';
+import { formatDateForInputValue } from '@/utils/methods';
 import { useStats, useStatsQueryOptions } from '@/utils/queries/stats';
+import dayjs from 'dayjs';
 import { MousePointerClick, UserRoundPlus } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -20,9 +21,8 @@ import PendingWinsBlock from './PendingWinsBlock';
 import PPSOpenCallsBlock from './PPSOpenCallsBlock';
 import WinsBlock from './WinsBlock';
 
-const currentDate = new Date();
-const firstDayOfMonth = getFirstDayOfMonth(currentDate.getFullYear(), currentDate.getMonth()).toISOString();
-const lastDayOfMonth = getLastDayOfMonth(currentDate.getFullYear(), currentDate.getMonth()).toISOString();
+const firstDayOfMonth = dayjs().startOf('month').toISOString();
+const lastDayOfMonth = dayjs().endOf('month').toISOString();
 
 type TQueryFilters = {
   period: { after: string; before: string };
@@ -145,7 +145,7 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
                         ...prev,
                         period: {
                           ...prev.period,
-                          after: formatDateOnInputChange(value, 'string') || firstDayOfMonth,
+                          after: formatDateOnInputChange(value, 'string', 'start') as string,
                         },
                       }))
                     }
@@ -162,7 +162,7 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
                         ...prev,
                         period: {
                           ...prev.period,
-                          before: formatDateOnInputChange(value, 'string') || lastDayOfMonth,
+                          before: formatDateOnInputChange(value, 'string', 'end') as string,
                         },
                       }))
                     }

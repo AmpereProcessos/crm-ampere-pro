@@ -22,15 +22,13 @@ import { formatDateOnInputChange } from '@/lib/methods/formatting';
 import RegionResults from '@/components/Stats/Results/Region';
 import Sellers from '@/components/Stats/Results/Sellers';
 import type { TUserSession } from '@/lib/auth/session';
-import { formatDateForInputValue, getFirstDayOfMonth, getLastDayOfMonth } from '@/utils/methods';
+import { formatDateForInputValue } from '@/utils/methods';
 import { useComercialResultsQueryOptions } from '@/utils/queries/stats';
 import { fetchResultsExports } from '@/utils/queries/stats/exports';
 import type { TUserDTOWithSaleGoals } from '@/utils/schemas/user.schema';
 
-const currentDate = new Date();
-const periodStr = dayjs(currentDate).format('MM/YYYY');
-const firstDayOfMonth = getFirstDayOfMonth(currentDate.getFullYear(), currentDate.getMonth()).toISOString();
-const lastDayOfMonth = getLastDayOfMonth(currentDate.getFullYear(), currentDate.getMonth()).toISOString();
+const firstDayOfMonth = dayjs().startOf('month').toISOString();
+const lastDayOfMonth = dayjs().endOf('month').toISOString();
 
 type TQueryFilters = {
   period: { after: string; before: string };
@@ -43,7 +41,6 @@ type ComercialResultsProps = {
   session: TUserSession;
 };
 function ManagementComercialResults({ session }: ComercialResultsProps) {
-  console.log('TRIGGER');
   const [queryFilters, setQueryFilters] = useState<TQueryFilters>({
     period: { after: firstDayOfMonth, before: lastDayOfMonth },
     responsibles: null,
@@ -101,7 +98,7 @@ function ManagementComercialResults({ session }: ComercialResultsProps) {
                       ...prev,
                       period: {
                         ...prev.period,
-                        after: (formatDateOnInputChange(value) || firstDayOfMonth) as string,
+                        after: formatDateOnInputChange(value, 'string', 'start') as string,
                       },
                     }))
                   }
@@ -120,7 +117,7 @@ function ManagementComercialResults({ session }: ComercialResultsProps) {
                       ...prev,
                       period: {
                         ...prev.period,
-                        before: (formatDateOnInputChange(value) || lastDayOfMonth) as string,
+                        before: formatDateOnInputChange(value, 'string', 'end') as string,
                       },
                     }))
                   }
