@@ -1,6 +1,6 @@
 import { formatToMoney } from '@/lib/methods/formatting';
 import { OeMPlansEquivalents } from '@/utils/constants';
-import { TContractRequest } from '@/utils/schemas/integrations/app-ampere/contract-request.schema';
+import { TContractRequest } from '@/utils/schemas//contract-request.schema';
 import { TProposalDTO } from '@/utils/schemas/proposal.schema';
 import React from 'react';
 import { BsCheckCircleFill } from 'react-icons/bs';

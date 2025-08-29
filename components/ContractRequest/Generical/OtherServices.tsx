@@ -3,7 +3,7 @@ import NumberInput from '@/components/Inputs/NumberInput';
 import SelectInput from '@/components/Inputs/SelectInput';
 import { Button } from '@/components/ui/button';
 import { structureTypes } from '@/utils/constants';
-import type { TContractRequest } from '@/utils/schemas/integrations/app-ampere/contract-request.schema';
+import type { TContractRequest } from '@/utils/schemas//contract-request.schema';
 import { ChevronRight, Hammer } from 'lucide-react';
 import { type Dispatch, type SetStateAction } from 'react';
 import toast from 'react-hot-toast';

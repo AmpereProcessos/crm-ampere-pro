@@ -1,7 +1,7 @@
 import CheckboxInput from '@/components/Inputs/CheckboxInput';
 import NumberInput from '@/components/Inputs/NumberInput';
 import SelectInput from '@/components/Inputs/SelectInput';
-import { TContractRequest } from '@/utils/schemas/integrations/app-ampere/contract-request.schema';
+import { TContractRequest } from '@/utils/schemas//contract-request.schema';
 import React from 'react';
 import toast from 'react-hot-toast';
 

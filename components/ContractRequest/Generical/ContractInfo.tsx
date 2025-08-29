@@ -11,7 +11,7 @@ import { formatDateOnInputChange } from '@/lib/methods/formatting';
 import { BrazilianCitiesOptionsFromUF, BrazilianStatesOptions } from '@/utils/estados_cidades';
 import { formatDateForInputValue, formatToCEP, formatToCPForCNPJ, formatToPhone, getCEPInfo } from '@/utils/methods';
 import { useAcquisitionChannels } from '@/utils/queries/utils';
-import type { TContractRequest } from '@/utils/schemas/integrations/app-ampere/contract-request.schema';
+import type { TContractRequest } from '@/utils/schemas//contract-request.schema';
 import { BookText, ChevronRight } from 'lucide-react';
 type ContractInfoProps = {
   requestInfo: TContractRequest;

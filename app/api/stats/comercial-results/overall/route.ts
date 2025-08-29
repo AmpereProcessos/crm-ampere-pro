@@ -284,9 +284,6 @@ async function getOpportunities({
       ],
       dataExclusao: null,
     };
-    const addFields = { wonProposeObjectId: { $toObjectId: '$ganho.idProposta' }, clientObjectId: { $toObjectId: '$idCliente' } };
-    const proposalLookup = { from: 'proposals', localField: 'wonProposeObjectId', foreignField: '_id', as: 'proposta' };
-    const clientLookup = { from: 'clients', localField: 'clientObjectId', foreignField: '_id', as: 'cliente' };
 
     const projection = {
       idMarketing: 1,
@@ -297,15 +294,13 @@ async function getOpportunities({
       perda: 1,
       dataInsercao: 1,
     };
-    const result = await opportunitiesCollection
-      .aggregate([{ $match: match }, { $addFields: addFields }, { $lookup: proposalLookup }, { $lookup: clientLookup }, { $project: projection }])
-      .toArray();
+    const result = await opportunitiesCollection.aggregate([{ $match: match }, { $project: projection }]).toArray();
     const projects = result.map((r) => ({
       idMarketing: r.idMarketing,
       responsaveis: r.responsaveis,
       ganho: r.ganho,
-      valorProposta: r.proposta[0] ? r.proposta[0].valor : 0,
-      canalAquisicao: r.cliente[0] ? r.cliente[0].canalAquisicao : 'NÃO DEFINIDO',
+      valorProposta: r.proposta?.valor ?? 0,
+      canalAquisicao: r.cliente?.canalAquisicao ?? 'NÃO DEFINIDO',
       dataPerda: r.perda.data,
       motivoPerda: r.perda.descricaoMotivo,
       dataInsercao: r.dataInsercao,

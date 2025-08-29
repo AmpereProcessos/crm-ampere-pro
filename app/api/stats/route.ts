@@ -172,7 +172,7 @@ type TOpportunitySimplifiedResult = {
   responsaveis: TOpportunity['responsaveis'];
   ganho: TOpportunity['ganho'];
   perda: TOpportunity['perda'];
-  proposta: { valor: number; potenciaPico: number }[];
+  proposta: { valor: number; potenciaPico: number } | null;
   dataInsercao: TOpportunity['dataInsercao'];
 };
 
@@ -206,8 +206,6 @@ async function getSimplifiedInfo({
     ],
   };
 
-  const addFields = { wonProposeObjectId: { $toObjectId: '$ganho.idProposta' } };
-  const lookup = { from: 'proposals', localField: 'wonProposeObjectId', foreignField: '_id', as: 'proposta' };
   const projection = {
     nome: 1,
     idMarketing: 1,
@@ -219,16 +217,14 @@ async function getSimplifiedInfo({
     dataInsercao: 1,
   };
 
-  const result = (await opportunitiesCollection
-    .aggregate([{ $match: match }, { $addFields: addFields }, { $lookup: lookup }, { $project: projection }])
-    .toArray()) as TOpportunitySimplifiedResult[];
+  const result = (await opportunitiesCollection.aggregate([{ $match: match }, { $project: projection }]).toArray()) as TOpportunitySimplifiedResult[];
 
   const opportunities = result.map((r) => ({
     idMarketing: r.idMarketing,
     responsaveis: r.responsaveis,
     ganho: r.ganho,
-    valorProposta: r.proposta[0] ? r.proposta[0].valor : 0,
-    potenciaProposta: r.proposta[0] ? r.proposta[0].potenciaPico : 0,
+    valorProposta: r.proposta?.valor ?? 0,
+    potenciaProposta: r.proposta?.potenciaPico ?? 0,
     dataPerda: r.perda.data,
     motivoPerda: r.perda.descricaoMotivo,
     dataInsercao: r.dataInsercao,
@@ -307,35 +303,32 @@ async function getWonOpportunities({ opportunitiesCollection, query, afterDate, 
     $and: [{ 'ganho.data': { $gte: afterDateStr } }, { 'ganho.data': { $lte: beforeDateStr } }],
   };
 
-  const addFields = { wonProposeObjectId: { $toObjectId: '$ganho.idProposta' } };
-  const lookup = { from: 'proposals', localField: 'wonProposeObjectId', foreignField: '_id', as: 'proposta' };
+  // const addFields = { wonProposeObjectId: { $toObjectId: '$ganho.idProposta' } };
+  // const lookup = { from: 'proposals', localField: 'wonProposeObjectId', foreignField: '_id', as: 'proposta' };
   const projection = {
     nome: 1,
     idMarketing: 1,
     responsaveis: 1,
     ganho: 1,
-    'proposta._id': 1,
+    // 'proposta._id': 1,
     'proposta.nome': 1,
     'proposta.valor': 1,
     'proposta.potenciaPico': 1,
     dataInsercao: 1,
   };
 
-  const result = await opportunitiesCollection
-    .aggregate([{ $match: match }, { $addFields: addFields }, { $lookup: lookup }, { $project: projection }])
-    .toArray();
+  const result = await opportunitiesCollection.aggregate([{ $match: match }, { $project: projection }]).toArray();
 
   return result.map((r: any) => ({
     _id: r._id.toString(),
     nome: r.nome,
     responsaveis: r.responsaveis,
     idMarketing: r.idMarketing,
-    proposta: r.proposta[0]
+    proposta: r.proposta
       ? {
-          _id: r.proposta[0]._id.toString(),
-          nome: r.proposta[0].nome,
-          valor: r.proposta[0].valor,
-          potenciaPico: r.proposta[0].potenciaPico,
+          nome: r.proposta.nome,
+          valor: r.proposta.valor,
+          potenciaPico: r.proposta.potenciaPico,
         }
       : null,
     dataGanho: r.ganho.data,
@@ -353,35 +346,29 @@ async function getPendingWins({ opportunitiesCollection, query }: GetPendingWins
     $and: [{ 'ganho.idProposta': { $ne: null } }, { 'ganho.data': { $eq: null } }, { 'perda.data': { $eq: null } }],
   };
 
-  const addFields = { wonProposeObjectId: { $toObjectId: '$ganho.idProposta' } };
-  const lookup = { from: 'proposals', localField: 'wonProposeObjectId', foreignField: '_id', as: 'proposta' };
   const projection = {
     nome: 1,
     idMarketing: 1,
     responsaveis: 1,
     ganho: 1,
-    'proposta._id': 1,
     'proposta.nome': 1,
     'proposta.valor': 1,
     'proposta.potenciaPico': 1,
     dataInsercao: 1,
   };
 
-  const result = await opportunitiesCollection
-    .aggregate([{ $match: match }, { $addFields: addFields }, { $lookup: lookup }, { $project: projection }])
-    .toArray();
+  const result = await opportunitiesCollection.aggregate([{ $match: match }, { $project: projection }]).toArray();
 
   return result.map((r: any) => ({
     _id: r._id.toString(),
     nome: r.nome,
     idMarketing: r.idMarketing,
     responsaveis: r.responsaveis,
-    proposta: r.proposta[0]
+    proposta: r.proposta
       ? {
-          _id: r.proposta[0]._id.toString(),
-          nome: r.proposta[0].nome,
-          valor: r.proposta[0].valor,
-          potenciaPico: r.proposta[0].potenciaPico,
+          nome: r.proposta.nome,
+          valor: r.proposta.valor,
+          potenciaPico: r.proposta.potenciaPico,
         }
       : null,
     dataSolicitacao: r.dataInsercao,

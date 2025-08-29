@@ -102,18 +102,18 @@ export const Sidebar = ({ session }: SidebarProps) => {
             url='/operacional/analises-tecnicas'
             icon={<BsFillClipboardDataFill style={{ fontSize: '12px', color: '#264653' }} />}
           />
-          {session.user.permissoes.projetos.visualizar ? (
-            <SidebarItem
-              text='Projetos'
-              isOpen={sidebarExtended}
-              url='/operacional/setores/comercial'
-              icon={<MdDashboard style={{ fontSize: '12px', color: '#264653' }} />}
-            />
-          ) : (
+          {/* {session.user.permissoes.projetos.visualizar ? ( */}
+          <SidebarItem
+            text='Projetos'
+            isOpen={sidebarExtended}
+            url='/operacional/projetos'
+            icon={<MdDashboard style={{ fontSize: '12px', color: '#264653' }} />}
+          />
+          {/* ) : (
             false
-          )}
+          )} */}
         </div>
-        <NotificationBlock sidebarExtended={sidebarExtended} session={session} />
+        <NotificationBlock session={session} />
         {session?.user.avatar_url ? (
           <div className='flex w-full items-center justify-center'>
             <Link href={`/auth/perfil?id=${session.user.id}`}>
@@ -158,7 +158,7 @@ export const Sidebar = ({ session }: SidebarProps) => {
                 </div>
               </div>
             ) : null}
-            <NotificationBlock sidebarExtended={sidebarExtended} session={session} />
+            <NotificationBlock session={session} />
             <Link href={'/configuracoes'}>
               <button
                 type='button'

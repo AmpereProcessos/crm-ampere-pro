@@ -1,10 +1,13 @@
-import { z } from 'zod'
+import { z } from 'zod';
 
 const PPSCallClientSchema = z.object({
   nome: z.string({ required_error: 'Nome do cliente não informado.', invalid_type_error: 'Tipo não válido para o nome do cliente.' }),
   email: z.string({ required_error: 'Email do cliente não informado.', invalid_type_error: 'Tipo não válido para o email do cliente.' }),
   telefone: z.string({ required_error: 'Telefone do cliente não informado.', invalid_type_error: 'Tipo não válido para o telefone do cliente.' }),
-  cpfCnpj: z.string({ required_error: 'CPF ou CNPJ do cliente não informado.', invalid_type_error: 'Tipo não válido para o CPF ou CNPJ do cliente.' }),
+  cpfCnpj: z.string({
+    required_error: 'CPF ou CNPJ do cliente não informado.',
+    invalid_type_error: 'Tipo não válido para o CPF ou CNPJ do cliente.',
+  }),
   dataNascimento: z
     .string({ invalid_type_error: 'Tipo não válido para a data de nascimento do cliente.' })
     .datetime({ message: 'Formato inválido para data de nascimento do cliente.' })
@@ -29,12 +32,12 @@ const PPSCallClientSchema = z.object({
   endereco: z.string({ invalid_type_error: 'Tipo não válido para o endereço do cliente.' }).optional().nullable(),
   numeroOuIdentificador: z.string({ invalid_type_error: 'Tipo não válido para o número ou identificador do cliente.' }).optional().nullable(),
   complemento: z.string({ invalid_type_error: 'Tipo não válido para o complemento de endereço do cliente.' }).optional().nullable(),
-})
+});
 const PPSCallProjectSchema = z.object({
   id: z.string({ required_error: 'ID de referência da oportunidade do chamado não informado.' }).optional().nullable(),
   nome: z.string({ required_error: 'Nome de referência da oportunidade do chamado não informado.' }).optional().nullable(),
   codigo: z.string({ required_error: 'Código identificador de referência da oportunidade do chamado não informado.' }).optional().nullable(),
-})
+});
 const PPSCallRequerentSchema = z.object({
   apelido: z.string({
     required_error: 'Nome/apelido do requerente não informado.',
@@ -55,7 +58,7 @@ const PPSCallRequerentSchema = z.object({
     .optional()
     .nullable(),
   avatar_url: z.string({ invalid_type_error: 'Tipo não válido para a URL do avatar do requerente.' }).optional().nullable(),
-})
+});
 const PPSCallResponsibleSchema = z.object({
   id: z
     .string({
@@ -76,7 +79,7 @@ const PPSCallResponsibleSchema = z.object({
     })
     .optional()
     .nullable(),
-})
+});
 const PPSCallPremissesSchema = z.object({
   cargas: z
     .array(
@@ -105,7 +108,7 @@ const PPSCallPremissesSchema = z.object({
   tipoEstrutura: z.string({ invalid_type_error: 'Tipo não válido para a premissa de tipo de estrutura do chamado.' }).optional().nullable(),
   topologia: z.string({ invalid_type_error: 'Tipo não válido para a premissa de topologia do chamado.' }).optional().nullable(),
   valorFinanciamento: z.number({ invalid_type_error: 'Tipo não válido para a premissa de valor de financiamento do chamado.' }).optional().nullable(),
-})
+});
 
 const GeneralPPSCallSchema = z.object({
   status: z.enum(['PENDENTE', 'EM ANDAMENTO', 'AGUARDANDO VENDEDOR', 'REALIZADO'], {
@@ -113,14 +116,30 @@ const GeneralPPSCallSchema = z.object({
     invalid_type_error: 'Tipo não válido para o status de resolução do chamado.',
   }),
   tipoSolicitacao: z
-    .enum(['PROPOSTA COMERCIAL (ON GRID)', 'PROPOSTA COMERCIAL (OFF GRID)', 'ANÁLISE DE CRÉDITO', 'DUVIDAS E AUXILIOS TÉCNICOS', 'OUTROS', 'NÃO DEFINIDO'], {
-      required_error: 'Tipo de solicitação do chamado não informado.',
-      invalid_type_error: 'Tipo não válido para o tipo de solicitação do chamado.',
-    })
+    .enum(
+      [
+        'PROPOSTA COMERCIAL (ON GRID)',
+        'PROPOSTA COMERCIAL (OFF GRID)',
+        'ANÁLISE DE CRÉDITO',
+        'DUVIDAS E AUXILIOS TÉCNICOS',
+        'OUTROS',
+        'NÃO DEFINIDO',
+      ],
+      {
+        required_error: 'Tipo de solicitação do chamado não informado.',
+        invalid_type_error: 'Tipo não válido para o tipo de solicitação do chamado.',
+      }
+    )
     .optional()
     .nullable(),
-  anotacoes: z.string({ required_error: 'Anotações do chamado não informadas.', invalid_type_error: 'Tipo não válido para as anotações do chamado.' }),
-  observacoes: z.string({ required_error: 'Observações do chamado não informadas.', invalid_type_error: 'Tipo não válido para as anotações do chamado.' }),
+  anotacoes: z.string({
+    required_error: 'Anotações do chamado não informadas.',
+    invalid_type_error: 'Tipo não válido para as anotações do chamado.',
+  }),
+  observacoes: z.string({
+    required_error: 'Observações do chamado não informadas.',
+    invalid_type_error: 'Tipo não válido para as anotações do chamado.',
+  }),
   cliente: PPSCallClientSchema,
   projeto: PPSCallProjectSchema,
   requerente: PPSCallRequerentSchema,
@@ -156,7 +175,7 @@ const GeneralPPSCallSchema = z.object({
     required_error: 'Data de inserção do chamado não informada.',
     invalid_type_error: 'Tipo não válido para a data de inserção do chamado.',
   }),
-})
+});
 
 export const InsertPPSCallSchema = z.object({
   status: z.enum(['PENDENTE', 'EM ANDAMENTO', 'AGUARDANDO VENDEDOR', 'REALIZADO'], {
@@ -164,14 +183,30 @@ export const InsertPPSCallSchema = z.object({
     invalid_type_error: 'Tipo não válido para o status de resolução do chamado.',
   }),
   tipoSolicitacao: z
-    .enum(['PROPOSTA COMERCIAL (ON GRID)', 'PROPOSTA COMERCIAL (OFF GRID)', 'ANÁLISE DE CRÉDITO', 'DUVIDAS E AUXILIOS TÉCNICOS', 'OUTROS', 'NÃO DEFINIDO'], {
-      required_error: 'Tipo de solicitação do chamado não informado.',
-      invalid_type_error: 'Tipo não válido para o tipo de solicitação do chamado.',
-    })
+    .enum(
+      [
+        'PROPOSTA COMERCIAL (ON GRID)',
+        'PROPOSTA COMERCIAL (OFF GRID)',
+        'ANÁLISE DE CRÉDITO',
+        'DUVIDAS E AUXILIOS TÉCNICOS',
+        'OUTROS',
+        'NÃO DEFINIDO',
+      ],
+      {
+        required_error: 'Tipo de solicitação do chamado não informado.',
+        invalid_type_error: 'Tipo não válido para o tipo de solicitação do chamado.',
+      }
+    )
     .optional()
     .nullable(),
-  anotacoes: z.string({ required_error: 'Anotações do chamado não informadas.', invalid_type_error: 'Tipo não válido para as anotações do chamado.' }),
-  observacoes: z.string({ required_error: 'Observações do chamado não informadas.', invalid_type_error: 'Tipo não válido para as anotações do chamado.' }),
+  anotacoes: z.string({
+    required_error: 'Anotações do chamado não informadas.',
+    invalid_type_error: 'Tipo não válido para as anotações do chamado.',
+  }),
+  observacoes: z.string({
+    required_error: 'Observações do chamado não informadas.',
+    invalid_type_error: 'Tipo não válido para as anotações do chamado.',
+  }),
   cliente: PPSCallClientSchema,
   projeto: PPSCallProjectSchema,
   requerente: PPSCallRequerentSchema,
@@ -207,7 +242,7 @@ export const InsertPPSCallSchema = z.object({
     required_error: 'Data de inserção do chamado não informada.',
     invalid_type_error: 'Tipo não válido para a data de inserção do chamado.',
   }),
-})
+});
 
-export type TPPSCall = z.infer<typeof GeneralPPSCallSchema>
-export type TPPSCallDTO = TPPSCall & { _id: string }
+export type TPPSCall = z.infer<typeof GeneralPPSCallSchema>;
+export type TPPSCallDTO = TPPSCall & { _id: string };

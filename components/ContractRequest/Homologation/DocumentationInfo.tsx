@@ -1,7 +1,7 @@
 import DocumentFileInput from '@/components/Inputs/DocumentFileInput';
 import { IContractRequest } from '@/utils/models';
 import { useFileReferencesByOpportunityId } from '@/utils/queries/file-references';
-import { TContractRequest } from '@/utils/schemas/integrations/app-ampere/contract-request.schema';
+import { TContractRequest } from '@/utils/schemas//contract-request.schema';
 import { TOpportunityDTO } from '@/utils/schemas/opportunity.schema';
 
 import React from 'react';

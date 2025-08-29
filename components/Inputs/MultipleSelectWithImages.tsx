@@ -172,7 +172,7 @@ function MultipleSelectWithImages<T>({
         ) : null}
         <div
           className={cn(
-            'flex h-full min-h-[46.6px] w-full items-center justify-between rounded-md border bg-background p-3 text-sm shadow-md duration-500 ease-in-out',
+            'flex h-full min-h-[46.6px] w-full items-center justify-between rounded-md border bg-background px-3 text-sm shadow-md duration-500 ease-in-out',
             selectMenuIsOpen ? 'border-primary' : 'border-primary/20',
             holderClassName
           )}

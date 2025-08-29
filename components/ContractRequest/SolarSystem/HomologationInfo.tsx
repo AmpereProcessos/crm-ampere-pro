@@ -4,7 +4,7 @@ import TextInput from '@/components/Inputs/TextInput';
 import { cn } from '@/lib/utils';
 import { stateCities } from '@/utils/estados_cidades';
 import { formatToCEP, getCEPInfo } from '@/utils/methods';
-import type { TContractRequest } from '@/utils/schemas/integrations/app-ampere/contract-request.schema';
+import type { TContractRequest } from '@/utils/schemas//contract-request.schema';
 import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';
 type HomologationInfoProps = {

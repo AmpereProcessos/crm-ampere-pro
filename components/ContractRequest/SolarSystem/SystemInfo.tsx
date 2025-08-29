@@ -1,7 +1,7 @@
 import { getInverterPeakPowerByProducts, getInverterQty, getModulesPeakPotByProducts, getModulesQty } from '@/lib/methods/extracting';
 import { renderCategoryIcon } from '@/lib/methods/rendering';
 
-import { TContractRequest } from '@/utils/schemas/integrations/app-ampere/contract-request.schema';
+import { TContractRequest } from '@/utils/schemas//contract-request.schema';
 import { TProposalDTOWithOpportunity } from '@/utils/schemas/proposal.schema';
 import React from 'react';
 import { AiOutlineSafety } from 'react-icons/ai';

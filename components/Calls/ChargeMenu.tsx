@@ -1,5 +1,5 @@
 import { Charge } from '@/utils/models';
-import { TPPSCall } from '@/utils/schemas/integrations/app-ampere/pps-calls.schema';
+import { TPPSCall } from '@/utils/schemas/pps-calls.schema';
 import { useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { GiBatteryPack } from 'react-icons/gi';

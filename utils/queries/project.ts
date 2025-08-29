@@ -1,103 +1,65 @@
-import axios from 'axios'
-import { useQuery } from '@tanstack/react-query'
-import { TProject, TProjectDTO, TProjectDTOWithReferences, TProjectUltraSimplifiedDTO } from '../schemas/project.schema'
-import { TFollowUpProject } from '@/pages/api/projects/follow-up'
-import { useState } from 'react'
-import { formatWithoutDiacritics } from '@/lib/methods/formatting'
+import { useDebounceMemo } from '@/lib/hooks';
+import { TGetManyProjectsInput, TGetProjectByIdInput, TGetProjectsOutput } from '@/pages/api/integration/app-ampere/projects';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
+import { useState } from 'react';
 
-export async function fetchProjectById(id: string) {
-  console.log('ID', id)
-  if (!id) throw new Error('ID inválido.')
-  try {
-    const { data } = await axios.get(`/api/projects?id=${id}`)
-    return data.data as TProjectDTOWithReferences
-  } catch (error) {
-    throw error
+async function fetchProjects(input: TGetManyProjectsInput) {
+  const searchParams = new URLSearchParams();
+  if (input.search && input.search.trim().length > 0) searchParams.set('search', input.search);
+  if (input.responsiblesIds && input.responsiblesIds.length > 0) searchParams.set('responsiblesIds', input.responsiblesIds.map((id) => id).join(','));
+  if (input.periodField) searchParams.set('periodField', input.periodField);
+  if (input.periodAfter) searchParams.set('periodAfter', input.periodAfter);
+  if (input.periodBefore) searchParams.set('periodBefore', input.periodBefore);
+  if (input.page) searchParams.set('page', input.page.toString());
+
+  const searchParamsString = searchParams.toString();
+  const url = `/api/integration/app-ampere/projects?${searchParamsString}`;
+
+  const { data } = await axios.get<TGetProjectsOutput>(url);
+  if (!data.data.default) throw new Error('Oops, houve um erro ao buscar projetos');
+  return data.data.default;
+}
+
+type TUseProjectsParams = {
+  initialFilters?: Partial<TGetManyProjectsInput>;
+};
+export function useProjects({ initialFilters }: TUseProjectsParams = {}) {
+  const [filters, setFilters] = useState<TGetManyProjectsInput>({
+    page: 1,
+    responsiblesIds: initialFilters?.responsiblesIds ?? null,
+    periodField: initialFilters?.periodField ?? null,
+    periodAfter: initialFilters?.periodAfter ?? null,
+    periodBefore: initialFilters?.periodBefore ?? null,
+    search: initialFilters?.search ?? null,
+  });
+  function updateFilters(newFilters: Partial<TGetManyProjectsInput>) {
+    setFilters((prev) => ({ ...prev, ...newFilters }));
   }
-}
-
-export function useProjectById({ id }: { id: string }) {
-  return useQuery({
-    queryKey: ['project-by-id', id],
-    queryFn: async () => await fetchProjectById(id),
-    refetchOnWindowFocus: true,
-  })
-}
-
-async function fetchComercialProjects() {
-  try {
-    const { data } = await axios.get('/api/projects/by-sector/comercial')
-    return data.data as TProjectDTO[]
-  } catch (error) {}
-}
-
-export function useComercialProjects() {
-  return useQuery({
-    queryKey: ['comercial-projects'],
-    queryFn: fetchComercialProjects,
-  })
-}
-
-async function fetchProjectsUltraSimplified() {
-  try {
-    const { data } = await axios.get('/api/projects/simplified')
-    return data.data as TProjectUltraSimplifiedDTO[]
-  } catch (error) {
-    throw error
-  }
-}
-
-export function useProjectsUltraSimplified() {
-  return useQuery({
-    queryKey: ['projects-ultra-simplified'],
-    queryFn: fetchProjectsUltraSimplified,
-  })
-}
-
-async function fetchFollowUpProjects() {
-  try {
-    const { data } = await axios.get('/api/projects/follow-up')
-    return data.data as TFollowUpProject[]
-  } catch (error) {
-    throw error
-  }
-}
-
-type UseProjectsFollowUpFilters = {
-  search: string
-  projectTypes: string[]
-  pendingProcesses: string[]
-}
-export function useProjectsFollowUp() {
-  const [filters, setFilters] = useState<UseProjectsFollowUpFilters>({
-    search: '',
-    projectTypes: [],
-    pendingProcesses: [],
-  })
-
-  function matchSearch(project: TFollowUpProject) {
-    if (filters.search.trim().length == 0) return true
-    return formatWithoutDiacritics(project.nome, true).includes(formatWithoutDiacritics(filters.search, true))
-  }
-  function matchProjectTypes(project: TFollowUpProject) {
-    if (filters.projectTypes.length == 0) return true
-    return filters.projectTypes.includes(project.tipo)
-  }
-  function matchPendingProcesses(project: TFollowUpProject) {
-    if (filters.pendingProcesses.length == 0) return true
-    return project.processos.some((process) => filters.pendingProcesses.includes(process.processo) && !process.concluido)
-  }
-
-  function handleModelData(data: TFollowUpProject[]) {
-    return data.filter((project) => matchSearch(project) && matchProjectTypes(project) && matchPendingProcesses(project))
-  }
+  const debouncedFilters = useDebounceMemo(filters, 500);
   return {
     ...useQuery({
-      queryKey: ['projects-follow-up'],
-      queryFn: fetchFollowUpProjects,
-      select: (data) => handleModelData(data),
+      queryKey: ['projects', debouncedFilters],
+      queryFn: () => fetchProjects(debouncedFilters),
     }),
+    queryKey: ['projects', debouncedFilters],
     filters,
-    setFilters,
-  }
+    updateFilters,
+  };
+}
+
+export async function fetchProjectById({ id }: TGetProjectByIdInput) {
+  const { data } = await axios.get<TGetProjectsOutput>(`/api/integration/app-ampere/projects?id=${id}`);
+  if (!data.data.byId) throw new Error('Oops, houve um erro ao buscar o projeto');
+  return data.data.byId;
+}
+
+export function useProjectById({ id }: TGetProjectByIdInput) {
+  return {
+    ...useQuery({
+      queryKey: ['project-by-id', id],
+      queryFn: () => fetchProjectById({ id }),
+    }),
+    queryKey: ['project-by-id', id],
+  };
 }

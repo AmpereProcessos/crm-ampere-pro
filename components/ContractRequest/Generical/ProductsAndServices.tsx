@@ -8,7 +8,7 @@ import { renderCategoryIcon } from '@/lib/methods/rendering';
 import { cn } from '@/lib/utils';
 import { GeneralVisibleHiddenExitMotionVariants } from '@/utils/constants';
 import { useEquipments } from '@/utils/queries/utils';
-import type { TContractRequest } from '@/utils/schemas/integrations/app-ampere/contract-request.schema';
+import type { TContractRequest } from '@/utils/schemas//contract-request.schema';
 import { ProductItemCategories } from '@/utils/select-options';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronRight, Plus, Settings } from 'lucide-react';

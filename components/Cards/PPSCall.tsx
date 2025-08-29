@@ -1,5 +1,5 @@
 import { formatDateAsLocale, formatNameAsInitials } from '@/lib/methods/formatting';
-import { TPPSCallDTO } from '@/utils/schemas/integrations/app-ampere/pps-calls.schema';
+import { TPPSCallDTO } from '@/utils/schemas/pps-calls.schema';
 import Link from 'next/link';
 import { BsCalendarCheck, BsCalendarPlus, BsCode } from 'react-icons/bs';
 import Avatar from '../utils/Avatar';

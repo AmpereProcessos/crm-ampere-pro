@@ -58,7 +58,7 @@ function OpportunitiesCardModePage({
     <div className='flex h-full flex-col md:flex-row'>
       <Sidebar session={session} />
       <div className='flex w-full max-w-full grow flex-col overflow-x-hidden bg-background p-6'>
-        <div className='flex w-full flex-col gap-2 border-b border-black pb-2'>
+        <div className='flex w-full flex-col gap-2 border-b border-primary pb-2'>
           <div className='flex w-full flex-col items-center justify-between gap-4 lg:flex-row'>
             <div className='flex flex-col items-center gap-1 lg:flex-row'>
               <div className='flex flex-col items-center gap-1'>

@@ -4,7 +4,7 @@ import SelectInput from '@/components/Inputs/SelectInput';
 import { Button } from '@/components/ui/button';
 import { OeMIDs } from '@/utils/constants';
 import { useSignaturePlanWithPricingMethod } from '@/utils/queries/signature-plans';
-import type { TContractRequest } from '@/utils/schemas/integrations/app-ampere/contract-request.schema';
+import type { TContractRequest } from '@/utils/schemas//contract-request.schema';
 import type { TProposalDTOWithOpportunity } from '@/utils/schemas/proposal.schema';
 import type { TSignaturePlanDTOWithPricingMethod } from '@/utils/schemas/signature-plans.schema';
 import { ChevronRight, Tag } from 'lucide-react';

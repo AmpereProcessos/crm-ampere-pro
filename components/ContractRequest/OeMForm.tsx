@@ -1,97 +1,96 @@
-import React, { useState } from 'react'
-import ContractInfo from './SolarSystem/ContractInfo'
-import JourneyInfo from './SolarSystem/JourneyInfo'
-import HomologationInfo from './SolarSystem/HomologationInfo'
-import SystemInfo from './SolarSystem/SystemInfo'
-import StructureInfo from './SolarSystem/StructureInfo'
-import PAInfo from './SolarSystem/PAInfo'
-import OeMPlansInfo from './OeM/OeMPlansInfo'
-import PaymentInfo from './SolarSystem/PaymentInfo'
-import CreditDistributionInfo from './SolarSystem/CreditDistributionInfo'
-import DocumentAttachmentInfo from './OeM/DocumentAttachmentInfo'
-import ReviewInfo from './OeM/ReviewInfo'
-import { getModulesQty } from '@/utils/methods'
-import PersonalizedSystemInfo from './OeM/PersonalizedSystemInfo'
-import { TContractRequest } from '@/utils/schemas/integrations/app-ampere/contract-request.schema'
-import { TProposalDTOWithOpportunity } from '@/utils/schemas/proposal.schema'
-import { UploadResult, getDownloadURL, getMetadata, ref, uploadBytes } from 'firebase/storage'
-import { storage } from '@/services/firebase/storage-config'
-import { fileTypes } from '@/utils/constants'
-import toast from 'react-hot-toast'
-import axios from 'axios'
-import { createContractRequest } from '@/utils/mutations/contract-request'
+import { storage } from '@/services/firebase/storage-config';
+import { fileTypes } from '@/utils/constants';
+import { createContractRequest } from '@/utils/mutations/contract-request';
+import { TContractRequest } from '@/utils/schemas//contract-request.schema';
+import { TProposalDTOWithOpportunity } from '@/utils/schemas/proposal.schema';
+import { UploadResult, getDownloadURL, getMetadata, ref, uploadBytes } from 'firebase/storage';
+import React, { useState } from 'react';
+import toast from 'react-hot-toast';
+import DocumentAttachmentInfo from './OeM/DocumentAttachmentInfo';
+import OeMPlansInfo from './OeM/OeMPlansInfo';
+import PersonalizedSystemInfo from './OeM/PersonalizedSystemInfo';
+import ReviewInfo from './OeM/ReviewInfo';
+import ContractInfo from './SolarSystem/ContractInfo';
+import CreditDistributionInfo from './SolarSystem/CreditDistributionInfo';
+import HomologationInfo from './SolarSystem/HomologationInfo';
+import JourneyInfo from './SolarSystem/JourneyInfo';
+import PAInfo from './SolarSystem/PAInfo';
+import PaymentInfo from './SolarSystem/PaymentInfo';
+import StructureInfo from './SolarSystem/StructureInfo';
 type OeMFormProps = {
-  requestInfo: TContractRequest
-  setRequestInfo: React.Dispatch<React.SetStateAction<TContractRequest>>
-  proposeInfo: TProposalDTOWithOpportunity
-}
+  requestInfo: TContractRequest;
+  setRequestInfo: React.Dispatch<React.SetStateAction<TContractRequest>>;
+  proposeInfo: TProposalDTOWithOpportunity;
+};
 function OeMForm({ requestInfo, setRequestInfo, proposeInfo }: OeMFormProps) {
-  const [stage, setStage] = useState(1)
-  const [sameProjectHolder, setSameProjectHolder] = useState<boolean>(false)
-  const [documentsFileHolder, setDocumentsFileHolder] = useState<{ [key: string]: File | string | null }>({})
+  const [stage, setStage] = useState(1);
+  const [sameProjectHolder, setSameProjectHolder] = useState<boolean>(false);
+  const [documentsFileHolder, setDocumentsFileHolder] = useState<{ [key: string]: File | string | null }>({});
 
   async function handleUploadFiles(files: { [key: string]: File | string | null }) {
-    var links: { title: string; link: string; format: string }[] = []
+    var links: { title: string; link: string; format: string }[] = [];
     try {
       const uploadPromises = Object.entries(files).map(async ([key, value]) => {
-        const file = value
-        if (!file) return
+        const file = value;
+        if (!file) return;
         if (typeof file == 'string') {
-          const fileRef = ref(storage, file)
-          const metaData = await getMetadata(fileRef)
+          const fileRef = ref(storage, file);
+          const metaData = await getMetadata(fileRef);
           const link = {
             title: key,
             link: file,
             format: fileTypes[metaData.contentType || '']?.title || 'NÃO DEFINIDO',
-          }
-          links.push(link)
+          };
+          links.push(link);
         }
         if (typeof file != 'string') {
-          const storageStr = `formSolicitacao/${requestInfo.nomeDoContrato}/${key} - ${new Date().toISOString()}`
-          const fileRef = ref(storage, storageStr)
-          const firebaseUploadResponse = await uploadBytes(fileRef, file)
-          const uploadResult = firebaseUploadResponse as UploadResult
-          const fileUrl = await getDownloadURL(ref(storage, firebaseUploadResponse.metadata.fullPath))
+          const storageStr = `formSolicitacao/${requestInfo.nomeDoContrato}/${key} - ${new Date().toISOString()}`;
+          const fileRef = ref(storage, storageStr);
+          const firebaseUploadResponse = await uploadBytes(fileRef, file);
+          const uploadResult = firebaseUploadResponse as UploadResult;
+          const fileUrl = await getDownloadURL(ref(storage, firebaseUploadResponse.metadata.fullPath));
           const link = {
             title: key,
             link: fileUrl,
             format: fileTypes[uploadResult.metadata.contentType || '']?.title || 'NÃO DEFINIDO',
-          }
-          links.push(link)
+          };
+          links.push(link);
         }
-      })
-      await Promise.all(uploadPromises)
-      return links
+      });
+      await Promise.all(uploadPromises);
+      return links;
     } catch (error) {
-      throw error
+      throw error;
     }
   }
 
   async function handleRequestContract() {
     try {
       // Getting documents links
-      const fileUploadLoadingToast = toast.loading('Vinculando arquivos...')
-      const links = await handleUploadFiles(documentsFileHolder)
-      toast.dismiss(fileUploadLoadingToast)
+      const fileUploadLoadingToast = toast.loading('Vinculando arquivos...');
+      const links = await handleUploadFiles(documentsFileHolder);
+      toast.dismiss(fileUploadLoadingToast);
       // Creating contract request
-      const requestCreationLoadingToast = toast.loading('Criando formulário...')
+      const requestCreationLoadingToast = toast.loading('Criando formulário...');
       const previsaoValorDoKit = proposeInfo?.precificacao?.find((p) => p.descricao.includes('KIT'))
         ? proposeInfo?.precificacao?.find((p) => p.descricao.includes('KIT'))?.valorFinal
-        : null
-      const idProjetoCRM = proposeInfo.oportunidadeDados?._id || ''
-      const idPropostaCRM = proposeInfo._id || ''
-      const contractRequest = { ...requestInfo, previsaoValorDoKit, idProjetoCRM, idPropostaCRM, links }
-      const insertedId = await createContractRequest({ info: contractRequest, returnId: true })
-      toast.dismiss(requestCreationLoadingToast)
-      return 'Solicitação finalizada com sucesso !'
+        : null;
+      const idProjetoCRM = proposeInfo.oportunidadeDados?._id || '';
+      const idPropostaCRM = proposeInfo._id || '';
+      const contractRequest = { ...requestInfo, previsaoValorDoKit, idProjetoCRM, idPropostaCRM, links };
+      const insertedId = await createContractRequest({ info: contractRequest, returnId: true });
+      toast.dismiss(requestCreationLoadingToast);
+      return 'Solicitação finalizada com sucesso !';
     } catch (error) {
-      toast.dismiss()
-      throw error
+      toast.dismiss();
+      throw error;
     }
   }
   return (
     <>
-      {stage == 1 ? <ContractInfo requestInfo={requestInfo} setRequestInfo={setRequestInfo} goToNextStage={() => setStage((prev) => prev + 1)} /> : null}
+      {stage == 1 ? (
+        <ContractInfo requestInfo={requestInfo} setRequestInfo={setRequestInfo} goToNextStage={() => setStage((prev) => prev + 1)} />
+      ) : null}
       {stage == 2 ? (
         <JourneyInfo
           requestInfo={requestInfo}
@@ -187,7 +186,7 @@ function OeMForm({ requestInfo, setRequestInfo, proposeInfo }: OeMFormProps) {
         />
       ) : null}
     </>
-  )
+  );
 }
 
-export default OeMForm
+export default OeMForm;

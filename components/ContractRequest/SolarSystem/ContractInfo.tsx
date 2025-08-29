@@ -5,7 +5,7 @@ import TextInput from '@/components/Inputs/TextInput';
 import { stateCities } from '@/utils/estados_cidades';
 import { formatDateForInputValue, formatToCEP, formatToCPForCNPJ, formatToPhone, getCEPInfo } from '@/utils/methods';
 
-import { TContractRequest } from '@/utils/schemas/integrations/app-ampere/contract-request.schema';
+import { TContractRequest } from '@/utils/schemas//contract-request.schema';
 import { CustomersAcquisitionChannels } from '@/utils/select-options';
 import React from 'react';
 import { toast } from 'react-hot-toast';

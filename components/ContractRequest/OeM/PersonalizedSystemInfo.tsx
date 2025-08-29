@@ -1,7 +1,7 @@
 import NumberInput from '@/components/Inputs/NumberInput';
 import SelectInput from '@/components/Inputs/SelectInput';
 import TextInput from '@/components/Inputs/TextInput';
-import { TContractRequest } from '@/utils/schemas/integrations/app-ampere/contract-request.schema';
+import { TContractRequest } from '@/utils/schemas//contract-request.schema';
 import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { AiFillDelete, AiOutlinePlus } from 'react-icons/ai';

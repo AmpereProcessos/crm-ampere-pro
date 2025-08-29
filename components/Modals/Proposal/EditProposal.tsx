@@ -8,6 +8,7 @@ import ErrorComponent from '@/components/utils/ErrorComponent';
 import LoadingComponent from '@/components/utils/LoadingComponent';
 import { handleDownload } from '@/lib/methods/download';
 
+import SelectInput from '@/components/Inputs/SelectInput';
 import type { TUserSession } from '@/lib/auth/session';
 import { formatToMoney } from '@/lib/methods/formatting';
 import { useMutationWithFeedback } from '@/utils/mutations/general-hook';
@@ -15,6 +16,7 @@ import { createProposalUpdateRecord } from '@/utils/mutations/proposal-update-re
 import { editProposalPersonalized } from '@/utils/mutations/proposals';
 import { getPricingTotal } from '@/utils/pricing/methods';
 import { usePaymentMethods } from '@/utils/queries/payment-methods';
+import { useProjectTypes } from '@/utils/queries/project-types';
 import { TProposalUpdateRecord } from '@/utils/schemas/proposal-update-records.schema';
 import { TPricingItem, TProposalDTO, TProposalDTOWithOpportunityAndClient, TProposalPaymentMethodItem } from '@/utils/schemas/proposal.schema';
 import { useQueryClient } from '@tanstack/react-query';
@@ -34,11 +36,15 @@ function EditProposal({ closeModal, info, userHasPricingViewPermission, userHasP
   const queryClient = useQueryClient();
   const alterationLimit = userHasPricingEditPermission ? undefined : 0.02;
 
+  const { data: projectTypes } = useProjectTypes();
+  const proposalTemplates = projectTypes?.find((t) => t._id == info.oportunidadeDados.tipo.id)?.modelosProposta;
+
   // Creating a flag for the need of updating the defined plan price, if
   // there is one. So, if there is only one plan to the proposal, it is the defined one.
   const updatePlanPrice = info.planos.length == 1;
 
   const [proposalName, setProposalName] = useState(info.nome);
+  const [proposalTemplate, setProposalTemplate] = useState<string | null | undefined>(info.idModeloAnvil);
   const [regenerateFile, setRegenerateFile] = useState<boolean>(false);
   const [pricing, setPricing] = useState<TPricingItem[]>(info.precificacao);
   const [payment, setPayment] = useState<TProposalDTO['pagamento']>(info.pagamento);
@@ -92,7 +98,15 @@ function EditProposal({ closeModal, info, userHasPricingViewPermission, userHasP
 
       const response = await editProposalPersonalized({
         id: info._id,
-        proposal: { ...info, nome: newName, planos: proposalPlans, precificacao: newPricing, valor: newTotal, pagamento: payment },
+        proposal: {
+          ...info,
+          nome: newName,
+          planos: proposalPlans,
+          precificacao: newPricing,
+          valor: newTotal,
+          pagamento: payment,
+          idModeloAnvil: proposalTemplate,
+        },
         opportunity: info.oportunidadeDados,
         client: info.clienteDados,
         regenerateFile: regenerateFile,
@@ -135,6 +149,15 @@ function EditProposal({ closeModal, info, userHasPricingViewPermission, userHasP
             placeholder='Preencha o nome da proposta...'
             value={proposalName}
             handleChange={(value) => setProposalName(value)}
+            width='100%'
+          />
+          <SelectInput
+            label='TEMPLATE DA PROPOSTA'
+            value={proposalTemplate || null}
+            resetOptionLabel='TEMPLATE PADRÃO'
+            options={proposalTemplates?.map((t, index) => ({ id: index + 1, label: t.titulo, value: t.idAnvil })) || []}
+            handleChange={(value) => setProposalTemplate(value)}
+            onReset={() => setProposalTemplate(undefined)}
             width='100%'
           />
           <div className='flex w-full flex-col gap-2 rounded-sm border border-cyan-500'>

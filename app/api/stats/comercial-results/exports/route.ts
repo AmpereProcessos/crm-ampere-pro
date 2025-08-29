@@ -219,10 +219,8 @@ async function getOpportunities({
     };
     const addFields = {
       activeProposeObjectID: { $toObjectId: '$ganho.idProposta' },
-      clientObjectId: { $toObjectId: '$idCliente' },
     };
     const proposeLookup = { from: 'proposals', localField: 'activeProposeObjectID', foreignField: '_id', as: 'proposta' };
-    const clientLookup = { from: 'clients', localField: 'clientObjectId', foreignField: '_id', as: 'cliente' };
     const projection = {
       nome: 1,
       identificador: 1,
@@ -242,7 +240,7 @@ async function getOpportunities({
       dataInsercao: 1,
     };
     const result = await opportunitiesCollection
-      .aggregate([{ $match: match }, { $addFields: addFields }, { $lookup: proposeLookup }, { $lookup: clientLookup }, { $project: projection }])
+      .aggregate([{ $match: match }, { $addFields: addFields }, { $lookup: proposeLookup }, { $project: projection }])
       .toArray();
 
     const opportunities: TResultsExportsOpportunity[] = result.map((r) => ({
@@ -258,8 +256,8 @@ async function getOpportunities({
       potenciaPicoProposta: r.proposta[0] ? r.proposta[0].potenciaPico : 0,
       produtosProposta: r.proposta[0] ? r.proposta[0].produtos : [],
       servicosProposta: r.proposta[0] ? r.proposta[0].servicos : [],
-      telefone: r.cliente[0] ? r.cliente[0].telefonePrimario : null,
-      canalAquisicao: r.cliente[0] ? r.cliente[0].canalAquisicao : 'NÃO DEFINIDO',
+      telefone: r.cliente.telefonePrimario,
+      canalAquisicao: r.cliente.canalAquisicao,
       dataPerda: r.perda?.data || null,
       motivoPerda: r.perda?.descricaoMotivo || null,
       dataInsercao: r.dataInsercao,

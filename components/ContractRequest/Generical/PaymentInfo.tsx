@@ -6,7 +6,7 @@ import TextInput from '@/components/Inputs/TextInput';
 import { Button } from '@/components/ui/button';
 import { formatToCPForCNPJ, formatToPhone } from '@/utils/methods';
 import { useCreditors } from '@/utils/queries/utils';
-import type { TContractRequest } from '@/utils/schemas/integrations/app-ampere/contract-request.schema';
+import type { TContractRequest } from '@/utils/schemas//contract-request.schema';
 import { BadgeDollarSign, ChevronRight } from 'lucide-react';
 import { type Dispatch, type SetStateAction } from 'react';
 import toast from 'react-hot-toast';

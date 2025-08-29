@@ -15,7 +15,7 @@ import SignaturePlans from './SignaturePlans';
 
 import { getErrorMessage } from '@/lib/methods/errors';
 import { useMutationWithFeedback } from '@/utils/mutations/general-hook';
-import type { TContractRequest } from '@/utils/schemas/integrations/app-ampere/contract-request.schema';
+import type { TContractRequest } from '@/utils/schemas//contract-request.schema';
 import type { TProposalDTOWithOpportunity } from '@/utils/schemas/proposal.schema';
 
 type ReviewProps = {

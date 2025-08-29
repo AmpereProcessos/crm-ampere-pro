@@ -107,16 +107,16 @@ export const Sidebar = ({ session }: SidebarProps) => {
             url='/operacional/analises-tecnicas'
             icon={<BsFillClipboardDataFill className='w-3.5 h-3.5 min-w-3.5 min-h-3.5' />}
           />
-          {session.user.permissoes.projetos.visualizar ? (
-            <SidebarItem
-              text='Projetos'
-              isOpen={sidebarExtended}
-              url='/operacional/setores/comercial'
-              icon={<MdDashboard className='w-3.5 h-3.5 min-w-3.5 min-h-3.5' />}
-            />
-          ) : (
+          {/* {session.user.permissoes.projetos.visualizar ? ( */}
+          <SidebarItem
+            text='Projetos'
+            isOpen={sidebarExtended}
+            url='/operacional/projetos'
+            icon={<MdDashboard className='w-3.5 h-3.5 min-w-3.5 min-h-3.5' />}
+          />
+          {/* ) : (
             false
-          )}
+          )} */}
         </div>
         <div className='flex w-full items-center justify-center py-2' style={{ position: 'relative', zIndex: 100 }}>
           <NotificationBlock session={session} />

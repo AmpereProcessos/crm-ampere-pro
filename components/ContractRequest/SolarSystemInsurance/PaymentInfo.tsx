@@ -3,7 +3,7 @@ import SelectInput from '@/components/Inputs/SelectInput';
 import TextInput from '@/components/Inputs/TextInput';
 import { formatToCPForCNPJ, formatToPhone } from '@/utils/methods';
 import { useCreditors } from '@/utils/queries/utils';
-import { TContractRequest } from '@/utils/schemas/integrations/app-ampere/contract-request.schema';
+import { TContractRequest } from '@/utils/schemas//contract-request.schema';
 import React from 'react';
 import toast from 'react-hot-toast';
 

@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils';
 import { GeneralVisibleHiddenExitMotionVariants } from '@/utils/constants';
 import { formatLongString } from '@/utils/methods';
 import { useFileReferencesByOpportunityId } from '@/utils/queries/file-references';
-import type { TContractRequest } from '@/utils/schemas/integrations/app-ampere/contract-request.schema';
+import type { TContractRequest } from '@/utils/schemas//contract-request.schema';
 import { AnimatePresence, motion } from 'framer-motion';
 import { CloudUpload } from 'lucide-react';
 import { useState, type Dispatch, type SetStateAction } from 'react';

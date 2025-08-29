@@ -1,4 +1,4 @@
-import type { TContractRequest } from '@/utils/schemas/integrations/app-ampere/contract-request.schema';
+import type { TContractRequest } from '@/utils/schemas//contract-request.schema';
 import { useState, type Dispatch, type SetStateAction } from 'react';
 
 import CheckboxInput from '@/components/Inputs/CheckboxInput';

@@ -6,7 +6,7 @@ import { stateCities } from '@/utils/estados_cidades';
 
 import { formatToCEP, formatToCPForCNPJ, formatToPhone, getCEPInfo } from '@/utils/methods';
 import { useCreditors } from '@/utils/queries/utils';
-import { TContractRequest } from '@/utils/schemas/integrations/app-ampere/contract-request.schema';
+import { TContractRequest } from '@/utils/schemas//contract-request.schema';
 import { TProposalPaymentMethodItem } from '@/utils/schemas/proposal.schema';
 import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';

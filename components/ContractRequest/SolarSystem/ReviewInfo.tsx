@@ -13,7 +13,7 @@ import { formatDateForInputValue, formatToCEP, formatToCPForCNPJ, formatToMoney,
 import { useMutationWithFeedback } from '@/utils/mutations/general-hook';
 import { getOeMPrices } from '@/utils/pricing/oem/methods';
 import { useCreditors } from '@/utils/queries/utils';
-import { TContractRequest } from '@/utils/schemas/integrations/app-ampere/contract-request.schema';
+import { TContractRequest } from '@/utils/schemas//contract-request.schema';
 import { TProposalDTOWithOpportunity } from '@/utils/schemas/proposal.schema';
 
 import { CustomersAcquisitionChannels } from '@/utils/select-options';

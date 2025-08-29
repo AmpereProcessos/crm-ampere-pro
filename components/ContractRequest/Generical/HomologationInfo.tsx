@@ -5,7 +5,7 @@ import TextInput from '@/components/Inputs/TextInput';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { formatToCPForCNPJ } from '@/utils/methods';
-import type { TContractRequest } from '@/utils/schemas/integrations/app-ampere/contract-request.schema';
+import type { TContractRequest } from '@/utils/schemas//contract-request.schema';
 import { ChevronRight, Share2 } from 'lucide-react';
 import { useState, type Dispatch, type SetStateAction } from 'react';
 import toast from 'react-hot-toast';

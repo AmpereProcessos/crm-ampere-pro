@@ -163,7 +163,7 @@ export const POST = apiHandler({ POST: getGraphDataHandler });
 type TOpportunitySimplifiedResult = {
   ganho: TOpportunity['ganho'];
   perda: TOpportunity['perda'];
-  proposta: { valor: number; potenciaPico: number }[];
+  proposta: TOpportunity['proposta'];
   dataInsercao: TOpportunity['dataInsercao'];
 };
 
@@ -183,8 +183,6 @@ async function getOpportunities({ collection, coreQuery, periodStart, periodEnd 
     ],
   };
 
-  const addFields = { wonProposeObjectId: { $toObjectId: '$ganho.idProposta' } };
-  const lookup = { from: 'proposals', localField: 'wonProposeObjectId', foreignField: '_id', as: 'proposta' };
   const projection = {
     ganho: 1,
     perda: 1,
@@ -193,14 +191,12 @@ async function getOpportunities({ collection, coreQuery, periodStart, periodEnd 
     dataInsercao: 1,
   };
 
-  const result = (await collection
-    .aggregate([{ $match: match }, { $addFields: addFields }, { $lookup: lookup }, { $project: projection }])
-    .toArray()) as TOpportunitySimplifiedResult[];
+  const result = (await collection.aggregate([{ $match: match }, { $project: projection }]).toArray()) as TOpportunitySimplifiedResult[];
 
   const opportunities = result.map((r) => ({
     ganho: r.ganho,
-    valorProposta: r.proposta[0] ? r.proposta[0].valor : 0,
-    potenciaProposta: r.proposta[0] ? r.proposta[0].potenciaPico : 0,
+    valorProposta: r.proposta ? r.proposta.valor : 0,
+    potenciaProposta: r.proposta ? r.proposta.potenciaPico : 0,
     dataPerda: r.perda.data,
     motivoPerda: r.perda.descricaoMotivo,
     dataInsercao: r.dataInsercao,

@@ -7,8 +7,8 @@ import { editHomologation } from '@/utils/mutations/homologations';
 import { useHomologationById } from '@/utils/queries/homologations';
 import { TClientDTO } from '@/utils/schemas/client.schema';
 
+import { TContractRequest } from '@/utils/schemas//contract-request.schema';
 import { THomologation } from '@/utils/schemas/homologation.schema';
-import { TContractRequest } from '@/utils/schemas/integrations/app-ampere/contract-request.schema';
 import { TOpportunityDTO } from '@/utils/schemas/opportunity.schema';
 
 import type { TUserSession } from '@/lib/auth/session';

@@ -182,8 +182,7 @@ async function getOpportunities({ collection, query, afterDate, beforeDate }: Ge
     ],
     dataExclusao: null,
   };
-  const addFields = { wonProposeObjectId: { $toObjectId: '$ganho.idProposta' } };
-  const lookup = { from: 'proposals', localField: 'wonProposeObjectId', foreignField: '_id', as: 'proposta' };
+
   const projection = {
     idMarketing: 1,
     'localizacao.cidade': 1,
@@ -192,15 +191,13 @@ async function getOpportunities({ collection, query, afterDate, beforeDate }: Ge
     perda: 1,
     dataInsercao: 1,
   };
-  const opportunities = await collection
-    .aggregate([{ $match: match }, { $addFields: addFields }, { $lookup: lookup }, { $project: projection }])
-    .toArray();
+  const opportunities = await collection.aggregate([{ $match: match }, { $project: projection }]).toArray();
 
   const result: TResultsByRegionOpportunity[] = opportunities.map((opportunity: any) => {
     return {
       idMarketing: opportunity.idMarketing,
       ganho: opportunity.ganho,
-      valorProposta: opportunity.proposta[0] ? opportunity.proposta[0].valor : 0,
+      valorProposta: opportunity.proposta?.valor ?? 0,
       cidade: opportunity.localizacao?.cidade || null,
       dataPerda: opportunity.perda?.data || null,
       dataInsercao: opportunity.dataInsercao,

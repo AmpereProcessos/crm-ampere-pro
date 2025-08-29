@@ -1,6 +1,6 @@
 import type { TUserSession } from '@/lib/auth/session';
 import { formatDateAsLocale, formatNameAsInitials } from '@/lib/methods/formatting';
-import { TPPSCallDTO } from '@/utils/schemas/integrations/app-ampere/pps-calls.schema';
+import { TPPSCallDTO } from '@/utils/schemas/pps-calls.schema';
 import { BsCalendarCheck, BsCalendarPlus } from 'react-icons/bs';
 import Avatar from '../utils/Avatar';
 

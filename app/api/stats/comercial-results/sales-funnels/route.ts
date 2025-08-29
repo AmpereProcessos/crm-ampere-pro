@@ -288,16 +288,13 @@ async function getOpportunities({
       ],
       dataExclusao: null,
     };
-    const addFields = { activeProposeObjectID: { $toObjectId: '$idPropostaAtiva' } };
-    const proposeLookup = { from: 'proposals', localField: 'activeProposeObjectID', foreignField: '_id', as: 'proposta' };
+
     const projection = { 'proposta.valor': 1, 'perda.descricaoMotivo': 1, 'perda.data': 1 };
-    const result = await opportunitiesCollection
-      .aggregate([{ $match: match }, { $addFields: addFields }, { $lookup: proposeLookup }, { $project: projection }])
-      .toArray();
+    const result = await opportunitiesCollection.aggregate([{ $match: match }, { $project: projection }]).toArray();
 
     const projects = result.map((r) => ({
       _id: r._id.toString(),
-      valorProposta: r.proposta[0] ? r.proposta[0].valor : 0,
+      valorProposta: r.proposta?.valor ?? 0,
       motivoPerda: r.perda.descricaoMotivo,
       dataPerda: r.perda.data,
     })) as TInProgressResultsProject[];

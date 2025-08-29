@@ -1,6 +1,6 @@
 import { OeMIDs } from '@/utils/constants';
 import { useSignaturePlanWithPricingMethod } from '@/utils/queries/signature-plans';
-import { TContractRequest } from '@/utils/schemas/integrations/app-ampere/contract-request.schema';
+import { TContractRequest } from '@/utils/schemas//contract-request.schema';
 import { TProposalDTOWithOpportunity } from '@/utils/schemas/proposal.schema';
 import { TSignaturePlanDTOWithPricingMethod } from '@/utils/schemas/signature-plans.schema';
 import React from 'react';

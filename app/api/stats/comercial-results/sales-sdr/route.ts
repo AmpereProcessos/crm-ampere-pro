@@ -325,14 +325,7 @@ async function getOpportunities({
       dataExclusao: null,
     };
     console.log('[INFO] [GET_SALES_SDR_STATS] Query', JSON.stringify(match, null, 2));
-    const addFields = {
-      activeProposeObjectID: {
-        $toObjectId: '$ganho.idProposta',
-      },
-      clientObjectId: { $toObjectId: '$idCliente' },
-    };
-    const proposeLookup = { from: 'proposals', localField: 'activeProposeObjectID', foreignField: '_id', as: 'proposta' };
-    const clientLookup = { from: 'clients', localField: 'clientObjectId', foreignField: '_id', as: 'cliente' };
+
     const projection = {
       idMarketing: 1,
       responsaveis: 1,
@@ -343,17 +336,15 @@ async function getOpportunities({
       'cliente.canalAquisicao': 1,
       dataInsercao: 1,
     };
-    const result = await opportunitiesCollection
-      .aggregate([{ $match: match }, { $addFields: addFields }, { $lookup: proposeLookup }, { $lookup: clientLookup }, { $project: projection }])
-      .toArray();
+    const result = await opportunitiesCollection.aggregate([{ $match: match }, { $project: projection }]).toArray();
     const projects = result.map((r) => ({
       idMarketing: r.idMarketing,
       responsaveis: r.responsaveis,
       ganho: r.ganho,
       perda: r.perda,
-      valorProposta: r.proposta[0] ? r.proposta[0].valor : 0,
-      potenciaPicoProposta: r.proposta[0] ? r.proposta[0].potenciaPico : 0,
-      canalAquisicao: r.cliente[0] ? r.cliente[0].canalAquisicao : 'NÃO DEFINIDO',
+      valorProposta: r.proposta ? r.proposta.valor : 0,
+      potenciaPicoProposta: r.proposta ? r.proposta.potenciaPico : 0,
+      canalAquisicao: r.cliente ? r.cliente.canalAquisicao : 'NÃO DEFINIDO',
       dataInsercao: r.dataInsercao,
     })) as TSDRResultsProject[];
     return projects;
