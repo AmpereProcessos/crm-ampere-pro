@@ -9,7 +9,7 @@ import {
   ProcessTrackedByProjectType,
   SupplyProcessesIds,
 } from '@/utils/process-tracking';
-import { AppProjectResultsSimplifiedProjection, TAppProject } from '@/utils/schemas//projects.schema';
+import { AppProjectResultsSimplifiedProjection, TProject } from '@/utils/schemas/project.schema';
 import { Collection, Filter, WithId } from 'mongodb';
 import { NextApiHandler } from 'next';
 
@@ -36,8 +36,8 @@ const getProjectsFollowUp: NextApiHandler<GetResponse> = async (req, res) => {
   const session = await validateAuthorization(req, res, 'resultados', 'visualizarOperacional', true);
   const partnerScope = session.user.permissoes.parceiros.escopo;
 
-  const db = await connectToAmpereProjectsDatabase(process.env.MONGODB_URI);
-  const collection: Collection<TAppProject> = db.collection('dados');
+  const db = await connectToAmpereProjectsDatabase();
+  const collection: Collection<TProject> = db.collection('dados');
 
   const partnerQuery = partnerScope ? { idParceiro: { $in: [...partnerScope] } } : {};
 
@@ -179,43 +179,43 @@ type TSimplifiedProjectResult = {
   indexador: number;
   nome: string;
   identificador: string | number;
-  tipo: TAppProject['tipoDeServico'];
-  cidade: TAppProject['cidade'];
-  idParceiro: TAppProject['idParceiro'];
-  idProjetoCRM: TAppProject['idProjetoCRM'];
-  potenciaPico: TAppProject['sistema']['potPico'];
+  tipo: TProject['tipoDeServico'];
+  cidade: TProject['cidade'];
+  idParceiro: TProject['idParceiro'];
+  idProjetoCRM: TProject['idProjetoCRM'];
+  potenciaPico: TProject['sistema']['potPico'];
   valor: number;
   contrato: {
-    dataLiberacao: TAppProject['contrato']['dataLiberacao'];
-    dataSolicitacao: TAppProject['contrato']['dataSolicitacao'];
-    dataAssinatura: TAppProject['contrato']['dataAssinatura'];
+    dataLiberacao: TProject['contrato']['dataLiberacao'];
+    dataSolicitacao: TProject['contrato']['dataSolicitacao'];
+    dataAssinatura: TProject['contrato']['dataAssinatura'];
   };
   homologacao: {
     concluido: boolean;
-    dataLiberacao: TAppProject['homologacao']['dataLiberacao'];
-    dataInicioElaboracao: TAppProject['homologacao']['documentacao']['dataInicioElaboracao'];
-    dataConclusaoElaboracao: TAppProject['homologacao']['documentacao']['dataConclusaoElaboracao'];
-    dataSolicitacaoAcesso: TAppProject['homologacao']['acesso']['dataSolicitacao'];
-    dataRespostaAcesso: TAppProject['homologacao']['acesso']['dataResposta'];
-    dataSolicitacaoVistoria: TAppProject['homologacao']['vistoria']['dataSolicitacao'];
-    dataEfetivacaoVistoria: TAppProject['homologacao']['vistoria']['dataEfetivacao'];
+    dataLiberacao: TProject['homologacao']['dataLiberacao'];
+    dataInicioElaboracao: TProject['homologacao']['documentacao']['dataInicioElaboracao'];
+    dataConclusaoElaboracao: TProject['homologacao']['documentacao']['dataConclusaoElaboracao'];
+    dataSolicitacaoAcesso: TProject['homologacao']['acesso']['dataSolicitacao'];
+    dataRespostaAcesso: TProject['homologacao']['acesso']['dataResposta'];
+    dataSolicitacaoVistoria: TProject['homologacao']['vistoria']['dataSolicitacao'];
+    dataEfetivacaoVistoria: TProject['homologacao']['vistoria']['dataEfetivacao'];
   };
   compra: {
     concluido: boolean;
-    dataLiberacao: TAppProject['compra']['dataLiberacao'];
-    dataPedido: TAppProject['compra']['dataPedido'];
-    dataEntrega: TAppProject['compra']['dataEntrega'];
+    dataLiberacao: TProject['compra']['dataLiberacao'];
+    dataPedido: TProject['compra']['dataPedido'];
+    dataEntrega: TProject['compra']['dataEntrega'];
   };
   execucao: {
     concluido: boolean;
-    inicio: TAppProject['obra']['entrada'];
-    fim: TAppProject['obra']['saida'];
+    inicio: TProject['obra']['entrada'];
+    fim: TProject['obra']['saida'];
   };
 };
 
 type GetSimplifiedProjectsProps = {
-  collection: Collection<TAppProject>;
-  query: Filter<TAppProject>;
+  collection: Collection<TProject>;
+  query: Filter<TProject>;
 };
 async function getSimplifiedProjects({ collection, query }: GetSimplifiedProjectsProps) {
   try {
@@ -226,7 +226,7 @@ async function getSimplifiedProjects({ collection, query }: GetSimplifiedProject
 
     const result = await collection.find({ ...match }, { projection: projection, sort: { qtde: -1 } }).toArray();
     const projects: TSimplifiedProjectResult[] = result.map((project) => {
-      const info = project as WithId<TAppProject>;
+      const info = project as WithId<TProject>;
       return {
         id: info._id.toString(),
         indexador: info.qtde,

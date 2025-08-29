@@ -865,3 +865,82 @@ export const ProjectSchema = z.object({
   restricao: ProjectRestrictionSchema.optional().nullable(),
 });
 export type TProject = z.infer<typeof ProjectSchema>;
+
+export const AppProjectResultsSimplifiedProjection = {
+  _id: 1,
+  qtde: 1,
+  nomeDoContrato: 1,
+  codigoSVB: 1,
+  cidade: 1,
+  identificador: 1,
+  tipoDeServico: 1,
+  idParceiro: 1,
+  idProjetoCRM: 1,
+  'sistema.potPico': 1,
+  'sistema.valorProjeto': 1,
+  'padrao.valor': 1,
+  'estruturaPersonalizada.valor': 1,
+  'contrato.dataSolicitacao': 1,
+  'contrato.dataLiberacao': 1,
+  'contrato.dataAssinatura': 1,
+  homologacao: 1,
+  'compra.status': 1,
+  'compra.dataLiberacao': 1,
+  'compra.dataPedido': 1,
+  'compra.dataEntrega': 1,
+  'obra.statusDaObra': 1,
+  'obra.entrada': 1,
+  'obra.saida': 1,
+};
+
+export type TAppProjectComissionSimplified = Pick<
+  TProject,
+  'qtde' | 'nomeDoContrato' | 'codigoSVB' | 'uf' | 'cidade' | 'vendedor' | 'tipoDeServico' | 'comissoes' | 'canalVenda' | 'insider' | 'idProjetoCRM'
+> & {
+  contrato: {
+    dataAssinatura: TProject['contrato']['dataAssinatura'];
+  };
+  pagamento: {
+    dataRecebimento: TProject['pagamento']['dataRecebimento'];
+  };
+  sistema: {
+    potPico: TProject['sistema']['potPico'];
+    valorProjeto: TProject['sistema']['valorProjeto'];
+  };
+  padrao: {
+    valor: TProject['padrao']['valor'];
+  };
+  estruturaPersonalizada: {
+    valor: TProject['estruturaPersonalizada']['valor'];
+  };
+  oem: {
+    valor: TProject['oem']['valor'];
+  };
+  seguro: {
+    valor: TProject['seguro']['valor'];
+  };
+  compra: {
+    dataPagamento: TProject['compra']['dataPagamento'];
+  };
+};
+export const AppProjectComissionSimplifiedProjection = {
+  qtde: 1,
+  nomeDoContrato: 1,
+  codigoSVB: 1,
+  uf: 1,
+  cidade: 1,
+  vendedor: 1,
+  tipoDeServico: 1,
+  'contrato.dataAssinatura': 1,
+  comissoes: 1,
+  'pagamento.dataRecebimento': 1,
+  'sistema.potPico': 1,
+  'sistema.valorProjeto': 1,
+  'padrao.valor': 1,
+  'estruturaPersonalizada.valor': 1,
+  'oem.valor': 1,
+  'compra.dataPagamento': 1,
+  canalVenda: 1,
+  insider: 1,
+  idProjetoCRM: 1,
+};

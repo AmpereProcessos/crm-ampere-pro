@@ -3,8 +3,8 @@ import { getValidCurrentSessionUncached } from '@/lib/auth/session';
 import connectToAmpereProjectsDatabase from '@/services/mongodb/ampere/projects-db-connection';
 import connectToDatabase from '@/services/mongodb/crm-db-connection';
 import type { UnwrapNextResponse } from '@/utils/api';
-import { AppProjectComissionSimplifiedProjection, type TAppProject, type TAppProjectComissionSimplified } from '@/utils/schemas//projects.schema';
 import { SimplifiedOpportunityProjection, type TOpportunity, type TOpportunitySimplified } from '@/utils/schemas/opportunity.schema';
+import { AppProjectComissionSimplifiedProjection, type TAppProjectComissionSimplified, type TProject } from '@/utils/schemas/project.schema';
 import createHttpError from 'http-errors';
 import { ObjectId, type AnyBulkWriteOperation, type Collection, type Filter, type WithId } from 'mongodb';
 import { NextResponse, type NextRequest } from 'next/server';
@@ -45,7 +45,7 @@ export async function getComissions(request: NextRequest) {
   const crmDb = await connectToDatabase();
   const opportunitiesCollection = crmDb.collection<TOpportunity>('opportunities');
   const appDb = await connectToAmpereProjectsDatabase();
-  const projectsCollection = appDb.collection<TAppProject>('dados');
+  const projectsCollection = appDb.collection<TProject>('dados');
 
   const projects = await getProjects({
     projectsCollection,
@@ -123,11 +123,11 @@ async function bulkUpdateComissions(request: NextRequest) {
   const bulkUpdates = BulkUpdateComissionsInputSchema.parse(payload);
 
   const appDb = await connectToAmpereProjectsDatabase();
-  const projectsCollection = appDb.collection<TAppProject>('dados');
+  const projectsCollection = appDb.collection<TProject>('dados');
 
   console.log(`[BULK UPDATE COMISSIONS] User: ${user.nome} (${user.id})`);
   console.log(`[BULK UPDATE COMISSIONS] Updating ${bulkUpdates.length} projects...`);
-  const bulkwrite: AnyBulkWriteOperation<TAppProject>[] = bulkUpdates.map((update) => {
+  const bulkwrite: AnyBulkWriteOperation<TProject>[] = bulkUpdates.map((update) => {
     return {
       updateOne: {
         filter: { _id: new ObjectId(update.projectId) },
@@ -171,26 +171,26 @@ async function getOpportunities({ opportunitiesCollection, ids }: GetOpportuniti
 }
 
 type GetProjectsParams = {
-  projectsCollection: Collection<TAppProject>;
+  projectsCollection: Collection<TProject>;
   afterDateStr: string;
   beforeDateStr: string;
   userIds: string[] | undefined;
 };
 export async function getProjects({ projectsCollection, afterDateStr, beforeDateStr, userIds }: GetProjectsParams) {
-  const responsiblesQuery: Filter<TAppProject> =
+  const responsiblesQuery: Filter<TProject> =
     userIds && userIds.length > 0
       ? {
           'comissoes.comissionados.idCrm': { $in: userIds },
         }
       : {};
-  const signedQueryFilter: Filter<TAppProject> = {
+  const signedQueryFilter: Filter<TProject> = {
     'contrato.status': 'ASSINADO',
   };
-  const referenceDateQueryFilter: Filter<TAppProject> = {
+  const referenceDateQueryFilter: Filter<TProject> = {
     'comissoes.dataReferencia': { $gte: afterDateStr, $lte: beforeDateStr },
   };
 
-  const query: Filter<TAppProject> = {
+  const query: Filter<TProject> = {
     ...responsiblesQuery,
     ...signedQueryFilter,
     ...referenceDateQueryFilter,

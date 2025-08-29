@@ -1,16 +1,4 @@
-import connectToAppCallsDatabase from '@/services/mongodb/ampere/calls-db-connection';
-import connectToAppProjectsDatabase from '@/services/mongodb/ampere/projects-db-connection';
-import connectToAppRequestsDatabase from '@/services/mongodb/ampere/resquests-db-connection';
-import connectToCRMDatabase from '@/services/mongodb/crm-db-connection';
 import { apiHandler } from '@/utils/api';
-import { TContractRequest } from '@/utils/schemas//contract-request.schema';
-import { TAppProject } from '@/utils/schemas//projects.schema';
-import { TNotification } from '@/utils/schemas/notification.schema';
-import { TOpportunityHistory } from '@/utils/schemas/opportunity-history.schema';
-import { TOpportunity } from '@/utils/schemas/opportunity.schema';
-import { TPPSCall } from '@/utils/schemas/pps-calls.schema';
-import { TTechnicalAnalysis } from '@/utils/schemas/technical-analysis.schema';
-import { Collection } from 'mongodb';
 import { NextApiHandler } from 'next';
 type PostResponse = any;
 const fixOpportunityIdentificatorsSecondStep: NextApiHandler<PostResponse> = async (req, res) => {
@@ -18,23 +6,23 @@ const fixOpportunityIdentificatorsSecondStep: NextApiHandler<PostResponse> = asy
   // Envolve atualizações de diversas entidades ao longo da aplicação que dependentes do identificador
   // das oportunidades do CRM
 
-  const crmDb = await connectToCRMDatabase(process.env.MONGODB_URI, 'crm');
-  const opportunitiesCollection: Collection<TOpportunity> = crmDb.collection('opportunities');
-  const notificationsCollection: Collection<TNotification> = crmDb.collection('notifications');
-  const opportunityHistoryCollection: Collection<TOpportunityHistory> = crmDb.collection('opportunities-history');
-  const technicalAnalysisCollection: Collection<TTechnicalAnalysis> = crmDb.collection('technical-analysis');
+  // const crmDb = await connectToCRMDatabase();
+  // const opportunitiesCollection: Collection<TOpportunity> = crmDb.collection('opportunities');
+  // const notificationsCollection: Collection<TNotification> = crmDb.collection('notifications');
+  // const opportunityHistoryCollection: Collection<TOpportunityHistory> = crmDb.collection('opportunities-history');
+  // const technicalAnalysisCollection: Collection<TTechnicalAnalysis> = crmDb.collection('technical-analysis');
 
-  const appProjectsDb = await connectToAppProjectsDatabase(process.env.MONGODB_URI);
-  const appProjectsCollection: Collection<TAppProject> = appProjectsDb.collection('dados');
+  // const appProjectsDb = await connectToAppProjectsDatabase();
+  // const appProjectsCollection: Collection<TProject> = appProjectsDb.collection('dados');
 
-  const appRequestsDb = await connectToAppRequestsDatabase(process.env.MONGODB_URI);
-  const appContractRequestsCollection: Collection<TContractRequest> = appRequestsDb.collection('contrato');
+  // const appRequestsDb = await connectToAppRequestsDatabase();
+  // const appContractRequestsCollection: Collection<TContractRequest> = appRequestsDb.collection('contrato');
 
-  const appCallsDb = await connectToAppCallsDatabase(process.env.MONGODB_URI);
-  const appPPSCallsCollection: Collection<TPPSCall> = appCallsDb.collection('pps');
+  // const appCallsDb = await connectToAppCallsDatabase();
+  // const appPPSCallsCollection: Collection<TPPSCall> = appCallsDb.collection('pps');
 
-  // Primeiro, buscamos os registros das oportunidades (agora atualizadas)
-  const opportunities = await opportunitiesCollection.find({}, { projection: { identificador: 1 } }).toArray();
+  // // Primeiro, buscamos os registros das oportunidades (agora atualizadas)
+  // const opportunities = await opportunitiesCollection.find({}, { projection: { identificador: 1 } }).toArray();
 
   // Agora, buscamos cada uma das entidades dependentes e definimos um bulkwrite para atualização dos identificadores
 
