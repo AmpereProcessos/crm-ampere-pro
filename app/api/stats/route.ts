@@ -13,7 +13,7 @@ import { GeneralStatsFiltersSchema, QueryDatesSchema } from '@/utils/schemas/sta
 import type { TUser, TUserDTOSimplified } from '@/utils/schemas/user.schema';
 import dayjs from 'dayjs';
 import createHttpError from 'http-errors';
-import type { Collection, Filter } from 'mongodb';
+import type { Collection, Filter, ObjectId } from 'mongodb';
 import { NextResponse, type NextRequest } from 'next/server';
 import type { z } from 'zod';
 
@@ -310,6 +310,7 @@ async function getWonOpportunities({ opportunitiesCollection, query, afterDate, 
     idMarketing: 1,
     responsaveis: 1,
     ganho: 1,
+    idPropostaAtiva: 1,
     // 'proposta._id': 1,
     'proposta.nome': 1,
     'proposta.valor': 1,
@@ -317,13 +318,22 @@ async function getWonOpportunities({ opportunitiesCollection, query, afterDate, 
     dataInsercao: 1,
   };
 
-  const result = await opportunitiesCollection.aggregate([{ $match: match }, { $project: projection }]).toArray();
+  const result = (await opportunitiesCollection.aggregate([{ $match: match }, { $project: projection }]).toArray()) as {
+    _id: ObjectId;
+    nome: TOpportunity['nome'];
+    idMarketing: TOpportunity['idMarketing'];
+    responsaveis: TOpportunity['responsaveis'];
+    idPropostaAtiva: TOpportunity['idPropostaAtiva'];
+    proposta: Pick<Exclude<TOpportunity['proposta'], undefined | null>, 'nome' | 'valor' | 'potenciaPico'>;
+    ganho: TOpportunity['ganho'];
+  }[];
 
-  return result.map((r: any) => ({
+  return result.map((r) => ({
     _id: r._id.toString(),
     nome: r.nome,
     responsaveis: r.responsaveis,
     idMarketing: r.idMarketing,
+    idPropostaAtiva: r.idPropostaAtiva,
     proposta: r.proposta
       ? {
           nome: r.proposta.nome,
@@ -331,7 +341,7 @@ async function getWonOpportunities({ opportunitiesCollection, query, afterDate, 
           potenciaPico: r.proposta.potenciaPico,
         }
       : null,
-    dataGanho: r.ganho.data,
+    dataGanho: r.ganho?.data ?? null,
   }));
 }
 
@@ -357,9 +367,17 @@ async function getPendingWins({ opportunitiesCollection, query }: GetPendingWins
     dataInsercao: 1,
   };
 
-  const result = await opportunitiesCollection.aggregate([{ $match: match }, { $project: projection }]).toArray();
+  const result = (await opportunitiesCollection.aggregate([{ $match: match }, { $project: projection }]).toArray()) as {
+    _id: ObjectId;
+    nome: TOpportunity['nome'];
+    idMarketing: TOpportunity['idMarketing'];
+    responsaveis: TOpportunity['responsaveis'];
+    ganho: TOpportunity['ganho'];
+    proposta: Pick<Exclude<TOpportunity['proposta'], undefined | null>, 'nome' | 'valor' | 'potenciaPico'>;
+    dataInsercao: TOpportunity['dataInsercao'];
+  }[];
 
-  return result.map((r: any) => ({
+  return result.map((r) => ({
     _id: r._id.toString(),
     nome: r.nome,
     idMarketing: r.idMarketing,
@@ -371,7 +389,7 @@ async function getPendingWins({ opportunitiesCollection, query }: GetPendingWins
           potenciaPico: r.proposta.potenciaPico,
         }
       : null,
-    dataSolicitacao: r.dataInsercao,
+    dataSolicitacao: r.ganho?.dataSolicitacao ?? null,
   }));
 }
 

@@ -162,7 +162,7 @@ function SelectInputVirtualized<T>({
               onClick={() => {
                 if (editable) setSelectMenuIsOpen((prev) => !prev);
               }}
-              className='grow cursor-pointer text-primary'
+              className='grow cursor-pointer text-primary text-start'
             >
               {selectedId && options ? options.filter((item) => item.id === selectedId)[0]?.label : resetOptionLabel}
             </button>
@@ -232,7 +232,7 @@ function SelectInputVirtualized<T>({
             onClick={() => {
               if (editable) setSelectMenuIsOpen((prev) => !prev);
             }}
-            className='grow cursor-pointer text-primary'
+            className='grow cursor-pointer text-primary text-start'
           >
             {selectedId && options ? options.filter((item) => item.id === selectedId)[0]?.label : resetOptionLabel}
           </button>

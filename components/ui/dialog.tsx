@@ -71,9 +71,7 @@ DialogTitle.displayName = DialogPrimitive.Title.displayName;
 const DialogDescription = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Description>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Description>
->(({ className, ...props }, ref) => (
-  <DialogPrimitive.Description ref={ref} className={cn('text-sm text-primary/70 dark:text-primary/40', className)} {...props} />
-));
+>(({ className, ...props }, ref) => <DialogPrimitive.Description ref={ref} className={cn('text-sm text-primary/70', className)} {...props} />);
 DialogDescription.displayName = DialogPrimitive.Description.displayName;
 
 export { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogOverlay, DialogPortal, DialogTitle, DialogTrigger };

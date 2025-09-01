@@ -59,19 +59,19 @@ function FunnelList({ stageName, session, items, id }: IFunnelListProps) {
       {(provided) => (
         <div className='flex w-full min-w-[375px] flex-col p-2 px-4 lg:w-[375px]'>
           <div className='flex h-[100px] w-full flex-col rounded-sm bg-[#15599a] px-2 lg:h-[60px]'>
-            <h1 className='w-full rounded-sm p-1 text-center font-medium text-primary-foreground'>{stageName}</h1>
+            <h1 className='w-full rounded-sm p-1 text-center font-medium text-white'>{stageName}</h1>
             <div className='mt-1 flex w-full flex-col items-center justify-between px-2 pb-2 lg:flex-row'>
-              <div className='flex w-full items-center justify-center gap-1 text-[0.65rem] text-primary-foreground lg:w-1/3 lg:justify-start lg:text-[0.7rem]'>
+              <div className='flex w-full items-center justify-center gap-1 text-[0.65rem] text-white lg:w-1/3 lg:justify-start lg:text-[0.7rem]'>
                 <p>R$</p>
                 <p>{cumulativeValues.formattedValue}</p>
               </div>
-              <div className='flex w-full items-center justify-center gap-1 text-[0.65rem] text-primary-foreground lg:w-1/3 lg:text-[0.7rem]'>
+              <div className='flex w-full items-center justify-center gap-1 text-[0.65rem] text-white lg:w-1/3 lg:text-[0.7rem]'>
                 <p>
                   <ImPower />
                 </p>
                 <p>{cumulativeValues.formattedPeakPower} kWp</p>
               </div>
-              <div className='flex w-full items-center justify-center gap-1 text-[0.65rem] text-primary-foreground lg:w-1/3 lg:justify-end lg:text-[0.7rem]'>
+              <div className='flex w-full items-center justify-center gap-1 text-[0.65rem] text-white lg:w-1/3 lg:justify-end lg:text-[0.7rem]'>
                 <p>
                   <MdDashboard />
                 </p>

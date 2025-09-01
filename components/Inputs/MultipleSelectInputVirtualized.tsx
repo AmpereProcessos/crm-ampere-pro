@@ -168,7 +168,7 @@ function MultipleSelectInputVirtualized<T>({
               className='h-full w-full text-sm italic outline-hidden'
             />
           ) : (
-            <button type='button' onClick={() => setSelectMenuIsOpen((prev) => !prev)} className='grow cursor-pointer text-primary'>
+            <button type='button' onClick={() => setSelectMenuIsOpen((prev) => !prev)} className='grow text-start cursor-pointer text-primary'>
               {selectedIds && selectedIds.length > 0 && options
                 ? options.filter((item) => selectedIds.includes(item.id)).length > 1
                   ? 'MÚLTIPLAS SELEÇÕES'
@@ -226,7 +226,7 @@ function MultipleSelectInputVirtualized<T>({
             holderClassName
           )}
         >
-          <button type='button' onClick={() => setSelectMenuIsOpen((prev) => !prev)} className='grow cursor-pointer text-primary'>
+          <button type='button' onClick={() => setSelectMenuIsOpen((prev) => !prev)} className='grow text-start cursor-pointer text-primary'>
             {selectedIds && selectedIds.length > 0 && options
               ? options.filter((item) => selectedIds.includes(item.id)).length > 1
                 ? 'MÚLTIPLAS SELEÇÕES'

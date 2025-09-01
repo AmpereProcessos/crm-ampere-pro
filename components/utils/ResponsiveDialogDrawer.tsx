@@ -38,7 +38,7 @@ function ResponsiveDialogDrawer({
           <DialogTitle>{menuTitle}</DialogTitle>
           <DialogDescription>{menuDescription}</DialogDescription>
         </DialogHeader>
-        <div className='scrollbar-thin scrollbar-track-primary/10 scrollbar-thumb-primary/30 flex flex-1 flex-col gap-3 overflow-auto px-4 py-2 lg:px-0'>
+        <div className='scrollbar-thin scrollbar-track-primary/10 scrollbar-thumb-primary/30 flex flex-1 flex-col gap-3 overflow-auto px-4 py-2 lg:px-2'>
           {children}
         </div>
         <DialogFooter>

@@ -1,18 +1,18 @@
+import { TGetStatsRouteOutput } from '@/app/api/stats/route';
 import type { TUserSession } from '@/lib/auth/session';
 import { formatLongString, formatToMoney } from '@/utils/methods';
-import type { TGeneralStats } from '@/utils/schemas/stats.schema';
 import Link from 'next/link';
 import { BsFillMegaphoneFill } from 'react-icons/bs';
 import { FaSignature } from 'react-icons/fa';
 import Avatar from '../../utils/Avatar';
 
 type PendingWinsBlockProps = {
-  data: TGeneralStats['ganhosPendentes'];
+  data: TGetStatsRouteOutput['data']['ganhosPendentes'];
   session: TUserSession;
 };
 
 function PendingWinsBlock({ data, session }: PendingWinsBlockProps) {
-  function getIdleMoney(list: TGeneralStats['ganhosPendentes']) {
+  function getIdleMoney(list: TGetStatsRouteOutput['data']['ganhosPendentes']) {
     if (!list) return 0;
     const total = list.reduce((acc, current) => {
       const proposalValue = current.proposta?.valor || 0;

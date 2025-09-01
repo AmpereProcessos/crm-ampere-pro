@@ -1,14 +1,14 @@
+import { TGetStatsRouteOutput } from '@/app/api/stats/route';
 import Avatar from '@/components/utils/Avatar';
 import type { TUserSession } from '@/lib/auth/session';
 import { formatToMoney } from '@/lib/methods/formatting';
 import { formatLongString } from '@/utils/methods';
-import type { TGeneralStats } from '@/utils/schemas/stats.schema';
 import Link from 'next/link';
 import { BsCode, BsFillMegaphoneFill } from 'react-icons/bs';
 import { MdOutlineAttachMoney, MdSell } from 'react-icons/md';
 
 type WinsBlockProps = {
-  data: TGeneralStats['ganhos'];
+  data: TGetStatsRouteOutput['data']['ganhos'];
   session: TUserSession;
 };
 function WinsBlock({ data, session }: WinsBlockProps) {
@@ -37,7 +37,7 @@ function WinsBlock({ data, session }: WinsBlockProps) {
                   <MdOutlineAttachMoney />
                 </div>
                 <div className='flex grow flex-col items-start'>
-                  <Link href={`/comercial/proposta/${win.proposta?._id}`}>
+                  <Link href={`/comercial/proposta/${win.idPropostaAtiva}`}>
                     <h1 className='w-full text-start text-sm font-medium leading-none tracking-tight duration-300 ease-in-out hover:text-cyan-500'>
                       {formatLongString(win?.proposta?.nome.toUpperCase() || '', 30)}
                     </h1>
