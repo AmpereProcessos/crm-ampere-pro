@@ -121,7 +121,6 @@ function ProposalPage({ proposalId, session }: ProposalPageProps) {
                   </div>
                 </Link>
               </div>
-
               <WinBlock
                 opportunityId={proposal.oportunidade.id}
                 proposalId={proposalId}

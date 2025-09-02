@@ -62,34 +62,6 @@ function WinBlock({
       <Trophy size={15} color='white' />
     </button>
   );
-  // return (
-  //   <>
-  //     {/* <button
-  //             onClick={() => setNewContractRequestIsOpen(true)}
-  //             className="rounded border border-green-600 px-4 py-2 text-sm font-bold text-green-600 duration-300 ease-in-out hover:bg-green-600 hover:text-primary-foreground"
-  //           >
-  //             REQUISITAR CONTRATO
-  //           </button> */}
-  //     {isWon ? (
-  //       <div className="flex w-[80%] flex-col items-center rounded-md bg-green-400  p-2 shadow-md lg:w-fit">
-  //         <h1 className="text-center font-Raleway text-xs font-bold text-primary">OPORTUNIDADE GANHA</h1>
-  //         {wonProposalId != proposalId ? <p className="text-center font-Raleway text-xxs font-thin text-primary/70">(ATRAVÉS DE OUTRA PROPOSTA)</p> : null}
-  //         <div className="flex items-center justify-center gap-2">
-  //           <BsFillCalendarCheckFill style={{ color: '#000', fontSize: '15px' }} />
-  //           <p className="text-center text-xs font-bold text-primary">{wonDate ? formatDateAsLocale(wonDate, true) : '-'}</p>
-  //         </div>
-  //       </div>
-  //     ) : (
-  //       <button
-  //         // @ts-ignore
-  //         onClick={() => handleWin()}
-  //         className="rounded border border-green-600 px-4 py-2 text-sm font-bold text-green-600 duration-300 ease-in-out hover:bg-green-600 hover:text-primary-foreground"
-  //       >
-  //         DAR GANHO
-  //       </button>
-  //     )}
-  //   </>
-  // )
 }
 
 export default WinBlock;
