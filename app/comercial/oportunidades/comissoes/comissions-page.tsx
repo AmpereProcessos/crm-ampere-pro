@@ -74,6 +74,7 @@ function ComissionsPage({ session }: ComissionsPageProps) {
       (
         acc: {
           totalComissionableProjects: number;
+          totalComissionableValue: number;
           totalComissionValue: number;
           totalComissionsValidated: number;
           totalComissionsNotValidated: number;
@@ -81,6 +82,7 @@ function ComissionsPage({ session }: ComissionsPageProps) {
         c
       ) => {
         acc.totalComissionableProjects++;
+        acc.totalComissionableValue += c.comissao.valorComissionavel;
         acc.totalComissionValue += c.comissao.comissionados?.reduce((acc, c) => acc + c.comissaoValor, 0) || 0;
         acc.totalComissionsValidated += c.comissao.comissionados?.filter((c) => c.dataValidacao).length || 0;
         acc.totalComissionsNotValidated += c.comissao.comissionados?.filter((c) => !c.dataValidacao).length || 0;
@@ -88,6 +90,7 @@ function ComissionsPage({ session }: ComissionsPageProps) {
       },
       {
         totalComissionableProjects: 0,
+        totalComissionableValue: 0,
         totalComissionValue: 0,
         totalComissionsValidated: 0,
         totalComissionsNotValidated: 0,
@@ -161,38 +164,49 @@ function ComissionsPage({ session }: ComissionsPageProps) {
           {isSuccess ? (
             <>
               <div className='w-full flex items-center gap-2 flex-col lg:flex-row'>
-                <div className='flex min-h-[110px] w-full flex-col rounded-xl border border-primary/30 bg-background px-6 py-3 shadow-md lg:w-1/2'>
+                <div className={cn('bg-card border-primary/20 flex w-full flex-col gap-1 rounded-xl border px-3 py-4 shadow-xs lg:w-1/3')}>
                   <div className='flex items-center justify-between'>
-                    <h1 className='text-sm font-medium uppercase tracking-tight'>Projetos Comissionáveis</h1>
-                    <VscDiffAdded />
+                    <h1 className='text-xs font-medium tracking-tight uppercase'>Valor Comissionável</h1>
+                    <div className='flex items-center gap-2'>
+                      <BadgeDollarSign className='h-4 w-4 min-h-4 min-w-4' />
+                    </div>
                   </div>
-                  <div className='mt-2 flex w-full flex-col'>
-                    <div className='text-xl font-bold text-[#15599a]'>{stats.totalComissionableProjects}</div>
+                  <div className='flex w-full flex-col'>
+                    <div className='text-2xl font-bold text-[#15599a] dark:text-[#fead61]'>{formatToMoney(stats.totalComissionableValue)}</div>
                   </div>
                 </div>
-                <div className='flex min-h-[110px] w-full flex-col rounded-xl border border-primary/30 bg-background px-6 py-3 shadow-md lg:w-1/2'>
+                <div className={cn('bg-card border-primary/20 flex w-full flex-col gap-1 rounded-xl border px-3 py-4 shadow-xs lg:w-1/3')}>
                   <div className='flex items-center justify-between'>
-                    <h1 className='text-sm font-medium uppercase tracking-tight'>Comissão total</h1>
-                    <BadgeDollarSign />
+                    <h1 className='text-xs font-medium tracking-tight uppercase'>Projetos Comissionáveis</h1>
+                    <div className='flex items-center gap-2'>
+                      <VscDiffAdded className='h-4 w-4 min-h-4 min-w-4' />
+                    </div>
                   </div>
-                  <div className='mt-2 flex w-full flex-col'>
-                    <div className='text-xl font-bold text-[#15599a]'>{formatToMoney(stats.totalComissionValue)}</div>
+                  <div className='flex w-full flex-col'>
+                    <div className='text-2xl font-bold text-[#15599a] dark:text-[#fead61]'>{stats.totalComissionableProjects}</div>
+                  </div>
+                </div>
+                <div className={cn('bg-card border-primary/20 flex w-full flex-col gap-1 rounded-xl border px-3 py-4 shadow-xs lg:w-1/3')}>
+                  <div className='flex items-center justify-between'>
+                    <h1 className='text-xs font-medium tracking-tight uppercase'>Comissão total</h1>
+                    <div className='flex items-center gap-2'>
+                      <BadgeDollarSign className='h-4 w-4 min-h-4 min-w-4' />
+                    </div>
+                  </div>
+                  <div className='flex w-full flex-col'>
+                    <div className='text-2xl font-bold text-[#15599a] dark:text-[#fead61]'>{formatToMoney(stats.totalComissionValue)}</div>
                   </div>
                 </div>
               </div>
               <div className='w-full flex items-center justify-center gap-2 flex-wrap'>
                 <div
-                  className={cn(
-                    'flex items-center gap-1 rounded-lg bg-secondary px-2 py-0.5 text-center text-xxs font-bold italic text-primary/80 bg-green-100 text-green-700'
-                  )}
+                  className={cn('flex items-center gap-1 rounded-lg px-2 py-0.5 text-center text-xxs font-bold italic bg-green-100 text-green-700')}
                 >
                   <BadgeCheck className={cn('w-4 h-4 min-w-4 min-h-4')} />
                   <p className={cn('font-medium text-sm')}>{stats.totalComissionsValidated} validadas</p>
                 </div>
                 <div
-                  className={cn(
-                    'flex items-center gap-1 rounded-lg bg-secondary px-2 py-0.5 text-center text-xxs font-bold italic text-primary/80 bg-orange-100 text-orange-700'
-                  )}
+                  className={cn('flex items-center gap-1 rounded-lg px-2 py-0.5 text-center text-xxs font-bold italic bg-orange-100 text-orange-700')}
                 >
                   <BadgeCheck className={cn('w-4 h-4 min-w-4 min-h-4')} />
                   <p className={cn('font-medium text-sm')}>{stats.totalComissionsNotValidated} não validadas</p>
@@ -326,19 +340,23 @@ function ComissionCard({ opportunity, queryClient, affectedQueryKey, view, sessi
             </HoverCardContent>
           </HoverCard>
         </div>
-        {view === 'own' ? (
-          <div className='flex items-center gap-2'>
-            <p className='text-sm font-semibold text-primary/80'>SUA COMISSÃO</p>
-            <div className='flex items-center gap-1 px-2 py-1'>
-              <Percent className='h-4 w-4 min-h-4 min-w-4' />
-              <p className='text-sm font-semibold text-primary/80'>{formatDecimalPlaces(sessionUserComission?.comissaoPorcentagem || 0)}%</p>
-            </div>
-            <div className='flex items-center gap-1 px-2 py-1'>
-              <BadgeDollarSign className='h-4 w-4 min-h-4 min-w-4' />
-              <p className='text-sm font-semibold text-primary/80'>{formatToMoney(sessionUserComission?.comissaoValor || 0)}</p>
-            </div>
-          </div>
-        ) : null}
+        <div className='flex items-center gap-2'>
+          {view === 'own' ? (
+            <>
+              <p className='text-sm font-semibold text-primary/80'>SUA COMISSÃO</p>
+              <div className='flex items-center gap-1 px-2 py-1'>
+                <Percent className='h-4 w-4 min-h-4 min-w-4' />
+                <p className='text-sm font-semibold text-primary/80'>{formatDecimalPlaces(sessionUserComission?.comissaoPorcentagem || 0)}%</p>
+              </div>
+              <div className='flex items-center gap-1 px-2 py-1'>
+                <BadgeDollarSign className='h-4 w-4 min-h-4 min-w-4' />
+                <p className='text-sm font-semibold text-primary/80'>{formatToMoney(sessionUserComission?.comissaoValor || 0)}</p>
+              </div>
+            </>
+          ) : null}
+          <p className='text-sm font-semibold text-primary/80'>VENDA</p>
+          <p className='text-sm font-bold leading-none tracking-tight'>{formatToMoney(opportunity.comissao.valorComissionavel || 0)}</p>
+        </div>
       </div>
       <div className='flex w-full flex-col items-center justify-between gap-2 lg:flex-row'>
         <div className='flex w-full flex-wrap items-center justify-center gap-2 lg:grow lg:justify-start'>

@@ -64,8 +64,13 @@ export default function OperationalProjectsPage({ session }: OperationalProjects
         <div className='flex w-full flex-col gap-2 border-b border-primary pb-2'>
           <div className='flex w-full flex-col items-center justify-between gap-4 lg:flex-row'>
             <h1 className='text-xl font-black leading-none tracking-tight md:text-2xl'>PROJETOS</h1>
-            <Button size='icon' variant='ghost' onClick={() => setFiltersMenuIsOpen((prev) => !prev)}>
-              <Filter className='w-4 h-4' />
+            <Button
+              variant={filtersMenuIsOpen ? 'default' : 'ghost'}
+              size='fit'
+              className='rounded-lg p-2'
+              onClick={() => setFiltersMenuIsOpen((prev) => !prev)}
+            >
+              <Filter className='w-4 h-4 min-w-4 min-h-4' />
             </Button>
           </div>
           <AnimatePresence>

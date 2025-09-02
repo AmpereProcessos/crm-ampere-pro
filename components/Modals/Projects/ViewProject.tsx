@@ -2,10 +2,11 @@ import ErrorComponent from '@/components/utils/ErrorComponent';
 import LoadingComponent from '@/components/utils/LoadingComponent';
 import ResponsiveDialogDrawerViewOnly from '@/components/utils/ResponsiveDialogDrawerViewOnly';
 import { getErrorMessage } from '@/lib/methods/errors';
-import { formatDateAsLocale, formatDecimalPlaces, formatLocation } from '@/lib/methods/formatting';
+import { formatDateAsLocale, formatDecimalPlaces, formatLocation, formatToMoney } from '@/lib/methods/formatting';
 import { TGetProjectsOutputById } from '@/pages/api/integration/app-ampere/projects';
 import { useProjectById } from '@/utils/queries/project';
 import {
+  BadgeDollarSign,
   Calendar,
   Code,
   Diamond,
@@ -71,6 +72,11 @@ function GeneralInformationBlock({ project }: { project: TGetProjectsOutputById 
       <div className='w-full flex flex-col gap-1.5'>
         <InformationItem icon={<Code className='w-4 h-4 min-w-4 min-h-4' />} label='ÍNDICE DE PROJETO' value={project.inxedador.toString()} />
         <InformationItem icon={<LayoutGrid className='w-4 h-4 min-w-4 min-h-4' />} label='TIPO DE SERVIÇO' value={project.tipo} />
+        <InformationItem
+          icon={<BadgeDollarSign className='w-4 h-4 min-w-4 min-h-4' />}
+          label='VALOR DO CONTRATO'
+          value={formatToMoney(project.valor)}
+        />
         <InformationItem
           icon={<Zap className='w-4 h-4 min-w-4 min-h-4' />}
           label='POTÊNCIA (kWp)'

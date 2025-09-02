@@ -60,6 +60,10 @@ export type TCreateStatsRouteInput = z.infer<typeof GeneralStatsFiltersSchema>;
 async function getStats(request: NextRequest) {
   const { user } = await getValidCurrentSessionUncached();
 
+  console.log('[INFO] [GET_STATS] Service called.', {
+    userId: user.id,
+    userName: user.nome,
+  });
   if (!user.permissoes.oportunidades.visualizar) {
     throw new createHttpError.Unauthorized('Usuário não possui permissão para visualizar oportunidades.');
   }

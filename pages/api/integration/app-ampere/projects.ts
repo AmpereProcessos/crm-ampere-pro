@@ -1,4 +1,5 @@
 import { TUserSession } from '@/lib/auth/session';
+import { getProjectContractValue } from '@/lib/project';
 import connectToAmpereProjectsDatabase from '@/services/mongodb/ampere/projects-db-connection';
 import connectToDatabase from '@/services/mongodb/crm-db-connection';
 import { apiHandler, validateAuthenticationWithSession } from '@/utils/api';
@@ -138,6 +139,13 @@ async function getProjects({ input, session }: { input: TGetProjectsInput; sessi
           numeroOuIdentificador: project.numeroResidencia,
           vendedor: project.vendedor?.nome,
           insider: project.insider,
+          valor: getProjectContractValue({
+            projectValue: project.sistema?.valorProjeto,
+            paValue: project.padrao?.valor,
+            structureValue: project.estruturaPersonalizada?.valor,
+            oemValue: project.oem?.valor,
+            insuranceValue: project.seguro?.valor,
+          }),
           metadados: {
             potencia: project.sistema?.potPico,
           },
@@ -248,6 +256,13 @@ async function getProjects({ input, session }: { input: TGetProjectsInput; sessi
           numeroOuIdentificador: project.numeroResidencia,
           vendedor: project.vendedor?.nome,
           insider: project.insider,
+          valor: getProjectContractValue({
+            projectValue: project.sistema?.valorProjeto,
+            paValue: project.padrao?.valor,
+            structureValue: project.estruturaPersonalizada?.valor,
+            oemValue: project.oem?.valor,
+            insuranceValue: project.seguro?.valor,
+          }),
           contrato: {
             status: project.contrato?.status,
             dataSolicitacao: project.contrato?.dataSolicitacao,
