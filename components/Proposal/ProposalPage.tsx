@@ -40,7 +40,7 @@ import { handleDownload } from '@/lib/methods/download';
 import { formatProposalPremissesLabel, formatProposalPremissesValue } from '@/utils/proposal';
 import type { TProposalDTOWithOpportunityAndClient, TProposalPremisses } from '@/utils/schemas/proposal.schema';
 import { getSalesProposalScenarios } from '@/utils/solar';
-import { CalendarRange, ChartArea, LayoutGrid, PiggyBank } from 'lucide-react';
+import { CalendarRange, ChartArea, Diamond, LayoutGrid, PiggyBank, ShoppingCart, Variable } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { BsCalendarPlus, BsFillFunnelFill } from 'react-icons/bs';
 import { FaTrophy } from 'react-icons/fa6';
@@ -206,13 +206,15 @@ function ProposalPage({ proposalId, session }: ProposalPageProps) {
                 <LayoutGrid className='h-4 w-4' />
                 <h1 className='text-xs font-medium tracking-tight uppercase'>RESUMO DA PROPOSTA</h1>
               </div>
-              <div className='flex min-h-[350px] w-full flex-col justify-around gap-3 lg:flex-row'>
-                <div className='flex h-full w-full flex-col rounded-sm border border-primary/50 bg-background p-6 shadow-md lg:w-1/4'>
-                  <div className='mb-2 flex w-full flex-col items-center'>
-                    <h1 className='w-full text-center text-lg font-bold text-[#15599a] dark:text-[#fead61]'>INFORMAÇÕES GERAIS</h1>
-                    <p className='text-center text-xs italic text-primary/70'>Essas são informações sobre a proposta.</p>
+              <div className='flex w-full flex-col justify-around gap-3 lg:flex-row items-stretch'>
+                <div className={'bg-card border-primary/20 flex w-full flex-col gap-4 rounded-xl border px-3 py-4 shadow-xs lg:w-1/4'}>
+                  <div className='flex items-center justify-between border-b border-primary/20 pb-2'>
+                    <h1 className='text-xs font-medium tracking-tight uppercase'>INFORMAÇÕES GERAIS</h1>
+                    <div className='flex items-center gap-2'>
+                      <Diamond className='h-4 w-4' />
+                    </div>
                   </div>
-                  <div className='flex w-full grow flex-col justify-around gap-3'>
+                  <div className='flex w-full flex-col justify-around gap-3'>
                     <div className='flex w-full flex-col items-center justify-between gap-1 lg:flex-row'>
                       <p className='text-xs font-medium leading-none tracking-tight text-primary/70'>NOME DA PROPOSTA</p>
                       <p className='text-base font-medium leading-none tracking-tight lg:text-xs'>{proposal.nome}</p>
@@ -294,12 +296,14 @@ function ProposalPage({ proposalId, session }: ProposalPageProps) {
                     ) : null}
                   </div>
                 </div>
-                <div className='flex h-full w-full flex-col rounded-sm border border-primary/50 bg-background p-6 shadow-md lg:w-1/4'>
-                  <div className='mb-2 flex w-full flex-col items-center'>
-                    <h1 className='w-full text-center text-lg font-bold text-[#15599a] dark:text-[#fead61]'>PREMISSAS</h1>
-                    <p className='text-center text-xs italic text-primary/70'>Essas são as premissas de dimensionamento dessa proposta.</p>
+                <div className={'bg-card border-primary/20 flex w-full flex-col gap-4 rounded-xl border px-3 py-4 shadow-xs lg:w-1/4'}>
+                  <div className='flex items-center justify-between border-b border-primary/20 pb-2'>
+                    <h1 className='text-xs font-medium tracking-tight uppercase'>PREMISSAS</h1>
+                    <div className='flex items-center gap-2'>
+                      <Variable className='h-4 w-4' />
+                    </div>
                   </div>
-                  <div className='flex w-full grow flex-col justify-around gap-3'>
+                  <div className='flex w-full flex-col justify-around gap-3'>
                     {Object.entries(proposal.premissas)
                       .filter(([key, value]) => !!value)
                       .map(([key, value], index) => (
@@ -314,77 +318,78 @@ function ProposalPage({ proposalId, session }: ProposalPageProps) {
                       ))}
                   </div>
                 </div>
-                <div className='flex h-full w-full flex-col rounded-sm border border-primary/50 bg-background p-6 shadow-md lg:w-1/4'>
-                  <div className='mb-2 flex w-full flex-col items-center'>
-                    <h1 className='w-full text-center text-lg font-bold text-[#15599a] dark:text-[#fead61]'>PRODUTOS</h1>
-                    <p className='text-center text-xs italic text-primary/70'>Esses são os produtos vinculados à essa proposta</p>
-                    <div className='mt-2 flex w-full flex-col gap-2'>
-                      {proposal.produtos.length > 0 ? (
-                        proposal.produtos.map((product, index) => (
-                          <div
-                            key={`${product.modelo}-${product.fabricante}`}
-                            className='mt-1 flex w-full flex-col rounded-md border border-primary/30 p-2'
-                          >
-                            <div className='flex w-full flex-col items-start justify-between gap-2'>
-                              <div className='flex items-center gap-1'>
-                                <div className='flex h-[25px] w-[25px] items-center justify-center rounded-full border border-black p-1 text-[15px]'>
-                                  {renderCategoryIcon(product.categoria)}
-                                </div>
-                                <p className='text-[0.6rem] font-medium leading-none tracking-tight lg:text-xs'>
-                                  <strong className='text-[#FF9B50]'>{product.qtde}</strong> x {product.modelo}
-                                </p>
-                              </div>
-                              <div className='flex w-full grow items-end justify-end gap-2 pl-2'>
-                                <div className='flex items-center gap-1'>
-                                  <FaIndustry size={15} />
-                                  <p className='text-[0.6rem] font-light text-primary/70'>{product.fabricante}</p>
-                                </div>
-                                <div className='flex items-center gap-1'>
-                                  <ImPower size={15} />
-                                  <p className='text-[0.6rem] font-light text-primary/70'>{product.potencia} W</p>
-                                </div>
-                                <div className='flex items-center gap-1'>
-                                  <AiOutlineSafety size={15} />
-                                  <p className='text-[0.6rem] font-light text-primary/70'>{product.garantia} ANOS</p>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        ))
-                      ) : (
-                        <p className='w-full text-center text-sm italic text-primary/70'>Nenhum produto vinculado à proposta...</p>
-                      )}
+                <div className={'bg-card border-primary/20 flex w-full flex-col gap-4 rounded-xl border px-3 py-4 shadow-xs lg:w-1/4'}>
+                  <div className='flex items-center justify-between border-b border-primary/20 pb-2'>
+                    <h1 className='text-xs font-medium tracking-tight uppercase'>PRODUTOS</h1>
+                    <div className='flex items-center gap-2'>
+                      <ShoppingCart className='h-4 w-4' />
                     </div>
                   </div>
-                </div>
-                <div className='flex h-full w-full flex-col rounded-sm border border-primary/50 bg-background p-6 shadow-md lg:w-1/4'>
-                  <div className='mb-2 flex w-full flex-col items-center'>
-                    <h1 className='w-full text-center text-lg font-bold text-[#15599a] dark:text-[#fead61]'>SERVIÇOS</h1>
-                    <p className='text-center text-xs italic text-primary/70'>Esses são os serviços vinculados à essa proposta</p>
-                    <div className='mt-2 flex w-full flex-col gap-2'>
-                      {proposal.servicos.length > 0 ? (
-                        proposal.servicos.map((service, index) => (
-                          <div key={`${service.descricao}`} className='mt-1 flex w-full flex-col rounded-md border border-primary/30 p-2'>
-                            <div className='flex w-full items-center justify-between gap-2'>
-                              <div className='flex  items-center gap-1'>
-                                <div className='flex h-[25px] w-[25px] items-center justify-center rounded-full border border-black p-1'>
-                                  <MdOutlineMiscellaneousServices />
-                                </div>
-                                <p className='text-[0.6rem] font-medium leading-none tracking-tight lg:text-xs'>{service.descricao}</p>
+                  <div className='flex w-full flex-col justify-around gap-3'>
+                    {proposal.produtos.length > 0 ? (
+                      proposal.produtos.map((product, index) => (
+                        <div key={`${product.modelo}-${product.fabricante}`} className='flex w-full flex-col rounded-md border border-primary/30 p-2'>
+                          <div className='flex w-full flex-col items-start justify-between gap-2'>
+                            <div className='flex items-center gap-1'>
+                              <div className='flex h-[25px] w-[25px] items-center justify-center rounded-full border border-black p-1 text-[15px]'>
+                                {renderCategoryIcon(product.categoria)}
                               </div>
-                              <div className='flex  grow items-center justify-end gap-2 pl-2'>
-                                <div className='flex items-center gap-1'>
-                                  <AiOutlineSafety size={15} />
-                                  <p className='text-[0.6rem] font-light text-primary/70'>{service.garantia} ANOS</p>
-                                </div>
+                              <p className='text-[0.6rem] font-medium leading-none tracking-tight lg:text-xs'>
+                                <strong className='text-[#FF9B50]'>{product.qtde}</strong> x {product.modelo}
+                              </p>
+                            </div>
+                            <div className='flex w-full grow items-end justify-end gap-2 pl-2'>
+                              <div className='flex items-center gap-1'>
+                                <FaIndustry size={15} />
+                                <p className='text-[0.6rem] font-light text-primary/70'>{product.fabricante}</p>
+                              </div>
+                              <div className='flex items-center gap-1'>
+                                <ImPower size={15} />
+                                <p className='text-[0.6rem] font-light text-primary/70'>{product.potencia} W</p>
+                              </div>
+                              <div className='flex items-center gap-1'>
+                                <AiOutlineSafety size={15} />
+                                <p className='text-[0.6rem] font-light text-primary/70'>{product.garantia} ANOS</p>
                               </div>
                             </div>
                           </div>
-                        ))
-                      ) : (
-                        <p className='w-full text-center text-sm italic text-primary/70'>Nenhum serviço vinculado à proposta...</p>
-                      )}
+                        </div>
+                      ))
+                    ) : (
+                      <p className='w-full text-center text-sm italic text-primary/70'>Nenhum produto vinculado à proposta...</p>
+                    )}
+                  </div>
+                </div>
+                <div className={'bg-card border-primary/20 flex w-full flex-col gap-4 rounded-xl border px-3 py-4 shadow-xs lg:w-1/4'}>
+                  <div className='flex items-center justify-between border-b border-primary/20 pb-2'>
+                    <h1 className='text-xs font-medium tracking-tight uppercase'>SERVIÇOS</h1>
+                    <div className='flex items-center gap-2'>
+                      <MdOutlineMiscellaneousServices className='h-4 w-4' />
                     </div>
+                  </div>
+                  <div className='flex w-full flex-col justify-around gap-3'>
+                    {proposal.servicos.length > 0 ? (
+                      proposal.servicos.map((service, index) => (
+                        <div key={`${service.descricao}`} className='flex w-full flex-col rounded-md border border-primary/30 p-2'>
+                          <div className='flex w-full items-center justify-between gap-2'>
+                            <div className='flex  items-center gap-1'>
+                              <div className='flex h-[25px] w-[25px] items-center justify-center rounded-full border border-black p-1'>
+                                <MdOutlineMiscellaneousServices />
+                              </div>
+                              <p className='text-[0.6rem] font-medium leading-none tracking-tight lg:text-xs'>{service.descricao}</p>
+                            </div>
+                            <div className='flex  grow items-center justify-end gap-2 pl-2'>
+                              <div className='flex items-center gap-1'>
+                                <AiOutlineSafety size={15} />
+                                <p className='text-[0.6rem] font-light text-primary/70'>{service.garantia} ANOS</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <p className='w-full text-center text-sm italic text-primary/70'>Nenhum serviço vinculado à proposta...</p>
+                    )}
                   </div>
                 </div>
               </div>
