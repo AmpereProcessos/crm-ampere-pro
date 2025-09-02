@@ -7,7 +7,7 @@ import { TLead } from '@/utils/schemas/leads.schema';
 import { useMutation } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { GeneralBlock, QualificationBlock } from './LeadContent';
+import { GeneralBlock, QualificationBlock } from './Blocks/LeadContent';
 
 type EditLeadProps = {
   leadId: string;
@@ -48,6 +48,9 @@ export default function EditLead({ leadId, closeModal, callbacks, sessionUser }:
   function updateInfoHolder(newInfo: Partial<TLead>) {
     setInfoHolder((prev) => ({ ...prev, ...newInfo }));
   }
+  function updateQualification(newInfo: Partial<TLead['qualificacao']>) {
+    setInfoHolder((prev) => ({ ...prev, qualificacao: { ...prev.qualificacao, ...newInfo } }));
+  }
   const { mutate: handleUpdateLeadMutation, isPending } = useMutation({
     mutationFn: updateLead,
     mutationKey: ['update-lead', leadId],
@@ -80,8 +83,15 @@ export default function EditLead({ leadId, closeModal, callbacks, sessionUser }:
       actionIsPending={isPending}
       stateIsLoading={isLoading}
     >
-      <QualificationBlock infoHolder={infoHolder} updateInfoHolder={updateInfoHolder} />
-      <GeneralBlock infoHolder={infoHolder} updateInfoHolder={updateInfoHolder} />
+      <GeneralBlock
+        name={infoHolder.nome}
+        phone={infoHolder.telefone}
+        uf={infoHolder.uf}
+        city={infoHolder.cidade}
+        acquisitionChannel={infoHolder.canalAquisicao}
+        updateInfoHolder={updateInfoHolder}
+      />
+      <QualificationBlock qualification={infoHolder.qualificacao} updateQualification={updateQualification} />
     </ResponsiveDialogDrawer>
   );
 }

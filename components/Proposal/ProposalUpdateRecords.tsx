@@ -1,4 +1,5 @@
 import { useProposalUpdateRecords } from '@/utils/queries/proposal-update-records';
+import { Library } from 'lucide-react';
 import ProposalUpdateRecord from '../Cards/ProposalUpdateRecord';
 import ErrorComponent from '../utils/ErrorComponent';
 import LoadingComponent from '../utils/LoadingComponent';
@@ -9,8 +10,11 @@ type ProposalUpdateRecordsProps = {
 function ProposalUpdateRecords({ proposalId }: ProposalUpdateRecordsProps) {
   const { data: records, isLoading, isError, isSuccess } = useProposalUpdateRecords({ proposalId });
   return (
-    <div className='mt-2 flex w-full flex-col gap-1 rounded-sm border border-primary/50 bg-background shadow-md'>
-      <h1 className='w-full bg-yellow-500 p-2 text-center font-bold'>REGISTROS DE ALTERAÇÃO</h1>
+    <div className='bg-card border-primary/20 flex w-full flex-col gap-3 rounded-xl border px-3 py-4 shadow-xs'>
+      <div className='flex w-full items-center gap-1'>
+        <Library className='h-4 w-4' />
+        <h1 className='text-xs font-medium tracking-tight uppercase'>REGISTROS DE ALTERAÇÃO</h1>
+      </div>
       <div className='flex min-h-[50px] w-full flex-col gap-2 p-2'>
         {isLoading ? <LoadingComponent /> : null} {isError ? <ErrorComponent msg='Erro ao buscar registros de alteração.' /> : null}
         {isSuccess ? (

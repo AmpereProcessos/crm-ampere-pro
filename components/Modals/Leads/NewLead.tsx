@@ -6,7 +6,7 @@ import { TLead } from '@/utils/schemas/leads.schema';
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
-import { GeneralBlock, QualificationBlock } from './LeadContent';
+import { GeneralBlock, QualificationBlock } from './Blocks/LeadContent';
 
 type NewLeadProps = {
   sessionUser: TUserSession;
@@ -45,6 +45,9 @@ export default function NewLead({ closeModal, callbacks, sessionUser }: NewLeadP
   function updateInfoHolder(newInfo: Partial<TLead>) {
     setInfoHolder((prev) => ({ ...prev, ...newInfo }));
   }
+  function updateQualification(newInfo: Partial<TLead['qualificacao']>) {
+    setInfoHolder((prev) => ({ ...prev, qualificacao: { ...prev.qualificacao, ...newInfo } }));
+  }
   const { mutate: handleCreateLeadMutation, isPending } = useMutation({
     mutationFn: createLead,
     mutationKey: ['create-lead'],
@@ -63,6 +66,7 @@ export default function NewLead({ closeModal, callbacks, sessionUser }: NewLeadP
       if (callbacks?.onError) callbacks.onError(error);
     },
   });
+
   return (
     <ResponsiveDialogDrawer
       menuTitle='NOVO LEAD'
@@ -74,8 +78,15 @@ export default function NewLead({ closeModal, callbacks, sessionUser }: NewLeadP
       actionIsPending={isPending}
       stateIsLoading={false}
     >
-      <QualificationBlock infoHolder={infoHolder} updateInfoHolder={updateInfoHolder} />
-      <GeneralBlock infoHolder={infoHolder} updateInfoHolder={updateInfoHolder} />
+      <GeneralBlock
+        name={infoHolder.nome}
+        phone={infoHolder.telefone}
+        uf={infoHolder.uf}
+        city={infoHolder.cidade}
+        acquisitionChannel={infoHolder.canalAquisicao}
+        updateInfoHolder={updateInfoHolder}
+      />
+      <QualificationBlock qualification={infoHolder.qualificacao} updateQualification={updateQualification} />
     </ResponsiveDialogDrawer>
   );
 }

@@ -51,10 +51,23 @@ export const LeadQualificationSchema = z.object({
 });
 
 export const LeadConversionSchema = z.object({
-  idOportunidade: z.string({
-    required_error: 'ID da oportunidade não informado.',
-    invalid_type_error: 'Tipo não válido para o ID da oportunidade.',
-  }),
+  oportunidade: z
+    .object({
+      id: z.string({
+        required_error: 'ID da oportunidade não informado.',
+        invalid_type_error: 'Tipo não válido para o ID da oportunidade.',
+      }),
+      nome: z.string({
+        required_error: 'Nome da oportunidade não informado.',
+        invalid_type_error: 'Tipo não válido para o nome da oportunidade.',
+      }),
+      identificador: z.string({
+        required_error: 'Identificador da oportunidade não informado.',
+        invalid_type_error: 'Tipo não válido para o identificador da oportunidade.',
+      }),
+    })
+    .optional()
+    .nullable(),
   // User to which the opportnity was assigned to
   atribuido: AuthorSchema.optional().nullable(),
   data: z.string({

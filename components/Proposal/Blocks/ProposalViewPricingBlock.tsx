@@ -35,7 +35,7 @@ function ProposalViewPricingBlock({ userHasPricingViewPermission, pricing }: Pro
                 const calculatedProfitMargin = getProfitMargin(custoCalculado, valorCalculado);
                 return (
                   <div
-                    className={`flex w-full items-center rounded-sm ${Math.abs(valorFinal - valorCalculado) > 1 ? 'bg-orange-200' : ''}`}
+                    className={`flex w-full items-center ${Math.abs(valorFinal - valorCalculado) > 1 ? 'bg-orange-200 dark:bg-orange-900' : ''}`}
                     key={index}
                   >
                     <div className='flex w-6/12 items-center justify-center p-1'>

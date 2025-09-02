@@ -10,6 +10,7 @@ import EditLead from '@/components/Modals/Leads/EditLead';
 import NewLead from '@/components/Modals/Leads/NewLead';
 import NewManyLeads from '@/components/Modals/Leads/NewManyLeads';
 import QualifyLead from '@/components/Modals/Leads/QualifyLead';
+import UpgrateLead from '@/components/Modals/Leads/UpgradeLead';
 import { Sidebar } from '@/components/Sidebar';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -28,7 +29,7 @@ import { useOpportunityCreators } from '@/utils/queries/users';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Filter, MapPin, UserRound } from 'lucide-react';
+import { CircleFadingArrowUp, Filter, MapPin, UserRound } from 'lucide-react';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { BsCalendarPlus } from 'react-icons/bs';
@@ -42,6 +43,7 @@ export default function LeadsPage({ session }: LeadsPageProps) {
   const [newManyLeadsMenuIsOpen, setNewManyLeadsMenuIsOpen] = useState(false);
   const [editLeadMenuId, setEditLeadMenuId] = useState<string | null>(null);
   const [qualifyLeadMenuId, setQualifyLeadMenuId] = useState<string | null>(null);
+  const [upgrateLeadMenuId, setUpgrateLeadMenuId] = useState<string | null>(null);
   const [filterMenuIsOpen, setFilterMenuIsOpen] = useState(false);
   const { data: leadsResult, isLoading, isError, isSuccess, queryKey, filters, updateFilters, error } = useLeads();
 
@@ -96,6 +98,7 @@ export default function LeadsPage({ session }: LeadsPageProps) {
                   lead={lead}
                   handleQualifyClick={() => setQualifyLeadMenuId(lead._id)}
                   handleEditClick={() => setEditLeadMenuId(lead._id)}
+                  handleUpgrateClick={() => setUpgrateLeadMenuId(lead._id)}
                   callbacks={{ onMutate: handleOnMutate, onSettled: handleOnSettle }}
                 />
               ))}
@@ -139,7 +142,19 @@ export default function LeadsPage({ session }: LeadsPageProps) {
       {qualifyLeadMenuId ? (
         <QualifyLead
           leadId={qualifyLeadMenuId}
+          sessionUser={session}
           closeModal={() => setQualifyLeadMenuId(null)}
+          callbacks={{
+            onMutate: handleOnMutate,
+            onSettled: handleOnSettle,
+          }}
+        />
+      ) : null}
+      {upgrateLeadMenuId ? (
+        <UpgrateLead
+          leadId={upgrateLeadMenuId}
+          sessionUser={session}
+          closeModal={() => setUpgrateLeadMenuId(null)}
           callbacks={{
             onMutate: handleOnMutate,
             onSettled: handleOnSettle,
@@ -278,12 +293,13 @@ type LeadCardProps = {
   lead: TGetLeadsOutputDefault['leads'][number];
   handleQualifyClick: () => void;
   handleEditClick: () => void;
+  handleUpgrateClick: () => void;
   callbacks: {
     onMutate: () => void;
     onSettled: () => void;
   };
 };
-function LeadCard({ lead, handleQualifyClick, handleEditClick, callbacks }: LeadCardProps) {
+function LeadCard({ lead, handleQualifyClick, handleEditClick, handleUpgrateClick, callbacks }: LeadCardProps) {
   function QualificationTag({ qualification }: { qualification: TGetLeadsOutputDefault['leads'][number]['qualificacao'] }) {
     if (!qualification.data)
       return <h3 className={cn('px-2 py-0.5 rounded-lg text-[0.6rem] font-medium bg-red-200 text-red-700')}>QUALIFICAÇÃO PENDENTE</h3>;
@@ -383,19 +399,30 @@ function LeadCard({ lead, handleQualifyClick, handleEditClick, callbacks }: Lead
             </div>
           ) : null}
         </div>
-        <div className='flex items-center gap-2 flex-wrap'>
-          <Button variant='ghost' size='fit' className='text-xs px-2 py-1' onClick={() => handleUpdateLeadMutation()} disabled={isPending}>
-            NOTIFICAR CONTATO
-          </Button>
-          {!lead.qualificacao.data ? (
-            <Button variant='ghost' size='fit' className='text-xs px-2 py-1' onClick={handleQualifyClick}>
-              QUALIFICAR
+        {lead.conversao ? (
+          <h3 className={cn('px-2 py-0.5 rounded-lg text-[0.6rem] font-medium bg-green-200 text-green-70')}>
+            CONVERTIDO NO {lead.conversao.oportunidade?.identificador} {formatDateAsLocale(lead.conversao.data, true)}
+          </h3>
+        ) : (
+          <div className='flex items-center gap-2 flex-wrap'>
+            <Button variant='ghost' size='fit' className='text-xs px-2 py-1' onClick={() => handleUpdateLeadMutation()} disabled={isPending}>
+              NOTIFICAR CONTATO
             </Button>
-          ) : null}
-          <Button variant='ghost' size='fit' className='text-xs px-2 py-1' onClick={handleEditClick}>
-            EDITAR
-          </Button>
-        </div>
+            {!lead.qualificacao.data ? (
+              <Button variant='ghost' size='fit' className='text-xs px-2 py-1' onClick={handleQualifyClick}>
+                QUALIFICAR
+              </Button>
+            ) : null}
+            <Button variant='ghost' size='fit' className='text-xs px-2 py-1' onClick={handleEditClick}>
+              EDITAR
+            </Button>
+
+            <Button variant='ghost' size='fit' className='flex items-center gap-1 text-xs px-2 py-1' onClick={handleUpgrateClick}>
+              <CircleFadingArrowUp className='w-3 h-3 min-w-3 min-h-3' />
+              GERAR OPORTUNIDADE
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );
