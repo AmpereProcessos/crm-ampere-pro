@@ -91,7 +91,7 @@ export const EmbeddedOpportunityProposalSchema = z.object({
   potenciaPico: z.number({
     required_error: 'Potência pico da proposta não informada.',
     invalid_type_error: 'Tipo não válido para potência pico da proposta.',
-  }),
+  }).optional().nullable(),
   urlArquivo: z
     .string({
       required_error: 'URL do arquivo da proposta não informada.',
