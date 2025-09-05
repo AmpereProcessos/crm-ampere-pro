@@ -102,8 +102,14 @@ export const EmbeddedOpportunityProposalSchema = z.object({
 });
 
 export const GeneralOpportunitySchema = z.object({
-  nome: z.string(),
-  idParceiro: z.string(),
+  idParceiro: z.string({
+    required_error: 'ID de referência do parceiro não informado.',
+    invalid_type_error: 'Tipo não válido para o ID de referência do parceiro.',
+  }),
+  nome: z.string({
+    required_error: 'Nome da oportunidade não informado.',
+    invalid_type_error: 'Tipo não válido para o nome da oportunidade.',
+  }),
   tipo: z.object({
     id: z
       .string({
@@ -117,8 +123,14 @@ export const GeneralOpportunitySchema = z.object({
     }),
   }),
   categoriaVenda: SaleCategorySchema,
-  descricao: z.string(),
-  identificador: z.string(),
+  descricao: z.string({
+    required_error: 'Descrição da oportunidade não informada.',
+    invalid_type_error: 'Tipo não válido para a descrição da oportunidade.',
+  }),
+  identificador: z.string({
+    required_error: 'Identificador da oportunidade não informado.',
+    invalid_type_error: 'Tipo não válido para o identificador da oportunidade.',
+  }),
   responsaveis: z
     .array(OpportunityResponsibleSchema, {
       required_error: 'Responsável(is) da oportunidade não informados.',
