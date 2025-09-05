@@ -1,10 +1,12 @@
-import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
 import type { TGetActivitiesRouteOutput } from "@/app/api/activities/route";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 
 async function fetchActivityById({ id }: { id: string }) {
 	try {
-		const { data }: { data: TGetActivitiesRouteOutput } = await axios.get(`/api/activities?id=${id}`);
+		const { data }: { data: TGetActivitiesRouteOutput } = await axios.get(
+			`/api/activities?id=${id}`,
+		);
 		if (!data.data.byId) throw new Error("Atividade não encontrada.");
 		return data.data.byId;
 	} catch (error) {
@@ -20,29 +22,52 @@ export function useActivityById({ id }: { id: string }) {
 	});
 }
 
-type UseActivitiesByOpportunityIdParams = { opportunityId: string; openOnly?: boolean; dueOnly?: boolean };
-async function fetchActivitiesByOpportunityId({ opportunityId, openOnly, dueOnly }: UseActivitiesByOpportunityIdParams) {
+type UseActivitiesByOpportunityIdParams = {
+	opportunityId: string;
+	openOnly?: boolean;
+	dueOnly?: boolean;
+};
+async function fetchActivitiesByOpportunityId({
+	opportunityId,
+	openOnly,
+	dueOnly,
+}: UseActivitiesByOpportunityIdParams) {
 	try {
 		let url = `/api/activities?opportunityId=${opportunityId}`;
 		if (openOnly) url += `&openOnly=${openOnly}`;
 		if (dueOnly) url += `&dueOnly=${dueOnly}`;
 		const { data }: { data: TGetActivitiesRouteOutput } = await axios.get(url);
+		if (!data.data.byOpportunityId)
+			throw new Error("Atividades não encontradas.");
 		return data.data.byOpportunityId;
 	} catch (error) {
 		console.log("[ERROR] - fetchActivitiesByOpportunityId", error);
 		throw error;
 	}
 }
-export function useActivitiesByOpportunityId({ opportunityId, openOnly, dueOnly }: UseActivitiesByOpportunityIdParams) {
+export function useActivitiesByOpportunityId({
+	opportunityId,
+	openOnly,
+	dueOnly,
+}: UseActivitiesByOpportunityIdParams) {
 	return useQuery({
 		queryKey: ["opportunity-activities", opportunityId],
-		queryFn: async () => await fetchActivitiesByOpportunityId({ opportunityId, openOnly, dueOnly }),
+		queryFn: async () =>
+			await fetchActivitiesByOpportunityId({
+				opportunityId,
+				openOnly,
+				dueOnly,
+			}),
 	});
 }
 
-async function fetchActivitiesByHomologationId({ homologationId }: { homologationId: string }) {
+async function fetchActivitiesByHomologationId({
+	homologationId,
+}: { homologationId: string }) {
 	try {
-		const { data }: { data: TGetActivitiesRouteOutput } = await axios.get(`/api/activities?homologationId=${homologationId}`);
+		const { data }: { data: TGetActivitiesRouteOutput } = await axios.get(
+			`/api/activities?homologationId=${homologationId}`,
+		);
 		return data.data.byHomologationId;
 	} catch (error) {
 		console.log("[ERROR] - fetchActivitiesByHomologationId", error);
@@ -50,16 +75,23 @@ async function fetchActivitiesByHomologationId({ homologationId }: { homologatio
 	}
 }
 
-export function useActivitiesByHomologationId({ homologationId }: { homologationId: string }) {
+export function useActivitiesByHomologationId({
+	homologationId,
+}: { homologationId: string }) {
 	return useQuery({
 		queryKey: ["homologation-activities", homologationId],
-		queryFn: async () => await fetchActivitiesByHomologationId({ homologationId }),
+		queryFn: async () =>
+			await fetchActivitiesByHomologationId({ homologationId }),
 	});
 }
 
-async function fetchActivitiesByTechnicalAnalysisId({ technicalAnalysisId }: { technicalAnalysisId: string }) {
+async function fetchActivitiesByTechnicalAnalysisId({
+	technicalAnalysisId,
+}: { technicalAnalysisId: string }) {
 	try {
-		const { data }: { data: TGetActivitiesRouteOutput } = await axios.get(`/api/activities?technicalAnalysisId=${technicalAnalysisId}`);
+		const { data }: { data: TGetActivitiesRouteOutput } = await axios.get(
+			`/api/activities?technicalAnalysisId=${technicalAnalysisId}`,
+		);
 		return data.data.byTechnicalAnalysisId;
 	} catch (error) {
 		console.log("[ERROR] - fetchActivitiesByTechnicalAnalysisId", error);
@@ -67,15 +99,22 @@ async function fetchActivitiesByTechnicalAnalysisId({ technicalAnalysisId }: { t
 	}
 }
 
-export function useActivitiesByTechnicalAnalysisId({ technicalAnalysisId }: { technicalAnalysisId: string }) {
+export function useActivitiesByTechnicalAnalysisId({
+	technicalAnalysisId,
+}: { technicalAnalysisId: string }) {
 	return useQuery({
 		queryKey: ["technical-analysis-activities", technicalAnalysisId],
-		queryFn: async () => await fetchActivitiesByTechnicalAnalysisId({ technicalAnalysisId }),
+		queryFn: async () =>
+			await fetchActivitiesByTechnicalAnalysisId({ technicalAnalysisId }),
 	});
 }
-async function fetchActivitiesByPurchaseId({ purchaseId }: { purchaseId: string }) {
+async function fetchActivitiesByPurchaseId({
+	purchaseId,
+}: { purchaseId: string }) {
 	try {
-		const { data }: { data: TGetActivitiesRouteOutput } = await axios.get(`/api/activities?purchaseId=${purchaseId}`);
+		const { data }: { data: TGetActivitiesRouteOutput } = await axios.get(
+			`/api/activities?purchaseId=${purchaseId}`,
+		);
 		return data.data.byPurchaseId;
 	} catch (error) {
 		console.log("[ERROR] - fetchActivitiesByPurchaseId", error);
@@ -83,23 +122,35 @@ async function fetchActivitiesByPurchaseId({ purchaseId }: { purchaseId: string 
 	}
 }
 
-export function useActivitiesByPurchaseId({ purchaseId }: { purchaseId: string }) {
+export function useActivitiesByPurchaseId({
+	purchaseId,
+}: { purchaseId: string }) {
 	return useQuery({
 		queryKey: ["purchase-activities", purchaseId],
 		queryFn: async () => await fetchActivitiesByPurchaseId({ purchaseId }),
 	});
 }
 
-async function fetchActivities({ responsibleIds, openOnly, dueOnly }: { responsibleIds?: string[] | null; openOnly?: boolean; dueOnly?: boolean }) {
+async function fetchActivities({
+	responsibleIds,
+	openOnly,
+	dueOnly,
+}: {
+	responsibleIds?: string[] | null;
+	openOnly?: boolean;
+	dueOnly?: boolean;
+}) {
 	try {
 		const baseUrl = "/api/activities?";
 		const params = new URLSearchParams();
 		if (openOnly) params.append("openOnly", String(openOnly));
 		if (dueOnly) params.append("dueOnly", String(dueOnly));
-		if (responsibleIds) params.append("responsiblesId", responsibleIds.join(","));
+		if (responsibleIds)
+			params.append("responsiblesId", responsibleIds.join(","));
 		const url = baseUrl + params.toString();
 		const { data }: { data: TGetActivitiesRouteOutput } = await axios.get(url);
-		if (responsibleIds && responsibleIds.length > 0) return data.data.byResponsibleId;
+		if (responsibleIds && responsibleIds.length > 0)
+			return data.data.byResponsibleId;
 		return data.data.default;
 	} catch (error) {
 		console.log("[ERROR] - fetchActivities", error);
@@ -107,9 +158,18 @@ async function fetchActivities({ responsibleIds, openOnly, dueOnly }: { responsi
 	}
 }
 
-export function useActivities({ responsibleIds, openOnly, dueOnly }: { responsibleIds?: string[] | null; openOnly?: boolean; dueOnly?: boolean }) {
+export function useActivities({
+	responsibleIds,
+	openOnly,
+	dueOnly,
+}: {
+	responsibleIds?: string[] | null;
+	openOnly?: boolean;
+	dueOnly?: boolean;
+}) {
 	return useQuery({
 		queryKey: ["activities", responsibleIds, openOnly, dueOnly],
-		queryFn: async () => await fetchActivities({ responsibleIds, openOnly, dueOnly }),
+		queryFn: async () =>
+			await fetchActivities({ responsibleIds, openOnly, dueOnly }),
 	});
 }
