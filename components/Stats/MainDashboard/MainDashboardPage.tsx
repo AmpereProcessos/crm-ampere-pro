@@ -53,7 +53,7 @@ import { FaBolt } from "react-icons/fa";
 import { FaListCheck } from "react-icons/fa6";
 import { VscDiffAdded } from "react-icons/vsc";
 import { Area, CartesianGrid, ComposedChart, XAxis, YAxis } from "recharts";
-import SellersRanking from "../rankings/SellersRanking";
+import SellersRanking from "../rankings/Rankings";
 import OpenActivitiesBlock from "./OpenActivitiesBlock";
 import PPSOpenCallsBlock from "./PPSOpenCallsBlock";
 import PendingWinsBlock from "./PendingWinsBlock";
@@ -636,7 +636,7 @@ function GraphData({
 				<div className="flex max-h-[400px] min-h-[400px] w-full items-center justify-center lg:max-h-[350px] lg:min-h-[350px]">
 					<ChartContainer
 						config={firstPeriodChartConfig}
-						className="aspect-auto h-[350px] w-full lg:h-[250px]"
+						className="aspect-auto h-[350px] w-full lg:h-[300px]"
 					>
 						<ComposedChart
 							data={data || []}

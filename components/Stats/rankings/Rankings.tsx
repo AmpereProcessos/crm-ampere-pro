@@ -1,19 +1,27 @@
 import { AnimatedSpinner } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { useSDRRanking, useSellersRanking } from "@/utils/queries/stats";
+import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import NonPodiumCard from "./NonPodiumCard";
 import PodiumCard from "./PodiumCard";
 
 export default function Rankings() {
 	const [ranking, setRanking] = useState<"sellers" | "sdrs">("sellers");
+	const [direction, setDirection] = useState(1);
+
+	const handleSetRanking = (next: "sellers" | "sdrs") => {
+		setDirection(ranking === "sellers" && next === "sdrs" ? 1 : -1);
+		setRanking(next);
+	};
 
 	useEffect(() => {
 		const intervalId = setInterval(() => {
+			setDirection(ranking === "sellers" ? 1 : -1);
 			setRanking((prev) => (prev === "sellers" ? "sdrs" : "sellers"));
-		}, 5000);
+		}, 10000);
 		return () => clearInterval(intervalId);
-	}, []);
+	}, [ranking]);
 
 	return (
 		<div className="bg-card border-primary/20 flex w-full flex-col gap-3 rounded-xl border px-3 py-4 shadow-xs h-full">
@@ -22,7 +30,7 @@ export default function Rankings() {
 					variant={ranking === "sellers" ? "default" : "ghost"}
 					size="fit"
 					className="rounded-lg px-2 py-1 text-xs"
-					onClick={() => setRanking("sellers")}
+					onClick={() => handleSetRanking("sellers")}
 				>
 					RANKING DE VENDEDORES
 				</Button>
@@ -30,12 +38,25 @@ export default function Rankings() {
 					variant={ranking === "sdrs" ? "default" : "ghost"}
 					size="fit"
 					className="rounded-lg px-2 py-1 text-xs"
-					onClick={() => setRanking("sdrs")}
+					onClick={() => handleSetRanking("sdrs")}
 				>
 					RANKING DE SDRS
 				</Button>
 			</div>
-			{ranking === "sellers" ? <SellerRanking /> : <SdrsRanking />}
+			<div className="relative w-full grow">
+				<AnimatePresence mode="wait" initial={false}>
+					<motion.div
+						key={ranking}
+						initial={{ opacity: 0, x: 40 * direction }}
+						animate={{ opacity: 1, x: 0 }}
+						exit={{ opacity: 0, x: -40 * direction }}
+						transition={{ duration: 0.3, ease: "easeOut" }}
+						className="w-full"
+					>
+						{ranking === "sellers" ? <SellerRanking /> : <SdrsRanking />}
+					</motion.div>
+				</AnimatePresence>
+			</div>
 		</div>
 	);
 }
@@ -53,7 +74,7 @@ export function SellerRanking() {
 
 	if (isLoading) {
 		return (
-			<div className="w-full grow flex items-center justify-center gap-2">
+			<div className="w-full h-full flex items-center justify-center gap-2">
 				<AnimatedSpinner className="h-4 w-4" />
 				<span className="text-primary text-xs font-bold animate-pulse">
 					Carregando...
@@ -63,7 +84,7 @@ export function SellerRanking() {
 	}
 	if (isError) {
 		return (
-			<div className="w-full grow flex items-center justify-center">
+			<div className="w-full h-full flex items-center justify-center">
 				<span className="text-primary text-xs font-bold">
 					Erro ao carregar o ranking
 				</span>
@@ -144,7 +165,7 @@ export function SdrsRanking() {
 
 	if (isLoading) {
 		return (
-			<div className="w-full grow flex items-center justify-center gap-2">
+			<div className="w-full h-full flex items-center justify-center gap-2">
 				<AnimatedSpinner className="h-4 w-4" />
 				<span className="text-primary text-xs font-bold animate-pulse">
 					Carregando...
@@ -154,7 +175,7 @@ export function SdrsRanking() {
 	}
 	if (isError) {
 		return (
-			<div className="w-full grow flex items-center justify-center">
+			<div className="w-full h-full flex items-center justify-center">
 				<span className="text-primary text-xs font-bold">
 					Erro ao carregar o ranking
 				</span>
