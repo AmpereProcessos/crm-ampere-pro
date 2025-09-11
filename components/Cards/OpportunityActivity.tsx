@@ -63,7 +63,7 @@ function OpportunityActivity({
 					<button
 						type="button"
 						className={
-							"flex h-[16px] w-[16px] cursor-pointer items-center justify-center rounded-full border border-black"
+							"flex h-[16px] w-[16px] cursor-pointer items-center justify-center rounded-full border border-primary"
 						}
 						onClick={() =>
 							// @ts-ignore

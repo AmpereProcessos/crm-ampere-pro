@@ -1,6 +1,3 @@
-import { useMutation } from "@tanstack/react-query";
-import { useEffect } from "react";
-import toast from "react-hot-toast";
 import ErrorComponent from "@/components/utils/ErrorComponent";
 import LoadingComponent from "@/components/utils/LoadingComponent";
 import ResponsiveDialogDrawer from "@/components/utils/ResponsiveDialogDrawer";
@@ -9,6 +6,9 @@ import { getErrorMessage } from "@/lib/methods/errors";
 import { updateGoal } from "@/utils/mutations/goals";
 import { useGoalById } from "@/utils/queries/goals";
 import { useGoalStore, useGoalStoreWithSync } from "@/utils/stores/goal-store";
+import { useMutation } from "@tanstack/react-query";
+import { useEffect } from "react";
+import toast from "react-hot-toast";
 import { GoalGeneralBlock } from "./blocks/General";
 import GoalUsersBlock from "./blocks/Users";
 import GoalValuesBlock from "./blocks/Values";
@@ -24,7 +24,14 @@ type EditGoalProps = {
 	};
 };
 function EditGoal({ goalId, closeMenu, callbacks, session }: EditGoalProps) {
-	return <EditGoalContent callbacks={callbacks} closeMenu={closeMenu} goalId={goalId} session={session} />;
+	return (
+		<EditGoalContent
+			callbacks={callbacks}
+			closeMenu={closeMenu}
+			goalId={goalId}
+			session={session}
+		/>
+	);
 }
 export default EditGoal;
 
@@ -38,8 +45,19 @@ type EditGoalContentProps = {
 		onSettled?: () => void;
 	};
 };
-function EditGoalContent({ goalId, session, closeMenu, callbacks }: EditGoalContentProps) {
-	const { data: fetchedGoal, isLoading: isLoadingGoal, isError: isErrorGoal, isSuccess: isSuccessGoal, error: errorGoal } = useGoalById({ id: goalId });
+function EditGoalContent({
+	goalId,
+	session,
+	closeMenu,
+	callbacks,
+}: EditGoalContentProps) {
+	const {
+		data: fetchedGoal,
+		isLoading: isLoadingGoal,
+		isError: isErrorGoal,
+		isSuccess: isSuccessGoal,
+		error: errorGoal,
+	} = useGoalById({ id: goalId });
 
 	const getGoal = useGoalStoreWithSync(fetchedGoal)((s) => s.getGoal);
 	const reset = useGoalStoreWithSync(fetchedGoal)((s) => s.reset);
@@ -73,7 +91,7 @@ function EditGoalContent({ goalId, session, closeMenu, callbacks }: EditGoalCont
 					id: goalId,
 				});
 			}}
-			actionIsPending={isPending}
+			actionIsLoading={isPending}
 			closeMenu={closeMenu}
 			dialogContentClassName="min-w-[50%]"
 			menuActionButtonText="CRIAR META"
@@ -84,10 +102,13 @@ function EditGoalContent({ goalId, session, closeMenu, callbacks }: EditGoalCont
 		>
 			{isLoadingGoal ? <LoadingComponent /> : null}
 			{isErrorGoal ? <ErrorComponent msg={getErrorMessage(errorGoal)} /> : null}
-			{isSuccessGoal ? <><GoalGeneralBlock />
-			<GoalValuesBlock />
-			<GoalUsersBlock /></>: null}
-			
+			{isSuccessGoal ? (
+				<>
+					<GoalGeneralBlock />
+					<GoalValuesBlock />
+					<GoalUsersBlock />
+				</>
+			) : null}
 		</ResponsiveDialogDrawer>
 	);
 }

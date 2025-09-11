@@ -1,6 +1,3 @@
-import { BadgeDollarSign, Check, Goal, Percent, Plus, Send, UsersRound, Zap } from "lucide-react";
-import { useState } from "react";
-import toast from "react-hot-toast";
 import NumberInput from "@/components/Inputs/NumberInput";
 import SelectWithImages from "@/components/Inputs/SelectWithImages";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -10,6 +7,18 @@ import { formatNameAsInitials } from "@/lib/methods/formatting";
 import { useOpportunityCreators } from "@/utils/queries/users";
 import type { TGoal } from "@/utils/schemas/goal.schema";
 import { type TGoalStore, useGoalStore } from "@/utils/stores/goal-store";
+import {
+	BadgeDollarSign,
+	Check,
+	Goal,
+	Percent,
+	Plus,
+	Send,
+	UsersRound,
+	Zap,
+} from "lucide-react";
+import { useState } from "react";
+import toast from "react-hot-toast";
 
 function GoalUsersBlock() {
 	const [newUserModalIsOpen, setNewUserModalIsOpen] = useState(false);
@@ -29,10 +38,17 @@ function GoalUsersBlock() {
 		<div className="flex w-full flex-col gap-2">
 			<div className="flex w-fit items-center gap-2 rounded-sm bg-primary/20 px-2 py-1">
 				<UsersRound size={15} />
-				<h1 className="w-fit text-start font-medium text-xs tracking-tight">USUÁRIOS</h1>
+				<h1 className="w-fit text-start font-medium text-xs tracking-tight">
+					USUÁRIOS
+				</h1>
 			</div>
 			<div className="flex w-full items-center justify-end">
-				<Button className="text-xs" onClick={() => setNewUserModalIsOpen(true)} size={"fit"} variant={"ghost"}>
+				<Button
+					className="text-xs"
+					onClick={() => setNewUserModalIsOpen(true)}
+					size={"fit"}
+					variant={"ghost"}
+				>
 					ADICIONAR META DE USUÁRIO
 				</Button>
 			</div>
@@ -40,19 +56,31 @@ function GoalUsersBlock() {
 				{users.map((user) => (
 					<UserCard
 						handleEditClick={() => setEditUserModalId(user.id)}
-						handleRemoveClick={() => removeUser(users.findIndex((u) => u.id === user.id))}
+						handleRemoveClick={() =>
+							removeUser(users.findIndex((u) => u.id === user.id))
+						}
 						index={users.findIndex((u) => u.id === user.id)}
 						key={user.id}
 						user={user}
 					/>
 				))}
 			</div>
-			{newUserModalIsOpen ? <NewUserMenu addUser={handleAddUser} closeMenu={() => setNewUserModalIsOpen(false)} /> : null}
+			{newUserModalIsOpen ? (
+				<NewUserMenu
+					addUser={handleAddUser}
+					closeMenu={() => setNewUserModalIsOpen(false)}
+				/>
+			) : null}
 			{editUserModalId && editingUser ? (
 				<EditUserMenu
 					closeMenu={() => setEditUserModalId(null)}
 					initialUser={editingUser}
-					updateUser={(change) => updateUser({ index: users.findIndex((user) => user.id === editUserModalId), change })}
+					updateUser={(change) =>
+						updateUser({
+							index: users.findIndex((user) => user.id === editUserModalId),
+							change,
+						})
+					}
 				/>
 			) : null}
 		</div>
@@ -91,7 +119,7 @@ function NewUserMenu({ closeMenu, addUser }: NewUserMenuProps) {
 	return (
 		<ResponsiveDialogDrawer
 			actionFunction={() => handleAddUser(userHolder)}
-			actionIsPending={false}
+			actionIsLoading={false}
 			closeMenu={closeMenu}
 			menuActionButtonText="CRIAR META DE USUÁRIO"
 			menuCancelButtonText="CANCELAR"
@@ -100,9 +128,16 @@ function NewUserMenu({ closeMenu, addUser }: NewUserMenuProps) {
 		>
 			<SelectWithImages
 				handleChange={(value) => {
-					const selectedUser = opportunityCreators?.find((user) => user._id === value);
+					const selectedUser = opportunityCreators?.find(
+						(user) => user._id === value,
+					);
 					if (selectedUser) {
-						return setUserHolder((prev) => ({ ...prev, id: selectedUser._id, nome: selectedUser.nome, avatar_url: selectedUser.avatar_url }));
+						return setUserHolder((prev) => ({
+							...prev,
+							id: selectedUser._id,
+							nome: selectedUser.nome,
+							avatar_url: selectedUser.avatar_url,
+						}));
 					}
 					return;
 				}}
@@ -123,11 +158,18 @@ function NewUserMenu({ closeMenu, addUser }: NewUserMenuProps) {
 			<div className="flex w-full flex-col gap-2">
 				<div className="flex w-fit items-center gap-2 rounded-sm bg-primary/20 px-2 py-1">
 					<Goal size={15} />
-					<h1 className="w-fit text-start font-medium text-xs tracking-tight">OBJETIVO</h1>
+					<h1 className="w-fit text-start font-medium text-xs tracking-tight">
+						OBJETIVO
+					</h1>
 				</div>
 				<div className="flex w-full flex-col gap-2">
 					<NumberInput
-						handleChange={(value) => setUserHolder((prev) => ({ ...prev, objetivo: { ...prev.objetivo, oportunidadesCriadas: value } }))}
+						handleChange={(value) =>
+							setUserHolder((prev) => ({
+								...prev,
+								objetivo: { ...prev.objetivo, oportunidadesCriadas: value },
+							}))
+						}
 						label="OPORTUNIDADES CRIADAS"
 						labelIcon={Plus}
 						labelIconClassName="w-3.5 h-3.5"
@@ -136,7 +178,12 @@ function NewUserMenu({ closeMenu, addUser }: NewUserMenuProps) {
 						width="100%"
 					/>
 					<NumberInput
-						handleChange={(value) => setUserHolder((prev) => ({ ...prev, objetivo: { ...prev.objetivo, oportunidadesEnviadas: value } }))}
+						handleChange={(value) =>
+							setUserHolder((prev) => ({
+								...prev,
+								objetivo: { ...prev.objetivo, oportunidadesEnviadas: value },
+							}))
+						}
 						label="OPORTUNIDADES ENVIADAS"
 						labelIcon={Send}
 						labelIconClassName="w-3.5 h-3.5"
@@ -145,7 +192,12 @@ function NewUserMenu({ closeMenu, addUser }: NewUserMenuProps) {
 						width="100%"
 					/>
 					<NumberInput
-						handleChange={(value) => setUserHolder((prev) => ({ ...prev, objetivo: { ...prev.objetivo, oportunidadesGanhas: value } }))}
+						handleChange={(value) =>
+							setUserHolder((prev) => ({
+								...prev,
+								objetivo: { ...prev.objetivo, oportunidadesGanhas: value },
+							}))
+						}
 						label="OPORTUNIDADES GANHAS"
 						labelIcon={Check}
 						labelIconClassName="w-3.5 h-3.5"
@@ -154,7 +206,12 @@ function NewUserMenu({ closeMenu, addUser }: NewUserMenuProps) {
 						width="100%"
 					/>
 					<NumberInput
-						handleChange={(value) => setUserHolder((prev) => ({ ...prev, objetivo: { ...prev.objetivo, valorVendido: value } }))}
+						handleChange={(value) =>
+							setUserHolder((prev) => ({
+								...prev,
+								objetivo: { ...prev.objetivo, valorVendido: value },
+							}))
+						}
 						label="VALOR VENDIDO (R$)"
 						labelIcon={BadgeDollarSign}
 						labelIconClassName="w-3.5 h-3.5"
@@ -163,7 +220,12 @@ function NewUserMenu({ closeMenu, addUser }: NewUserMenuProps) {
 						width="100%"
 					/>
 					<NumberInput
-						handleChange={(value) => setUserHolder((prev) => ({ ...prev, objetivo: { ...prev.objetivo, potenciaVendida: value } }))}
+						handleChange={(value) =>
+							setUserHolder((prev) => ({
+								...prev,
+								objetivo: { ...prev.objetivo, potenciaVendida: value },
+							}))
+						}
 						label="POTÊNCIA VENDIDA (kWp)"
 						labelIcon={Zap}
 						labelIconClassName="w-3.5 h-3.5"
@@ -173,7 +235,15 @@ function NewUserMenu({ closeMenu, addUser }: NewUserMenuProps) {
 					/>
 
 					<NumberInput
-						handleChange={(value) => setUserHolder((prev) => ({ ...prev, objetivo: { ...prev.objetivo, oportunidadesEnviadasConversao: value } }))}
+						handleChange={(value) =>
+							setUserHolder((prev) => ({
+								...prev,
+								objetivo: {
+									...prev.objetivo,
+									oportunidadesEnviadasConversao: value,
+								},
+							}))
+						}
 						label="CONVERSÃO EM ENVIO (%)"
 						labelIcon={Percent}
 						labelIconClassName="w-3.5 h-3.5"
@@ -182,7 +252,15 @@ function NewUserMenu({ closeMenu, addUser }: NewUserMenuProps) {
 						width="100%"
 					/>
 					<NumberInput
-						handleChange={(value) => setUserHolder((prev) => ({ ...prev, objetivo: { ...prev.objetivo, oportunidadesGanhasConversao: value } }))}
+						handleChange={(value) =>
+							setUserHolder((prev) => ({
+								...prev,
+								objetivo: {
+									...prev.objetivo,
+									oportunidadesGanhasConversao: value,
+								},
+							}))
+						}
 						label="CONVERSÃO EM GANHO (%)"
 						labelIcon={Percent}
 						labelIconClassName="w-3.5 h-3.5"
@@ -201,9 +279,14 @@ type EditUserMenuProps = {
 	initialUser: TGoalStore["goal"]["usuarios"][number];
 	updateUser: (change: Partial<TGoalStore["goal"]["usuarios"][number]>) => void;
 };
-function EditUserMenu({ closeMenu, initialUser, updateUser }: EditUserMenuProps) {
+function EditUserMenu({
+	closeMenu,
+	initialUser,
+	updateUser,
+}: EditUserMenuProps) {
 	const { data: opportunityCreators } = useOpportunityCreators();
-	const [userHolder, setUserHolder] = useState<TGoal["usuarios"][number]>(initialUser);
+	const [userHolder, setUserHolder] =
+		useState<TGoal["usuarios"][number]>(initialUser);
 
 	function handleUpdateUser(info: TGoal["usuarios"][number]) {
 		if (!info.id) return toast.error("Usuário não selecionado.");
@@ -212,7 +295,7 @@ function EditUserMenu({ closeMenu, initialUser, updateUser }: EditUserMenuProps)
 	return (
 		<ResponsiveDialogDrawer
 			actionFunction={() => handleUpdateUser(userHolder)}
-			actionIsPending={false}
+			actionIsLoading={false}
 			closeMenu={closeMenu}
 			menuActionButtonText="ATUALIZAR META DE USUÁRIO"
 			menuCancelButtonText="CANCELAR"
@@ -222,9 +305,16 @@ function EditUserMenu({ closeMenu, initialUser, updateUser }: EditUserMenuProps)
 			<SelectWithImages
 				editable={false}
 				handleChange={(value) => {
-					const selectedUser = opportunityCreators?.find((user) => user._id === value);
+					const selectedUser = opportunityCreators?.find(
+						(user) => user._id === value,
+					);
 					if (selectedUser) {
-						return setUserHolder((prev) => ({ ...prev, id: selectedUser._id, nome: selectedUser.nome, avatar_url: selectedUser.avatar_url }));
+						return setUserHolder((prev) => ({
+							...prev,
+							id: selectedUser._id,
+							nome: selectedUser.nome,
+							avatar_url: selectedUser.avatar_url,
+						}));
 					}
 					return;
 				}}
@@ -245,11 +335,18 @@ function EditUserMenu({ closeMenu, initialUser, updateUser }: EditUserMenuProps)
 			<div className="flex w-full flex-col gap-2">
 				<div className="flex w-fit items-center gap-2 rounded-sm bg-primary/20 px-2 py-1">
 					<Goal size={15} />
-					<h1 className="w-fit text-start font-medium text-xs tracking-tight">OBJETIVO</h1>
+					<h1 className="w-fit text-start font-medium text-xs tracking-tight">
+						OBJETIVO
+					</h1>
 				</div>
 				<div className="flex w-full flex-col gap-2">
 					<NumberInput
-						handleChange={(value) => setUserHolder((prev) => ({ ...prev, objetivo: { ...prev.objetivo, oportunidadesCriadas: value } }))}
+						handleChange={(value) =>
+							setUserHolder((prev) => ({
+								...prev,
+								objetivo: { ...prev.objetivo, oportunidadesCriadas: value },
+							}))
+						}
 						label="OPORTUNIDADES CRIADAS"
 						labelIcon={Plus}
 						labelIconClassName="w-3.5 h-3.5"
@@ -258,7 +355,12 @@ function EditUserMenu({ closeMenu, initialUser, updateUser }: EditUserMenuProps)
 						width="100%"
 					/>
 					<NumberInput
-						handleChange={(value) => setUserHolder((prev) => ({ ...prev, objetivo: { ...prev.objetivo, oportunidadesEnviadas: value } }))}
+						handleChange={(value) =>
+							setUserHolder((prev) => ({
+								...prev,
+								objetivo: { ...prev.objetivo, oportunidadesEnviadas: value },
+							}))
+						}
 						label="OPORTUNIDADES ENVIADAS"
 						labelIcon={Send}
 						labelIconClassName="w-3.5 h-3.5"
@@ -267,7 +369,12 @@ function EditUserMenu({ closeMenu, initialUser, updateUser }: EditUserMenuProps)
 						width="100%"
 					/>
 					<NumberInput
-						handleChange={(value) => setUserHolder((prev) => ({ ...prev, objetivo: { ...prev.objetivo, oportunidadesGanhas: value } }))}
+						handleChange={(value) =>
+							setUserHolder((prev) => ({
+								...prev,
+								objetivo: { ...prev.objetivo, oportunidadesGanhas: value },
+							}))
+						}
 						label="OPORTUNIDADES GANHAS"
 						labelIcon={Check}
 						labelIconClassName="w-3.5 h-3.5"
@@ -276,7 +383,12 @@ function EditUserMenu({ closeMenu, initialUser, updateUser }: EditUserMenuProps)
 						width="100%"
 					/>
 					<NumberInput
-						handleChange={(value) => setUserHolder((prev) => ({ ...prev, objetivo: { ...prev.objetivo, valorVendido: value } }))}
+						handleChange={(value) =>
+							setUserHolder((prev) => ({
+								...prev,
+								objetivo: { ...prev.objetivo, valorVendido: value },
+							}))
+						}
 						label="VALOR VENDIDO (R$)"
 						labelIcon={BadgeDollarSign}
 						labelIconClassName="w-3.5 h-3.5"
@@ -285,7 +397,12 @@ function EditUserMenu({ closeMenu, initialUser, updateUser }: EditUserMenuProps)
 						width="100%"
 					/>
 					<NumberInput
-						handleChange={(value) => setUserHolder((prev) => ({ ...prev, objetivo: { ...prev.objetivo, potenciaVendida: value } }))}
+						handleChange={(value) =>
+							setUserHolder((prev) => ({
+								...prev,
+								objetivo: { ...prev.objetivo, potenciaVendida: value },
+							}))
+						}
 						label="POTÊNCIA VENDIDA (kWp)"
 						labelIcon={Zap}
 						labelIconClassName="w-3.5 h-3.5"
@@ -295,7 +412,15 @@ function EditUserMenu({ closeMenu, initialUser, updateUser }: EditUserMenuProps)
 					/>
 
 					<NumberInput
-						handleChange={(value) => setUserHolder((prev) => ({ ...prev, objetivo: { ...prev.objetivo, oportunidadesEnviadasConversao: value } }))}
+						handleChange={(value) =>
+							setUserHolder((prev) => ({
+								...prev,
+								objetivo: {
+									...prev.objetivo,
+									oportunidadesEnviadasConversao: value,
+								},
+							}))
+						}
 						label="CONVERSÃO EM ENVIO (%)"
 						labelIcon={Percent}
 						labelIconClassName="w-3.5 h-3.5"
@@ -304,7 +429,15 @@ function EditUserMenu({ closeMenu, initialUser, updateUser }: EditUserMenuProps)
 						width="100%"
 					/>
 					<NumberInput
-						handleChange={(value) => setUserHolder((prev) => ({ ...prev, objetivo: { ...prev.objetivo, oportunidadesGanhasConversao: value } }))}
+						handleChange={(value) =>
+							setUserHolder((prev) => ({
+								...prev,
+								objetivo: {
+									...prev.objetivo,
+									oportunidadesGanhasConversao: value,
+								},
+							}))
+						}
 						label="CONVERSÃO EM GANHO (%)"
 						labelIcon={Percent}
 						labelIconClassName="w-3.5 h-3.5"
@@ -324,8 +457,17 @@ type UserCardProps = {
 	handleEditClick: () => void;
 	handleRemoveClick: () => void;
 };
-function UserCard({ user, index, handleEditClick, handleRemoveClick }: UserCardProps) {
-	function GoalValueCard({ label, value, icon }: { label: string; value: number; icon: React.ReactNode }) {
+function UserCard({
+	user,
+	index,
+	handleEditClick,
+	handleRemoveClick,
+}: UserCardProps) {
+	function GoalValueCard({
+		label,
+		value,
+		icon,
+	}: { label: string; value: number; icon: React.ReactNode }) {
 		return (
 			<div className="flex items-center gap-2 rounded-lg bg-primary/10 px-2 py-0.5">
 				<div className="flex items-center gap-1">
@@ -347,10 +489,20 @@ function UserCard({ user, index, handleEditClick, handleRemoveClick }: UserCardP
 					<h1 className="font-medium text-sm">{user.nome}</h1>
 				</div>
 				<div className="flex items-center gap-2">
-					<Button className="px-2 py-1 text-xs" onClick={handleEditClick} size={"fit"} variant={"ghost"}>
+					<Button
+						className="px-2 py-1 text-xs"
+						onClick={handleEditClick}
+						size={"fit"}
+						variant={"ghost"}
+					>
 						EDITAR
 					</Button>
-					<Button className="px-2 py-1 text-red-500 text-xs hover:text-red-600" onClick={handleRemoveClick} size={"fit"} variant={"ghost"}>
+					<Button
+						className="px-2 py-1 text-red-500 text-xs hover:text-red-600"
+						onClick={handleRemoveClick}
+						size={"fit"}
+						variant={"ghost"}
+					>
 						REMOVER
 					</Button>
 				</div>
@@ -358,11 +510,31 @@ function UserCard({ user, index, handleEditClick, handleRemoveClick }: UserCardP
 			<div className="flex w-full flex-col gap-2">
 				<h1 className="w-fit text-start text-xs tracking-tight">OBJETIVOS</h1>
 				<div className="flex flex-wrap items-center justify-around gap-x-3 gap-y-1">
-					<GoalValueCard icon={<Plus className="h-3.5 w-3.5" />} label="OPORTUNIDADES CRIADAS" value={user.objetivo.oportunidadesCriadas} />
-					<GoalValueCard icon={<Send className="h-3.5 w-3.5" />} label="OPORTUNIDADES ENVIADAS" value={user.objetivo.oportunidadesEnviadas} />
-					<GoalValueCard icon={<Check className="h-3.5 w-3.5" />} label="OPORTUNIDADES GANHAS" value={user.objetivo.oportunidadesGanhas} />
-					<GoalValueCard icon={<BadgeDollarSign className="h-3.5 w-3.5" />} label="VALOR VENDIDO (R$)" value={user.objetivo.valorVendido} />
-					<GoalValueCard icon={<Zap className="h-3.5 w-3.5" />} label="POTÊNCIA VENDIDA (kWp)" value={user.objetivo.potenciaVendida} />
+					<GoalValueCard
+						icon={<Plus className="h-3.5 w-3.5" />}
+						label="OPORTUNIDADES CRIADAS"
+						value={user.objetivo.oportunidadesCriadas}
+					/>
+					<GoalValueCard
+						icon={<Send className="h-3.5 w-3.5" />}
+						label="OPORTUNIDADES ENVIADAS"
+						value={user.objetivo.oportunidadesEnviadas}
+					/>
+					<GoalValueCard
+						icon={<Check className="h-3.5 w-3.5" />}
+						label="OPORTUNIDADES GANHAS"
+						value={user.objetivo.oportunidadesGanhas}
+					/>
+					<GoalValueCard
+						icon={<BadgeDollarSign className="h-3.5 w-3.5" />}
+						label="VALOR VENDIDO (R$)"
+						value={user.objetivo.valorVendido}
+					/>
+					<GoalValueCard
+						icon={<Zap className="h-3.5 w-3.5" />}
+						label="POTÊNCIA VENDIDA (kWp)"
+						value={user.objetivo.potenciaVendida}
+					/>
 					<GoalValueCard
 						icon={<Percent className="h-3.5 w-3.5" />}
 						label="CONVERSÃO EM ENVIO (%)"

@@ -1,11 +1,11 @@
-import { useMutation } from "@tanstack/react-query";
-import { useEffect } from "react";
-import toast from "react-hot-toast";
 import ResponsiveDialogDrawer from "@/components/utils/ResponsiveDialogDrawer";
 import type { TUserSession } from "@/lib/auth/session";
 import { getErrorMessage } from "@/lib/methods/errors";
 import { createGoal } from "@/utils/mutations/goals";
 import { useGoalStore, useGoalStoreWithSync } from "@/utils/stores/goal-store";
+import { useMutation } from "@tanstack/react-query";
+import { useEffect } from "react";
+import toast from "react-hot-toast";
 import { GoalGeneralBlock } from "./blocks/General";
 import GoalUsersBlock from "./blocks/Users";
 import GoalValuesBlock from "./blocks/Values";
@@ -20,7 +20,13 @@ type NewGoalProps = {
 	};
 };
 function NewGoal({ closeMenu, callbacks, session }: NewGoalProps) {
-	return <NewGoalContent callbacks={callbacks} closeMenu={closeMenu} session={session} />;
+	return (
+		<NewGoalContent
+			callbacks={callbacks}
+			closeMenu={closeMenu}
+			session={session}
+		/>
+	);
 }
 
 export default NewGoal;
@@ -34,7 +40,11 @@ type NewGoalContentProps = {
 		onSettled?: () => void;
 	};
 };
-function NewGoalContent({ session, closeMenu, callbacks }: NewGoalContentProps) {
+function NewGoalContent({
+	session,
+	closeMenu,
+	callbacks,
+}: NewGoalContentProps) {
 	const reset = useGoalStoreWithSync(null)((s) => s.reset);
 	const getGoal = useGoalStoreWithSync(null)((s) => s.getGoal);
 	const { mutate: createGoalMutation, isPending } = useMutation({
@@ -72,7 +82,7 @@ function NewGoalContent({ session, closeMenu, callbacks }: NewGoalContentProps) 
 					goal: getGoal(),
 				});
 			}}
-			actionIsPending={isPending}
+			actionIsLoading={isPending}
 			closeMenu={closeMenu}
 			dialogContentClassName="min-w-[50%]"
 			menuActionButtonText="CRIAR META"

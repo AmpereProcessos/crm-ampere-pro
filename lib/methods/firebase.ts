@@ -51,18 +51,20 @@ type UploadFileParams = {
 	file: File;
 	fileName: string;
 	vinculationId: string;
+	prefix?: string;
 };
 export async function uploadFile({
 	file,
 	fileName,
 	vinculationId,
+	prefix = "crm",
 }: UploadFileParams) {
 	try {
 		if (!file) throw new Error("Arquivo não fornecido.");
 		const datetime = new Date().toISOString();
 		const fileRef = ref(
 			storage,
-			`saas/(${vinculationId}) ${fileName} - ${datetime}`,
+			`${prefix}/(${vinculationId}) ${fileName} - ${datetime}`,
 		);
 		const uploadResponse = await uploadBytes(fileRef, file);
 

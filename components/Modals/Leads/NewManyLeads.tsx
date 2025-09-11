@@ -84,7 +84,7 @@ export default function NewManyLeads({
 			actionFunction={() =>
 				handleCreateManyLeadsMutation({ type: "multiple", leads: infoHolder })
 			}
-			actionIsPending={isPending}
+			actionIsLoading={isPending}
 			stateIsLoading={false}
 		>
 			<Utils qualifiers={qualifiers ?? []} />
