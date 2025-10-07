@@ -63,7 +63,7 @@ function NewGoalContent({
 		onSuccess(data) {
 			if (callbacks?.onSuccess) callbacks.onSuccess();
 			reset();
-			toast.success(data);
+			toast.success(data.message);
 			closeMenu();
 			return;
 		},

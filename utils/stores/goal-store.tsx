@@ -28,7 +28,7 @@ const initialGoalState = (): TGoalState =>
 		usuarios: [],
 	}) as TGoalState;
 
-export const useGoalStore = create<{
+export type TGoalStore = {
 	goal: TGoalState;
 	sync: (goal: TGoalState) => void;
 	updateGoal: (goal: Partial<TGoalState>) => void;
@@ -36,11 +36,16 @@ export const useGoalStore = create<{
 	updateGoalValues: (values: Partial<TGoalState["objetivo"]>) => void;
 	addUser: (user: TGoalState["usuarios"][number]) => void;
 	removeUser: (userIndex: number) => void;
-	updateUser: (payload: { index: number; change: Partial<TGoalState["usuarios"][number]> }) => void;
+	updateUser: (payload: {
+		index: number;
+		change: Partial<TGoalState["usuarios"][number]>;
+	}) => void;
+	setUsers: (users: TGoalState["usuarios"]) => void;
 	getGoal: () => TGoalState;
 	clearGoal: () => void;
 	reset: () => void;
-}>((set, get) => ({
+};
+export const useGoalStore = create<TGoalStore>((set, get) => ({
 	addUser: (user) =>
 		set((state) => ({
 			goal: { ...state.goal, usuarios: [...state.goal.usuarios, user] },
@@ -56,6 +61,10 @@ export const useGoalStore = create<{
 			},
 		})),
 	reset: () => set({ goal: initialGoalState() }),
+	setUsers: (users) =>
+		set((state) => ({
+			goal: { ...state.goal, usuarios: users },
+		})),
 	sync: (goal) => set({ goal }),
 	updateGoal: (goal) =>
 		set((state) => ({
@@ -73,7 +82,9 @@ export const useGoalStore = create<{
 		set((state) => ({
 			goal: {
 				...state.goal,
-				usuarios: state.goal.usuarios.map((user, idx) => (idx === index ? { ...user, ...change } : user)),
+				usuarios: state.goal.usuarios.map((user, idx) =>
+					idx === index ? { ...user, ...change } : user,
+				),
 			},
 		})),
 }));

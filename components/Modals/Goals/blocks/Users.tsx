@@ -3,13 +3,21 @@ import SelectWithImages from "@/components/Inputs/SelectWithImages";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import ResponsiveDialogDrawer from "@/components/utils/ResponsiveDialogDrawer";
+import { getErrorMessage } from "@/lib/methods/errors";
+import {
+	getExcelFromJSON,
+	getJSONFromExcelFile,
+} from "@/lib/methods/excel-utils";
 import { formatNameAsInitials } from "@/lib/methods/formatting";
 import { useOpportunityCreators } from "@/utils/queries/users";
 import type { TGoal } from "@/utils/schemas/goal.schema";
+import type { TUserDTOSimplified } from "@/utils/schemas/user.schema";
 import { type TGoalStore, useGoalStore } from "@/utils/stores/goal-store";
 import {
 	BadgeDollarSign,
 	Check,
+	FileDown,
+	FileUp,
 	Goal,
 	Percent,
 	Plus,
@@ -19,20 +27,90 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { BsCloudUploadFill } from "react-icons/bs";
+import z from "zod";
 
+const GoalUsersTemplateSchema = z.object({
+	ID: z.string({
+		required_error: "ID não informado.",
+		invalid_type_error: "ID não válido.",
+	}),
+	NOME: z.string({
+		required_error: "Nome não informado.",
+		invalid_type_error: "Nome não válido.",
+	}),
+	OPORTUNIDADES_CRIADAS: z.number({
+		required_error: "Oportunidades criadas não informadas.",
+		invalid_type_error: "Oportunidades criadas não válidas.",
+	}),
+	OPORTUNIDADES_ENVIADAS: z.number({
+		required_error: "Oportunidades enviadas não informadas.",
+		invalid_type_error: "Oportunidades enviadas não válidas.",
+	}),
+	OPORTUNIDADES_GANHAS: z.number({
+		required_error: "Oportunidades ganhas não informadas.",
+		invalid_type_error: "Oportunidades ganhas não válidas.",
+	}),
+	VALOR_VENDIDO: z.number({
+		required_error: "Valor vendido não informado.",
+		invalid_type_error: "Valor vendido não válido.",
+	}),
+	POTENCIA_VENDIDA: z.number({
+		required_error: "Potência vendida não informada.",
+		invalid_type_error: "Potência vendida não válida.",
+	}),
+	CONVERSAO_EM_ENVIO: z.number({
+		required_error: "Conversão em envio não informada.",
+		invalid_type_error: "Conversão em envio não válida.",
+	}),
+	CONVERSAO_EM_GANHO: z.number({
+		required_error: "Conversão em ganho não informada.",
+		invalid_type_error: "Conversão em ganho não válida.",
+	}),
+});
+type TGoalUsersTemplate = z.infer<typeof GoalUsersTemplateSchema>;
 function GoalUsersBlock() {
+	const { data: opportunityCreators } = useOpportunityCreators();
 	const [newUserModalIsOpen, setNewUserModalIsOpen] = useState(false);
 	const [editUserModalId, setEditUserModalId] = useState<string | null>(null);
+	const [uploadModalIsOpen, setUploadModalIsOpen] = useState(false);
 	const users = useGoalStore((s) => s.goal.usuarios);
 	const addUser = useGoalStore((s) => s.addUser);
 	const updateUser = useGoalStore((s) => s.updateUser);
 	const removeUser = useGoalStore((s) => s.removeUser);
+	const setUsers = useGoalStore((s) => s.setUsers);
 	function handleAddUser(info: TGoal["usuarios"][number]) {
 		const hasExistingUser = users.find((user) => user.id === info.id);
 		if (hasExistingUser) return toast.error("Meta de usuário já definida.");
 		return addUser(info);
 	}
+	async function handleDownloadBaseSheet({
+		opportunityCreators,
+		users,
+	}: {
+		opportunityCreators: TUserDTOSimplified[];
+		users: TGoal["usuarios"][number][];
+	}) {
+		const template: TGoalUsersTemplate[] = opportunityCreators.map(
+			(creator) => {
+				const user = users.find((user) => user.id === creator._id);
+				return {
+					ID: creator._id.toString(),
+					NOME: creator.nome,
+					OPORTUNIDADES_CRIADAS: user?.objetivo.oportunidadesCriadas ?? 0,
+					OPORTUNIDADES_ENVIADAS: user?.objetivo.oportunidadesEnviadas ?? 0,
+					OPORTUNIDADES_GANHAS: user?.objetivo.oportunidadesGanhas ?? 0,
+					VALOR_VENDIDO: user?.objetivo.valorVendido ?? 0,
+					POTENCIA_VENDIDA: user?.objetivo.potenciaVendida ?? 0,
+					CONVERSAO_EM_ENVIO:
+						user?.objetivo.oportunidadesEnviadasConversao ?? 0,
+					CONVERSAO_EM_GANHO: user?.objetivo.oportunidadesGanhasConversao ?? 0,
+				};
+			},
+		);
 
+		await getExcelFromJSON(template, "TEMPLATE_METAS_USUARIOS.xlsx");
+	}
 	const editingUser = users.find((user) => user.id === editUserModalId);
 	return (
 		<div className="flex w-full flex-col gap-2">
@@ -42,13 +120,37 @@ function GoalUsersBlock() {
 					USUÁRIOS
 				</h1>
 			</div>
-			<div className="flex w-full items-center justify-end">
+			<div className="flex w-full items-center justify-end gap-3 flex-wrap">
 				<Button
-					className="text-xs"
+					className="flex items-center gap-1 text-xs"
+					onClick={() =>
+						handleDownloadBaseSheet({
+							opportunityCreators: opportunityCreators ?? [],
+							users,
+						})
+					}
+					size={"fit"}
+					variant={"ghost"}
+				>
+					<FileDown className="w-3.5 h-3.5" />
+					BAIXAR PLANILHA DE REFERÊNCIA
+				</Button>
+				<Button
+					className="flex items-center gap-1 text-xs"
+					onClick={() => setUploadModalIsOpen(true)}
+					size={"fit"}
+					variant={"ghost"}
+				>
+					<FileUp className="w-3.5 h-3.5" />
+					IMPORTAR META DE USUÁRIOS
+				</Button>
+				<Button
+					className="flex items-center gap-1 text-xs"
 					onClick={() => setNewUserModalIsOpen(true)}
 					size={"fit"}
 					variant={"ghost"}
 				>
+					<Plus className="w-3.5 h-3.5" />
 					ADICIONAR META DE USUÁRIO
 				</Button>
 			</div>
@@ -81,6 +183,13 @@ function GoalUsersBlock() {
 							change,
 						})
 					}
+				/>
+			) : null}
+			{uploadModalIsOpen ? (
+				<FileUploadMenu
+					closeMenu={() => setUploadModalIsOpen(false)}
+					opportunityCreators={opportunityCreators ?? []}
+					setUsers={setUsers}
 				/>
 			) : null}
 		</div>
@@ -120,6 +229,7 @@ function NewUserMenu({ closeMenu, addUser }: NewUserMenuProps) {
 		<ResponsiveDialogDrawer
 			actionFunction={() => handleAddUser(userHolder)}
 			actionIsLoading={false}
+			stateIsLoading={false}
 			closeMenu={closeMenu}
 			menuActionButtonText="CRIAR META DE USUÁRIO"
 			menuCancelButtonText="CANCELAR"
@@ -296,6 +406,7 @@ function EditUserMenu({
 		<ResponsiveDialogDrawer
 			actionFunction={() => handleUpdateUser(userHolder)}
 			actionIsLoading={false}
+			stateIsLoading={false}
 			closeMenu={closeMenu}
 			menuActionButtonText="ATUALIZAR META DE USUÁRIO"
 			menuCancelButtonText="CANCELAR"
@@ -548,5 +659,148 @@ function UserCard({
 				</div>
 			</div>
 		</div>
+	);
+}
+
+type FileUploadMenuProps = {
+	closeMenu: () => void;
+	opportunityCreators: TUserDTOSimplified[];
+	setUsers: TGoalStore["setUsers"];
+};
+function FileUploadMenu({
+	closeMenu,
+	opportunityCreators,
+	setUsers,
+}: FileUploadMenuProps) {
+	const [fileHolder, setFileHolder] = useState<File | null>(null);
+	const [isProcessing, setIsProcessing] = useState(false);
+
+	async function handleFileUpload(file: File | null) {
+		if (!file) return toast.error("Arquivo não vinculado.");
+		setIsProcessing(true);
+		try {
+			// Parse Excel file to JSON
+			const data = await getJSONFromExcelFile(file);
+			console.log(
+				"[INFO] [FILE_UPLOAD_MENU] [HANDLE_FILE_UPLOAD] [DATA]",
+				data,
+			);
+			// Validate data against schema
+			const validatedData = z.array(GoalUsersTemplateSchema).parse(data);
+			console.log(
+				"[INFO] [FILE_UPLOAD_MENU] [HANDLE_FILE_UPLOAD] [VALIDATED_DATA]",
+				validatedData,
+			);
+			// Transform validated data to user goals format
+			const mappedUsers = validatedData
+				.map(
+					(
+						item,
+					):
+						| (TGoal["usuarios"][number] & {
+								avatar_url: string | null | undefined;
+						  })
+						| null => {
+						// Find the user in opportunityCreators to get additional info
+						const creator = opportunityCreators.find(
+							(creator) => creator._id === item.ID,
+						);
+						if (!creator) {
+							toast.error(`Usuário com ID ${item.ID} não encontrado.`);
+							return null;
+						}
+
+						return {
+							id: item.ID,
+							nome: item.NOME,
+							avatar_url: creator.avatar_url,
+							objetivo: {
+								oportunidadesCriadas: item.OPORTUNIDADES_CRIADAS,
+								oportunidadesEnviadas: item.OPORTUNIDADES_ENVIADAS,
+								oportunidadesEnviadasConversao: item.CONVERSAO_EM_ENVIO,
+								oportunidadesEnviadasGanhas: 0,
+								oportunidadesEnviadasGanhasConversao: 0,
+								oportunidadesGanhas: item.OPORTUNIDADES_GANHAS,
+								oportunidadesGanhasConversao: item.CONVERSAO_EM_GANHO,
+								valorVendido: item.VALOR_VENDIDO,
+								potenciaVendida: item.POTENCIA_VENDIDA,
+							},
+						};
+					},
+				)
+				.filter(
+					(
+						user,
+					): user is TGoal["usuarios"][number] & {
+						avatar_url: string | null | undefined;
+					} => user !== null,
+				);
+
+			const updatedUsers: TGoal["usuarios"] = mappedUsers.map((u) => ({
+				id: u.id,
+				nome: u.nome,
+				avatar_url: u.avatar_url ?? null,
+				objetivo: u.objetivo,
+			}));
+
+			// Update the store with new users
+			setUsers(updatedUsers);
+			toast.success(
+				`${updatedUsers.length} meta(s) de usuário(s) importada(s) com sucesso.`,
+			);
+			closeMenu();
+		} catch (error) {
+			console.error(error);
+			const msg = getErrorMessage(error);
+			toast.error(msg);
+		} finally {
+			setIsProcessing(false);
+		}
+	}
+
+	return (
+		<ResponsiveDialogDrawer
+			actionFunction={() => handleFileUpload(fileHolder)}
+			actionIsLoading={isProcessing}
+			stateIsLoading={false}
+			closeMenu={closeMenu}
+			menuActionButtonText="IMPORTAR METAS"
+			menuCancelButtonText="CANCELAR"
+			menuDescription="Faça upload de um arquivo XLSX com as metas dos usuários. O arquivo deve seguir o template disponível para download."
+			menuTitle="IMPORTAR METAS DE USUÁRIOS"
+		>
+			<div className="relative mb-4 flex w-full items-center justify-center">
+				<label
+					htmlFor="dropzone-file-upload"
+					className="flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-primary"
+				>
+					<div className="flex flex-col items-center justify-center pb-6 pt-5 text-primary">
+						<BsCloudUploadFill size={50} />
+						{fileHolder ? (
+							<p className="mb-2 px-2 text-center text-sm">
+								<span className="font-semibold">{fileHolder.name}</span>
+							</p>
+						) : (
+							<p className="mb-2 px-2 text-center text-sm">
+								<span className="font-semibold">
+									Clique para escolher um arquivo
+								</span>{" "}
+								ou o arraste para a área demarcada
+							</p>
+						)}
+					</div>
+					<input
+						onChange={(e) => {
+							const file = e.target.files?.[0] || null;
+							setFileHolder(file);
+						}}
+						id="dropzone-file-upload"
+						type="file"
+						className="absolute h-full w-full opacity-0"
+						accept=".xlsx"
+					/>
+				</label>
+			</div>
+		</ResponsiveDialogDrawer>
 	);
 }

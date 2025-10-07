@@ -286,14 +286,14 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
 							</div>
 						</div>
 					</div>
-					{data ? (
+					{/* {data ? (
 						<GoalTrackingBar
 							actual={data?.simplificado.ATUAL}
 							goal={data?.simplificado.METAS}
 							barHeigth="25px"
 							barBgColor="bg-gradient-to-r from-[#15599a] to-blue-700"
 						/>
-					) : null}
+					) : null} */}
 
 					<div className="flex w-full flex-col items-center justify-around gap-2 lg:flex-row">
 						<CardStat
