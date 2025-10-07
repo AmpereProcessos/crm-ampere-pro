@@ -6,6 +6,7 @@ import { getOpportunityCreators } from "@/repositories/users/queries";
 import connectToDatabase from "@/services/mongodb/crm-db-connection";
 import type { TActivity } from "@/utils/schemas/activities.schema";
 import type { TConectaInteractionEvent } from "@/utils/schemas/conecta-interaction-events.schema";
+import type { TGoal } from "@/utils/schemas/goal.schema";
 import type { TOpportunity } from "@/utils/schemas/opportunity.schema";
 import type {
 	TPartner,
@@ -15,6 +16,7 @@ import type {
 	TProjectType,
 	TProjectTypeDTOSimplified,
 } from "@/utils/schemas/project-types.schema";
+import { TSaleGoal } from "@/utils/schemas/sale-goal.schema";
 import {
 	GeneralStatsFiltersSchema,
 	QueryDatesSchema,
@@ -185,6 +187,7 @@ async function getStats(request: NextRequest) {
 		db.collection("opportunities");
 	const activitiesCollection: Collection<TActivity> =
 		db.collection("activities");
+	const goalsCollection: Collection<TGoal> = db.collection("goals");
 	const conectaInteractionEventsCollection: Collection<TConectaInteractionEvent> =
 		db.collection("conecta-interaction-events");
 
@@ -209,6 +212,12 @@ async function getStats(request: NextRequest) {
 		query: { ...responsiblesQuery, ...partnerQuery } as Filter<TActivity>,
 	});
 
+	const applicableGoals = await getApplicableGoals({
+		goalsCollection,
+		responsiblesIds: responsibles,
+		afterDate,
+		beforeDate,
+	});
 	const conectaInteractionEventsStats = await getConectaInteractionEventsStats({
 		collection: conectaInteractionEventsCollection,
 		sellerIds: responsibles,
@@ -218,7 +227,7 @@ async function getStats(request: NextRequest) {
 
 	return NextResponse.json({
 		data: {
-			simplificado: condensedInfo,
+			simplificado: { ...condensedInfo, METAS: applicableGoals },
 			ganhos: wonOpportunities,
 			ganhosPendentes: pendingWins,
 			atividades: activities,
@@ -388,6 +397,195 @@ async function getSimplifiedInfo({
 			},
 		},
 	);
+}
+
+type GetApplicableGoalsParams = {
+	goalsCollection: Collection<TGoal>;
+	responsiblesIds: string[] | null;
+	afterDate: Date;
+	beforeDate: Date;
+};
+async function getApplicableGoals({
+	goalsCollection,
+	responsiblesIds,
+	afterDate,
+	beforeDate,
+}: GetApplicableGoalsParams) {
+	const afterDatetime = new Date(afterDate).getTime();
+	const afterDateStr = afterDate.toISOString();
+	const beforeDatetime = new Date(beforeDate).getTime();
+	const beforeDateStr = beforeDate.toISOString();
+
+	const goals = await goalsCollection
+		.find({
+			$or: [
+				{
+					"periodo.inicio": {
+						$gte: afterDateStr,
+						$lte: beforeDateStr,
+					},
+				},
+				{
+					"periodo.fim": {
+						$gte: afterDateStr,
+						$lte: beforeDateStr,
+					},
+				},
+			],
+		})
+		.toArray();
+	const applicableGoals = goals.reduce(
+		(acc, current) => {
+			const goalAfterDateTime = new Date(current.periodo.inicio).getTime();
+			const goalBeforeDateTime = new Date(current.periodo.fim).getTime();
+			const goalDaysDiff = dayjs(current.periodo.fim).diff(
+				dayjs(current.periodo.inicio),
+				"days",
+			);
+			if (
+				(afterDatetime < goalAfterDateTime &&
+					beforeDatetime < goalAfterDateTime) ||
+				(afterDatetime > goalBeforeDateTime &&
+					beforeDatetime > goalBeforeDateTime)
+			) {
+				console.log("[INFO] [GET_OVERALL_SALE_GOAL] Goal not applicable: ", {
+					current,
+				});
+				return acc;
+			}
+			if (
+				afterDatetime <= goalAfterDateTime &&
+				beforeDatetime >= goalBeforeDateTime
+			) {
+				// Caso o período de filtro da query compreenda o mês inteiro
+				console.log(
+					"[INFO] [GET_OVERALL_SALE_GOAL] Goal applicable for all period: ",
+					{
+						queryPeriodStart: afterDateStr,
+						queryPeriodEnd: beforeDateStr,
+						goalPeriodStart: current.periodo.inicio,
+						goalPeriodEnd: current.periodo.fim,
+					},
+				);
+
+				// If not responsible ids were provided, using the global goal
+				if (!responsiblesIds) {
+					acc.projetosCriados += current.objetivo.oportunidadesCriadas;
+					acc.potenciaVendida += current.objetivo.potenciaVendida;
+					acc.totalVendido += current.objetivo.valorVendido;
+					acc.projetosGanhos += current.objetivo.oportunidadesGanhas;
+					return acc;
+				}
+
+				// If responsible ids were provided, using the responsible goals
+				for (const responsible of current.usuarios) {
+					const isApplicable = responsiblesIds.includes(responsible.id);
+					if (isApplicable) {
+						acc.projetosCriados += responsible.objetivo.oportunidadesCriadas;
+						acc.potenciaVendida += responsible.objetivo.potenciaVendida;
+						acc.totalVendido += responsible.objetivo.valorVendido;
+						acc.projetosGanhos += responsible.objetivo.oportunidadesGanhas;
+					}
+				}
+				return acc;
+			}
+			if (beforeDatetime > goalBeforeDateTime) {
+				const applicableDays = dayjs(current.periodo.fim).diff(
+					dayjs(afterDate),
+					"days",
+				);
+
+				console.log(
+					"[INFO] [GET_OVERALL_SALE_GOAL] Goal applicable for partial period: ",
+					{
+						queryPeriodStart: afterDateStr,
+						queryPeriodEnd: beforeDateStr,
+						goalPeriodStart: current.periodo.inicio,
+						goalPeriodEnd: current.periodo.fim,
+						applicableDays,
+						goalDaysDiff: goalDaysDiff,
+					},
+				);
+				const mutlplier = applicableDays / goalDaysDiff;
+
+				// If not responsible ids were provided, using the global goal
+				if (!responsiblesIds) {
+					acc.projetosCriados +=
+						current.objetivo.oportunidadesCriadas * mutlplier;
+					acc.potenciaVendida += current.objetivo.potenciaVendida * mutlplier;
+					acc.totalVendido += current.objetivo.valorVendido * mutlplier;
+					acc.projetosGanhos +=
+						current.objetivo.oportunidadesGanhas * mutlplier;
+					return acc;
+				}
+				// If responsible ids were provided, using the responsible goals
+				for (const responsible of current.usuarios) {
+					const isApplicable = responsiblesIds.includes(responsible.id);
+					if (isApplicable) {
+						acc.projetosCriados +=
+							responsible.objetivo.oportunidadesCriadas * mutlplier;
+						acc.potenciaVendida +=
+							responsible.objetivo.potenciaVendida * mutlplier;
+						acc.totalVendido += responsible.objetivo.valorVendido * mutlplier;
+						acc.projetosGanhos +=
+							responsible.objetivo.oportunidadesGanhas * mutlplier;
+					}
+				}
+				return acc;
+			}
+
+			const applicableDays =
+				dayjs(beforeDate).diff(dayjs(current.periodo.inicio), "days") + 1;
+
+			const mutlplier = applicableDays / goalDaysDiff;
+
+			console.log(
+				"[INFO] [GET_OVERALL_SALE_GOAL] Goal applicable for partial period: ",
+				{
+					queryPeriodStart: afterDateStr,
+					queryPeriodEnd: beforeDateStr,
+					goalPeriodStart: current.periodo.inicio,
+					goalPeriodEnd: current.periodo.fim,
+					applicableDays,
+					goalDaysDiff: goalDaysDiff,
+					mutlplier,
+				},
+			);
+
+			// If responsible ids were provided, using the responsible goals
+			if (!responsiblesIds) {
+				acc.projetosCriados +=
+					current.objetivo.oportunidadesCriadas * mutlplier;
+				acc.potenciaVendida += current.objetivo.potenciaVendida * mutlplier;
+				acc.totalVendido += current.objetivo.valorVendido * mutlplier;
+				acc.projetosGanhos += current.objetivo.oportunidadesGanhas * mutlplier;
+				return acc;
+			}
+			// If responsible ids were provided, using the responsible goals
+			for (const responsible of current.usuarios) {
+				const isApplicable = responsiblesIds.includes(responsible.id);
+				if (isApplicable) {
+					acc.projetosCriados +=
+						responsible.objetivo.oportunidadesCriadas * mutlplier;
+					acc.potenciaVendida +=
+						responsible.objetivo.potenciaVendida * mutlplier;
+					acc.totalVendido += responsible.objetivo.valorVendido * mutlplier;
+					acc.projetosGanhos +=
+						responsible.objetivo.oportunidadesGanhas * mutlplier;
+				}
+			}
+			return acc;
+		},
+		{
+			projetosCriados: 0,
+			projetosGanhos: 0,
+			projetosPerdidos: 0,
+			totalVendido: 0,
+			potenciaVendida: 0,
+		},
+	);
+
+	return applicableGoals;
 }
 
 type GetWonOpportunitiesParams = {

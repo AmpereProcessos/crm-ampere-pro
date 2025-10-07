@@ -1,17 +1,20 @@
 "use client";
 import type { TGetGraphDataRouteInput } from "@/app/api/stats/graph/route";
+import type { TGetStatsRouteOutputData } from "@/app/api/stats/route";
 import UserConectaIndicationCodeFlag from "@/components/Conecta/UserConectaIndicationCodeFlag";
 import DateInput from "@/components/Inputs/DateInput";
 import MultipleSelectInput from "@/components/Inputs/MultipleSelectInput";
 import { Sidebar } from "@/components/Sidebar";
 import { Button } from "@/components/ui/button";
 import {
+	type ChartConfig,
 	ChartContainer,
 	ChartLegend,
 	ChartLegendContent,
 	ChartTooltip,
 	ChartTooltipContent,
 } from "@/components/ui/chart";
+import { Progress } from "@/components/ui/progress";
 import {
 	Tooltip,
 	TooltipContent,
@@ -32,8 +35,12 @@ import {
 	useStatsQueryOptions,
 } from "@/utils/queries/stats";
 import dayjs from "dayjs";
+import { AnimatePresence, motion } from "framer-motion";
 import {
 	BadgeDollarSign,
+	ChevronDown,
+	ChevronUp,
+	CircleCheck,
 	CirclePlus,
 	CircleX,
 	MousePointerClick,
@@ -52,7 +59,14 @@ import {
 import { FaBolt } from "react-icons/fa";
 import { FaListCheck } from "react-icons/fa6";
 import { VscDiffAdded } from "react-icons/vsc";
-import { Area, CartesianGrid, ComposedChart, XAxis, YAxis } from "recharts";
+import {
+	Area,
+	CartesianGrid,
+	ComposedChart,
+	Line,
+	XAxis,
+	YAxis,
+} from "recharts";
 import SellersRanking from "../rankings/Rankings";
 import OpenActivitiesBlock from "./OpenActivitiesBlock";
 import PPSOpenCallsBlock from "./PPSOpenCallsBlock";
@@ -60,7 +74,7 @@ import PendingWinsBlock from "./PendingWinsBlock";
 import WinsBlock from "./WinsBlock";
 
 const firstDayOfMonth = dayjs().startOf("month").toISOString();
-const endOfDay = dayjs().endOf("day").toISOString();
+const endOfMonth = dayjs().endOf("month").toISOString();
 
 type TQueryFilters = {
 	period: { after: string; before: string };
@@ -78,7 +92,7 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
 	const userPartnersScope = session.user.permissoes.parceiros.escopo || null;
 
 	const [queryFilters, setQueryFilters] = useState<TQueryFilters>({
-		period: { after: firstDayOfMonth, before: endOfDay },
+		period: { after: firstDayOfMonth, before: endOfMonth },
 		responsibles: userOpportunitiesScope,
 		partners: userPartnersScope,
 		projectTypes: null,
@@ -104,8 +118,8 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
 			? queryOptions?.partners.filter((a) => userPartnersScope.includes(a._id))
 			: queryOptions?.partners
 		: [];
-	console.log(session);
-	console.log(queryFilters);
+
+	console.log(data);
 	return (
 		<div className="flex h-full flex-col md:flex-row">
 			<Sidebar session={session} />
@@ -272,6 +286,15 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
 							</div>
 						</div>
 					</div>
+					{data ? (
+						<GoalTrackingBar
+							actual={data?.simplificado.ATUAL}
+							goal={data?.simplificado.METAS}
+							barHeigth="25px"
+							barBgColor="bg-gradient-to-r from-[#15599a] to-blue-700"
+						/>
+					) : null}
+
 					<div className="flex w-full flex-col items-center justify-around gap-2 lg:flex-row">
 						<CardStat
 							title="Projetos Criados"
@@ -503,9 +526,8 @@ function GraphData({
 	partners,
 	projectTypes,
 }: TGraphDataProps) {
-	const [graphType, setGraphType] = useState<
-		TGetGraphDataRouteInput["graphType"]
-	>("opportunities-created");
+	const [graphType, setGraphType] =
+		useState<TGetGraphDataRouteInput["graphType"]>("total-sold");
 	const { data } = useGraphData({
 		after,
 		before,
@@ -531,7 +553,7 @@ function GraphData({
 			title: "PROJETOS VENDIDOS",
 			chartLabel: "PROJETOS",
 			valorFormatting: (value: number) => String(value),
-			icon: <CirclePlus className="h-4 min-h-4 w-4 min-w-4" />,
+			icon: <CircleCheck className="h-4 min-h-4 w-4 min-w-4" />,
 		},
 		"opportunities-lost": {
 			title: "PROJETOS PERDIDOS",
@@ -556,7 +578,11 @@ function GraphData({
 			label: METRIC_LABELS[graphType].chartLabel,
 			color: "#15599a",
 		},
-	};
+		objetivo: {
+			label: "META",
+			color: "#10b981",
+		},
+	} satisfies ChartConfig;
 	return (
 		<div className="bg-card border-primary/20 flex w-full flex-col gap-3 rounded-xl border px-3 py-4 shadow-xs h-full">
 			<div className="flex items-center justify-between">
@@ -564,6 +590,21 @@ function GraphData({
 					{METRIC_LABELS[graphType].title}
 				</h1>
 				<div className="flex items-center gap-2">
+					<Tooltip>
+						<TooltipTrigger asChild>
+							<Button
+								variant={graphType === "total-sold" ? "default" : "ghost"}
+								size="fit"
+								className="rounded-lg p-2"
+								onClick={() => setGraphType("total-sold")}
+							>
+								{METRIC_LABELS["total-sold"].icon}
+							</Button>
+						</TooltipTrigger>
+						<TooltipContent>
+							<p>{METRIC_LABELS["total-sold"].title}</p>
+						</TooltipContent>
+					</Tooltip>
 					<Tooltip>
 						<TooltipTrigger asChild>
 							<Button
@@ -581,21 +622,7 @@ function GraphData({
 							<p>{METRIC_LABELS["opportunities-created"].title}</p>
 						</TooltipContent>
 					</Tooltip>
-					<Tooltip>
-						<TooltipTrigger asChild>
-							<Button
-								variant={graphType === "total-sold" ? "default" : "ghost"}
-								size="fit"
-								className="rounded-lg p-2"
-								onClick={() => setGraphType("total-sold")}
-							>
-								{METRIC_LABELS["total-sold"].icon}
-							</Button>
-						</TooltipTrigger>
-						<TooltipContent>
-							<p>{METRIC_LABELS["total-sold"].title}</p>
-						</TooltipContent>
-					</Tooltip>
+
 					<Tooltip>
 						<TooltipTrigger asChild>
 							<Button
@@ -660,6 +687,18 @@ function GraphData({
 										stopOpacity={0.1}
 									/>
 								</linearGradient>
+								<linearGradient id="goalGradient" x1="0" y1="0" x2="0" y2="1">
+									<stop
+										offset="10%"
+										stopColor={firstPeriodChartConfig.objetivo.color}
+										stopOpacity={0.3}
+									/>
+									<stop
+										offset="90%"
+										stopColor={firstPeriodChartConfig.objetivo.color}
+										stopOpacity={0.05}
+									/>
+								</linearGradient>
 							</defs>
 							<CartesianGrid vertical={false} />
 							<XAxis
@@ -682,19 +721,199 @@ function GraphData({
 
 							<ChartTooltip
 								cursor={false}
-								content={<ChartTooltipContent indicator="dot" />}
+								content={
+									<ChartTooltipContent
+										indicator="dot"
+										labelFormatter={(label) => label}
+										// formatter={(value, name) => {
+										// 	const formattedValue = METRIC_LABELS[
+										// 		graphType
+										// 	].valorFormatting(Number(value));
+										// 	const formattedName =
+										// 		name === "valor"
+										// 			? METRIC_LABELS[graphType].chartLabel
+										// 			: "Meta";
+										// 	return [formattedValue, formattedName];
+										// }}
+									/>
+								}
+							/>
+							<Area
+								dataKey="objetivo"
+								type="monotone"
+								fill="url(#goalGradient)"
+								stroke={firstPeriodChartConfig.objetivo.color}
+								strokeWidth={2}
+								strokeDasharray="5 5"
+								fillOpacity={0.5}
 							/>
 							<Area
 								dataKey="valor"
 								type="monotone"
 								fill="url(#firstGradient)"
 								stroke={firstPeriodChartConfig.valor.color}
+								strokeWidth={2}
 							/>
-							<ChartLegend content={<ChartLegendContent payload={[]} />} />
+							<ChartLegend
+								content={<ChartLegendContent payload={[]} />}
+								verticalAlign="top"
+								align="right"
+								iconType="line"
+							/>
 						</ComposedChart>
 					</ChartContainer>
 				</div>
 			</div>
+		</div>
+	);
+}
+
+type TGoalTrackingBarProps = {
+	actual: TGetStatsRouteOutputData["simplificado"]["ATUAL"];
+	goal: TGetStatsRouteOutputData["simplificado"]["METAS"];
+	barHeigth: string;
+	barBgColor: string;
+};
+function GoalTrackingBar({ actual, goal }: TGoalTrackingBarProps) {
+	const [showingMetrics, setShowingMetrics] = useState<Record<string, boolean>>(
+		{
+			"total-sold": true,
+			"opportunities-created": false,
+			"opportunities-won": false,
+			"potencia-sold": false,
+		},
+	);
+	function getPercentage({
+		goal,
+		hit,
+	}: { goal: number | undefined; hit: number | undefined }) {
+		if (!hit || hit === 0) return { text: "0%", value: 0 };
+		if (!goal && hit) return { text: "100%", value: 100 };
+		if (goal && !hit) return { text: "0%", value: 0 };
+		if (goal && hit) {
+			const percentage = ((hit / goal) * 100).toFixed(2);
+			return { text: `${percentage}%`, value: Number(percentage) };
+		}
+		return { text: "0%", value: 0 };
+	}
+
+	const METRICS = {
+		"total-sold": {
+			icon: <BadgeDollarSign className="h-5 min-h-5 w-5 min-w-5" />,
+			label: "VALOR VENDIDO",
+			valueGoal: goal.totalVendido,
+			valueHit: actual.totalVendido,
+			valueGoalFormatted: `${formatToMoney(goal.totalVendido)}`,
+			valueHitFormatted: `${formatToMoney(actual.totalVendido)}`,
+		},
+		"opportunities-created": {
+			icon: <CirclePlus className="h-5 min-h-5 w-5 min-w-5" />,
+			label: "OPORTUNIDADES CRIADAS",
+			valueGoal: goal.projetosCriados,
+			valueHit: actual.projetosCriados,
+			valueGoalFormatted: `${formatDecimalPlaces(goal.projetosCriados)}`,
+			valueHitFormatted: `${formatDecimalPlaces(actual.projetosCriados)}`,
+		},
+		"opportunities-won": {
+			icon: <CircleCheck className="h-5 min-h-5 w-5 min-w-5" />,
+			label: "OPORTUNIDADES VENDIDAS",
+			valueGoal: goal.projetosGanhos,
+			valueHit: actual.projetosGanhos,
+			valueGoalFormatted: `${formatDecimalPlaces(goal.projetosGanhos)}`,
+			valueHitFormatted: `${formatDecimalPlaces(actual.projetosGanhos)}`,
+		},
+		"potencia-sold": {
+			icon: <FaBolt className="h-5 min-h-5 w-5 min-w-5" />,
+			label: "POTÊNCIA VENDIDA",
+			valueGoal: goal.potenciaVendida,
+			valueGoalFormatted: `${formatDecimalPlaces(goal.potenciaVendida)}kWp`,
+			valueHit: actual.potenciaVendida,
+			valueHitFormatted: `${formatDecimalPlaces(actual.potenciaVendida)}kWp`,
+		},
+	};
+	const showingAllMetrics = Object.values(showingMetrics).every((v) => !!v);
+	return (
+		<div
+			className={cn(
+				"bg-card border-primary/20 flex w-full flex-col gap-1 rounded-xl border px-3 py-4 shadow-xs",
+			)}
+		>
+			<div className="flex items-center justify-between">
+				<h1 className="text-xs font-medium tracking-tight uppercase">META</h1>
+				<Button
+					variant={"ghost"}
+					size="fit"
+					className="rounded-lg p-2"
+					onClick={() => {
+						setShowingMetrics(
+							showingAllMetrics
+								? {
+										"total-sold": true,
+										"opportunities-created": false,
+										"opportunities-won": false,
+										"potencia-sold": false,
+									}
+								: {
+										"total-sold": true,
+										"opportunities-created": true,
+										"opportunities-won": true,
+										"potencia-sold": true,
+									},
+						);
+					}}
+				>
+					{showingAllMetrics ? (
+						<ChevronUp className="h-4 w-4 min-h-4 min-w-4" />
+					) : (
+						<ChevronDown className="h-4 w-4 min-h-4 min-w-4" />
+					)}
+				</Button>
+			</div>
+			<AnimatePresence initial={false}>
+				{Object.entries(METRICS)
+					.filter(([k, value]) => showingMetrics[k])
+					.map(([metric, value]) => (
+						<motion.div
+							key={metric}
+							initial={{ opacity: 0, height: 0, marginTop: 0 }}
+							animate={{ opacity: 1, height: "auto", marginTop: 4 }}
+							exit={{ opacity: 0, height: 0, marginTop: 0 }}
+							transition={{
+								duration: 0.3,
+								ease: [0.4, 0, 0.2, 1],
+							}}
+							className="flex w-full items-center gap-3 overflow-hidden"
+						>
+							{value.icon}
+							<div className="flex grow gap-2">
+								<Progress
+									value={
+										getPercentage({
+											goal: value.valueGoal,
+											hit: value.valueHit,
+										}).value
+									}
+									className="h-[25px] rounded-sm"
+									indicatorClassName="bg-gradient-to-r from-blue-500 to-[#15599a] dark:from-yellow-400 dark:to-[#fead41]"
+								/>
+							</div>
+							<div className="flex min-w-[70px] flex-col items-end justify-end lg:min-w-[100px]">
+								<p className="text-xs font-medium uppercase tracking-tight lg:text-sm">
+									{
+										getPercentage({
+											goal: value.valueGoal,
+											hit: value.valueHit,
+										}).text
+									}
+								</p>
+								<p className="text-[0.5rem] italic text-gray-500 lg:text-[0.65rem]">
+									<strong>{value.valueHitFormatted}</strong> de{" "}
+									<strong>{value.valueGoalFormatted}</strong>{" "}
+								</p>
+							</div>
+						</motion.div>
+					))}
+			</AnimatePresence>
 		</div>
 	);
 }
