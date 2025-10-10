@@ -1,3 +1,4 @@
+import connectToDatabase from "@/services/mongodb/crm-db-connection";
 import { apiHandler } from "@/utils/api";
 import type { NextApiHandler } from "next";
 import z from "zod";
@@ -47,6 +48,11 @@ const getMetaLeadsHandler: NextApiHandler<
 	console.log("PAYLOAD", payload);
 	console.log("QUERY", query);
 	console.log("HEADERS", headers);
+
+	const db = await connectToDatabase();
+	const metaLeadsCollection = db.collection("meta_leads");
+
+	await metaLeadsCollection.insertOne(payload);
 
 	return res
 		.status(200)
