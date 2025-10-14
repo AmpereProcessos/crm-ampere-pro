@@ -1,4 +1,3 @@
-import ClientsDuplicity from "@/clients-duplicity.json";
 import connectToAmpereProjectsDatabase from "@/services/mongodb/ampere/projects-db-connection";
 import connectToDatabase from "@/services/mongodb/crm-db-connection";
 import { apiHandler } from "@/utils/api";
@@ -42,7 +41,7 @@ type TClientsOperationHolder = {
 	}[];
 };
 async function fixDuplicity(req: NextApiRequest, res: NextApiResponse) {
-	const clientsDuplicity = ClientsDuplicity as TClientsOperationHolder[];
+	const clientsDuplicity = [] as TClientsOperationHolder[];
 
 	const crmDb = await connectToDatabase();
 	const appDb = await connectToAmpereProjectsDatabase();
