@@ -180,8 +180,9 @@ export async function fetchMetaLeadData(
 	].join(",");
 
 	const url = `${META_GRAPH_API_BASE_URL}/${leadgenId}?fields=${fields}&access_token=${accessToken}`;
-
+	console.log("[INFO] [META_GRAPH_API] [FETCH_LEAD_DATA] URL:", url);
 	const response = await fetch(url);
+	console.log("[INFO] [META_GRAPH_API] [FETCH_LEAD_DATA] Response:", response);
 
 	if (!response.ok) {
 		const error = await response.json();
@@ -207,9 +208,9 @@ export async function fetchMetaAdData(
 	].join(",");
 
 	const url = `${META_GRAPH_API_BASE_URL}/${adId}?fields=${fields}&access_token=${accessToken}`;
-
+	console.log("[INFO] [META_GRAPH_API] [FETCH_AD_DATA] URL:", url);
 	const response = await fetch(url);
-
+	console.log("[INFO] [META_GRAPH_API] [FETCH_AD_DATA] Response:", response);
 	if (!response.ok) {
 		const error = await response.json();
 		throw new Error(`Failed to fetch Meta ad data: ${JSON.stringify(error)}`);
@@ -228,9 +229,9 @@ export async function fetchMetaAdsetData(
 	const fields = ["name", "campaign_id", "status", "targeting"].join(",");
 
 	const url = `${META_GRAPH_API_BASE_URL}/${adsetId}?fields=${fields}&access_token=${accessToken}`;
-
+	console.log("[INFO] [META_GRAPH_API] [FETCH_ADSET_DATA] URL:", url);
 	const response = await fetch(url);
-
+	console.log("[INFO] [META_GRAPH_API] [FETCH_ADSET_DATA] Response:", response);
 	if (!response.ok) {
 		const error = await response.json();
 		throw new Error(
@@ -251,9 +252,12 @@ export async function fetchMetaCampaignData(
 	const fields = ["name", "status", "objective"].join(",");
 
 	const url = `${META_GRAPH_API_BASE_URL}/${campaignId}?fields=${fields}&access_token=${accessToken}`;
-
+	console.log("[INFO] [META_GRAPH_API] [FETCH_CAMPAIGN_DATA] URL:", url);
 	const response = await fetch(url);
-
+	console.log(
+		"[INFO] [META_GRAPH_API] [FETCH_CAMPAIGN_DATA] Response:",
+		response,
+	);
 	if (!response.ok) {
 		const error = await response.json();
 		throw new Error(
@@ -274,9 +278,9 @@ export async function fetchMetaPageData(
 	const fields = ["name"].join(",");
 
 	const url = `${META_GRAPH_API_BASE_URL}/${pageId}?fields=${fields}&access_token=${accessToken}`;
-
+	console.log("[INFO] [META_GRAPH_API] [FETCH_PAGE_DATA] URL:", url);
 	const response = await fetch(url);
-
+	console.log("[INFO] [META_GRAPH_API] [FETCH_PAGE_DATA] Response:", response);
 	if (!response.ok) {
 		const error = await response.json();
 		throw new Error(`Failed to fetch Meta page data: ${JSON.stringify(error)}`);
@@ -295,9 +299,9 @@ export async function fetchMetaFormData(
 	const fields = ["name", "status", "locale"].join(",");
 
 	const url = `${META_GRAPH_API_BASE_URL}/${formId}?fields=${fields}&access_token=${accessToken}`;
-
+	console.log("[INFO] [META_GRAPH_API] [FETCH_FORM_DATA] URL:", url);
 	const response = await fetch(url);
-
+	console.log("[INFO] [META_GRAPH_API] [FETCH_FORM_DATA] Response:", response);
 	if (!response.ok) {
 		const error = await response.json();
 		throw new Error(`Failed to fetch Meta form data: ${JSON.stringify(error)}`);
