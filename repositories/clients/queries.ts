@@ -1,4 +1,4 @@
-import { formatPhoneAsBase } from "@/lib/utils";
+import { formatPhoneAsBase } from "@/utils/methods";
 import {
 	ClientSimplifiedProjection,
 	SimilarClientsSimplifiedProjection,
