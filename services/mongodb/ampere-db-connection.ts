@@ -1,15 +1,17 @@
-import createHttpError from 'http-errors'
-import { Db, MongoClient } from 'mongodb'
-import clientPromise from './mongo-client'
+import createHttpError from "http-errors";
+import { type Db, MongoClient } from "mongodb";
+import clientPromise from "./mongo-client";
 
-let cachedDb: Db | null = null
-export default async function connectToAmpereDatabase(uri: unknown, database: string) {
-  if (typeof uri != 'string') throw createHttpError.InternalServerError('Wrong databse URI.')
-  if (cachedDb) {
-    return cachedDb
-  }
-  const client = await clientPromise
-  const db = client.db(database)
-  cachedDb = db
-  return db
+let cachedDb: Db | null = null;
+export default async function connectToAmpereDatabase(
+	uri: unknown,
+	database: string,
+) {
+	if (cachedDb) {
+		return cachedDb;
+	}
+	const client = await clientPromise;
+	const db = client.db(database);
+	cachedDb = db;
+	return db;
 }
