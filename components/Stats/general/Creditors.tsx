@@ -315,11 +315,11 @@ function CreditorAggregateChart({
 	const METRIC_LABELS = {
 		quantity: {
 			icon: <CircleCheck className="w-4 h-4 min-w-4 min-h-4" />,
-			title: "PROJETOS VENDIDOS",
+			title: "PROJETOS VENDIDOS POR CREDOR",
 		},
 		total: {
 			icon: <BadgeDollarSign className="w-4 h-4 min-w-4 min-h-4" />,
-			title: "VALOR VENDIDO",
+			title: "VALOR VENDIDO POR CREDOR",
 		},
 	};
 	const chartConfig = {
@@ -340,7 +340,7 @@ function CreditorAggregateChart({
 		<div className="flex flex-col rounded-sm border border-black p-3 min-w-0">
 			<div className="flex items-center justify-between gap-2">
 				<h1 className="font-bold tracking-tight">
-					PARTICIPAÇÃO POR CREDOR (GERAL)
+					{METRIC_LABELS[groupType].title}
 				</h1>
 				<div className="flex justify-end">
 					<div className="flex items-center gap-2">
