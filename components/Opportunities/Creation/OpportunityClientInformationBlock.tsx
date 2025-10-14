@@ -2,7 +2,11 @@ import SelectInput from "@/components/Inputs/SelectInput";
 import TextInput from "@/components/Inputs/TextInput";
 import Avatar from "@/components/utils/Avatar";
 import { formatDateAsLocale, formatLocation } from "@/lib/methods/formatting";
-import { formatToCPForCNPJ, formatToPhone } from "@/utils/methods";
+import {
+	formatPhoneAsBase,
+	formatToCPForCNPJ,
+	formatToPhone,
+} from "@/utils/methods";
 import { useAcquisitionChannels } from "@/utils/queries/utils";
 import type {
 	TClient,
@@ -179,6 +183,7 @@ function OpportunityClientInformationBlock({
 									setClient((prev) => ({
 										...prev,
 										telefonePrimario: formatToPhone(value),
+										telefonePrimarioBase: formatPhoneAsBase(value),
 									}))
 								}
 								width="100%"

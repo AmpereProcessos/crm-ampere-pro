@@ -1,3 +1,4 @@
+import { formatPhoneAsBase } from "@/lib/utils";
 import {
 	ClientSimplifiedProjection,
 	SimilarClientsSimplifiedProjection,
@@ -7,14 +8,24 @@ import {
 	type TSimilarClientSimplified,
 	type TSimilarClientSimplifiedDTO,
 } from "@/utils/schemas/client.schema";
-import { type Collection, type Filter, type MatchKeysAndValues, ObjectId, type WithId } from "mongodb";
+import {
+	type Collection,
+	type Filter,
+	type MatchKeysAndValues,
+	ObjectId,
+	type WithId,
+} from "mongodb";
 
 type GetClientByIdParams = {
 	collection: Collection<TClient>;
 	id: string;
 	query: Filter<TClient>;
 };
-export async function getClientById({ collection, id, query }: GetClientByIdParams) {
+export async function getClientById({
+	collection,
+	id,
+	query,
+}: GetClientByIdParams) {
 	try {
 		const clientsArr = await collection
 			.aggregate([
@@ -42,7 +53,11 @@ export async function getClientById({ collection, id, query }: GetClientByIdPara
 	}
 }
 
-export function getClientSearchParams({ cpfCnpj, phoneNumber, email }: { cpfCnpj: unknown; phoneNumber: unknown; email: unknown }) {
+export function getClientSearchParams({
+	cpfCnpj,
+	phoneNumber,
+	email,
+}: { cpfCnpj: unknown; phoneNumber: unknown; email: unknown }) {
 	const orArr = [];
 
 	if (typeof cpfCnpj === "string" && cpfCnpj.trim().length > 2) {
@@ -51,8 +66,13 @@ export function getClientSearchParams({ cpfCnpj, phoneNumber, email }: { cpfCnpj
 	}
 
 	if (typeof phoneNumber === "string" && phoneNumber.trim().length > 2) {
-		orArr.push({ telefonePrimario: { $regex: phoneNumber, $options: "i" } });
-		orArr.push({ telefonePrimario: phoneNumber });
+		orArr.push({
+			telefonePrimarioBase: {
+				$regex: formatPhoneAsBase(phoneNumber),
+				$options: "i",
+			},
+		});
+		orArr.push({ telefonePrimarioBase: formatPhoneAsBase(phoneNumber) });
 	}
 
 	if (typeof email === "string" && email.trim().length > 2) {
@@ -68,7 +88,12 @@ type GetExistentClientParams = {
 	cpfCnpj?: string;
 	phoneNumber?: string;
 };
-export async function getExistentClientByProperties({ collection, email, cpfCnpj, phoneNumber }: GetExistentClientParams) {
+export async function getExistentClientByProperties({
+	collection,
+	email,
+	cpfCnpj,
+	phoneNumber,
+}: GetExistentClientParams) {
 	try {
 		const orParam = getClientSearchParams({ cpfCnpj, email, phoneNumber });
 		const orQuery = orParam.length > 0 ? { $or: orParam } : {};
@@ -87,9 +112,15 @@ type GetClientsParams = {
 	partnerId: string;
 	queryParam: MatchKeysAndValues<TClient>;
 };
-export async function getClients({ collection, partnerId, queryParam }: GetClientsParams) {
+export async function getClients({
+	collection,
+	partnerId,
+	queryParam,
+}: GetClientsParams) {
 	try {
-		const clients = await collection.find({ idParceiro: partnerId, ...queryParam }).toArray();
+		const clients = await collection
+			.find({ idParceiro: partnerId, ...queryParam })
+			.toArray();
 		return clients;
 	} catch (error) {
 		console.log("[ERROR] Error getting clients", error);
@@ -103,10 +134,18 @@ type GetSimilarClientsParams = {
 	query: Filter<TClient>;
 };
 
-export async function getSimilarClients({ collection, query }: GetSimilarClientsParams) {
+export async function getSimilarClients({
+	collection,
+	query,
+}: GetSimilarClientsParams) {
 	try {
-		const clients = await collection.find({ ...query }, { projection: SimilarClientsSimplifiedProjection }).toArray();
-		return clients.map((c) => ({ ...c, _id: c._id.toString() })) as TSimilarClientSimplifiedDTO[];
+		const clients = await collection
+			.find({ ...query }, { projection: SimilarClientsSimplifiedProjection })
+			.toArray();
+		return clients.map((c) => ({
+			...c,
+			_id: c._id.toString(),
+		})) as TSimilarClientSimplifiedDTO[];
 	} catch (error) {
 		console.log("[ERROR] Error getting similar clients", error);
 		throw error;
@@ -119,15 +158,31 @@ type GetClientsByFiltersParams = {
 	skip: number;
 	limit: number;
 };
-export async function getClientsByFilters({ collection, query, skip, limit }: GetClientsByFiltersParams) {
+export async function getClientsByFilters({
+	collection,
+	query,
+	skip,
+	limit,
+}: GetClientsByFiltersParams) {
 	try {
 		// Getting the total clients matched by the query
 		const clientsMatched = await collection.countDocuments({ ...query });
 		const sort = { _id: -1 };
 		const match = { ...query };
-		const clients = await collection.aggregate([{ $sort: sort }, { $match: match }, { $skip: skip }, { $project: ClientSimplifiedProjection }, { $limit: limit }]).toArray();
+		const clients = await collection
+			.aggregate([
+				{ $sort: sort },
+				{ $match: match },
+				{ $skip: skip },
+				{ $project: ClientSimplifiedProjection },
+				{ $limit: limit },
+			])
+			.toArray();
 
-		return { clients, clientsMatched } as { clients: TClientDTOSimplified[]; clientsMatched: number };
+		return { clients, clientsMatched } as {
+			clients: TClientDTOSimplified[];
+			clientsMatched: number;
+		};
 	} catch (error) {
 		console.log("[ERROR] Error getting clients by filters", error);
 		throw error;

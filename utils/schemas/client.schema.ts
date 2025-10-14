@@ -256,6 +256,7 @@ export type TSimilarClientSimplifiedDTO = Pick<
 	| "nome"
 	| "autor"
 	| "telefonePrimario"
+	| "telefonePrimarioBase"
 	| "email"
 	| "cpfCnpj"
 	| "cep"
@@ -304,6 +305,7 @@ export const SimilarClientsSimplifiedProjection = {
 	_id: 1,
 	nome: 1,
 	telefonePrimario: 1,
+	telefonePrimarioBase: 1,
 	email: 1,
 	cpfCnpj: 1,
 	autor: 1,
@@ -321,6 +323,7 @@ export const ClientSimplifiedProjection = {
 	_id: 1,
 	nome: 1,
 	telefonePrimario: 1,
+	telefonePrimarioBase: 1,
 	email: 1,
 	cpfCnpj: 1,
 	cep: 1,
