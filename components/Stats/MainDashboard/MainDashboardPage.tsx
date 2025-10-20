@@ -5,6 +5,7 @@ import UserConectaIndicationCodeFlag from "@/components/Conecta/UserConectaIndic
 import DateInput from "@/components/Inputs/DateInput";
 import MultipleSelectInput from "@/components/Inputs/MultipleSelectInput";
 import { Sidebar } from "@/components/Sidebar";
+import UpdateProfileHint from "@/components/Users/UpdateProfileHint";
 import { Button } from "@/components/ui/button";
 import {
 	type ChartConfig,
@@ -20,6 +21,7 @@ import {
 	TooltipContent,
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
+import CoachMark from "@/components/utils/CoachMark";
 import type { TUserSession } from "@/lib/auth/session";
 import {
 	formatDateOnInputChange,
@@ -420,6 +422,14 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
 						</div>
 					</div>
 				</div>
+				<UpdateProfileHint
+					session={session}
+					required={
+						!session.user.telefone ||
+						!session.user.avatar_url ||
+						!session.user.dataNascimento
+					}
+				/>
 			</div>
 		</div>
 	);
