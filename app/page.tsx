@@ -9,6 +9,6 @@ export default async function Home() {
 	if (!session.user || !session.session) {
 		return redirect("/auth/signin");
 	}
-
+	console.log({ session: session.session, user: session.user });
 	return <MainDashboardPage session={session} />;
 }
