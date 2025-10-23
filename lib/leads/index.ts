@@ -20,8 +20,7 @@ export const DEFAULT_LEAD_QUALIFICATION_ATTRIBUTES = [
 		name: "VALOR DA CONTA DE ENERGIA",
 		call: "Escolha qual a faixa de valor da conta de energia do cliente.",
 		inputType: "select",
-		inputPlaceholder:
-			"Selecione a faixa de valor da conta de energia do cliente.",
+		inputPlaceholder: "Selecione a faixa de valor da conta de energia do cliente.",
 		inputOptions: [
 			{
 				id: 1,
@@ -75,8 +74,7 @@ export const DEFAULT_LEAD_QUALIFICATION_ATTRIBUTES = [
 		name: "APTO A RECORRER À CREDITO BANCÁRIO",
 		call: "Responda se o cliente está apto a recorrer à crédito bancário.",
 		inputType: "select",
-		inputPlaceholder:
-			"Selecione se o cliente está apto a recorrer à crédito bancário.",
+		inputPlaceholder: "Selecione se o cliente está apto a recorrer à crédito bancário.",
 		inputOptions: [
 			{ id: 1, label: "SIM", value: "SIM", weightMultipler: 1 },
 			{ id: 2, label: "NÃO", value: "NÃO", weightMultipler: 0.5 },
@@ -164,38 +162,19 @@ const META_GRAPH_API_BASE_URL = `https://graph.facebook.com/${META_GRAPH_API_VER
  * Fetches lead data from Meta Graph API
  * Tries to fetch all fields, falls back to core fields if some are unavailable
  */
-export async function fetchMetaLeadData(
-	leadgenId: string,
-	accessToken: string,
-): Promise<TMetaLeadData> {
+export async function fetchMetaLeadData(leadgenId: string, accessToken: string): Promise<TMetaLeadData> {
 	// Try fetching all fields first
-	const allFields = [
-		"id",
-		"created_time",
-		"field_data",
-		"ad_id",
-		"adset_id",
-		"campaign_id",
-		"form_id",
-		"page_id",
-		"platform",
-		"tracking_parameters",
-	].join(",");
+	const allFields = ["id", "created_time", "field_data", "ad_id", "adset_id", "campaign_id", "form_id", "page_id", "platform", "tracking_parameters"].join(",");
 
 	const allFieldsUrl = `${META_GRAPH_API_BASE_URL}/${leadgenId}?fields=${allFields}&access_token=${accessToken}`;
 
-	console.log(
-		"[INFO] [META_GRAPH_API] [FETCH_LEAD_DATA] Attempting to fetch all fields",
-	);
+	console.log("[INFO] [META_GRAPH_API] [FETCH_LEAD_DATA] Attempting to fetch all fields");
 	let response = await fetch(allFieldsUrl);
 
 	// If all fields request fails, try with just core fields
 	if (!response.ok) {
 		const error = await response.json();
-		console.log(
-			"[WARN] [META_GRAPH_API] [FETCH_LEAD_DATA] Failed to fetch all fields, trying core fields only:",
-			JSON.stringify(error),
-		);
+		console.log("[WARN] [META_GRAPH_API] [FETCH_LEAD_DATA] Failed to fetch all fields, trying core fields only:", JSON.stringify(error));
 
 		// Fallback to core fields only
 		const coreFields = ["id", "created_time", "field_data"].join(",");
@@ -205,35 +184,21 @@ export async function fetchMetaLeadData(
 
 		if (!response.ok) {
 			const coreError = await response.json();
-			throw new Error(
-				`Failed to fetch Meta lead data: ${JSON.stringify(coreError)}`,
-			);
+			throw new Error(`Failed to fetch Meta lead data: ${JSON.stringify(coreError)}`);
 		}
 	}
 
 	const leadData = (await response.json()) as TMetaLeadData;
 
-	console.log(
-		"[INFO] [META_GRAPH_API] [FETCH_LEAD_DATA] Lead data fetched:",
-		JSON.stringify(leadData, null, 2),
-	);
+	console.log("[INFO] [META_GRAPH_API] [FETCH_LEAD_DATA] Lead data fetched:", JSON.stringify(leadData, null, 2));
 	return leadData;
 }
 
 /**
  * Fetches ad data from Meta Graph API
  */
-export async function fetchMetaAdData(
-	adId: string,
-	accessToken: string,
-): Promise<TMetaAdData> {
-	const fields = [
-		"name",
-		"adset_id",
-		"campaign_id",
-		"status",
-		"creative{id,name}",
-	].join(",");
+export async function fetchMetaAdData(adId: string, accessToken: string): Promise<TMetaAdData> {
+	const fields = ["name", "adset_id", "campaign_id", "status", "creative{id,name}"].join(",");
 
 	const url = `${META_GRAPH_API_BASE_URL}/${adId}?fields=${fields}&access_token=${accessToken}`;
 	const response = await fetch(url);
@@ -249,10 +214,7 @@ export async function fetchMetaAdData(
 /**
  * Fetches adset data from Meta Graph API
  */
-export async function fetchMetaAdsetData(
-	adsetId: string,
-	accessToken: string,
-): Promise<TMetaAdsetData> {
+export async function fetchMetaAdsetData(adsetId: string, accessToken: string): Promise<TMetaAdsetData> {
 	const fields = ["name", "campaign_id", "status", "targeting"].join(",");
 
 	const url = `${META_GRAPH_API_BASE_URL}/${adsetId}?fields=${fields}&access_token=${accessToken}`;
@@ -260,9 +222,7 @@ export async function fetchMetaAdsetData(
 
 	if (!response.ok) {
 		const error = await response.json();
-		throw new Error(
-			`Failed to fetch Meta adset data: ${JSON.stringify(error)}`,
-		);
+		throw new Error(`Failed to fetch Meta adset data: ${JSON.stringify(error)}`);
 	}
 
 	return response.json();
@@ -271,10 +231,7 @@ export async function fetchMetaAdsetData(
 /**
  * Fetches campaign data from Meta Graph API
  */
-export async function fetchMetaCampaignData(
-	campaignId: string,
-	accessToken: string,
-): Promise<TMetaCampaignData> {
+export async function fetchMetaCampaignData(campaignId: string, accessToken: string): Promise<TMetaCampaignData> {
 	const fields = ["name", "status", "objective"].join(",");
 
 	const url = `${META_GRAPH_API_BASE_URL}/${campaignId}?fields=${fields}&access_token=${accessToken}`;
@@ -282,9 +239,7 @@ export async function fetchMetaCampaignData(
 
 	if (!response.ok) {
 		const error = await response.json();
-		throw new Error(
-			`Failed to fetch Meta campaign data: ${JSON.stringify(error)}`,
-		);
+		throw new Error(`Failed to fetch Meta campaign data: ${JSON.stringify(error)}`);
 	}
 
 	return response.json();
@@ -293,10 +248,7 @@ export async function fetchMetaCampaignData(
 /**
  * Fetches page data from Meta Graph API
  */
-export async function fetchMetaPageData(
-	pageId: string,
-	accessToken: string,
-): Promise<TMetaPageData> {
+export async function fetchMetaPageData(pageId: string, accessToken: string): Promise<TMetaPageData> {
 	const fields = ["name"].join(",");
 
 	const url = `${META_GRAPH_API_BASE_URL}/${pageId}?fields=${fields}&access_token=${accessToken}`;
@@ -313,10 +265,7 @@ export async function fetchMetaPageData(
 /**
  * Fetches form data from Meta Graph API
  */
-export async function fetchMetaFormData(
-	formId: string,
-	accessToken: string,
-): Promise<TMetaFormData> {
+export async function fetchMetaFormData(formId: string, accessToken: string): Promise<TMetaFormData> {
 	const fields = ["name", "status", "locale"].join(",");
 
 	const url = `${META_GRAPH_API_BASE_URL}/${formId}?fields=${fields}&access_token=${accessToken}`;
@@ -333,13 +282,8 @@ export async function fetchMetaFormData(
 /**
  * Enriches Meta lead data with ad, adset, campaign, page, and form information
  */
-export async function enrichMetaLead(
-	leadData: TMetaLeadData,
-	accessToken: string,
-): Promise<TEnrichedMetaLead> {
-	const answers = leadData.field_data.reduce<
-		Record<string, string | undefined>
-	>((acc, field) => {
+export async function enrichMetaLead(leadData: TMetaLeadData, accessToken: string): Promise<TEnrichedMetaLead> {
+	const answers = leadData.field_data.reduce<Record<string, string | undefined>>((acc, field) => {
 		acc[field.name] = field.values?.at(0);
 		return acc;
 	}, {});
@@ -362,10 +306,7 @@ export async function enrichMetaLead(
 					enrichedLead.ad = adData;
 				})
 				.catch((error) => {
-					console.error(
-						`[ERROR] Failed to fetch ad data for ${leadData.ad_id}:`,
-						error,
-					);
+					console.error(`[ERROR] Failed to fetch ad data for ${leadData.ad_id}:`, error);
 				}),
 		);
 	}
@@ -377,10 +318,7 @@ export async function enrichMetaLead(
 					enrichedLead.adset = adsetData;
 				})
 				.catch((error) => {
-					console.error(
-						`[ERROR] Failed to fetch adset data for ${leadData.adset_id}:`,
-						error,
-					);
+					console.error(`[ERROR] Failed to fetch adset data for ${leadData.adset_id}:`, error);
 				}),
 		);
 	}
@@ -392,10 +330,7 @@ export async function enrichMetaLead(
 					enrichedLead.campaign = campaignData;
 				})
 				.catch((error) => {
-					console.error(
-						`[ERROR] Failed to fetch campaign data for ${leadData.campaign_id}:`,
-						error,
-					);
+					console.error(`[ERROR] Failed to fetch campaign data for ${leadData.campaign_id}:`, error);
 				}),
 		);
 	}
@@ -407,10 +342,7 @@ export async function enrichMetaLead(
 					enrichedLead.page = pageData;
 				})
 				.catch((error) => {
-					console.error(
-						`[ERROR] Failed to fetch page data for ${leadData.page_id}:`,
-						error,
-					);
+					console.error(`[ERROR] Failed to fetch page data for ${leadData.page_id}:`, error);
 				}),
 		);
 	}
@@ -422,10 +354,7 @@ export async function enrichMetaLead(
 					enrichedLead.form = formData;
 				})
 				.catch((error) => {
-					console.error(
-						`[ERROR] Failed to fetch form data for ${leadData.form_id}:`,
-						error,
-					);
+					console.error(`[ERROR] Failed to fetch form data for ${leadData.form_id}:`, error);
 				}),
 		);
 	}

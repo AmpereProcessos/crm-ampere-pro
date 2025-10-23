@@ -9,10 +9,15 @@ import type { Collection } from "mongodb";
 import type { NextApiHandler } from "next";
 import { z } from "zod";
 import { createNovuTopicAndSubscribeResponsibles } from "../../opportunities/personalized";
+import { formatPhoneAsBase } from "@/utils/methods";
 
 const NewLeadQueryInputSchema = z.object({
-	nome: z.string({ required_error: "Nome é obrigatório", invalid_type_error: "Nome deve ser uma string" }).min(3, "Nome deve ter pelo menos 3 caracteres"),
-	telefone: z.string({ required_error: "Telefone é obrigatório", invalid_type_error: "Telefone deve ser uma string" }).min(11, "Telefone deve ter pelo menos 11 caracteres"),
+	nome: z
+		.string({ required_error: "Nome é obrigatório", invalid_type_error: "Nome deve ser uma string" })
+		.min(3, "Nome deve ter pelo menos 3 caracteres"),
+	telefone: z
+		.string({ required_error: "Telefone é obrigatório", invalid_type_error: "Telefone deve ser uma string" })
+		.min(11, "Telefone deve ter pelo menos 11 caracteres"),
 	email: z.string({ invalid_type_error: "Email deve ser uma string" }).email("Email inválido").optional().nullable(),
 	uf: z.string({ invalid_type_error: "UF deve ser uma string" }).min(2, "UF deve ter pelo menos 2 caracteres").optional().nullable(),
 	cidade: z.string({ invalid_type_error: "Cidade deve ser uma string" }).min(3, "Cidade deve ter pelo menos 3 caracteres").optional().nullable(),
@@ -39,7 +44,7 @@ async function handleLeadGeneration(newLead: z.infer<typeof NewLeadQueryInputSch
 	const newLeadReceiver = await getNewLeadReceiver({ opportunitiesCollection, usersCollection });
 	console.log("[generate-lead] New lead receiver", newLeadReceiver);
 	let clientId: string | null = null;
-	const client = await clientsCollection.findOne({ telefonePrimario: newLead.telefone });
+	const client = await clientsCollection.findOne({ telefonePrimarioBase: formatPhoneAsBase(newLead.telefone) });
 
 	if (client) {
 		console.log("[generate-lead] Using existing client", client._id.toString());
@@ -50,6 +55,7 @@ async function handleLeadGeneration(newLead: z.infer<typeof NewLeadQueryInputSch
 			nome: newLead.nome,
 			idParceiro: newLeadReceiver.idParceiro,
 			telefonePrimario: newLead.telefone,
+			telefonePrimarioBase: formatPhoneAsBase(newLead.telefone),
 			uf: newLead.uf || "",
 			cidade: newLead.cidade || "",
 			canalAquisicao: newLead.canalAquisicao || "MARKETING (GERAL)",
@@ -63,7 +69,9 @@ async function handleLeadGeneration(newLead: z.infer<typeof NewLeadQueryInputSch
 		clientId = insertedClientResponse.insertedId.toString();
 	}
 
-	const lastInsertedIdentificator = await opportunitiesCollection.aggregate([{ $project: { identificador: 1 } }, { $sort: { _id: -1 } }, { $limit: 1 }]).toArray();
+	const lastInsertedIdentificator = await opportunitiesCollection
+		.aggregate([{ $project: { identificador: 1 } }, { $sort: { _id: -1 } }, { $limit: 1 }])
+		.toArray();
 	const lastIdentifierNumber = lastInsertedIdentificator[0] ? Number(lastInsertedIdentificator[0].identificador.split("-")[1]) : 0;
 	const newIdentifierNumber = lastIdentifierNumber + 1;
 	const newIdentifier = `CRM-${newIdentifierNumber}`;
@@ -145,7 +153,8 @@ async function handleLeadGeneration(newLead: z.infer<typeof NewLeadQueryInputSch
 		opportunityResponsibles,
 		author: {
 			nome: "INTEGRAÇÃO",
-			avatar_url: "https://firebasestorage.googleapis.com/v0/b/sistemaampere.appspot.com/o/usuarios%2Favatar-ampere.png?alt=media&token=de5f3573-c293-43bd-8209-4dc0d1304b2a",
+			avatar_url:
+				"https://firebasestorage.googleapis.com/v0/b/sistemaampere.appspot.com/o/usuarios%2Favatar-ampere.png?alt=media&token=de5f3573-c293-43bd-8209-4dc0d1304b2a",
 		},
 	});
 	const whatsappRedirectMessage = formatWhatsappRedirectMessage({
@@ -170,6 +179,7 @@ async function getNewLeadReceiver({ opportunitiesCollection, usersCollection }: 
 			.sort({ dataInsercao: -1 })
 			.limit(1)
 			.toArray();
+		0;
 		const lastOpportunityFromLeads = opportunitiesFromLeads[0];
 
 		const lastReceiverId = lastOpportunityFromLeads.autor.id;
