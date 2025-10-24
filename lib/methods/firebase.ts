@@ -1,7 +1,8 @@
+import { FirebaseError } from "firebase/app";
+import { getDownloadURL, ref, type UploadResult, uploadBytes } from "firebase/storage";
 import { storage } from "@/services/firebase/storage-config";
 import { fileTypes } from "@/utils/constants";
-import { FirebaseError } from "firebase/app";
-import { type UploadResult, getDownloadURL, ref, uploadBytes } from "firebase/storage";
+
 type HandleProposalUploadParams = {
 	file: File;
 	storageRef: string;

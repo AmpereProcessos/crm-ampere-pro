@@ -4,7 +4,9 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import ResponsiveDialogDrawer from "@/components/utils/ResponsiveDialogDrawer";
+import useClientStateHook, { type TUseClientStateHook } from "@/hooks/use-client-state-hook";
 import type { TUserSession } from "@/lib/auth/session";
+import { uploadFile } from "@/lib/methods/firebase";
 import { createClient } from "@/utils/mutations/clients";
 import type { TClient } from "@/utils/schemas/client.schema";
 import ClientAddressBlock from "./Blocks/Address";
@@ -26,76 +28,69 @@ type NewClientModalProps = {
 function NewClient({ session, partnerId, closeModal, callbacks }: NewClientModalProps) {
 	const queryClient = useQueryClient();
 
-	const [clientInfo, setClientInfo] = useState<TClient>({
-		nome: "",
-		idParceiro: partnerId,
-		cpfCnpj: "",
-		telefonePrimario: "",
-		telefoneSecundario: null,
-		email: "",
-		cep: "",
-		uf: "",
-		cidade: "",
-		bairro: "",
-		endereco: "",
-		numeroOuIdentificador: "",
-		complemento: "",
-		dataNascimento: null,
-		profissao: null,
-		estadoCivil: null,
-		canalAquisicao: "",
-		idMarketing: null,
-		indicador: {
-			nome: "",
-			contato: "",
-		},
-		autor: {
-			id: session.user.id,
-			nome: session.user.nome,
-			avatar_url: session.user.avatar_url,
-		},
-		dataInsercao: new Date().toISOString(),
-	});
-	function updateClientInfo(changes: Partial<TClient>) {
-		setClientInfo((prev) => ({ ...prev, ...changes }));
-	}
-
-	function resetClient() {
-		setClientInfo({
-			nome: "",
-			idParceiro: partnerId,
-			cpfCnpj: "",
-
-			telefonePrimario: "",
-			telefoneSecundario: null,
-			email: "",
-			cep: "",
-			uf: "",
-			cidade: "",
-			bairro: "",
-			endereco: "",
-			numeroOuIdentificador: "",
-			complemento: "",
-			dataNascimento: null,
-			profissao: null,
-			estadoCivil: null,
-			canalAquisicao: "",
-			idMarketing: null,
-			indicador: {
+	const { state, updateClient, updateClientAvatarHolder, resetState, redefineState } = useClientStateHook({
+		initialState: {
+			client: {
 				nome: "",
-				contato: "",
+				idParceiro: partnerId,
+				cpfCnpj: "",
+				telefonePrimario: "",
+				telefoneSecundario: null,
+				email: "",
+				cep: "",
+				uf: "",
+				cidade: "",
+				bairro: "",
+				endereco: "",
+				numeroOuIdentificador: "",
+				complemento: "",
+				dataNascimento: null,
+				profissao: null,
+				estadoCivil: null,
+				canalAquisicao: "",
+				idMarketing: null,
+				indicador: {
+					nome: "",
+					contato: "",
+				},
+				autor: {
+					id: session.user.id,
+					nome: session.user.nome,
+					avatar_url: session.user.avatar_url,
+				},
+				dataInsercao: new Date().toISOString(),
 			},
-			autor: {
-				id: session.user.id,
-				nome: session.user.nome,
-				avatar_url: session.user.avatar_url,
+			clientAvatarHolder: {
+				file: null,
+				previewUrl: null,
 			},
-			dataInsercao: new Date().toISOString(),
+		},
+	});
+
+	async function handleCreateClient(state: TUseClientStateHook["state"]) {
+		let clientAvatarUrl = state.client.conecta?.avatar_url;
+
+		if (state.clientAvatarHolder.file) {
+			const fileName = `avatar_cliente_${state.client.nome.toLowerCase().replaceAll(" ", "_")}`;
+			const { url } = await uploadFile({ file: state.clientAvatarHolder.file, fileName: fileName, vinculationId: state.client.idParceiro });
+			clientAvatarUrl = url;
+		}
+
+		return await createClient({
+			info: {
+				...state.client,
+				conecta: {
+					...state.client.conecta,
+					usuario: state.client.conecta?.usuario ?? "",
+					senha: state.client.conecta?.senha ?? "",
+					avatar_url: clientAvatarUrl,
+				},
+			},
 		});
 	}
 	const {
 		data: mutationData,
-		mutate: handleCreateClient,
+		mutate: handleCreateClientMutation,
 		reset: resetMutation,
 		isPending,
 	} = useMutation({
@@ -123,7 +118,7 @@ function NewClient({ session, partnerId, closeModal, callbacks }: NewClientModal
 			menuActionButtonText="CRIAR CLIENTE"
 			menuCancelButtonText="CANCELAR"
 			closeMenu={closeModal}
-			actionFunction={() => handleCreateClient({ info: clientInfo })}
+			actionFunction={() => handleCreateClient(state)}
 			actionIsLoading={isPending}
 			stateIsLoading={false}
 			dialogVariant="md"
@@ -138,7 +133,7 @@ function NewClient({ session, partnerId, closeModal, callbacks }: NewClientModal
 					<div className="flex flex-col items-center gap-2 lg:flex-row">
 						<Button
 							onClick={() => {
-								resetClient();
+								resetState();
 								resetMutation();
 							}}
 							variant={"secondary"}
@@ -148,9 +143,14 @@ function NewClient({ session, partnerId, closeModal, callbacks }: NewClientModal
 					</div>
 				</div>
 			) : null}
-			<ClientGeneralBlock infoHolder={clientInfo} updateInfoHolder={updateClientInfo} />
-			<ClientContactsBlock infoHolder={clientInfo} updateInfoHolder={updateClientInfo} />
-			<ClientAddressBlock infoHolder={clientInfo} updateInfoHolder={updateClientInfo} />
+			<ClientGeneralBlock
+				infoHolder={state.client}
+				updateInfoHolder={updateClient}
+				avatarHolder={state.clientAvatarHolder}
+				updateAvatarHolder={updateClientAvatarHolder}
+			/>
+			<ClientContactsBlock infoHolder={state.client} updateInfoHolder={updateClient} />
+			<ClientAddressBlock infoHolder={state.client} updateInfoHolder={updateClient} />
 		</ResponsiveDialogDrawer>
 	);
 }

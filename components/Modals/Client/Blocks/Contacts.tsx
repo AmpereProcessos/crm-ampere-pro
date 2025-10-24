@@ -1,12 +1,12 @@
 import { Phone } from "lucide-react";
 import TextInput from "@/components/Inputs/TextInput";
 import ResponsiveDialogDrawerSection from "@/components/utils/ResponsiveDialogDrawerSection";
+import type { TUseClientStateHook } from "@/hooks/use-client-state-hook";
 import { formatPhoneAsBase, formatToPhone } from "@/utils/methods";
-import type { TClient } from "@/utils/schemas/client.schema";
 
 type ClientContactsBlockProps = {
-	infoHolder: TClient;
-	updateInfoHolder: (changes: Partial<TClient>) => void;
+	infoHolder: TUseClientStateHook["state"]["client"];
+	updateInfoHolder: TUseClientStateHook["updateClient"];
 };
 export default function ClientContactsBlock({ infoHolder, updateInfoHolder }: ClientContactsBlockProps) {
 	return (

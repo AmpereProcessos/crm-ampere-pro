@@ -23,6 +23,10 @@ const nextConfig = {
 				hostname: "sc-erp.s3.amazonaws.com",
 			},
 			{
+				protocol: "https",
+				hostname: "lh3.googleusercontent.com",
+			},
+			{
 				protocol: "http",
 				hostname: "localhost",
 			},

@@ -3,13 +3,13 @@ import { toast } from "react-hot-toast";
 import SelectInput from "@/components/Inputs/SelectInput";
 import TextInput from "@/components/Inputs/TextInput";
 import ResponsiveDialogDrawerSection from "@/components/utils/ResponsiveDialogDrawerSection";
+import type { TUseClientStateHook } from "@/hooks/use-client-state-hook";
 import { BrazilianCitiesOptionsFromUF, BrazilianStatesOptions, type stateCities } from "@/utils/estados_cidades";
 import { formatToCEP, getCEPInfo } from "@/utils/methods";
-import type { TClient } from "@/utils/schemas/client.schema";
 
 type ClientAddressBlockProps = {
-	infoHolder: TClient;
-	updateInfoHolder: (changes: Partial<TClient>) => void;
+	infoHolder: TUseClientStateHook["state"]["client"];
+	updateInfoHolder: TUseClientStateHook["updateClient"];
 };
 export default function ClientAddressBlock({ infoHolder, updateInfoHolder }: ClientAddressBlockProps) {
 	async function setAddressDataByCEP(cep: string) {

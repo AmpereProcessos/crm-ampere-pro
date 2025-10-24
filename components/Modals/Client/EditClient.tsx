@@ -1,12 +1,13 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { toast } from "react-hot-toast";
 import ResponsiveDialogDrawer from "@/components/utils/ResponsiveDialogDrawer";
+import useClientStateHook, { type TUseClientStateHook } from "@/hooks/use-client-state-hook";
 import type { TUserSession } from "@/lib/auth/session";
 import { getErrorMessage } from "@/lib/methods/errors";
-import { updateClient } from "@/utils/mutations/clients";
+import { uploadFile } from "@/lib/methods/firebase";
+import { updateClient as updateClientMutation } from "@/utils/mutations/clients";
 import { useClientById } from "@/utils/queries/clients";
-import type { TClient } from "@/utils/schemas/client.schema";
 import ClientAddressBlock from "./Blocks/Address";
 import ClientContactsBlock from "./Blocks/Contacts";
 import ClientGeneralBlock from "./Blocks/General";
@@ -28,44 +29,69 @@ type EditClientModalProps = {
 function EditClient({ clientId, session, partnerId, closeModal, callbacks }: EditClientModalProps) {
 	const queryClient = useQueryClient();
 	const { data: client, queryKey, isError, isLoading, error } = useClientById({ id: clientId });
-	const [clientInfo, setClientInfo] = useState<TClient>({
-		nome: "",
-		idParceiro: partnerId,
-		cpfCnpj: "",
-		telefonePrimario: "",
-		telefoneSecundario: null,
-		email: "",
-		cep: "",
-		uf: "",
-		cidade: "",
-		bairro: "",
-		endereco: "",
-		numeroOuIdentificador: "",
-		complemento: "",
-		dataNascimento: null,
-		profissao: null,
-		estadoCivil: null,
-		canalAquisicao: "",
-		idMarketing: null,
-		indicador: {
-			nome: "",
-			contato: "",
+
+	const { state, updateClient, updateClientAvatarHolder, redefineState } = useClientStateHook({
+		initialState: {
+			client: {
+				nome: "",
+				idParceiro: partnerId,
+				cpfCnpj: "",
+				telefonePrimario: "",
+				telefoneSecundario: null,
+				email: "",
+				cep: "",
+				uf: "",
+				cidade: "",
+				bairro: "",
+				endereco: "",
+				numeroOuIdentificador: "",
+				complemento: "",
+				dataNascimento: null,
+				profissao: null,
+				estadoCivil: null,
+				canalAquisicao: "",
+				idMarketing: null,
+				indicador: {
+					nome: "",
+					contato: "",
+				},
+				autor: {
+					id: session.user.id,
+					nome: session.user.nome,
+					avatar_url: session.user.avatar_url,
+				},
+				dataInsercao: new Date().toISOString(),
+			},
+			clientAvatarHolder: {
+				file: null,
+				previewUrl: null,
+			},
 		},
-		autor: {
-			id: session.user.id,
-			nome: session.user.nome,
-			avatar_url: session.user.avatar_url,
-		},
-		dataInsercao: new Date().toISOString(),
 	});
 
-	function updateClientInfo(changes: Partial<TClient>) {
-		setClientInfo((prev) => ({ ...prev, ...changes }));
+	async function handleUpdateClient(state: TUseClientStateHook["state"]) {
+		let clientAvatarUrl = state.client.conecta?.avatar_url;
+		if (state.clientAvatarHolder.file) {
+			const fileName = `avatar_cliente_${state.client.nome.toLowerCase().replaceAll(" ", "_")}`;
+			const { url } = await uploadFile({ file: state.clientAvatarHolder.file, fileName: fileName, vinculationId: state.client.idParceiro });
+			clientAvatarUrl = url;
+		}
+		return await updateClientMutation({
+			id: clientId,
+			changes: {
+				...state.client,
+				conecta: {
+					...state.client.conecta,
+					avatar_url: clientAvatarUrl,
+					usuario: state.client.conecta?.usuario ?? "",
+					senha: state.client.conecta?.senha ?? "",
+				},
+			},
+		});
 	}
-
-	const { mutate: handleUpdateClient, isPending } = useMutation({
+	const { mutate: handleUpdateClientMutation, isPending } = useMutation({
 		mutationKey: ["update-client", clientId],
-		mutationFn: updateClient,
+		mutationFn: handleUpdateClient,
 		onMutate: async () => {
 			await queryClient.cancelQueries({ queryKey: queryKey });
 			if (callbacks?.onMutate) callbacks.onMutate();
@@ -83,8 +109,8 @@ function EditClient({ clientId, session, partnerId, closeModal, callbacks }: Edi
 		},
 	});
 	useEffect(() => {
-		if (client) setClientInfo(client);
-	}, [client]);
+		if (client) redefineState({ client: client, clientAvatarHolder: { file: null, previewUrl: null } });
+	}, [client, redefineState]);
 
 	return (
 		<ResponsiveDialogDrawer
@@ -93,7 +119,7 @@ function EditClient({ clientId, session, partnerId, closeModal, callbacks }: Edi
 			menuActionButtonText="ATUALIZAR CLIENTE"
 			menuCancelButtonText="CANCELAR"
 			closeMenu={closeModal}
-			actionFunction={() => handleUpdateClient({ id: clientId, changes: clientInfo })}
+			actionFunction={() => handleUpdateClientMutation(state)}
 			actionIsLoading={isPending}
 			stateIsLoading={isLoading}
 			stateError={isError ? getErrorMessage(error) : null}
@@ -101,9 +127,14 @@ function EditClient({ clientId, session, partnerId, closeModal, callbacks }: Edi
 			drawerVariant="md"
 		>
 			<ClientIdBlock clientId={clientId} />
-			<ClientGeneralBlock infoHolder={clientInfo} updateInfoHolder={updateClientInfo} />
-			<ClientContactsBlock infoHolder={clientInfo} updateInfoHolder={updateClientInfo} />
-			<ClientAddressBlock infoHolder={clientInfo} updateInfoHolder={updateClientInfo} />
+			<ClientGeneralBlock
+				infoHolder={state.client}
+				updateInfoHolder={updateClient}
+				avatarHolder={state.clientAvatarHolder}
+				updateAvatarHolder={updateClientAvatarHolder}
+			/>
+			<ClientContactsBlock infoHolder={state.client} updateInfoHolder={updateClient} />
+			<ClientAddressBlock infoHolder={state.client} updateInfoHolder={updateClient} />
 		</ResponsiveDialogDrawer>
 	);
 }
