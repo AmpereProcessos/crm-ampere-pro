@@ -1,13 +1,10 @@
 import { z } from "zod";
 import { AuthorSchema } from "../user.schema";
 
-export const UtilsIdentifierSchema = z.enum(
-	["EQUIPMENT", "CREDITOR", "ACQUISITION_CHANNEL"],
-	{
-		required_error: "Identificador não informado.",
-		invalid_type_error: "Tipo inválido para identificador.",
-	},
-);
+export const UtilsIdentifierSchema = z.enum(["EQUIPMENT", "CREDITOR", "ACQUISITION_CHANNEL"], {
+	required_error: "Identificador não informado.",
+	invalid_type_error: "Tipo inválido para identificador.",
+});
 
 const EquipmentSchema = z.object({
 	identificador: z.literal("EQUIPMENT"),
@@ -87,11 +84,7 @@ export const AcquisitionChannelSchema = z.object({
 export type TAcquisitionChannel = z.infer<typeof AcquisitionChannelSchema>;
 export type TAcquisitionChannelDTO = TAcquisitionChannel & { _id: string };
 
-export const GeneralUtilSchema = z.discriminatedUnion("identificador", [
-	EquipmentSchema,
-	CreditorSchema,
-	AcquisitionChannelSchema,
-]);
+export const GeneralUtilSchema = z.discriminatedUnion("identificador", [EquipmentSchema, CreditorSchema, AcquisitionChannelSchema]);
 
 export type TUtil = TEquipment | TCreditor | TAcquisitionChannel;
 
@@ -106,9 +99,7 @@ export const AttachmentStateSchema = z.object({
 	}),
 	arquivos: z.array(
 		z.object({
-			arquivo: z
-				.instanceof(File, { message: "Arquivo não informado." })
-				.nullable(),
+			arquivo: z.instanceof(File, { message: "Arquivo não informado." }).nullable(),
 			previewUrl: z
 				.string({
 					required_error: "URL do arquivo não informada.",

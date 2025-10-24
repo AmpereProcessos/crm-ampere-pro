@@ -29,10 +29,7 @@ function ApplicantBlock({ infoHolder, setInfoHolder }: ApplicantBlockProps) {
 	}
 
 	return (
-		<ResponsiveDialogDrawerSection
-			sectionTitleText="REQUERENTE"
-			sectionTitleIcon={<UserRound className="w-4 h-4 min-w-4 min-h-4" />}
-		>
+		<ResponsiveDialogDrawerSection sectionTitleText="REQUERENTE" sectionTitleIcon={<UserRound className="w-4 h-4 min-w-4 min-h-4" />}>
 			<div className="flex w-full items-center justify-center">
 				<SelectWithImages
 					label={"REQUERENTE"}

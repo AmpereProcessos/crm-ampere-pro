@@ -1,20 +1,12 @@
 import { storage } from "@/services/firebase/storage-config";
 import { fileTypes } from "@/utils/constants";
 import { FirebaseError } from "firebase/app";
-import {
-	type UploadResult,
-	getDownloadURL,
-	ref,
-	uploadBytes,
-} from "firebase/storage";
+import { type UploadResult, getDownloadURL, ref, uploadBytes } from "firebase/storage";
 type HandleProposalUploadParams = {
 	file: File;
 	storageRef: string;
 };
-export async function handleProposalUpload({
-	file,
-	storageRef,
-}: HandleProposalUploadParams) {
+export async function handleProposalUpload({ file, storageRef }: HandleProposalUploadParams) {
 	try {
 		const fileRef = ref(storage, storageRef);
 		const res = await uploadBytes(fileRef, file).catch((err) => {
@@ -37,9 +29,7 @@ export async function handleProposalUpload({
 		});
 		const uploadResult = res as UploadResult;
 		if ("metadata" in uploadResult) {
-			const url = await getDownloadURL(
-				ref(storage, uploadResult.metadata.fullPath),
-			);
+			const url = await getDownloadURL(ref(storage, uploadResult.metadata.fullPath));
 			return url;
 		}
 	} catch (error) {
@@ -53,27 +43,16 @@ type UploadFileParams = {
 	vinculationId: string;
 	prefix?: string;
 };
-export async function uploadFile({
-	file,
-	fileName,
-	vinculationId,
-	prefix = "crm",
-}: UploadFileParams) {
+export async function uploadFile({ file, fileName, vinculationId, prefix = "crm" }: UploadFileParams) {
 	try {
 		if (!file) throw new Error("Arquivo não fornecido.");
 		const datetime = new Date().toISOString();
-		const fileRef = ref(
-			storage,
-			`${prefix}/(${vinculationId}) ${fileName} - ${datetime}`,
-		);
+		const fileRef = ref(storage, `${prefix}/(${vinculationId}) ${fileName} - ${datetime}`);
 		const uploadResponse = await uploadBytes(fileRef, file);
 
-		const url = await getDownloadURL(
-			ref(storage, uploadResponse.metadata.fullPath),
-		);
+		const url = await getDownloadURL(ref(storage, uploadResponse.metadata.fullPath));
 		const format =
-			uploadResponse.metadata.contentType &&
-			fileTypes[uploadResponse.metadata.contentType]
+			uploadResponse.metadata.contentType && fileTypes[uploadResponse.metadata.contentType]
 				? fileTypes[uploadResponse.metadata.contentType].title
 				: "INDEFINIDO";
 		const size = uploadResponse.metadata.size;
@@ -83,28 +62,18 @@ export async function uploadFile({
 		throw error;
 	}
 }
-export async function uploadFileAsPDF({
-	file,
-	fileName,
-	vinculationId,
-}: UploadFileParams) {
+export async function uploadFileAsPDF({ file, fileName, vinculationId }: UploadFileParams) {
 	try {
 		if (!file) throw new Error("Arquivo não fornecido.");
 		const datetime = new Date().toISOString();
-		const fileRef = ref(
-			storage,
-			`saas/(${vinculationId}) ${fileName} - ${datetime}`,
-		);
+		const fileRef = ref(storage, `saas/(${vinculationId}) ${fileName} - ${datetime}`);
 		const uploadResponse = await uploadBytes(fileRef, file, {
 			contentType: "application/pdf",
 		});
 
-		const url = await getDownloadURL(
-			ref(storage, uploadResponse.metadata.fullPath),
-		);
+		const url = await getDownloadURL(ref(storage, uploadResponse.metadata.fullPath));
 		const format =
-			uploadResponse.metadata.contentType &&
-			fileTypes[uploadResponse.metadata.contentType]
+			uploadResponse.metadata.contentType && fileTypes[uploadResponse.metadata.contentType]
 				? fileTypes[uploadResponse.metadata.contentType].title
 				: "INDEFINIDO";
 		const size = uploadResponse.metadata.size;
@@ -119,19 +88,12 @@ export function getFileTypeTitle(type: string) {
 	return fileTypes[type]?.title || "NÃO DEFINIDO";
 }
 export function getTitleFileType(title: string) {
-	const equivalent = Object.entries(fileTypes).find(
-		([key, value]) => title === value.title,
-	);
+	const equivalent = Object.entries(fileTypes).find(([key, value]) => title === value.title);
 	const type = equivalent ? equivalent[0] : "";
 	return type;
 }
 export function isFileFormatImage(format: string) {
-	return [
-		"IMAGEM (.PNG)",
-		"IMAGEM(.JPEG)",
-		"IMAGEM(.TIFF)",
-		"IMAGEM(.JPG)",
-	].includes(format);
+	return ["IMAGEM (.PNG)", "IMAGEM(.JPEG)", "IMAGEM(.TIFF)", "IMAGEM(.JPG)"].includes(format);
 }
 
 export function isFileImage(type: string) {

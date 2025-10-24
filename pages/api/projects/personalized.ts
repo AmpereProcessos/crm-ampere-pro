@@ -12,10 +12,7 @@ type PutResponse = {
 	message: string;
 };
 
-const updateProjectRelatedEntitiesRoute: NextApiHandler<PutResponse> = async (
-	req,
-	res,
-) => {
+const updateProjectRelatedEntitiesRoute: NextApiHandler<PutResponse> = async (req, res) => {
 	const session = await validateAuthenticationWithSession(req, res);
 	const partnerId = session.user.idParceiro;
 
@@ -27,18 +24,13 @@ const updateProjectRelatedEntitiesRoute: NextApiHandler<PutResponse> = async (
 	const clientsCollection: Collection<TClient> = db.collection("clients");
 
 	if (projectId) {
-		if (typeof projectId !== "string" || !ObjectId.isValid(projectId))
-			throw new createHttpError.BadRequest("ID de projeto inválido.");
+		if (typeof projectId !== "string" || !ObjectId.isValid(projectId)) throw new createHttpError.BadRequest("ID de projeto inválido.");
 
-		const updateProjectResponse = await projectsCollection.updateOne(
-			{ _id: new ObjectId(projectId) },
-			{ $set: { ...projectChanges } },
-		);
+		const updateProjectResponse = await projectsCollection.updateOne({ _id: new ObjectId(projectId) }, { $set: { ...projectChanges } });
 	}
 
 	if (clientId) {
-		if (typeof clientId !== "string" || !ObjectId.isValid(clientId))
-			throw new createHttpError.BadRequest("ID de cliente inválido.");
+		if (typeof clientId !== "string" || !ObjectId.isValid(clientId)) throw new createHttpError.BadRequest("ID de cliente inválido.");
 		const updateClientResponse = await updateClient({
 			id: clientId,
 			collection: clientsCollection,

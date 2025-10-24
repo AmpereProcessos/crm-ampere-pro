@@ -478,7 +478,10 @@ type GetPromotersParams = {
 async function getPromoters({ collection, partnerId }: GetPromotersParams) {
 	try {
 		const promoters = await collection
-			.aggregate([{ $match: { idParceiro: partnerId, ativo: true, idGrupo: { $in: ["66562a2a812707dbf9f04832", "66562a2a812707dbf9f04833"] } } }, { $project: { senha: 0 } }])
+			.aggregate([
+				{ $match: { idParceiro: partnerId, ativo: true, idGrupo: { $in: ["66562a2a812707dbf9f04832", "66562a2a812707dbf9f04833"] } } },
+				{ $project: { senha: 0 } },
+			])
 			.toArray();
 		return promoters as WithId<TUserEntity>[];
 	} catch (error) {

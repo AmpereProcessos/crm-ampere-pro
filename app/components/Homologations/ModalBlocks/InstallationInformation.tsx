@@ -2,10 +2,7 @@ import SelectInput from "@/components/Inputs/SelectInput";
 import TextInput from "@/components/Inputs/TextInput";
 import ResponsiveDialogDrawerSection from "@/components/utils/ResponsiveDialogDrawerSection";
 import type { THomologation } from "@/utils/schemas/homologation.schema";
-import {
-	ElectricalInstallationGroups,
-	EnergyDistributorsOptions,
-} from "@/utils/select-options";
+import { ElectricalInstallationGroups, EnergyDistributorsOptions } from "@/utils/select-options";
 import { Building2 } from "lucide-react";
 import type React from "react";
 
@@ -13,28 +10,18 @@ type InstallationInformationProps = {
 	infoHolder: THomologation;
 	setInfoHolder: React.Dispatch<React.SetStateAction<THomologation>>;
 };
-function InstallationInformation({
-	infoHolder,
-	setInfoHolder,
-}: InstallationInformationProps) {
+function InstallationInformation({ infoHolder, setInfoHolder }: InstallationInformationProps) {
 	return (
-		<ResponsiveDialogDrawerSection
-			sectionTitleText="INFORMAÇÕES DA INSTALAÇÃO ELÉTRICA"
-			sectionTitleIcon={<Building2 className="w-4 h-4 min-w-4 min-h-4" />}
-		>
+		<ResponsiveDialogDrawerSection sectionTitleText="INFORMAÇÕES DA INSTALAÇÃO ELÉTRICA" sectionTitleIcon={<Building2 className="w-4 h-4 min-w-4 min-h-4" />}>
 			<div className="flex w-full flex-col items-center gap-2 lg:flex-row">
 				<div className="w-full lg:w-1/3">
 					<SelectInput
 						label="CONCESSIONÁRIA/DISTRIBUIDORA"
 						value={infoHolder.distribuidora}
 						options={EnergyDistributorsOptions.map((d) => d)}
-						handleChange={(value) =>
-							setInfoHolder((prev) => ({ ...prev, distribuidora: value }))
-						}
+						handleChange={(value) => setInfoHolder((prev) => ({ ...prev, distribuidora: value }))}
 						resetOptionLabel="NÃO DEFINIDO"
-						onReset={() =>
-							setInfoHolder((prev) => ({ ...prev, distribuidora: "" }))
-						}
+						onReset={() => setInfoHolder((prev) => ({ ...prev, distribuidora: "" }))}
 						width="100%"
 					/>
 				</div>

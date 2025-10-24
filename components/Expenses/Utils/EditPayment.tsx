@@ -86,7 +86,12 @@ function EditPayment({ payment, affectedQueryKey }: EditPaymentProps) {
 				</div>
 				<div className="flex w-full items-center justify-center">
 					<div className="w-fit">
-						<CheckboxInput labelFalse="PAGO" labelTrue="PAGO" checked={infoHolder.efetivado} handleChange={(value) => setInfoHolder((prev) => ({ ...prev, efetivado: value }))} />
+						<CheckboxInput
+							labelFalse="PAGO"
+							labelTrue="PAGO"
+							checked={infoHolder.efetivado}
+							handleChange={(value) => setInfoHolder((prev) => ({ ...prev, efetivado: value }))}
+						/>
 					</div>
 				</div>
 			</div>

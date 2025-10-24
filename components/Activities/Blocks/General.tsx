@@ -5,8 +5,6 @@ import { formatDateForInputValue, formatDateOnInputChange } from "@/lib/methods/
 import { useActivityStore } from "@/utils/stores/activity-store";
 import { ListTodo } from "lucide-react";
 
-
-
 function ActivityGeneralBlock() {
 	const title = useActivityStore((s) => s.activity.titulo);
 	const description = useActivityStore((s) => s.activity.descricao);
@@ -37,17 +35,17 @@ function ActivityGeneralBlock() {
 				/>
 				<DateTimeInput
 					label="DATA DE VENCIMENTO"
-					value={formatDateForInputValue(deadline, 'datetime')}
+					value={formatDateForInputValue(deadline, "datetime")}
 					handleChange={(value) => {
-						updateActivity({ dataVencimento: formatDateOnInputChange(value, "string") as string })
+						updateActivity({ dataVencimento: formatDateOnInputChange(value, "string") as string });
 					}}
 					width="100%"
 				/>
 				<DateTimeInput
 					label="DATA DE CONCLUSÃO"
-					value={formatDateForInputValue(conclusion, 'datetime')}
+					value={formatDateForInputValue(conclusion, "datetime")}
 					handleChange={(value) => {
-						updateActivity({ dataConclusao: formatDateOnInputChange(value, "string") as string })
+						updateActivity({ dataConclusao: formatDateOnInputChange(value, "string") as string });
 					}}
 					width="100%"
 				/>

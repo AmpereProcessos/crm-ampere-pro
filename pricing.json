@@ -1,66 +1,66 @@
 {
-  "nome": "PRECIFICAÇÃO PADRÃO",
-  "idParceiro": "65454ba15cf3e3ecf534b308",
-  "itens": [
-    {
-      "nome": "INSTALAÇÃO",
-      "resultados": [
-        {
-          "condicao": {
-            "aplicavel": false,
-            "variavel": null,
-            "igual": null
-          },
-          "taxaImposto": 17,
-          "margemLucro": 12,
-          "formulaArr": ["150", "*", "[potenciaPico]", "+", "(", "[distancia]", "-", "30", ")", "*", "3.2"]
-        },
-        {
-          "condicao": {
-            "aplicavel": true,
-            "variavel": "uf",
-            "igual": "GO"
-          },
-          "taxaImposto": 17,
-          "margemLucro": 12,
-          "formulaArr": ["150", "*", "[potenciaPico]", "+", "(", "[distancia]", "-", "30", ")", "*", "3.2", "+", "900"]
-        }
-      ]
-    },
-    {
-      "nome": "MÃO DE OBRA",
-      "resultados": [
-        {
-          "condicao": {
-            "aplicavel": false,
-            "variavel": null,
-            "igual": null
-          },
-          "taxaImposto": 17,
-          "margemLucro": 12,
-          "formulaArr": ["275", "*", "[potenciaPico]"]
-        }
-      ]
-    },
-    {
-      "nome": "CUSTO DE PROJETO",
-      "resultados": [
-        {
-          "condicao": {
-            "aplicavel": false,
-            "variavel": null,
-            "igual": null
-          },
-          "taxaImposto": 17,
-          "margemLucro": 12,
-          "formulaArr": ["80", "*", "[potenciaPico]"]
-        }
-      ]
-    }
-  ],
-  "autor": {
-    "id": "65453222e345279bdfcac0dc",
-    "nome": "Lucas Fernandes",
-    "avatar_url": "https://firebasestorage.googleapis.com/v0/b/sistemaampere.appspot.com/o/saas-crm%2Fusuarios%2FLucas%20Fernandes?alt=media&token=e33bf3df-fd76-41e8-8039-8a298a761a13"
-  }
+	"nome": "PRECIFICAÇÃO PADRÃO",
+	"idParceiro": "65454ba15cf3e3ecf534b308",
+	"itens": [
+		{
+			"nome": "INSTALAÇÃO",
+			"resultados": [
+				{
+					"condicao": {
+						"aplicavel": false,
+						"variavel": null,
+						"igual": null
+					},
+					"taxaImposto": 17,
+					"margemLucro": 12,
+					"formulaArr": ["150", "*", "[potenciaPico]", "+", "(", "[distancia]", "-", "30", ")", "*", "3.2"]
+				},
+				{
+					"condicao": {
+						"aplicavel": true,
+						"variavel": "uf",
+						"igual": "GO"
+					},
+					"taxaImposto": 17,
+					"margemLucro": 12,
+					"formulaArr": ["150", "*", "[potenciaPico]", "+", "(", "[distancia]", "-", "30", ")", "*", "3.2", "+", "900"]
+				}
+			]
+		},
+		{
+			"nome": "MÃO DE OBRA",
+			"resultados": [
+				{
+					"condicao": {
+						"aplicavel": false,
+						"variavel": null,
+						"igual": null
+					},
+					"taxaImposto": 17,
+					"margemLucro": 12,
+					"formulaArr": ["275", "*", "[potenciaPico]"]
+				}
+			]
+		},
+		{
+			"nome": "CUSTO DE PROJETO",
+			"resultados": [
+				{
+					"condicao": {
+						"aplicavel": false,
+						"variavel": null,
+						"igual": null
+					},
+					"taxaImposto": 17,
+					"margemLucro": 12,
+					"formulaArr": ["80", "*", "[potenciaPico]"]
+				}
+			]
+		}
+	],
+	"autor": {
+		"id": "65453222e345279bdfcac0dc",
+		"nome": "Lucas Fernandes",
+		"avatar_url": "https://firebasestorage.googleapis.com/v0/b/sistemaampere.appspot.com/o/saas-crm%2Fusuarios%2FLucas%20Fernandes?alt=media&token=e33bf3df-fd76-41e8-8039-8a298a761a13"
+	}
 }

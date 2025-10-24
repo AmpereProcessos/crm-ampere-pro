@@ -1,13 +1,6 @@
 import SelectInput from "@/components/Inputs/SelectInput";
-import type {
-	THomologation,
-	THomologationEquipment,
-} from "@/utils/schemas/homologation.schema";
-import type {
-	TInverter,
-	TModule,
-	TProductItem,
-} from "@/utils/schemas/kits.schema";
+import type { THomologation, THomologationEquipment } from "@/utils/schemas/homologation.schema";
+import type { TInverter, TModule, TProductItem } from "@/utils/schemas/kits.schema";
 import type React from "react";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -15,10 +8,7 @@ import toast from "react-hot-toast";
 import NumberInput from "@/components/Inputs/NumberInput";
 import TextInput from "@/components/Inputs/TextInput";
 import ResponsiveDialogDrawerSection from "@/components/utils/ResponsiveDialogDrawerSection";
-import {
-	getInverterPeakPowerByProducts,
-	getModulesPeakPotByProducts,
-} from "@/lib/methods/extracting";
+import { getInverterPeakPowerByProducts, getModulesPeakPotByProducts } from "@/lib/methods/extracting";
 import { renderCategoryIcon } from "@/lib/methods/rendering";
 import { useEquipments } from "@/utils/queries/utils";
 import { FaIndustry, FaSolarPanel } from "react-icons/fa";
@@ -30,17 +20,8 @@ type EquipmentsCompositionProps = {
 	setInfoHolder: React.Dispatch<React.SetStateAction<THomologation>>;
 	activeProposalId?: string | null;
 };
-function EquipmentsComposition({
-	infoHolder,
-	setInfoHolder,
-	activeProposalId,
-}: EquipmentsCompositionProps) {
-	const {
-		data: equipments,
-		isLoading,
-		isError,
-		isSuccess,
-	} = useEquipments({ category: null });
+function EquipmentsComposition({ infoHolder, setInfoHolder, activeProposalId }: EquipmentsCompositionProps) {
+	const { data: equipments, isLoading, isError, isSuccess } = useEquipments({ category: null });
 
 	const [inverterHolder, setInverterHolder] = useState<TInverter>({
 		id: "",
@@ -58,27 +39,20 @@ function EquipmentsComposition({
 		potencia: 0,
 		garantia: 10,
 	});
-	const [personalizedEquipmentHolder, setPersonalizedEquipmentHolder] =
-		useState<THomologationEquipment>({
-			categoria: "MÓDULO",
-			fabricante: "",
-			modelo: "",
-			qtde: 1,
-			potencia: 0,
-		});
+	const [personalizedEquipmentHolder, setPersonalizedEquipmentHolder] = useState<THomologationEquipment>({
+		categoria: "MÓDULO",
+		fabricante: "",
+		modelo: "",
+		qtde: 1,
+		potencia: 0,
+	});
 
 	function addInverterToEquipments() {
-		if (
-			!inverterHolder.id &&
-			!inverterHolder.fabricante &&
-			!inverterHolder.modelo
-		) {
+		if (!inverterHolder.id && !inverterHolder.fabricante && !inverterHolder.modelo) {
 			return toast.error("Inversor inválido. Por favor, tente novamente.");
 		}
 		if (inverterHolder.qtde <= 0) {
-			return toast.error(
-				"Por favor, preencha um quantidade de inversores válida.",
-			);
+			return toast.error("Por favor, preencha um quantidade de inversores válida.");
 		}
 		const productsArr = [...infoHolder.equipamentos];
 		const productInfo: THomologationEquipment = {
@@ -89,9 +63,7 @@ function EquipmentsComposition({
 			potencia: inverterHolder.potencia,
 		};
 		productsArr.push(productInfo);
-		const orderProducts = productsArr.sort((a, b) =>
-			a.categoria.localeCompare(b.categoria),
-		);
+		const orderProducts = productsArr.sort((a, b) => a.categoria.localeCompare(b.categoria));
 		setInfoHolder((prev) => ({ ...prev, equipamentos: orderProducts }));
 		setInverterHolder({
 			id: "",
@@ -107,9 +79,7 @@ function EquipmentsComposition({
 			return toast.error("Módulo inválido. Por favor, tente novamente.");
 		}
 		if (moduleHolder.qtde <= 0) {
-			return toast.error(
-				"Por favor, preencha um quantidade de módulos válida.",
-			);
+			return toast.error("Por favor, preencha um quantidade de módulos válida.");
 		}
 		const productsArr = [...infoHolder.equipamentos];
 		const productInfo: THomologationEquipment = {
@@ -120,9 +90,7 @@ function EquipmentsComposition({
 			potencia: moduleHolder.potencia,
 		};
 		productsArr.push(productInfo);
-		const orderProducts = productsArr.sort((a, b) =>
-			a.categoria.localeCompare(b.categoria),
-		);
+		const orderProducts = productsArr.sort((a, b) => a.categoria.localeCompare(b.categoria));
 		setInfoHolder((prev) => ({ ...prev, equipamentos: orderProducts }));
 		setModuleHolder({
 			id: "",
@@ -134,12 +102,9 @@ function EquipmentsComposition({
 		});
 	}
 	function addPersonalizedEquipment() {
-		if (personalizedEquipmentHolder.fabricante.trim().length < 3)
-			return toast.error("Fabricante do produto não específicado.");
-		if (personalizedEquipmentHolder.modelo.trim().length < 3)
-			return toast.error("Modelo do produto não específicado.");
-		if (personalizedEquipmentHolder.qtde <= 0)
-			return toast.error("Quantidade do produto inválida.");
+		if (personalizedEquipmentHolder.fabricante.trim().length < 3) return toast.error("Fabricante do produto não específicado.");
+		if (personalizedEquipmentHolder.modelo.trim().length < 3) return toast.error("Modelo do produto não específicado.");
+		if (personalizedEquipmentHolder.qtde <= 0) return toast.error("Quantidade do produto inválida.");
 
 		const productsArr = [...infoHolder.equipamentos];
 		const productInfo: THomologationEquipment = {
@@ -150,9 +115,7 @@ function EquipmentsComposition({
 			potencia: personalizedEquipmentHolder.potencia,
 		};
 		productsArr.push(productInfo);
-		const orderProducts = productsArr.sort((a, b) =>
-			a.categoria.localeCompare(b.categoria),
-		);
+		const orderProducts = productsArr.sort((a, b) => a.categoria.localeCompare(b.categoria));
 		setInfoHolder((prev) => ({ ...prev, equipamentos: orderProducts }));
 		setPersonalizedEquipmentHolder({
 			categoria: "MÓDULO",
@@ -170,21 +133,13 @@ function EquipmentsComposition({
 	}
 
 	return (
-		<ResponsiveDialogDrawerSection
-			sectionTitleText="EQUIPAMENTOS"
-			sectionTitleIcon={<FaIndustry className="w-4 h-4 min-w-4 min-h-4" />}
-		>
+		<ResponsiveDialogDrawerSection sectionTitleText="EQUIPAMENTOS" sectionTitleIcon={<FaIndustry className="w-4 h-4 min-w-4 min-h-4" />}>
 			<div className="flex w-full flex-col gap-1">
 				<div className="flex w-full flex-col items-center gap-2 lg:flex-row">
 					<div className="w-full lg:w-3/4">
 						<SelectInput
 							label="INVERSOR"
-							value={
-								equipments?.find(
-									(e) =>
-										e.categoria === "INVERSOR" && e._id === inverterHolder.id,
-								) || null
-							}
+							value={equipments?.find((e) => e.categoria === "INVERSOR" && e._id === inverterHolder.id) || null}
 							handleChange={(value) =>
 								setInverterHolder((prev) => ({
 									...prev,
@@ -249,11 +204,7 @@ function EquipmentsComposition({
 					<div className="w-full lg:w-3/4">
 						<SelectInput
 							label="MÓDULO"
-							value={
-								equipments?.find(
-									(e) => e.categoria === "MÓDULO" && e._id === moduleHolder.id,
-								) || null
-							}
+							value={equipments?.find((e) => e.categoria === "MÓDULO" && e._id === moduleHolder.id) || null}
 							handleChange={(value) =>
 								setModuleHolder((prev) => ({
 									...prev,
@@ -409,34 +360,20 @@ function EquipmentsComposition({
 			{activeProposalId ? (
 				<UseActiveProposalProducts
 					activeProposalId={activeProposalId}
-					getProducts={(equipments) =>
-						setInfoHolder((prev) => ({ ...prev, equipamentos: equipments }))
-					}
+					getProducts={(equipments) => setInfoHolder((prev) => ({ ...prev, equipamentos: equipments }))}
 				/>
 			) : null}
 
 			<div className="mt-2 flex w-full items-center justify-between gap-2">
-				<h1 className="mb-2 text-start font-Inter font-bold leading-none tracking-tight">
-					EQUIPAMENTOS A SEREM HOMOLOGADOS
-				</h1>
+				<h1 className="mb-2 text-start font-Inter font-bold leading-none tracking-tight">EQUIPAMENTOS A SEREM HOMOLOGADOS</h1>
 				<div className="flex items-center gap-2">
 					<div className="flex items-center gap-1 rounded-md bg-[#15599a] px-2 py-1 text-primary-foreground">
 						<FaSolarPanel />
-						<p className="text-xs font-medium tracking-tight">
-							{getModulesPeakPotByProducts(
-								infoHolder.equipamentos as TProductItem[],
-							)}{" "}
-							kWp EM MÓDULOS
-						</p>
+						<p className="text-xs font-medium tracking-tight">{getModulesPeakPotByProducts(infoHolder.equipamentos as TProductItem[])} kWp EM MÓDULOS</p>
 					</div>
 					<div className="flex items-center gap-1 rounded-md bg-[#fead41] px-2 py-1 text-primary-foreground">
 						<ImPower />
-						<p className="tracking-tigh text-xs font-medium">
-							{getInverterPeakPowerByProducts(
-								infoHolder.equipamentos as TProductItem[],
-							)}{" "}
-							kWp EM INVERSORES
-						</p>
+						<p className="tracking-tigh text-xs font-medium">{getInverterPeakPowerByProducts(infoHolder.equipamentos as TProductItem[])} kWp EM INVERSORES</p>
 					</div>
 				</div>
 			</div>
@@ -444,18 +381,14 @@ function EquipmentsComposition({
 			<div className="flex w-full flex-wrap items-center justify-around gap-2">
 				{infoHolder.equipamentos.length > 0 ? (
 					infoHolder.equipamentos.map((product, index) => (
-						<div
-							key={product.modelo}
-							className="flex w-full flex-col rounded-md border border-primary/30 p-2 lg:w-[450px]"
-						>
+						<div key={product.modelo} className="flex w-full flex-col rounded-md border border-primary/30 p-2 lg:w-[450px]">
 							<div className="flex w-full items-center justify-between gap-2">
 								<div className="flex  items-center gap-1">
 									<div className="flex h-[25px] w-[25px] items-center justify-center rounded-full border border-black p-1">
 										{renderCategoryIcon(product.categoria, 15)}
 									</div>
 									<p className="text-xs font-medium leading-none tracking-tight lg:text-sm">
-										<strong className="text-[#FF9B50]">{product.qtde}</strong> x{" "}
-										{product.modelo}
+										<strong className="text-[#FF9B50]">{product.qtde}</strong> x {product.modelo}
 									</p>
 								</div>
 
@@ -471,23 +404,17 @@ function EquipmentsComposition({
 							<div className="mt-1 flex w-full items-center justify-end gap-2 pl-2">
 								<div className="flex items-center gap-1">
 									<FaIndustry size={12} />
-									<p className="text-[0.7rem] font-light text-primary/70 lg:text-xs">
-										{product.fabricante}
-									</p>
+									<p className="text-[0.7rem] font-light text-primary/70 lg:text-xs">{product.fabricante}</p>
 								</div>
 								<div className="flex items-center gap-1">
 									<ImPower size={12} />
-									<p className="text-[0.7rem] font-light text-primary/70 lg:text-xs">
-										{product.potencia} W
-									</p>
+									<p className="text-[0.7rem] font-light text-primary/70 lg:text-xs">{product.potencia} W</p>
 								</div>
 							</div>
 						</div>
 					))
 				) : (
-					<div className="text-center font-light text-primary/70">
-						Nenhum produto adicionado
-					</div>
+					<div className="text-center font-light text-primary/70">Nenhum produto adicionado</div>
 				)}
 			</div>
 		</ResponsiveDialogDrawerSection>

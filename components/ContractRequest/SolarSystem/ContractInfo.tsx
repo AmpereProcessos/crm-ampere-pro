@@ -4,13 +4,7 @@ import TextInput from "@/components/Inputs/TextInput";
 import { formatDateOnInputChange } from "@/lib/methods/formatting";
 
 import { stateCities } from "@/utils/estados_cidades";
-import {
-	formatDateForInputValue,
-	formatToCEP,
-	formatToCPForCNPJ,
-	formatToPhone,
-	getCEPInfo,
-} from "@/utils/methods";
+import { formatDateForInputValue, formatToCEP, formatToCPForCNPJ, formatToPhone, getCEPInfo } from "@/utils/methods";
 
 import type { TContractRequest } from "@/utils/schemas//contract-request.schema";
 import { CustomersAcquisitionChannels } from "@/utils/select-options";
@@ -21,11 +15,7 @@ type ContractInfoProps = {
 	setRequestInfo: React.Dispatch<React.SetStateAction<TContractRequest>>;
 	goToNextStage: () => void;
 };
-function ContractInfo({
-	requestInfo,
-	setRequestInfo,
-	goToNextStage,
-}: ContractInfoProps) {
+function ContractInfo({ requestInfo, setRequestInfo, goToNextStage }: ContractInfoProps) {
 	async function setAddressDataByCEP(cep: string) {
 		const addressInfo = await getCEPInfo(cep);
 		const toastID = toast.loading("Buscando informações sobre o CEP...", {
@@ -101,10 +91,7 @@ function ContractInfo({
 			toast.error("Por favor, preencha um bairro válido.");
 			return false;
 		}
-		if (
-			requestInfo.possuiDeficiencia == "SIM" &&
-			requestInfo.qualDeficiencia.trim().length < 3
-		) {
+		if (requestInfo.possuiDeficiencia == "SIM" && requestInfo.qualDeficiencia.trim().length < 3) {
 			toast.error("Por favor, preencha a deficiência.");
 			return false;
 		}
@@ -112,10 +99,7 @@ function ContractInfo({
 			toast.error("Por favor, preencha o segmento do projeto.");
 			return false;
 		}
-		if (
-			requestInfo.canalVenda == "INDICAÇÃO DE AMIGO" &&
-			requestInfo.nomeIndicador.trim().length < 3
-		) {
+		if (requestInfo.canalVenda == "INDICAÇÃO DE AMIGO" && requestInfo.nomeIndicador.trim().length < 3) {
 			toast.error("Por favor, preencha o nome do indicador.");
 			return false;
 		}
@@ -123,13 +107,9 @@ function ContractInfo({
 	}
 	return (
 		<div className="flex w-full flex-col  bg-background pb-2">
-			<span className="py-2 text-center text-lg font-bold uppercase text-[#15599a]">
-				DADOS PARA CONTRATO
-			</span>
+			<span className="py-2 text-center text-lg font-bold uppercase text-[#15599a]">DADOS PARA CONTRATO</span>
 			<div className="flex flex-col flex-wrap justify-around gap-2 p-2 lg:grid lg:grid-cols-3">
-				<h1 className="col-span-3 py-2 text-center font-bold text-[#fead61]">
-					SOBRE O CLIENTE
-				</h1>
+				<h1 className="col-span-3 py-2 text-center font-bold text-[#fead61]">SOBRE O CLIENTE</h1>
 				<div className="flex items-center justify-center">
 					<TextInput
 						width={"450px"}
@@ -182,9 +162,7 @@ function ContractInfo({
 						editable={true}
 						placeholder="Digite aqui o RG do cliente."
 						value={requestInfo.rg}
-						handleChange={(value) =>
-							setRequestInfo({ ...requestInfo, rg: value })
-						}
+						handleChange={(value) => setRequestInfo({ ...requestInfo, rg: value })}
 					/>
 				</div>
 				<div className="flex items-center justify-center">
@@ -192,11 +170,7 @@ function ContractInfo({
 						width={"450px"}
 						label={"DATA DE NASCIMENTO"}
 						editable={true}
-						value={
-							requestInfo.dataDeNascimento
-								? formatDateForInputValue(requestInfo.dataDeNascimento)
-								: undefined
-						}
+						value={requestInfo.dataDeNascimento ? formatDateForInputValue(requestInfo.dataDeNascimento) : undefined}
 						handleChange={(value) =>
 							setRequestInfo({
 								...requestInfo,
@@ -243,9 +217,7 @@ function ContractInfo({
 						]}
 						editable={true}
 						value={requestInfo.estadoCivil}
-						handleChange={(value) =>
-							setRequestInfo({ ...requestInfo, estadoCivil: value })
-						}
+						handleChange={(value) => setRequestInfo({ ...requestInfo, estadoCivil: value })}
 						onReset={() => {
 							setRequestInfo((prev) => ({
 								...prev,
@@ -262,9 +234,7 @@ function ContractInfo({
 						editable={true}
 						placeholder="Preencha aqui o email do cliente."
 						value={requestInfo.email}
-						handleChange={(value) =>
-							setRequestInfo({ ...requestInfo, email: value })
-						}
+						handleChange={(value) => setRequestInfo({ ...requestInfo, email: value })}
 					/>
 				</div>
 				<div className="flex items-center justify-center">
@@ -289,9 +259,7 @@ function ContractInfo({
 						placeholder="Preencha aqui onde o cliente trabalha."
 						editable={true}
 						value={requestInfo.ondeTrabalha}
-						handleChange={(value) =>
-							setRequestInfo({ ...requestInfo, ondeTrabalha: value })
-						}
+						handleChange={(value) => setRequestInfo({ ...requestInfo, ondeTrabalha: value })}
 					/>
 				</div>
 				{requestInfo.tipoDeServico != "SISTEMA FOTOVOLTAICO" && (
@@ -301,9 +269,7 @@ function ContractInfo({
 							width={"450px"}
 							editable={true}
 							value={requestInfo.tipoDoTitular}
-							handleChange={(value) =>
-								setRequestInfo({ ...requestInfo, tipoDoTitular: value })
-							}
+							handleChange={(value) => setRequestInfo({ ...requestInfo, tipoDoTitular: value })}
 							options={[
 								{
 									id: 1,
@@ -376,9 +342,7 @@ function ContractInfo({
 						</>
 					)}
 				</div>
-				<h1 className="col-span-3 py-2 text-center font-bold text-[#fead61]">
-					ENDEREÇO
-				</h1>
+				<h1 className="col-span-3 py-2 text-center font-bold text-[#fead61]">ENDEREÇO</h1>
 				<div className="flex flex-wrap items-center justify-center gap-2">
 					<TextInput
 						width={"450px"}
@@ -411,20 +375,16 @@ function ContractInfo({
 						value={requestInfo.cidade}
 						options={
 							requestInfo.uf
-								? stateCities[requestInfo.uf as keyof typeof stateCities].map(
-										(city, index) => {
-											return {
-												id: index,
-												value: city,
-												label: city,
-											};
-										},
-									)
+								? stateCities[requestInfo.uf as keyof typeof stateCities].map((city, index) => {
+										return {
+											id: index,
+											value: city,
+											label: city,
+										};
+									})
 								: null
 						}
-						handleChange={(value) =>
-							setRequestInfo({ ...requestInfo, cidade: value })
-						}
+						handleChange={(value) => setRequestInfo({ ...requestInfo, cidade: value })}
 						onReset={() => {
 							setRequestInfo((prev) => ({
 								...prev,
@@ -445,9 +405,7 @@ function ContractInfo({
 							value: state,
 						}))}
 						value={requestInfo.uf}
-						handleChange={(value) =>
-							setRequestInfo({ ...requestInfo, uf: value })
-						}
+						handleChange={(value) => setRequestInfo({ ...requestInfo, uf: value })}
 						resetOptionLabel="NÃO DEFINIDO"
 						onReset={() => {
 							setRequestInfo((prev) => ({ ...prev, uf: null }));
@@ -514,9 +472,7 @@ function ContractInfo({
 						}
 					/>
 				</div>
-				<h1 className="col-span-3 py-2 text-center font-bold text-[#fead61]">
-					CONTRATO/VENDA
-				</h1>
+				<h1 className="col-span-3 py-2 text-center font-bold text-[#fead61]">CONTRATO/VENDA</h1>
 				<div className="flex items-center justify-center">
 					<SelectInput
 						width={"450px"}
@@ -529,9 +485,7 @@ function ContractInfo({
 							{ id: 3, label: "RURAL", value: "RURAL" },
 							{ id: 4, label: "INDUSTRIAL", value: "INDUSTRIAL" },
 						]}
-						handleChange={(value) =>
-							setRequestInfo({ ...requestInfo, segmento: value })
-						}
+						handleChange={(value) => setRequestInfo({ ...requestInfo, segmento: value })}
 						resetOptionLabel="NÃO DEFINIDO"
 						onReset={() => {
 							setRequestInfo((prev) => ({
@@ -551,9 +505,7 @@ function ContractInfo({
 							{ id: 1, label: "FISICA", value: "FISICA" },
 							{ id: 2, label: "DIGITAL", value: "DIGITAL" },
 						]}
-						handleChange={(value) =>
-							setRequestInfo({ ...requestInfo, formaAssinatura: value })
-						}
+						handleChange={(value) => setRequestInfo({ ...requestInfo, formaAssinatura: value })}
 						resetOptionLabel="NÃO DEFINIDO"
 						onReset={() => {
 							setRequestInfo((prev) => ({
@@ -568,9 +520,7 @@ function ContractInfo({
 						label={"CANAL DE VENDA"}
 						editable={true}
 						value={requestInfo.canalVenda}
-						handleChange={(value) =>
-							setRequestInfo({ ...requestInfo, canalVenda: value })
-						}
+						handleChange={(value) => setRequestInfo({ ...requestInfo, canalVenda: value })}
 						options={CustomersAcquisitionChannels.map((value) => value)}
 						resetOptionLabel="NÃO DEFINIDO"
 						onReset={() => {
@@ -617,9 +567,7 @@ function ContractInfo({
 				)}
 			</div>
 			<div className="mt-2 flex w-full flex-col items-center self-center px-2">
-				<span className="font-raleway text-center text-sm font-bold uppercase">
-					COMO VOCÊ CHEGOU A ESSE CLIENTE?
-				</span>
+				<span className="font-raleway text-center text-sm font-bold uppercase">COMO VOCÊ CHEGOU A ESSE CLIENTE?</span>
 				<textarea
 					placeholder={"Descreva aqui como esse cliente chegou até voce.."}
 					value={requestInfo.comoChegouAoCliente}
@@ -633,9 +581,7 @@ function ContractInfo({
 				/>
 			</div>
 			<div className="mt-2 flex w-full flex-col items-center self-center px-2">
-				<span className="font-raleway text-center text-sm font-bold uppercase">
-					OBSERVAÇÃO ADICIONAL ACERCA DO SERVIÇO PRESTADO
-				</span>
+				<span className="font-raleway text-center text-sm font-bold uppercase">OBSERVAÇÃO ADICIONAL ACERCA DO SERVIÇO PRESTADO</span>
 				<textarea
 					placeholder={
 						"Preencha aqui, se houver, observações acerca desse contrato. Peculiaridades desse serviço (ex: somente instalação/equipamentos), detalhes e esclarecimentos para financiamento, entre outras informações relevantes."

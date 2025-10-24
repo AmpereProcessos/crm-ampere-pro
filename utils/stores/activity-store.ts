@@ -42,7 +42,10 @@ export const useActivityStore = create<TActivityStore>((set, get) => ({
 	removeResponsible: (index) => set({ activity: { ...get().activity, responsaveis: get().activity.responsaveis.filter((_, i) => i !== index) } }),
 	updateResponsible: (info) =>
 		set({
-			activity: { ...get().activity, responsaveis: get().activity.responsaveis.map((responsible, i) => (i === info.index ? { ...responsible, ...info.changes } : responsible)) },
+			activity: {
+				...get().activity,
+				responsaveis: get().activity.responsaveis.map((responsible, i) => (i === info.index ? { ...responsible, ...info.changes } : responsible)),
+			},
 		}),
 	reset: () => set({ activity: initialActivity }),
 }));

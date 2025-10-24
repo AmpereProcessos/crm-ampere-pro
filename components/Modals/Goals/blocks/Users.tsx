@@ -4,27 +4,13 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import ResponsiveDialogDrawer from "@/components/utils/ResponsiveDialogDrawer";
 import { getErrorMessage } from "@/lib/methods/errors";
-import {
-	getExcelFromJSON,
-	getJSONFromExcelFile,
-} from "@/lib/methods/excel-utils";
+import { getExcelFromJSON, getJSONFromExcelFile } from "@/lib/methods/excel-utils";
 import { formatNameAsInitials } from "@/lib/methods/formatting";
 import { useOpportunityCreators } from "@/utils/queries/users";
 import type { TGoal } from "@/utils/schemas/goal.schema";
 import type { TUserDTOSimplified } from "@/utils/schemas/user.schema";
 import { type TGoalStore, useGoalStore } from "@/utils/stores/goal-store";
-import {
-	BadgeDollarSign,
-	Check,
-	FileDown,
-	FileUp,
-	Goal,
-	Percent,
-	Plus,
-	Send,
-	UsersRound,
-	Zap,
-} from "lucide-react";
+import { BadgeDollarSign, Check, FileDown, FileUp, Goal, Percent, Plus, Send, UsersRound, Zap } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { BsCloudUploadFill } from "react-icons/bs";
@@ -84,30 +70,21 @@ function GoalUsersBlock() {
 		if (hasExistingUser) return toast.error("Meta de usuário já definida.");
 		return addUser(info);
 	}
-	async function handleDownloadBaseSheet({
-		opportunityCreators,
-		users,
-	}: {
-		opportunityCreators: TUserDTOSimplified[];
-		users: TGoal["usuarios"][number][];
-	}) {
-		const template: TGoalUsersTemplate[] = opportunityCreators.map(
-			(creator) => {
-				const user = users.find((user) => user.id === creator._id);
-				return {
-					ID: creator._id.toString(),
-					NOME: creator.nome,
-					OPORTUNIDADES_CRIADAS: user?.objetivo.oportunidadesCriadas ?? 0,
-					OPORTUNIDADES_ENVIADAS: user?.objetivo.oportunidadesEnviadas ?? 0,
-					OPORTUNIDADES_GANHAS: user?.objetivo.oportunidadesGanhas ?? 0,
-					VALOR_VENDIDO: user?.objetivo.valorVendido ?? 0,
-					POTENCIA_VENDIDA: user?.objetivo.potenciaVendida ?? 0,
-					CONVERSAO_EM_ENVIO:
-						user?.objetivo.oportunidadesEnviadasConversao ?? 0,
-					CONVERSAO_EM_GANHO: user?.objetivo.oportunidadesGanhasConversao ?? 0,
-				};
-			},
-		);
+	async function handleDownloadBaseSheet({ opportunityCreators, users }: { opportunityCreators: TUserDTOSimplified[]; users: TGoal["usuarios"][number][] }) {
+		const template: TGoalUsersTemplate[] = opportunityCreators.map((creator) => {
+			const user = users.find((user) => user.id === creator._id);
+			return {
+				ID: creator._id.toString(),
+				NOME: creator.nome,
+				OPORTUNIDADES_CRIADAS: user?.objetivo.oportunidadesCriadas ?? 0,
+				OPORTUNIDADES_ENVIADAS: user?.objetivo.oportunidadesEnviadas ?? 0,
+				OPORTUNIDADES_GANHAS: user?.objetivo.oportunidadesGanhas ?? 0,
+				VALOR_VENDIDO: user?.objetivo.valorVendido ?? 0,
+				POTENCIA_VENDIDA: user?.objetivo.potenciaVendida ?? 0,
+				CONVERSAO_EM_ENVIO: user?.objetivo.oportunidadesEnviadasConversao ?? 0,
+				CONVERSAO_EM_GANHO: user?.objetivo.oportunidadesGanhasConversao ?? 0,
+			};
+		});
 
 		await getExcelFromJSON(template, "TEMPLATE_METAS_USUARIOS.xlsx");
 	}
@@ -116,9 +93,7 @@ function GoalUsersBlock() {
 		<div className="flex w-full flex-col gap-2">
 			<div className="flex w-fit items-center gap-2 rounded-sm bg-primary/20 px-2 py-1">
 				<UsersRound size={15} />
-				<h1 className="w-fit text-start font-medium text-xs tracking-tight">
-					USUÁRIOS
-				</h1>
+				<h1 className="w-fit text-start font-medium text-xs tracking-tight">USUÁRIOS</h1>
 			</div>
 			<div className="flex w-full items-center justify-end gap-3 flex-wrap">
 				<Button
@@ -135,21 +110,11 @@ function GoalUsersBlock() {
 					<FileDown className="w-3.5 h-3.5" />
 					BAIXAR PLANILHA DE REFERÊNCIA
 				</Button>
-				<Button
-					className="flex items-center gap-1 text-xs"
-					onClick={() => setUploadModalIsOpen(true)}
-					size={"fit"}
-					variant={"ghost"}
-				>
+				<Button className="flex items-center gap-1 text-xs" onClick={() => setUploadModalIsOpen(true)} size={"fit"} variant={"ghost"}>
 					<FileUp className="w-3.5 h-3.5" />
 					IMPORTAR META DE USUÁRIOS
 				</Button>
-				<Button
-					className="flex items-center gap-1 text-xs"
-					onClick={() => setNewUserModalIsOpen(true)}
-					size={"fit"}
-					variant={"ghost"}
-				>
+				<Button className="flex items-center gap-1 text-xs" onClick={() => setNewUserModalIsOpen(true)} size={"fit"} variant={"ghost"}>
 					<Plus className="w-3.5 h-3.5" />
 					ADICIONAR META DE USUÁRIO
 				</Button>
@@ -158,21 +123,14 @@ function GoalUsersBlock() {
 				{users.map((user) => (
 					<UserCard
 						handleEditClick={() => setEditUserModalId(user.id)}
-						handleRemoveClick={() =>
-							removeUser(users.findIndex((u) => u.id === user.id))
-						}
+						handleRemoveClick={() => removeUser(users.findIndex((u) => u.id === user.id))}
 						index={users.findIndex((u) => u.id === user.id)}
 						key={user.id}
 						user={user}
 					/>
 				))}
 			</div>
-			{newUserModalIsOpen ? (
-				<NewUserMenu
-					addUser={handleAddUser}
-					closeMenu={() => setNewUserModalIsOpen(false)}
-				/>
-			) : null}
+			{newUserModalIsOpen ? <NewUserMenu addUser={handleAddUser} closeMenu={() => setNewUserModalIsOpen(false)} /> : null}
 			{editUserModalId && editingUser ? (
 				<EditUserMenu
 					closeMenu={() => setEditUserModalId(null)}
@@ -186,11 +144,7 @@ function GoalUsersBlock() {
 				/>
 			) : null}
 			{uploadModalIsOpen ? (
-				<FileUploadMenu
-					closeMenu={() => setUploadModalIsOpen(false)}
-					opportunityCreators={opportunityCreators ?? []}
-					setUsers={setUsers}
-				/>
+				<FileUploadMenu closeMenu={() => setUploadModalIsOpen(false)} opportunityCreators={opportunityCreators ?? []} setUsers={setUsers} />
 			) : null}
 		</div>
 	);
@@ -238,9 +192,7 @@ function NewUserMenu({ closeMenu, addUser }: NewUserMenuProps) {
 		>
 			<SelectWithImages
 				handleChange={(value) => {
-					const selectedUser = opportunityCreators?.find(
-						(user) => user._id === value,
-					);
+					const selectedUser = opportunityCreators?.find((user) => user._id === value);
 					if (selectedUser) {
 						return setUserHolder((prev) => ({
 							...prev,
@@ -268,9 +220,7 @@ function NewUserMenu({ closeMenu, addUser }: NewUserMenuProps) {
 			<div className="flex w-full flex-col gap-2">
 				<div className="flex w-fit items-center gap-2 rounded-sm bg-primary/20 px-2 py-1">
 					<Goal size={15} />
-					<h1 className="w-fit text-start font-medium text-xs tracking-tight">
-						OBJETIVO
-					</h1>
+					<h1 className="w-fit text-start font-medium text-xs tracking-tight">OBJETIVO</h1>
 				</div>
 				<div className="flex w-full flex-col gap-2">
 					<NumberInput
@@ -389,14 +339,9 @@ type EditUserMenuProps = {
 	initialUser: TGoalStore["goal"]["usuarios"][number];
 	updateUser: (change: Partial<TGoalStore["goal"]["usuarios"][number]>) => void;
 };
-function EditUserMenu({
-	closeMenu,
-	initialUser,
-	updateUser,
-}: EditUserMenuProps) {
+function EditUserMenu({ closeMenu, initialUser, updateUser }: EditUserMenuProps) {
 	const { data: opportunityCreators } = useOpportunityCreators();
-	const [userHolder, setUserHolder] =
-		useState<TGoal["usuarios"][number]>(initialUser);
+	const [userHolder, setUserHolder] = useState<TGoal["usuarios"][number]>(initialUser);
 
 	function handleUpdateUser(info: TGoal["usuarios"][number]) {
 		if (!info.id) return toast.error("Usuário não selecionado.");
@@ -416,9 +361,7 @@ function EditUserMenu({
 			<SelectWithImages
 				editable={false}
 				handleChange={(value) => {
-					const selectedUser = opportunityCreators?.find(
-						(user) => user._id === value,
-					);
+					const selectedUser = opportunityCreators?.find((user) => user._id === value);
 					if (selectedUser) {
 						return setUserHolder((prev) => ({
 							...prev,
@@ -446,9 +389,7 @@ function EditUserMenu({
 			<div className="flex w-full flex-col gap-2">
 				<div className="flex w-fit items-center gap-2 rounded-sm bg-primary/20 px-2 py-1">
 					<Goal size={15} />
-					<h1 className="w-fit text-start font-medium text-xs tracking-tight">
-						OBJETIVO
-					</h1>
+					<h1 className="w-fit text-start font-medium text-xs tracking-tight">OBJETIVO</h1>
 				</div>
 				<div className="flex w-full flex-col gap-2">
 					<NumberInput
@@ -568,17 +509,8 @@ type UserCardProps = {
 	handleEditClick: () => void;
 	handleRemoveClick: () => void;
 };
-function UserCard({
-	user,
-	index,
-	handleEditClick,
-	handleRemoveClick,
-}: UserCardProps) {
-	function GoalValueCard({
-		label,
-		value,
-		icon,
-	}: { label: string; value: number; icon: React.ReactNode }) {
+function UserCard({ user, index, handleEditClick, handleRemoveClick }: UserCardProps) {
+	function GoalValueCard({ label, value, icon }: { label: string; value: number; icon: React.ReactNode }) {
 		return (
 			<div className="flex items-center gap-2 rounded-lg bg-primary/10 px-2 py-0.5">
 				<div className="flex items-center gap-1">
@@ -600,20 +532,10 @@ function UserCard({
 					<h1 className="font-medium text-sm">{user.nome}</h1>
 				</div>
 				<div className="flex items-center gap-2">
-					<Button
-						className="px-2 py-1 text-xs"
-						onClick={handleEditClick}
-						size={"fit"}
-						variant={"ghost"}
-					>
+					<Button className="px-2 py-1 text-xs" onClick={handleEditClick} size={"fit"} variant={"ghost"}>
 						EDITAR
 					</Button>
-					<Button
-						className="px-2 py-1 text-red-500 text-xs hover:text-red-600"
-						onClick={handleRemoveClick}
-						size={"fit"}
-						variant={"ghost"}
-					>
+					<Button className="px-2 py-1 text-red-500 text-xs hover:text-red-600" onClick={handleRemoveClick} size={"fit"} variant={"ghost"}>
 						REMOVER
 					</Button>
 				</div>
@@ -621,41 +543,13 @@ function UserCard({
 			<div className="flex w-full flex-col gap-2">
 				<h1 className="w-fit text-start text-xs tracking-tight">OBJETIVOS</h1>
 				<div className="flex flex-wrap items-center justify-around gap-x-3 gap-y-1">
-					<GoalValueCard
-						icon={<Plus className="h-3.5 w-3.5" />}
-						label="OPORTUNIDADES CRIADAS"
-						value={user.objetivo.oportunidadesCriadas}
-					/>
-					<GoalValueCard
-						icon={<Send className="h-3.5 w-3.5" />}
-						label="OPORTUNIDADES ENVIADAS"
-						value={user.objetivo.oportunidadesEnviadas}
-					/>
-					<GoalValueCard
-						icon={<Check className="h-3.5 w-3.5" />}
-						label="OPORTUNIDADES GANHAS"
-						value={user.objetivo.oportunidadesGanhas}
-					/>
-					<GoalValueCard
-						icon={<BadgeDollarSign className="h-3.5 w-3.5" />}
-						label="VALOR VENDIDO (R$)"
-						value={user.objetivo.valorVendido}
-					/>
-					<GoalValueCard
-						icon={<Zap className="h-3.5 w-3.5" />}
-						label="POTÊNCIA VENDIDA (kWp)"
-						value={user.objetivo.potenciaVendida}
-					/>
-					<GoalValueCard
-						icon={<Percent className="h-3.5 w-3.5" />}
-						label="CONVERSÃO EM ENVIO (%)"
-						value={user.objetivo.oportunidadesEnviadasConversao}
-					/>
-					<GoalValueCard
-						icon={<Percent className="h-3.5 w-3.5" />}
-						label="CONVERSÃO EM GANHO (%)"
-						value={user.objetivo.oportunidadesGanhasConversao}
-					/>
+					<GoalValueCard icon={<Plus className="h-3.5 w-3.5" />} label="OPORTUNIDADES CRIADAS" value={user.objetivo.oportunidadesCriadas} />
+					<GoalValueCard icon={<Send className="h-3.5 w-3.5" />} label="OPORTUNIDADES ENVIADAS" value={user.objetivo.oportunidadesEnviadas} />
+					<GoalValueCard icon={<Check className="h-3.5 w-3.5" />} label="OPORTUNIDADES GANHAS" value={user.objetivo.oportunidadesGanhas} />
+					<GoalValueCard icon={<BadgeDollarSign className="h-3.5 w-3.5" />} label="VALOR VENDIDO (R$)" value={user.objetivo.valorVendido} />
+					<GoalValueCard icon={<Zap className="h-3.5 w-3.5" />} label="POTÊNCIA VENDIDA (kWp)" value={user.objetivo.potenciaVendida} />
+					<GoalValueCard icon={<Percent className="h-3.5 w-3.5" />} label="CONVERSÃO EM ENVIO (%)" value={user.objetivo.oportunidadesEnviadasConversao} />
+					<GoalValueCard icon={<Percent className="h-3.5 w-3.5" />} label="CONVERSÃO EM GANHO (%)" value={user.objetivo.oportunidadesGanhasConversao} />
 				</div>
 			</div>
 		</div>
@@ -667,11 +561,7 @@ type FileUploadMenuProps = {
 	opportunityCreators: TUserDTOSimplified[];
 	setUsers: TGoalStore["setUsers"];
 };
-function FileUploadMenu({
-	closeMenu,
-	opportunityCreators,
-	setUsers,
-}: FileUploadMenuProps) {
+function FileUploadMenu({ closeMenu, opportunityCreators, setUsers }: FileUploadMenuProps) {
 	const [fileHolder, setFileHolder] = useState<File | null>(null);
 	const [isProcessing, setIsProcessing] = useState(false);
 
@@ -681,16 +571,10 @@ function FileUploadMenu({
 		try {
 			// Parse Excel file to JSON
 			const data = await getJSONFromExcelFile(file);
-			console.log(
-				"[INFO] [FILE_UPLOAD_MENU] [HANDLE_FILE_UPLOAD] [DATA]",
-				data,
-			);
+			console.log("[INFO] [FILE_UPLOAD_MENU] [HANDLE_FILE_UPLOAD] [DATA]", data);
 			// Validate data against schema
 			const validatedData = z.array(GoalUsersTemplateSchema).parse(data);
-			console.log(
-				"[INFO] [FILE_UPLOAD_MENU] [HANDLE_FILE_UPLOAD] [VALIDATED_DATA]",
-				validatedData,
-			);
+			console.log("[INFO] [FILE_UPLOAD_MENU] [HANDLE_FILE_UPLOAD] [VALIDATED_DATA]", validatedData);
 			// Transform validated data to user goals format
 			const mappedUsers = validatedData
 				.map(
@@ -702,9 +586,7 @@ function FileUploadMenu({
 						  })
 						| null => {
 						// Find the user in opportunityCreators to get additional info
-						const creator = opportunityCreators.find(
-							(creator) => creator._id === item.ID,
-						);
+						const creator = opportunityCreators.find((creator) => creator._id === item.ID);
 						if (!creator) {
 							toast.error(`Usuário com ID ${item.ID} não encontrado.`);
 							return null;
@@ -745,9 +627,7 @@ function FileUploadMenu({
 
 			// Update the store with new users
 			setUsers(updatedUsers);
-			toast.success(
-				`${updatedUsers.length} meta(s) de usuário(s) importada(s) com sucesso.`,
-			);
+			toast.success(`${updatedUsers.length} meta(s) de usuário(s) importada(s) com sucesso.`);
 			closeMenu();
 		} catch (error) {
 			console.error(error);
@@ -782,10 +662,7 @@ function FileUploadMenu({
 							</p>
 						) : (
 							<p className="mb-2 px-2 text-center text-sm">
-								<span className="font-semibold">
-									Clique para escolher um arquivo
-								</span>{" "}
-								ou o arraste para a área demarcada
+								<span className="font-semibold">Clique para escolher um arquivo</span> ou o arraste para a área demarcada
 							</p>
 						)}
 					</div>

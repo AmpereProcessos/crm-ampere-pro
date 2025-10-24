@@ -1,8 +1,5 @@
 "use client";
-import type {
-	TGetLeadsOutputDefault,
-	TGetManyLeadsInput,
-} from "@/app/api/leads/route";
+import type { TGetLeadsOutputDefault, TGetManyLeadsInput } from "@/app/api/leads/route";
 import CheckboxInput from "@/components/Inputs/CheckboxInput";
 import DateInput from "@/components/Inputs/DateInput";
 import MultipleSelectInputVirtualized from "@/components/Inputs/MultipleSelectInputVirtualized";
@@ -22,18 +19,10 @@ import GeneralQueryPaginationMenu from "@/components/utils/GeneralQueryPaginatio
 import LoadingComponent from "@/components/utils/LoadingComponent";
 import type { TUserSession } from "@/lib/auth/session";
 import { getErrorMessage } from "@/lib/methods/errors";
-import {
-	formatDateAsLocale,
-	formatDateForInputValue,
-	formatDateOnInputChange,
-	formatNameAsInitials,
-} from "@/lib/methods/formatting";
+import { formatDateAsLocale, formatDateForInputValue, formatDateOnInputChange, formatNameAsInitials } from "@/lib/methods/formatting";
 import { cn } from "@/lib/utils";
 import { SlideMotionVariants } from "@/utils/constants";
-import {
-	BrazilianStatesOptions,
-	BrazillianCitiesOptions,
-} from "@/utils/estados_cidades";
+import { BrazilianStatesOptions, BrazillianCitiesOptions } from "@/utils/estados_cidades";
 import { updateLead } from "@/utils/mutations/leads";
 import { useLeads } from "@/utils/queries/leads";
 import { useOpportunityCreators } from "@/utils/queries/users";
@@ -53,28 +42,13 @@ export default function LeadsPage({ session }: LeadsPageProps) {
 	const [newLeadMenuIsOpen, setNewLeadMenuIsOpen] = useState(false);
 	const [newManyLeadsMenuIsOpen, setNewManyLeadsMenuIsOpen] = useState(false);
 	const [editLeadMenuId, setEditLeadMenuId] = useState<string | null>(null);
-	const [qualifyLeadMenuId, setQualifyLeadMenuId] = useState<string | null>(
-		null,
-	);
-	const [upgrateLeadMenuId, setUpgrateLeadMenuId] = useState<string | null>(
-		null,
-	);
+	const [qualifyLeadMenuId, setQualifyLeadMenuId] = useState<string | null>(null);
+	const [upgrateLeadMenuId, setUpgrateLeadMenuId] = useState<string | null>(null);
 	const [filterMenuIsOpen, setFilterMenuIsOpen] = useState(false);
-	const {
-		data: leadsResult,
-		isLoading,
-		isError,
-		isSuccess,
-		queryKey,
-		filters,
-		updateFilters,
-		error,
-	} = useLeads();
+	const { data: leadsResult, isLoading, isError, isSuccess, queryKey, filters, updateFilters, error } = useLeads();
 
-	const handleOnMutate = async () =>
-		await queryClient.cancelQueries({ queryKey: queryKey });
-	const handleOnSettle = async () =>
-		await queryClient.invalidateQueries({ queryKey: queryKey });
+	const handleOnMutate = async () => await queryClient.cancelQueries({ queryKey: queryKey });
+	const handleOnSettle = async () => await queryClient.invalidateQueries({ queryKey: queryKey });
 	const leads = leadsResult?.leads;
 	const leadsShowing = leads?.length ?? 0;
 	const leadsMatched = leadsResult?.leadsMatched ?? 0;
@@ -85,9 +59,7 @@ export default function LeadsPage({ session }: LeadsPageProps) {
 			<div className="flex w-full max-w-full grow flex-col overflow-x-hidden bg-background p-6">
 				<div className="w-full flex flex-col gap-2 pb-2 border-b border-primary">
 					<div className="flex w-full items-center justify-between gap-2">
-						<h1 className="text-xl font-black leading-none tracking-tight md:text-2xl">
-							LEADS
-						</h1>
+						<h1 className="text-xl font-black leading-none tracking-tight md:text-2xl">LEADS</h1>
 						<div className="flex items-center gap-2">
 							<Button
 								variant={filterMenuIsOpen ? "default" : "ghost"}
@@ -97,25 +69,13 @@ export default function LeadsPage({ session }: LeadsPageProps) {
 							>
 								<Filter className="w-4 h-4 min-w-4 min-h-4" />
 							</Button>
-							<Button
-								onClick={() => setNewManyLeadsMenuIsOpen(true)}
-								variant="ghost"
-							>
+							<Button onClick={() => setNewManyLeadsMenuIsOpen(true)} variant="ghost">
 								MÚLTIPLOS LEADS
 							</Button>
-							<Button onClick={() => setNewLeadMenuIsOpen(true)}>
-								NOVO LEAD
-							</Button>
+							<Button onClick={() => setNewLeadMenuIsOpen(true)}>NOVO LEAD</Button>
 						</div>
 					</div>
-					<AnimatePresence>
-						{filterMenuIsOpen ? (
-							<LeadsPageFilters
-								filters={filters}
-								updateFilters={updateFilters}
-							/>
-						) : null}
-					</AnimatePresence>
+					<AnimatePresence>{filterMenuIsOpen ? <LeadsPageFilters filters={filters} updateFilters={updateFilters} /> : null}</AnimatePresence>
 				</div>
 
 				<GeneralQueryPaginationMenu
@@ -147,9 +107,7 @@ export default function LeadsPage({ session }: LeadsPageProps) {
 							))}
 						</div>
 					) : (
-						<p className="w-full text-center italic text-primary/70">
-							Nenhum lead encontrado...
-						</p>
+						<p className="w-full text-center italic text-primary/70">Nenhum lead encontrado...</p>
 					)
 				) : null}
 			</div>
@@ -234,13 +192,9 @@ function LeadsPageFilters({ filters, updateFilters }: LeadsPageFiltersProps) {
 			initial="initial"
 			animate="animate"
 			exit="exit"
-			className={
-				"bg-card border-primary/20 flex w-full flex-col gap-2 rounded-xl border px-3 py-4 shadow-xs"
-			}
+			className={"bg-card border-primary/20 flex w-full flex-col gap-2 rounded-xl border px-3 py-4 shadow-xs"}
 		>
-			<h1 className="text-[0.65rem] font-medium tracking-tight uppercase">
-				FILTROS
-			</h1>
+			<h1 className="text-[0.65rem] font-medium tracking-tight uppercase">FILTROS</h1>
 			<div className="flex w-full flex-col items-center justify-start gap-2 md:flex-row flex-wrap">
 				<div className="w-full md:w-[300px]">
 					<TextInput
@@ -256,9 +210,7 @@ function LeadsPageFilters({ filters, updateFilters }: LeadsPageFiltersProps) {
 						label="UF"
 						options={BrazilianStatesOptions}
 						selected={filters.ufs ?? []}
-						handleChange={(value) =>
-							updateFilters({ ufs: value as TGetManyLeadsInput["ufs"] })
-						}
+						handleChange={(value) => updateFilters({ ufs: value as TGetManyLeadsInput["ufs"] })}
 						resetOptionLabel="TODAS"
 						onReset={() => updateFilters({ ufs: [] })}
 						width="100%"
@@ -269,9 +221,7 @@ function LeadsPageFilters({ filters, updateFilters }: LeadsPageFiltersProps) {
 						label="UF"
 						options={BrazillianCitiesOptions}
 						selected={filters.cities ?? []}
-						handleChange={(value) =>
-							updateFilters({ cities: value as TGetManyLeadsInput["cities"] })
-						}
+						handleChange={(value) => updateFilters({ cities: value as TGetManyLeadsInput["cities"] })}
 						resetOptionLabel="TODAS"
 						onReset={() => updateFilters({ cities: [] })}
 						width="100%"
@@ -297,9 +247,7 @@ function LeadsPageFilters({ filters, updateFilters }: LeadsPageFiltersProps) {
 					<DateInput
 						label="PERÍODO - DEPOIS DE"
 						value={formatDateForInputValue(filters.periodAfter)}
-						handleChange={(value) =>
-							updateFilters({ periodAfter: formatDateOnInputChange(value) })
-						}
+						handleChange={(value) => updateFilters({ periodAfter: formatDateOnInputChange(value) })}
 						width="100%"
 					/>
 				</div>
@@ -307,9 +255,7 @@ function LeadsPageFilters({ filters, updateFilters }: LeadsPageFiltersProps) {
 					<DateInput
 						label="PERÍODO - ANTES DE"
 						value={formatDateForInputValue(filters.periodBefore)}
-						handleChange={(value) =>
-							updateFilters({ periodBefore: formatDateOnInputChange(value) })
-						}
+						handleChange={(value) => updateFilters({ periodBefore: formatDateOnInputChange(value) })}
 						width="100%"
 					/>
 				</div>
@@ -350,9 +296,7 @@ function LeadsPageFilters({ filters, updateFilters }: LeadsPageFiltersProps) {
 						labelFalse="SOMENTE QUALIFICAÇÕES PENDENTES"
 						labelTrue="SOMENTE QUALIFICAÇÕES PENDENTES"
 						checked={!!filters.pendingQualification}
-						handleChange={(value) =>
-							updateFilters({ pendingQualification: value })
-						}
+						handleChange={(value) => updateFilters({ pendingQualification: value })}
 					/>
 				</div>
 			</div>
@@ -370,43 +314,18 @@ type LeadCardProps = {
 		onSettled: () => void;
 	};
 };
-function LeadCard({
-	lead,
-	handleQualifyClick,
-	handleEditClick,
-	handleUpgrateClick,
-	callbacks,
-}: LeadCardProps) {
-	function QualificationTag({
-		qualification,
-	}: {
-		qualification: TGetLeadsOutputDefault["leads"][number]["qualificacao"];
-	}) {
-		if (!qualification.data)
-			return (
-				<h3
-					className={cn(
-						"px-2 py-0.5 rounded-lg text-[0.6rem] font-medium bg-red-200 text-red-700",
-					)}
-				>
-					QUALIFICAÇÃO PENDENTE
-				</h3>
-			);
+function LeadCard({ lead, handleQualifyClick, handleEditClick, handleUpgrateClick, callbacks }: LeadCardProps) {
+	function QualificationTag({ qualification }: { qualification: TGetLeadsOutputDefault["leads"][number]["qualificacao"] }) {
+		if (!qualification.data) return <h3 className={cn("px-2 py-0.5 rounded-lg text-[0.6rem] font-medium bg-red-200 text-red-700")}>QUALIFICAÇÃO PENDENTE</h3>;
 		return (
 			<>
-				<h3 className={cn("text-[0.6rem] text-primary")}>
-					QUALIFICADO EM: {formatDateAsLocale(qualification.data, true)}
-				</h3>
+				<h3 className={cn("text-[0.6rem] text-primary")}>QUALIFICADO EM: {formatDateAsLocale(qualification.data, true)}</h3>
 				<h3
-					className={cn(
-						"px-2 py-0.5 rounded-lg bg-primary/20 text-[0.6rem] font-medium",
-						{
-							"bg-green-200 text-green-700": qualification.score >= 7,
-							"bg-yellow-200 text-yellow-700":
-								qualification.score >= 4 && qualification.score < 7,
-							"bg-red-200 text-red-700": qualification.score < 4,
-						},
-					)}
+					className={cn("px-2 py-0.5 rounded-lg bg-primary/20 text-[0.6rem] font-medium", {
+						"bg-green-200 text-green-700": qualification.score >= 7,
+						"bg-yellow-200 text-yellow-700": qualification.score >= 4 && qualification.score < 7,
+						"bg-red-200 text-red-700": qualification.score < 4,
+					})}
 				>
 					NOTA {qualification.score}
 				</h3>
@@ -420,27 +339,15 @@ function LeadCard({
 		lastContact: TGetLeadsOutputDefault["leads"][number]["dataUltimoContato"];
 		nextContact: TGetLeadsOutputDefault["leads"][number]["dataProximoContato"];
 	}) {
-		if (!lastContact)
-			return (
-				<h3
-					className={cn(
-						"px-2 py-0.5 rounded-lg text-[0.6rem] font-medium bg-red-200 text-red-700",
-					)}
-				>
-					CONTATO PENDENTE
-				</h3>
-			);
+		if (!lastContact) return <h3 className={cn("px-2 py-0.5 rounded-lg text-[0.6rem] font-medium bg-red-200 text-red-700")}>CONTATO PENDENTE</h3>;
 
 		const isOverDue = nextContact ? dayjs().isAfter(nextContact) : false;
 
 		return (
 			<h3
-				className={cn(
-					"px-2 py-0.5 rounded-lg text-[0.6rem] font-medium bg-primary/20 text-primary",
-					{
-						"bg-red-200 text-red-700": isOverDue,
-					},
-				)}
+				className={cn("px-2 py-0.5 rounded-lg text-[0.6rem] font-medium bg-primary/20 text-primary", {
+					"bg-red-200 text-red-700": isOverDue,
+				})}
 			>
 				ÚLTIMO CONTATO EM: {formatDateAsLocale(lastContact, true)}
 			</h3>
@@ -468,19 +375,12 @@ function LeadCard({
 		},
 	});
 	return (
-		<div
-			className={cn(
-				"bg-card border-primary/20 flex w-full flex-col gap-3 rounded-xl border shadow-xs p-3",
-			)}
-		>
+		<div className={cn("bg-card border-primary/20 flex w-full flex-col gap-3 rounded-xl border shadow-xs p-3")}>
 			<div className="w-full flex items-center justify-between flex-col lg:flex-row gap-2">
 				<h1 className="text-sm font-bold  text-truncate">{lead.telefone}</h1>
 				<div className="flex items-center justify-center lg:justify-end gap-y-1 gap-x-2 flex-wrap">
 					<QualificationTag qualification={lead.qualificacao} />
-					<ContactTag
-						lastContact={lead.dataUltimoContato}
-						nextContact={lead.dataProximoContato}
-					/>
+					<ContactTag lastContact={lead.dataUltimoContato} nextContact={lead.dataProximoContato} />
 				</div>
 			</div>
 			<div className="w-full flex items-center grow flex-wrap">
@@ -504,72 +404,38 @@ function LeadCard({
 				<div className="flex items-center gap-2 flex-wrap">
 					<div className="flex items-center gap-1">
 						<BsCalendarPlus className="w-3 h-3 min-w-3 min-h-3" />
-						<p className="text-xs font-medium">
-							{formatDateAsLocale(lead.dataInsercao, true)}
-						</p>
+						<p className="text-xs font-medium">{formatDateAsLocale(lead.dataInsercao, true)}</p>
 					</div>
 					{lead.qualificacao.responsavel ? (
 						<div className="flex items-center gap-1">
 							<p className="text-xs font-medium">QUALIFICADO POR:</p>
 							<Avatar className="w-5 h-5 min-w-5 min-h-5">
-								<AvatarImage
-									src={lead.qualificacao.responsavel.avatar_url || undefined}
-								/>
-								<AvatarFallback>
-									{formatNameAsInitials(lead.qualificacao.responsavel.nome)}
-								</AvatarFallback>
+								<AvatarImage src={lead.qualificacao.responsavel.avatar_url || undefined} />
+								<AvatarFallback>{formatNameAsInitials(lead.qualificacao.responsavel.nome)}</AvatarFallback>
 							</Avatar>
-							<p className="text-xs font-medium">
-								{lead.qualificacao.responsavel.nome}
-							</p>
+							<p className="text-xs font-medium">{lead.qualificacao.responsavel.nome}</p>
 						</div>
 					) : null}
 				</div>
 				{lead.conversao ? (
-					<h3
-						className={cn(
-							"px-2 py-0.5 rounded-lg text-[0.6rem] font-medium bg-green-200 text-green-70",
-						)}
-					>
-						CONVERTIDO NO {lead.conversao.oportunidade?.identificador}{" "}
-						{formatDateAsLocale(lead.conversao.data, true)}
+					<h3 className={cn("px-2 py-0.5 rounded-lg text-[0.6rem] font-medium bg-green-200 text-green-70")}>
+						CONVERTIDO NO {lead.conversao.oportunidade?.identificador} {formatDateAsLocale(lead.conversao.data, true)}
 					</h3>
 				) : (
 					<div className="flex items-center gap-2 flex-wrap">
-						<Button
-							variant="ghost"
-							size="fit"
-							className="text-xs px-2 py-1"
-							onClick={() => handleUpdateLeadMutation()}
-							disabled={isPending}
-						>
+						<Button variant="ghost" size="fit" className="text-xs px-2 py-1" onClick={() => handleUpdateLeadMutation()} disabled={isPending}>
 							NOTIFICAR CONTATO
 						</Button>
 						{!lead.qualificacao.data ? (
-							<Button
-								variant="ghost"
-								size="fit"
-								className="text-xs px-2 py-1"
-								onClick={handleQualifyClick}
-							>
+							<Button variant="ghost" size="fit" className="text-xs px-2 py-1" onClick={handleQualifyClick}>
 								QUALIFICAR
 							</Button>
 						) : null}
-						<Button
-							variant="ghost"
-							size="fit"
-							className="text-xs px-2 py-1"
-							onClick={handleEditClick}
-						>
+						<Button variant="ghost" size="fit" className="text-xs px-2 py-1" onClick={handleEditClick}>
 							EDITAR
 						</Button>
 
-						<Button
-							variant="ghost"
-							size="fit"
-							className="flex items-center gap-1 text-xs px-2 py-1"
-							onClick={handleUpgrateClick}
-						>
+						<Button variant="ghost" size="fit" className="flex items-center gap-1 text-xs px-2 py-1" onClick={handleUpgrateClick}>
 							<CircleFadingArrowUp className="w-3 h-3 min-w-3 min-h-3" />
 							GERAR OPORTUNIDADE
 						</Button>

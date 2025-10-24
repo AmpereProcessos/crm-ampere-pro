@@ -16,7 +16,13 @@ const PremissesFields: PremissesFieldOptions<"consumoEnergiaMensal"> = [
 		label: "",
 		value: "consumoEnergiaMensal",
 		field: ({ value, handleChange }) => (
-			<NumberInput label="CONSUMO DE ENERGIA MENSAL" placeholder="Preencha aqui o consumo de energia mensal." value={value || null} handleChange={handleChange} width="100%" />
+			<NumberInput
+				label="CONSUMO DE ENERGIA MENSAL"
+				placeholder="Preencha aqui o consumo de energia mensal."
+				value={value || null}
+				handleChange={handleChange}
+				width="100%"
+			/>
 		),
 	},
 ];

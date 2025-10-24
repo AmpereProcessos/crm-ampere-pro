@@ -34,12 +34,7 @@ export default function Rankings() {
 				>
 					RANKING DE VENDEDORES
 				</Button>
-				<Button
-					variant={ranking === "sdrs" ? "default" : "ghost"}
-					size="fit"
-					className="rounded-lg px-2 py-1 text-xs"
-					onClick={() => handleSetRanking("sdrs")}
-				>
+				<Button variant={ranking === "sdrs" ? "default" : "ghost"} size="fit" className="rounded-lg px-2 py-1 text-xs" onClick={() => handleSetRanking("sdrs")}>
 					RANKING DE SDRS
 				</Button>
 			</div>
@@ -76,18 +71,14 @@ export function SellerRanking() {
 		return (
 			<div className="w-full h-full flex items-center justify-center gap-2">
 				<AnimatedSpinner className="h-4 w-4" />
-				<span className="text-primary text-xs font-bold animate-pulse">
-					Carregando...
-				</span>
+				<span className="text-primary text-xs font-bold animate-pulse">Carregando...</span>
 			</div>
 		);
 	}
 	if (isError) {
 		return (
 			<div className="w-full h-full flex items-center justify-center">
-				<span className="text-primary text-xs font-bold">
-					Erro ao carregar o ranking
-				</span>
+				<span className="text-primary text-xs font-bold">Erro ao carregar o ranking</span>
 			</div>
 		);
 	}
@@ -134,17 +125,10 @@ export function SellerRanking() {
 				)}
 			</div>
 			<div className="flex w-full flex-col gap-1">
-				<h2 className="text-primary text-[0.65rem] font-bold uppercase lg:text-xs">
-					OUTROS
-				</h2>
+				<h2 className="text-primary text-[0.65rem] font-bold uppercase lg:text-xs">OUTROS</h2>
 				<div className="overscroll-y scrollbar-thin scrollbar-track-primary/20 scrollbar-thumb-primary/20 flex h-[200px] w-full flex-col gap-2 overflow-y-auto lg:h-[250px]">
 					{others.map((item, index) => (
-						<NonPodiumCard
-							key={`${item.name}-${index}`}
-							rankingItem={item}
-							rankingMinValue={rankingMinValue}
-							rankingMaxValue={rankingMaxValue}
-						/>
+						<NonPodiumCard key={`${item.name}-${index}`} rankingItem={item} rankingMinValue={rankingMinValue} rankingMaxValue={rankingMaxValue} />
 					))}
 				</div>
 			</div>
@@ -167,18 +151,14 @@ export function SdrsRanking() {
 		return (
 			<div className="w-full h-full flex items-center justify-center gap-2">
 				<AnimatedSpinner className="h-4 w-4" />
-				<span className="text-primary text-xs font-bold animate-pulse">
-					Carregando...
-				</span>
+				<span className="text-primary text-xs font-bold animate-pulse">Carregando...</span>
 			</div>
 		);
 	}
 	if (isError) {
 		return (
 			<div className="w-full h-full flex items-center justify-center">
-				<span className="text-primary text-xs font-bold">
-					Erro ao carregar o ranking
-				</span>
+				<span className="text-primary text-xs font-bold">Erro ao carregar o ranking</span>
 			</div>
 		);
 	}
@@ -225,17 +205,10 @@ export function SdrsRanking() {
 				)}
 			</div>
 			<div className="flex w-full flex-col gap-1">
-				<h2 className="text-primary text-[0.65rem] font-bold uppercase lg:text-xs">
-					OUTROS
-				</h2>
+				<h2 className="text-primary text-[0.65rem] font-bold uppercase lg:text-xs">OUTROS</h2>
 				<div className="overscroll-y scrollbar-thin scrollbar-track-primary/20 scrollbar-thumb-primary/20 flex h-[200px] w-full flex-col gap-2 overflow-y-auto lg:h-[250px]">
 					{others.map((item, index) => (
-						<NonPodiumCard
-							key={`${item.name}-${index}`}
-							rankingItem={item}
-							rankingMinValue={rankingMinValue}
-							rankingMaxValue={rankingMaxValue}
-						/>
+						<NonPodiumCard key={`${item.name}-${index}`} rankingItem={item} rankingMinValue={rankingMinValue} rankingMaxValue={rankingMaxValue} />
 					))}
 				</div>
 			</div>

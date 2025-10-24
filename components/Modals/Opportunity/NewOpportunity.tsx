@@ -6,34 +6,15 @@ import OpportunityClientInformationBlock from "@/components/Opportunities/Creati
 import ResponsiblesInformationBlock from "@/components/Opportunities/Creation/ResponsiblesInformationBlock";
 import SimilarClients from "@/components/Opportunities/SimilarClients";
 import { Button } from "@/components/ui/button";
-import {
-	Dialog,
-	DialogClose,
-	DialogContent,
-	DialogDescription,
-	DialogFooter,
-	DialogHeader,
-	DialogTitle,
-} from "@/components/ui/dialog";
-import {
-	Drawer,
-	DrawerClose,
-	DrawerContent,
-	DrawerDescription,
-	DrawerFooter,
-	DrawerHeader,
-	DrawerTitle,
-} from "@/components/ui/drawer";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
 import type { TUserSession } from "@/lib/auth/session";
 import { useMediaQuery } from "@/lib/utils";
 import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
 import { createClientOpportunityAndFunnelReference } from "@/utils/mutations/opportunities";
 import { useSearchClients } from "@/utils/queries/clients";
 import { useProjectTypes } from "@/utils/queries/project-types";
-import type {
-	TClient,
-	TSimilarClientSimplifiedDTO,
-} from "@/utils/schemas/client.schema";
+import type { TClient, TSimilarClientSimplifiedDTO } from "@/utils/schemas/client.schema";
 import type { TFunnelReference } from "@/utils/schemas/funnel-reference.schema";
 import type { TFunnelDTO } from "@/utils/schemas/funnel.schema";
 import type { TOpportunity } from "@/utils/schemas/opportunity.schema";
@@ -52,18 +33,12 @@ type NewOpportunityProps = {
 	funnels: TFunnelDTO[];
 	closeModal: () => void;
 };
-function NewOpportunity({
-	session,
-	closeModal,
-	opportunityCreators,
-	funnels,
-}: NewOpportunityProps) {
+function NewOpportunity({ session, closeModal, opportunityCreators, funnels }: NewOpportunityProps) {
 	const isDesktop = useMediaQuery("(min-width: 768px)");
 
 	const queryClient = useQueryClient();
 	const { data: projectTypes } = useProjectTypes();
-	const [similarClient, setSimilarClient] =
-		useState<TSimilarClientSimplifiedDTO | null>(null);
+	const [similarClient, setSimilarClient] = useState<TSimilarClientSimplifiedDTO | null>(null);
 	const initialClient = {
 		_id: null,
 		nome: "",
@@ -157,35 +132,24 @@ function NewOpportunity({
 		estagios: {},
 		dataInsercao: new Date().toISOString(),
 	};
-	const [newClient, setNewClient] = useState<TClient & { _id?: string | null }>(
-		initialClient,
-	);
-	const [newOpportunity, setNewOpportunity] =
-		useState<TOpportunity>(initialOpportunity);
-	const [newFunnelReference, setNewFunnelReference] =
-		useState<TFunnelReference>(initialFunnelReference);
+	const [newClient, setNewClient] = useState<TClient & { _id?: string | null }>(initialClient);
+	const [newOpportunity, setNewOpportunity] = useState<TOpportunity>(initialOpportunity);
+	const [newFunnelReference, setNewFunnelReference] = useState<TFunnelReference>(initialFunnelReference);
 
 	const [createdProjectId, setCreateProjectId] = useState<string | null>(null);
 
 	async function handleOpportunityCreation() {
 		try {
-			if (
-				newClient.telefonePrimario.trim().length < 14 &&
-				newClient.cpfCnpj &&
-				newClient.cpfCnpj?.trim().length < 14
-			) {
-				throw new createHttpError.BadRequest(
-					"Telefone ou CPF/CNPJ são obrigatórios.",
-				);
+			if (newClient.telefonePrimario.trim().length < 14 && newClient.cpfCnpj && newClient.cpfCnpj?.trim().length < 14) {
+				throw new createHttpError.BadRequest("Telefone ou CPF/CNPJ são obrigatórios.");
 			}
-			const insertedOpportunityId =
-				await createClientOpportunityAndFunnelReference({
-					clientId: similarClient?._id || null,
-					client: newClient,
-					opportunity: newOpportunity,
-					funnelReference: newFunnelReference,
-					returnId: true,
-				});
+			const insertedOpportunityId = await createClientOpportunityAndFunnelReference({
+				clientId: similarClient?._id || null,
+				client: newClient,
+				opportunity: newOpportunity,
+				funnelReference: newFunnelReference,
+				returnId: true,
+			});
 			setCreateProjectId(insertedOpportunityId);
 			return "Oportunidade criada com sucesso !";
 		} catch (error) {
@@ -206,8 +170,7 @@ function NewOpportunity({
 	});
 
 	const MENU_TITLE = "NOVA OPORTUNIDADE";
-	const MENU_DESCRIPTION =
-		"Preencha os campos abaixo para criar uma nova oportunidade.";
+	const MENU_DESCRIPTION = "Preencha os campos abaixo para criar uma nova oportunidade.";
 	const BUTTON_TEXT = "CADASTRAR";
 	return isDesktop ? (
 		<Dialog onOpenChange={(v) => (v ? null : closeModal())} open>
@@ -220,9 +183,7 @@ function NewOpportunity({
 					<div className="flex w-full grow flex-col items-center justify-center gap-2">
 						<div className="flex flex-col items-center gap-1">
 							<BadgeCheck className="h-10 min-h-10 w-10 min-w-10 text-green-500 lg:h-20 lg:w-20" />
-							<h1 className="text-center font-bold text-lg text-primary tracking-tight">
-								Oportunidade criada com sucesso!
-							</h1>
+							<h1 className="text-center font-bold text-lg text-primary tracking-tight">Oportunidade criada com sucesso!</h1>
 						</div>
 						<div className="flex flex-col items-center gap-2 lg:flex-row">
 							<Button
@@ -289,9 +250,7 @@ function NewOpportunity({
 					<div className="flex w-full grow flex-col items-center justify-center gap-2">
 						<div className="flex flex-col items-center gap-1">
 							<BadgeCheck className="h-10 min-h-10 w-10 min-w-10 text-green-500 lg:h-20 lg:w-20" />
-							<h1 className="text-center font-bold text-lg text-primary tracking-tight">
-								Oportunidade criada com sucesso!
-							</h1>
+							<h1 className="text-center font-bold text-lg text-primary tracking-tight">Oportunidade criada com sucesso!</h1>
 						</div>
 						<div className="flex flex-col items-center gap-2 lg:flex-row">
 							<Button
@@ -363,9 +322,7 @@ type NewOpportunityContentProps = {
 	funnelReferenceHolder: TFunnelReference;
 	setFunnelReferenceHolder: Dispatch<SetStateAction<TFunnelReference>>;
 	similarClientHolder: TSimilarClientSimplifiedDTO | null;
-	setSimilarClientHolder: Dispatch<
-		SetStateAction<TSimilarClientSimplifiedDTO | null>
-	>;
+	setSimilarClientHolder: Dispatch<SetStateAction<TSimilarClientSimplifiedDTO | null>>;
 };
 function NewOpportunityContent({
 	session,
@@ -437,12 +394,7 @@ function NewOpportunityContent({
 			refetch();
 		}, 2000);
 		return () => clearTimeout(getData);
-	}, [
-		clientHolder.cpfCnpj,
-		clientHolder.email,
-		clientHolder.telefonePrimario,
-		refetch,
-	]);
+	}, [clientHolder.cpfCnpj, clientHolder.email, clientHolder.telefonePrimario, refetch]);
 	return (
 		<div className="flex h-full w-full flex-col gap-6 px-4 lg:flex-row lg:px-0">
 			<div className="scrollbar-thin scrollbar-track-primary/10 scrollbar-thumb-primary/30 flex w-full flex-col gap-2 px-2 lg:h-full lg:max-h-full lg:w-[60%] lg:overflow-y-auto">
@@ -452,17 +404,8 @@ function NewOpportunityContent({
 					session={session}
 					setOpportunity={setOpportunityHolder}
 				/>
-				<GeneralInformationBlock
-					opportunity={opportunityHolder}
-					projectTypes={projectTypes}
-					session={session}
-					setOpportunity={setOpportunityHolder}
-				/>
-				<FunnelReferenceInformationBlock
-					funnelReference={funnelReferenceHolder}
-					funnels={funnels || []}
-					setFunnelReference={setFunnelReferenceHolder}
-				/>
+				<GeneralInformationBlock opportunity={opportunityHolder} projectTypes={projectTypes} session={session} setOpportunity={setOpportunityHolder} />
+				<FunnelReferenceInformationBlock funnelReference={funnelReferenceHolder} funnels={funnels || []} setFunnelReference={setFunnelReferenceHolder} />
 				<OpportunityClientInformationBlock
 					client={clientHolder}
 					opportunity={opportunityHolder}
@@ -472,12 +415,7 @@ function NewOpportunityContent({
 					similarClient={similarClientHolder}
 					similarClients={similarClients || []}
 				/>
-				<AddressInformationBlock
-					client={clientHolder}
-					opportunity={opportunityHolder}
-					setClient={setClientHolder}
-					setOpportunity={setOpportunityHolder}
-				/>
+				<AddressInformationBlock client={clientHolder} opportunity={opportunityHolder} setClient={setClientHolder} setOpportunity={setOpportunityHolder} />
 			</div>
 			<div className="flex w-full lg:w-[40%]">
 				<SimilarClients

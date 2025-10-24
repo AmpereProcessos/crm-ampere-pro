@@ -10,7 +10,9 @@ type UseDistanceDataParams = {
 };
 async function fetchDistanceData({ originCity, originUF, destinationCity, destinationUF }: UseDistanceDataParams) {
 	try {
-		const { data } = await axios.get(`/api/utils/distance?destination=${`${destinationCity}, ${destinationUF}, BRASIL`}&origin=${originCity}, ${originUF}, BRASIL'`);
+		const { data } = await axios.get(
+			`/api/utils/distance?destination=${`${destinationCity}, ${destinationUF}, BRASIL`}&origin=${originCity}, ${originUF}, BRASIL'`,
+		);
 		return data.data as number;
 	} catch (error) {
 		console.log("Error running fetchDistanceData");

@@ -4,16 +4,8 @@ import { Draggable } from "react-beautiful-dnd";
 import { AiOutlineRight } from "react-icons/ai";
 import { MdAttachMoney, MdDashboard } from "react-icons/md";
 
-import {
-	formatDateAsLocale,
-	formatDecimalPlaces,
-	formatNameAsInitials,
-	formatToMoney,
-} from "@/lib/methods/formatting";
-import type {
-	TOpportunityDTO,
-	TOpportunityDTOWithFunnelReferenceAndActivitiesByStatus,
-} from "@/utils/schemas/opportunity.schema";
+import { formatDateAsLocale, formatDecimalPlaces, formatNameAsInitials, formatToMoney } from "@/lib/methods/formatting";
+import type { TOpportunityDTO, TOpportunityDTOWithFunnelReferenceAndActivitiesByStatus } from "@/utils/schemas/opportunity.schema";
 import { BsCalendarPlus, BsFillMegaphoneFill } from "react-icons/bs";
 import Avatar from "../utils/Avatar";
 
@@ -22,20 +14,14 @@ import { Share2 } from "lucide-react";
 import { FaBolt } from "react-icons/fa";
 import OpportunityActivitiesModal from "../Activities/OpportunityActivitiesModal";
 
-function getTagColor(
-	activitiesByStatus: TOpportunityDTOWithFunnelReferenceAndActivitiesByStatus["statusAtividades"],
-) {
+function getTagColor(activitiesByStatus: TOpportunityDTOWithFunnelReferenceAndActivitiesByStatus["statusAtividades"]) {
 	const overDue = activitiesByStatus["EM ATRASO"];
 	const comingDue = activitiesByStatus["EM VENCIMENTO"];
 	if (overDue > 0) return "bg-red-500";
 	if (comingDue > 0) return "bg-orange-500";
 	return "bg-green-500";
 }
-function getBarColor({
-	isWon,
-	isRequested,
-	isLost,
-}: { isWon: boolean; isRequested: boolean; isLost: boolean }) {
+function getBarColor({ isWon, isRequested, isLost }: { isWon: boolean; isRequested: boolean; isLost: boolean }) {
 	if (isWon) return "bg-green-500";
 	if (isRequested) return "bg-orange-400";
 	if (isLost) return "bg-red-500";
@@ -72,8 +58,7 @@ function FunnelListItem({ item, session, index }: FunnelListItemProps) {
 	const isRequested = !!item.contratoSolicitado;
 	const isLost = !!item.perca;
 
-	const [activitiesModalIsOpen, setActivitiesModalIsOpen] =
-		useState<boolean>(false);
+	const [activitiesModalIsOpen, setActivitiesModalIsOpen] = useState<boolean>(false);
 	return (
 		<Draggable draggableId={item.id.toString()} index={index}>
 			{(provided) => (
@@ -83,9 +68,7 @@ function FunnelListItem({ item, session, index }: FunnelListItemProps) {
 					{...provided.dragHandleProps}
 					className="relative flex min-h-[110px] w-full flex-col justify-between rounded-sm border border-primary/40 bg-background shadow-md"
 				>
-					<div
-						className={`h-1 w-full rounded-xs  ${getBarColor({ isWon, isRequested, isLost })}`}
-					/>
+					<div className={`h-1 w-full rounded-xs  ${getBarColor({ isWon, isRequested, isLost })}`} />
 					<div className="flex w-full flex-col p-2">
 						{item.ganho ? (
 							<div className="z-8 absolute right-2 top-4 flex items-center justify-center text-green-500">
@@ -105,29 +88,16 @@ function FunnelListItem({ item, session, index }: FunnelListItemProps) {
 							</button>
 						) : null}
 						{activitiesModalIsOpen ? (
-							<OpportunityActivitiesModal
-								session={session}
-								opportunityId={item.idOportunidade}
-								closeModal={() => setActivitiesModalIsOpen(false)}
-							/>
+							<OpportunityActivitiesModal session={session} opportunityId={item.idOportunidade} closeModal={() => setActivitiesModalIsOpen(false)} />
 						) : null}
 						<div className="flex w-full flex-col">
 							<div className="flex items-center gap-1">
-								<h1 className="text-xs font-bold text-[#fead41]">
-									{item.identificador}
-								</h1>
-								{item.idMarketing ? (
-									<BsFillMegaphoneFill color="#3e53b2" />
-								) : null}
+								<h1 className="text-xs font-bold text-[#fead41]">{item.identificador}</h1>
+								{item.idMarketing ? <BsFillMegaphoneFill color="#3e53b2" /> : null}
 								{item.idIndicacao ? <Share2 size={15} color="#06b6d4" /> : null}
 							</div>
-							<Link
-								href={`/comercial/oportunidades/id/${item.idOportunidade}`}
-								prefetch={false}
-							>
-								<h1 className="font-bold text-primary hover:text-blue-400">
-									{item.nome}
-								</h1>
+							<Link href={`/comercial/oportunidades/id/${item.idOportunidade}`} prefetch={false}>
+								<h1 className="font-bold text-primary hover:text-blue-400">{item.nome}</h1>
 							</Link>
 							<div className="flex items-center gap-1">
 								<MdDashboard />
@@ -136,13 +106,9 @@ function FunnelListItem({ item, session, index }: FunnelListItemProps) {
 						</div>
 						{item.proposta?.nome ? (
 							<div className="my-2 flex w-full grow flex-col rounded-md border border-primary/30 p-2">
-								<h1 className="text-[0.6rem] font-extralight text-primary/70">
-									PROPOSTA ATIVA
-								</h1>
+								<h1 className="text-[0.6rem] font-extralight text-primary/70">PROPOSTA ATIVA</h1>
 								<div className="flex w-full flex-col justify-between">
-									<p className="text-xs font-medium text-cyan-500">
-										{item.proposta.nome}
-									</p>
+									<p className="text-xs font-medium text-cyan-500">{item.proposta.nome}</p>
 									<div className="flex  items-center justify-between">
 										<div className="flex items-center gap-1">
 											<FaBolt color="rgb(6,182,212)" />
@@ -153,9 +119,7 @@ function FunnelListItem({ item, session, index }: FunnelListItemProps) {
 										</div>
 										<div className="flex items-center gap-1">
 											<MdAttachMoney color="rgb(6,182,212)" />
-											<p className="text-xs  text-primary/70">
-												{formatToMoney(item.proposta.valor)}
-											</p>
+											<p className="text-xs  text-primary/70">{formatToMoney(item.proposta.valor)}</p>
 										</div>
 									</div>
 								</div>
@@ -167,31 +131,18 @@ function FunnelListItem({ item, session, index }: FunnelListItemProps) {
 									if (index <= 1)
 										return (
 											<div key={resp.id} className="flex items-center gap-1">
-												<Avatar
-													url={resp.avatar_url || undefined}
-													fallback={formatNameAsInitials(resp.nome)}
-													height={18}
-													width={18}
-												/>
-												<p className="text-[0.65rem] font-light text-primary/70">
-													{resp.nome}
-												</p>
+												<Avatar url={resp.avatar_url || undefined} fallback={formatNameAsInitials(resp.nome)} height={18} width={18} />
+												<p className="text-[0.65rem] font-light text-primary/70">{resp.nome}</p>
 											</div>
 										);
 									return null;
 								})}
-								{item.responsaveis.length > 2 ? (
-									<p className="text-[0.65rem] font-light text-primary/70">
-										...
-									</p>
-								) : null}
+								{item.responsaveis.length > 2 ? <p className="text-[0.65rem] font-light text-primary/70">...</p> : null}
 							</div>
 
 							<div className="ites-center flex min-w-fit gap-1">
 								<BsCalendarPlus />
-								<p className={"text-[0.65rem] font-medium text-primary/70"}>
-									{formatDateAsLocale(item.dataInsercao, true)}
-								</p>
+								<p className={"text-[0.65rem] font-medium text-primary/70"}>{formatDateAsLocale(item.dataInsercao, true)}</p>
 							</div>
 						</div>
 					</div>

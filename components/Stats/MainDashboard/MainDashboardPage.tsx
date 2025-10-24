@@ -7,35 +7,15 @@ import MultipleSelectInput from "@/components/Inputs/MultipleSelectInput";
 import { Sidebar } from "@/components/Sidebar";
 import UpdateProfileHint from "@/components/Users/UpdateProfileHint";
 import { Button } from "@/components/ui/button";
-import {
-	type ChartConfig,
-	ChartContainer,
-	ChartLegend,
-	ChartLegendContent,
-	ChartTooltip,
-	ChartTooltipContent,
-} from "@/components/ui/chart";
+import { type ChartConfig, ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { Progress } from "@/components/ui/progress";
-import {
-	Tooltip,
-	TooltipContent,
-	TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import CoachMark from "@/components/utils/CoachMark";
 import type { TUserSession } from "@/lib/auth/session";
-import {
-	formatDateOnInputChange,
-	formatDecimalPlaces,
-	formatToMoney,
-} from "@/lib/methods/formatting";
+import { formatDateOnInputChange, formatDecimalPlaces, formatToMoney } from "@/lib/methods/formatting";
 import { cn } from "@/lib/utils";
 import { formatDateForInputValue } from "@/utils/methods";
-import {
-	useGraphData,
-	useSellersRanking,
-	useStats,
-	useStatsQueryOptions,
-} from "@/utils/queries/stats";
+import { useGraphData, useSellersRanking, useStats, useStatsQueryOptions } from "@/utils/queries/stats";
 import dayjs from "dayjs";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -53,22 +33,11 @@ import {
 import Link from "next/link";
 import { useState } from "react";
 import { AiOutlineCloseCircle, AiOutlineTeam } from "react-icons/ai";
-import {
-	BsFileEarmarkText,
-	BsPatchCheck,
-	BsTicketPerforated,
-} from "react-icons/bs";
+import { BsFileEarmarkText, BsPatchCheck, BsTicketPerforated } from "react-icons/bs";
 import { FaBolt } from "react-icons/fa";
 import { FaListCheck } from "react-icons/fa6";
 import { VscDiffAdded } from "react-icons/vsc";
-import {
-	Area,
-	CartesianGrid,
-	ComposedChart,
-	Line,
-	XAxis,
-	YAxis,
-} from "recharts";
+import { Area, CartesianGrid, ComposedChart, Line, XAxis, YAxis } from "recharts";
 import SellersRanking from "../rankings/Rankings";
 import OpenActivitiesBlock from "./OpenActivitiesBlock";
 import PPSOpenCallsBlock from "./PPSOpenCallsBlock";
@@ -89,8 +58,7 @@ type MainDashboardPageProps = {
 	session: TUserSession;
 };
 function MainDashboardPage({ session }: MainDashboardPageProps) {
-	const userOpportunitiesScope =
-		session.user.permissoes.oportunidades.escopo || null;
+	const userOpportunitiesScope = session.user.permissoes.oportunidades.escopo || null;
 	const userPartnersScope = session.user.permissoes.parceiros.escopo || null;
 
 	const [queryFilters, setQueryFilters] = useState<TQueryFilters>({
@@ -110,9 +78,7 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
 
 	const responsiblesSelectableOptions = queryOptions?.responsibles
 		? userOpportunitiesScope
-			? queryOptions.responsibles.filter((a) =>
-					userOpportunitiesScope.includes(a._id),
-				)
+			? queryOptions.responsibles.filter((a) => userOpportunitiesScope.includes(a._id))
 			: queryOptions.responsibles
 		: [];
 	const partnersSelectableOptions = queryOptions?.partners
@@ -128,12 +94,8 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
 			<div className="flex w-full max-w-full grow flex-col overflow-x-hidden bg-background p-6">
 				<div className="flex w-full flex-col gap-2 items-center justify-between border-b border-black pb-2 lg:flex-row">
 					<div className="flex flex-col items-center gap-2 lg:flex-row">
-						<h1 className="font-Raleway text-2xl font-black text-primary">
-							DASHBOARD
-						</h1>
-						<UserConectaIndicationCodeFlag
-							code={session.user.codigoIndicacaoConecta}
-						/>
+						<h1 className="font-Raleway text-2xl font-black text-primary">DASHBOARD</h1>
+						<UserConectaIndicationCodeFlag code={session.user.codigoIndicacaoConecta} />
 					</div>
 					<div className="flex flex-col items-center gap-6 lg:flex-row">
 						{session?.user.permissoes.resultados?.visualizarComercial ? (
@@ -222,18 +184,14 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
 										projectTypes: value as string[],
 									}))
 								}
-								onReset={() =>
-									setQueryFilters((prev) => ({ ...prev, projectTypes: null }))
-								}
+								onReset={() => setQueryFilters((prev) => ({ ...prev, projectTypes: null }))}
 								label="PROJETOS"
 								width="100%"
 							/>
 						</div>
 
 						<div className="flex w-full flex-col lg:w-fit">
-							<h1 className="text-end text-sm font-medium uppercase tracking-tight">
-								PERÍODO
-							</h1>
+							<h1 className="text-end text-sm font-medium uppercase tracking-tight">PERÍODO</h1>
 							<div className="flex flex-col items-center gap-2 lg:flex-row">
 								<div className="w-full lg:w-[150px]">
 									<DateInput
@@ -245,11 +203,7 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
 												...prev,
 												period: {
 													...prev.period,
-													after: formatDateOnInputChange(
-														value,
-														"string",
-														"start",
-													) as string,
+													after: formatDateOnInputChange(value, "string", "start") as string,
 												},
 											}))
 										}
@@ -266,11 +220,7 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
 												...prev,
 												period: {
 													...prev.period,
-													before: formatDateOnInputChange(
-														value,
-														"string",
-														"end",
-													) as string,
+													before: formatDateOnInputChange(value, "string", "end") as string,
 												},
 											}))
 										}
@@ -333,14 +283,8 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
 						<CardStat
 							title="Ticket Médio"
 							icon={<BsTicketPerforated className="h-4 w-4" />}
-							current={
-								(data?.simplificado.ATUAL.totalVendido || 0) /
-								(data?.simplificado.ATUAL.projetosGanhos || 0)
-							}
-							previous={
-								(data?.simplificado.ANTERIOR.totalVendido || 0) /
-								(data?.simplificado.ANTERIOR.projetosGanhos || 0)
-							}
+							current={(data?.simplificado.ATUAL.totalVendido || 0) / (data?.simplificado.ATUAL.projetosGanhos || 0)}
+							previous={(data?.simplificado.ANTERIOR.totalVendido || 0) / (data?.simplificado.ANTERIOR.projetosGanhos || 0)}
 							formatCurrent={(value) => `${formatToMoney(value)}`}
 							formatPrevious={(value) => `${formatToMoney(value)}`}
 							className="w-full lg:w-1/6"
@@ -363,51 +307,32 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
 					</div>
 
 					<div className="flex w-full flex-col items-center justify-around gap-2 lg:flex-row">
-						<div
-							className={cn(
-								"bg-card border-primary/20 flex w-full flex-col gap-1 rounded-xl border px-3 py-4 shadow-xs lg:w-1/2",
-							)}
-						>
+						<div className={cn("bg-card border-primary/20 flex w-full flex-col gap-1 rounded-xl border px-3 py-4 shadow-xs lg:w-1/2")}>
 							<div className="flex items-center justify-between">
-								<h1 className="text-xs font-medium tracking-tight uppercase">
-									Visualizações do Conecta Link
-								</h1>
+								<h1 className="text-xs font-medium tracking-tight uppercase">Visualizações do Conecta Link</h1>
 								<div className="flex items-center gap-2">
 									<MousePointerClick className="h-4 w-4" />
 								</div>
 							</div>
 							<div className="flex w-full flex-col">
-								<div className="text-2xl font-bold text-[#15599a] dark:text-[#fead61]">
-									{data?.conecta.visualizacoes || 0}
-								</div>
+								<div className="text-2xl font-bold text-[#15599a] dark:text-[#fead61]">{data?.conecta.visualizacoes || 0}</div>
 							</div>
 						</div>
-						<div
-							className={cn(
-								"bg-card border-primary/20 flex w-full flex-col gap-1 rounded-xl border px-3 py-4 shadow-xs lg:w-1/2",
-							)}
-						>
+						<div className={cn("bg-card border-primary/20 flex w-full flex-col gap-1 rounded-xl border px-3 py-4 shadow-xs lg:w-1/2")}>
 							<div className="flex items-center justify-between">
-								<h1 className="text-xs font-medium tracking-tight uppercase">
-									Oportunidades do Conecta Link
-								</h1>
+								<h1 className="text-xs font-medium tracking-tight uppercase">Oportunidades do Conecta Link</h1>
 								<div className="flex items-center gap-2">
 									<UserRoundPlus className="h-4 w-4" />
 								</div>
 							</div>
 							<div className="flex w-full flex-col">
-								<div className="text-2xl font-bold text-[#15599a] dark:text-[#fead61]">
-									{data?.conecta.oportunidades || 0}
-								</div>
+								<div className="text-2xl font-bold text-[#15599a] dark:text-[#fead61]">{data?.conecta.oportunidades || 0}</div>
 							</div>
 						</div>
 					</div>
 					<div className="flex w-full flex-col items-center justify-around gap-2 lg:flex-row">
 						<div className="w-full lg:w-[40%]">
-							<PendingWinsBlock
-								data={data?.ganhosPendentes || []}
-								session={session}
-							/>
+							<PendingWinsBlock data={data?.ganhosPendentes || []} session={session} />
 						</div>
 						<div className="w-full lg:w-[60%]">
 							<WinsBlock data={data?.ganhos || []} session={session} />
@@ -422,14 +347,7 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
 						</div>
 					</div>
 				</div>
-				<UpdateProfileHint
-					session={session}
-					required={
-						!session.user.telefone ||
-						!session.user.avatar_url ||
-						!session.user.dataNascimento
-					}
-				/>
+				<UpdateProfileHint session={session} required={!session.user.telefone || !session.user.avatar_url || !session.user.dataNascimento} />
 			</div>
 		</div>
 	);
@@ -447,16 +365,7 @@ type CardStatProps = {
 	lowerIsBetter?: boolean;
 	className?: string;
 };
-function CardStat({
-	title,
-	icon,
-	current,
-	previous,
-	formatCurrent,
-	formatPrevious,
-	lowerIsBetter,
-	className,
-}: CardStatProps) {
+function CardStat({ title, icon, current, previous, formatCurrent, formatPrevious, lowerIsBetter, className }: CardStatProps) {
 	const change = (() => {
 		if (previous === 0) {
 			if (current === 0) return 0;
@@ -470,31 +379,18 @@ function CardStat({
 	const changeAbs = Math.abs(change);
 
 	return (
-		<div
-			className={cn(
-				"bg-card border-primary/20 flex w-full flex-col gap-1 rounded-xl border px-3 py-4 shadow-xs",
-				className,
-			)}
-		>
+		<div className={cn("bg-card border-primary/20 flex w-full flex-col gap-1 rounded-xl border px-3 py-4 shadow-xs", className)}>
 			<div className="flex items-center justify-between">
-				<h1 className="text-xs font-medium tracking-tight uppercase">
-					{title}
-				</h1>
+				<h1 className="text-xs font-medium tracking-tight uppercase">{title}</h1>
 				<div className="flex items-center gap-2">
 					{!isNeutral && (
 						<div
 							className={cn(
 								"inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[0.65rem] font-bold",
-								isGood
-									? "bg-green-200 text-green-700"
-									: "bg-red-200 text-red-700",
+								isGood ? "bg-green-200 text-green-700" : "bg-red-200 text-red-700",
 							)}
 						>
-							{isGood ? (
-								<TrendingUp className="h-3 min-h-3 w-3 min-w-3" />
-							) : (
-								<TrendingDown className="h-3 min-h-3 w-3 min-w-3" />
-							)}
+							{isGood ? <TrendingUp className="h-3 min-h-3 w-3 min-w-3" /> : <TrendingDown className="h-3 min-h-3 w-3 min-w-3" />}
 							{formatDecimalPlaces(changeAbs)}%
 						</div>
 					)}
@@ -502,13 +398,8 @@ function CardStat({
 				</div>
 			</div>
 			<div className="flex w-full flex-col">
-				<div className="text-2xl font-bold text-[#15599a] dark:text-[#fead61]">
-					{formatCurrent ? formatCurrent(current) : String(current)}
-				</div>
-				<p className="text-primary/60 text-xs tracking-tight">
-					NO MÊS ANTERIOR:{" "}
-					{formatPrevious ? formatPrevious(previous) : String(previous || 0)}
-				</p>
+				<div className="text-2xl font-bold text-[#15599a] dark:text-[#fead61]">{formatCurrent ? formatCurrent(current) : String(current)}</div>
+				<p className="text-primary/60 text-xs tracking-tight">NO MÊS ANTERIOR: {formatPrevious ? formatPrevious(previous) : String(previous || 0)}</p>
 			</div>
 		</div>
 	);
@@ -521,15 +412,8 @@ type TGraphDataProps = {
 	partners: TGetGraphDataRouteInput["partners"];
 	projectTypes: TGetGraphDataRouteInput["projectTypes"];
 };
-function GraphData({
-	after,
-	before,
-	responsibles,
-	partners,
-	projectTypes,
-}: TGraphDataProps) {
-	const [graphType, setGraphType] =
-		useState<TGetGraphDataRouteInput["graphType"]>("total-sold");
+function GraphData({ after, before, responsibles, partners, projectTypes }: TGraphDataProps) {
+	const [graphType, setGraphType] = useState<TGetGraphDataRouteInput["graphType"]>("total-sold");
 	const { data } = useGraphData({
 		after,
 		before,
@@ -588,9 +472,7 @@ function GraphData({
 	return (
 		<div className="bg-card border-primary/20 flex w-full flex-col gap-3 rounded-xl border px-3 py-4 shadow-xs h-full">
 			<div className="flex items-center justify-between">
-				<h1 className="text-xs font-medium tracking-tight uppercase">
-					{METRIC_LABELS[graphType].title}
-				</h1>
+				<h1 className="text-xs font-medium tracking-tight uppercase">{METRIC_LABELS[graphType].title}</h1>
 				<div className="flex items-center gap-2">
 					<Tooltip>
 						<TooltipTrigger asChild>
@@ -610,9 +492,7 @@ function GraphData({
 					<Tooltip>
 						<TooltipTrigger asChild>
 							<Button
-								variant={
-									graphType === "opportunities-created" ? "default" : "ghost"
-								}
+								variant={graphType === "opportunities-created" ? "default" : "ghost"}
 								size="fit"
 								className="rounded-lg p-2"
 								onClick={() => setGraphType("opportunities-created")}
@@ -628,9 +508,7 @@ function GraphData({
 					<Tooltip>
 						<TooltipTrigger asChild>
 							<Button
-								variant={
-									graphType === "opportunities-won" ? "default" : "ghost"
-								}
+								variant={graphType === "opportunities-won" ? "default" : "ghost"}
 								size="fit"
 								className="rounded-lg p-2"
 								onClick={() => setGraphType("opportunities-won")}
@@ -645,9 +523,7 @@ function GraphData({
 					<Tooltip>
 						<TooltipTrigger asChild>
 							<Button
-								variant={
-									graphType === "opportunities-lost" ? "default" : "ghost"
-								}
+								variant={graphType === "opportunities-lost" ? "default" : "ghost"}
 								size="fit"
 								className="rounded-lg p-2"
 								onClick={() => setGraphType("opportunities-lost")}
@@ -663,10 +539,7 @@ function GraphData({
 			</div>
 			<div className="flex w-full items-center gap-4">
 				<div className="flex max-h-[400px] min-h-[400px] w-full items-center justify-center lg:max-h-[350px] lg:min-h-[350px]">
-					<ChartContainer
-						config={firstPeriodChartConfig}
-						className="aspect-auto h-[350px] w-full lg:h-[300px]"
-					>
+					<ChartContainer config={firstPeriodChartConfig} className="aspect-auto h-[350px] w-full lg:h-[300px]">
 						<ComposedChart
 							data={data || []}
 							margin={{
@@ -678,28 +551,12 @@ function GraphData({
 						>
 							<defs>
 								<linearGradient id="firstGradient" x1="0" y1="0" x2="0" y2="1">
-									<stop
-										offset="10%"
-										stopColor={firstPeriodChartConfig.valor.color}
-										stopOpacity={0.9}
-									/>
-									<stop
-										offset="90%"
-										stopColor={firstPeriodChartConfig.valor.color}
-										stopOpacity={0.1}
-									/>
+									<stop offset="10%" stopColor={firstPeriodChartConfig.valor.color} stopOpacity={0.9} />
+									<stop offset="90%" stopColor={firstPeriodChartConfig.valor.color} stopOpacity={0.1} />
 								</linearGradient>
 								<linearGradient id="goalGradient" x1="0" y1="0" x2="0" y2="1">
-									<stop
-										offset="10%"
-										stopColor={firstPeriodChartConfig.objetivo.color}
-										stopOpacity={0.3}
-									/>
-									<stop
-										offset="90%"
-										stopColor={firstPeriodChartConfig.objetivo.color}
-										stopOpacity={0.05}
-									/>
+									<stop offset="10%" stopColor={firstPeriodChartConfig.objetivo.color} stopOpacity={0.3} />
+									<stop offset="90%" stopColor={firstPeriodChartConfig.objetivo.color} stopOpacity={0.05} />
 								</linearGradient>
 							</defs>
 							<CartesianGrid vertical={false} />
@@ -715,9 +572,7 @@ function GraphData({
 							/>
 							<YAxis
 								orientation="left"
-								tickFormatter={(value) =>
-									METRIC_LABELS[graphType].valorFormatting(value)
-								}
+								tickFormatter={(value) => METRIC_LABELS[graphType].valorFormatting(value)}
 								stroke={firstPeriodChartConfig.valor.color}
 							/>
 
@@ -749,19 +604,8 @@ function GraphData({
 								strokeDasharray="5 5"
 								fillOpacity={0.5}
 							/>
-							<Area
-								dataKey="valor"
-								type="monotone"
-								fill="url(#firstGradient)"
-								stroke={firstPeriodChartConfig.valor.color}
-								strokeWidth={2}
-							/>
-							<ChartLegend
-								content={<ChartLegendContent payload={[]} />}
-								verticalAlign="top"
-								align="right"
-								iconType="line"
-							/>
+							<Area dataKey="valor" type="monotone" fill="url(#firstGradient)" stroke={firstPeriodChartConfig.valor.color} strokeWidth={2} />
+							<ChartLegend content={<ChartLegendContent payload={[]} />} verticalAlign="top" align="right" iconType="line" />
 						</ComposedChart>
 					</ChartContainer>
 				</div>
@@ -777,18 +621,13 @@ type TGoalTrackingBarProps = {
 	barBgColor: string;
 };
 function GoalTrackingBar({ actual, goal }: TGoalTrackingBarProps) {
-	const [showingMetrics, setShowingMetrics] = useState<Record<string, boolean>>(
-		{
-			"total-sold": true,
-			"opportunities-created": false,
-			"opportunities-won": false,
-			"potencia-sold": false,
-		},
-	);
-	function getPercentage({
-		goal,
-		hit,
-	}: { goal: number | undefined; hit: number | undefined }) {
+	const [showingMetrics, setShowingMetrics] = useState<Record<string, boolean>>({
+		"total-sold": true,
+		"opportunities-created": false,
+		"opportunities-won": false,
+		"potencia-sold": false,
+	});
+	function getPercentage({ goal, hit }: { goal: number | undefined; hit: number | undefined }) {
 		if (!hit || hit === 0) return { text: "0%", value: 0 };
 		if (!goal && hit) return { text: "100%", value: 100 };
 		if (goal && !hit) return { text: "0%", value: 0 };
@@ -835,11 +674,7 @@ function GoalTrackingBar({ actual, goal }: TGoalTrackingBarProps) {
 	};
 	const showingAllMetrics = Object.values(showingMetrics).every((v) => !!v);
 	return (
-		<div
-			className={cn(
-				"bg-card border-primary/20 flex w-full flex-col gap-1 rounded-xl border px-3 py-4 shadow-xs",
-			)}
-		>
+		<div className={cn("bg-card border-primary/20 flex w-full flex-col gap-1 rounded-xl border px-3 py-4 shadow-xs")}>
 			<div className="flex items-center justify-between">
 				<h1 className="text-xs font-medium tracking-tight uppercase">META</h1>
 				<Button
@@ -864,11 +699,7 @@ function GoalTrackingBar({ actual, goal }: TGoalTrackingBarProps) {
 						);
 					}}
 				>
-					{showingAllMetrics ? (
-						<ChevronUp className="h-4 w-4 min-h-4 min-w-4" />
-					) : (
-						<ChevronDown className="h-4 w-4 min-h-4 min-w-4" />
-					)}
+					{showingAllMetrics ? <ChevronUp className="h-4 w-4 min-h-4 min-w-4" /> : <ChevronDown className="h-4 w-4 min-h-4 min-w-4" />}
 				</Button>
 			</div>
 			<AnimatePresence initial={false}>
@@ -909,8 +740,7 @@ function GoalTrackingBar({ actual, goal }: TGoalTrackingBarProps) {
 									}
 								</p>
 								<p className="text-[0.5rem] italic text-gray-500 lg:text-[0.65rem]">
-									<strong>{value.valueHitFormatted}</strong> de{" "}
-									<strong>{value.valueGoalFormatted}</strong>{" "}
+									<strong>{value.valueHitFormatted}</strong> de <strong>{value.valueGoalFormatted}</strong>{" "}
 								</p>
 							</div>
 						</motion.div>

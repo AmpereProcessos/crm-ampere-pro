@@ -5618,13 +5618,11 @@ export const stateCities: StateCities = {
 	],
 };
 
-export const BrazilianStatesOptions = Object.keys(stateCities).map(
-	(state, index) => ({
-		id: index + 1,
-		label: state,
-		value: state,
-	}),
-);
+export const BrazilianStatesOptions = Object.keys(stateCities).map((state, index) => ({
+	id: index + 1,
+	label: state,
+	value: state,
+}));
 
 export const BrazillianCitiesOptions = Object.values(stateCities)
 	.flat()

@@ -82,9 +82,7 @@ export const useGoalStore = create<TGoalStore>((set, get) => ({
 		set((state) => ({
 			goal: {
 				...state.goal,
-				usuarios: state.goal.usuarios.map((user, idx) =>
-					idx === index ? { ...user, ...change } : user,
-				),
+				usuarios: state.goal.usuarios.map((user, idx) => (idx === index ? { ...user, ...change } : user)),
 			},
 		})),
 }));

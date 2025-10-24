@@ -3,7 +3,14 @@ import { TechnicalAnalysisSolicitationTypes } from "./utils/select-options";
 
 const EquipmentSchema = z.object({
 	id: z.string({ invalid_type_error: "Tipo não válido para ID do módulo." }).optional().nullable(),
-	categoria: z.union([z.literal("MÓDULO"), z.literal("INVERSOR"), z.literal("INSUMO"), z.literal("ESTRUTURA"), z.literal("PADRÃO"), z.literal("OUTROS")]),
+	categoria: z.union([
+		z.literal("MÓDULO"),
+		z.literal("INVERSOR"),
+		z.literal("INSUMO"),
+		z.literal("ESTRUTURA"),
+		z.literal("PADRÃO"),
+		z.literal("OUTROS"),
+	]),
 	fabricante: z.string({
 		required_error: "Fabricante do módulo não informado.",
 		invalid_type_error: "Tipo não válido para o fabricante do módulo.",

@@ -3,10 +3,7 @@ import { type QueryClient, useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import type { TUser } from "../schemas/user.schema";
 
-export async function editUser({
-	userId,
-	changes,
-}: { userId: string; changes: any }) {
+export async function editUser({ userId, changes }: { userId: string; changes: any }) {
 	try {
 		const { data } = await axios.put(`/api/users?id=${userId}`, { changes });
 		return data.message;
@@ -20,11 +17,7 @@ type UseEditUser = {
 	queryClient: QueryClient;
 	invalidateKey: string[];
 };
-export function useEditUser({
-	userId,
-	queryClient,
-	invalidateKey,
-}: UseEditUser) {
+export function useEditUser({ userId, queryClient, invalidateKey }: UseEditUser) {
 	return useMutation({
 		mutationKey: ["editUser", userId],
 		mutationFn: async (changes: any) => {

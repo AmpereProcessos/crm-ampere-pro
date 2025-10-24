@@ -11,10 +11,7 @@ type HolderInformationProps = {
 	infoHolder: THomologation;
 	setInfoHolder: React.Dispatch<React.SetStateAction<THomologation>>;
 };
-function HolderInformation({
-	infoHolder,
-	setInfoHolder,
-}: HolderInformationProps) {
+function HolderInformation({ infoHolder, setInfoHolder }: HolderInformationProps) {
 	return (
 		<ResponsiveDialogDrawerSection
 			sectionTitleText="INFORMAÇÕES DO TITULAR DA INSTALAÇÃO ELÉTRICA"

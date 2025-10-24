@@ -135,7 +135,10 @@ type GetComissionScenarioConditionApplicableDefinitionsParams = {
 	conditionType: TComissionScenarioConditionType;
 	definitions: typeof SaleDefinitions;
 };
-export function getComissionScenarioConditionApplicableDefinitions({ conditionType, definitions }: GetComissionScenarioConditionApplicableDefinitionsParams) {
+export function getComissionScenarioConditionApplicableDefinitions({
+	conditionType,
+	definitions,
+}: GetComissionScenarioConditionApplicableDefinitionsParams) {
 	const applicableDefinitionTypes = MethodConditionTypes.find((c) => c.value === conditionType)?.applicableDefinitionTypes;
 	return definitions.filter((p) => applicableDefinitionTypes?.includes(p.type as "NÚMERICO" | "SELEÇÃO" | "BOOLEANO"));
 }
@@ -146,7 +149,11 @@ type GetComissionScenarioConditionOptionsByDefinitionParams = {
 		partners: { id: string; label: string; value: string }[];
 	};
 };
-export function getComissionScenarioConditionOptionsByDefinition({ conditionVariable, definitions, metadata }: GetComissionScenarioConditionOptionsByDefinitionParams) {
+export function getComissionScenarioConditionOptionsByDefinition({
+	conditionVariable,
+	definitions,
+	metadata,
+}: GetComissionScenarioConditionOptionsByDefinitionParams) {
 	const definition = definitions.find((p) => p.identifier === conditionVariable);
 	if (!definition) return [];
 	// If the definition is a partner, then return the options from the metadata
@@ -162,7 +169,11 @@ type HandleRenderComissionScenarioResultConditionPhraseParams = {
 		partners: { id: string; label: string; value: string }[];
 	};
 };
-export function handleRenderComissionScenarioResultConditionPhrase({ result, definitions, metadata }: HandleRenderComissionScenarioResultConditionPhraseParams) {
+export function handleRenderComissionScenarioResultConditionPhrase({
+	result,
+	definitions,
+	metadata,
+}: HandleRenderComissionScenarioResultConditionPhraseParams) {
 	const {
 		condicao: { aplicavel, tipo, variavel, igual, maiorQue, menorQue, entre, inclui },
 	} = result;
@@ -173,7 +184,11 @@ export function handleRenderComissionScenarioResultConditionPhrase({ result, def
 	const premisseDefinitionLabel = premisseDefinition?.label || "";
 
 	if (tipo === "IGUAL_TEXTO" || tipo === "IGUAL_NÚMERICO") {
-		if (premisseDefinition?.identifier === "parceiro_venda" || premisseDefinition?.identifier === "parceiro_vendedor" || premisseDefinition?.identifier === "parceiro_sdr") {
+		if (
+			premisseDefinition?.identifier === "parceiro_venda" ||
+			premisseDefinition?.identifier === "parceiro_vendedor" ||
+			premisseDefinition?.identifier === "parceiro_sdr"
+		) {
 			const partner = metadata?.partners.find((p) => p.value === igual);
 			if (partner) {
 				return (
@@ -211,7 +226,11 @@ export function handleRenderComissionScenarioResultConditionPhrase({ result, def
 		);
 	}
 	if (tipo === "INCLUI_LISTA") {
-		if (premisseDefinition?.identifier === "parceiro_venda" || premisseDefinition?.identifier === "parceiro_vendedor" || premisseDefinition?.identifier === "parceiro_sdr") {
+		if (
+			premisseDefinition?.identifier === "parceiro_venda" ||
+			premisseDefinition?.identifier === "parceiro_vendedor" ||
+			premisseDefinition?.identifier === "parceiro_sdr"
+		) {
 			const partnersLabels = metadata?.partners
 				.filter((p) => inclui?.includes(p.value))
 				.map((p) => p.label)
@@ -297,7 +316,9 @@ export function getComissionValue({ userComissionConfig, projectTypeId, userRole
 	const comissionConfig = userComissionConfig.find((c) => c.tipoProjeto.id === projectTypeId && c.papel === userRole);
 	if (!comissionConfig) return 0;
 
-	const orderedPossibleResults = comissionConfig.resultados.sort((a, b) => (a.condicao.aplicavel === b.condicao.aplicavel ? 0 : a.condicao.aplicavel ? -1 : 1));
+	const orderedPossibleResults = comissionConfig.resultados.sort((a, b) =>
+		a.condicao.aplicavel === b.condicao.aplicavel ? 0 : a.condicao.aplicavel ? -1 : 1,
+	);
 
 	const applicableResult = orderedPossibleResults.find((r) => {
 		// Since general formulas are last, if condicao aplicavel equals false, either:
@@ -354,7 +375,11 @@ type TConditionsAlias = {
 };
 export const comissionConditionsAlias: TConditionsAlias[] = [
 	{ label: "VALOR DA PROPOSTA", value: "valorProposta", types: ["IGUAL_NÚMERICO", "MAIOR_QUE_NÚMERICO", "MENOR_QUE_NÚMERICO", "INTERVALO_NÚMERICO"] },
-	{ label: "POTÊNCIA DA PROPOSTA", value: "potenciaPico", types: ["IGUAL_NÚMERICO", "MAIOR_QUE_NÚMERICO", "MENOR_QUE_NÚMERICO", "INTERVALO_NÚMERICO"] },
+	{
+		label: "POTÊNCIA DA PROPOSTA",
+		value: "potenciaPico",
+		types: ["IGUAL_NÚMERICO", "MAIOR_QUE_NÚMERICO", "MENOR_QUE_NÚMERICO", "INTERVALO_NÚMERICO"],
+	},
 	{ label: "COMBINAÇÃO DE RESPONSÁVEIS", value: "combinacaoResponsaveis", types: ["IGUAL_TEXTO"] },
 ];
 export function formatComissionFormulaItem(value: string) {
@@ -388,7 +413,8 @@ type GetConditionOptions = {
 	variable: keyof TComissionConditionData;
 };
 export function getComissionScenarioConditionOptions({ variable }: GetConditionOptions) {
-	if (variable === "combinacaoResponsaveis") return OpportunityResponsibilityRolesCombinations.map((c, index) => ({ id: index + 1, label: c, value: c }));
+	if (variable === "combinacaoResponsaveis")
+		return OpportunityResponsibilityRolesCombinations.map((c, index) => ({ id: index + 1, label: c, value: c }));
 	return [];
 }
 

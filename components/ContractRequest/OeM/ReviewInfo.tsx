@@ -2,27 +2,16 @@ import DateInput from "@/components/Inputs/DateInput";
 import NumberInput from "@/components/Inputs/NumberInput";
 import SelectInput from "@/components/Inputs/SelectInput";
 import TextInput from "@/components/Inputs/TextInput";
-import {
-	formatDateOnInputChange,
-	formatToMoney,
-} from "@/lib/methods/formatting";
+import { formatDateOnInputChange, formatToMoney } from "@/lib/methods/formatting";
 import { stateCities } from "@/utils/estados_cidades";
-import {
-	formatDateForInputValue,
-	formatToCEP,
-	formatToCPForCNPJ,
-	formatToPhone,
-} from "@/utils/methods";
+import { formatDateForInputValue, formatToCEP, formatToCPForCNPJ, formatToPhone } from "@/utils/methods";
 
 import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
 import { getOeMPrices } from "@/utils/pricing/oem/methods";
 import { useCreditors } from "@/utils/queries/utils";
 import type { TContractRequest } from "@/utils/schemas//contract-request.schema";
 import type { TProposalDTOWithOpportunity } from "@/utils/schemas/proposal.schema";
-import {
-	CustomersAcquisitionChannels,
-	StructureTypes,
-} from "@/utils/select-options";
+import { CustomersAcquisitionChannels, StructureTypes } from "@/utils/select-options";
 
 import { useQueryClient } from "@tanstack/react-query";
 import type React from "react";
@@ -72,10 +61,7 @@ function ReviewInfo({
 
 	function requestContract() {
 		const proposeId = proposeInfo?._id || "";
-		const projectResponsibleId =
-			proposeInfo?.oportunidadeDados?.responsaveis.find(
-				(r) => r.papel == "VENDEDOR",
-			)?.id;
+		const projectResponsibleId = proposeInfo?.oportunidadeDados?.responsaveis.find((r) => r.papel == "VENDEDOR")?.id;
 		const kitCost = 0;
 		const opportunityId = proposeInfo?.oportunidadeDados?.idMarketing;
 		const clientEmail = requestInfo.email;
@@ -92,18 +78,12 @@ function ReviewInfo({
 	}
 	return (
 		<div className="flex w-full grow flex-col bg-background pb-2">
-			<span className="py-2 text-center text-xl font-bold uppercase text-green-500">
-				REVISÃO DAS INFORMAÇÕES
-			</span>
+			<span className="py-2 text-center text-xl font-bold uppercase text-green-500">REVISÃO DAS INFORMAÇÕES</span>
 			<div className="flex w-full grow flex-col">
 				<div className="flex w-full flex-col  bg-background pb-2">
-					<span className="py-2 text-center text-lg font-bold uppercase text-[#15599a]">
-						DADOS PARA CONTRATO
-					</span>
+					<span className="py-2 text-center text-lg font-bold uppercase text-[#15599a]">DADOS PARA CONTRATO</span>
 					<div className="flex flex-col flex-wrap justify-around gap-2 p-2 lg:grid lg:grid-cols-3">
-						<h1 className="col-span-3 py-2 text-center font-bold text-[#fead61]">
-							SOBRE O CLIENTE
-						</h1>
+						<h1 className="col-span-3 py-2 text-center font-bold text-[#fead61]">SOBRE O CLIENTE</h1>
 						<div className="flex items-center justify-center">
 							<TextInput
 								width={"450px"}
@@ -156,9 +136,7 @@ function ReviewInfo({
 								editable={true}
 								placeholder="Digite aqui o RG do cliente."
 								value={requestInfo.rg}
-								handleChange={(value) =>
-									setRequestInfo({ ...requestInfo, rg: value })
-								}
+								handleChange={(value) => setRequestInfo({ ...requestInfo, rg: value })}
 							/>
 						</div>
 						<div className="flex items-center justify-center">
@@ -166,11 +144,7 @@ function ReviewInfo({
 								width={"450px"}
 								label={"DATA DE NASCIMENTO"}
 								editable={true}
-								value={
-									requestInfo.dataDeNascimento
-										? formatDateForInputValue(requestInfo.dataDeNascimento)
-										: undefined
-								}
+								value={requestInfo.dataDeNascimento ? formatDateForInputValue(requestInfo.dataDeNascimento) : undefined}
 								handleChange={(value) =>
 									setRequestInfo({
 										...requestInfo,
@@ -217,9 +191,7 @@ function ReviewInfo({
 								]}
 								editable={true}
 								value={requestInfo.estadoCivil}
-								handleChange={(value) =>
-									setRequestInfo({ ...requestInfo, estadoCivil: value })
-								}
+								handleChange={(value) => setRequestInfo({ ...requestInfo, estadoCivil: value })}
 								onReset={() => {
 									setRequestInfo((prev) => ({
 										...prev,
@@ -236,9 +208,7 @@ function ReviewInfo({
 								editable={true}
 								placeholder="Preencha aqui o email do cliente."
 								value={requestInfo.email}
-								handleChange={(value) =>
-									setRequestInfo({ ...requestInfo, email: value })
-								}
+								handleChange={(value) => setRequestInfo({ ...requestInfo, email: value })}
 							/>
 						</div>
 						<div className="flex items-center justify-center">
@@ -263,9 +233,7 @@ function ReviewInfo({
 								placeholder="Preencha aqui onde o cliente trabalha."
 								editable={true}
 								value={requestInfo.ondeTrabalha}
-								handleChange={(value) =>
-									setRequestInfo({ ...requestInfo, ondeTrabalha: value })
-								}
+								handleChange={(value) => setRequestInfo({ ...requestInfo, ondeTrabalha: value })}
 							/>
 						</div>
 						{requestInfo.tipoDeServico != "SISTEMA FOTOVOLTAICO" && (
@@ -275,9 +243,7 @@ function ReviewInfo({
 									width={"450px"}
 									editable={true}
 									value={requestInfo.tipoDoTitular}
-									handleChange={(value) =>
-										setRequestInfo({ ...requestInfo, tipoDoTitular: value })
-									}
+									handleChange={(value) => setRequestInfo({ ...requestInfo, tipoDoTitular: value })}
 									options={[
 										{
 											id: 1,
@@ -350,9 +316,7 @@ function ReviewInfo({
 								</>
 							)}
 						</div>
-						<h1 className="col-span-3 py-2 text-center font-bold text-[#fead61]">
-							ENDEREÇO
-						</h1>
+						<h1 className="col-span-3 py-2 text-center font-bold text-[#fead61]">ENDEREÇO</h1>
 						<div className="flex flex-wrap items-center justify-center gap-2">
 							<TextInput
 								width={"450px"}
@@ -382,9 +346,7 @@ function ReviewInfo({
 								value={requestInfo.cidade}
 								options={
 									requestInfo.uf
-										? stateCities[
-												requestInfo.uf as keyof typeof stateCities
-											].map((city, index) => {
+										? stateCities[requestInfo.uf as keyof typeof stateCities].map((city, index) => {
 												return {
 													id: index,
 													value: city,
@@ -393,9 +355,7 @@ function ReviewInfo({
 											})
 										: null
 								}
-								handleChange={(value) =>
-									setRequestInfo({ ...requestInfo, cidade: value })
-								}
+								handleChange={(value) => setRequestInfo({ ...requestInfo, cidade: value })}
 								onReset={() => {
 									setRequestInfo((prev) => ({
 										...prev,
@@ -416,9 +376,7 @@ function ReviewInfo({
 									value: state,
 								}))}
 								value={requestInfo.uf}
-								handleChange={(value) =>
-									setRequestInfo({ ...requestInfo, uf: value })
-								}
+								handleChange={(value) => setRequestInfo({ ...requestInfo, uf: value })}
 								resetOptionLabel="NÃO DEFINIDO"
 								onReset={() => {
 									setRequestInfo((prev) => ({ ...prev, uf: null }));
@@ -485,9 +443,7 @@ function ReviewInfo({
 								}
 							/>
 						</div>
-						<h1 className="col-span-3 py-2 text-center font-bold text-[#fead61]">
-							CONTRATO/VENDA
-						</h1>
+						<h1 className="col-span-3 py-2 text-center font-bold text-[#fead61]">CONTRATO/VENDA</h1>
 						<div className="flex items-center justify-center">
 							<SelectInput
 								width={"450px"}
@@ -500,9 +456,7 @@ function ReviewInfo({
 									{ id: 3, label: "RURAL", value: "RURAL" },
 									{ id: 4, label: "INDUSTRIAL", value: "INDUSTRIAL" },
 								]}
-								handleChange={(value) =>
-									setRequestInfo({ ...requestInfo, segmento: value })
-								}
+								handleChange={(value) => setRequestInfo({ ...requestInfo, segmento: value })}
 								resetOptionLabel="NÃO DEFINIDO"
 								onReset={() => {
 									setRequestInfo((prev) => ({
@@ -522,9 +476,7 @@ function ReviewInfo({
 									{ id: 1, label: "FISICA", value: "FISICA" },
 									{ id: 2, label: "DIGITAL", value: "DIGITAL" },
 								]}
-								handleChange={(value) =>
-									setRequestInfo({ ...requestInfo, formaAssinatura: value })
-								}
+								handleChange={(value) => setRequestInfo({ ...requestInfo, formaAssinatura: value })}
 								resetOptionLabel="NÃO DEFINIDO"
 								onReset={() => {
 									setRequestInfo((prev) => ({
@@ -539,9 +491,7 @@ function ReviewInfo({
 								label={"CANAL DE VENDA"}
 								editable={true}
 								value={requestInfo.canalVenda}
-								handleChange={(value) =>
-									setRequestInfo({ ...requestInfo, canalVenda: value })
-								}
+								handleChange={(value) => setRequestInfo({ ...requestInfo, canalVenda: value })}
 								options={CustomersAcquisitionChannels.map((value) => value)}
 								resetOptionLabel="NÃO DEFINIDO"
 								onReset={() => {
@@ -588,9 +538,7 @@ function ReviewInfo({
 						)}
 					</div>
 					<div className="mt-2 flex w-full flex-col items-center self-center px-2">
-						<span className="font-raleway text-center text-sm font-bold uppercase">
-							COMO VOCÊ CHEGOU A ESSE CLIENTE?
-						</span>
+						<span className="font-raleway text-center text-sm font-bold uppercase">COMO VOCÊ CHEGOU A ESSE CLIENTE?</span>
 						<textarea
 							placeholder={"Descreva aqui como esse cliente chegou até voce.."}
 							value={requestInfo.comoChegouAoCliente}
@@ -604,9 +552,7 @@ function ReviewInfo({
 						/>
 					</div>
 					<div className="mt-2 flex w-full flex-col items-center self-center px-2">
-						<span className="font-raleway text-center text-sm font-bold uppercase">
-							OBSERVAÇÃO ADICIONAL ACERCA DO SERVIÇO PRESTADO
-						</span>
+						<span className="font-raleway text-center text-sm font-bold uppercase">OBSERVAÇÃO ADICIONAL ACERCA DO SERVIÇO PRESTADO</span>
 						<textarea
 							placeholder={
 								"Preencha aqui, se houver, observações acerca desse contrato. Peculiaridades desse serviço (ex: somente instalação/equipamentos), detalhes e esclarecimentos para financiamento, entre outras informações relevantes."
@@ -623,9 +569,7 @@ function ReviewInfo({
 					</div>
 				</div>
 				<div className="flex w-full flex-col bg-background pb-2">
-					<span className="py-2 text-center text-lg font-bold uppercase text-[#15599a]">
-						DADOS PARA CONTATO
-					</span>
+					<span className="py-2 text-center text-lg font-bold uppercase text-[#15599a]">DADOS PARA CONTATO</span>
 					<div className="flex grow flex-col gap-2 p-2">
 						<div className="grid w-full grid-cols-2 gap-2">
 							<div className="w-full">
@@ -693,9 +637,7 @@ function ReviewInfo({
 						</div>
 
 						<div className="mt-2 flex w-full flex-col items-center self-center px-2">
-							<span className="font-raleway text-center text-sm font-bold uppercase">
-								CUIDADOS PARA CONTATO COM O CLIENTE
-							</span>
+							<span className="font-raleway text-center text-sm font-bold uppercase">CUIDADOS PARA CONTATO COM O CLIENTE</span>
 							<textarea
 								placeholder={
 									"Descreva aqui cuidados em relação ao contato do cliente durante a jornada. Melhores horários para contato, texto ou aúdio, etc..."
@@ -713,22 +655,14 @@ function ReviewInfo({
 					</div>
 				</div>
 				<div className="flex w-full flex-col bg-background pb-2">
-					<span className="py-2 text-center text-lg font-bold uppercase text-[#15599a]">
-						DADOS PARA ENTRADA NA CONCESSIONÁRIA
-					</span>
+					<span className="py-2 text-center text-lg font-bold uppercase text-[#15599a]">DADOS PARA ENTRADA NA CONCESSIONÁRIA</span>
 					<div className="flex flex-col gap-2 p-2 lg:grid lg:grid-cols-3">
-						<h1 className="col-span-3 py-2 text-center font-bold text-[#fead61]">
-							INFORMAÇÕES DA INSTALAÇÃO DO CLIENTE
-						</h1>
+						<h1 className="col-span-3 py-2 text-center font-bold text-[#fead61]">INFORMAÇÕES DA INSTALAÇÃO DO CLIENTE</h1>
 						<div className="col-span-3 flex w-full items-center justify-center gap-2">
 							<TextInput
 								label={"NOME DO TITULAR DO PROJETO"}
 								placeholder="Preencha o nome do titular do projeto junto a concessionária."
-								value={
-									requestInfo.nomeTitularProjeto
-										? requestInfo.nomeTitularProjeto
-										: ""
-								}
+								value={requestInfo.nomeTitularProjeto ? requestInfo.nomeTitularProjeto : ""}
 								editable={true}
 								handleChange={(value) =>
 									setRequestInfo({
@@ -742,14 +676,8 @@ function ReviewInfo({
 								label={"Nº DA INSTALAÇÃO"}
 								editable={true}
 								placeholder="Preencha aqui o número de instalação junto a concessionária."
-								value={
-									requestInfo.numeroInstalacao
-										? requestInfo.numeroInstalacao
-										: ""
-								}
-								handleChange={(value) =>
-									setRequestInfo({ ...requestInfo, numeroInstalacao: value })
-								}
+								value={requestInfo.numeroInstalacao ? requestInfo.numeroInstalacao : ""}
+								handleChange={(value) => setRequestInfo({ ...requestInfo, numeroInstalacao: value })}
 							/>
 						</div>
 						<div className="flex items-center justify-center">
@@ -757,9 +685,7 @@ function ReviewInfo({
 								label={"TIPO DO TITULAR"}
 								editable={true}
 								value={requestInfo.tipoDoTitular}
-								handleChange={(value) =>
-									setRequestInfo({ ...requestInfo, tipoDoTitular: value })
-								}
+								handleChange={(value) => setRequestInfo({ ...requestInfo, tipoDoTitular: value })}
 								options={[
 									{
 										id: 1,
@@ -786,9 +712,7 @@ function ReviewInfo({
 								label={"TIPO DA LIGAÇÃO"}
 								editable={true}
 								value={requestInfo.tipoDaLigacao}
-								handleChange={(value) =>
-									setRequestInfo({ ...requestInfo, tipoDaLigacao: value })
-								}
+								handleChange={(value) => setRequestInfo({ ...requestInfo, tipoDaLigacao: value })}
 								options={[
 									{
 										id: 1,
@@ -815,9 +739,7 @@ function ReviewInfo({
 								label={"TIPO DA INSTALAÇÃO"}
 								editable={true}
 								value={requestInfo.tipoDaInstalacao}
-								handleChange={(value) =>
-									setRequestInfo({ ...requestInfo, tipoDaInstalacao: value })
-								}
+								handleChange={(value) => setRequestInfo({ ...requestInfo, tipoDaInstalacao: value })}
 								options={[
 									{
 										id: 1,
@@ -839,9 +761,7 @@ function ReviewInfo({
 								}
 							/>
 						</div>
-						<h1 className="col-span-3 pt-2 text-center font-bold text-[#fead61]">
-							ENDEREÇO DA INSTALAÇÃO
-						</h1>
+						<h1 className="col-span-3 pt-2 text-center font-bold text-[#fead61]">ENDEREÇO DA INSTALAÇÃO</h1>
 						<div className="flex flex-wrap items-center justify-center gap-x-2">
 							<TextInput
 								editable={true}
@@ -878,14 +798,8 @@ function ReviewInfo({
 								label={"Nº"}
 								editable={true}
 								placeholder="Preencha o número/identificador do local de instalação do sistema."
-								value={
-									requestInfo.numeroResInstalacao
-										? requestInfo.numeroResInstalacao
-										: ""
-								}
-								handleChange={(value) =>
-									setRequestInfo({ ...requestInfo, numeroResInstalacao: value })
-								}
+								value={requestInfo.numeroResInstalacao ? requestInfo.numeroResInstalacao : ""}
+								handleChange={(value) => setRequestInfo({ ...requestInfo, numeroResInstalacao: value })}
 							/>
 						</div>
 						<div className="flex items-center justify-center">
@@ -913,9 +827,7 @@ function ReviewInfo({
 									value: state,
 								}))}
 								value={requestInfo.ufInstalacao}
-								handleChange={(value) =>
-									setRequestInfo({ ...requestInfo, ufInstalacao: value })
-								}
+								handleChange={(value) => setRequestInfo({ ...requestInfo, ufInstalacao: value })}
 								resetOptionLabel="NÃO DEFINIDO"
 								onReset={() => {
 									setRequestInfo((prev) => ({ ...prev, ufInstalacao: null }));
@@ -929,9 +841,7 @@ function ReviewInfo({
 								value={requestInfo.cidadeInstalacao}
 								options={
 									requestInfo.ufInstalacao
-										? stateCities[
-												requestInfo.ufInstalacao as keyof typeof stateCities
-											].map((city, index) => {
+										? stateCities[requestInfo.ufInstalacao as keyof typeof stateCities].map((city, index) => {
 												return {
 													id: index,
 													value: city,
@@ -940,9 +850,7 @@ function ReviewInfo({
 											})
 										: null
 								}
-								handleChange={(value) =>
-									setRequestInfo({ ...requestInfo, cidadeInstalacao: value })
-								}
+								handleChange={(value) => setRequestInfo({ ...requestInfo, cidadeInstalacao: value })}
 								resetOptionLabel="NÃO DEFINIDO"
 								onReset={() =>
 									setRequestInfo((prev) => ({
@@ -972,121 +880,91 @@ function ReviewInfo({
 								value={requestInfo.latitude}
 								placeholder="Preencha aqui a latitude do local de instalação."
 								editable={true}
-								handleChange={(value) =>
-									setRequestInfo({ ...requestInfo, latitude: value })
-								}
+								handleChange={(value) => setRequestInfo({ ...requestInfo, latitude: value })}
 							/>
 							<TextInput
 								label={"LONGITUDE"}
 								editable={true}
 								value={requestInfo.longitude}
 								placeholder="Preencha aqui a longitude do local de instalação."
-								handleChange={(value) =>
-									setRequestInfo({ ...requestInfo, longitude: value })
-								}
+								handleChange={(value) => setRequestInfo({ ...requestInfo, longitude: value })}
 							/>
 						</div>
 
-						<h1 className="col-span-3 py-2 text-center font-bold text-[#fead61]">
-							INFORMAÇÕES DA CONTA DE CEMIG ATENDE
-						</h1>
+						<h1 className="col-span-3 py-2 text-center font-bold text-[#fead61]">INFORMAÇÕES DA CONTA DE CEMIG ATENDE</h1>
 						<div className="col-span-3 flex flex-wrap items-center justify-center gap-2">
 							<TextInput
 								label={"LOGIN(CEMIG ATENDE)"}
 								editable={true}
 								placeholder="Preencha aqui o login do CEMIG ATENDE do cliente."
 								value={requestInfo.loginCemigAtende}
-								handleChange={(value) =>
-									setRequestInfo({ ...requestInfo, loginCemigAtende: value })
-								}
+								handleChange={(value) => setRequestInfo({ ...requestInfo, loginCemigAtende: value })}
 							/>
 							<TextInput
 								label={"SENHA(CEMIG ATENDE)"}
 								placeholder="Preencha aqui a senha do CEMIG ATENDE do cliente."
 								editable={true}
 								value={requestInfo.senhaCemigAtende}
-								handleChange={(value) =>
-									setRequestInfo({ ...requestInfo, senhaCemigAtende: value })
-								}
+								handleChange={(value) => setRequestInfo({ ...requestInfo, senhaCemigAtende: value })}
 							/>
 						</div>
 					</div>
 				</div>
 				<div className="flex w-full flex-col bg-background pb-2">
-					<span className="py-2 text-center text-lg font-bold uppercase text-[#15599a]">
-						DADOS DO SISTEMA
-					</span>
+					<span className="py-2 text-center text-lg font-bold uppercase text-[#15599a]">DADOS DO SISTEMA</span>
 					<div className="flex w-full grow flex-col items-center">
-						<h1 className="mt-4 w-full text-center font-medium text-[#fead41]">
-							INVERSORES
-						</h1>
+						<h1 className="mt-4 w-full text-center font-medium text-[#fead41]">INVERSORES</h1>
 						<div className="grid w-full grid-cols-1 grid-rows-3 gap-2 lg:grid-cols-3 lg:grid-rows-1">
 							<TextInput
 								label="MARCA DOS INVERSORES"
 								placeholder="Preencha aqui a marca dos inversores."
 								value={requestInfo.marcaInversor}
-								handleChange={(value) =>
-									setRequestInfo((prev) => ({ ...prev, marcaInversor: value }))
-								}
+								handleChange={(value) => setRequestInfo((prev) => ({ ...prev, marcaInversor: value }))}
 								width="100%"
 							/>
 							<TextInput
 								label="QTDE DE INVERSORES"
 								placeholder="Preencha aqui a quantidade de inversores."
 								value={requestInfo.qtdeInversor}
-								handleChange={(value) =>
-									setRequestInfo((prev) => ({ ...prev, qtdeInversor: value }))
-								}
+								handleChange={(value) => setRequestInfo((prev) => ({ ...prev, qtdeInversor: value }))}
 								width="100%"
 							/>
 							<TextInput
 								label="POTÊNCIA DOS INVERSORES"
 								placeholder="Preencha aqui a potência dos inversores."
 								value={requestInfo.potInversor}
-								handleChange={(value) =>
-									setRequestInfo((prev) => ({ ...prev, potInversor: value }))
-								}
+								handleChange={(value) => setRequestInfo((prev) => ({ ...prev, potInversor: value }))}
 								width="100%"
 							/>
 						</div>
-						<h1 className="mt-4 w-full text-center font-medium text-[#fead41]">
-							MÓDULOS
-						</h1>
+						<h1 className="mt-4 w-full text-center font-medium text-[#fead41]">MÓDULOS</h1>
 						<div className="grid w-full grid-cols-1 grid-rows-3 gap-2 lg:grid-cols-3 lg:grid-rows-1">
 							<TextInput
 								label="MARCA DOS MÓDULOS"
 								placeholder="Preencha aqui a marca dos módulos."
 								value={requestInfo.marcaModulos}
-								handleChange={(value) =>
-									setRequestInfo((prev) => ({ ...prev, marcaModulos: value }))
-								}
+								handleChange={(value) => setRequestInfo((prev) => ({ ...prev, marcaModulos: value }))}
 								width="100%"
 							/>
 							<TextInput
 								label="QTDE DE MÓDULOS"
 								placeholder="Preencha aqui a quantidade de módulos."
 								value={requestInfo.qtdeModulos.toString()}
-								handleChange={(value) =>
-									setRequestInfo((prev) => ({ ...prev, qtdeModulos: value }))
-								}
+								handleChange={(value) => setRequestInfo((prev) => ({ ...prev, qtdeModulos: value }))}
 								width="100%"
 							/>
 							<TextInput
 								label="POTÊNCIA DOS MÓDULOS"
 								placeholder="Preencha aqui a potência dos módulos."
 								value={requestInfo.potModulos?.toString()}
-								handleChange={(value) =>
-									setRequestInfo((prev) => ({ ...prev, potModulos: value }))
-								}
+								handleChange={(value) => setRequestInfo((prev) => ({ ...prev, potModulos: value }))}
 								width="100%"
 							/>
 						</div>
 					</div>
 				</div>
 				<div className="flex w-full flex-col bg-background pb-2">
-					<span className="py-2 text-center text-lg font-bold uppercase text-[#15599a]">
-						DADOS DA ESTRUTURA DE MONTAGEM
-					</span>
+					<span className="py-2 text-center text-lg font-bold uppercase text-[#15599a]">DADOS DA ESTRUTURA DE MONTAGEM</span>
 					<div className="flex w-full grow flex-col items-center gap-2">
 						<div className="grid w-full grid-cols-1 grid-rows-2 gap-2 lg:grid-cols-2 lg:grid-rows-1">
 							<SelectInput
@@ -1100,9 +978,7 @@ function ReviewInfo({
 									};
 								})}
 								value={requestInfo.tipoEstrutura}
-								handleChange={(value) =>
-									setRequestInfo({ ...requestInfo, tipoEstrutura: value })
-								}
+								handleChange={(value) => setRequestInfo({ ...requestInfo, tipoEstrutura: value })}
 								resetOptionLabel="NÃO DEFINIDO"
 								onReset={() => {
 									setRequestInfo((prev) => ({ ...prev, tipoEstrutura: "" }));
@@ -1117,9 +993,7 @@ function ReviewInfo({
 									{ id: 2, label: "FERRO", value: "FERRO" },
 								]}
 								value={requestInfo.materialEstrutura}
-								handleChange={(value) =>
-									setRequestInfo({ ...requestInfo, materialEstrutura: value })
-								}
+								handleChange={(value) => setRequestInfo({ ...requestInfo, materialEstrutura: value })}
 								resetOptionLabel="NÃO DEFINIDO"
 								onReset={() =>
 									setRequestInfo((prev) => ({
@@ -1147,9 +1021,7 @@ function ReviewInfo({
 									},
 								]}
 								value={requestInfo.estruturaAmpere}
-								handleChange={(value) =>
-									setRequestInfo({ ...requestInfo, estruturaAmpere: value })
-								}
+								handleChange={(value) => setRequestInfo({ ...requestInfo, estruturaAmpere: value })}
 								resetOptionLabel="NÃO DEFINIDO"
 								onReset={() => {
 									setRequestInfo((prev) => ({
@@ -1196,78 +1068,69 @@ function ReviewInfo({
 								width="100%"
 							/>
 						</div>
-						{requestInfo.responsavelEstrutura &&
-							requestInfo.responsavelEstrutura != "NÃO SE APLICA" && (
-								<>
-									<h1 className="col-span-3 py-2 text-center font-bold text-[#fead61]">
-										PAGAMENTO DA ESTRUTURA
-									</h1>
-									<div className="col-span-3 flex flex-wrap items-center justify-center gap-2">
-										<SelectInput
-											label={"FORMA DE PAGAMENTO"}
-											editable={true}
-											options={[
-												{
-													id: 1,
-													label: "INCLUSO NO FINANCIAMENTO",
-													value: "INCLUSO NO FINANCIAMENTO",
-												},
-												{
-													id: 2,
-													label: "DIRETO PRO FORNECEDOR",
-													value: "DIRETO PRO FORNECEDOR",
-												},
-												{
-													id: 3,
-													label: "A VISTA PARA AMPÈRE",
-													value: "A VISTA PARA AMPÈRE",
-												},
-												{
-													id: 4,
-													label: "NÃO SE APLICA",
-													value: "NÃO SE APLICA",
-												},
-											]}
-											value={requestInfo.formaPagamentoEstrutura}
-											handleChange={(value) =>
-												setRequestInfo({
-													...requestInfo,
-													formaPagamentoEstrutura: value,
-												})
-											}
-											resetOptionLabel="NÃO DEFINIDO"
-											onReset={() =>
-												setRequestInfo((prev) => ({
-													...prev,
-													formaPagamentoEstrutura: null,
-												}))
-											}
-										/>
-										<NumberInput
-											label={"VALOR DA ESTRUTURA"}
-											editable={true}
-											value={
-												requestInfo.valorEstrutura
-													? requestInfo.valorEstrutura
-													: null
-											}
-											placeholder="Preencha aqui o valor da estrutura"
-											handleChange={(value) =>
-												setRequestInfo({
-													...requestInfo,
-													valorEstrutura: Number(value),
-												})
-											}
-										/>
-									</div>
-								</>
-							)}
+						{requestInfo.responsavelEstrutura && requestInfo.responsavelEstrutura != "NÃO SE APLICA" && (
+							<>
+								<h1 className="col-span-3 py-2 text-center font-bold text-[#fead61]">PAGAMENTO DA ESTRUTURA</h1>
+								<div className="col-span-3 flex flex-wrap items-center justify-center gap-2">
+									<SelectInput
+										label={"FORMA DE PAGAMENTO"}
+										editable={true}
+										options={[
+											{
+												id: 1,
+												label: "INCLUSO NO FINANCIAMENTO",
+												value: "INCLUSO NO FINANCIAMENTO",
+											},
+											{
+												id: 2,
+												label: "DIRETO PRO FORNECEDOR",
+												value: "DIRETO PRO FORNECEDOR",
+											},
+											{
+												id: 3,
+												label: "A VISTA PARA AMPÈRE",
+												value: "A VISTA PARA AMPÈRE",
+											},
+											{
+												id: 4,
+												label: "NÃO SE APLICA",
+												value: "NÃO SE APLICA",
+											},
+										]}
+										value={requestInfo.formaPagamentoEstrutura}
+										handleChange={(value) =>
+											setRequestInfo({
+												...requestInfo,
+												formaPagamentoEstrutura: value,
+											})
+										}
+										resetOptionLabel="NÃO DEFINIDO"
+										onReset={() =>
+											setRequestInfo((prev) => ({
+												...prev,
+												formaPagamentoEstrutura: null,
+											}))
+										}
+									/>
+									<NumberInput
+										label={"VALOR DA ESTRUTURA"}
+										editable={true}
+										value={requestInfo.valorEstrutura ? requestInfo.valorEstrutura : null}
+										placeholder="Preencha aqui o valor da estrutura"
+										handleChange={(value) =>
+											setRequestInfo({
+												...requestInfo,
+												valorEstrutura: Number(value),
+											})
+										}
+									/>
+								</div>
+							</>
+						)}
 					</div>
 				</div>
 				<div className="flex w-full flex-col bg-background pb-2">
-					<span className="py-2 text-center text-lg font-bold uppercase text-[#15599a]">
-						AUMENTO DE CARGA
-					</span>
+					<span className="py-2 text-center text-lg font-bold uppercase text-[#15599a]">AUMENTO DE CARGA</span>
 					<div className="flex w-full grow flex-col">
 						<div className="mt-2 flex justify-center p-2">
 							<SelectInput
@@ -1286,13 +1149,9 @@ function ReviewInfo({
 									},
 								]}
 								value={requestInfo.aumentoDeCarga}
-								handleChange={(value) =>
-									setRequestInfo({ ...requestInfo, aumentoDeCarga: value })
-								}
+								handleChange={(value) => setRequestInfo({ ...requestInfo, aumentoDeCarga: value })}
 								resetOptionLabel="NÃO DEFINIDO"
-								onReset={() =>
-									setRequestInfo((prev) => ({ ...prev, aumentoDeCarga: null }))
-								}
+								onReset={() => setRequestInfo((prev) => ({ ...prev, aumentoDeCarga: null }))}
 							/>
 						</div>
 						{requestInfo.aumentoDeCarga == "SIM" ? (
@@ -1301,9 +1160,7 @@ function ReviewInfo({
 									label={"RESPONSÁVEL PELA TROCA"}
 									editable={true}
 									value={requestInfo.respTrocaPadrao}
-									handleChange={(value) =>
-										setRequestInfo({ ...requestInfo, respTrocaPadrao: value })
-									}
+									handleChange={(value) => setRequestInfo({ ...requestInfo, respTrocaPadrao: value })}
 									options={[
 										{
 											id: 1,
@@ -1340,9 +1197,7 @@ function ReviewInfo({
 										label={"TIPO DO PADRÃO"}
 										editable={true}
 										value={requestInfo.tipoDePadrao}
-										handleChange={(value) =>
-											setRequestInfo({ ...requestInfo, tipoDePadrao: value })
-										}
+										handleChange={(value) => setRequestInfo({ ...requestInfo, tipoDePadrao: value })}
 										options={[
 											{
 												label: "MONO 40A",
@@ -1463,9 +1318,7 @@ function ReviewInfo({
 											},
 										]}
 										value={requestInfo.caixaConjugada}
-										handleChange={(value) =>
-											setRequestInfo({ ...requestInfo, caixaConjugada: value })
-										}
+										handleChange={(value) => setRequestInfo({ ...requestInfo, caixaConjugada: value })}
 										resetOptionLabel="NÃO DEFINIDO"
 										onReset={() => {
 											setRequestInfo((prev) => ({
@@ -1475,9 +1328,7 @@ function ReviewInfo({
 										}}
 									/>
 								</div>
-								<h1 className="col-span-3 py-2 text-center font-bold text-[#fead61]">
-									PAGAMENTO
-								</h1>
+								<h1 className="col-span-3 py-2 text-center font-bold text-[#fead61]">PAGAMENTO</h1>
 								<div className="col-span-3 flex flex-wrap items-center justify-center gap-2">
 									<SelectInput
 										width={"450px"}
@@ -1524,9 +1375,7 @@ function ReviewInfo({
 										width={"450px"}
 										label={"VALOR DO PADRÃO"}
 										editable={true}
-										value={
-											requestInfo.valorPadrao ? requestInfo.valorPadrao : null
-										}
+										value={requestInfo.valorPadrao ? requestInfo.valorPadrao : null}
 										handleChange={(value) =>
 											setRequestInfo({
 												...requestInfo,
@@ -1541,42 +1390,27 @@ function ReviewInfo({
 					</div>
 				</div>
 				<div className="flex w-full flex-col bg-background pb-2">
-					<span className="py-2 text-center text-lg font-bold uppercase text-[#15599a]">
-						PLANO INTEGRADO DE OPERAÇÃO E MANUTENÇÃO
-					</span>
-					<p className="text-center text-sm italic text-primary/70">
-						Escolha, se houver, o plano de Operação & Manutenção incluso no
-						projeto.
-					</p>
+					<span className="py-2 text-center text-lg font-bold uppercase text-[#15599a]">PLANO INTEGRADO DE OPERAÇÃO E MANUTENÇÃO</span>
+					<p className="text-center text-sm italic text-primary/70">Escolha, se houver, o plano de Operação & Manutenção incluso no projeto.</p>
 					<div className="flex grow flex-wrap items-start justify-center gap-2 py-2">
 						<div className="flex w-[450px] flex-col rounded-lg border border-primary/50 bg-background p-6 shadow-lg">
 							<div className="flex w-full items-center justify-between gap-2">
 								<h1 className="font-black">{proposeInfo.planos[0]?.nome}</h1>
 							</div>
-							<p className="w-full text-start text-sm text-primary/70">
-								{proposeInfo.planos[0]?.descricao || "..."}
-							</p>
+							<p className="w-full text-start text-sm text-primary/70">{proposeInfo.planos[0]?.descricao || "..."}</p>
 							<div className="my-4 flex w-full items-end justify-center gap-1">
-								<h1 className="text-4xl font-black">
-									{formatToMoney(proposeInfo.planos[0]?.valor || 0)}
-								</h1>
-								<h1 className="text-xs font-light text-primary/70">
-									/ {proposeInfo.planos[0]?.intervalo.tipo}
-								</h1>
+								<h1 className="text-4xl font-black">{formatToMoney(proposeInfo.planos[0]?.valor || 0)}</h1>
+								<h1 className="text-xs font-light text-primary/70">/ {proposeInfo.planos[0]?.intervalo.tipo}</h1>
 							</div>
 							<div className="my-4 flex grow flex-col gap-1">
-								<h1 className="text-[0.6rem] tracking-tight text-primary/70">
-									DESCRITIVO
-								</h1>
+								<h1 className="text-[0.6rem] tracking-tight text-primary/70">DESCRITIVO</h1>
 								<div className="flex grow flex-col gap-2">
 									{proposeInfo.planos[0]?.descritivo.map((d, idx) => (
 										<div key={idx} className="flex items-center gap-1">
 											<div className="w-fit">
 												<BsCheckCircleFill color="rgb(21,128,61)" size={15} />
 											</div>
-											<p className="text-xs font-medium tracking-tight">
-												{d.descricao}
-											</p>
+											<p className="text-xs font-medium tracking-tight">{d.descricao}</p>
 										</div>
 									))}
 								</div>
@@ -1585,14 +1419,10 @@ function ReviewInfo({
 					</div>
 				</div>
 				<div className="flex w-full flex-col bg-background pb-2">
-					<span className="py-2 text-center text-lg font-bold uppercase text-[#15599a]">
-						DADOS FINANCEIROS E NEGOCIAÇÃO
-					</span>
+					<span className="py-2 text-center text-lg font-bold uppercase text-[#15599a]">DADOS FINANCEIROS E NEGOCIAÇÃO</span>
 					<div className="flex w-full grow flex-col">
 						<div className="mt-2 flex flex-col gap-2 p-2 lg:grid lg:grid-cols-3">
-							<h1 className="col-span-3 py-2 text-center font-bold text-[#fead61]">
-								DADOS DO PAGADOR
-							</h1>
+							<h1 className="col-span-3 py-2 text-center font-bold text-[#fead61]">DADOS DO PAGADOR</h1>
 							<div className="flex items-center justify-center">
 								<TextInput
 									width={"450px"}
@@ -1600,9 +1430,7 @@ function ReviewInfo({
 									placeholder="Preencha aqui o nome da pessoa/empresa que realizará o pagamento"
 									editable={true}
 									value={requestInfo.nomePagador}
-									handleChange={(value) =>
-										setRequestInfo({ ...requestInfo, nomePagador: value })
-									}
+									handleChange={(value) => setRequestInfo({ ...requestInfo, nomePagador: value })}
 								/>
 							</div>
 							<div className="flex items-center justify-center">
@@ -1637,9 +1465,7 @@ function ReviewInfo({
 							</div>
 						</div>
 						<div className="flex flex-col p-2">
-							<h1 className="col-span-3 py-2 text-center font-bold text-[#fead61]">
-								SOBRE N.F
-							</h1>
+							<h1 className="col-span-3 py-2 text-center font-bold text-[#fead61]">SOBRE N.F</h1>
 							<div className="mt-2 flex flex-wrap justify-around gap-2">
 								<SelectInput
 									width={"450px"}
@@ -1710,29 +1536,21 @@ function ReviewInfo({
 										placeholder="Preencha aqui a inscrição rural do cliente."
 										editable={true}
 										value={requestInfo.inscriçãoRural}
-										handleChange={(value) =>
-											setRequestInfo({ ...requestInfo, inscriçãoRural: value })
-										}
+										handleChange={(value) => setRequestInfo({ ...requestInfo, inscriçãoRural: value })}
 									/>
 								)}
 							</div>
 						</div>
 						<div className="flex flex-col p-2">
-							<h1 className="col-span-3 py-2 text-center font-bold text-[#fead61]">
-								SOBRE O PAGAMENTO
-							</h1>
+							<h1 className="col-span-3 py-2 text-center font-bold text-[#fead61]">SOBRE O PAGAMENTO</h1>
 							<div className="mt-2 flex flex-col gap-2 lg:grid lg:grid-cols-3">
 								<div className="col-span-3 flex flex-wrap items-center justify-center gap-2">
 									<NumberInput
 										width={"450px"}
-										label={
-											"VALOR DO CONTRATO FOTOVOLTAICO(SEM CUSTOS ADICIONAIS)"
-										}
+										label={"VALOR DO CONTRATO FOTOVOLTAICO(SEM CUSTOS ADICIONAIS)"}
 										editable={true}
 										value={requestInfo.valorContrato || null}
-										placeholder={
-											"Preencha aqui o valor do contrato (sem custos adicionais de estrutura/padrão/O&M, etc..."
-										}
+										placeholder={"Preencha aqui o valor do contrato (sem custos adicionais de estrutura/padrão/O&M, etc..."}
 										handleChange={(value) =>
 											setRequestInfo((prev) => ({
 												...prev,
@@ -1745,9 +1563,7 @@ function ReviewInfo({
 										label={"ORIGEM DO RECURSO"}
 										editable={true}
 										value={requestInfo.origemRecurso}
-										handleChange={(value) =>
-											setRequestInfo({ ...requestInfo, origemRecurso: value })
-										}
+										handleChange={(value) => setRequestInfo({ ...requestInfo, origemRecurso: value })}
 										options={[
 											{
 												id: 1,
@@ -1784,9 +1600,7 @@ function ReviewInfo({
 													})) || []
 												}
 												value={requestInfo.credor}
-												handleChange={(value) =>
-													setRequestInfo({ ...requestInfo, credor: value })
-												}
+												handleChange={(value) => setRequestInfo({ ...requestInfo, credor: value })}
 												resetOptionLabel="NÃO DEFINIDO"
 												onReset={() => {
 													setRequestInfo((prev) => ({ ...prev, credor: null }));
@@ -1800,9 +1614,7 @@ function ReviewInfo({
 												placeholder="Preencha aqui o nome do gerente."
 												editable={true}
 												value={requestInfo.nomeGerente}
-												handleChange={(value) =>
-													setRequestInfo({ ...requestInfo, nomeGerente: value })
-												}
+												handleChange={(value) => setRequestInfo({ ...requestInfo, nomeGerente: value })}
 											/>
 										</div>
 										<div className="flex items-center justify-center">
@@ -1833,13 +1645,7 @@ function ReviewInfo({
 											setRequestInfo({
 												...requestInfo,
 												numParcelas: Number(value),
-												valorParcela: requestInfo.valorContrato
-													? Number(
-															(
-																requestInfo.valorContrato / Number(value)
-															).toFixed(2),
-														)
-													: 0,
+												valorParcela: requestInfo.valorContrato ? Number((requestInfo.valorContrato / Number(value)).toFixed(2)) : 0,
 											})
 										}
 									/>
@@ -1900,10 +1706,8 @@ function ReviewInfo({
 										options={[
 											{
 												id: 1,
-												label:
-													"80% A VISTA NA ENTRADA + 20% NA FINALIZAÇÃO DA INSTALAÇÃO",
-												value:
-													"80% A VISTA NA ENTRADA + 20% NA FINALIZAÇÃO DA INSTALAÇÃO",
+												label: "80% A VISTA NA ENTRADA + 20% NA FINALIZAÇÃO DA INSTALAÇÃO",
+												value: "80% A VISTA NA ENTRADA + 20% NA FINALIZAÇÃO DA INSTALAÇÃO",
 											},
 											{
 												id: 2,
@@ -1945,9 +1749,7 @@ function ReviewInfo({
 							</div>
 						</div>
 						<div className="mt-2 flex w-full flex-col items-center self-center px-2">
-							<span className="font-raleway text-center text-sm font-bold uppercase">
-								DESCRIÇÃO DA NEGOCIAÇÃO
-							</span>
+							<span className="font-raleway text-center text-sm font-bold uppercase">DESCRIÇÃO DA NEGOCIAÇÃO</span>
 							<textarea
 								placeholder={"Descreva aqui a negociação"}
 								value={requestInfo.descricaoNegociacao}
@@ -1963,9 +1765,7 @@ function ReviewInfo({
 					</div>
 				</div>
 				<div className="flex w-full grow flex-col bg-background pb-2">
-					<span className="py-2 text-center text-sm font-bold uppercase text-[#15599a]">
-						DISTRIBUIÇÃO DE CRÉDITOS
-					</span>
+					<span className="py-2 text-center text-sm font-bold uppercase text-[#15599a]">DISTRIBUIÇÃO DE CRÉDITOS</span>
 					<div className="mt-2 flex justify-center p-2">
 						<SelectInput
 							label={"POSSUI DISTRIBUIÇÕES DE CRÉDITOS?"}
@@ -1983,9 +1783,7 @@ function ReviewInfo({
 									value: "SIM",
 								},
 							]}
-							handleChange={(value) =>
-								setRequestInfo({ ...requestInfo, possuiDistribuicao: value })
-							}
+							handleChange={(value) => setRequestInfo({ ...requestInfo, possuiDistribuicao: value })}
 							resetOptionLabel="NÃO DEFINIDO"
 							onReset={() => {
 								setRequestInfo((prev) => ({
@@ -2038,12 +1836,8 @@ function ReviewInfo({
 								<div className="mt-4 flex flex-col gap-2">
 									{requestInfo.distribuicoes.map((distribuicao, index) => (
 										<div key={index} className="flex flex-wrap justify-around">
-											<p className="text-sm font-bold text-primary/60">
-												INSTALAÇÃO Nº{distribuicao.numInstalacao}
-											</p>
-											<p className="text-sm font-bold text-primary/60">
-												{distribuicao.excedente}%
-											</p>
+											<p className="text-sm font-bold text-primary/60">INSTALAÇÃO Nº{distribuicao.numInstalacao}</p>
+											<p className="text-sm font-bold text-primary/60">{distribuicao.excedente}%</p>
 											{/* <button
                         onClick={() => {
                           let distribuicoes = requestInfo.distribuicoes;
@@ -2065,9 +1859,7 @@ function ReviewInfo({
 					)}
 				</div>
 				<div className="flex w-full grow flex-col bg-background pb-2">
-					<span className="py-2 text-center text-lg font-bold uppercase text-[#15599a]">
-						DOCUMENTAÇÃO
-					</span>
+					<span className="py-2 text-center text-lg font-bold uppercase text-[#15599a]">DOCUMENTAÇÃO</span>
 					<div className="flex w-full flex-wrap items-start justify-around gap-2">
 						{Object.entries(documentsFile).map(([key, value]) => (
 							<div className="flex items-center gap-1 rounded-md bg-blue-800 px-2 py-1 text-primary-foreground">

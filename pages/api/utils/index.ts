@@ -25,7 +25,8 @@ const getUtilsRelated: NextApiHandler<GetResponse> = async (req, res) => {
 	}
 
 	if (identifier === "EQUIPMENT") {
-		const categoryQuery: Filter<TUtil> = equipmentCategory && equipmentCategory !== "null" && equipmentCategory !== "undefined" ? { categoria: equipmentCategory } : {};
+		const categoryQuery: Filter<TUtil> =
+			equipmentCategory && equipmentCategory !== "null" && equipmentCategory !== "undefined" ? { categoria: equipmentCategory } : {};
 		const query = { ...categoryQuery };
 		const equipments = await getEquipments({ collection: collection, query: query });
 		return res.status(200).json({ data: equipments });

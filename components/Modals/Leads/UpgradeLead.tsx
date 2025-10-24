@@ -25,18 +25,8 @@ type UpgrateLeadProps = {
 		onError?: (error: Error) => void;
 	};
 };
-export default function UpgrateLead({
-	leadId,
-	sessionUser,
-	closeModal,
-	callbacks,
-}: UpgrateLeadProps) {
-	const {
-		data: lead,
-		isLoading,
-		isError,
-		isSuccess,
-	} = useLeadById({ id: leadId });
+export default function UpgrateLead({ leadId, sessionUser, closeModal, callbacks }: UpgrateLeadProps) {
+	const { data: lead, isLoading, isError, isSuccess } = useLeadById({ id: leadId });
 	const [infoHolder, setInfoHolder] = useState<TUpgrateLeadInput>({
 		leadId,
 		atribuidoId: "",
@@ -80,10 +70,7 @@ export default function UpgrateLead({
 			actionIsLoading={isPending}
 			stateIsLoading={false}
 		>
-			<UpgrateLeadContent
-				infoHolder={infoHolder}
-				updateInfoHolder={updateInfoHolder}
-			/>
+			<UpgrateLeadContent infoHolder={infoHolder} updateInfoHolder={updateInfoHolder} />
 		</ResponsiveDialogDrawer>
 	);
 }
@@ -92,10 +79,7 @@ type UpgrateLeadContentProps = {
 	infoHolder: TUpgrateLeadInput;
 	updateInfoHolder: (newInfo: Partial<TUpgrateLeadInput>) => void;
 };
-function UpgrateLeadContent({
-	infoHolder,
-	updateInfoHolder,
-}: UpgrateLeadContentProps) {
+function UpgrateLeadContent({ infoHolder, updateInfoHolder }: UpgrateLeadContentProps) {
 	const { data: projectTypes } = useProjectTypes();
 	const { data: users } = useOpportunityCreators();
 	const { data: funnels } = useFunnels();
@@ -103,9 +87,7 @@ function UpgrateLeadContent({
 		<div className="flex w-full flex-col gap-2">
 			<div className="flex items-center gap-2 bg-primary/20 px-2 py-1 rounded-sm w-fit">
 				<CircleFadingArrowUp size={15} />
-				<h1 className="text-xs tracking-tight font-medium text-start w-fit">
-					ATUALIZAR LEAD PARA OPORTUNIDADE
-				</h1>
+				<h1 className="text-xs tracking-tight font-medium text-start w-fit">ATUALIZAR LEAD PARA OPORTUNIDADE</h1>
 			</div>
 			<SelectWithImages
 				label="USUÁRIO PARA ATRIBUIÇÃO"

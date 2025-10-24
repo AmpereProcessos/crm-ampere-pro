@@ -34,8 +34,13 @@ const createOpportunityHistory: NextApiHandler<PostResponse> = async (req, res) 
 	const opportunitiesCollection: Collection<TOpportunity> = db.collection("opportunities");
 	const conectaIndicationsCollection: Collection<TConectaIndication> = db.collection("conecta-indications");
 
-	const insertResponse = await insertOpportunityHistory({ collection: opportunityHistoryCollection, info: opportunityHistory, partnerId: partnerId || "" });
-	if (!insertResponse.acknowledged) throw new createHttpError.InternalServerError("Oops, houve um erro desconhecido na criação do histórico da oportunidade.");
+	const insertResponse = await insertOpportunityHistory({
+		collection: opportunityHistoryCollection,
+		info: opportunityHistory,
+		partnerId: partnerId || "",
+	});
+	if (!insertResponse.acknowledged)
+		throw new createHttpError.InternalServerError("Oops, houve um erro desconhecido na criação do histórico da oportunidade.");
 	// If opportunity history is an interaction, updating the opportunity with the latest interaction
 	if (opportunityHistory.categoria === "INTERAÇÃO") {
 		await opportunitiesCollection.updateOne(
@@ -106,7 +111,8 @@ const getOpportunitiesHistory: NextApiHandler<GetResponse> = async (req, res) =>
 		if (!history) throw new createHttpError.NotFound("Objeto de histórico da oportunidade não encontrado.");
 		return res.status(200).json({ data: history });
 	}
-	if (!opportunityId || typeof opportunityId !== "string" || !ObjectId.isValid(opportunityId)) throw new createHttpError.BadRequest("ID de oportunidade inválido.");
+	if (!opportunityId || typeof opportunityId !== "string" || !ObjectId.isValid(opportunityId))
+		throw new createHttpError.BadRequest("ID de oportunidade inválido.");
 
 	const history = await getOpportunityHistory({ opportunityId: opportunityId, collection: collection, query: {} });
 
@@ -157,7 +163,8 @@ const editOpportunityHistory: NextApiHandler<PutResponse> = async (req, res) => 
 	if (!opportunityHistory) throw new createHttpError.NotFound("Objeto de alteração não encontrada.");
 	// Checking for opportunity history edit authorization
 	// @ts-ignore
-	if (!!userScope && !userScope.includes(opportunityHistory.responsavel?.id)) new createHttpError.Unauthorized("Usuário não possui permissão para essa alteração.");
+	if (!!userScope && !userScope.includes(opportunityHistory.responsavel?.id))
+		new createHttpError.Unauthorized("Usuário não possui permissão para essa alteração.");
 
 	const updateResponse = await updateOpportunityHistory({
 		id: id,

@@ -117,7 +117,8 @@ const collectLead: NextApiHandler<PostResponse> = async (req, res) => {
 	const lead = body.leads[0];
 	if (!lead) throw new createHttpError.BadRequest("Nenhum lead encontrado.");
 	const { partnerId } = query;
-	if (!partnerId || typeof partnerId != "string" || !ObjectId.isValid(partnerId)) throw new createHttpError.BadRequest("ID de parceiro inválido ou não fornecido.");
+	if (!partnerId || typeof partnerId != "string" || !ObjectId.isValid(partnerId))
+		throw new createHttpError.BadRequest("ID de parceiro inválido ou não fornecido.");
 
 	const db: Db = await connectToDatabase(process.env.MONGODB_URI, "crm");
 	const testCollection = db.collection("test");

@@ -29,13 +29,9 @@ type TResultsExportsOpportunity = {
 };
 
 type GetResponse = any;
-const getManualExportDataRoute: NextApiHandler<GetResponse> = async (
-	req,
-	res,
-) => {
+const getManualExportDataRoute: NextApiHandler<GetResponse> = async (req, res) => {
 	const db = await connectToDatabase(process.env.MONGODB_URI, "crm");
-	const opportunitiesCollection: Collection<TOpportunity> =
-		db.collection("opportunities");
+	const opportunitiesCollection: Collection<TOpportunity> = db.collection("opportunities");
 
 	// Defining the responsible query parameters. If specified, filtering opportunities in the provided responsible scope
 
@@ -85,13 +81,7 @@ const getManualExportDataRoute: NextApiHandler<GetResponse> = async (
 		dataInsercao: 1,
 	};
 	const result = await opportunitiesCollection
-		.aggregate([
-			{ $match: query },
-			{ $addFields: addFields },
-			{ $lookup: proposeLookup },
-			{ $lookup: clientLookup },
-			{ $project: projection },
-		])
+		.aggregate([{ $match: query }, { $addFields: addFields }, { $lookup: proposeLookup }, { $lookup: clientLookup }, { $project: projection }])
 		.toArray();
 
 	const exportation = result.map((project) => {
@@ -106,13 +96,9 @@ const getManualExportDataRoute: NextApiHandler<GetResponse> = async (
 			responsaveis: project.responsaveis,
 			ganho: project.ganho,
 			valorProposta: project.proposta[0] ? project.proposta[0].valor : 0,
-			potenciaPicoProposta: project.proposta[0]
-				? project.proposta[0].potenciaPico
-				: 0,
+			potenciaPicoProposta: project.proposta[0] ? project.proposta[0].potenciaPico : 0,
 			telefone: project.cliente[0]?.telefonePrimario || "",
-			canalAquisicao: project.cliente[0]
-				? project.cliente[0].canalAquisicao
-				: "NÃO DEFINIDO",
+			canalAquisicao: project.cliente[0] ? project.cliente[0].canalAquisicao : "NÃO DEFINIDO",
 			dataPerda: project.perda.data,
 			motivoPerda: project.perda.descricaoMotivo,
 			dataInsercao: project.dataInsercao,
@@ -155,8 +141,7 @@ const getManualExportDataRoute: NextApiHandler<GetResponse> = async (
 			CIDADE: city,
 			"CANAL DE AQUISIÇÃO": aquisitionOrigin,
 			CLASSIFICAÇÃO: classification || "NÃO DEFINIDO",
-			"DATA DE GANHO":
-				formatDateAsLocale(wonDate || undefined) || "NÃO ASSINADO",
+			"DATA DE GANHO": formatDateAsLocale(wonDate || undefined) || "NÃO ASSINADO",
 			"POTÊNCIA VENDIDA": proposePower,
 			"VALOR VENDA": proposeValue,
 			"DATA DE PERDA": formatDateAsLocale(project.dataPerda || undefined),

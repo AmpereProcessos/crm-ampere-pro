@@ -23,10 +23,7 @@ import LocationInformation from "@/app/components/Homologations/ModalBlocks/Loca
 import { getErrorMessage } from "@/lib/methods/errors";
 import { uploadFile } from "@/lib/methods/firebase";
 
-import type {
-	TFileHolder,
-	TFileReference,
-} from "@/utils/schemas/file-reference.schema";
+import type { TFileHolder, TFileReference } from "@/utils/schemas/file-reference.schema";
 import type { THomologation } from "@/utils/schemas/homologation.schema";
 import type { TOpportunityDTOWithClient } from "@/utils/schemas/opportunity.schema";
 
@@ -45,12 +42,7 @@ type NewHomologationProps = {
 	closeModal: () => void;
 	affectedQueryKey: any[];
 };
-function NewHomologation({
-	opportunity,
-	session,
-	closeModal,
-	affectedQueryKey,
-}: NewHomologationProps) {
+function NewHomologation({ opportunity, session, closeModal, affectedQueryKey }: NewHomologationProps) {
 	const queryClient = useQueryClient();
 	const [infoHolder, setInfoHolder] = useState<THomologation>({
 		status: "PENDENTE",
@@ -113,10 +105,7 @@ function NewHomologation({
 		dataInsercao: new Date().toISOString(),
 	});
 	const [files, setFiles] = useState<TFileHolder>({});
-	async function handleUploadFiles({
-		files,
-		homologationId,
-	}: { files: TFileHolder; homologationId: string }) {
+	async function handleUploadFiles({ files, homologationId }: { files: TFileHolder; homologationId: string }) {
 		const links: TFileReference[] = [];
 		try {
 			const uploadPromises = Object.entries(files).map(async ([key, value]) => {
@@ -125,10 +114,7 @@ function NewHomologation({
 				if (typeof file === "string") {
 					const fileRef = ref(storage, file);
 					const metaData = await getMetadata(fileRef);
-					const format =
-						metaData.contentType && fileTypes[metaData.contentType]
-							? fileTypes[metaData.contentType].title
-							: "INDEFINIDO";
+					const format = metaData.contentType && fileTypes[metaData.contentType] ? fileTypes[metaData.contentType].title : "INDEFINIDO";
 					const link: TFileReference = {
 						idParceiro: session.user.idParceiro || "",
 						idHomologacao: homologationId,
@@ -178,10 +164,7 @@ function NewHomologation({
 		}
 	}
 
-	async function requestHomologation({
-		info,
-		files,
-	}: { info: THomologation; files: TFileHolder }) {
+	async function requestHomologation({ info, files }: { info: THomologation; files: TFileHolder }) {
 		// Creating the homologation document in db via api call
 		const creationLoadingToastId = toast.loading("Criando homologação...");
 		const insertedHomologationId = await createHomologation({
@@ -224,9 +207,7 @@ function NewHomologation({
 			menuActionButtonText="SOLICITAR HOMOLOGAÇÃO"
 			menuCancelButtonText="CANCELAR"
 			closeMenu={closeModal}
-			actionFunction={() =>
-				handleCreateHomologation({ info: infoHolder, files: files })
-			}
+			actionFunction={() => handleCreateHomologation({ info: infoHolder, files: files })}
 			actionIsLoading={isPending}
 			stateIsLoading={false}
 			dialogVariant="lg"
@@ -234,49 +215,20 @@ function NewHomologation({
 			{isSuccess ? (
 				<div className="flex w-full grow flex-col items-center justify-center gap-2 text-green-500">
 					<BsFillClipboardCheckFill color="rgb(34,197,94)" size={35} />
-					<p className="text-lg font-medium tracking-tight text-primary/70">
-						Homologação requisitada com sucesso !
-					</p>
+					<p className="text-lg font-medium tracking-tight text-primary/70">Homologação requisitada com sucesso !</p>
 				</div>
 			) : null}
 			{!isPending && !isSuccess ? (
 				<>
 					<div className="flex grow flex-col gap-y-2 overflow-y-auto overscroll-y-auto px-2 py-1 scrollbar-thin scrollbar-track-primary/10 scrollbar-thumb-primary/30">
-						<OpportunityInformationBlock
-							infoHolder={infoHolder}
-							setInfoHolder={
-								setInfoHolder as React.Dispatch<
-									React.SetStateAction<THomologation>
-								>
-							}
-						/>
+						<OpportunityInformationBlock infoHolder={infoHolder} setInfoHolder={setInfoHolder as React.Dispatch<React.SetStateAction<THomologation>>} />
 
-						<ApplicantBlock
-							infoHolder={infoHolder}
-							setInfoHolder={setInfoHolder}
-						/>
-						<HolderInformation
-							infoHolder={infoHolder}
-							setInfoHolder={setInfoHolder}
-						/>
-						<InstallationInformation
-							infoHolder={infoHolder}
-							setInfoHolder={setInfoHolder}
-						/>
-						<LocationInformation
-							infoHolder={infoHolder}
-							setInfoHolder={setInfoHolder}
-						/>
-						<EquipmentsComposition
-							infoHolder={infoHolder}
-							setInfoHolder={setInfoHolder}
-							activeProposalId={opportunity?.idPropostaAtiva}
-						/>
-						<AttachFiles
-							opportunityId={opportunity?._id}
-							files={files}
-							setFiles={setFiles}
-						/>
+						<ApplicantBlock infoHolder={infoHolder} setInfoHolder={setInfoHolder} />
+						<HolderInformation infoHolder={infoHolder} setInfoHolder={setInfoHolder} />
+						<InstallationInformation infoHolder={infoHolder} setInfoHolder={setInfoHolder} />
+						<LocationInformation infoHolder={infoHolder} setInfoHolder={setInfoHolder} />
+						<EquipmentsComposition infoHolder={infoHolder} setInfoHolder={setInfoHolder} activeProposalId={opportunity?.idPropostaAtiva} />
+						<AttachFiles opportunityId={opportunity?._id} files={files} setFiles={setFiles} />
 					</div>
 				</>
 			) : null}

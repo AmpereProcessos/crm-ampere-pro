@@ -14,17 +14,11 @@ const UpdateProfileInputSchema = GeneralUserSchema.pick({
 });
 export type TUpdateProfileInput = z.infer<typeof UpdateProfileInputSchema>;
 
-async function updateProfile({
-	input,
-	session,
-}: { input: TUpdateProfileInput; session: TUserSession }) {
+async function updateProfile({ input, session }: { input: TUpdateProfileInput; session: TUserSession }) {
 	const db = await connectToDatabase();
 	const usersCollection = db.collection<TUser>("users");
 
-	await usersCollection.updateOne(
-		{ _id: new ObjectId(session.user.id) },
-		{ $set: input },
-	);
+	await usersCollection.updateOne({ _id: new ObjectId(session.user.id) }, { $set: input });
 
 	return {
 		data: {
@@ -35,10 +29,7 @@ async function updateProfile({
 }
 export type TUpdateProfileOutput = Awaited<ReturnType<typeof updateProfile>>;
 
-const updateProfileRoute: NextApiHandler<TUpdateProfileOutput> = async (
-	req,
-	res,
-) => {
+const updateProfileRoute: NextApiHandler<TUpdateProfileOutput> = async (req, res) => {
 	const session = await validateAuthenticationWithSession(req, res);
 	const input = UpdateProfileInputSchema.parse(req.body);
 	const result = await updateProfile({ input, session });

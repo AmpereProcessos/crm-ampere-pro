@@ -19,11 +19,7 @@ type NewLeadProps = {
 	};
 };
 
-export default function NewLead({
-	closeModal,
-	callbacks,
-	sessionUser,
-}: NewLeadProps) {
+export default function NewLead({ closeModal, callbacks, sessionUser }: NewLeadProps) {
 	const initialInfoHolder: TLead = {
 		nome: "",
 		telefone: "",
@@ -81,9 +77,7 @@ export default function NewLead({
 			menuActionButtonText="CRIAR LEAD"
 			menuCancelButtonText="CANCELAR"
 			closeMenu={closeModal}
-			actionFunction={() =>
-				handleCreateLeadMutation({ type: "single", lead: infoHolder })
-			}
+			actionFunction={() => handleCreateLeadMutation({ type: "single", lead: infoHolder })}
 			actionIsLoading={isPending}
 			stateIsLoading={false}
 		>
@@ -95,10 +89,7 @@ export default function NewLead({
 				acquisitionChannel={infoHolder.canalAquisicao}
 				updateInfoHolder={updateInfoHolder}
 			/>
-			<QualificationBlock
-				qualification={infoHolder.qualificacao}
-				updateQualification={updateQualification}
-			/>
+			<QualificationBlock qualification={infoHolder.qualificacao} updateQualification={updateQualification} />
 		</ResponsiveDialogDrawer>
 	);
 }

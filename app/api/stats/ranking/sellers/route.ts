@@ -1,8 +1,5 @@
 import { apiHandler } from "@/lib/api";
-import {
-	type TUserSession,
-	getValidCurrentSessionUncached,
-} from "@/lib/auth/session";
+import { type TUserSession, getValidCurrentSessionUncached } from "@/lib/auth/session";
 import connectToAmpereProjectsDatabase from "@/services/mongodb/ampere/projects-db-connection";
 import connectToDatabase from "@/services/mongodb/crm-db-connection";
 import type { TProject } from "@/utils/schemas/project.schema";
@@ -17,13 +14,10 @@ const GetSellersRankingQueryParams = z.object({
 		required_error: "Tipo de ranking é obrigatório",
 		invalid_type_error: "Tipo de ranking inválido",
 	}),
-	rankBy: z.enum(
-		["sales-total-qty", "sales-total-value", "sales-total-power"],
-		{
-			required_error: "Tipo de ranking é obrigatório",
-			invalid_type_error: "Tipo de ranking inválido",
-		},
-	),
+	rankBy: z.enum(["sales-total-qty", "sales-total-value", "sales-total-power"], {
+		required_error: "Tipo de ranking é obrigatório",
+		invalid_type_error: "Tipo de ranking inválido",
+	}),
 	projectTypes: z
 		.string({
 			required_error: "Tipos de projetos são obrigatórios",
@@ -32,14 +26,9 @@ const GetSellersRankingQueryParams = z.object({
 		.transform((value) => value.split(",")),
 });
 
-export type TGetSellersRankingInput = z.infer<
-	typeof GetSellersRankingQueryParams
->;
+export type TGetSellersRankingInput = z.infer<typeof GetSellersRankingQueryParams>;
 
-async function getSellersRanking(
-	input: TGetSellersRankingInput,
-	session: TUserSession,
-) {
+async function getSellersRanking(input: TGetSellersRankingInput, session: TUserSession) {
 	const currentDate = dayjs();
 	const currentMonth = currentDate.month();
 	const currentSemesterMonthStart = currentMonth < 6 ? 0 : 6;
@@ -50,10 +39,7 @@ async function getSellersRanking(
 			endDate: currentDate.endOf("month").subtract(3, "hours").toDate(),
 		},
 		"current-semester": {
-			startDate: currentDate
-				.set("month", currentSemesterMonthStart)
-				.startOf("month")
-				.toDate(),
+			startDate: currentDate.set("month", currentSemesterMonthStart).startOf("month").toDate(),
 			endDate: currentDate
 				.set("month", currentSemesterMonthStart + 5)
 				.endOf("month")
@@ -185,9 +171,7 @@ async function getSellersRanking(
 		data: ranking,
 	};
 }
-export type TGetSellersRankingOutput = Awaited<
-	ReturnType<typeof getSellersRanking>
->;
+export type TGetSellersRankingOutput = Awaited<ReturnType<typeof getSellersRanking>>;
 
 const getSellersRankingHandler = async (req: NextRequest) => {
 	const session = await getValidCurrentSessionUncached();

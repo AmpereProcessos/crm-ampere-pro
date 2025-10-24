@@ -1,25 +1,14 @@
 import { type UnwrapNextResponse, apiHandler } from "@/lib/api";
 import { getValidCurrentSessionUncached } from "@/lib/auth/session";
 import { formatDateQuery } from "@/lib/methods/formatting";
-import {
-	getClientSearchParams,
-	getClientsByFilters,
-	getSimilarClients,
-} from "@/repositories/clients/queries";
+import { getClientSearchParams, getClientsByFilters, getSimilarClients } from "@/repositories/clients/queries";
 import connectToDatabase from "@/services/mongodb/crm-db-connection";
-import {
-	PersonalizedClientQuerySchema,
-	type TClient,
-	type TClientDTOSimplified,
-} from "@/utils/schemas/client.schema";
+import { PersonalizedClientQuerySchema, type TClient, type TClientDTOSimplified } from "@/utils/schemas/client.schema";
 import createHttpError from "http-errors";
 import type { Collection, Filter } from "mongodb";
 import { type NextRequest, NextResponse } from "next/server";
 import type { z } from "zod";
-import {
-	GetClientsByFiltersQueryParams,
-	GetSimilarClientsQueryParams,
-} from "../inputs";
+import { GetClientsByFiltersQueryParams, GetSimilarClientsQueryParams } from "../inputs";
 
 async function getPartnerSimilarClients(request: NextRequest) {
 	const { user } = await getValidCurrentSessionUncached();
@@ -63,18 +52,12 @@ async function getPartnerSimilarClients(request: NextRequest) {
 	});
 }
 
-export type TGetSimilarClientsRouteOutput = UnwrapNextResponse<
-	Awaited<ReturnType<typeof getPartnerSimilarClients>>
->;
-export type TGetSimilarClientsRouteOutputData =
-	TGetSimilarClientsRouteOutput["data"]["similarClients"];
+export type TGetSimilarClientsRouteOutput = UnwrapNextResponse<Awaited<ReturnType<typeof getPartnerSimilarClients>>>;
+export type TGetSimilarClientsRouteOutputData = TGetSimilarClientsRouteOutput["data"]["similarClients"];
 
 export const GET = apiHandler({ GET: getPartnerSimilarClients });
 
-function getClientByPersonalizedFilterORSearchParams({
-	name,
-	phone,
-}: { name: string; phone: string }): Filter<TClient> {
+function getClientByPersonalizedFilterORSearchParams({ name, phone }: { name: string; phone: string }): Filter<TClient> {
 	const orArr: Filter<TClient>[] = [];
 
 	if (name.trim().length > 0) {
@@ -97,9 +80,7 @@ export type TClientsByFilterResult = {
 	totalPages: number;
 };
 
-export type TGetClientsByFiltersRouteInput = z.infer<
-	typeof PersonalizedClientQuerySchema
->;
+export type TGetClientsByFiltersRouteInput = z.infer<typeof PersonalizedClientQuerySchema>;
 async function getClientsByPersonalizedFilters(request: NextRequest) {
 	const PAGE_SIZE = 500;
 	const { user } = await getValidCurrentSessionUncached();
@@ -117,22 +98,17 @@ async function getClientsByPersonalizedFilters(request: NextRequest) {
 	const { after, before, page } = queryParams;
 
 	const payload = await request.json();
-	const { authors, partners, filters } =
-		PersonalizedClientQuerySchema.parse(payload);
+	const { authors, partners, filters } = PersonalizedClientQuerySchema.parse(payload);
 
 	// If user has a scope defined and in the request there isnt a partners arr defined, then user is trying
 	// to access a overall visualiation, which he/she isnt allowed
 	if (!!partnerScope && !partners) {
-		throw new createHttpError.Unauthorized(
-			"Seu usuário não possui solicitação para esse escopo de visualização.",
-		);
+		throw new createHttpError.Unauthorized("Seu usuário não possui solicitação para esse escopo de visualização.");
 	}
 
 	// Validating page parameter
 	if (!page || Number.isNaN(Number(page))) {
-		throw new createHttpError.BadRequest(
-			"Parâmetro de paginação inválido ou não informado.",
-		);
+		throw new createHttpError.BadRequest("Parâmetro de paginação inválido ou não informado.");
 	}
 
 	// Defining the queries
@@ -150,12 +126,8 @@ async function getClientsByPersonalizedFilters(request: NextRequest) {
 				}
 			: {};
 
-	const authorsQuery: Filter<TClient> = authors
-		? { "autor.id": { $in: authors } }
-		: {};
-	const partnerQuery: Filter<TClient> = partners
-		? { idParceiro: { $in: [...partners] } }
-		: {};
+	const authorsQuery: Filter<TClient> = authors ? { "autor.id": { $in: authors } } : {};
+	const partnerQuery: Filter<TClient> = partners ? { idParceiro: { $in: [...partners] } } : {};
 	const orQuery = getClientByPersonalizedFilterORSearchParams({
 		name: filters.name,
 		phone: filters.phone,
@@ -164,10 +136,7 @@ async function getClientsByPersonalizedFilters(request: NextRequest) {
 	const filtersQuery: Filter<TClient> = {
 		...orQuery,
 		cidade: filters.city.length > 0 ? { $in: filters.city } : { $ne: "" },
-		canalAquisicao:
-			filters.acquisitionChannel.length > 0
-				? { $in: filters.acquisitionChannel }
-				: { $ne: "" },
+		canalAquisicao: filters.acquisitionChannel.length > 0 ? { $in: filters.acquisitionChannel } : { $ne: "" },
 	};
 
 	const query = {
@@ -202,7 +171,5 @@ async function getClientsByPersonalizedFilters(request: NextRequest) {
 	});
 }
 
-export type TGetClientsByFiltersRouteOutput = UnwrapNextResponse<
-	Awaited<ReturnType<typeof getClientsByPersonalizedFilters>>
->;
+export type TGetClientsByFiltersRouteOutput = UnwrapNextResponse<Awaited<ReturnType<typeof getClientsByPersonalizedFilters>>>;
 export const POST = apiHandler({ POST: getClientsByPersonalizedFilters });

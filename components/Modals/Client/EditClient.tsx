@@ -4,14 +4,7 @@ import ErrorComponent from "@/components/utils/ErrorComponent";
 import LoadingComponent from "@/components/utils/LoadingComponent";
 import type { TUserSession } from "@/lib/auth/session";
 import { formatDateOnInputChange } from "@/lib/methods/formatting";
-import {
-	formatDateForInputValue,
-	formatPhoneAsBase,
-	formatToCEP,
-	formatToCPForCNPJ,
-	formatToPhone,
-	getCEPInfo,
-} from "@/utils/methods";
+import { formatDateForInputValue, formatPhoneAsBase, formatToCEP, formatToCPForCNPJ, formatToPhone, getCEPInfo } from "@/utils/methods";
 import { updateClient } from "@/utils/mutations/clients";
 import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
 import { useClientById } from "@/utils/queries/clients";
@@ -33,20 +26,9 @@ type EditClientModalProps = {
 	additionalAffectedQuery?: string[];
 };
 
-function EditClient({
-	clientId,
-	session,
-	partnerId,
-	closeModal,
-	additionalAffectedQuery,
-}: EditClientModalProps) {
+function EditClient({ clientId, session, partnerId, closeModal, additionalAffectedQuery }: EditClientModalProps) {
 	const queryClient = useQueryClient();
-	const {
-		data: client,
-		isSuccess,
-		isError,
-		isLoading,
-	} = useClientById({ id: clientId });
+	const { data: client, isSuccess, isError, isLoading } = useClientById({ id: clientId });
 	const { data: acquisitionChannels } = useAcquisitionChannels();
 	const [clientInfo, setClientInfo] = useState<TClient>({
 		nome: "",
@@ -118,10 +100,7 @@ function EditClient({
 		if (client) setClientInfo(client);
 	}, [client]);
 	return (
-		<div
-			id="newClient"
-			className="fixed bottom-0 left-0 right-0 top-0 z-100 bg-[rgba(0,0,0,.85)]"
-		>
+		<div id="newClient" className="fixed bottom-0 left-0 right-0 top-0 z-100 bg-[rgba(0,0,0,.85)]">
 			<div className="fixed left-[50%] top-[50%] z-100 h-[80%] w-[93%] translate-x-[-50%] translate-y-[-50%] rounded-md bg-background p-[10px]">
 				<div className="flex h-full flex-col">
 					<div className="flex flex-col items-center justify-between border-b border-primary/30 px-2 pb-2 text-lg lg:flex-row">
@@ -135,23 +114,17 @@ function EditClient({
 						</button>
 					</div>
 					{isLoading ? <LoadingComponent /> : null}
-					{isError ? (
-						<ErrorComponent msg="Erro ao buscar informações do cliente." />
-					) : null}
+					{isError ? <ErrorComponent msg="Erro ao buscar informações do cliente." /> : null}
 					{isSuccess ? (
 						<div className="flex grow flex-col gap-y-2 overflow-y-auto overscroll-y-auto border-b border-primary/30 py-2 scrollbar-thin scrollbar-track-primary/10 scrollbar-thumb-primary/30">
-							<h1 className="w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-primary-foreground">
-								INFORMAÇÕES PESSOAIS
-							</h1>
+							<h1 className="w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-primary-foreground">INFORMAÇÕES PESSOAIS</h1>
 							<div className="flex w-full flex-col items-center gap-2 lg:flex-row">
 								<div className="w-full lg:w-1/2">
 									<TextInput
 										label="NOME (*)"
 										value={clientInfo.nome}
 										placeholder="Preencha aqui o nome do cliente."
-										handleChange={(value) =>
-											setClientInfo((prev) => ({ ...prev, nome: value }))
-										}
+										handleChange={(value) => setClientInfo((prev) => ({ ...prev, nome: value }))}
 										width="100%"
 									/>
 								</div>
@@ -179,10 +152,7 @@ function EditClient({
 											console.log("SELECTED", value);
 											setClientInfo((prev) => ({
 												...prev,
-												dataNascimento: formatDateOnInputChange(
-													value,
-													"string",
-												) as string,
+												dataNascimento: formatDateOnInputChange(value, "string") as string,
 											}));
 										}}
 										width={"100%"}
@@ -284,9 +254,7 @@ function EditClient({
 									/>
 								</div>
 							</div>
-							<h1 className="w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-primary-foreground">
-								INFORMAÇÕES DE CONTATO
-							</h1>
+							<h1 className="w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-primary-foreground">INFORMAÇÕES DE CONTATO</h1>
 							<div className="flex w-full flex-col items-center gap-2 lg:flex-row">
 								<div className="w-full lg:w-1/3">
 									<TextInput
@@ -322,16 +290,12 @@ function EditClient({
 										label="EMAIL"
 										value={clientInfo.email || ""}
 										placeholder="Preencha aqui o email do cliente."
-										handleChange={(value) =>
-											setClientInfo((prev) => ({ ...prev, email: value }))
-										}
+										handleChange={(value) => setClientInfo((prev) => ({ ...prev, email: value }))}
 										width="100%"
 									/>
 								</div>
 							</div>
-							<h1 className="w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-primary-foreground">
-								INFORMAÇÕES DE ENDEREÇO
-							</h1>
+							<h1 className="w-full rounded-sm bg-primary/80 p-1 text-center font-bold text-primary-foreground">INFORMAÇÕES DE ENDEREÇO</h1>
 							<div className="grid grid-cols-1 grid-rows-3 items-center gap-6 px-2 lg:grid-cols-3 lg:grid-rows-1">
 								<TextInput
 									label="CEP"
@@ -355,15 +319,11 @@ function EditClient({
 										setClientInfo((prev) => ({
 											...prev,
 											uf: value,
-											cidade: stateCities[
-												value as keyof typeof stateCities
-											][0] as string,
+											cidade: stateCities[value as keyof typeof stateCities][0] as string,
 										}))
 									}
 									resetOptionLabel="NÃO DEFINIDO"
-									onReset={() =>
-										setClientInfo((prev) => ({ ...prev, uf: "", cidade: "" }))
-									}
+									onReset={() => setClientInfo((prev) => ({ ...prev, uf: "", cidade: "" }))}
 									options={Object.keys(stateCities).map((state, index) => ({
 										id: index + 1,
 										label: state,
@@ -374,14 +334,10 @@ function EditClient({
 								<SelectInput
 									label="CIDADE"
 									value={clientInfo.cidade}
-									handleChange={(value) =>
-										setClientInfo((prev) => ({ ...prev, cidade: value }))
-									}
+									handleChange={(value) => setClientInfo((prev) => ({ ...prev, cidade: value }))}
 									options={
 										clientInfo.uf
-											? stateCities[
-													clientInfo.uf as keyof typeof stateCities
-												].map((city, index) => ({
+											? stateCities[clientInfo.uf as keyof typeof stateCities].map((city, index) => ({
 													id: index + 1,
 													value: city,
 													label: city,
@@ -389,9 +345,7 @@ function EditClient({
 											: null
 									}
 									resetOptionLabel="NÃO DEFINIDO"
-									onReset={() =>
-										setClientInfo((prev) => ({ ...prev, cidade: "" }))
-									}
+									onReset={() => setClientInfo((prev) => ({ ...prev, cidade: "" }))}
 									width="100%"
 								/>
 							</div>
@@ -400,18 +354,14 @@ function EditClient({
 									label="BAIRRO"
 									value={clientInfo.bairro || ""}
 									placeholder="Preencha aqui o bairro do cliente."
-									handleChange={(value) =>
-										setClientInfo((prev) => ({ ...prev, bairro: value }))
-									}
+									handleChange={(value) => setClientInfo((prev) => ({ ...prev, bairro: value }))}
 									width="100%"
 								/>
 								<TextInput
 									label="LOGRADOURO/RUA"
 									value={clientInfo.endereco || ""}
 									placeholder="Preencha aqui o logradouro do cliente."
-									handleChange={(value) =>
-										setClientInfo((prev) => ({ ...prev, endereco: value }))
-									}
+									handleChange={(value) => setClientInfo((prev) => ({ ...prev, endereco: value }))}
 									width="100%"
 								/>
 							</div>
@@ -449,9 +399,7 @@ function EditClient({
 							type="button"
 							disabled={isPending}
 							// @ts-ignore
-							onClick={() =>
-								handleUpdateClient({ id: clientId, changes: clientInfo })
-							}
+							onClick={() => handleUpdateClient({ id: clientId, changes: clientInfo })}
 							className="rounded bg-blue-500 px-4 py-1 text-sm font-medium text-primary-foreground duration-300 ease-in-out disabled:bg-primary/50 disabled:text-primary enabled:hover:bg-blue-700"
 						>
 							SALVAR

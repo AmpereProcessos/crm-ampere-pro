@@ -44,9 +44,7 @@ function ChargeMenu({ addCharge, removeCharge, charges }: ChargeMenuProps) {
 					<TextInput
 						label="DESCRIÇÃO"
 						value={chargeHolder.descricao}
-						handleChange={(value) =>
-							setChargeHolder((prev) => ({ ...prev, descricao: value }))
-						}
+						handleChange={(value) => setChargeHolder((prev) => ({ ...prev, descricao: value }))}
 						placeholder="Descrição/nome da carga..."
 						width="100%"
 					/>
@@ -55,9 +53,7 @@ function ChargeMenu({ addCharge, removeCharge, charges }: ChargeMenuProps) {
 					<NumberInput
 						label="QTDE"
 						value={chargeHolder.qtde}
-						handleChange={(value) =>
-							setChargeHolder((prev) => ({ ...prev, qtde: value }))
-						}
+						handleChange={(value) => setChargeHolder((prev) => ({ ...prev, qtde: value }))}
 						placeholder="Quantidade de itens da carga..."
 						width="100%"
 					/>
@@ -66,9 +62,7 @@ function ChargeMenu({ addCharge, removeCharge, charges }: ChargeMenuProps) {
 					<NumberInput
 						label="POTÊNCIA (W)"
 						value={chargeHolder.potencia}
-						handleChange={(value) =>
-							setChargeHolder((prev) => ({ ...prev, potencia: value }))
-						}
+						handleChange={(value) => setChargeHolder((prev) => ({ ...prev, potencia: value }))}
 						placeholder="Potência da carga.."
 						width="100%"
 					/>
@@ -98,34 +92,21 @@ function ChargeMenu({ addCharge, removeCharge, charges }: ChargeMenuProps) {
 			</div>
 			{charges && charges.length > 0 ? (
 				charges.map((charge, index) => (
-					<div
-						key={index}
-						className="flex w-full items-center justify-between gap-2 rounded-md border border-cyan-500 p-2 lg:w-[50%]"
-					>
+					<div key={index} className="flex w-full items-center justify-between gap-2 rounded-md border border-cyan-500 p-2 lg:w-[50%]">
 						<div className="flex items-center gap-2">
 							<GiBatteryPack color="rgb(6,182,212)" size={"20px"} />
 							<p className="text-sm text-primary/70">
-								<strong className="text-cyan-500">{charge.qtde}</strong> x{" "}
-								<strong className="text-cyan-500">{charge.descricao}</strong> de{" "}
-								<strong className="text-cyan-500">{charge.potencia}W</strong>{" "}
-								por{" "}
-								<strong className="text-cyan-500">
-									{charge.horasFuncionamento} horas
-								</strong>
+								<strong className="text-cyan-500">{charge.qtde}</strong> x <strong className="text-cyan-500">{charge.descricao}</strong> de{" "}
+								<strong className="text-cyan-500">{charge.potencia}W</strong> por <strong className="text-cyan-500">{charge.horasFuncionamento} horas</strong>
 							</p>
 						</div>
-						<button
-							onClick={() => removeCharge(index)}
-							className="text-red-300 duration-300 ease-in-out hover:scale-105 hover:text-red-500"
-						>
+						<button onClick={() => removeCharge(index)} className="text-red-300 duration-300 ease-in-out hover:scale-105 hover:text-red-500">
 							<MdDelete />
 						</button>
 					</div>
 				))
 			) : (
-				<p className="py-1 text-sm italic text-primary/70">
-					Sem cargas adicionadas...
-				</p>
+				<p className="py-1 text-sm italic text-primary/70">Sem cargas adicionadas...</p>
 			)}
 		</div>
 	);

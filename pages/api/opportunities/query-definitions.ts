@@ -88,7 +88,10 @@ const UpdateOpportunityQueryDefinitionsInputSchema = z.object({
 });
 export type TUpdateOpportunityQueryDefinitionsInput = z.infer<typeof UpdateOpportunityQueryDefinitionsInputSchema>;
 
-async function updateOpportunitiesQueryDefinitions({ payload, session }: { payload: TUpdateOpportunityQueryDefinitionsInput; session: TUserSession }) {
+async function updateOpportunitiesQueryDefinitions({
+	payload,
+	session,
+}: { payload: TUpdateOpportunityQueryDefinitionsInput; session: TUserSession }) {
 	const db = await connectToDatabase();
 	const userPreferencesCollection: Collection<TUserPreferences> = db.collection("user-preferences");
 

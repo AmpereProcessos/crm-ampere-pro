@@ -85,7 +85,12 @@ function EditReceipt({ receipt, affectedQueryKey }: EditReceiptProps) {
 				</div>
 				<div className="flex w-full items-center justify-center">
 					<div className="w-fit">
-						<CheckboxInput labelFalse="RECEBIDO" labelTrue="RECEBIDO" checked={infoHolder.efetivado} handleChange={(value) => setInfoHolder((prev) => ({ ...prev, efetivado: value }))} />
+						<CheckboxInput
+							labelFalse="RECEBIDO"
+							labelTrue="RECEBIDO"
+							checked={infoHolder.efetivado}
+							handleChange={(value) => setInfoHolder((prev) => ({ ...prev, efetivado: value }))}
+						/>
 					</div>
 				</div>
 			</div>

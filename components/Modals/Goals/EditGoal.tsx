@@ -24,14 +24,7 @@ type EditGoalProps = {
 	};
 };
 function EditGoal({ goalId, closeMenu, callbacks, session }: EditGoalProps) {
-	return (
-		<EditGoalContent
-			callbacks={callbacks}
-			closeMenu={closeMenu}
-			goalId={goalId}
-			session={session}
-		/>
-	);
+	return <EditGoalContent callbacks={callbacks} closeMenu={closeMenu} goalId={goalId} session={session} />;
 }
 export default EditGoal;
 
@@ -45,19 +38,8 @@ type EditGoalContentProps = {
 		onSettled?: () => void;
 	};
 };
-function EditGoalContent({
-	goalId,
-	session,
-	closeMenu,
-	callbacks,
-}: EditGoalContentProps) {
-	const {
-		data: fetchedGoal,
-		isLoading: isLoadingGoal,
-		isError: isErrorGoal,
-		isSuccess: isSuccessGoal,
-		error: errorGoal,
-	} = useGoalById({ id: goalId });
+function EditGoalContent({ goalId, session, closeMenu, callbacks }: EditGoalContentProps) {
+	const { data: fetchedGoal, isLoading: isLoadingGoal, isError: isErrorGoal, isSuccess: isSuccessGoal, error: errorGoal } = useGoalById({ id: goalId });
 
 	const getGoal = useGoalStoreWithSync(fetchedGoal)((s) => s.getGoal);
 	const reset = useGoalStoreWithSync(fetchedGoal)((s) => s.reset);

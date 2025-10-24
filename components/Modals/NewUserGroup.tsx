@@ -1,13 +1,13 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
 type NewUserGroupProps = {
-  closeModal: () => void
-}
+	closeModal: () => void;
+};
 
 function NewUserGroup() {
-  const [infoHolder, setInfoHolder] = useState({
-    nome: '',
-  })
-  return <div>NewUserGroup</div>
+	const [infoHolder, setInfoHolder] = useState({
+		nome: "",
+	});
+	return <div>NewUserGroup</div>;
 }
 
-export default NewUserGroup
+export default NewUserGroup;

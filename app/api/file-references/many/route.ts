@@ -37,9 +37,17 @@ async function getMultipleSourcesFileReferences(request: NextRequest) {
 	const expenseQuery: Filter<TFileReference> = expenseId ? { idDespesa: expenseId } : {};
 	const serviceOrderQuery: Filter<TFileReference> = serviceOrderId ? { idOrdemServico: serviceOrderId } : {};
 
-	const nonEmptyQueries = [clientQuery, opportunityQuery, analysisQuery, homologationQuery, projectQuery, purchaseQuery, revenueQuery, expenseQuery, serviceOrderQuery].filter(
-		(r) => Object.keys(r).length > 0,
-	);
+	const nonEmptyQueries = [
+		clientQuery,
+		opportunityQuery,
+		analysisQuery,
+		homologationQuery,
+		projectQuery,
+		purchaseQuery,
+		revenueQuery,
+		expenseQuery,
+		serviceOrderQuery,
+	].filter((r) => Object.keys(r).length > 0);
 
 	if (nonEmptyQueries.length === 0) {
 		return NextResponse.json({

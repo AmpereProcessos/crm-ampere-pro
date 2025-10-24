@@ -40,7 +40,10 @@ export const InsertSaleGoalSchema = z.object({
 			.number({ required_error: "Meta de potência vendida não informada.", invalid_type_error: "Tipo não válido para meta de potência vendida." })
 			.optional()
 			.nullable(),
-		valorVendido: z.number({ required_error: "Meta de valor vendido não informada.", invalid_type_error: "Tipo não válido para meta de valor vendido." }).optional().nullable(),
+		valorVendido: z
+			.number({ required_error: "Meta de valor vendido não informada.", invalid_type_error: "Tipo não válido para meta de valor vendido." })
+			.optional()
+			.nullable(),
 		projetosVendidos: z
 			.number({ required_error: "Meta de projetos vendidos não informada.", invalid_type_error: "Tipo não válido para meta de projetos vendidos." })
 			.optional()
@@ -49,7 +52,10 @@ export const InsertSaleGoalSchema = z.object({
 			.number({ required_error: "Meta de projetos enviados não informada.", invalid_type_error: "Tipo não válido para meta de projetos enviados." })
 			.optional()
 			.nullable(),
-		conversao: z.number({ required_error: "Meta de conversão não informada.", invalid_type_error: "Tipo não válido para meta de conversão." }).optional().nullable(),
+		conversao: z
+			.number({ required_error: "Meta de conversão não informada.", invalid_type_error: "Tipo não válido para meta de conversão." })
+			.optional()
+			.nullable(),
 	}),
 	autor: AuthorSchema,
 	dataInsercao: z.string().datetime(),

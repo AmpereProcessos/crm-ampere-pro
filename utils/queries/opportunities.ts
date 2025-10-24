@@ -31,7 +31,16 @@ type UseOpportunitiesParams = {
 	isFromMarketing: boolean;
 	isFromIndication: boolean;
 };
-async function fetchOpportunities({ responsibles, funnel, periodAfter, periodBefore, periodField, status, isFromMarketing, isFromIndication }: UseOpportunitiesParams) {
+async function fetchOpportunities({
+	responsibles,
+	funnel,
+	periodAfter,
+	periodBefore,
+	periodField,
+	status,
+	isFromMarketing,
+	isFromIndication,
+}: UseOpportunitiesParams) {
 	try {
 		const queryParamsArr = [
 			{ key: "responsibles", value: responsibles },
@@ -54,11 +63,21 @@ async function fetchOpportunities({ responsibles, funnel, periodAfter, periodBef
 		throw error;
 	}
 }
-export function useOpportunities({ responsibles, funnel, periodAfter, periodBefore, periodField, status, isFromMarketing, isFromIndication }: UseOpportunitiesParams) {
+export function useOpportunities({
+	responsibles,
+	funnel,
+	periodAfter,
+	periodBefore,
+	periodField,
+	status,
+	isFromMarketing,
+	isFromIndication,
+}: UseOpportunitiesParams) {
 	return {
 		...useQuery({
 			queryKey: ["opportunities", responsibles, funnel, periodAfter, periodBefore, periodField, status, isFromMarketing, isFromIndication],
-			queryFn: async () => await fetchOpportunities({ responsibles, funnel, periodAfter, periodBefore, periodField, status, isFromMarketing, isFromIndication }),
+			queryFn: async () =>
+				await fetchOpportunities({ responsibles, funnel, periodAfter, periodBefore, periodField, status, isFromMarketing, isFromIndication }),
 			gcTime: 1000 * 60 * 5, // 5 minutes
 		}),
 		queryKey: ["opportunities", responsibles, funnel, periodAfter, periodBefore, periodField, status, isFromMarketing, isFromIndication],
@@ -146,7 +165,13 @@ type FetchOpportunitiesByPersonalizedFiltersParams = {
 	projectTypes: string[] | null;
 	filters: TPersonalizedOpportunitiesFilter;
 };
-async function fetchOpportunitiesByPersonalizedFilters({ page, responsibles, partners, projectTypes, filters }: FetchOpportunitiesByPersonalizedFiltersParams) {
+async function fetchOpportunitiesByPersonalizedFilters({
+	page,
+	responsibles,
+	partners,
+	projectTypes,
+	filters,
+}: FetchOpportunitiesByPersonalizedFiltersParams) {
 	try {
 		const { data } = await axios.post(`/api/opportunities/search?page=${page}`, { responsibles, partners, projectTypes, filters });
 		return data.data as TOpportunitiesByFilterResult;
@@ -276,7 +301,9 @@ async function flushKanbanQueue() {
 	kanbanQueueTimer = null;
 	if (currentQueue.length === 0) return;
 	try {
-		const { data } = await axios.post<{ data: TGetOpportunitiesKanbanViewOutput["data"][] }>("/api/opportunities/kanban-batch", { requests: currentQueue.map((q) => q.payload) });
+		const { data } = await axios.post<{ data: TGetOpportunitiesKanbanViewOutput["data"][] }>("/api/opportunities/kanban-batch", {
+			requests: currentQueue.map((q) => q.payload),
+		});
 		const results = data.data;
 		for (let index = 0; index < currentQueue.length; index++) {
 			const item = currentQueue[index];

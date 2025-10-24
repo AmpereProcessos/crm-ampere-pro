@@ -1,134 +1,134 @@
 [
-  {
-    "id": "12",
-    "codigo": null,
-    "fabricante": "HUAWEI",
-    "modelo": "SUN2000-450W-P",
-    "potenciaNominalW": 450,
-    "maxTensaoEntradaVoc": 80,
-    "maxCorrenteCcIsc": 13,
-    "modulosPorOtimizador": 1,
-    "dataDisponibilidade": null
-  },
-  {
-    "id": "8",
-    "codigo": null,
-    "fabricante": "SOLAREDGE",
-    "modelo": "M1600",
-    "potenciaNominalW": 1800,
-    "maxTensaoEntradaVoc": 125,
-    "maxCorrenteCcIsc": 12.5,
-    "modulosPorOtimizador": 4,
-    "dataDisponibilidade": null
-  },
-  {
-    "id": "11",
-    "codigo": null,
-    "fabricante": "SOLAREDGE",
-    "modelo": "P1100",
-    "potenciaNominalW": 1100,
-    "maxTensaoEntradaVoc": 125,
-    "maxCorrenteCcIsc": 14,
-    "modulosPorOtimizador": 2,
-    "dataDisponibilidade": null
-  },
-  {
-    "id": "1",
-    "codigo": null,
-    "fabricante": "SOLAREDGE",
-    "modelo": "P370",
-    "potenciaNominalW": 370,
-    "maxTensaoEntradaVoc": 60,
-    "maxCorrenteCcIsc": 11,
-    "modulosPorOtimizador": 1,
-    "dataDisponibilidade": null
-  },
-  {
-    "id": "2",
-    "codigo": null,
-    "fabricante": "SOLAREDGE",
-    "modelo": "P500",
-    "potenciaNominalW": 500,
-    "maxTensaoEntradaVoc": 80,
-    "maxCorrenteCcIsc": 10.1,
-    "modulosPorOtimizador": 1,
-    "dataDisponibilidade": null
-  },
-  {
-    "id": "3",
-    "codigo": null,
-    "fabricante": "SOLAREDGE",
-    "modelo": "P505",
-    "potenciaNominalW": 505,
-    "maxTensaoEntradaVoc": 87,
-    "maxCorrenteCcIsc": 14,
-    "modulosPorOtimizador": 1,
-    "dataDisponibilidade": null
-  },
-  {
-    "id": "9",
-    "codigo": null,
-    "fabricante": "SOLAREDGE",
-    "modelo": "P601",
-    "potenciaNominalW": 600,
-    "maxTensaoEntradaVoc": 65,
-    "maxCorrenteCcIsc": 14,
-    "modulosPorOtimizador": 1,
-    "dataDisponibilidade": null
-  },
-  {
-    "id": "10",
-    "codigo": null,
-    "fabricante": "SOLAREDGE",
-    "modelo": "P605",
-    "potenciaNominalW": 605,
-    "maxTensaoEntradaVoc": 65,
-    "maxCorrenteCcIsc": 14,
-    "modulosPorOtimizador": 1,
-    "dataDisponibilidade": null
-  },
-  {
-    "id": "4",
-    "codigo": null,
-    "fabricante": "SOLAREDGE",
-    "modelo": "P730",
-    "potenciaNominalW": 730,
-    "maxTensaoEntradaVoc": 125,
-    "maxCorrenteCcIsc": 11,
-    "modulosPorOtimizador": 2,
-    "dataDisponibilidade": null
-  },
-  {
-    "id": "5",
-    "codigo": null,
-    "fabricante": "SOLAREDGE",
-    "modelo": "P801",
-    "potenciaNominalW": 800,
-    "maxTensaoEntradaVoc": 125,
-    "maxCorrenteCcIsc": 11.75,
-    "modulosPorOtimizador": 2,
-    "dataDisponibilidade": null
-  },
-  {
-    "id": "6",
-    "codigo": null,
-    "fabricante": "SOLAREDGE",
-    "modelo": "P850",
-    "potenciaNominalW": 850,
-    "maxTensaoEntradaVoc": 125,
-    "maxCorrenteCcIsc": 12.5,
-    "modulosPorOtimizador": 2,
-    "dataDisponibilidade": null
-  },
-  {
-    "id": "7",
-    "codigo": null,
-    "fabricante": "SOLAREDGE",
-    "modelo": "P950",
-    "potenciaNominalW": 950,
-    "maxTensaoEntradaVoc": 125,
-    "maxCorrenteCcIsc": 12.5,
-    "modulosPorOtimizador": 2,
-    "dataDisponibilidade": null
-  }
+	{
+		"id": "12",
+		"codigo": null,
+		"fabricante": "HUAWEI",
+		"modelo": "SUN2000-450W-P",
+		"potenciaNominalW": 450,
+		"maxTensaoEntradaVoc": 80,
+		"maxCorrenteCcIsc": 13,
+		"modulosPorOtimizador": 1,
+		"dataDisponibilidade": null
+	},
+	{
+		"id": "8",
+		"codigo": null,
+		"fabricante": "SOLAREDGE",
+		"modelo": "M1600",
+		"potenciaNominalW": 1800,
+		"maxTensaoEntradaVoc": 125,
+		"maxCorrenteCcIsc": 12.5,
+		"modulosPorOtimizador": 4,
+		"dataDisponibilidade": null
+	},
+	{
+		"id": "11",
+		"codigo": null,
+		"fabricante": "SOLAREDGE",
+		"modelo": "P1100",
+		"potenciaNominalW": 1100,
+		"maxTensaoEntradaVoc": 125,
+		"maxCorrenteCcIsc": 14,
+		"modulosPorOtimizador": 2,
+		"dataDisponibilidade": null
+	},
+	{
+		"id": "1",
+		"codigo": null,
+		"fabricante": "SOLAREDGE",
+		"modelo": "P370",
+		"potenciaNominalW": 370,
+		"maxTensaoEntradaVoc": 60,
+		"maxCorrenteCcIsc": 11,
+		"modulosPorOtimizador": 1,
+		"dataDisponibilidade": null
+	},
+	{
+		"id": "2",
+		"codigo": null,
+		"fabricante": "SOLAREDGE",
+		"modelo": "P500",
+		"potenciaNominalW": 500,
+		"maxTensaoEntradaVoc": 80,
+		"maxCorrenteCcIsc": 10.1,
+		"modulosPorOtimizador": 1,
+		"dataDisponibilidade": null
+	},
+	{
+		"id": "3",
+		"codigo": null,
+		"fabricante": "SOLAREDGE",
+		"modelo": "P505",
+		"potenciaNominalW": 505,
+		"maxTensaoEntradaVoc": 87,
+		"maxCorrenteCcIsc": 14,
+		"modulosPorOtimizador": 1,
+		"dataDisponibilidade": null
+	},
+	{
+		"id": "9",
+		"codigo": null,
+		"fabricante": "SOLAREDGE",
+		"modelo": "P601",
+		"potenciaNominalW": 600,
+		"maxTensaoEntradaVoc": 65,
+		"maxCorrenteCcIsc": 14,
+		"modulosPorOtimizador": 1,
+		"dataDisponibilidade": null
+	},
+	{
+		"id": "10",
+		"codigo": null,
+		"fabricante": "SOLAREDGE",
+		"modelo": "P605",
+		"potenciaNominalW": 605,
+		"maxTensaoEntradaVoc": 65,
+		"maxCorrenteCcIsc": 14,
+		"modulosPorOtimizador": 1,
+		"dataDisponibilidade": null
+	},
+	{
+		"id": "4",
+		"codigo": null,
+		"fabricante": "SOLAREDGE",
+		"modelo": "P730",
+		"potenciaNominalW": 730,
+		"maxTensaoEntradaVoc": 125,
+		"maxCorrenteCcIsc": 11,
+		"modulosPorOtimizador": 2,
+		"dataDisponibilidade": null
+	},
+	{
+		"id": "5",
+		"codigo": null,
+		"fabricante": "SOLAREDGE",
+		"modelo": "P801",
+		"potenciaNominalW": 800,
+		"maxTensaoEntradaVoc": 125,
+		"maxCorrenteCcIsc": 11.75,
+		"modulosPorOtimizador": 2,
+		"dataDisponibilidade": null
+	},
+	{
+		"id": "6",
+		"codigo": null,
+		"fabricante": "SOLAREDGE",
+		"modelo": "P850",
+		"potenciaNominalW": 850,
+		"maxTensaoEntradaVoc": 125,
+		"maxCorrenteCcIsc": 12.5,
+		"modulosPorOtimizador": 2,
+		"dataDisponibilidade": null
+	},
+	{
+		"id": "7",
+		"codigo": null,
+		"fabricante": "SOLAREDGE",
+		"modelo": "P950",
+		"potenciaNominalW": 950,
+		"maxTensaoEntradaVoc": 125,
+		"maxCorrenteCcIsc": 12.5,
+		"modulosPorOtimizador": 2,
+		"dataDisponibilidade": null
+	}
 ]

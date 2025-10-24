@@ -8,19 +8,10 @@ import type { TActivity } from "@/utils/schemas/activities.schema";
 import type { TConectaInteractionEvent } from "@/utils/schemas/conecta-interaction-events.schema";
 import type { TGoal } from "@/utils/schemas/goal.schema";
 import type { TOpportunity } from "@/utils/schemas/opportunity.schema";
-import type {
-	TPartner,
-	TPartnerSimplifiedDTO,
-} from "@/utils/schemas/partner.schema";
-import type {
-	TProjectType,
-	TProjectTypeDTOSimplified,
-} from "@/utils/schemas/project-types.schema";
+import type { TPartner, TPartnerSimplifiedDTO } from "@/utils/schemas/partner.schema";
+import type { TProjectType, TProjectTypeDTOSimplified } from "@/utils/schemas/project-types.schema";
 import { TSaleGoal } from "@/utils/schemas/sale-goal.schema";
-import {
-	GeneralStatsFiltersSchema,
-	QueryDatesSchema,
-} from "@/utils/schemas/stats.schema";
+import { GeneralStatsFiltersSchema, QueryDatesSchema } from "@/utils/schemas/stats.schema";
 import type { TUser, TUserDTOSimplified } from "@/utils/schemas/user.schema";
 import dayjs from "dayjs";
 import createHttpError from "http-errors";
@@ -37,15 +28,12 @@ export type TGeneralStatsQueryFiltersOptions = {
 async function getQueryFiltersOptions(request: NextRequest) {
 	const { user } = await getValidCurrentSessionUncached();
 	const parterScope = user.permissoes.parceiros.escopo;
-	const partnerQuery = parterScope
-		? { idParceiro: { $in: [...parterScope, null] } }
-		: {};
+	const partnerQuery = parterScope ? { idParceiro: { $in: [...parterScope, null] } } : {};
 
 	const db = await connectToDatabase();
 	const usersCollection: Collection<TUser> = db.collection("users");
 	const partnersCollection: Collection<TPartner> = db.collection("partners");
-	const projectTypesCollection: Collection<TProjectType> =
-		db.collection("project-types");
+	const projectTypesCollection: Collection<TProjectType> = db.collection("project-types");
 
 	const responsibles = await getOpportunityCreators({
 		collection: usersCollection,
@@ -74,11 +62,8 @@ async function getQueryFiltersOptions(request: NextRequest) {
 	});
 }
 
-export type TGetStatsQueryFiltersOptionsRouteOutput = UnwrapNextResponse<
-	Awaited<ReturnType<typeof getQueryFiltersOptions>>
->;
-export type TGetStatsQueryFiltersOptionsRouteOutputData =
-	TGetStatsQueryFiltersOptionsRouteOutput["data"]["options"];
+export type TGetStatsQueryFiltersOptionsRouteOutput = UnwrapNextResponse<Awaited<ReturnType<typeof getQueryFiltersOptions>>>;
+export type TGetStatsQueryFiltersOptionsRouteOutputData = TGetStatsQueryFiltersOptionsRouteOutput["data"]["options"];
 
 export const GET = apiHandler({ GET: getQueryFiltersOptions });
 
@@ -91,9 +76,7 @@ async function getStats(request: NextRequest) {
 		userName: user.nome,
 	});
 	if (!user.permissoes.oportunidades.visualizar) {
-		throw new createHttpError.Unauthorized(
-			"Usuário não possui permissão para visualizar oportunidades.",
-		);
+		throw new createHttpError.Unauthorized("Usuário não possui permissão para visualizar oportunidades.");
 	}
 
 	const partnerScope = user.permissoes.parceiros.escopo;
@@ -108,8 +91,7 @@ async function getStats(request: NextRequest) {
 	const { after, before } = queryParams;
 
 	const payload = await request.json();
-	const { responsibles, partners, projectTypes } =
-		GeneralStatsFiltersSchema.parse(payload);
+	const { responsibles, partners, projectTypes } = GeneralStatsFiltersSchema.parse(payload);
 
 	if (typeof after !== "string" || typeof before !== "string") {
 		throw new createHttpError.BadRequest("Parâmetros de período inválidos.");
@@ -118,47 +100,30 @@ async function getStats(request: NextRequest) {
 	// Se o usuário tem escopo definido e na requisição não há array de responsáveis definido,
 	// então o usuário está tentando acessar uma visualização geral, o que não é permitido
 	if (!!opportunityVisibilityScope && !responsibles) {
-		throw new createHttpError.Unauthorized(
-			"Seu usuário não possui solicitação para esse escopo de visualização.",
-		);
+		throw new createHttpError.Unauthorized("Seu usuário não possui solicitação para esse escopo de visualização.");
 	}
 
 	// Se o usuário tem escopo definido e na requisição não há array de parceiros definido,
 	// então o usuário está tentando acessar uma visualização geral, o que não é permitido
 	if (!!partnerScope && !partners) {
-		throw new createHttpError.Unauthorized(
-			"Seu usuário não possui solicitação para esse escopo de visualização.",
-		);
+		throw new createHttpError.Unauthorized("Seu usuário não possui solicitação para esse escopo de visualização.");
 	}
 
 	// Se o usuário tem escopo definido e no array de responsáveis da requisição há um responsável
 	// que não está no seu escopo, então o usuário está tentando acessar uma visualização não permitida
-	if (
-		!!opportunityVisibilityScope &&
-		responsibles?.some((r) => !opportunityVisibilityScope.includes(r))
-	) {
-		throw new createHttpError.Unauthorized(
-			"Seu usuário não possui solicitação para esse escopo de visualização.",
-		);
+	if (!!opportunityVisibilityScope && responsibles?.some((r) => !opportunityVisibilityScope.includes(r))) {
+		throw new createHttpError.Unauthorized("Seu usuário não possui solicitação para esse escopo de visualização.");
 	}
 
 	// Se o usuário tem escopo definido e no array de parceiros da requisição há um parceiro
 	// que não está no seu escopo, então o usuário está tentando acessar uma visualização não permitida
 	if (!!partnerScope && partners?.some((r) => !partnerScope.includes(r))) {
-		throw new createHttpError.Unauthorized(
-			"Seu usuário não possui solicitação para esse escopo de visualização.",
-		);
+		throw new createHttpError.Unauthorized("Seu usuário não possui solicitação para esse escopo de visualização.");
 	}
 
-	const responsiblesQuery: Filter<TOpportunity> = responsibles
-		? { "responsaveis.id": { $in: responsibles } }
-		: {};
-	const partnerQuery: Filter<TOpportunity> = partners
-		? { idParceiro: { $in: [...partners] } }
-		: {};
-	const projectTypeQuery: Filter<TOpportunity> = projectTypes
-		? { "tipo.id": { $in: [...projectTypes] } }
-		: {};
+	const responsiblesQuery: Filter<TOpportunity> = responsibles ? { "responsaveis.id": { $in: responsibles } } : {};
+	const partnerQuery: Filter<TOpportunity> = partners ? { idParceiro: { $in: [...partners] } } : {};
+	const projectTypeQuery: Filter<TOpportunity> = projectTypes ? { "tipo.id": { $in: [...projectTypes] } } : {};
 
 	const query: Filter<TOpportunity> = {
 		...responsiblesQuery,
@@ -171,25 +136,18 @@ async function getStats(request: NextRequest) {
 
 	console.log("[INFO] [GET_STATS] Period", { after, before });
 
-	const afterWithMarginDate = new Date(
-		dayjs(after).subtract(1, "month").toISOString(),
-	);
-	const beforeWithMarginDate = new Date(
-		dayjs(before).subtract(1, "month").toISOString(),
-	);
+	const afterWithMarginDate = new Date(dayjs(after).subtract(1, "month").toISOString());
+	const beforeWithMarginDate = new Date(dayjs(before).subtract(1, "month").toISOString());
 
 	console.log("[INFO] [GET_STATS] Period with margin", {
 		afterWithMarginDate,
 		beforeWithMarginDate,
 	});
 	const db = await connectToDatabase();
-	const opportunitiesCollection: Collection<TOpportunity> =
-		db.collection("opportunities");
-	const activitiesCollection: Collection<TActivity> =
-		db.collection("activities");
+	const opportunitiesCollection: Collection<TOpportunity> = db.collection("opportunities");
+	const activitiesCollection: Collection<TActivity> = db.collection("activities");
 	const goalsCollection: Collection<TGoal> = db.collection("goals");
-	const conectaInteractionEventsCollection: Collection<TConectaInteractionEvent> =
-		db.collection("conecta-interaction-events");
+	const conectaInteractionEventsCollection: Collection<TConectaInteractionEvent> = db.collection("conecta-interaction-events");
 
 	const condensedInfo = await getSimplifiedInfo({
 		opportunitiesCollection,
@@ -237,9 +195,7 @@ async function getStats(request: NextRequest) {
 	});
 }
 
-export type TGetStatsRouteOutput = UnwrapNextResponse<
-	Awaited<ReturnType<typeof getStats>>
->;
+export type TGetStatsRouteOutput = UnwrapNextResponse<Awaited<ReturnType<typeof getStats>>>;
 export type TGetStatsRouteOutputData = TGetStatsRouteOutput["data"];
 
 export const POST = apiHandler({ POST: getStats });
@@ -279,22 +235,13 @@ async function getSimplifiedInfo({
 		...query,
 		$or: [
 			{
-				$and: [
-					{ dataInsercao: { $gte: afterWithMarginDateStr } },
-					{ dataInsercao: { $lte: beforeDateStr } },
-				],
+				$and: [{ dataInsercao: { $gte: afterWithMarginDateStr } }, { dataInsercao: { $lte: beforeDateStr } }],
 			},
 			{
-				$and: [
-					{ "perda.data": { $gte: afterWithMarginDateStr } },
-					{ "perda.data": { $lte: beforeDateStr } },
-				],
+				$and: [{ "perda.data": { $gte: afterWithMarginDateStr } }, { "perda.data": { $lte: beforeDateStr } }],
 			},
 			{
-				$and: [
-					{ "ganho.data": { $gte: afterWithMarginDateStr } },
-					{ "ganho.data": { $lte: beforeDateStr } },
-				],
+				$and: [{ "ganho.data": { $gte: afterWithMarginDateStr } }, { "ganho.data": { $lte: beforeDateStr } }],
 			},
 		],
 	};
@@ -310,9 +257,7 @@ async function getSimplifiedInfo({
 		dataInsercao: 1,
 	};
 
-	const result = (await opportunitiesCollection
-		.aggregate([{ $match: match }, { $project: projection }])
-		.toArray()) as TOpportunitySimplifiedResult[];
+	const result = (await opportunitiesCollection.aggregate([{ $match: match }, { $project: projection }]).toArray()) as TOpportunitySimplifiedResult[];
 
 	const opportunities = result.map((r) => ({
 		idMarketing: r.idMarketing,
@@ -329,24 +274,14 @@ async function getSimplifiedInfo({
 		(acc, current) => {
 			// Insertion related checkings
 			const insertDate = new Date(current.dataInsercao);
-			const wasInsertedWithinCurrentPeriod =
-				insertDate >= afterDate && insertDate <= beforeDate;
-			const wasInsertedWithinPreviousPeriod =
-				insertDate >= afterWithMarginDate && insertDate < beforeWithMarginDate;
+			const wasInsertedWithinCurrentPeriod = insertDate >= afterDate && insertDate <= beforeDate;
+			const wasInsertedWithinPreviousPeriod = insertDate >= afterWithMarginDate && insertDate < beforeWithMarginDate;
 
 			// Signing related checkings
-			const signatureDate = current.ganho?.data
-				? new Date(current.ganho?.data)
-				: null;
+			const signatureDate = current.ganho?.data ? new Date(current.ganho?.data) : null;
 			const hasContractSigned = !!signatureDate;
-			const wasSignedWithinCurrentPeriod =
-				hasContractSigned &&
-				signatureDate >= afterDate &&
-				signatureDate <= beforeDate;
-			const wasSignedWithinPreviousPeriod =
-				hasContractSigned &&
-				signatureDate >= afterWithMarginDate &&
-				signatureDate <= beforeWithMarginDate;
+			const wasSignedWithinCurrentPeriod = hasContractSigned && signatureDate >= afterDate && signatureDate <= beforeDate;
+			const wasSignedWithinPreviousPeriod = hasContractSigned && signatureDate >= afterWithMarginDate && signatureDate <= beforeWithMarginDate;
 
 			const proposalValue = current.valorProposta;
 			const proposalPower = current.potenciaProposta;
@@ -354,29 +289,22 @@ async function getSimplifiedInfo({
 			// Lost related checkings
 			const lostDate = current.dataPerda ? new Date(current.dataPerda) : null;
 			const isLostProject = !!lostDate;
-			const wasLostWithinCurrentPeriod =
-				isLostProject && lostDate >= afterDate && lostDate <= beforeDate;
-			const wasLostWithinPreviousPeriod =
-				isLostProject &&
-				lostDate >= afterWithMarginDate &&
-				lostDate <= beforeWithMarginDate;
+			const wasLostWithinCurrentPeriod = isLostProject && lostDate >= afterDate && lostDate <= beforeDate;
+			const wasLostWithinPreviousPeriod = isLostProject && lostDate >= afterWithMarginDate && lostDate <= beforeWithMarginDate;
 
 			// Increasing ATUAL qtys based on checkings
 			if (wasInsertedWithinCurrentPeriod) acc.ATUAL.projetosCriados += 1;
 			if (wasSignedWithinCurrentPeriod) acc.ATUAL.projetosGanhos += 1;
 			if (wasLostWithinCurrentPeriod) acc.ATUAL.projetosPerdidos += 1;
 			if (wasSignedWithinCurrentPeriod) acc.ATUAL.totalVendido += proposalValue;
-			if (wasSignedWithinCurrentPeriod)
-				acc.ATUAL.potenciaVendida += proposalPower;
+			if (wasSignedWithinCurrentPeriod) acc.ATUAL.potenciaVendida += proposalPower;
 
 			// Increasing ANTERIOR qtys based on checkings
 			if (wasInsertedWithinPreviousPeriod) acc.ANTERIOR.projetosCriados += 1;
 			if (wasSignedWithinPreviousPeriod) acc.ANTERIOR.projetosGanhos += 1;
 			if (wasLostWithinPreviousPeriod) acc.ANTERIOR.projetosPerdidos += 1;
-			if (wasSignedWithinPreviousPeriod)
-				acc.ANTERIOR.totalVendido += proposalValue;
-			if (wasSignedWithinPreviousPeriod)
-				acc.ANTERIOR.potenciaVendida += proposalPower;
+			if (wasSignedWithinPreviousPeriod) acc.ANTERIOR.totalVendido += proposalValue;
+			if (wasSignedWithinPreviousPeriod) acc.ANTERIOR.potenciaVendida += proposalPower;
 
 			return acc;
 		},
@@ -405,12 +333,7 @@ type GetApplicableGoalsParams = {
 	afterDate: Date;
 	beforeDate: Date;
 };
-async function getApplicableGoals({
-	goalsCollection,
-	responsiblesIds,
-	afterDate,
-	beforeDate,
-}: GetApplicableGoalsParams) {
+async function getApplicableGoals({ goalsCollection, responsiblesIds, afterDate, beforeDate }: GetApplicableGoalsParams) {
 	const afterDatetime = new Date(afterDate).getTime();
 	const afterDateStr = afterDate.toISOString();
 	const beforeDatetime = new Date(beforeDate).getTime();
@@ -438,35 +361,24 @@ async function getApplicableGoals({
 		(acc, current) => {
 			const goalAfterDateTime = new Date(current.periodo.inicio).getTime();
 			const goalBeforeDateTime = new Date(current.periodo.fim).getTime();
-			const goalDaysDiff = dayjs(current.periodo.fim).diff(
-				dayjs(current.periodo.inicio),
-				"days",
-			);
+			const goalDaysDiff = dayjs(current.periodo.fim).diff(dayjs(current.periodo.inicio), "days");
 			if (
-				(afterDatetime < goalAfterDateTime &&
-					beforeDatetime < goalAfterDateTime) ||
-				(afterDatetime > goalBeforeDateTime &&
-					beforeDatetime > goalBeforeDateTime)
+				(afterDatetime < goalAfterDateTime && beforeDatetime < goalAfterDateTime) ||
+				(afterDatetime > goalBeforeDateTime && beforeDatetime > goalBeforeDateTime)
 			) {
 				console.log("[INFO] [GET_OVERALL_SALE_GOAL] Goal not applicable: ", {
 					current,
 				});
 				return acc;
 			}
-			if (
-				afterDatetime <= goalAfterDateTime &&
-				beforeDatetime >= goalBeforeDateTime
-			) {
+			if (afterDatetime <= goalAfterDateTime && beforeDatetime >= goalBeforeDateTime) {
 				// Caso o período de filtro da query compreenda o mês inteiro
-				console.log(
-					"[INFO] [GET_OVERALL_SALE_GOAL] Goal applicable for all period: ",
-					{
-						queryPeriodStart: afterDateStr,
-						queryPeriodEnd: beforeDateStr,
-						goalPeriodStart: current.periodo.inicio,
-						goalPeriodEnd: current.periodo.fim,
-					},
-				);
+				console.log("[INFO] [GET_OVERALL_SALE_GOAL] Goal applicable for all period: ", {
+					queryPeriodStart: afterDateStr,
+					queryPeriodEnd: beforeDateStr,
+					goalPeriodStart: current.periodo.inicio,
+					goalPeriodEnd: current.periodo.fim,
+				});
 
 				// If not responsible ids were provided, using the global goal
 				if (!responsiblesIds) {
@@ -490,72 +402,56 @@ async function getApplicableGoals({
 				return acc;
 			}
 			if (beforeDatetime > goalBeforeDateTime) {
-				const applicableDays = dayjs(current.periodo.fim).diff(
-					dayjs(afterDate),
-					"days",
-				);
+				const applicableDays = dayjs(current.periodo.fim).diff(dayjs(afterDate), "days");
 
-				console.log(
-					"[INFO] [GET_OVERALL_SALE_GOAL] Goal applicable for partial period: ",
-					{
-						queryPeriodStart: afterDateStr,
-						queryPeriodEnd: beforeDateStr,
-						goalPeriodStart: current.periodo.inicio,
-						goalPeriodEnd: current.periodo.fim,
-						applicableDays,
-						goalDaysDiff: goalDaysDiff,
-					},
-				);
-				const mutlplier = applicableDays / goalDaysDiff;
-
-				// If not responsible ids were provided, using the global goal
-				if (!responsiblesIds) {
-					acc.projetosCriados +=
-						current.objetivo.oportunidadesCriadas * mutlplier;
-					acc.potenciaVendida += current.objetivo.potenciaVendida * mutlplier;
-					acc.totalVendido += current.objetivo.valorVendido * mutlplier;
-					acc.projetosGanhos +=
-						current.objetivo.oportunidadesGanhas * mutlplier;
-					return acc;
-				}
-				// If responsible ids were provided, using the responsible goals
-				for (const responsible of current.usuarios) {
-					const isApplicable = responsiblesIds.includes(responsible.id);
-					if (isApplicable) {
-						acc.projetosCriados +=
-							responsible.objetivo.oportunidadesCriadas * mutlplier;
-						acc.potenciaVendida +=
-							responsible.objetivo.potenciaVendida * mutlplier;
-						acc.totalVendido += responsible.objetivo.valorVendido * mutlplier;
-						acc.projetosGanhos +=
-							responsible.objetivo.oportunidadesGanhas * mutlplier;
-					}
-				}
-				return acc;
-			}
-
-			const applicableDays =
-				dayjs(beforeDate).diff(dayjs(current.periodo.inicio), "days") + 1;
-
-			const mutlplier = applicableDays / goalDaysDiff;
-
-			console.log(
-				"[INFO] [GET_OVERALL_SALE_GOAL] Goal applicable for partial period: ",
-				{
+				console.log("[INFO] [GET_OVERALL_SALE_GOAL] Goal applicable for partial period: ", {
 					queryPeriodStart: afterDateStr,
 					queryPeriodEnd: beforeDateStr,
 					goalPeriodStart: current.periodo.inicio,
 					goalPeriodEnd: current.periodo.fim,
 					applicableDays,
 					goalDaysDiff: goalDaysDiff,
-					mutlplier,
-				},
-			);
+				});
+				const mutlplier = applicableDays / goalDaysDiff;
+
+				// If not responsible ids were provided, using the global goal
+				if (!responsiblesIds) {
+					acc.projetosCriados += current.objetivo.oportunidadesCriadas * mutlplier;
+					acc.potenciaVendida += current.objetivo.potenciaVendida * mutlplier;
+					acc.totalVendido += current.objetivo.valorVendido * mutlplier;
+					acc.projetosGanhos += current.objetivo.oportunidadesGanhas * mutlplier;
+					return acc;
+				}
+				// If responsible ids were provided, using the responsible goals
+				for (const responsible of current.usuarios) {
+					const isApplicable = responsiblesIds.includes(responsible.id);
+					if (isApplicable) {
+						acc.projetosCriados += responsible.objetivo.oportunidadesCriadas * mutlplier;
+						acc.potenciaVendida += responsible.objetivo.potenciaVendida * mutlplier;
+						acc.totalVendido += responsible.objetivo.valorVendido * mutlplier;
+						acc.projetosGanhos += responsible.objetivo.oportunidadesGanhas * mutlplier;
+					}
+				}
+				return acc;
+			}
+
+			const applicableDays = dayjs(beforeDate).diff(dayjs(current.periodo.inicio), "days") + 1;
+
+			const mutlplier = applicableDays / goalDaysDiff;
+
+			console.log("[INFO] [GET_OVERALL_SALE_GOAL] Goal applicable for partial period: ", {
+				queryPeriodStart: afterDateStr,
+				queryPeriodEnd: beforeDateStr,
+				goalPeriodStart: current.periodo.inicio,
+				goalPeriodEnd: current.periodo.fim,
+				applicableDays,
+				goalDaysDiff: goalDaysDiff,
+				mutlplier,
+			});
 
 			// If responsible ids were provided, using the responsible goals
 			if (!responsiblesIds) {
-				acc.projetosCriados +=
-					current.objetivo.oportunidadesCriadas * mutlplier;
+				acc.projetosCriados += current.objetivo.oportunidadesCriadas * mutlplier;
 				acc.potenciaVendida += current.objetivo.potenciaVendida * mutlplier;
 				acc.totalVendido += current.objetivo.valorVendido * mutlplier;
 				acc.projetosGanhos += current.objetivo.oportunidadesGanhas * mutlplier;
@@ -565,13 +461,10 @@ async function getApplicableGoals({
 			for (const responsible of current.usuarios) {
 				const isApplicable = responsiblesIds.includes(responsible.id);
 				if (isApplicable) {
-					acc.projetosCriados +=
-						responsible.objetivo.oportunidadesCriadas * mutlplier;
-					acc.potenciaVendida +=
-						responsible.objetivo.potenciaVendida * mutlplier;
+					acc.projetosCriados += responsible.objetivo.oportunidadesCriadas * mutlplier;
+					acc.potenciaVendida += responsible.objetivo.potenciaVendida * mutlplier;
 					acc.totalVendido += responsible.objetivo.valorVendido * mutlplier;
-					acc.projetosGanhos +=
-						responsible.objetivo.oportunidadesGanhas * mutlplier;
+					acc.projetosGanhos += responsible.objetivo.oportunidadesGanhas * mutlplier;
 				}
 			}
 			return acc;
@@ -595,21 +488,13 @@ type GetWonOpportunitiesParams = {
 	beforeDate: Date;
 };
 
-async function getWonOpportunities({
-	opportunitiesCollection,
-	query,
-	afterDate,
-	beforeDate,
-}: GetWonOpportunitiesParams) {
+async function getWonOpportunities({ opportunitiesCollection, query, afterDate, beforeDate }: GetWonOpportunitiesParams) {
 	const afterDateStr = afterDate.toISOString();
 	const beforeDateStr = beforeDate.toISOString();
 
 	const match: Filter<TOpportunity> = {
 		...query,
-		$and: [
-			{ "ganho.data": { $gte: afterDateStr } },
-			{ "ganho.data": { $lte: beforeDateStr } },
-		],
+		$and: [{ "ganho.data": { $gte: afterDateStr } }, { "ganho.data": { $lte: beforeDateStr } }],
 	};
 
 	// const addFields = { wonProposeObjectId: { $toObjectId: '$ganho.idProposta' } };
@@ -627,18 +512,13 @@ async function getWonOpportunities({
 		dataInsercao: 1,
 	};
 
-	const result = (await opportunitiesCollection
-		.aggregate([{ $match: match }, { $project: projection }])
-		.toArray()) as {
+	const result = (await opportunitiesCollection.aggregate([{ $match: match }, { $project: projection }]).toArray()) as {
 		_id: ObjectId;
 		nome: TOpportunity["nome"];
 		idMarketing: TOpportunity["idMarketing"];
 		responsaveis: TOpportunity["responsaveis"];
 		idPropostaAtiva: TOpportunity["idPropostaAtiva"];
-		proposta: Pick<
-			Exclude<TOpportunity["proposta"], undefined | null>,
-			"nome" | "valor" | "potenciaPico"
-		>;
+		proposta: Pick<Exclude<TOpportunity["proposta"], undefined | null>, "nome" | "valor" | "potenciaPico">;
 		ganho: TOpportunity["ganho"];
 	}[];
 
@@ -659,9 +539,7 @@ async function getWonOpportunities({
 			dataGanho: r.ganho?.data ?? null,
 		}))
 		.sort((a, b) => {
-			return a.dataGanho && b.dataGanho
-				? new Date(b.dataGanho).getTime() - new Date(a.dataGanho).getTime()
-				: 0;
+			return a.dataGanho && b.dataGanho ? new Date(b.dataGanho).getTime() - new Date(a.dataGanho).getTime() : 0;
 		});
 }
 
@@ -670,17 +548,10 @@ type GetPendingWinsParams = {
 	query: Filter<TOpportunity>;
 };
 
-async function getPendingWins({
-	opportunitiesCollection,
-	query,
-}: GetPendingWinsParams) {
+async function getPendingWins({ opportunitiesCollection, query }: GetPendingWinsParams) {
 	const match: Filter<TOpportunity> = {
 		...query,
-		$and: [
-			{ "ganho.idProposta": { $ne: null } },
-			{ "ganho.data": { $eq: null } },
-			{ "perda.data": { $eq: null } },
-		],
+		$and: [{ "ganho.idProposta": { $ne: null } }, { "ganho.data": { $eq: null } }, { "perda.data": { $eq: null } }],
 	};
 
 	const projection = {
@@ -694,18 +565,13 @@ async function getPendingWins({
 		dataInsercao: 1,
 	};
 
-	const result = (await opportunitiesCollection
-		.aggregate([{ $match: match }, { $project: projection }])
-		.toArray()) as {
+	const result = (await opportunitiesCollection.aggregate([{ $match: match }, { $project: projection }]).toArray()) as {
 		_id: ObjectId;
 		nome: TOpportunity["nome"];
 		idMarketing: TOpportunity["idMarketing"];
 		responsaveis: TOpportunity["responsaveis"];
 		ganho: TOpportunity["ganho"];
-		proposta: Pick<
-			Exclude<TOpportunity["proposta"], undefined | null>,
-			"nome" | "valor" | "potenciaPico"
-		>;
+		proposta: Pick<Exclude<TOpportunity["proposta"], undefined | null>, "nome" | "valor" | "potenciaPico">;
 		dataInsercao: TOpportunity["dataInsercao"];
 	}[];
 
@@ -725,10 +591,7 @@ async function getPendingWins({
 			dataSolicitacao: r.ganho?.dataSolicitacao ?? null,
 		}))
 		.sort((a, b) => {
-			return a.dataSolicitacao && b.dataSolicitacao
-				? new Date(b.dataSolicitacao).getTime() -
-						new Date(a.dataSolicitacao).getTime()
-				: 0;
+			return a.dataSolicitacao && b.dataSolicitacao ? new Date(b.dataSolicitacao).getTime() - new Date(a.dataSolicitacao).getTime() : 0;
 		});
 }
 
@@ -738,11 +601,7 @@ type GetActivitiesParams = {
 };
 
 async function getActivities({ collection, query }: GetActivitiesParams) {
-	const result = await collection
-		.find(query)
-		.limit(50)
-		.sort({ dataInsercao: -1 })
-		.toArray();
+	const result = await collection.find(query).limit(50).sort({ dataInsercao: -1 }).toArray();
 	return result.map((r) => ({ ...r, _id: r._id.toString() }));
 }
 
@@ -752,12 +611,7 @@ type TConectaInteractionEventsStats = {
 	after: string;
 	before: string;
 };
-async function getConectaInteractionEventsStats({
-	collection,
-	sellerIds,
-	after,
-	before,
-}: TConectaInteractionEventsStats) {
+async function getConectaInteractionEventsStats({ collection, sellerIds, after, before }: TConectaInteractionEventsStats) {
 	const generalQuery: Filter<TConectaInteractionEvent> = {
 		"vendedor.id": sellerIds ? { $in: sellerIds } : { $ne: null },
 		data: { $gte: after, $lte: before },

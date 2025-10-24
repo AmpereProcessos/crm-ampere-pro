@@ -14,11 +14,7 @@ type OpportunityActivitiesModalProps = {
 	closeModal: () => void;
 	session: TUserSession;
 };
-function OpportunityActivitiesModal({
-	opportunityId,
-	closeModal,
-	session,
-}: OpportunityActivitiesModalProps) {
+function OpportunityActivitiesModal({ opportunityId, closeModal, session }: OpportunityActivitiesModalProps) {
 	const {
 		data: activities,
 		isLoading,
@@ -38,22 +34,11 @@ function OpportunityActivitiesModal({
 			menuCancelButtonText="FECHAR"
 			closeMenu={closeModal}
 		>
-			{isLoading ? (
-				<p className="w-full text-center animate-pulse font-medium italic tracking-tight text-primary">
-					Carregando atividades...
-				</p>
-			) : null}
+			{isLoading ? <p className="w-full text-center animate-pulse font-medium italic tracking-tight text-primary">Carregando atividades...</p> : null}
 			{isError ? <ErrorComponent msg={getErrorMessage(error)} /> : null}
 			{isSuccess ? (
 				activities.length > 0 ? (
-					activities.map((activity) => (
-						<OpportunityActivity
-							key={activity._id}
-							activity={activity}
-							opportunityId={opportunityId}
-							session={session}
-						/>
-					))
+					activities.map((activity) => <OpportunityActivity key={activity._id} activity={activity} opportunityId={opportunityId} session={session} />)
 				) : (
 					<p className="flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/70">
 						Sem atividades adicionadas.

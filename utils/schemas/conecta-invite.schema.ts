@@ -8,27 +8,22 @@ export const InvitesSchema = z.object({
 		}),
 		id: z.string({
 			required_error: "ID do vendedor promotor do convite não informado.",
-			invalid_type_error:
-				"Tipo não válido para o ID do vendedor promotor do convite.",
+			invalid_type_error: "Tipo não válido para o ID do vendedor promotor do convite.",
 		}),
 		nome: z.string({
 			required_error: "Nome do vendedor promotor do convite não informado.",
-			invalid_type_error:
-				"Tipo não válido para o nome do vendedor promotor do convite.",
+			invalid_type_error: "Tipo não válido para o nome do vendedor promotor do convite.",
 		}),
 		avatar_url: z
 			.string({
 				required_error: "Avatar do vendedor promotor do convite não informado.",
-				invalid_type_error:
-					"Tipo não válido para o avatar do vendedor promotor do convite.",
+				invalid_type_error: "Tipo não válido para o avatar do vendedor promotor do convite.",
 			})
 			.optional()
 			.nullable(),
 		codigoIndicacao: z.string({
-			required_error:
-				"Código de indicação do vendedor promotor do convite não informado.",
-			invalid_type_error:
-				"Tipo não válido para o código de indicação do vendedor promotor do convite.",
+			required_error: "Código de indicação do vendedor promotor do convite não informado.",
+			invalid_type_error: "Tipo não válido para o código de indicação do vendedor promotor do convite.",
 		}),
 	}),
 	convidado: z.object({
@@ -78,8 +73,7 @@ export const InvitesSchema = z.object({
 	dataExpiracao: z
 		.string({
 			required_error: "Data de expiração do convite não informada.",
-			invalid_type_error:
-				"Tipo não válido para a data de expiração do convite.",
+			invalid_type_error: "Tipo não válido para a data de expiração do convite.",
 		})
 		.datetime({
 			message: "Formato inválido para data de expiração do convite.",

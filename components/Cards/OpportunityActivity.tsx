@@ -1,21 +1,13 @@
 import type { TUserSession } from "@/lib/auth/session";
 import { getErrorMessage } from "@/lib/methods/errors";
-import {
-	formatDateAsLocale,
-	formatNameAsInitials,
-} from "@/lib/methods/formatting";
+import { formatDateAsLocale, formatNameAsInitials } from "@/lib/methods/formatting";
 import { editActivity } from "@/utils/mutations/activities";
 import type { TActivityDTO } from "@/utils/schemas/activities.schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Pencil } from "lucide-react";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
-import {
-	BsCalendar4Event,
-	BsCalendarCheck,
-	BsCalendarPlus,
-	BsCheck,
-} from "react-icons/bs";
+import { BsCalendar4Event, BsCalendarCheck, BsCalendarPlus, BsCheck } from "react-icons/bs";
 import ControlActivity from "../Activities/ControlActivity";
 import { Button } from "../ui/button";
 import Avatar from "../utils/Avatar";
@@ -30,12 +22,7 @@ type OpportunityActivityProps = {
 		onSettled?: () => void;
 	};
 };
-function OpportunityActivity({
-	opportunityId,
-	activity,
-	session,
-	callbacks,
-}: OpportunityActivityProps) {
+function OpportunityActivity({ opportunityId, activity, session, callbacks }: OpportunityActivityProps) {
 	const queryClient = useQueryClient();
 
 	const [editActivityModalIsOpen, setEditActivityModalIsOpen] = useState(false);
@@ -62,24 +49,18 @@ function OpportunityActivity({
 				<div className="flex items-center gap-2">
 					<button
 						type="button"
-						className={
-							"flex h-[16px] w-[16px] cursor-pointer items-center justify-center rounded-full border border-primary"
-						}
+						className={"flex h-[16px] w-[16px] cursor-pointer items-center justify-center rounded-full border border-primary"}
 						onClick={() =>
 							// @ts-ignore
 							handleUpdateActivity({
 								id: activity._id,
 								changes: {
-									dataConclusao: activity.dataConclusao
-										? null
-										: new Date().toISOString(),
+									dataConclusao: activity.dataConclusao ? null : new Date().toISOString(),
 								},
 							})
 						}
 					>
-						{activity.dataConclusao ? (
-							<BsCheck style={{ color: "black" }} />
-						) : null}
+						{activity.dataConclusao ? <BsCheck style={{ color: "black" }} /> : null}
 					</button>
 					<button
 						type="button"
@@ -89,9 +70,7 @@ function OpportunityActivity({
 							handleUpdateActivity({
 								id: activity._id,
 								changes: {
-									dataConclusao: activity.dataConclusao
-										? null
-										: new Date().toISOString(),
+									dataConclusao: activity.dataConclusao ? null : new Date().toISOString(),
 								},
 							})
 						}
@@ -103,25 +82,16 @@ function OpportunityActivity({
 					{activity.dataVencimento ? (
 						<div className="flex items-center gap-1 text-orange-500">
 							<BsCalendar4Event color="rgb(249,115,22)" size={17} />
-							<p className="text-[0.55rem] font-medium text-primary/70 lg:text-xs">
-								{formatDateAsLocale(activity.dataVencimento, true)}
-							</p>
+							<p className="text-[0.55rem] font-medium text-primary/70 lg:text-xs">{formatDateAsLocale(activity.dataVencimento, true)}</p>
 						</div>
 					) : null}
 					{activity.dataConclusao ? (
 						<div className="flex items-center gap-1">
 							<BsCalendarCheck color="rgb(34,197,94)" />
-							<p className="text-[0.55rem] font-medium text-primary/70 lg:text-xs">
-								{formatDateAsLocale(activity.dataConclusao, true)}
-							</p>
+							<p className="text-[0.55rem] font-medium text-primary/70 lg:text-xs">{formatDateAsLocale(activity.dataConclusao, true)}</p>
 						</div>
 					) : null}
-					<Button
-						onClick={() => setEditActivityModalIsOpen(true)}
-						variant="ghost"
-						size="fit"
-						className="rounded-full p-1"
-					>
+					<Button onClick={() => setEditActivityModalIsOpen(true)} variant="ghost" size="fit" className="rounded-full p-1">
 						<Pencil className="h-4 w-4 min-w-4 min-h-4" />
 					</Button>
 				</div>
@@ -130,24 +100,12 @@ function OpportunityActivity({
 				{activity.descricao ?? "Descrição não definida."}
 			</h1>
 			<div className="flex grow flex-col items-center gap-1 lg:flex-row">
-				<h1 className="mr-2 text-[0.6rem] leading-none tracking-tight text-primary/70 lg:text-xs">
-					RESPONSÁVEIS
-				</h1>
+				<h1 className="mr-2 text-[0.6rem] leading-none tracking-tight text-primary/70 lg:text-xs">RESPONSÁVEIS</h1>
 				<div className="flex grow flex-wrap items-center gap-2">
 					{activity.responsaveis.map((resp) => (
-						<div
-							key={resp.id}
-							className="flex items-center gap-2 rounded-lg border border-cyan-500 p-1 px-2 shadow-md"
-						>
-							<Avatar
-								width={20}
-								height={20}
-								url={resp.avatar_url || undefined}
-								fallback={formatNameAsInitials(resp.nome)}
-							/>
-							<p className="text-[0.65rem] font-medium tracking-tight text-primary/70 lg:text-xs">
-								{resp.nome}
-							</p>
+						<div key={resp.id} className="flex items-center gap-2 rounded-lg border border-cyan-500 p-1 px-2 shadow-md">
+							<Avatar width={20} height={20} url={resp.avatar_url || undefined} fallback={formatNameAsInitials(resp.nome)} />
+							<p className="text-[0.65rem] font-medium tracking-tight text-primary/70 lg:text-xs">{resp.nome}</p>
 						</div>
 					))}
 				</div>
@@ -155,23 +113,12 @@ function OpportunityActivity({
 			<div className="flex min-w-fit grow flex-col items-center justify-end gap-1 lg:mt-0 lg:flex-row">
 				<div className="flex items-center gap-1">
 					<BsCalendarPlus />
-					<h1 className="text-[0.65rem] font-medium tracking-tight text-primary/70 lg:text-xs">
-						{formatDateAsLocale(activity.dataInsercao, true)}
-					</h1>
+					<h1 className="text-[0.65rem] font-medium tracking-tight text-primary/70 lg:text-xs">{formatDateAsLocale(activity.dataInsercao, true)}</h1>
 				</div>
 				<div className="flex items-center gap-1">
-					<h1 className="text-[0.65rem] leading-none tracking-tight text-primary/70 lg:text-xs">
-						CRIADO POR
-					</h1>
-					<Avatar
-						width={20}
-						height={20}
-						url={activity.autor.avatar_url || ""}
-						fallback={formatNameAsInitials(activity.autor.nome)}
-					/>
-					<h1 className="text-[0.65rem] font-medium tracking-tight text-primary/70 lg:text-xs">
-						{activity.autor.nome}
-					</h1>
+					<h1 className="text-[0.65rem] leading-none tracking-tight text-primary/70 lg:text-xs">CRIADO POR</h1>
+					<Avatar width={20} height={20} url={activity.autor.avatar_url || ""} fallback={formatNameAsInitials(activity.autor.nome)} />
+					<h1 className="text-[0.65rem] font-medium tracking-tight text-primary/70 lg:text-xs">{activity.autor.nome}</h1>
 				</div>
 			</div>
 			{editActivityModalIsOpen ? (

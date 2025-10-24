@@ -8,11 +8,7 @@ type InsertClientParams = {
 	partnerId: string;
 };
 
-export async function insertClient({
-	collection,
-	info,
-	partnerId,
-}: InsertClientParams) {
+export async function insertClient({ collection, info, partnerId }: InsertClientParams) {
 	const insertResponse = await collection.insertOne({
 		...info,
 		telefonePrimarioBase: formatPhoneAsBase(info.telefonePrimario ?? ""),
@@ -27,15 +23,7 @@ type UpdateClientParams = {
 	changes: Partial<TClient>;
 	query: Filter<TClient>;
 };
-export async function updateClient({
-	id,
-	collection,
-	changes,
-	query,
-}: UpdateClientParams) {
-	const updateResponse = await collection.updateOne(
-		{ _id: new ObjectId(id), ...query },
-		{ $set: { ...changes } },
-	);
+export async function updateClient({ id, collection, changes, query }: UpdateClientParams) {
+	const updateResponse = await collection.updateOne({ _id: new ObjectId(id), ...query }, { $set: { ...changes } });
 	return updateResponse;
 }

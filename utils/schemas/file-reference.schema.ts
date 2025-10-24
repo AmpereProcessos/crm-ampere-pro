@@ -63,8 +63,7 @@ export const InsertFileReferenceSchema = z.object({
 		.nullable(),
 	idOrdemServico: z
 		.string({
-			invalid_type_error:
-				"Tipo não válido para a referência de ordem de serviço.",
+			invalid_type_error: "Tipo não válido para a referência de ordem de serviço.",
 		})
 		.optional()
 		.nullable(),
@@ -75,8 +74,7 @@ export const InsertFileReferenceSchema = z.object({
 	idAnaliseTecnica: z
 		.string({
 			required_error: "Referência de análise técnica não informada.",
-			invalid_type_error:
-				"Tipo não válido para a referência de análise técnica.",
+			invalid_type_error: "Tipo não válido para a referência de análise técnica.",
 		})
 		.optional()
 		.nullable(),
@@ -92,10 +90,7 @@ export const InsertFileReferenceSchema = z.object({
 			required_error: "Titulo do arquivo não informado.",
 			invalid_type_error: "Tipo não válido para titulo do arquivo.",
 		})
-		.min(
-			2,
-			"É necessário que o titulo do arquivo tenha ao menos 2 caracteres.",
-		),
+		.min(2, "É necessário que o titulo do arquivo tenha ao menos 2 caracteres."),
 	formato: z.string({
 		required_error: "Formato do arquivo não informado.",
 		invalid_type_error: "Tipo não válido para o formato do arquivo.",
@@ -153,10 +148,7 @@ export type TFileHolder = { [key: string]: File | string | null };
 export type TFileListHolder = { [key: string]: FileList | string | null };
 
 export const FileReferencesQueryParamsSchema = z.object({
-	clientId: z
-		.string({ invalid_type_error: "Tipo inválido para referência de cliente." })
-		.optional()
-		.nullable(),
+	clientId: z.string({ invalid_type_error: "Tipo inválido para referência de cliente." }).optional().nullable(),
 	opportunityId: z
 		.string({
 			invalid_type_error: "Tipo inválido para referência de oportunidade.",
@@ -175,22 +167,10 @@ export const FileReferencesQueryParamsSchema = z.object({
 		})
 		.optional()
 		.nullable(),
-	projectId: z
-		.string({ invalid_type_error: "Tipo inválido para referência de projeto." })
-		.optional()
-		.nullable(),
-	purchaseId: z
-		.string({ invalid_type_error: "Tipo inválido para referência de compra." })
-		.optional()
-		.nullable(),
-	revenueId: z
-		.string({ invalid_type_error: "Tipo inválido para referência de receita." })
-		.optional()
-		.nullable(),
-	expenseId: z
-		.string({ invalid_type_error: "Tipo inválido para referência de despesa." })
-		.optional()
-		.nullable(),
+	projectId: z.string({ invalid_type_error: "Tipo inválido para referência de projeto." }).optional().nullable(),
+	purchaseId: z.string({ invalid_type_error: "Tipo inválido para referência de compra." }).optional().nullable(),
+	revenueId: z.string({ invalid_type_error: "Tipo inválido para referência de receita." }).optional().nullable(),
+	expenseId: z.string({ invalid_type_error: "Tipo inválido para referência de despesa." }).optional().nullable(),
 	serviceOrderId: z
 		.string({
 			invalid_type_error: "Tipo inválido para referência de ordem de serviço.",
@@ -199,9 +179,7 @@ export const FileReferencesQueryParamsSchema = z.object({
 		.nullable(),
 });
 
-export type TFileReferencesQueryParams = z.infer<
-	typeof FileReferencesQueryParamsSchema
->;
+export type TFileReferencesQueryParams = z.infer<typeof FileReferencesQueryParamsSchema>;
 export type TFileReferenceVinculations = {
 	userId?: {
 		blocked: boolean;

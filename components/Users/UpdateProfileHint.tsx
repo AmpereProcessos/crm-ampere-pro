@@ -1,11 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import {
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
-} from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import type { TUserSession } from "@/lib/auth/session";
 import { XIcon } from "lucide-react";
 import { useState } from "react";
@@ -39,12 +35,7 @@ const UpdateProfileHint = ({ required, session }: UpdateProfileHintProps) => {
 				<PopoverTrigger asChild>
 					<div className="w-0 h-0" aria-hidden="true" />
 				</PopoverTrigger>
-				<PopoverContent
-					className="w-80 p-5 relative flex flex-col"
-					align="end"
-					side="top"
-					sideOffset={10}
-				>
+				<PopoverContent className="w-80 p-5 relative flex flex-col" align="end" side="top" sideOffset={10}>
 					<button
 						type="button"
 						onClick={handleDismiss}
@@ -54,33 +45,18 @@ const UpdateProfileHint = ({ required, session }: UpdateProfileHintProps) => {
 						<XIcon className="h-4 w-4" />
 					</button>
 					<div className="w-full flex flex-col">
-						<h4 className="font-semibold text-lg mb-2 text-start">
-							Complete seu perfil
-						</h4>
-						<p className="text-sm text-muted-foreground mb-4">
-							Mantenha suas informações atualizadas para uma melhor experiência
-							no sistema.
-						</p>
+						<h4 className="font-semibold text-lg mb-2 text-start">Complete seu perfil</h4>
+						<p className="text-sm text-muted-foreground mb-4">Mantenha suas informações atualizadas para uma melhor experiência no sistema.</p>
 					</div>
 
-					<Button
-						type="button"
-						onClick={handleUpdateProfile}
-						className="w-full"
-						size="sm"
-					>
+					<Button type="button" onClick={handleUpdateProfile} className="w-full" size="sm">
 						ATUALIZAR PERFIL
 					</Button>
 				</PopoverContent>
 			</Popover>
 
 			{updateProfileModalOpen && (
-				<EditUserProfile
-					closeModal={() => setUpdateProfileModalOpen(false)}
-					userId={session.user.id}
-					partnerId={session.user.idParceiro}
-					session={session}
-				/>
+				<EditUserProfile closeModal={() => setUpdateProfileModalOpen(false)} userId={session.user.id} partnerId={session.user.idParceiro} session={session} />
 			)}
 		</div>
 	);

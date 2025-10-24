@@ -6,16 +6,13 @@ import { useGoalStore } from "@/utils/stores/goal-store";
 import { formatDateForInputValue } from "@/utils/methods";
 import { formatDateOnInputChange } from "@/lib/methods/formatting";
 
-
-
-
 export function GoalGeneralBlock() {
 	const periodStart = useGoalStore((s) => s.goal.periodo.inicio);
 	const periodEnd = useGoalStore((s) => s.goal.periodo.fim);
 	const updatePeriod = useGoalStore((s) => s.updatePeriod);
 
-	console.log("Period Start", periodStart, formatDateForInputValue(periodStart))
-	console.log("Period End", periodEnd, formatDateForInputValue(periodEnd))
+	console.log("Period Start", periodStart, formatDateForInputValue(periodStart));
+	console.log("Period End", periodEnd, formatDateForInputValue(periodEnd));
 
 	return (
 		<div className="flex w-full flex-col gap-2">
@@ -27,7 +24,7 @@ export function GoalGeneralBlock() {
 				<div className="w-full lg:w-1/2">
 					<DateInput
 						handleChange={(v) => {
-							updatePeriod({ inicio: formatDateOnInputChange(v, 'string', 'start') ?? undefined });
+							updatePeriod({ inicio: formatDateOnInputChange(v, "string", "start") ?? undefined });
 						}}
 						label="INÍCIO DO PERÍODO"
 						labelIcon={Calendar}
@@ -39,7 +36,7 @@ export function GoalGeneralBlock() {
 				<div className="w-full lg:w-1/2">
 					<DateInput
 						handleChange={(v) => {
-							updatePeriod({ fim: formatDateOnInputChange(v, 'string', 'end') ?? undefined });
+							updatePeriod({ fim: formatDateOnInputChange(v, "string", "end") ?? undefined });
 						}}
 						label="FIM DO PERÍODO"
 						labelIcon={Calendar}
@@ -49,7 +46,6 @@ export function GoalGeneralBlock() {
 					/>
 				</div>
 			</div>
-
 		</div>
 	);
 }

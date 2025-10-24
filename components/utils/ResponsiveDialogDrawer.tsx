@@ -1,21 +1,5 @@
-import {
-	Dialog,
-	DialogClose,
-	DialogContent,
-	DialogDescription,
-	DialogFooter,
-	DialogHeader,
-	DialogTitle,
-} from "@/components/ui/dialog";
-import {
-	Drawer,
-	DrawerClose,
-	DrawerContent,
-	DrawerDescription,
-	DrawerFooter,
-	DrawerHeader,
-	DrawerTitle,
-} from "@/components/ui/drawer";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
 import { cn, useMediaQuery } from "@/lib/utils";
 import { type VariantProps, cva } from "class-variance-authority";
 import type { PropsWithChildren } from "react";
@@ -94,12 +78,7 @@ function ResponsiveDialogDrawer({
 	const isDesktop = useMediaQuery("(min-width: 768px)");
 	return isDesktop ? (
 		<Dialog onOpenChange={(v) => (v ? null : closeMenu())} open>
-			<DialogContent
-				className={cn(
-					responsiveMenuVariants({ dialogVariant }),
-					dialogContentClassName,
-				)}
-			>
+			<DialogContent className={cn(responsiveMenuVariants({ dialogVariant }), dialogContentClassName)}>
 				<DialogHeader>
 					<DialogTitle>{menuTitle}</DialogTitle>
 					<DialogDescription>{menuDescription}</DialogDescription>
@@ -119,19 +98,11 @@ function ResponsiveDialogDrawer({
 						<Button variant="outline">{menuCancelButtonText}</Button>
 					</DialogClose>
 					{menuSecondaryActionButtonText && secondaryActionFunction && (
-						<LoadingButton
-							loading={actionIsLoading || stateIsLoading}
-							onClick={() => secondaryActionFunction()}
-							className={menuSecondaryActionButtonClassName}
-						>
+						<LoadingButton loading={actionIsLoading || stateIsLoading} onClick={() => secondaryActionFunction()} className={menuSecondaryActionButtonClassName}>
 							{menuSecondaryActionButtonText}
 						</LoadingButton>
 					)}
-					<LoadingButton
-						loading={actionIsLoading || stateIsLoading}
-						onClick={() => actionFunction()}
-						className={menuActionButtonClassName}
-					>
+					<LoadingButton loading={actionIsLoading || stateIsLoading} onClick={() => actionFunction()} className={menuActionButtonClassName}>
 						{menuActionButtonText}
 					</LoadingButton>
 				</DialogFooter>
@@ -139,12 +110,7 @@ function ResponsiveDialogDrawer({
 		</Dialog>
 	) : (
 		<Drawer onOpenChange={(v) => (v ? null : closeMenu())} open>
-			<DrawerContent
-				className={cn(
-					drawerVariants({ drawerVariant }),
-					drawerContentClassName,
-				)}
-			>
+			<DrawerContent className={cn(drawerVariants({ drawerVariant }), drawerContentClassName)}>
 				<DrawerHeader className="text-left">
 					<DrawerTitle>{menuTitle}</DrawerTitle>
 					<DrawerDescription>{menuDescription}</DrawerDescription>
@@ -165,18 +131,11 @@ function ResponsiveDialogDrawer({
 						<Button variant="outline">{menuCancelButtonText}</Button>
 					</DrawerClose>
 					{menuSecondaryActionButtonText && secondaryActionFunction && (
-						<LoadingButton
-							loading={actionIsLoading || stateIsLoading}
-							onClick={() => secondaryActionFunction()}
-							className={menuSecondaryActionButtonClassName}
-						>
+						<LoadingButton loading={actionIsLoading || stateIsLoading} onClick={() => secondaryActionFunction()} className={menuSecondaryActionButtonClassName}>
 							{menuSecondaryActionButtonText}
 						</LoadingButton>
 					)}
-					<LoadingButton
-						loading={actionIsLoading || stateIsLoading}
-						onClick={() => actionFunction()}
-					>
+					<LoadingButton loading={actionIsLoading || stateIsLoading} onClick={() => actionFunction()}>
 						{menuActionButtonText}
 					</LoadingButton>
 				</DrawerFooter>

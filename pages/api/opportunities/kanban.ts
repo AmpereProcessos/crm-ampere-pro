@@ -121,7 +121,21 @@ const OpportunityStatusesMap: Record<TGetOpportunitiesKanbanViewInput["status"],
 	},
 };
 export async function getOpportunitiesKanbanView({ payload, session }: { payload: TGetOpportunitiesKanbanViewInput; session: TUserSession }) {
-	const { page, funnelId, funnelStage, partnerIds, responsiblesIds, opportunityTypeIds, period, status, segments, isFromMarketing, isFromIndication, cities, ufs } = payload;
+	const {
+		page,
+		funnelId,
+		funnelStage,
+		partnerIds,
+		responsiblesIds,
+		opportunityTypeIds,
+		period,
+		status,
+		segments,
+		isFromMarketing,
+		isFromIndication,
+		cities,
+		ufs,
+	} = payload;
 
 	const userOpportunityScope = session.user.permissoes.oportunidades.escopo;
 	const userPartnerScope = session.user.permissoes.parceiros.escopo;
@@ -142,14 +156,16 @@ export async function getOpportunitiesKanbanView({ payload, session }: { payload
 	if (userOpportunityScope && responsiblesIds.some((r) => !userOpportunityScope.includes(r)))
 		throw new createHttpError.BadRequest("Seu escopo de visibilidade não contempla esse usuário.");
 	/// Second, checking for possible partner scope violation attempts (if user has scope defined and is attempting to visualize partners that are not in his scope)
-	if (userPartnerScope && partnerIds.some((p) => !userPartnerScope.includes(p))) throw new createHttpError.BadRequest("Seu escopo de visibilidade não contempla esse parceiro.");
+	if (userPartnerScope && partnerIds.some((p) => !userPartnerScope.includes(p)))
+		throw new createHttpError.BadRequest("Seu escopo de visibilidade não contempla esse parceiro.");
 
 	const opportunityResponsiblesQuery: Filter<TOpportunity> = isResponsiblesDefined ? { "responsaveis.id": { $in: responsiblesIds } } : {};
 	const opportunityPartnersQuery: Filter<TOpportunity> = isPartnersDefined ? { idParceiro: { $in: partnerIds } } : {};
 	const opportunityTypesQuery: Filter<TOpportunity> = isOpportunityTypesDefined ? { "tipo.id": { $in: opportunityTypeIds } } : {};
 	const opportunityStatusQuery: Filter<TOpportunity> = OpportunityStatusesMap[status] || {};
 	const opportunitySegmentsQuery: Filter<TOpportunity> = isSegmentsDefined ? { segmento: { $in: segments } } : {};
-	const opportunityPeriodQuery: Filter<TOpportunity> = isPeriodDefined && period.field ? { [period.field]: { $gte: period.after, $lte: period.before } } : {};
+	const opportunityPeriodQuery: Filter<TOpportunity> =
+		isPeriodDefined && period.field ? { [period.field]: { $gte: period.after, $lte: period.before } } : {};
 	const opportunityFromMarketingQuery: Filter<TOpportunity> = isFromMarketing ? { idMarketing: { $ne: null } } : {};
 	const opportunityFromIndicationQuery: Filter<TOpportunity> = isFromIndication ? { idIndicacao: { $ne: null } } : {};
 	const opportunityCitiesQuery: Filter<TOpportunity> = isCitiesDefined ? { "localizacao.cidade": { $in: cities } } : {};
@@ -172,7 +188,11 @@ export async function getOpportunitiesKanbanView({ payload, session }: { payload
 	const ooportunitiesApplicableIds = opportunitiesApplicable.map((o) => o._id.toString());
 
 	const funnelReferencesOpportunitiesFunnelQuery: Filter<TFunnelReference> = { idOportunidade: { $in: ooportunitiesApplicableIds } };
-	const funnelReferencesQuery: Filter<TFunnelReference> = { idFunil: funnelId, idEstagioFunil: funnelStage, ...funnelReferencesOpportunitiesFunnelQuery };
+	const funnelReferencesQuery: Filter<TFunnelReference> = {
+		idFunil: funnelId,
+		idEstagioFunil: funnelStage,
+		...funnelReferencesOpportunitiesFunnelQuery,
+	};
 
 	console.log("Funnel References Query", {
 		idFunil: funnelReferencesQuery.idFunil,
@@ -211,7 +231,9 @@ async function getFunnelReferencesWithOpportunities({ page, limit, funnelReferen
 	const pipeline = [{ $match: match }, { $addFields: addFields }, { $lookup: lookup }, { $sort: sort }, { $skip: skip }, { $limit: limit + 1 }];
 
 	const funnelReferencesMatched = await funnelReferencesCollection.countDocuments(match);
-	const aggregationResult = (await funnelReferencesCollection.aggregate(pipeline).toArray()) as WithId<TFunnelReference & { oportunidade: WithId<TOpportunity>[] }>[];
+	const aggregationResult = (await funnelReferencesCollection.aggregate(pipeline).toArray()) as WithId<
+		TFunnelReference & { oportunidade: WithId<TOpportunity>[] }
+	>[];
 
 	const opportunitiesResult = aggregationResult
 		.map((f) => {

@@ -47,12 +47,9 @@ async function fixDuplicity(req: NextApiRequest, res: NextApiResponse) {
 	const appDb = await connectToAmpereProjectsDatabase();
 
 	const clientsCollection = crmDb.collection<TClient>("clients");
-	const opportunitiesCollection =
-		crmDb.collection<TOpportunity>("opportunities");
+	const opportunitiesCollection = crmDb.collection<TOpportunity>("opportunities");
 	const projectsCollection = appDb.collection<TProject>("dados");
-	const projects = await projectsCollection
-		.find({}, { projection: { _id: 1, cpf_cnpj: 1, idClienteCRM: 1 } })
-		.toArray();
+	const projects = await projectsCollection.find({}, { projection: { _id: 1, cpf_cnpj: 1, idClienteCRM: 1 } }).toArray();
 
 	const clientsBulkwrite: AnyBulkWriteOperation<TClient>[] = [];
 	const opportunitiesBulkwrite: AnyBulkWriteOperation<TOpportunity>[] = [];
@@ -70,13 +67,9 @@ async function fixDuplicity(req: NextApiRequest, res: NextApiResponse) {
 			// 2. Transfer their opportunities to the client to keep
 			// 3. Transfer their projects to the client to keep
 
-			const clientToDeleteProjects = projects.filter(
-				(project) => project.idClienteCRM === clientToRemove.id,
-			);
+			const clientToDeleteProjects = projects.filter((project) => project.idClienteCRM === clientToRemove.id);
 			if (clientToDeleteProjects.length > 0) {
-				const betterToKeepOption = client.clientsToKeep.find(
-					(client) => client.cpfCnpj === clientToTransferToKeep.cpfCnpj,
-				);
+				const betterToKeepOption = client.clientsToKeep.find((client) => client.cpfCnpj === clientToTransferToKeep.cpfCnpj);
 				console.log(
 					`Client to delete (${clientToRemove.id}) has ${clientToDeleteProjects.length} projects.`,
 					clientToDeleteProjects.map(

@@ -69,14 +69,18 @@ const getUsersWithFiltersRoute: NextApiHandler<PostResponse> = async (req, res) 
 
 	const filters = UsersQueryFiltersSchema.parse(req.body);
 
-	const nameQuery: Filter<TUser>[] = filters.name?.trim().length > 0 ? [{ nome: { $regex: filters.name, $options: "i" } }, { nome: filters.name }] : [];
+	const nameQuery: Filter<TUser>[] =
+		filters.name?.trim().length > 0 ? [{ nome: { $regex: filters.name, $options: "i" } }, { nome: filters.name }] : [];
 
-	const emailQuery: Filter<TUser>[] = filters.email?.trim().length > 0 ? [{ email: { $regex: filters.email, $options: "i" } }, { email: filters.email }] : [];
+	const emailQuery: Filter<TUser>[] =
+		filters.email?.trim().length > 0 ? [{ email: { $regex: filters.email, $options: "i" } }, { email: filters.email }] : [];
 
 	const orQuery: Filter<TUser> = nameQuery.length > 0 || emailQuery.length > 0 ? { $or: [...nameQuery, ...emailQuery] } : {};
 
 	const periodQuery: Filter<TUser> =
-		filters.period.after && filters.period.before && filters.period.field ? { [filters.period.field]: { $gte: filters.period.after, $lte: filters.period.before } } : {};
+		filters.period.after && filters.period.before && filters.period.field
+			? { [filters.period.field]: { $gte: filters.period.after, $lte: filters.period.before } }
+			: {};
 
 	const activeOnlyQuery: Filter<TUser> = filters.activeOnly ? { ativo: true } : {};
 

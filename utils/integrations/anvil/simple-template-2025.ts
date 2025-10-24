@@ -29,8 +29,14 @@ export function getSimpleTemplate2025Data({ opportunity, proposal }: GetTemplate
 	const twelveYearsEnergyExpense = Table.reduce((acc, current) => acc + current.ConventionalEnergyBill, 0);
 
 	// Economy related
-	const estimatedGeneration = getEstimatedGen(proposal.potenciaPico || 0, opportunity.localizacao.cidade, opportunity.localizacao.uf, proposal.premissas.orientacao || "NORTE");
-	const monthlySavedValue = SingleYearScopedTable.reduce((acc, current) => acc + (current.ConventionalEnergyBill - current.EnergyBillValue), 0) / SingleYearScopedTable.length;
+	const estimatedGeneration = getEstimatedGen(
+		proposal.potenciaPico || 0,
+		opportunity.localizacao.cidade,
+		opportunity.localizacao.uf,
+		proposal.premissas.orientacao || "NORTE",
+	);
+	const monthlySavedValue =
+		SingleYearScopedTable.reduce((acc, current) => acc + (current.ConventionalEnergyBill - current.EnergyBillValue), 0) / SingleYearScopedTable.length;
 	const annualSavedValue = (12 * Table.reduce((acc, current) => acc + (current.ConventionalEnergyBill - current.EnergyBillValue), 0)) / Table.length;
 	const twelveYearsSavedValue = Table.reduce((acc, current) => acc + (current.ConventionalEnergyBill - current.EnergyBillValue), 0);
 	const obj = {

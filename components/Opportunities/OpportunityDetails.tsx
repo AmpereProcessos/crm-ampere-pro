@@ -11,20 +11,14 @@ import type { TUserSession } from "@/lib/auth/session";
 import { updateClient } from "@/utils/mutations/clients";
 import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
 import { updateOpportunity } from "@/utils/mutations/opportunities";
-import type {
-	TOpportunity,
-	TOpportunityDTOWithClientAndPartnerAndFunnelReferences,
-} from "@/utils/schemas/opportunity.schema";
+import type { TOpportunity, TOpportunityDTOWithClientAndPartnerAndFunnelReferences } from "@/utils/schemas/opportunity.schema";
 
 import { formatDateOnInputChange } from "@/lib/methods/formatting";
 import { stateCities } from "@/utils/estados_cidades";
 import { usePartnersSimplified } from "@/utils/queries/partners";
 import { useProjectTypes } from "@/utils/queries/project-types";
 import { useAcquisitionChannels } from "@/utils/queries/utils";
-import {
-	ConsumerUnitHolderType,
-	ElectricalInstallationGroups,
-} from "@/utils/select-options";
+import { ConsumerUnitHolderType, ElectricalInstallationGroups } from "@/utils/select-options";
 import SelectWithImages from "../Inputs/SelectWithImages";
 import OpportunityFunnelReferencesBlock from "./OpportunityFunnelReferencesBlock";
 import OpportunityResponsiblesBlock from "./OpportunityResponsiblesBlock";
@@ -37,19 +31,14 @@ type DetailsBlockType = {
 function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 	const queryClient = useQueryClient();
 	const partnersScope = session.user.permissoes.parceiros.escopo;
-	const [infoHolder, setInfoHolder] =
-		useState<TOpportunityDTOWithClientAndPartnerAndFunnelReferences>({
-			...info,
-		});
+	const [infoHolder, setInfoHolder] = useState<TOpportunityDTOWithClientAndPartnerAndFunnelReferences>({
+		...info,
+	});
 
 	const { data: partners } = usePartnersSimplified();
 	const { data: projectTypes } = useProjectTypes();
 
-	const vinculationPartners = partners
-		? partnersScope
-			? partners?.filter((p) => partnersScope.includes(p._id))
-			: partners
-		: [];
+	const vinculationPartners = partners ? (partnersScope ? partners?.filter((p) => partnersScope.includes(p._id)) : partners) : [];
 	const { mutate: handleUpdateOpportunity } = useMutationWithFeedback({
 		mutationKey: ["update-opportunity", opportunityId],
 		mutationFn: updateOpportunity,
@@ -79,11 +68,7 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 						<div className="grow">
 							<TextInput
 								label="NOME DA OPORTUNIDADE"
-								value={
-									infoHolder?.cliente && infoHolder?.nome
-										? infoHolder?.nome
-										: ""
-								}
+								value={infoHolder?.cliente && infoHolder?.nome ? infoHolder?.nome : ""}
 								handleChange={(value) => {
 									if (infoHolder)
 										setInfoHolder((prev) => ({
@@ -110,10 +95,7 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 							<AiOutlineCheck
 								style={{
 									fontSize: "18px",
-									color:
-										infoHolder?.nome !== info.nome
-											? "rgb(34,197,94)"
-											: "rgb(156,163,175)",
+									color: infoHolder?.nome !== info.nome ? "rgb(34,197,94)" : "rgb(156,163,175)",
 								}}
 							/>
 						</button>
@@ -140,8 +122,7 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 											id: value,
 											titulo: typeTitle,
 										},
-										categoriaVenda:
-											saleCategory as TOpportunity["categoriaVenda"],
+										categoriaVenda: saleCategory as TOpportunity["categoriaVenda"],
 									}));
 								}}
 								resetOptionLabel="NÃO DEFINIDO"
@@ -179,10 +160,7 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 							<AiOutlineCheck
 								style={{
 									fontSize: "18px",
-									color:
-										infoHolder?.tipo.id !== info.tipo.id
-											? "rgb(34,197,94)"
-											: "rgb(156,163,175)",
+									color: infoHolder?.tipo.id !== info.tipo.id ? "rgb(34,197,94)" : "rgb(156,163,175)",
 								}}
 							/>
 						</button>
@@ -231,10 +209,7 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 							<AiOutlineCheck
 								style={{
 									fontSize: "18px",
-									color:
-										infoHolder?.idParceiro !== info.idParceiro
-											? "rgb(34,197,94)"
-											: "rgb(156,163,175)",
+									color: infoHolder?.idParceiro !== info.idParceiro ? "rgb(34,197,94)" : "rgb(156,163,175)",
 								}}
 							/>
 						</button>
@@ -246,13 +221,8 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 						session={session}
 						handleUpdateOpportunity={handleUpdateOpportunity}
 					/>
-					<OpportunityFunnelReferencesBlock
-						opportunity={infoHolder}
-						setOpportunity={setInfoHolder}
-					/>
-					<h1 className="w-full rounded-md bg-[#fead41] p-1 text-center text-sm font-medium text-primary-foreground">
-						DADOS DA LOCALIZAÇÃO
-					</h1>
+					<OpportunityFunnelReferencesBlock opportunity={infoHolder} setOpportunity={setInfoHolder} />
+					<h1 className="w-full rounded-md bg-[#fead41] p-1 text-center text-sm font-medium text-primary-foreground">DADOS DA LOCALIZAÇÃO</h1>
 					<div className="flex w-full gap-2">
 						<div className="flex grow items-center gap-1">
 							<div className="w-1/3">
@@ -288,9 +258,7 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 									editable={true}
 									options={
 										infoHolder.localizacao?.uf
-											? stateCities[
-													infoHolder.localizacao?.uf as keyof typeof stateCities
-												].map((city, index) => {
+											? stateCities[infoHolder.localizacao?.uf as keyof typeof stateCities].map((city, index) => {
 													return {
 														id: index,
 														value: city,
@@ -321,10 +289,7 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 						</div>
 						<button
 							type="button"
-							disabled={
-								infoHolder?.localizacao.uf === info.localizacao.uf &&
-								infoHolder?.localizacao.cidade === info.localizacao.cidade
-							}
+							disabled={infoHolder?.localizacao.uf === info.localizacao.uf && infoHolder?.localizacao.cidade === info.localizacao.cidade}
 							onClick={() =>
 								// @ts-ignore
 								handleUpdateOpportunity({
@@ -341,8 +306,7 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 								style={{
 									fontSize: "18px",
 									color:
-										infoHolder?.localizacao.uf !== info.localizacao.uf ||
-										infoHolder?.localizacao.cidade !== info.localizacao.cidade
+										infoHolder?.localizacao.uf !== info.localizacao.uf || infoHolder?.localizacao.cidade !== info.localizacao.cidade
 											? "rgb(34,197,94)"
 											: "rgb(156,163,175)",
 								}}
@@ -366,9 +330,7 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 						</div>
 						<button
 							type="button"
-							disabled={
-								infoHolder?.localizacao.bairro === info.localizacao.bairro
-							}
+							disabled={infoHolder?.localizacao.bairro === info.localizacao.bairro}
 							onClick={() =>
 								// @ts-ignore
 								handleUpdateOpportunity({
@@ -383,10 +345,7 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 							<AiOutlineCheck
 								style={{
 									fontSize: "18px",
-									color:
-										infoHolder?.localizacao.bairro !== info.localizacao.bairro
-											? "rgb(34,197,94)"
-											: "rgb(156,163,175)",
+									color: infoHolder?.localizacao.bairro !== info.localizacao.bairro ? "rgb(34,197,94)" : "rgb(156,163,175)",
 								}}
 							/>
 						</button>
@@ -411,9 +370,7 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 						</div>
 						<button
 							type="button"
-							disabled={
-								infoHolder?.localizacao.endereco === info.localizacao.endereco
-							}
+							disabled={infoHolder?.localizacao.endereco === info.localizacao.endereco}
 							onClick={() =>
 								// @ts-ignore
 								handleUpdateOpportunity({
@@ -428,11 +385,7 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 							<AiOutlineCheck
 								style={{
 									fontSize: "18px",
-									color:
-										infoHolder?.localizacao.endereco !==
-										info.localizacao.endereco
-											? "rgb(34,197,94)"
-											: "rgb(156,163,175)",
+									color: infoHolder?.localizacao.endereco !== info.localizacao.endereco ? "rgb(34,197,94)" : "rgb(156,163,175)",
 								}}
 							/>
 						</button>
@@ -457,17 +410,13 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 						</div>
 						<button
 							type="button"
-							disabled={
-								infoHolder?.localizacao.numeroOuIdentificador ===
-								info.localizacao.numeroOuIdentificador
-							}
+							disabled={infoHolder?.localizacao.numeroOuIdentificador === info.localizacao.numeroOuIdentificador}
 							onClick={() =>
 								// @ts-ignore
 								handleUpdateOpportunity({
 									id: opportunityId,
 									changes: {
-										"localizacao.numeroOuIdentificador":
-											infoHolder.localizacao.numeroOuIdentificador,
+										"localizacao.numeroOuIdentificador": infoHolder.localizacao.numeroOuIdentificador,
 									},
 								})
 							}
@@ -476,18 +425,12 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 							<AiOutlineCheck
 								style={{
 									fontSize: "18px",
-									color:
-										infoHolder?.localizacao.numeroOuIdentificador !==
-										info.localizacao.numeroOuIdentificador
-											? "rgb(34,197,94)"
-											: "rgb(156,163,175)",
+									color: infoHolder?.localizacao.numeroOuIdentificador !== info.localizacao.numeroOuIdentificador ? "rgb(34,197,94)" : "rgb(156,163,175)",
 								}}
 							/>
 						</button>
 					</div>
-					<h1 className="w-full rounded-md bg-[#fead41] p-1 text-center text-sm font-medium text-primary-foreground">
-						DADOS ADICIONAIS DO CLIENTE
-					</h1>
+					<h1 className="w-full rounded-md bg-[#fead41] p-1 text-center text-sm font-medium text-primary-foreground">DADOS ADICIONAIS DO CLIENTE</h1>
 					<div className="flex w-full gap-2">
 						<div className="grow">
 							<TextInput
@@ -521,10 +464,7 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 							<AiOutlineCheck
 								style={{
 									fontSize: "18px",
-									color:
-										infoHolder?.cliente?.cpfCnpj !== info.cliente?.cpfCnpj
-											? "rgb(34,197,94)"
-											: "rgb(156,163,175)",
+									color: infoHolder?.cliente?.cpfCnpj !== info.cliente?.cpfCnpj ? "rgb(34,197,94)" : "rgb(156,163,175)",
 								}}
 							/>
 						</button>
@@ -560,10 +500,7 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 							<AiOutlineCheck
 								style={{
 									fontSize: "18px",
-									color:
-										infoHolder?.cliente?.rg !== info.cliente?.rg
-											? "rgb(34,197,94)"
-											: "rgb(156,163,175)",
+									color: infoHolder?.cliente?.rg !== info.cliente?.rg ? "rgb(34,197,94)" : "rgb(156,163,175)",
 								}}
 							/>
 						</button>
@@ -572,21 +509,14 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 						<div className="grow">
 							<DateInput
 								label="DATA DE NASCIMENTO"
-								value={
-									infoHolder?.cliente || infoHolder?.cliente.dataNascimento
-										? formatDateForInputValue(infoHolder.cliente.dataNascimento)
-										: undefined
-								}
+								value={infoHolder?.cliente || infoHolder?.cliente.dataNascimento ? formatDateForInputValue(infoHolder.cliente.dataNascimento) : undefined}
 								handleChange={(value) => {
 									if (value)
 										setInfoHolder((prev) => ({
 											...prev,
 											cliente: {
 												...prev?.cliente,
-												dataNascimento: formatDateOnInputChange(
-													value,
-													"string",
-												),
+												dataNascimento: formatDateOnInputChange(value, "string"),
 											},
 										}));
 									else
@@ -603,10 +533,7 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 						</div>
 						<button
 							type="button"
-							disabled={
-								infoHolder?.cliente?.dataNascimento ===
-								info.cliente?.dataNascimento
-							}
+							disabled={infoHolder?.cliente?.dataNascimento === info.cliente?.dataNascimento}
 							onClick={() =>
 								// @ts-ignore
 								handleUpdateClient({
@@ -621,11 +548,7 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 							<AiOutlineCheck
 								style={{
 									fontSize: "18px",
-									color:
-										infoHolder?.cliente?.dataNascimento !==
-										info.cliente?.dataNascimento
-											? "rgb(34,197,94)"
-											: "rgb(156,163,175)",
+									color: infoHolder?.cliente?.dataNascimento !== info.cliente?.dataNascimento ? "rgb(34,197,94)" : "rgb(156,163,175)",
 								}}
 							/>
 						</button>
@@ -634,9 +557,7 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 						<div className="grow">
 							<SelectInput
 								label="ESTADO CIVIL"
-								value={
-									infoHolder?.cliente ? infoHolder?.cliente.estadoCivil : null
-								}
+								value={infoHolder?.cliente ? infoHolder?.cliente.estadoCivil : null}
 								options={[
 									{
 										id: 1,
@@ -684,9 +605,7 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 						</div>
 						<button
 							type="button"
-							disabled={
-								infoHolder?.cliente?.estadoCivil === info.cliente?.estadoCivil
-							}
+							disabled={infoHolder?.cliente?.estadoCivil === info.cliente?.estadoCivil}
 							onClick={() =>
 								// @ts-ignore
 								handleUpdateClient({
@@ -699,11 +618,7 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 							<AiOutlineCheck
 								style={{
 									fontSize: "18px",
-									color:
-										infoHolder?.cliente?.estadoCivil !==
-										info.cliente?.estadoCivil
-											? "rgb(34,197,94)"
-											: "rgb(156,163,175)",
+									color: infoHolder?.cliente?.estadoCivil !== info.cliente?.estadoCivil ? "rgb(34,197,94)" : "rgb(156,163,175)",
 								}}
 							/>
 						</button>
@@ -712,11 +627,7 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 						<div className="grow">
 							<TextInput
 								label="PROFISSÃO"
-								value={
-									infoHolder?.cliente || infoHolder?.cliente.profissao
-										? infoHolder?.cliente.profissao || ""
-										: ""
-								}
+								value={infoHolder?.cliente || infoHolder?.cliente.profissao ? infoHolder?.cliente.profissao || "" : ""}
 								handleChange={(value) => {
 									if (infoHolder)
 										setInfoHolder((prev) => ({
@@ -733,9 +644,7 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 						</div>
 						<button
 							type="button"
-							disabled={
-								infoHolder?.cliente?.profissao === info.cliente?.profissao
-							}
+							disabled={infoHolder?.cliente?.profissao === info.cliente?.profissao}
 							onClick={() =>
 								// @ts-ignore
 								handleUpdateClient({
@@ -748,10 +657,7 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 							<AiOutlineCheck
 								style={{
 									fontSize: "18px",
-									color:
-										infoHolder?.cliente?.profissao !== info.cliente?.profissao
-											? "rgb(34,197,94)"
-											: "rgb(156,163,175)",
+									color: infoHolder?.cliente?.profissao !== info.cliente?.profissao ? "rgb(34,197,94)" : "rgb(156,163,175)",
 								}}
 							/>
 						</button>
@@ -760,11 +666,7 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 						<div className="grow">
 							<SelectInput
 								label="CANAL DE AQUISIÇÃO"
-								value={
-									infoHolder?.cliente
-										? infoHolder?.cliente.canalAquisicao
-										: null
-								}
+								value={infoHolder?.cliente ? infoHolder?.cliente.canalAquisicao : null}
 								options={
 									acquisitionChannels?.map((acquisitionChannel) => ({
 										id: acquisitionChannel._id,
@@ -792,10 +694,7 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 						</div>
 						<button
 							type="button"
-							disabled={
-								infoHolder?.cliente?.canalAquisicao ===
-								info.cliente?.canalAquisicao
-							}
+							disabled={infoHolder?.cliente?.canalAquisicao === info.cliente?.canalAquisicao}
 							onClick={() =>
 								// @ts-ignore
 								handleUpdateClient({
@@ -810,18 +709,12 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 							<AiOutlineCheck
 								style={{
 									fontSize: "18px",
-									color:
-										infoHolder?.cliente?.canalAquisicao !==
-										info.cliente?.canalAquisicao
-											? "rgb(34,197,94)"
-											: "rgb(156,163,175)",
+									color: infoHolder?.cliente?.canalAquisicao !== info.cliente?.canalAquisicao ? "rgb(34,197,94)" : "rgb(156,163,175)",
 								}}
 							/>
 						</button>
 					</div>
-					<h1 className="w-full rounded-md bg-[#fead41] p-1 text-center text-sm font-medium text-primary-foreground">
-						DADOS DA INSTALAÇÃO
-					</h1>
+					<h1 className="w-full rounded-md bg-[#fead41] p-1 text-center text-sm font-medium text-primary-foreground">DADOS DA INSTALAÇÃO</h1>
 					<div className="flex w-full gap-2">
 						<div className="grow">
 							<TextInput
@@ -844,17 +737,13 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 						</div>
 						<button
 							type="button"
-							disabled={
-								infoHolder?.instalacao.concessionaria ===
-								info.instalacao.concessionaria
-							}
+							disabled={infoHolder?.instalacao.concessionaria === info.instalacao.concessionaria}
 							onClick={() =>
 								// @ts-ignore
 								handleUpdateOpportunity({
 									id: opportunityId,
 									changes: {
-										"instalacao.concessionaria":
-											infoHolder.instalacao.concessionaria,
+										"instalacao.concessionaria": infoHolder.instalacao.concessionaria,
 									},
 								})
 							}
@@ -863,11 +752,7 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 							<AiOutlineCheck
 								style={{
 									fontSize: "18px",
-									color:
-										infoHolder?.instalacao.concessionaria !==
-										info.instalacao.concessionaria
-											? "rgb(34,197,94)"
-											: "rgb(156,163,175)",
+									color: infoHolder?.instalacao.concessionaria !== info.instalacao.concessionaria ? "rgb(34,197,94)" : "rgb(156,163,175)",
 								}}
 							/>
 						</button>
@@ -876,11 +761,7 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 						<div className="grow">
 							<TextInput
 								label="NÚMERO DE INSTALAÇÃO DA CONCESSIONÁRIA"
-								value={
-									infoHolder?.cliente && infoHolder?.instalacao.numero
-										? infoHolder?.instalacao.numero
-										: ""
-								}
+								value={infoHolder?.cliente && infoHolder?.instalacao.numero ? infoHolder?.instalacao.numero : ""}
 								// editable={session?.user.id === infoHolder?.responsavel?.id || session?.user.permissoes.projetos.editar}
 								handleChange={(value) => {
 									if (infoHolder)
@@ -898,9 +779,7 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 						</div>
 						<button
 							type="button"
-							disabled={
-								infoHolder?.instalacao.numero === info.instalacao.numero
-							}
+							disabled={infoHolder?.instalacao.numero === info.instalacao.numero}
 							onClick={() =>
 								// @ts-ignore
 								handleUpdateOpportunity({
@@ -915,10 +794,7 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 							<AiOutlineCheck
 								style={{
 									fontSize: "18px",
-									color:
-										infoHolder?.instalacao.numero !== info.instalacao.numero
-											? "rgb(34,197,94)"
-											: "rgb(156,163,175)",
+									color: infoHolder?.instalacao.numero !== info.instalacao.numero ? "rgb(34,197,94)" : "rgb(156,163,175)",
 								}}
 							/>
 						</button>
@@ -969,10 +845,7 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 							<AiOutlineCheck
 								style={{
 									fontSize: "18px",
-									color:
-										infoHolder?.instalacao.grupo !== info.instalacao.grupo
-											? "rgb(34,197,94)"
-											: "rgb(156,163,175)",
+									color: infoHolder?.instalacao.grupo !== info.instalacao.grupo ? "rgb(34,197,94)" : "rgb(156,163,175)",
 								}}
 							/>
 						</button>
@@ -1021,10 +894,7 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 						</div>
 						<button
 							type="button"
-							disabled={
-								infoHolder?.instalacao.tipoLigacao ===
-								info.instalacao.tipoLigacao
-							}
+							disabled={infoHolder?.instalacao.tipoLigacao === info.instalacao.tipoLigacao}
 							onClick={() =>
 								// @ts-ignore
 								handleUpdateOpportunity({
@@ -1039,11 +909,7 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 							<AiOutlineCheck
 								style={{
 									fontSize: "18px",
-									color:
-										infoHolder?.instalacao.tipoLigacao !==
-										info.instalacao.tipoLigacao
-											? "rgb(34,197,94)"
-											: "rgb(156,163,175)",
+									color: infoHolder?.instalacao.tipoLigacao !== info.instalacao.tipoLigacao ? "rgb(34,197,94)" : "rgb(156,163,175)",
 								}}
 							/>
 						</button>
@@ -1081,10 +947,7 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 						</div>
 						<button
 							type="button"
-							disabled={
-								infoHolder?.instalacao.tipoTitular ===
-								info.instalacao.tipoTitular
-							}
+							disabled={infoHolder?.instalacao.tipoTitular === info.instalacao.tipoTitular}
 							className="flex items-end justify-center pb-4 text-green-200"
 							onClick={() =>
 								// @ts-ignore
@@ -1099,11 +962,7 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 							<AiOutlineCheck
 								style={{
 									fontSize: "18px",
-									color:
-										infoHolder?.instalacao.tipoTitular !==
-										info.instalacao.tipoTitular
-											? "rgb(34,197,94)"
-											: "rgb(156,163,175)",
+									color: infoHolder?.instalacao.tipoTitular !== info.instalacao.tipoTitular ? "rgb(34,197,94)" : "rgb(156,163,175)",
 								}}
 							/>
 						</button>
@@ -1130,10 +989,7 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 						</div>
 						<button
 							type="button"
-							disabled={
-								infoHolder?.instalacao.nomeTitular ===
-								info.instalacao.nomeTitular
-							}
+							disabled={infoHolder?.instalacao.nomeTitular === info.instalacao.nomeTitular}
 							onClick={() =>
 								// @ts-ignore
 								handleUpdateOpportunity({
@@ -1148,11 +1004,7 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 							<AiOutlineCheck
 								style={{
 									fontSize: "18px",
-									color:
-										infoHolder?.instalacao.nomeTitular !==
-										info.instalacao.nomeTitular
-											? "rgb(34,197,94)"
-											: "rgb(156,163,175)",
+									color: infoHolder?.instalacao.nomeTitular !== info.instalacao.nomeTitular ? "rgb(34,197,94)" : "rgb(156,163,175)",
 								}}
 							/>
 						</button>

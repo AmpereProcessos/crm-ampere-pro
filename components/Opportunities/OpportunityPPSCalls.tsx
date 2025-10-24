@@ -16,15 +16,11 @@ type OpportunityTechnicalAnalysisBlockProps = {
 	session: TUserSession;
 	opportunity: TOpportunityDTOWithClient;
 };
-function OpportunityPPSCallsBlock({
-	session,
-	opportunity,
-}: OpportunityTechnicalAnalysisBlockProps) {
+function OpportunityPPSCallsBlock({ session, opportunity }: OpportunityTechnicalAnalysisBlockProps) {
 	const queryClient = useQueryClient();
 	const [blockIsOpen, setBlockIsOpen] = useState<boolean>(false);
 
-	const [newPPSCallModalIsOpen, setNewPPSCallModalIsOpen] =
-		useState<boolean>(false);
+	const [newPPSCallModalIsOpen, setNewPPSCallModalIsOpen] = useState<boolean>(false);
 	const {
 		data: calls,
 		isLoading,
@@ -36,10 +32,8 @@ function OpportunityPPSCallsBlock({
 		openOnly: false,
 	});
 
-	const handleOnMutatee = async () =>
-		await queryClient.cancelQueries({ queryKey: queryKey });
-	const handleOnSettle = async () =>
-		await queryClient.invalidateQueries({ queryKey: queryKey });
+	const handleOnMutatee = async () => await queryClient.cancelQueries({ queryKey: queryKey });
+	const handleOnSettle = async () => await queryClient.invalidateQueries({ queryKey: queryKey });
 	return (
 		<div className="flex max-h-[250px] w-full flex-col rounded-md border border-primary/30 bg-background p-3 shadow-lg">
 			<div className="flex  h-[40px] items-center  justify-between border-b border-primary/30 pb-2">
@@ -63,24 +57,12 @@ function OpportunityPPSCallsBlock({
 						<MdAdd />
 					</button>
 					{blockIsOpen ? (
-						<button
-							type="button"
-							className="text-primary/60 hover:text-blue-400"
-						>
-							<IoMdArrowDropupCircle
-								style={{ fontSize: "25px" }}
-								onClick={() => setBlockIsOpen(false)}
-							/>
+						<button type="button" className="text-primary/60 hover:text-blue-400">
+							<IoMdArrowDropupCircle style={{ fontSize: "25px" }} onClick={() => setBlockIsOpen(false)} />
 						</button>
 					) : (
-						<button
-							type="button"
-							className="text-primary/60 hover:text-blue-400"
-						>
-							<IoMdArrowDropdownCircle
-								style={{ fontSize: "25px" }}
-								onClick={() => setBlockIsOpen(true)}
-							/>
+						<button type="button" className="text-primary/60 hover:text-blue-400">
+							<IoMdArrowDropdownCircle style={{ fontSize: "25px" }} onClick={() => setBlockIsOpen(true)} />
 						</button>
 					)}
 				</div>
@@ -88,14 +70,10 @@ function OpportunityPPSCallsBlock({
 			{blockIsOpen ? (
 				<div className="overscroll-y flex w-full grow flex-col gap-1 overflow-y-auto py-1 pr-2 scrollbar-thin scrollbar-track-primary/10 scrollbar-thumb-primary/30">
 					{isLoading ? <LoadingComponent /> : null}
-					{isError ? (
-						<ErrorComponent msg="Erro ao buscar análises técnicas da oportunidade." />
-					) : null}
+					{isError ? <ErrorComponent msg="Erro ao buscar análises técnicas da oportunidade." /> : null}
 					{isSuccess ? (
 						calls.length > 0 ? (
-							calls.map((call) => (
-								<OpenPPSCall key={call._id} session={session} call={call} />
-							))
+							calls.map((call) => <OpenPPSCall key={call._id} session={session} call={call} />)
 						) : (
 							<p className="flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/70">
 								Sem chamados vinculados a essa oportunidade.

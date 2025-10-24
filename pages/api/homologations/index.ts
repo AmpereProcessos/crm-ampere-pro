@@ -1,18 +1,8 @@
-import {
-	insertHomologation,
-	updateHomologation,
-} from "@/repositories/homologations/mutations";
-import {
-	getHomologationById,
-	getHomologationByOpportunityId,
-	getPartnerHomologations,
-} from "@/repositories/homologations/queries";
+import { insertHomologation, updateHomologation } from "@/repositories/homologations/mutations";
+import { getHomologationById, getHomologationByOpportunityId, getPartnerHomologations } from "@/repositories/homologations/queries";
 import connectToDatabase from "@/services/mongodb/crm-db-connection";
 import { apiHandler, validateAuthorization } from "@/utils/api";
-import {
-	HomologationSchema,
-	type THomologation,
-} from "@/utils/schemas/homologation.schema";
+import { HomologationSchema, type THomologation } from "@/utils/schemas/homologation.schema";
 import createHttpError from "http-errors";
 import { type Collection, type Filter, ObjectId } from "mongodb";
 import type { NextApiHandler } from "next";
@@ -22,41 +12,30 @@ type GetResponse = {
 };
 
 const getHomologations: NextApiHandler<GetResponse> = async (req, res) => {
-	const session = await validateAuthorization(
-		req,
-		res,
-		"homologacoes",
-		"visualizar",
-		true,
-	);
+	const session = await validateAuthorization(req, res, "homologacoes", "visualizar", true);
 	const homologationScope = session.user.permissoes.homologacoes.escopo;
 	const partnerId = session.user.idParceiro;
 	const parterScope = session.user.permissoes.parceiros.escopo;
-	const partnerQuery: Filter<THomologation> = parterScope
-		? { idParceiro: { $in: [...parterScope] } }
-		: {};
+	const partnerQuery: Filter<THomologation> = parterScope ? { idParceiro: { $in: [...parterScope] } } : {};
 
 	const { id, opportunityId } = req.query;
 	const db = await connectToDatabase();
 	const collection: Collection<THomologation> = db.collection("homologations");
 
 	if (id) {
-		if (typeof id !== "string" || !ObjectId.isValid(id))
-			throw new createHttpError.BadRequest("ID de homologação inválido.");
+		if (typeof id !== "string" || !ObjectId.isValid(id)) throw new createHttpError.BadRequest("ID de homologação inválido.");
 		const homologation = await getHomologationById({
 			collection: collection,
 			id: id,
 			query: partnerQuery,
 		});
-		if (!homologation)
-			throw new createHttpError.NotFound("Homologação não encontrada.");
+		if (!homologation) throw new createHttpError.NotFound("Homologação não encontrada.");
 
 		return res.status(200).json({ data: homologation });
 	}
 
 	if (opportunityId) {
-		if (typeof opportunityId !== "string" || !ObjectId.isValid(opportunityId))
-			throw new createHttpError.BadRequest("ID de oportunidade inválido.");
+		if (typeof opportunityId !== "string" || !ObjectId.isValid(opportunityId)) throw new createHttpError.BadRequest("ID de oportunidade inválido.");
 		const homologations = await getHomologationByOpportunityId({
 			collection: collection,
 			opportunityId: opportunityId,
@@ -66,9 +45,7 @@ const getHomologations: NextApiHandler<GetResponse> = async (req, res) => {
 		return res.status(200).json({ data: homologations });
 	}
 	// Ajusting the query for the user's scope visualization
-	const applicantQuery: Filter<THomologation> = homologationScope
-		? { "requerente.id": { $in: [...homologationScope] } }
-		: {};
+	const applicantQuery: Filter<THomologation> = homologationScope ? { "requerente.id": { $in: [...homologationScope] } } : {};
 	console.log(applicantQuery);
 	const query = { ...partnerQuery, ...applicantQuery };
 	const homologations = await getPartnerHomologations({
@@ -84,13 +61,7 @@ type PostResponse = {
 };
 
 const createHomologation: NextApiHandler<PostResponse> = async (req, res) => {
-	const session = await validateAuthorization(
-		req,
-		res,
-		"homologacoes",
-		"criar",
-		true,
-	);
+	const session = await validateAuthorization(req, res, "homologacoes", "criar", true);
 	const partnerId = session.user.idParceiro;
 
 	const homologation = HomologationSchema.parse(req.body);
@@ -103,10 +74,7 @@ const createHomologation: NextApiHandler<PostResponse> = async (req, res) => {
 		info: homologation,
 		partnerId: partnerId || "",
 	});
-	if (!insertResponse.acknowledged)
-		throw new createHttpError.InternalServerError(
-			"Oops, houve um erro desconhecido ao criar homologação.",
-		);
+	if (!insertResponse.acknowledged) throw new createHttpError.InternalServerError("Oops, houve um erro desconhecido ao criar homologação.");
 	const insertedId = insertResponse.insertedId.toString();
 
 	return res.status(201).json({
@@ -121,22 +89,13 @@ type PutResponse = {
 };
 
 const editHomologation: NextApiHandler<PutResponse> = async (req, res) => {
-	const session = await validateAuthorization(
-		req,
-		res,
-		"homologacoes",
-		"editar",
-		true,
-	);
+	const session = await validateAuthorization(req, res, "homologacoes", "editar", true);
 	const partnerId = session.user.idParceiro;
 	const parterScope = session.user.permissoes.parceiros.escopo;
-	const partnerQuery: Filter<THomologation> = parterScope
-		? { idParceiro: { $in: [...parterScope] } }
-		: {};
+	const partnerQuery: Filter<THomologation> = parterScope ? { idParceiro: { $in: [...parterScope] } } : {};
 
 	const { id } = req.query;
-	if (!id || typeof id !== "string" || !ObjectId.isValid(id))
-		throw new createHttpError.BadRequest("ID inválido.");
+	if (!id || typeof id !== "string" || !ObjectId.isValid(id)) throw new createHttpError.BadRequest("ID inválido.");
 
 	const changes = HomologationSchema.partial().parse(req.body);
 
@@ -150,12 +109,8 @@ const editHomologation: NextApiHandler<PutResponse> = async (req, res) => {
 		query: partnerQuery,
 	});
 
-	if (!updateResponse.acknowledged)
-		throw new createHttpError.InternalServerError(
-			"Oops, houve um erro desconhecido ao atualizar homologação.",
-		);
-	if (updateResponse.matchedCount === 0)
-		throw new createHttpError.NotFound("Homologação não encontrada.");
+	if (!updateResponse.acknowledged) throw new createHttpError.InternalServerError("Oops, houve um erro desconhecido ao atualizar homologação.");
+	if (updateResponse.matchedCount === 0) throw new createHttpError.NotFound("Homologação não encontrada.");
 
 	return res.status(201).json({
 		data: "Homologação atualizada com sucesso !",

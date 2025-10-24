@@ -20,12 +20,7 @@ type QualifyLeadProps = {
 		onError?: (error: Error) => void;
 	};
 };
-export default function QualifyLead({
-	leadId,
-	closeModal,
-	callbacks,
-	sessionUser,
-}: QualifyLeadProps) {
+export default function QualifyLead({ leadId, closeModal, callbacks, sessionUser }: QualifyLeadProps) {
 	const queryClient = useQueryClient();
 	const [infoHolder, setInfoHolder] = useState<TLead["qualificacao"]>({
 		score: 0,
@@ -44,14 +39,7 @@ export default function QualifyLead({
 	function updateInfoHolder(newInfo: Partial<TLead["qualificacao"]>) {
 		setInfoHolder((prev) => ({ ...prev, ...newInfo }));
 	}
-	const {
-		data: lead,
-		isLoading,
-		isError,
-		isSuccess,
-		error,
-		queryKey,
-	} = useLeadById({ id: leadId });
+	const { data: lead, isLoading, isError, isSuccess, error, queryKey } = useLeadById({ id: leadId });
 
 	const { mutate: handleCreateLeadMutation, isPending } = useMutation({
 		mutationFn: updateLead,
@@ -94,10 +82,7 @@ export default function QualifyLead({
 			actionIsLoading={isPending}
 			stateIsLoading={false}
 		>
-			<QualificationBlock
-				qualification={infoHolder}
-				updateQualification={updateInfoHolder}
-			/>
+			<QualificationBlock qualification={infoHolder} updateQualification={updateInfoHolder} />
 		</ResponsiveDialogDrawer>
 	);
 }

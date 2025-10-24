@@ -9,20 +9,10 @@ import type { TOpportunityDTOWithClient } from "@/utils/schemas/opportunity.sche
 import type { TPPSCall } from "@/utils/schemas/pps-calls.schema";
 import type { TAttachmentState } from "@/utils/schemas/utils";
 import { useMutation } from "@tanstack/react-query";
-import {
-	type UploadResult,
-	getDownloadURL,
-	ref,
-	uploadBytes,
-} from "firebase/storage";
+import { type UploadResult, getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
-import {
-	AttachFileBlock,
-	ClientBlock,
-	GeneralBlock,
-	PremissesBlock,
-} from "./Content";
+import { AttachFileBlock, ClientBlock, GeneralBlock, PremissesBlock } from "./Content";
 
 type NewCallProps = {
 	opportunity?: TOpportunityDTOWithClient;
@@ -35,12 +25,7 @@ type NewCallProps = {
 		onError?: () => void;
 	};
 };
-export default function NewCall({
-	opportunity,
-	session,
-	closeModal,
-	callbacks,
-}: NewCallProps) {
+export default function NewCall({ opportunity, session, closeModal, callbacks }: NewCallProps) {
 	const initialState: TPPSCall = {
 		status: "PENDENTE",
 		anotacoes: "",
@@ -65,10 +50,7 @@ export default function NewCall({
 		},
 		cliente: {
 			nome: opportunity?.cliente?.nome || "",
-			tipo:
-				opportunity?.instalacao.tipoTitular === "PESSOA JURÍDICA"
-					? "CNPJ"
-					: "CPF",
+			tipo: opportunity?.instalacao.tipoTitular === "PESSOA JURÍDICA" ? "CNPJ" : "CPF",
 			telefone: opportunity?.cliente?.telefonePrimario || "",
 			cep: opportunity?.cliente?.cep,
 			uf: opportunity?.cliente?.uf || "",
@@ -94,9 +76,7 @@ export default function NewCall({
 	function removeAttachment(index: number) {
 		setAttachments((prev) => prev.filter((_, i) => i !== index));
 	}
-	function addCharge(
-		charge: Exclude<TPPSCall["premissas"]["cargas"], undefined | null>[number],
-	) {
+	function addCharge(charge: Exclude<TPPSCall["premissas"]["cargas"], undefined | null>[number]) {
 		setInfoHolder((prev) => ({
 			...prev,
 			premissas: {
@@ -137,54 +117,36 @@ export default function NewCall({
 		}
 		if (infoHolder.tipoSolicitacao === "DUVIDAS E AUXILIOS TÉCNICOS") {
 			if (infoHolder.observacoes.trim().length < 5) {
-				toast.error(
-					"Preencha a dúvida/questionamento/demanda no campo de observações.",
-				);
+				toast.error("Preencha a dúvida/questionamento/demanda no campo de observações.");
 				return false;
 			}
 		}
 		if (infoHolder.tipoSolicitacao === "PROPOSTA COMERCIAL (ON GRID)") {
 			if (!infoHolder.projeto?.id) {
-				toast.error(
-					"Vincule um projeto do CRM para requisitar uma proposta comercial.",
-				);
+				toast.error("Vincule um projeto do CRM para requisitar uma proposta comercial.");
 				return false;
 			}
 			if (!infoHolder.premissas.geracao || infoHolder.premissas.geracao <= 0) {
-				toast.error(
-					"Preencha uma geração válida para requisitar uma proposta comercial.",
-				);
+				toast.error("Preencha uma geração válida para requisitar uma proposta comercial.");
 				return false;
 			}
 			if (!infoHolder.premissas.tipoEstrutura) {
-				toast.error(
-					"Preencha o tipo de estrutura para requisitar uma proposta comercial.",
-				);
+				toast.error("Preencha o tipo de estrutura para requisitar uma proposta comercial.");
 				return false;
 			}
 			if (!infoHolder.premissas.topologia) {
-				toast.error(
-					"Preencha a topologia desejada para requisitar uma proposta comercial.",
-				);
+				toast.error("Preencha a topologia desejada para requisitar uma proposta comercial.");
 				return false;
 			}
 		}
 		if (infoHolder.tipoSolicitacao === "PROPOSTA COMERCIAL (OFF GRID)") {
-			if (
-				!infoHolder.premissas.cargas ||
-				infoHolder.premissas.cargas?.length === 0
-			) {
-				toast.error(
-					"Adicione cargas para requisitar uma proposta comercial OFF GRID.",
-				);
+			if (!infoHolder.premissas.cargas || infoHolder.premissas.cargas?.length === 0) {
+				toast.error("Adicione cargas para requisitar uma proposta comercial OFF GRID.");
 				return false;
 			}
 		}
 		if (infoHolder.tipoSolicitacao === "ANÁLISE DE CRÉDITO") {
-			if (
-				!infoHolder.cliente.cpfCnpj ||
-				infoHolder.cliente.cpfCnpj.length < 14
-			) {
+			if (!infoHolder.cliente.cpfCnpj || infoHolder.cliente.cpfCnpj.length < 14) {
 				toast.error("Preencha um CPF/CNPJ válido.");
 				return false;
 			}
@@ -203,20 +165,11 @@ export default function NewCall({
 		}
 		return true;
 	}
-	async function handleUploadFiles({
-		callId,
-		attachments,
-	}: {
-		callId: string;
-		attachments: TAttachmentState[];
-	}) {
+	async function handleUploadFiles({ callId, attachments }: { callId: string; attachments: TAttachmentState[] }) {
 		const filesToUpload = attachments
 			.flatMap((attachment) =>
 				attachment.arquivos.map((f) => ({
-					title:
-						attachment.arquivos.length > 0
-							? `${attachment.titulo} (${attachment.arquivos.length})`
-							: attachment.titulo,
+					title: attachment.arquivos.length > 0 ? `${attachment.titulo} (${attachment.arquivos.length})` : attachment.titulo,
 					arquivo: f.arquivo as File,
 				})),
 			)
@@ -239,10 +192,7 @@ export default function NewCall({
 		);
 		return links;
 	}
-	async function handleCallCreation({
-		call,
-		attachments,
-	}: { call: TPPSCall; attachments: TAttachmentState[] }) {
+	async function handleCallCreation({ call, attachments }: { call: TPPSCall; attachments: TAttachmentState[] }) {
 		if (!validateFields()) return;
 		const loadingToastId = toast.loading("Criando chamado...");
 		const createPPSCallResponse = await createPPSCall({ ...call });
@@ -250,10 +200,7 @@ export default function NewCall({
 			callId: createPPSCallResponse.data.insertedId,
 			attachments: attachments,
 		});
-		const updatePPSCallResponse = await updatePPSCall(
-			createPPSCallResponse.data.insertedId,
-			{ links: links },
-		);
+		const updatePPSCallResponse = await updatePPSCall(createPPSCallResponse.data.insertedId, { links: links });
 		toast.dismiss(loadingToastId);
 		toast.success(createPPSCallResponse.message);
 		return createPPSCallResponse.message;
@@ -297,15 +244,8 @@ export default function NewCall({
 			dialogVariant="md"
 			drawerVariant="md"
 		>
-			<GeneralBlock
-				infoHolder={infoHolder}
-				updateInfoHolder={updateInfoHolder}
-			/>
-			<ClientBlock
-				client={infoHolder.cliente}
-				updateClient={updateClient}
-				requestType={infoHolder.tipoSolicitacao}
-			/>
+			<GeneralBlock infoHolder={infoHolder} updateInfoHolder={updateInfoHolder} />
+			<ClientBlock client={infoHolder.cliente} updateClient={updateClient} requestType={infoHolder.tipoSolicitacao} />
 			<PremissesBlock
 				requestType={infoHolder.tipoSolicitacao}
 				premissas={infoHolder.premissas}
@@ -313,11 +253,7 @@ export default function NewCall({
 				addCharge={addCharge}
 				removeCharge={removeCharge}
 			/>
-			<AttachFileBlock
-				attachments={attachments}
-				addAttachment={addAttachment}
-				removeAttachment={removeAttachment}
-			/>
+			<AttachFileBlock attachments={attachments} addAttachment={addAttachment} removeAttachment={removeAttachment} />
 		</ResponsiveDialogDrawer>
 	);
 }

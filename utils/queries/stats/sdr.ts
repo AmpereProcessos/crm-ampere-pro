@@ -11,7 +11,11 @@ type UseSDRTeamResultsParams = {
 };
 async function fetchStats({ after, before, responsibles, partners, projectTypes }: UseSDRTeamResultsParams) {
 	try {
-		const { data } = await axios.post(`/api/stats/comercial-results/sales-sdr?after=${after}&before=${before}`, { responsibles, partners, projectTypes });
+		const { data } = await axios.post(`/api/stats/comercial-results/sales-sdr?after=${after}&before=${before}`, {
+			responsibles,
+			partners,
+			projectTypes,
+		});
 		return data.data as TSDRTeamResults;
 	} catch (error) {
 		throw new Error("Erro ao buscar resultados do time SDR");

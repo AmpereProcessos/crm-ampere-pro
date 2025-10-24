@@ -27,8 +27,7 @@ export default function PodiumCard({
 	containerClassName = "",
 	nameClassName = "text-primary text-xs font-bold tracking-tight",
 }: PodiumCardProps) {
-	const percentage =
-		((rankingItem.value - minValue) / (maxValue - minValue)) * 100;
+	const percentage = ((rankingItem.value - minValue) / (maxValue - minValue)) * 100;
 
 	const strokeWidth = size === "h-24 w-24" ? 4 : size === "h-16 w-16" ? 3 : 2;
 	const radius = size === "h-24 w-24" ? 44 : size === "h-16 w-16" ? 29 : 21;
@@ -73,9 +72,7 @@ export default function PodiumCard({
 				<div className={cn("relative overflow-hidden rounded-full", size)}>
 					<Avatar className="h-full w-full">
 						<AvatarImage src={rankingItem.avatar} alt={rankingItem.name} />
-						<AvatarFallback className="text-lg font-semibold">
-							{rankingItem.name ? formatNameAsInitials(rankingItem.name) : "NA"}
-						</AvatarFallback>
+						<AvatarFallback className="text-lg font-semibold">{rankingItem.name ? formatNameAsInitials(rankingItem.name) : "NA"}</AvatarFallback>
 					</Avatar>
 				</div>
 

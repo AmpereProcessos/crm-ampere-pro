@@ -74,8 +74,7 @@ async function getOverallResults(request: NextRequest) {
 	});
 
 	const payload = await request.json();
-	const { responsibles, partners, projectTypes } =
-		GeneralStatsFiltersSchema.parse(payload);
+	const { responsibles, partners, projectTypes } = GeneralStatsFiltersSchema.parse(payload);
 
 	console.log("[INFO] [GET_OVERALL_STATS] Query Params", { after, before });
 	console.log("[INFO] [GET_OVERALL_STATS] Payload", {
@@ -86,45 +85,30 @@ async function getOverallResults(request: NextRequest) {
 
 	// Authorization checks
 	if (!!userScope && !responsibles) {
-		throw new createHttpError.Unauthorized(
-			"Seu usuário não possui solicitação para esse escopo de visualização.",
-		);
+		throw new createHttpError.Unauthorized("Seu usuário não possui solicitação para esse escopo de visualização.");
 	}
 
 	if (!!partnerScope && !partners) {
-		throw new createHttpError.Unauthorized(
-			"Seu usuário não possui solicitação para esse escopo de visualização.",
-		);
+		throw new createHttpError.Unauthorized("Seu usuário não possui solicitação para esse escopo de visualização.");
 	}
 
 	if (!!userScope && responsibles?.some((r) => !userScope.includes(r))) {
-		throw new createHttpError.Unauthorized(
-			"Seu usuário não possui solicitação para esse escopo de visualização.",
-		);
+		throw new createHttpError.Unauthorized("Seu usuário não possui solicitação para esse escopo de visualização.");
 	}
 
 	if (!!partnerScope && partners?.some((r) => !partnerScope.includes(r))) {
-		throw new createHttpError.Unauthorized(
-			"Seu usuário não possui solicitação para esse escopo de visualização.",
-		);
+		throw new createHttpError.Unauthorized("Seu usuário não possui solicitação para esse escopo de visualização.");
 	}
 
-	const responsiblesQuery: Filter<TOpportunity> = responsibles
-		? { "responsaveis.id": { $in: responsibles } }
-		: {};
-	const partnerQuery = partners
-		? { idParceiro: { $in: [...partners, null] } }
-		: {};
-	const projectTypesQuery: Filter<TOpportunity> = projectTypes
-		? { "tipo.id": { $in: [...projectTypes] } }
-		: {};
+	const responsiblesQuery: Filter<TOpportunity> = responsibles ? { "responsaveis.id": { $in: responsibles } } : {};
+	const partnerQuery = partners ? { idParceiro: { $in: [...partners, null] } } : {};
+	const projectTypesQuery: Filter<TOpportunity> = projectTypes ? { "tipo.id": { $in: [...projectTypes] } } : {};
 
 	const afterDate = dayjs(after).toDate();
 	const beforeDate = dayjs(before).toDate();
 
 	const db = await connectToDatabase();
-	const opportunitiesCollection: Collection<TOpportunity> =
-		db.collection("opportunities");
+	const opportunitiesCollection: Collection<TOpportunity> = db.collection("opportunities");
 
 	const projects = await getOpportunities({
 		opportunitiesCollection,
@@ -146,18 +130,12 @@ async function getOverallResults(request: NextRequest) {
 
 			// Insertion related checkings
 			const insertDate = new Date(current.dataInsercao);
-			const wasInsertedWithinCurrentPeriod =
-				insertDate >= afterDate && insertDate <= beforeDate;
+			const wasInsertedWithinCurrentPeriod = insertDate >= afterDate && insertDate <= beforeDate;
 
 			// Signing related checkings
-			const signatureDate = current.ganho?.data
-				? new Date(current.ganho?.data)
-				: null;
+			const signatureDate = current.ganho?.data ? new Date(current.ganho?.data) : null;
 			const hasContractSigned = !!signatureDate;
-			const wasSignedWithinCurrentPeriod =
-				hasContractSigned &&
-				signatureDate >= afterDate &&
-				signatureDate <= beforeDate;
+			const wasSignedWithinCurrentPeriod = hasContractSigned && signatureDate >= afterDate && signatureDate <= beforeDate;
 
 			const proposeValue = current.valorProposta;
 
@@ -165,16 +143,13 @@ async function getOverallResults(request: NextRequest) {
 			const lostDate = current.dataPerda ? new Date(current.dataPerda) : null;
 			const isLostProject = !!lostDate;
 			const lossReason = current.motivoPerda || "NÃO DEFINIDO";
-			const wasLostWithinCurrentPeriod =
-				isLostProject && lostDate >= afterDate && lostDate <= beforeDate;
+			const wasLostWithinCurrentPeriod = isLostProject && lostDate >= afterDate && lostDate <= beforeDate;
 
 			// Sale channel related information
 			const isInbound = !!current.idMarketing;
 
 			const isTransfer = current.responsaveis.length > 1;
-			const isFromInsider = !!current.responsaveis.find(
-				(r) => r.papel === "SDR",
-			);
+			const isFromInsider = !!current.responsaveis.find((r) => r.papel === "SDR");
 			const isLead = isTransfer && isFromInsider;
 			const isSDROwn = !isTransfer && isFromInsider;
 
@@ -216,8 +191,7 @@ async function getOverallResults(request: NextRequest) {
 				if (isOutboundSDR) acc.projetosPerdidos.outboundSdr += 1;
 				if (isOutboundSeller) acc.projetosPerdidos.outboundVendedor += 1;
 
-				if (!acc.perdasPorMotivo[lossReason])
-					acc.perdasPorMotivo[lossReason] = 0;
+				if (!acc.perdasPorMotivo[lossReason]) acc.perdasPorMotivo[lossReason] = 0;
 				acc.perdasPorMotivo[lossReason] += 1;
 			}
 			if (wasSignedWithinCurrentPeriod) {
@@ -296,14 +270,7 @@ type TOverallResultsProject = {
 	dataPerda: TOpportunity["perda"]["data"];
 	dataInsercao: TOpportunity["dataInsercao"];
 };
-async function getOpportunities({
-	opportunitiesCollection,
-	partnerQuery,
-	responsiblesQuery,
-	projectTypesQuery,
-	afterDate,
-	beforeDate,
-}: GetProjectsParams) {
+async function getOpportunities({ opportunitiesCollection, partnerQuery, responsiblesQuery, projectTypesQuery, afterDate, beforeDate }: GetProjectsParams) {
 	try {
 		const afterDateStr = afterDate.toISOString();
 		const beforeDateStr = beforeDate.toISOString();
@@ -313,22 +280,13 @@ async function getOpportunities({
 			...projectTypesQuery,
 			$or: [
 				{
-					$and: [
-						{ dataInsercao: { $gte: afterDateStr } },
-						{ dataInsercao: { $lte: beforeDateStr } },
-					],
+					$and: [{ dataInsercao: { $gte: afterDateStr } }, { dataInsercao: { $lte: beforeDateStr } }],
 				},
 				{
-					$and: [
-						{ "perda.data": { $gte: afterDateStr } },
-						{ "perda.data": { $lte: beforeDateStr } },
-					],
+					$and: [{ "perda.data": { $gte: afterDateStr } }, { "perda.data": { $lte: beforeDateStr } }],
 				},
 				{
-					$and: [
-						{ "ganho.data": { $gte: afterDateStr } },
-						{ "ganho.data": { $lte: beforeDateStr } },
-					],
+					$and: [{ "ganho.data": { $gte: afterDateStr } }, { "ganho.data": { $lte: beforeDateStr } }],
 				},
 			],
 			dataExclusao: null,
@@ -343,9 +301,7 @@ async function getOpportunities({
 			perda: 1,
 			dataInsercao: 1,
 		};
-		const result = await opportunitiesCollection
-			.aggregate([{ $match: match }, { $project: projection }])
-			.toArray();
+		const result = await opportunitiesCollection.aggregate([{ $match: match }, { $project: projection }]).toArray();
 		const projects = result.map((r) => ({
 			idMarketing: r.idMarketing,
 			responsaveis: r.responsaveis,
@@ -362,7 +318,5 @@ async function getOpportunities({
 		throw error;
 	}
 }
-export type TOverallResultsRouteOutput = UnwrapNextResponse<
-	Awaited<ReturnType<typeof getOverallResults>>
->;
+export type TOverallResultsRouteOutput = UnwrapNextResponse<Awaited<ReturnType<typeof getOverallResults>>>;
 export const POST = apiHandler({ POST: getOverallResults });

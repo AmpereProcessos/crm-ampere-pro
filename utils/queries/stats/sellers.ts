@@ -12,7 +12,11 @@ type UseSalesTeamResultsParams = {
 };
 async function fetchStats({ after, before, responsibles, partners, projectTypes }: UseSalesTeamResultsParams) {
 	try {
-		const { data } = await axios.post(`/api/stats/comercial-results/sales-sellers?after=${after}&before=${before}`, { responsibles, partners, projectTypes });
+		const { data } = await axios.post(`/api/stats/comercial-results/sales-sellers?after=${after}&before=${before}`, {
+			responsibles,
+			partners,
+			projectTypes,
+		});
 		return data.data as TSellerSalesResults;
 	} catch (error) {
 		throw new Error("Erro ao buscar resultados do time de vendas");
@@ -56,7 +60,13 @@ type UseSalePromoterResultsByIdParams = {
 	secondPeriodAfter: string;
 	secondPeriodBefore: string;
 };
-async function fetchSalePromoterResultsById({ id, firstPeriodAfter, firstPeriodBefore, secondPeriodAfter, secondPeriodBefore }: UseSalePromoterResultsByIdParams) {
+async function fetchSalePromoterResultsById({
+	id,
+	firstPeriodAfter,
+	firstPeriodBefore,
+	secondPeriodAfter,
+	secondPeriodBefore,
+}: UseSalePromoterResultsByIdParams) {
 	try {
 		const { data } = await axios.get(
 			`/api/stats/comercial-results/sellers?id=${id}&firstPeriodAfter=${firstPeriodAfter}&firstPeriodBefore=${firstPeriodBefore}&secondPeriodAfter=${secondPeriodAfter}&secondPeriodBefore=${secondPeriodBefore}`,
@@ -67,7 +77,13 @@ async function fetchSalePromoterResultsById({ id, firstPeriodAfter, firstPeriodB
 	}
 }
 
-export function useSalePromoterResultsById({ id, firstPeriodAfter, firstPeriodBefore, secondPeriodAfter, secondPeriodBefore }: UseSalePromoterResultsByIdParams) {
+export function useSalePromoterResultsById({
+	id,
+	firstPeriodAfter,
+	firstPeriodBefore,
+	secondPeriodAfter,
+	secondPeriodBefore,
+}: UseSalePromoterResultsByIdParams) {
 	return useQuery({
 		queryKey: ["sale-promoter-results-by-id", id, firstPeriodAfter, firstPeriodBefore, secondPeriodAfter, secondPeriodBefore],
 		queryFn: async () => fetchSalePromoterResultsById({ id, firstPeriodAfter, firstPeriodBefore, secondPeriodAfter, secondPeriodBefore }),

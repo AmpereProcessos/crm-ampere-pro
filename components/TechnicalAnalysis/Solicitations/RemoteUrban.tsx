@@ -21,7 +21,16 @@ type RemoteUrbanProps = {
 	activeProposalId: TOpportunity["idPropostaAtiva"];
 	handleRequestAnalysis: ({ info, files }: { info: TTechnicalAnalysis; files: TFileHolder }) => void;
 };
-function RemoteUrban({ session, infoHolder, setInfoHolder, files, setFiles, activeProposalId, resetSolicitationType, handleRequestAnalysis }: RemoteUrbanProps) {
+function RemoteUrban({
+	session,
+	infoHolder,
+	setInfoHolder,
+	files,
+	setFiles,
+	activeProposalId,
+	resetSolicitationType,
+	handleRequestAnalysis,
+}: RemoteUrbanProps) {
 	const [stage, setStage] = useState(1);
 
 	return (

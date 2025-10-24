@@ -52,7 +52,10 @@ const GeneralActivitySchema = z.object({
 });
 
 export const InsertActivitySchema = z.object({
-	idParceiro: z.string({ required_error: "Referência de parceiro não informada.", invalid_type_error: "Tipo não válido para referência de parceiro." }),
+	idParceiro: z.string({
+		required_error: "Referência de parceiro não informada.",
+		invalid_type_error: "Tipo não válido para referência de parceiro.",
+	}),
 	titulo: z.string({ required_error: "Título da atividade não informado.", invalid_type_error: "Tipo não válido para o título da atividade." }), // resume of the activity
 	descricao: z.string({
 		required_error: "Descrição da atividade não informada.",

@@ -6,10 +6,7 @@ import type { TUserSession } from "@/lib/auth/session";
 import { copyToClipboard } from "@/lib/hooks";
 import { getErrorMessage } from "@/lib/methods/errors";
 import { getJSONFromExcelFile } from "@/lib/methods/excel-utils";
-import {
-	formatNameAsInitials,
-	formatWithoutDiacritics,
-} from "@/lib/methods/formatting";
+import { formatNameAsInitials, formatWithoutDiacritics } from "@/lib/methods/formatting";
 import { formatToPhone } from "@/utils/methods";
 import { createManyLeads } from "@/utils/mutations/leads";
 import { useOpportunityCreators } from "@/utils/queries/users";
@@ -35,11 +32,7 @@ type NewManyLeadsProps = {
 	};
 };
 
-export default function NewManyLeads({
-	closeModal,
-	callbacks,
-	sessionUser,
-}: NewManyLeadsProps) {
+export default function NewManyLeads({ closeModal, callbacks, sessionUser }: NewManyLeadsProps) {
 	const { data: qualifiers } = useOpportunityCreators();
 
 	const initialInfoHolder: TLead[] = [];
@@ -48,13 +41,8 @@ export default function NewManyLeads({
 	function updateInfoHolder(newInfo: TLead[]) {
 		setInfoHolder((prev) => [...prev, ...newInfo]);
 	}
-	function updateInfoHolderItem({
-		index,
-		newInfo,
-	}: { index: number; newInfo: Partial<TLead> }) {
-		setInfoHolder((prev) =>
-			prev.map((item, i) => (i === index ? { ...item, ...newInfo } : item)),
-		);
+	function updateInfoHolderItem({ index, newInfo }: { index: number; newInfo: Partial<TLead> }) {
+		setInfoHolder((prev) => prev.map((item, i) => (i === index ? { ...item, ...newInfo } : item)));
 	}
 	const { mutate: handleCreateManyLeadsMutation, isPending } = useMutation({
 		mutationFn: createManyLeads,
@@ -81,17 +69,12 @@ export default function NewManyLeads({
 			menuActionButtonText="CRIAR LEADS"
 			menuCancelButtonText="CANCELAR"
 			closeMenu={closeModal}
-			actionFunction={() =>
-				handleCreateManyLeadsMutation({ type: "multiple", leads: infoHolder })
-			}
+			actionFunction={() => handleCreateManyLeadsMutation({ type: "multiple", leads: infoHolder })}
 			actionIsLoading={isPending}
 			stateIsLoading={false}
 		>
 			<Utils qualifiers={qualifiers ?? []} />
-			<Dropzone
-				updateInfoHolder={updateInfoHolder}
-				qualifiers={qualifiers ?? []}
-			/>
+			<Dropzone updateInfoHolder={updateInfoHolder} qualifiers={qualifiers ?? []} />
 			<LeadsList infoHolder={infoHolder} />
 		</ResponsiveDialogDrawer>
 	);
@@ -132,27 +115,15 @@ function Utils({ qualifiers }: UtilsProps) {
 					<p className="text-xs">BAIXAR PLANILHA DE REFERÊNCIA</p>
 				</Button>
 			</div>
-			{seeQualifiersOptions ? (
-				<QualifiersList
-					qualifiers={qualifiers}
-					closeMenu={() => setSeeQualifiersOptions(false)}
-				/>
-			) : null}
+			{seeQualifiersOptions ? <QualifiersList qualifiers={qualifiers} closeMenu={() => setSeeQualifiersOptions(false)} /> : null}
 		</div>
 	);
 }
 
-function QualifiersList({
-	qualifiers,
-	closeMenu,
-}: { qualifiers: TUserDTOSimplified[]; closeMenu: () => void }) {
+function QualifiersList({ qualifiers, closeMenu }: { qualifiers: TUserDTOSimplified[]; closeMenu: () => void }) {
 	const [search, setSearch] = useState("");
 
-	const filteredQualifiers = qualifiers.filter((qualifier) =>
-		formatWithoutDiacritics(qualifier.nome, true).includes(
-			formatWithoutDiacritics(search, true),
-		),
-	);
+	const filteredQualifiers = qualifiers.filter((qualifier) => formatWithoutDiacritics(qualifier.nome, true).includes(formatWithoutDiacritics(search, true)));
 	return (
 		<ResponsiveDialogDrawerViewOnly
 			menuTitle="QUALIFICADORES"
@@ -184,18 +155,11 @@ function QualifiersList({
 									<div className="flex items-center gap-2">
 										<Avatar className="w-5 h-5 min-w-5 min-h-5">
 											<AvatarImage src={qualifier.avatar_url || undefined} />
-											<AvatarFallback>
-												{formatNameAsInitials(qualifier.nome)}
-											</AvatarFallback>
+											<AvatarFallback>{formatNameAsInitials(qualifier.nome)}</AvatarFallback>
 										</Avatar>
 										<p className="text-xs font-medium">{qualifier.nome}</p>
 									</div>
-									<Button
-										onClick={() => copyToClipboard(qualifier.nome)}
-										size={"fit"}
-										variant={"ghost"}
-										className="p-2 rounded-full"
-									>
+									<Button onClick={() => copyToClipboard(qualifier.nome)} size={"fit"} variant={"ghost"} className="p-2 rounded-full">
 										<Copy className="w-4 h-4 min-w-4 min-h-4" />
 									</Button>
 								</motion.div>
@@ -269,11 +233,7 @@ function Dropzone({ updateInfoHolder, qualifiers }: DropzoneProps) {
 			for (const lead of parsedData) {
 				const formattedPhone = formatToPhone(lead.TELEFONE);
 				if (!leadsMap.has(formattedPhone)) {
-					const qualifierUser = lead.QUALIFICADOR
-						? qualifiers?.find(
-								(qualifier) => qualifier.nome === lead.QUALIFICADOR,
-							)
-						: null;
+					const qualifierUser = lead.QUALIFICADOR ? qualifiers?.find((qualifier) => qualifier.nome === lead.QUALIFICADOR) : null;
 					const info: TLead = {
 						nome: lead.NOME,
 						telefone: formattedPhone,
@@ -313,10 +273,7 @@ function Dropzone({ updateInfoHolder, qualifiers }: DropzoneProps) {
 				<div className="flex flex-col items-center justify-center pb-6 pt-5 text-primary">
 					<BsCloudUploadFill size={50} />
 					<p className="mb-2 px-2 text-center text-sm">
-						<span className="font-semibold">
-							Clique para escolher um arquivo
-						</span>{" "}
-						ou o arraste para a àrea demarcada
+						<span className="font-semibold">Clique para escolher um arquivo</span> ou o arraste para a àrea demarcada
 					</p>
 				</div>
 				<input
@@ -335,25 +292,13 @@ function Dropzone({ updateInfoHolder, qualifiers }: DropzoneProps) {
 }
 
 function LeadsList({ infoHolder }: { infoHolder: TLead[] }) {
-	if (infoHolder.length === 0)
-		return (
-			<p className="w-full text-center italic text-primary/70">
-				Nenhum lead para criar...
-			</p>
-		);
+	if (infoHolder.length === 0) return <p className="w-full text-center italic text-primary/70">Nenhum lead para criar...</p>;
 	return (
 		<div className="flex flex-col gap-2">
 			{infoHolder.map((lead) => (
-				<div
-					key={lead.telefone}
-					className={
-						"bg-card border-primary/20 flex w-full flex-col gap-3 rounded-xl border shadow-xs p-3"
-					}
-				>
+				<div key={lead.telefone} className={"bg-card border-primary/20 flex w-full flex-col gap-3 rounded-xl border shadow-xs p-3"}>
 					<div className="w-full flex items-center justify-between flex-col lg:flex-row gap-2">
-						<h1 className="text-sm font-bold  text-truncate">
-							{lead.telefone}
-						</h1>
+						<h1 className="text-sm font-bold  text-truncate">{lead.telefone}</h1>
 						<div className="flex items-center grow flex-wrap">
 							{lead.nome ? (
 								<div className="flex items-center gap-1 bg-primary/20 px-2 py-0.5 rounded-lg">
@@ -378,16 +323,10 @@ function LeadsList({ infoHolder }: { infoHolder: TLead[] }) {
 							<div className="flex items-center gap-1">
 								<p className="text-xs font-medium">QUALIFICADO POR:</p>
 								<Avatar className="w-5 h-5 min-w-5 min-h-5">
-									<AvatarImage
-										src={lead.qualificacao.responsavel.avatar_url || undefined}
-									/>
-									<AvatarFallback>
-										{formatNameAsInitials(lead.qualificacao.responsavel.nome)}
-									</AvatarFallback>
+									<AvatarImage src={lead.qualificacao.responsavel.avatar_url || undefined} />
+									<AvatarFallback>{formatNameAsInitials(lead.qualificacao.responsavel.nome)}</AvatarFallback>
 								</Avatar>
-								<p className="text-xs font-medium">
-									{lead.qualificacao.responsavel.nome}
-								</p>
+								<p className="text-xs font-medium">{lead.qualificacao.responsavel.nome}</p>
 							</div>
 						</div>
 					) : null}

@@ -23,16 +23,9 @@ type UpdatePPSCallParams = {
 	collection: Collection<TPPSCall>;
 	info: Partial<TPPSCall>;
 };
-export async function updatePPSCall({
-	collection,
-	id,
-	info,
-}: UpdatePPSCallParams) {
+export async function updatePPSCall({ collection, id, info }: UpdatePPSCallParams) {
 	try {
-		const updateResponse = await collection.updateOne(
-			{ _id: new ObjectId(id) },
-			{ $set: info },
-		);
+		const updateResponse = await collection.updateOne({ _id: new ObjectId(id) }, { $set: info });
 		return updateResponse;
 	} catch (error) {
 		console.log("Error running updatePPSCall", error);

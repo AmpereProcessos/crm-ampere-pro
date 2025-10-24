@@ -1,4 +1,4 @@
 async function fetchMaterials() {
-  try {
-  } catch (error) {}
+	try {
+	} catch (error) {}
 }

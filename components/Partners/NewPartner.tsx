@@ -1,7 +1,7 @@
-import React from 'react'
+import React from "react";
 
 function NewPartner() {
-  return <div>NewPartner</div>
+	return <div>NewPartner</div>;
 }
 
-export default NewPartner
+export default NewPartner;

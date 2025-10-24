@@ -1,21 +1,5 @@
-import {
-	Dialog,
-	DialogClose,
-	DialogContent,
-	DialogDescription,
-	DialogFooter,
-	DialogHeader,
-	DialogTitle,
-} from "@/components/ui/dialog";
-import {
-	Drawer,
-	DrawerClose,
-	DrawerContent,
-	DrawerDescription,
-	DrawerFooter,
-	DrawerHeader,
-	DrawerTitle,
-} from "@/components/ui/drawer";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
 import { cn, useMediaQuery } from "@/lib/utils";
 import type { PropsWithChildren } from "react";
 import { Button } from "../ui/button";
@@ -40,12 +24,7 @@ function ResponsiveDialogDrawerViewOnly({
 	const isDesktop = useMediaQuery("(min-width: 768px)");
 	return isDesktop ? (
 		<Dialog onOpenChange={(v) => (v ? null : closeMenu())} open>
-			<DialogContent
-				className={cn(
-					"flex h-fit max-h-[80vh] min-h-[60vh] flex-col dark:bg-background",
-					dialogContentClassName,
-				)}
-			>
+			<DialogContent className={cn("flex h-fit max-h-[80vh] min-h-[60vh] flex-col dark:bg-background", dialogContentClassName)}>
 				<DialogHeader>
 					<DialogTitle>{menuTitle}</DialogTitle>
 					<DialogDescription>{menuDescription}</DialogDescription>
@@ -62,12 +41,7 @@ function ResponsiveDialogDrawerViewOnly({
 		</Dialog>
 	) : (
 		<Drawer onOpenChange={(v) => (v ? null : closeMenu())} open>
-			<DrawerContent
-				className={cn(
-					"flex h-fit max-h-[70vh] flex-col",
-					drawerContentClassName,
-				)}
-			>
+			<DrawerContent className={cn("flex h-fit max-h-[70vh] flex-col", drawerContentClassName)}>
 				<DrawerHeader className="text-left">
 					<DrawerTitle>{menuTitle}</DrawerTitle>
 					<DrawerDescription>{menuDescription}</DrawerDescription>

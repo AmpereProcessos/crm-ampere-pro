@@ -77,7 +77,12 @@ type getIdealTotalModulesPowerFromConsumptionProps = {
 	locationUf?: string;
 	locationCity?: string;
 };
-export function getIdealTotalModulesPowerFromConsumption({ energyConsumption, orientation, locationUf, locationCity }: getIdealTotalModulesPowerFromConsumptionProps): number {
+export function getIdealTotalModulesPowerFromConsumption({
+	energyConsumption,
+	orientation,
+	locationUf,
+	locationCity,
+}: getIdealTotalModulesPowerFromConsumptionProps): number {
 	const DEFAULT_GENERATION_FACTOR = 127; // kWh/m²/year
 	if (!locationCity || !locationUf) {
 		return energyConsumption / DEFAULT_GENERATION_FACTOR;
@@ -86,7 +91,8 @@ export function getIdealTotalModulesPowerFromConsumption({ energyConsumption, or
 	if (!locationGenerationFactors) {
 		return energyConsumption / DEFAULT_GENERATION_FACTOR;
 	}
-	const locationGenerationFactorForOrientation = locationGenerationFactors.POR_ORIENTACAO[orientation as keyof typeof locationGenerationFactors.POR_ORIENTACAO];
+	const locationGenerationFactorForOrientation =
+		locationGenerationFactors.POR_ORIENTACAO[orientation as keyof typeof locationGenerationFactors.POR_ORIENTACAO];
 	if (!locationGenerationFactorForOrientation) {
 		return energyConsumption / locationGenerationFactors.POR_ORIENTACAO.NORTE; // using the default orientation (NORTE)
 	}
@@ -115,7 +121,8 @@ export function getEstimatedEnergyGenerationFromTotalModulesPower({
 	if (!locationGenerationFactors) {
 		return totalModulesPower * DEFAULT_GENERATION_FACTOR;
 	}
-	const locationGenerationFactorForOrientation = locationGenerationFactors.POR_ORIENTACAO[orientation as keyof typeof locationGenerationFactors.POR_ORIENTACAO];
+	const locationGenerationFactorForOrientation =
+		locationGenerationFactors.POR_ORIENTACAO[orientation as keyof typeof locationGenerationFactors.POR_ORIENTACAO];
 	if (!locationGenerationFactorForOrientation) {
 		return totalModulesPower * locationGenerationFactors.POR_ORIENTACAO.NORTE; // using the default orientation (NORTE)
 	}
@@ -150,7 +157,10 @@ export function getSalesProposalScenarios({
 	const monthlyEnergyConsumption = salesProposal.premissas.consumoEnergiaMensal || 0;
 	const energyConsumptonTariff = salesProposal.premissas.tarifaEnergia || 0;
 	const totalModulesPower =
-		salesProposalProducts.reduce((acc, product) => (product.categoria === "MÓDULO" && product.potencia ? acc + product.qtde * (product.potencia || 0) : acc), 0) / 1000;
+		salesProposalProducts.reduce(
+			(acc, product) => (product.categoria === "MÓDULO" && product.potencia ? acc + product.qtde * (product.potencia || 0) : acc),
+			0,
+		) / 1000;
 	const totalModulesArea = salesProposalProducts.reduce(
 		(acc, product) =>
 			product.categoria === "MÓDULO"

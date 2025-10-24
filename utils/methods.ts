@@ -4,19 +4,9 @@ import axios, { AxiosError } from "axios";
 import dayjs from "dayjs";
 import { toast } from "react-hot-toast";
 import { ZodError } from "zod";
-import genFactors from "../utils/json-files/generationFactors.json" with {
-	type: "json",
-};
+import genFactors from "../utils/json-files/generationFactors.json" with { type: "json" };
 import type { orientations } from "./constants";
-import type {
-	IClient,
-	IKit,
-	IRepresentative,
-	IResponsible,
-	ISession,
-	InverterType,
-	ModuleType,
-} from "./models";
+import type { IClient, IKit, IRepresentative, IResponsible, ISession, InverterType, ModuleType } from "./models";
 import type { TModule, TProductItem } from "./schemas/kits.schema";
 import { TOpportunity } from "./schemas/opportunity.schema";
 import type { TProposal } from "./schemas/proposal.schema";
@@ -39,10 +29,7 @@ type GetMaxHomologationPowerEstimationParams = {
 	group: TProposal["premissas"]["grupoInstalacao"];
 	avgConsumption: number;
 };
-export function getMaxHomologationPowerEstimation({
-	group,
-	avgConsumption,
-}: GetMaxHomologationPowerEstimationParams) {
+export function getMaxHomologationPowerEstimation({ group, avgConsumption }: GetMaxHomologationPowerEstimationParams) {
 	if (group == "RESIDENCIAL") {
 		const CS = 0.68;
 		const convertionFactor = 115.2 / CS;
@@ -87,9 +74,7 @@ export function getPeakPotByModules(modules: TModule[] | undefined) {
 }
 export function getModulesQty(products: TProductItem[] | undefined) {
 	if (!products) return 0;
-	const qty = products
-		.filter((p) => p.categoria == "MÓDULO")
-		.reduce((acc, current) => acc + current.qtde, 0);
+	const qty = products.filter((p) => p.categoria == "MÓDULO").reduce((acc, current) => acc + current.qtde, 0);
 	return qty;
 }
 export function formatToMoney(value: string | number, tag = "R$") {
@@ -105,9 +90,7 @@ export function getEstimatedGen(
 	orientation?: (typeof orientations)[number],
 ): number {
 	if (!(city && uf)) return 127 * peakPower;
-	const cityFactor = genFactors.find(
-		(genFactor) => genFactor.CIDADE == city && genFactor.UF == uf,
-	);
+	const cityFactor = genFactors.find((genFactor) => genFactor.CIDADE == city && genFactor.UF == uf);
 	if (!cityFactor) return 127 * peakPower;
 
 	var genFactor;
@@ -117,13 +100,9 @@ export function getEstimatedGen(
 	if (genFactor) return genFactor * peakPower;
 	return 127 * peakPower;
 }
-export async function getCEPInfo(
-	cep: string,
-): Promise<ViaCEPSuccessfulReturn | null> {
+export async function getCEPInfo(cep: string): Promise<ViaCEPSuccessfulReturn | null> {
 	try {
-		const { data } = await axios.get(
-			`https://viacep.com.br/ws/${cep.replace("-", "")}/json/`,
-		);
+		const { data } = await axios.get(`https://viacep.com.br/ws/${cep.replace("-", "")}/json/`);
 		console.log(data);
 		if (data.erro) throw new Error("Erro");
 		return data;
@@ -139,10 +118,7 @@ export function formatToCPForCNPJ(value: string): string {
 		return cnpjCpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/g, "$1.$2.$3-$4");
 	}
 
-	return cnpjCpf.replace(
-		/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/g,
-		"$1.$2.$3/$4-$5",
-	);
+	return cnpjCpf.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/g, "$1.$2.$3/$4-$5");
 }
 export function formatToCEP(value: string): string {
 	const cep = value
@@ -185,9 +161,7 @@ export function formatPhoneAsBase(phone: string) {
  * @param {string | undefined} value
  * @returns {string | null}
  */
-export function formatDateForInputValue(
-	value: Date | string | null | undefined,
-): string | undefined {
+export function formatDateForInputValue(value: Date | string | null | undefined): string | undefined {
 	if (value === "" || value === undefined || value === null) return undefined;
 	const date = dayjs(value);
 	const yearValue = date.year();
@@ -220,10 +194,7 @@ export function formatUpdateSetObject(changes: object) {
 	return setObj;
 }
 // STR functions
-export function getInverterStr(
-	inverters: InverterType[],
-	kitType: string | undefined,
-) {
+export function getInverterStr(inverters: InverterType[], kitType: string | undefined) {
 	let str = "";
 	if (kitType === "PROMOCIONAL") {
 		for (let i = 0; i < inverters.length; i++) {
@@ -248,10 +219,7 @@ export function getInverterStr(
 	}
 	return str;
 }
-export function getModulesStr(
-	modules: ModuleType[],
-	kitType: string | undefined,
-) {
+export function getModulesStr(modules: ModuleType[], kitType: string | undefined) {
 	let str = "";
 	if (kitType === "PROMOCIONAL") {
 		for (let i = 0; i < modules.length; i++) {
@@ -274,11 +242,7 @@ export function getModulesStr(
 	return str;
 }
 
-export function useKitQueryPipelines(
-	type: "TODOS OS KITS" | "KITS POR PREMISSA",
-	payload: Record<string, any>,
-	partnerQuery: any,
-) {
+export function useKitQueryPipelines(type: "TODOS OS KITS" | "KITS POR PREMISSA", payload: Record<string, any>, partnerQuery: any) {
 	const currentDate = new Date().toISOString();
 	switch (type) {
 		case "TODOS OS KITS":
@@ -286,10 +250,7 @@ export function useKitQueryPipelines(
 				{
 					$match: {
 						ativo: true,
-						$or: [
-							{ dataValidade: null },
-							{ dataValidade: { $gt: currentDate } },
-						],
+						$or: [{ dataValidade: null }, { dataValidade: { $gt: currentDate } }],
 						estruturasCompativeis: payload.structure ? payload.structure : [],
 						...partnerQuery,
 					},
@@ -318,15 +279,9 @@ export function useKitQueryPipelines(
 				{
 					$match: {
 						ativo: true,
-						$or: [
-							{ dataValidade: null },
-							{ dataValidade: { $gt: currentDate } },
-						],
+						$or: [{ dataValidade: null }, { dataValidade: { $gt: currentDate } }],
 						estruturasCompativeis: payload.structure ? payload.structure : [],
-						$and: [
-							{ potenciaPico: { $gte: payload.min } },
-							{ potenciaPico: { $lte: payload.max } },
-						],
+						$and: [{ potenciaPico: { $gte: payload.min } }, { potenciaPico: { $lte: payload.max } }],
 						...partnerQuery,
 					},
 				},
@@ -354,10 +309,7 @@ export function useKitQueryPipelines(
 				{
 					$match: {
 						ativo: true,
-						$or: [
-							{ dataValidade: null },
-							{ dataValidade: { $gt: currentDate } },
-						],
+						$or: [{ dataValidade: null }, { dataValidade: { $gt: currentDate } }],
 						...partnerQuery,
 					},
 				},
@@ -412,10 +364,7 @@ export function useRepresentatives(): UseQueryResult<IRepresentative[], Error> {
 	});
 }
 
-export function useClient(
-	clientId: string,
-	enabled: boolean,
-): UseQueryResult<IClient, Error> {
+export function useClient(clientId: string, enabled: boolean): UseQueryResult<IClient, Error> {
 	return useQuery<IClient, Error>({
 		queryKey: ["client", clientId],
 		queryFn: async () => {
@@ -460,16 +409,12 @@ export function useResponsibles(): UseQueryResult<IResponsible[], Error> {
 		refetchOnWindowFocus: false,
 	});
 }
-export function useResponsibleInfo(
-	responsibleId: string | undefined,
-): IResponsible | null {
+export function useResponsibleInfo(responsibleId: string | undefined): IResponsible | null {
 	const { data: responsible } = useQuery({
 		queryKey: ["responsible", responsibleId],
 		queryFn: async (): Promise<IResponsible | null> => {
 			try {
-				const { data } = await axios.get(
-					`/api/responsibles?id=${responsibleId}`,
-				);
+				const { data } = await axios.get(`/api/responsibles?id=${responsibleId}`);
 				return data.data;
 			} catch (error) {
 				if (error instanceof AxiosError) {
@@ -516,17 +461,12 @@ export function useKits(onlyActive?: boolean): UseQueryResult<IKit[], Error> {
 		refetchOnWindowFocus: false,
 	});
 }
-export function useClients(
-	representative: string | null | undefined,
-	enabled: boolean,
-): UseQueryResult<IClient[], Error> {
+export function useClients(representative: string | null | undefined, enabled: boolean): UseQueryResult<IClient[], Error> {
 	return useQuery({
 		queryKey: ["clients"],
 		queryFn: async (): Promise<IClient[]> => {
 			try {
-				const { data } = await axios.get(
-					`/api/clients?representative=${representative}`,
-				);
+				const { data } = await axios.get(`/api/clients?representative=${representative}`);
 				return data.data;
 			} catch (error) {
 				if (error instanceof AxiosError) {
@@ -578,20 +518,13 @@ function getLevenshteinDistance(string1: string, string2: string): number {
 	for (let i = 1; i <= string1.length; i++) {
 		for (let j = 1; j <= string2.length; j++) {
 			const indicator = string1[i - 1] === string2[j - 1] ? 0 : 1;
-			matrix[i][j] = Math.min(
-				matrix[i - 1][j] + 1,
-				matrix[i][j - 1] + 1,
-				matrix[i - 1][j - 1] + indicator,
-			);
+			matrix[i][j] = Math.min(matrix[i - 1][j] + 1, matrix[i][j - 1] + 1, matrix[i - 1][j - 1] + indicator);
 		}
 	}
 
 	return matrix[string1.length][string2.length];
 }
-export function calculateStringSimilarity(
-	string1: string,
-	string2: string,
-): number {
+export function calculateStringSimilarity(string1: string, string2: string): number {
 	const maxLength = Math.max(string1.length, string2.length);
 	const distance = getLevenshteinDistance(string1, string2);
 	const similarity = (maxLength - distance) / maxLength;
@@ -605,9 +538,7 @@ export function getMostFrequent(arr: any[]) {
 		acc[val] = (acc[val] || 0) + 1;
 		return acc;
 	}, {});
-	return Object.keys(hashmap).reduce((a, b) =>
-		hashmap[a] > hashmap[b] ? a : b,
-	);
+	return Object.keys(hashmap).reduce((a, b) => (hashmap[a] > hashmap[b] ? a : b));
 }
 export function getAverageValue(arr: number[]) {
 	const sum = arr.reduce((a, b) => a + b, 0);
@@ -633,7 +564,5 @@ export function getLastDayOfYear(date: string) {
 	return dayjs(date).endOf("year").toDate();
 }
 export function isEmpty(value: any) {
-	return (
-		value == null || (typeof value === "string" && value.trim().length === 0)
-	);
+	return value == null || (typeof value === "string" && value.trim().length === 0);
 }

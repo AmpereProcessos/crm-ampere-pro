@@ -7,5 +7,10 @@ import {
 } from "@/services/novu/workflows";
 
 export const { GET, POST, OPTIONS } = serve({
-	workflows: [notfiyNewOpportunityToResponsibles, notifyNewInteractionToResponsibles, notifyOpportunityTopicOnTechnicalAnalysisConcluded, generalNoficationWorkflow],
+	workflows: [
+		notfiyNewOpportunityToResponsibles,
+		notifyNewInteractionToResponsibles,
+		notifyOpportunityTopicOnTechnicalAnalysisConcluded,
+		generalNoficationWorkflow,
+	],
 });

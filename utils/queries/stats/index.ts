@@ -1,18 +1,9 @@
 import type { TComercialResultsQueryFiltersOptions } from "@/app/api/stats/comercial-results/query-options/route";
-import type {
-	TGetGraphDataRouteInput,
-	TGetGraphDataRouteOutput,
-} from "@/app/api/stats/graph/route";
-import type {
-	TGetSDRRankingInput,
-	TGetSDRRankingOutput,
-} from "@/app/api/stats/ranking/sdrs/route";
+import type { TGetGraphDataRouteInput, TGetGraphDataRouteOutput } from "@/app/api/stats/graph/route";
+import type { TGetSDRRankingInput, TGetSDRRankingOutput } from "@/app/api/stats/ranking/sdrs/route";
 import type { TGetSellersRankingInput } from "@/app/api/stats/ranking/sellers/route";
 import type { TGetSellersRankingOutput } from "@/app/api/stats/ranking/sellers/route";
-import type {
-	TGetStatsQueryFiltersOptionsRouteOutput,
-	TGetStatsRouteOutput,
-} from "@/app/api/stats/route";
+import type { TGetStatsQueryFiltersOptionsRouteOutput, TGetStatsRouteOutput } from "@/app/api/stats/route";
 import type { TSalesStats } from "@/app/api/stats/sales/route";
 import { useDebounceMemo } from "@/lib/hooks";
 import type { TActivityDTO } from "@/utils/schemas/activities.schema";
@@ -69,40 +60,23 @@ type UseStatsParams = {
 	partners: string[] | null;
 	projectTypes: string[] | null;
 };
-async function fetchStats({
-	after,
-	before,
-	responsibles,
-	partners,
-	projectTypes,
-}: UseStatsParams) {
-	const { data }: { data: TGetStatsRouteOutput } = await axios.post(
-		`/api/stats?after=${after}&before=${before}`,
-		{
-			responsibles,
-			partners,
-			projectTypes,
-		},
-	);
+async function fetchStats({ after, before, responsibles, partners, projectTypes }: UseStatsParams) {
+	const { data }: { data: TGetStatsRouteOutput } = await axios.post(`/api/stats?after=${after}&before=${before}`, {
+		responsibles,
+		partners,
+		projectTypes,
+	});
 	return data.data;
 }
-export function useStats({
-	after,
-	before,
-	responsibles,
-	partners,
-	projectTypes,
-}: UseStatsParams) {
+export function useStats({ after, before, responsibles, partners, projectTypes }: UseStatsParams) {
 	return useQuery({
 		queryKey: ["stats", after, before, responsibles, partners, projectTypes],
-		queryFn: async () =>
-			await fetchStats({ after, before, responsibles, partners, projectTypes }),
+		queryFn: async () => await fetchStats({ after, before, responsibles, partners, projectTypes }),
 		refetchOnWindowFocus: false,
 	});
 }
 async function fetchStatsQueryOptions() {
-	const { data }: { data: TGetStatsQueryFiltersOptionsRouteOutput } =
-		await axios.get("/api/stats");
+	const { data }: { data: TGetStatsQueryFiltersOptionsRouteOutput } = await axios.get("/api/stats");
 	return data.data.options;
 }
 export function useStatsQueryOptions() {
@@ -112,9 +86,7 @@ export function useStatsQueryOptions() {
 	});
 }
 async function fetchComercialResultsQueryOptions() {
-	const { data } = await axios.get(
-		"/api/stats/comercial-results/query-options",
-	);
+	const { data } = await axios.get("/api/stats/comercial-results/query-options");
 	return data.data as TComercialResultsQueryFiltersOptions;
 }
 export function useComercialResultsQueryOptions() {
@@ -123,21 +95,11 @@ export function useComercialResultsQueryOptions() {
 		queryFn: fetchComercialResultsQueryOptions,
 	});
 }
-async function fetchSalesStats(
-	after: string,
-	before: string,
-	responsibles: string[] | null,
-) {
-	const { data } = await axios.get(
-		`/api/stats/sales?after=${after}&before=${before}&responsibles=${responsibles}`,
-	);
+async function fetchSalesStats(after: string, before: string, responsibles: string[] | null) {
+	const { data } = await axios.get(`/api/stats/sales?after=${after}&before=${before}&responsibles=${responsibles}`);
 	return data.data as TSalesStats;
 }
-export function useSaleStats(
-	after: string,
-	before: string,
-	responsibles: string[] | null,
-) {
+export function useSaleStats(after: string, before: string, responsibles: string[] | null) {
 	return useQuery({
 		queryKey: ["sale-stats", after, before, responsibles],
 		queryFn: async () => await fetchSalesStats(after, before, responsibles),
@@ -149,23 +111,12 @@ type TFetchGraphDataParams = {
 	before: string;
 	filters: TGetGraphDataRouteInput;
 };
-async function fetchGraphData({
-	after,
-	before,
-	filters,
-}: TFetchGraphDataParams) {
-	const { data } = await axios.post<TGetGraphDataRouteOutput>(
-		`/api/stats/graph?after=${after}&before=${before}`,
-		filters,
-	);
+async function fetchGraphData({ after, before, filters }: TFetchGraphDataParams) {
+	const { data } = await axios.post<TGetGraphDataRouteOutput>(`/api/stats/graph?after=${after}&before=${before}`, filters);
 	return data.data;
 }
 
-export function useGraphData({
-	after,
-	before,
-	filters,
-}: TFetchGraphDataParams) {
+export function useGraphData({ after, before, filters }: TFetchGraphDataParams) {
 	return useQuery({
 		queryKey: ["graph-data", after, before, filters],
 		queryFn: async () => await fetchGraphData({ after, before, filters }),
@@ -176,9 +127,7 @@ async function fetchSDRRanking({ rankBy, type }: TGetSDRRankingInput) {
 	const urlParams = new URLSearchParams();
 	urlParams.set("type", type);
 	urlParams.set("rankBy", rankBy);
-	const { data } = await axios.get<TGetSDRRankingOutput>(
-		`/api/stats/ranking/sdrs?${urlParams.toString()}`,
-	);
+	const { data } = await axios.get<TGetSDRRankingOutput>(`/api/stats/ranking/sdrs?${urlParams.toString()}`);
 	return data.data;
 }
 
@@ -206,18 +155,12 @@ export function useSDRRanking({ initialParams }: UseSDRRankingParams) {
 	};
 }
 
-async function fetchSellersRanking({
-	projectTypes,
-	rankBy,
-	type,
-}: TGetSellersRankingInput) {
+async function fetchSellersRanking({ projectTypes, rankBy, type }: TGetSellersRankingInput) {
 	const urlParams = new URLSearchParams();
 	urlParams.set("type", type);
 	urlParams.set("rankBy", rankBy);
 	urlParams.set("projectTypes", projectTypes.join(","));
-	const { data } = await axios.get<TGetSellersRankingOutput>(
-		`/api/stats/ranking/sellers?${urlParams.toString()}`,
-	);
+	const { data } = await axios.get<TGetSellersRankingOutput>(`/api/stats/ranking/sellers?${urlParams.toString()}`);
 	return data.data;
 }
 
@@ -228,10 +171,7 @@ export function useSellersRanking({ initialParams }: UseSellersRankingParams) {
 	const [params, setParams] = useState<TGetSellersRankingInput>({
 		type: initialParams?.type ?? "current-semester",
 		rankBy: initialParams?.rankBy ?? "sales-total-power",
-		projectTypes: initialParams?.projectTypes ?? [
-			"SISTEMA FOTOVOLTAICO",
-			"AUMENTO DE SISTEMA FOTOVOLTAICO",
-		],
+		projectTypes: initialParams?.projectTypes ?? ["SISTEMA FOTOVOLTAICO", "AUMENTO DE SISTEMA FOTOVOLTAICO"],
 	});
 
 	function updateParams(newParams: Partial<TGetSellersRankingInput>) {

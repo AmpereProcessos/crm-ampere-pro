@@ -86,7 +86,17 @@ async function fetchFileReferencesByQuery({
 	const revenueParam = revenueId ? `revenueId=${revenueId}` : null;
 	const expenseParam = expenseId ? `expenseId=${expenseId}` : null;
 	const serviceOrderParam = serviceOrderId ? `serviceOrderId=${serviceOrderId}` : null;
-	const param = [clientParam, opportunityParam, analysisParam, homologationParam, projectParam, purchaseParam, revenueParam, expenseParam, serviceOrderParam]
+	const param = [
+		clientParam,
+		opportunityParam,
+		analysisParam,
+		homologationParam,
+		projectParam,
+		purchaseParam,
+		revenueParam,
+		expenseParam,
+		serviceOrderParam,
+	]
 		.filter((q) => !!q)
 		.join("&");
 
@@ -96,9 +106,19 @@ async function fetchFileReferencesByQuery({
 	return data.data.fileReferences;
 }
 
-export function useFileReferences({ clientId, opportunityId, analysisId, homologationId, projectId, purchaseId, revenueId, serviceOrderId }: TFileReferencesQueryParams) {
+export function useFileReferences({
+	clientId,
+	opportunityId,
+	analysisId,
+	homologationId,
+	projectId,
+	purchaseId,
+	revenueId,
+	serviceOrderId,
+}: TFileReferencesQueryParams) {
 	return useQuery({
 		queryKey: ["file-references-by-query", clientId, opportunityId, analysisId, homologationId, projectId, purchaseId, revenueId, serviceOrderId],
-		queryFn: async () => await fetchFileReferencesByQuery({ clientId, opportunityId, analysisId, homologationId, projectId, purchaseId, revenueId, serviceOrderId }),
+		queryFn: async () =>
+			await fetchFileReferencesByQuery({ clientId, opportunityId, analysisId, homologationId, projectId, purchaseId, revenueId, serviceOrderId }),
 	});
 }

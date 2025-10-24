@@ -6,11 +6,7 @@ type InsertHomologationParams = {
 	info: THomologation;
 	partnerId: string;
 };
-export async function insertHomologation({
-	collection,
-	info,
-	partnerId,
-}: InsertHomologationParams) {
+export async function insertHomologation({ collection, info, partnerId }: InsertHomologationParams) {
 	try {
 		const insertResponse = await collection.insertOne({
 			...info,
@@ -29,17 +25,9 @@ type UpdateHomologationParams = {
 	changes: Partial<THomologation>;
 	query: Filter<THomologation>;
 };
-export async function updateHomologation({
-	id,
-	collection,
-	changes,
-	query,
-}: UpdateHomologationParams) {
+export async function updateHomologation({ id, collection, changes, query }: UpdateHomologationParams) {
 	try {
-		const updateResponse = await collection.updateOne(
-			{ _id: new ObjectId(id), ...query },
-			{ $set: { ...changes } },
-		);
+		const updateResponse = await collection.updateOne({ _id: new ObjectId(id), ...query }, { $set: { ...changes } });
 
 		return updateResponse;
 	} catch (error) {

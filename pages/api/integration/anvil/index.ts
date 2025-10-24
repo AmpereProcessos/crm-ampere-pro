@@ -1,4 +1,4 @@
 type PutResponse = {
-  data: string
-  message: string
-}
+	data: string;
+	message: string;
+};

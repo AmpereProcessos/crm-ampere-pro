@@ -25,10 +25,7 @@ import VistoryInformation from "@/app/components/Homologations/ModalBlocks/Visto
 
 import { getErrorMessage } from "@/lib/methods/errors";
 
-import type {
-	THomologation,
-	THomologationDTO,
-} from "@/utils/schemas/homologation.schema";
+import type { THomologation, THomologationDTO } from "@/utils/schemas/homologation.schema";
 
 import { useHomologationById } from "@/utils/queries/homologations";
 
@@ -43,19 +40,9 @@ type ControlHomologationProps = {
 	session: TUserSession;
 	closeModal: () => void;
 };
-function ControlHomologation({
-	homologationId,
-	session,
-	closeModal,
-}: ControlHomologationProps) {
+function ControlHomologation({ homologationId, session, closeModal }: ControlHomologationProps) {
 	const queryClient = useQueryClient();
-	const {
-		data: homologation,
-		isLoading,
-		isError,
-		isSuccess,
-		error,
-	} = useHomologationById({ id: homologationId });
+	const { data: homologation, isLoading, isError, isSuccess, error } = useHomologationById({ id: homologationId });
 	const [infoHolder, setInfoHolder] = useState<THomologationDTO>({
 		_id: "id-holder",
 		status: "PENDENTE",
@@ -118,13 +105,12 @@ function ControlHomologation({
 		dataInsercao: new Date().toISOString(),
 	});
 
-	const { mutate: handleUpdateHomologation, isPending } =
-		useMutationWithFeedback({
-			mutationKey: ["edit-homologation", homologationId],
-			mutationFn: editHomologation,
-			queryClient: queryClient,
-			affectedQueryKey: ["homologations"],
-		});
+	const { mutate: handleUpdateHomologation, isPending } = useMutationWithFeedback({
+		mutationKey: ["edit-homologation", homologationId],
+		mutationFn: editHomologation,
+		queryClient: queryClient,
+		affectedQueryKey: ["homologations"],
+	});
 	useEffect(() => {
 		if (homologation) setInfoHolder(homologation);
 	}, [homologation]);
@@ -136,87 +122,26 @@ function ControlHomologation({
 			menuActionButtonText="ATUALIZAR HOMOLOGAÇÃO"
 			menuCancelButtonText="FECHAR"
 			closeMenu={closeModal}
-			actionFunction={() =>
-				handleUpdateHomologation({ id: homologationId, changes: infoHolder })
-			}
+			actionFunction={() => handleUpdateHomologation({ id: homologationId, changes: infoHolder })}
 			actionIsLoading={isPending}
 			stateIsLoading={isLoading}
 			stateError={isError ? getErrorMessage(error) : null}
 			dialogVariant="lg"
 		>
-			<StatusInformation
-				infoHolder={infoHolder}
-				setInfoHolder={
-					setInfoHolder as React.Dispatch<React.SetStateAction<THomologation>>
-				}
-			/>
-			{homologation ? (
-				<ActivitiesInformation
-					session={session}
-					homologation={homologation}
-					opportunity={homologation.oportunidade}
-				/>
-			) : null}
-			<UpdatesInformation
-				session={session}
-				infoHolder={infoHolder}
-				setInfoHolder={setInfoHolder}
-			/>
-			<PendenciesInformation
-				infoHolder={infoHolder}
-				setInfoHolder={
-					setInfoHolder as React.Dispatch<React.SetStateAction<THomologation>>
-				}
-			/>
-			<OpportunityInformationBlock
-				infoHolder={infoHolder}
-				setInfoHolder={
-					setInfoHolder as React.Dispatch<React.SetStateAction<THomologation>>
-				}
-			/>
-			<ApplicantBlock
-				infoHolder={infoHolder}
-				setInfoHolder={
-					setInfoHolder as React.Dispatch<React.SetStateAction<THomologation>>
-				}
-			/>
-			<HolderInformation
-				infoHolder={infoHolder}
-				setInfoHolder={
-					setInfoHolder as React.Dispatch<React.SetStateAction<THomologation>>
-				}
-			/>
+			<StatusInformation infoHolder={infoHolder} setInfoHolder={setInfoHolder as React.Dispatch<React.SetStateAction<THomologation>>} />
+			{homologation ? <ActivitiesInformation session={session} homologation={homologation} opportunity={homologation.oportunidade} /> : null}
+			<UpdatesInformation session={session} infoHolder={infoHolder} setInfoHolder={setInfoHolder} />
+			<PendenciesInformation infoHolder={infoHolder} setInfoHolder={setInfoHolder as React.Dispatch<React.SetStateAction<THomologation>>} />
+			<OpportunityInformationBlock infoHolder={infoHolder} setInfoHolder={setInfoHolder as React.Dispatch<React.SetStateAction<THomologation>>} />
+			<ApplicantBlock infoHolder={infoHolder} setInfoHolder={setInfoHolder as React.Dispatch<React.SetStateAction<THomologation>>} />
+			<HolderInformation infoHolder={infoHolder} setInfoHolder={setInfoHolder as React.Dispatch<React.SetStateAction<THomologation>>} />
 			<HomologationFiles session={session} homologationId={homologationId} />
-			<InstallationInformation
-				infoHolder={infoHolder}
-				setInfoHolder={
-					setInfoHolder as React.Dispatch<React.SetStateAction<THomologation>>
-				}
-			/>
-			<LocationInformation
-				infoHolder={infoHolder}
-				setInfoHolder={
-					setInfoHolder as React.Dispatch<React.SetStateAction<THomologation>>
-				}
-			/>
-			<EquipmentsComposition
-				infoHolder={infoHolder}
-				setInfoHolder={
-					setInfoHolder as React.Dispatch<React.SetStateAction<THomologation>>
-				}
-			/>
-			<DocumentationInformation
-				infoHolder={infoHolder}
-				setInfoHolder={setInfoHolder}
-			/>
-			<AccessInformation
-				infoHolder={infoHolder}
-				setInfoHolder={setInfoHolder}
-			/>
-			<VistoryInformation
-				infoHolder={infoHolder}
-				setInfoHolder={setInfoHolder}
-			/>
+			<InstallationInformation infoHolder={infoHolder} setInfoHolder={setInfoHolder as React.Dispatch<React.SetStateAction<THomologation>>} />
+			<LocationInformation infoHolder={infoHolder} setInfoHolder={setInfoHolder as React.Dispatch<React.SetStateAction<THomologation>>} />
+			<EquipmentsComposition infoHolder={infoHolder} setInfoHolder={setInfoHolder as React.Dispatch<React.SetStateAction<THomologation>>} />
+			<DocumentationInformation infoHolder={infoHolder} setInfoHolder={setInfoHolder} />
+			<AccessInformation infoHolder={infoHolder} setInfoHolder={setInfoHolder} />
+			<VistoryInformation infoHolder={infoHolder} setInfoHolder={setInfoHolder} />
 		</ResponsiveDialogDrawer>
 	);
 }

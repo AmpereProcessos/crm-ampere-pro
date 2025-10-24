@@ -17,19 +17,14 @@ export default function NonPodiumCard({
 	rankingMinValue: number;
 	rankingMaxValue: number;
 }) {
-	const percentage =
-		((rankingItem.value - rankingMinValue) /
-			(rankingMaxValue - rankingMinValue)) *
-		100;
+	const percentage = ((rankingItem.value - rankingMinValue) / (rankingMaxValue - rankingMinValue)) * 100;
 	return (
 		<div className="flex w-full items-center gap-3 rounded p-2">
 			<div className="bg-primary/30 flex h-6 w-6 min-w-fit items-center justify-center rounded-full">
 				<p className="text-xs font-semibold">{rankingItem.index}</p>
 			</div>
 			<div className="flex h-full grow flex-col justify-between gap-2">
-				<h1 className="text-primary text-[0.65rem] tracking-tight lg:text-xs">
-					{rankingItem.name}
-				</h1>
+				<h1 className="text-primary text-[0.65rem] tracking-tight lg:text-xs">{rankingItem.name}</h1>
 				<Progress value={percentage} className="h-1" />
 			</div>
 

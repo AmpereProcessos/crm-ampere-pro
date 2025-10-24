@@ -20,13 +20,7 @@ type NewGoalProps = {
 	};
 };
 function NewGoal({ closeMenu, callbacks, session }: NewGoalProps) {
-	return (
-		<NewGoalContent
-			callbacks={callbacks}
-			closeMenu={closeMenu}
-			session={session}
-		/>
-	);
+	return <NewGoalContent callbacks={callbacks} closeMenu={closeMenu} session={session} />;
 }
 
 export default NewGoal;
@@ -40,11 +34,7 @@ type NewGoalContentProps = {
 		onSettled?: () => void;
 	};
 };
-function NewGoalContent({
-	session,
-	closeMenu,
-	callbacks,
-}: NewGoalContentProps) {
+function NewGoalContent({ session, closeMenu, callbacks }: NewGoalContentProps) {
 	const reset = useGoalStoreWithSync(null)((s) => s.reset);
 	const getGoal = useGoalStoreWithSync(null)((s) => s.getGoal);
 	const { mutate: createGoalMutation, isPending } = useMutation({

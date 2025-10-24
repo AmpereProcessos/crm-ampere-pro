@@ -1,52 +1,52 @@
-import { OeMIDs } from '@/utils/constants';
-import { useSignaturePlanWithPricingMethod } from '@/utils/queries/signature-plans';
-import { TContractRequest } from '@/utils/schemas//contract-request.schema';
-import { TProposalDTOWithOpportunity } from '@/utils/schemas/proposal.schema';
-import { TSignaturePlanDTOWithPricingMethod } from '@/utils/schemas/signature-plans.schema';
-import React from 'react';
-import SignaturePlanOptionCard from '../Utils/SignaturePlanOptionCard';
+import { OeMIDs } from "@/utils/constants";
+import { useSignaturePlanWithPricingMethod } from "@/utils/queries/signature-plans";
+import { TContractRequest } from "@/utils/schemas//contract-request.schema";
+import { TProposalDTOWithOpportunity } from "@/utils/schemas/proposal.schema";
+import { TSignaturePlanDTOWithPricingMethod } from "@/utils/schemas/signature-plans.schema";
+import React from "react";
+import SignaturePlanOptionCard from "../Utils/SignaturePlanOptionCard";
 
 type OeMPlansInfoProps = {
-  requestInfo: TContractRequest;
-  setRequestInfo: React.Dispatch<React.SetStateAction<TContractRequest>>;
-  goToPreviousStage: () => void;
-  goToNextStage: () => void;
-  modulesQty?: number;
-  distance?: number;
-  proposal: TProposalDTOWithOpportunity;
-  activePlanId?: number;
+	requestInfo: TContractRequest;
+	setRequestInfo: React.Dispatch<React.SetStateAction<TContractRequest>>;
+	goToPreviousStage: () => void;
+	goToNextStage: () => void;
+	modulesQty?: number;
+	distance?: number;
+	proposal: TProposalDTOWithOpportunity;
+	activePlanId?: number;
 };
 
 function OeMPlansInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNextStage, proposal }: OeMPlansInfoProps) {
-  // Nos casos em que houver um plano selecionado, captar nova escolha e atualizar informações da proposta.
-  const { data: signaturePlans, isLoading, isError, isSuccess } = useSignaturePlanWithPricingMethod();
-  function getOeMPlans(plans: TSignaturePlanDTOWithPricingMethod[] | undefined) {
-    if (!plans) return [];
-    return plans.filter((p) => OeMIDs.includes(p._id));
-  }
-  return (
-    <div className='flex w-full grow flex-col bg-background pb-2'>
-      <span className='py-2 text-center text-lg font-bold uppercase text-[#15599a]'>PLANO INTEGRADO DE OPERAÇÃO E MANUTENÇÃO</span>
-      <p className='text-center text-sm italic text-primary/70'>Escolha, se houver, o plano de Operação & Manutenção incluso no projeto.</p>
-      <div className='flex grow flex-wrap items-start justify-around gap-2 py-2'>
-        {getOeMPlans(signaturePlans).map((plan) => (
-          <SignaturePlanOptionCard
-            activePlanName={requestInfo.planoOeM}
-            plan={plan}
-            opportunity={proposal.oportunidadeDados}
-            proposal={proposal}
-            handleSelect={(plan) => {
-              setRequestInfo((prev) => ({
-                ...prev,
-                possuiOeM: 'SIM',
-                planoOeM: plan.nome as TContractRequest['planoOeM'],
-                valorOeMOuSeguro: plan.valorTotal,
-              }));
-              goToNextStage();
-            }}
-          />
-        ))}
-        {/* <div
+	// Nos casos em que houver um plano selecionado, captar nova escolha e atualizar informações da proposta.
+	const { data: signaturePlans, isLoading, isError, isSuccess } = useSignaturePlanWithPricingMethod();
+	function getOeMPlans(plans: TSignaturePlanDTOWithPricingMethod[] | undefined) {
+		if (!plans) return [];
+		return plans.filter((p) => OeMIDs.includes(p._id));
+	}
+	return (
+		<div className="flex w-full grow flex-col bg-background pb-2">
+			<span className="py-2 text-center text-lg font-bold uppercase text-[#15599a]">PLANO INTEGRADO DE OPERAÇÃO E MANUTENÇÃO</span>
+			<p className="text-center text-sm italic text-primary/70">Escolha, se houver, o plano de Operação & Manutenção incluso no projeto.</p>
+			<div className="flex grow flex-wrap items-start justify-around gap-2 py-2">
+				{getOeMPlans(signaturePlans).map((plan) => (
+					<SignaturePlanOptionCard
+						activePlanName={requestInfo.planoOeM}
+						plan={plan}
+						opportunity={proposal.oportunidadeDados}
+						proposal={proposal}
+						handleSelect={(plan) => {
+							setRequestInfo((prev) => ({
+								...prev,
+								possuiOeM: "SIM",
+								planoOeM: plan.nome as TContractRequest["planoOeM"],
+								valorOeMOuSeguro: plan.valorTotal,
+							}));
+							goToNextStage();
+						}}
+					/>
+				))}
+				{/* <div
           onClick={() => {
             setRequestInfo((prev) => ({
               ...prev,
@@ -266,28 +266,28 @@ function OeMPlansInfo({ requestInfo, setRequestInfo, goToPreviousStage, goToNext
             </div>
           </div>
         </div> */}
-      </div>
-      <div className='mt-2 flex w-full flex-wrap justify-between  gap-2'>
-        <button
-          onClick={() => {
-            goToPreviousStage();
-          }}
-          className='rounded p-2 font-bold text-primary/70 duration-300 hover:scale-105'
-        >
-          Voltar
-        </button>
-        <button
-          onClick={() => {
-            setRequestInfo((prev) => ({ ...prev, possuiOeM: 'NÃO', planoOeM: 'NÃO SE APLICA' }));
-            goToNextStage();
-          }}
-          className='rounded p-2 font-bold hover:bg-black hover:text-primary-foreground'
-        >
-          Prosseguir sem plano
-        </button>
-      </div>
-    </div>
-  );
+			</div>
+			<div className="mt-2 flex w-full flex-wrap justify-between  gap-2">
+				<button
+					onClick={() => {
+						goToPreviousStage();
+					}}
+					className="rounded p-2 font-bold text-primary/70 duration-300 hover:scale-105"
+				>
+					Voltar
+				</button>
+				<button
+					onClick={() => {
+						setRequestInfo((prev) => ({ ...prev, possuiOeM: "NÃO", planoOeM: "NÃO SE APLICA" }));
+						goToNextStage();
+					}}
+					className="rounded p-2 font-bold hover:bg-black hover:text-primary-foreground"
+				>
+					Prosseguir sem plano
+				</button>
+			</div>
+		</div>
+	);
 }
 
 export default OeMPlansInfo;

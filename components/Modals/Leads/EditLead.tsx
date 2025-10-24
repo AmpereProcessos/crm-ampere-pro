@@ -21,18 +21,8 @@ type EditLeadProps = {
 	};
 };
 
-export default function EditLead({
-	leadId,
-	closeModal,
-	callbacks,
-	sessionUser,
-}: EditLeadProps) {
-	const {
-		data: lead,
-		isLoading,
-		isError,
-		isSuccess,
-	} = useLeadById({ id: leadId });
+export default function EditLead({ leadId, closeModal, callbacks, sessionUser }: EditLeadProps) {
+	const { data: lead, isLoading, isError, isSuccess } = useLeadById({ id: leadId });
 	const initialInfoHolder: TLead = {
 		nome: "",
 		telefone: "",
@@ -92,9 +82,7 @@ export default function EditLead({
 			menuActionButtonText="ATUALIZAR LEAD"
 			menuCancelButtonText="CANCELAR"
 			closeMenu={closeModal}
-			actionFunction={() =>
-				handleUpdateLeadMutation({ id: leadId, lead: infoHolder })
-			}
+			actionFunction={() => handleUpdateLeadMutation({ id: leadId, lead: infoHolder })}
 			actionIsLoading={isPending}
 			stateIsLoading={isLoading}
 		>
@@ -106,10 +94,7 @@ export default function EditLead({
 				acquisitionChannel={infoHolder.canalAquisicao}
 				updateInfoHolder={updateInfoHolder}
 			/>
-			<QualificationBlock
-				qualification={infoHolder.qualificacao}
-				updateQualification={updateQualification}
-			/>
+			<QualificationBlock qualification={infoHolder.qualificacao} updateQualification={updateQualification} />
 		</ResponsiveDialogDrawer>
 	);
 }

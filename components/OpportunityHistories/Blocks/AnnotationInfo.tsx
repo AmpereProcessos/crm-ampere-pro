@@ -17,7 +17,12 @@ function AnnotationInfo() {
 				<TbNotes size={15} />
 				<h1 className="text-xs tracking-tight font-medium text-start w-fit">INFORMAÇÕES DA ANOTAÇÃO</h1>
 			</div>
-			<TextareaInput label="CONTEÚDO DA ANOTAÇÃO" value={content} handleChange={(value) => setContent(value)} placeholder="Preencha aqui o conteúdo da anotação..." />
+			<TextareaInput
+				label="CONTEÚDO DA ANOTAÇÃO"
+				value={content}
+				handleChange={(value) => setContent(value)}
+				placeholder="Preencha aqui o conteúdo da anotação..."
+			/>
 		</div>
 	);
 }

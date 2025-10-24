@@ -34,19 +34,9 @@ type OpportunityHistoryProps = {
 	opportunityIdentifier: string;
 	session: TUserSession;
 };
-function OpportunityHistory({
-	session,
-	opportunityName,
-	opportunityId,
-	opportunityIdentifier,
-}: OpportunityHistoryProps) {
+function OpportunityHistory({ session, opportunityName, opportunityId, opportunityIdentifier }: OpportunityHistoryProps) {
 	const queryClient = useQueryClient();
-	const {
-		data: historyAndActivities,
-		isLoading,
-		isError,
-		isSuccess,
-	} = useOpportunityHistoryAndActivities({ opportunityId: opportunityId });
+	const { data: historyAndActivities, isLoading, isError, isSuccess } = useOpportunityHistoryAndActivities({ opportunityId: opportunityId });
 
 	const handleOnMutate = async () =>
 		await queryClient.cancelQueries({
@@ -57,20 +47,13 @@ function OpportunityHistory({
 			queryKey: ["opportunity-history-and-activities", opportunityId],
 		});
 	// In open activities using activities with no conclusion date defined
-	const openActivities = historyAndActivities?.filter(
-		(h) =>
-			!!(h as TActivityDTO).responsaveis && !(h as TActivityDTO).dataConclusao,
-	);
+	const openActivities = historyAndActivities?.filter((h) => !!(h as TActivityDTO).responsaveis && !(h as TActivityDTO).dataConclusao);
 	// In history, considering both opportunity history and closed opportunities
 	const history = historyAndActivities?.filter(
 		(h) =>
-			(h as TOpportunityHistoryDTO).categoria === "ANOTAÇÃO" ||
-			(h as TOpportunityHistoryDTO).categoria === "INTERAÇÃO" ||
-			!!(h as TActivityDTO).dataConclusao,
+			(h as TOpportunityHistoryDTO).categoria === "ANOTAÇÃO" || (h as TOpportunityHistoryDTO).categoria === "INTERAÇÃO" || !!(h as TActivityDTO).dataConclusao,
 	);
-	const [view, setView] = useState<
-		"NEW NOTE" | "NEW ACTIVITY" | "NEW INTERACTION" | null
-	>(null);
+	const [view, setView] = useState<"NEW NOTE" | "NEW ACTIVITY" | "NEW INTERACTION" | null>(null);
 
 	return (
 		<div className="flex w-full flex-col gap-2 rounded-md border border-primary/30 bg-background p-3 shadow-lg">
@@ -80,9 +63,7 @@ function OpportunityHistory({
 					<button
 						type="button"
 						onClick={() => {
-							setView((prev) =>
-								prev === "NEW INTERACTION" ? null : "NEW INTERACTION",
-							);
+							setView((prev) => (prev === "NEW INTERACTION" ? null : "NEW INTERACTION"));
 						}}
 						className="flex w-full items-center justify-center gap-2 rounded-sm bg-[#15599a] text-white p-1.5 font-medium hover:bg-blue-800 lg:w-fit"
 					>
@@ -92,9 +73,7 @@ function OpportunityHistory({
 					<button
 						type="button"
 						onClick={() => {
-							setView((prev) =>
-								prev === "NEW ACTIVITY" ? null : "NEW ACTIVITY",
-							);
+							setView((prev) => (prev === "NEW ACTIVITY" ? null : "NEW ACTIVITY"));
 						}}
 						className="flex w-full items-center justify-center gap-2 rounded-sm bg-[#15599a] text-white p-1.5 font-medium hover:bg-blue-800 lg:w-fit"
 					>
@@ -156,9 +135,7 @@ function OpportunityHistory({
 						{/** OPEN ACTIVITIES BLOCK */}
 						{openActivities && openActivities.length > 0 ? (
 							<div className="flex w-full flex-col gap-2">
-								<h1 className="w-full text-start font-medium">
-									Atividades em aberto
-								</h1>
+								<h1 className="w-full text-start font-medium">Atividades em aberto</h1>
 								{openActivities.map((activity) => (
 									<OpportunityActivity
 										key={activity._id}
@@ -206,8 +183,7 @@ function OpportunityHistory({
 								})
 							) : (
 								<p className="flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/70">
-									Não foram encontrados registros do histórico dessa
-									oportunidade.
+									Não foram encontrados registros do histórico dessa oportunidade.
 								</p>
 							)
 						) : null}

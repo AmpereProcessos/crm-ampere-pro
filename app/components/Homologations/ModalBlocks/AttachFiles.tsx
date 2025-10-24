@@ -23,12 +23,8 @@ function AttachFiles({ opportunityId, files, setFiles }: AttachFilesProps) {
 		titulo: "",
 		arquivo: null,
 	});
-	function addFile({
-		titulo,
-		arquivo,
-	}: { titulo: string; arquivo: File | string | null }) {
-		if (titulo.trim().length < 3)
-			return toast.error("Preencha um título de ao menos 3 caractéres.");
+	function addFile({ titulo, arquivo }: { titulo: string; arquivo: File | string | null }) {
+		if (titulo.trim().length < 3) return toast.error("Preencha um título de ao menos 3 caractéres.");
 		if (!arquivo) return toast.error("Vincule o arquivo a ser anexado.");
 		const fileTitle = titulo.toUpperCase();
 		setFiles((prev) => ({ ...prev, [fileTitle]: arquivo }));
@@ -36,18 +32,13 @@ function AttachFiles({ opportunityId, files, setFiles }: AttachFilesProps) {
 	}
 
 	return (
-		<ResponsiveDialogDrawerSection
-			sectionTitleText="ARQUIVOS"
-			sectionTitleIcon={<FileIcon className="w-4 h-4 min-w-4 min-h-4" />}
-		>
+		<ResponsiveDialogDrawerSection sectionTitleText="ARQUIVOS" sectionTitleIcon={<FileIcon className="w-4 h-4 min-w-4 min-h-4" />}>
 			<div className="flex w-full flex-col items-center justify-center gap-2">
 				<div className="w-full lg:w-1/2">
 					<DocumentFileInput
 						label="ARQUIVO"
 						value={personalizedFile.arquivo}
-						handleChange={(value) =>
-							setPersonalizedFile((prev) => ({ ...prev, arquivo: value }))
-						}
+						handleChange={(value) => setPersonalizedFile((prev) => ({ ...prev, arquivo: value }))}
 						fileReferences={fileReferences ?? []}
 					/>
 				</div>
@@ -56,9 +47,7 @@ function AttachFiles({ opportunityId, files, setFiles }: AttachFilesProps) {
 						label="TITULO DO ARQUIVO"
 						placeholder="Digite o nome a ser dado ao arquivo..."
 						value={personalizedFile.titulo}
-						handleChange={(value) =>
-							setPersonalizedFile((prev) => ({ ...prev, titulo: value }))
-						}
+						handleChange={(value) => setPersonalizedFile((prev) => ({ ...prev, titulo: value }))}
 						width="100%"
 					/>
 				</div>
@@ -70,23 +59,16 @@ function AttachFiles({ opportunityId, files, setFiles }: AttachFilesProps) {
 					ADICIONAR ARQUIVO
 				</button>
 			</div>
-			<h1 className="mb-2 text-start font-Inter font-bold leading-none tracking-tight">
-				ARQUIVOS A SEREM ANEXADOS
-			</h1>
+			<h1 className="mb-2 text-start font-Inter font-bold leading-none tracking-tight">ARQUIVOS A SEREM ANEXADOS</h1>
 			<div className="flex w-full flex-wrap items-center justify-around gap-2">
 				{Object.entries(files).length > 0 ? (
 					Object.entries(files).map(([key, value], index) => (
-						<div
-							key={`${key}-${index.toString()}`}
-							className="flex w-full flex-col rounded-md border border-cyan-500 p-3 lg:w-[350px]"
-						>
+						<div key={`${key}-${index.toString()}`} className="flex w-full flex-col rounded-md border border-cyan-500 p-3 lg:w-[350px]">
 							<div className="flex w-full items-center gap-2">
 								<div className="text-lg text-primary">
 									<AiFillFile />
 								</div>
-								<p className="text-sm font-bold leading-none tracking-tight text-primary/70">
-									{key}
-								</p>
+								<p className="text-sm font-bold leading-none tracking-tight text-primary/70">{key}</p>
 							</div>
 						</div>
 					))

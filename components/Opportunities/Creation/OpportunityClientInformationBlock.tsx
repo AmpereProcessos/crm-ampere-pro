@@ -2,16 +2,9 @@ import SelectInput from "@/components/Inputs/SelectInput";
 import TextInput from "@/components/Inputs/TextInput";
 import Avatar from "@/components/utils/Avatar";
 import { formatDateAsLocale, formatLocation } from "@/lib/methods/formatting";
-import {
-	formatPhoneAsBase,
-	formatToCPForCNPJ,
-	formatToPhone,
-} from "@/utils/methods";
+import { formatPhoneAsBase, formatToCPForCNPJ, formatToPhone } from "@/utils/methods";
 import { useAcquisitionChannels } from "@/utils/queries/utils";
-import type {
-	TClient,
-	TSimilarClientSimplifiedDTO,
-} from "@/utils/schemas/client.schema";
+import type { TClient, TSimilarClientSimplifiedDTO } from "@/utils/schemas/client.schema";
 import type { TOpportunity } from "@/utils/schemas/opportunity.schema";
 import { CustomersAcquisitionChannels } from "@/utils/select-options";
 import { UserRound } from "lucide-react";
@@ -27,9 +20,7 @@ type OpportunityClientInformationBlockProps = {
 	client: TClient;
 	setClient: Dispatch<SetStateAction<TClient>>;
 	similarClient: TSimilarClientSimplifiedDTO | null;
-	setSimilarClient: Dispatch<
-		SetStateAction<TSimilarClientSimplifiedDTO | null>
-	>;
+	setSimilarClient: Dispatch<SetStateAction<TSimilarClientSimplifiedDTO | null>>;
 	similarClients: TSimilarClientSimplifiedDTO[];
 };
 function OpportunityClientInformationBlock({
@@ -58,29 +49,21 @@ function OpportunityClientInformationBlock({
 		<div className="flex w-full flex-col gap-2">
 			<div className="flex items-center gap-2 bg-primary/20 px-2 py-1 rounded-sm w-fit">
 				<UserRound size={15} />
-				<h1 className="text-xs tracking-tight font-medium text-start w-fit">
-					INFORMAÇÕES PESSOAIS DO CLIENTE
-				</h1>
+				<h1 className="text-xs tracking-tight font-medium text-start w-fit">INFORMAÇÕES PESSOAIS DO CLIENTE</h1>
 			</div>
 			{similarClient ? (
 				<div className="flex w-full flex-col gap-2 rounded-md border border-primary/50 bg-background font-Inter shadow-md">
-					<h1 className="w-full rounded-tl rounded-tr bg-cyan-500 text-center font-bold text-primary-foreground">
-						CLIENTE VINCULADO
-					</h1>
+					<h1 className="w-full rounded-tl rounded-tr bg-cyan-500 text-center font-bold text-primary-foreground">CLIENTE VINCULADO</h1>
 					<div className="flex w-full flex-col gap-2 p-4">
 						<div className="flex w-full items-center justify-between gap-2">
 							<div className="flex  items-center gap-1">
 								<div className="flex h-[25px] w-[25px] items-center justify-center rounded-full border border-black p-1">
 									<FaUser />
 								</div>
-								<p className="text-sm font-black leading-none tracking-tight">
-									{client.nome}
-								</p>
+								<p className="text-sm font-black leading-none tracking-tight">{client.nome}</p>
 							</div>
 
-							<h1 className="rounded-full bg-green-600 px-2 py-1 text-[0.65rem] font-bold text-primary-foreground lg:text-xs">
-								SELECIONADO
-							</h1>
+							<h1 className="rounded-full bg-green-600 px-2 py-1 text-[0.65rem] font-bold text-primary-foreground lg:text-xs">SELECIONADO</h1>
 						</div>
 						<div className="mt-2 flex w-full flex-wrap items-center justify-between">
 							<div className="flex items-center gap-2">
@@ -95,43 +78,28 @@ function OpportunityClientInformationBlock({
 							</div>
 							<div className="flex items-center gap-2">
 								<FaPhone />
-								<p className="text-[0.65rem] font-medium leading-none tracking-tight text-primary/70 lg:text-xs">
-									{client.telefonePrimario}
-								</p>
+								<p className="text-[0.65rem] font-medium leading-none tracking-tight text-primary/70 lg:text-xs">{client.telefonePrimario}</p>
 							</div>
 						</div>
 						<div className="flex w-full flex-wrap items-center justify-between">
 							<div className="flex items-center gap-2">
 								<MdEmail />
-								<p className="text-[0.65rem] font-medium leading-none tracking-tight text-primary/70 lg:text-xs">
-									{client.email || "NÃO PREENCHIDO"}
-								</p>
+								<p className="text-[0.65rem] font-medium leading-none tracking-tight text-primary/70 lg:text-xs">{client.email || "NÃO PREENCHIDO"}</p>
 							</div>
 							<div className="flex items-center gap-2">
 								<FaRegIdCard />
-								<p className="text-[0.65rem] font-medium leading-none tracking-tight text-primary/70 lg:text-xs">
-									{client.cpfCnpj || "NÃO PREENCHIDO"}
-								</p>
+								<p className="text-[0.65rem] font-medium leading-none tracking-tight text-primary/70 lg:text-xs">{client.cpfCnpj || "NÃO PREENCHIDO"}</p>
 							</div>
 						</div>
 						<div className="mt-2 flex w-full items-center justify-between gap-2">
 							<div className="flex items-center gap-2">
 								<div className={"flex items-center gap-2"}>
 									<BsCalendarPlus />
-									<p className="text-xs font-medium text-primary/70">
-										{formatDateAsLocale(client.dataInsercao)}
-									</p>
+									<p className="text-xs font-medium text-primary/70">{formatDateAsLocale(client.dataInsercao)}</p>
 								</div>
 								<div className="flex items-center justify-center gap-2">
-									<Avatar
-										fallback={"U"}
-										height={25}
-										width={25}
-										url={client.autor?.avatar_url || undefined}
-									/>
-									<p className="text-xs font-medium text-primary/70">
-										{client.autor?.nome}
-									</p>
+									<Avatar fallback={"U"} height={25} width={25} url={client.autor?.avatar_url || undefined} />
+									<p className="text-xs font-medium text-primary/70">{client.autor?.nome}</p>
 								</div>
 							</div>
 							<button
@@ -152,9 +120,7 @@ function OpportunityClientInformationBlock({
 								label="NOME"
 								value={client.nome}
 								placeholder="Preencha aqui o nome do cliente."
-								handleChange={(value) =>
-									setClient((prev) => ({ ...prev, nome: value }))
-								}
+								handleChange={(value) => setClient((prev) => ({ ...prev, nome: value }))}
 								width="100%"
 							/>
 						</div>
@@ -210,9 +176,7 @@ function OpportunityClientInformationBlock({
 								label="EMAIL"
 								value={client.email || ""}
 								placeholder="Preencha aqui o email do cliente."
-								handleChange={(value) =>
-									setClient((prev) => ({ ...prev, email: value }))
-								}
+								handleChange={(value) => setClient((prev) => ({ ...prev, email: value }))}
 								width="100%"
 							/>
 						</div>

@@ -6,29 +6,12 @@ import { Button } from "@/components/ui/button";
 import ResponsiveDialogDrawer from "@/components/utils/ResponsiveDialogDrawer";
 import { getFileTypeTitle, isFileImage } from "@/lib/methods/firebase";
 import { cn } from "@/lib/utils";
-import {
-	BrazilianCitiesOptionsFromUF,
-	BrazilianStatesOptions,
-	type stateCities,
-} from "@/utils/estados_cidades";
-import {
-	formatToCEP,
-	formatToCPForCNPJ,
-	formatToPhone,
-	getCEPInfo,
-} from "@/utils/methods";
+import { BrazilianCitiesOptionsFromUF, BrazilianStatesOptions, type stateCities } from "@/utils/estados_cidades";
+import { formatToCEP, formatToCPForCNPJ, formatToPhone, getCEPInfo } from "@/utils/methods";
 import type { TPPSCall } from "@/utils/schemas/pps-calls.schema";
 import type { TAttachmentState } from "@/utils/schemas/utils";
 import { PPSCallTypes, StructureTypes } from "@/utils/select-options";
-import {
-	Code,
-	LayoutGrid,
-	LinkIcon,
-	Plus,
-	UserRound,
-	Variable,
-	Zap,
-} from "lucide-react";
+import { Code, LayoutGrid, LinkIcon, Plus, UserRound, Variable, Zap } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -40,17 +23,12 @@ type GeneralBlockProps = {
 	infoHolder: TPPSCall;
 	updateInfoHolder: (changes: Partial<TPPSCall>) => void;
 };
-export function GeneralBlock({
-	infoHolder,
-	updateInfoHolder,
-}: GeneralBlockProps) {
+export function GeneralBlock({ infoHolder, updateInfoHolder }: GeneralBlockProps) {
 	return (
 		<div className="flex w-full flex-col gap-2">
 			<div className="flex items-center gap-2 bg-primary/20 px-2 py-1 rounded-sm w-fit">
 				<LayoutGrid size={15} />
-				<h1 className="text-xs tracking-tight font-medium text-start w-fit">
-					INFORMAÇÕES GERAIS
-				</h1>
+				<h1 className="text-xs tracking-tight font-medium text-start w-fit">INFORMAÇÕES GERAIS</h1>
 			</div>
 			<SelectInput
 				label="TIPO DE SOLICITAÇÃO"
@@ -91,11 +69,7 @@ type ClientBlockProps = {
 	client: TPPSCall["cliente"];
 	updateClient: (changes: Partial<TPPSCall["cliente"]>) => void;
 };
-export function ClientBlock({
-	client,
-	updateClient,
-	requestType,
-}: ClientBlockProps) {
+export function ClientBlock({ client, updateClient, requestType }: ClientBlockProps) {
 	async function setAddressDataByCEP(cep: string) {
 		const addressInfo = await getCEPInfo(cep);
 		const toastID = toast.loading("Buscando informações sobre o CEP...", {
@@ -120,9 +94,7 @@ export function ClientBlock({
 		<div className="flex w-full flex-col gap-2">
 			<div className="flex items-center gap-2 bg-primary/20 px-2 py-1 rounded-sm w-fit">
 				<UserRound size={15} />
-				<h1 className="text-xs tracking-tight font-medium text-start w-fit">
-					INFORMAÇÕES GERAIS DO CLIENTE
-				</h1>
+				<h1 className="text-xs tracking-tight font-medium text-start w-fit">INFORMAÇÕES GERAIS DO CLIENTE</h1>
 			</div>
 			<div className="w-full flex flex-col items-center gap-2 lg:flex-row">
 				<div className="w-full lg:w-1/2">
@@ -139,9 +111,7 @@ export function ClientBlock({
 						label="CPF/CNPJ DO CLIENTE"
 						value={client.cpfCnpj}
 						placeholder="Preencha aqui o CPF ou CNPJ do cliente"
-						handleChange={(value) =>
-							updateClient({ cpfCnpj: formatToCPForCNPJ(value) })
-						}
+						handleChange={(value) => updateClient({ cpfCnpj: formatToCPForCNPJ(value) })}
 						width="100%"
 					/>
 				</div>
@@ -152,9 +122,7 @@ export function ClientBlock({
 						label="TELEFONE DO CLIENTE"
 						value={client.telefone}
 						placeholder="Preencha aqui o telefone do cliente"
-						handleChange={(value) =>
-							updateClient({ telefone: formatToPhone(value) })
-						}
+						handleChange={(value) => updateClient({ telefone: formatToPhone(value) })}
 						width="100%"
 					/>
 				</div>
@@ -271,26 +239,16 @@ type PremissesBlockProps = {
 	requestType: TPPSCall["tipoSolicitacao"];
 	premissas: TPPSCall["premissas"];
 	updatePremissas: (changes: Partial<TPPSCall["premissas"]>) => void;
-	addCharge: (
-		charge: Exclude<TPPSCall["premissas"]["cargas"], undefined | null>[number],
-	) => void;
+	addCharge: (charge: Exclude<TPPSCall["premissas"]["cargas"], undefined | null>[number]) => void;
 	removeCharge: (index: number) => void;
 };
 
-export function PremissesBlock({
-	requestType,
-	premissas,
-	updatePremissas,
-	addCharge,
-	removeCharge,
-}: PremissesBlockProps) {
+export function PremissesBlock({ requestType, premissas, updatePremissas, addCharge, removeCharge }: PremissesBlockProps) {
 	return (
 		<div className="flex w-full flex-col gap-2">
 			<div className="flex items-center gap-2 bg-primary/20 px-2 py-1 rounded-sm w-fit">
 				<Variable size={15} />
-				<h1 className="text-xs tracking-tight font-medium text-start w-fit">
-					PREMISSAS
-				</h1>
+				<h1 className="text-xs tracking-tight font-medium text-start w-fit">PREMISSAS</h1>
 			</div>
 			{requestType !== "ANÁLISE DE CRÉDITO" ? (
 				<div className="mt-1 flex w-full flex-col items-center gap-2 lg:flex-row">
@@ -378,11 +336,7 @@ export function PremissesBlock({
 			) : null}
 
 			{requestType === "PROPOSTA COMERCIAL (OFF GRID)" ? (
-				<ChargeMenuBlock
-					charges={premissas.cargas}
-					addCharge={addCharge}
-					removeCharge={removeCharge}
-				/>
+				<ChargeMenuBlock charges={premissas.cargas} addCharge={addCharge} removeCharge={removeCharge} />
 			) : null}
 		</div>
 	);
@@ -390,99 +344,59 @@ export function PremissesBlock({
 
 type ChargeMenuBlockProps = {
 	charges: TPPSCall["premissas"]["cargas"];
-	addCharge: (
-		charge: Exclude<TPPSCall["premissas"]["cargas"], undefined | null>[number],
-	) => void;
+	addCharge: (charge: Exclude<TPPSCall["premissas"]["cargas"], undefined | null>[number]) => void;
 	removeCharge: (index: number) => void;
 };
-function ChargeMenuBlock({
-	charges,
-	addCharge,
-	removeCharge,
-}: ChargeMenuBlockProps) {
+function ChargeMenuBlock({ charges, addCharge, removeCharge }: ChargeMenuBlockProps) {
 	const [newChargeMenuIsOpen, setNewChargeMenuIsOpen] = useState(false);
 	return (
 		<div className="flex w-full flex-col gap-2">
 			<div className="flex items-center gap-2 bg-primary/20 px-2 py-1 rounded-sm w-fit">
 				<Zap size={15} />
-				<h1 className="text-xs tracking-tight font-medium text-start w-fit">
-					CARGAS
-				</h1>
+				<h1 className="text-xs tracking-tight font-medium text-start w-fit">CARGAS</h1>
 			</div>
 			<div className="w-full flex flex-col gap-1">
 				{charges && charges.length > 0 ? (
 					charges.map((charge, index) => (
-						<div
-							key={`${charge.descricao}-${index}`}
-							className="flex w-full items-center justify-between gap-2 rounded-md border border-cyan-500 p-2"
-						>
+						<div key={`${charge.descricao}-${index}`} className="flex w-full items-center justify-between gap-2 rounded-md border border-cyan-500 p-2">
 							<div className="flex items-center gap-2">
 								<GiBatteryPack color="rgb(6,182,212)" size={"20px"} />
 								<p className="text-sm text-primary/70">
-									<strong className="text-cyan-500">{charge.qtde}</strong> x{" "}
-									<strong className="text-cyan-500">{charge.descricao}</strong>{" "}
-									de{" "}
-									<strong className="text-cyan-500">{charge.potencia}W</strong>{" "}
-									por{" "}
-									<strong className="text-cyan-500">
-										{charge.horasFuncionamento} horas
-									</strong>
+									<strong className="text-cyan-500">{charge.qtde}</strong> x <strong className="text-cyan-500">{charge.descricao}</strong> de{" "}
+									<strong className="text-cyan-500">{charge.potencia}W</strong> por <strong className="text-cyan-500">{charge.horasFuncionamento} horas</strong>
 								</p>
 							</div>
-							<Button
-								onClick={() => removeCharge(index)}
-								size={"fit"}
-								variant={"destructive"}
-								className="p-2 rounded-full"
-							>
+							<Button onClick={() => removeCharge(index)} size={"fit"} variant={"destructive"} className="p-2 rounded-full">
 								<MdDelete className="w-4 h-4 min-w-4 min-h-4" />
 							</Button>
 						</div>
 					))
 				) : (
-					<p className=" text-sm italic text-primary/70">
-						Sem cargas adicionadas...
-					</p>
+					<p className=" text-sm italic text-primary/70">Sem cargas adicionadas...</p>
 				)}
 				<div className="w-full flex items-center justify-center">
-					<Button
-						onClick={() => setNewChargeMenuIsOpen(true)}
-						size="fit"
-						variant="ghost"
-						className="flex items-cente gap-2 px-2 py-1 rounded-lg"
-					>
+					<Button onClick={() => setNewChargeMenuIsOpen(true)} size="fit" variant="ghost" className="flex items-cente gap-2 px-2 py-1 rounded-lg">
 						<Plus className="w-4 h-4 min-w-4 min-h-4" />
 						ADICIONAR CARGA
 					</Button>
 				</div>
 			</div>
-			{newChargeMenuIsOpen ? (
-				<NewChargeMenuBlock
-					addCharge={addCharge}
-					closeMenu={() => setNewChargeMenuIsOpen(false)}
-				/>
-			) : null}
+			{newChargeMenuIsOpen ? <NewChargeMenuBlock addCharge={addCharge} closeMenu={() => setNewChargeMenuIsOpen(false)} /> : null}
 		</div>
 	);
 }
 type NewChargeMenuBlockProps = {
-	addCharge: (
-		charge: Exclude<TPPSCall["premissas"]["cargas"], undefined | null>[number],
-	) => void;
+	addCharge: (charge: Exclude<TPPSCall["premissas"]["cargas"], undefined | null>[number]) => void;
 	closeMenu: () => void;
 };
 function NewChargeMenuBlock({ addCharge, closeMenu }: NewChargeMenuBlockProps) {
-	const [chargeHolder, setChargeHolder] = useState<
-		Exclude<TPPSCall["premissas"]["cargas"], undefined | null>[number]
-	>({
+	const [chargeHolder, setChargeHolder] = useState<Exclude<TPPSCall["premissas"]["cargas"], undefined | null>[number]>({
 		descricao: "",
 		qtde: 0,
 		horasFuncionamento: 0,
 		potencia: 0,
 	});
-	function handleChargeAdd(
-		info: Exclude<TPPSCall["premissas"]["cargas"], undefined | null>[number],
-	) {
+	function handleChargeAdd(info: Exclude<TPPSCall["premissas"]["cargas"], undefined | null>[number]) {
 		if (info.descricao.trim().length < 3) {
 			toast.error("Preencha uma descrição válida para a carga.");
 			return;
@@ -514,36 +428,28 @@ function NewChargeMenuBlock({ addCharge, closeMenu }: NewChargeMenuBlockProps) {
 			<TextInput
 				label="DESCRIÇÃO"
 				value={chargeHolder.descricao}
-				handleChange={(value) =>
-					setChargeHolder((prev) => ({ ...prev, descricao: value }))
-				}
+				handleChange={(value) => setChargeHolder((prev) => ({ ...prev, descricao: value }))}
 				placeholder="Descrição/nome da carga..."
 				width="100%"
 			/>
 			<NumberInput
 				label="QTDE"
 				value={chargeHolder.qtde}
-				handleChange={(value) =>
-					setChargeHolder((prev) => ({ ...prev, qtde: value }))
-				}
+				handleChange={(value) => setChargeHolder((prev) => ({ ...prev, qtde: value }))}
 				placeholder="Quantidade de itens da carga..."
 				width="100%"
 			/>
 			<NumberInput
 				label="POTÊNCIA (W)"
 				value={chargeHolder.potencia}
-				handleChange={(value) =>
-					setChargeHolder((prev) => ({ ...prev, potencia: value }))
-				}
+				handleChange={(value) => setChargeHolder((prev) => ({ ...prev, potencia: value }))}
 				placeholder="Potência da carga.."
 				width="100%"
 			/>
 			<NumberInput
 				label="FUNCIONAMENTO (h)"
 				value={chargeHolder.horasFuncionamento}
-				handleChange={(value) =>
-					setChargeHolder((prev) => ({ ...prev, horasFuncionamento: value }))
-				}
+				handleChange={(value) => setChargeHolder((prev) => ({ ...prev, horasFuncionamento: value }))}
 				placeholder="Horas de funcionamento..."
 				width="100%"
 			/>
@@ -556,59 +462,35 @@ type AttachFileBlockProps = {
 	addAttachment: (file: TAttachmentState) => void;
 	removeAttachment: (index: number) => void;
 };
-export function AttachFileBlock({
-	attachments,
-	addAttachment,
-	removeAttachment,
-}: AttachFileBlockProps) {
+export function AttachFileBlock({ attachments, addAttachment, removeAttachment }: AttachFileBlockProps) {
 	const [newAttachmentMenuIsOpen, setNewAttachmentMenuIsOpen] = useState(false);
 	return (
 		<div className="flex w-full flex-col gap-2">
 			<div className="flex items-center gap-2 bg-primary/20 px-2 py-1 rounded-sm w-fit">
 				<LinkIcon size={15} />
-				<h1 className="text-xs tracking-tight font-medium text-start w-fit">
-					ANEXOS
-				</h1>
+				<h1 className="text-xs tracking-tight font-medium text-start w-fit">ANEXOS</h1>
 			</div>
 			<div className="w-full flex flex-col gap-1">
 				{attachments && attachments.length > 0 ? (
 					attachments.map((attachment, index) => (
 						<div
 							key={`${attachment.titulo}-${index}`}
-							className={cn(
-								"bg-card border-primary/20 flex w-full flex-col gap-1 rounded-xl border px-3 py-4 shadow-xs",
-							)}
+							className={cn("bg-card border-primary/20 flex w-full flex-col gap-1 rounded-xl border px-3 py-4 shadow-xs")}
 						>
 							<div className="flex items-center justify-between">
-								<h1 className="text-xs font-medium tracking-tight uppercase">
-									{attachment.titulo}
-								</h1>
-								<Button
-									size={"fit"}
-									className="p-2 rounded-full"
-									variant={"destructive"}
-									onClick={() => removeAttachment(index)}
-								>
+								<h1 className="text-xs font-medium tracking-tight uppercase">{attachment.titulo}</h1>
+								<Button size={"fit"} className="p-2 rounded-full" variant={"destructive"} onClick={() => removeAttachment(index)}>
 									<MdDelete className="w-4 h-4 min-w-4 min-h-4" />
 								</Button>
 							</div>
 							<div className="w-full flex items-center flex-wrap gap-3">
 								{attachment.arquivos.map((file, index) => (
-									<div
-										key={`${file.arquivo?.name}-${index}`}
-										className="flex h-[100px] w-[100px] flex-col rounded border border-primary/50"
-									>
+									<div key={`${file.arquivo?.name}-${index}`} className="flex h-[100px] w-[100px] flex-col rounded border border-primary/50">
 										<div className="relative flex h-[100px] w-full grow items-center justify-center bg-gradient-to-b from-sky-400 to-sky-200">
 											{file.previewUrl ? (
-												<Image
-													src={file.previewUrl}
-													alt={file.arquivo?.name || ""}
-													fill={true}
-												/>
+												<Image src={file.previewUrl} alt={file.arquivo?.name || ""} fill={true} />
 											) : (
-												<h1 className="rounded-lg bg-blue-600 px-4 py-1 text-[0.65rem] font-bold text-white">
-													{getFileTypeTitle(file.tipo || "")}
-												</h1>
+												<h1 className="rounded-lg bg-blue-600 px-4 py-1 text-[0.65rem] font-bold text-white">{getFileTypeTitle(file.tipo || "")}</h1>
 											)}
 										</div>
 									</div>
@@ -617,28 +499,16 @@ export function AttachFileBlock({
 						</div>
 					))
 				) : (
-					<p className=" text-sm italic text-primary/70">
-						Sem anexos adicionados...
-					</p>
+					<p className=" text-sm italic text-primary/70">Sem anexos adicionados...</p>
 				)}
 				<div className="w-full flex items-center justify-center">
-					<Button
-						onClick={() => setNewAttachmentMenuIsOpen(true)}
-						size="fit"
-						variant="ghost"
-						className="flex items-cente gap-2 px-2 py-1 rounded-lg"
-					>
+					<Button onClick={() => setNewAttachmentMenuIsOpen(true)} size="fit" variant="ghost" className="flex items-cente gap-2 px-2 py-1 rounded-lg">
 						<Plus className="w-4 h-4 min-w-4 min-h-4" />
 						ADICIONAR ANEXO
 					</Button>
 				</div>
 			</div>
-			{newAttachmentMenuIsOpen ? (
-				<NewAttachmentMenuBlock
-					addAttachment={addAttachment}
-					closeMenu={() => setNewAttachmentMenuIsOpen(false)}
-				/>
-			) : null}
+			{newAttachmentMenuIsOpen ? <NewAttachmentMenuBlock addAttachment={addAttachment} closeMenu={() => setNewAttachmentMenuIsOpen(false)} /> : null}
 		</div>
 	);
 }
@@ -647,10 +517,7 @@ type NewAttachmentMenuBlockProps = {
 	addAttachment: (attachment: TAttachmentState) => void;
 	closeMenu: () => void;
 };
-function NewAttachmentMenuBlock({
-	addAttachment,
-	closeMenu,
-}: NewAttachmentMenuBlockProps) {
+function NewAttachmentMenuBlock({ addAttachment, closeMenu }: NewAttachmentMenuBlockProps) {
 	const [attachmentHolder, setAttachmentHolder] = useState<TAttachmentState>({
 		titulo: "",
 		identificador: "",
@@ -678,9 +545,7 @@ function NewAttachmentMenuBlock({
 					...prev.arquivos,
 					...files.map((file) => ({
 						arquivo: file,
-						previewUrl: isFileImage(file.type)
-							? URL.createObjectURL(file)
-							: null,
+						previewUrl: isFileImage(file.type) ? URL.createObjectURL(file) : null,
 						tipo: file.type,
 					})),
 				],
@@ -703,9 +568,7 @@ function NewAttachmentMenuBlock({
 			<TextInput
 				label="TÍTULO"
 				value={attachmentHolder.titulo}
-				handleChange={(value) =>
-					setAttachmentHolder((prev) => ({ ...prev, titulo: value }))
-				}
+				handleChange={(value) => setAttachmentHolder((prev) => ({ ...prev, titulo: value }))}
 				placeholder="Título/nome do arquivo..."
 				width="100%"
 			/>
@@ -716,10 +579,7 @@ function NewAttachmentMenuBlock({
 				>
 					<div className="flex flex-col items-center justify-center px-6 pb-6 pt-5 text-primary">
 						<BsCloudUploadFill size={50} />
-						<p className="text-center text-xs font-medium tracking-tight">
-							Clique para escolher um ou mais arquivos ou os arraste para a àrea
-							demarcada
-						</p>
+						<p className="text-center text-xs font-medium tracking-tight">Clique para escolher um ou mais arquivos ou os arraste para a àrea demarcada</p>
 					</div>
 					<input
 						onChange={(e) => {
@@ -734,21 +594,12 @@ function NewAttachmentMenuBlock({
 			</div>
 			<div className="w-full flex items-center flex-wrap gap-3">
 				{attachmentHolder.arquivos.map((file, index) => (
-					<div
-						key={`${file.arquivo?.name}-${index}`}
-						className="flex h-[100px] w-[100px] flex-col rounded border border-primary/50"
-					>
+					<div key={`${file.arquivo?.name}-${index}`} className="flex h-[100px] w-[100px] flex-col rounded border border-primary/50">
 						<div className="relative flex h-[100px] w-full grow items-center justify-center bg-gradient-to-b from-sky-400 to-sky-200">
 							{file.previewUrl ? (
-								<Image
-									src={file.previewUrl}
-									alt={file.arquivo?.name || ""}
-									fill={true}
-								/>
+								<Image src={file.previewUrl} alt={file.arquivo?.name || ""} fill={true} />
 							) : (
-								<h1 className="rounded-lg bg-blue-600 px-4 py-1 text-[0.65rem] font-bold text-white">
-									{getFileTypeTitle(file.tipo || "")}
-								</h1>
+								<h1 className="rounded-lg bg-blue-600 px-4 py-1 text-[0.65rem] font-bold text-white">{getFileTypeTitle(file.tipo || "")}</h1>
 							)}
 						</div>
 					</div>

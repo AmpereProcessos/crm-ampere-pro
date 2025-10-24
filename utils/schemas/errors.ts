@@ -1,5 +1,5 @@
 export type TDefaultTreatedError = {
-  error: {
-    message: string
-  }
-}
+	error: {
+		message: string;
+	};
+};

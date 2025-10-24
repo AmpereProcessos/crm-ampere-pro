@@ -17,11 +17,7 @@ import toast from "react-hot-toast";
 import { AiOutlineSafety } from "react-icons/ai";
 import { BsCart } from "react-icons/bs";
 import { FaBolt, FaIndustry } from "react-icons/fa";
-import {
-	MdDelete,
-	MdEdit,
-	MdOutlineMiscellaneousServices,
-} from "react-icons/md";
+import { MdDelete, MdEdit, MdOutlineMiscellaneousServices } from "react-icons/md";
 type ProductsAndServicesProps = {
 	editable: boolean;
 	requestInfo: TContractRequest;
@@ -30,17 +26,8 @@ type ProductsAndServicesProps = {
 	goToPreviousStage: () => void;
 	goToNextStage: () => void;
 };
-function ProductsAndServices({
-	editable,
-	requestInfo,
-	setRequestInfo,
-	showActions,
-	goToPreviousStage,
-	goToNextStage,
-}: ProductsAndServicesProps) {
-	const [newScopeItemMenuState, setNewScopeItemMenuState] = useState<
-		"product" | "service" | null
-	>(null);
+function ProductsAndServices({ editable, requestInfo, setRequestInfo, showActions, goToPreviousStage, goToNextStage }: ProductsAndServicesProps) {
+	const [newScopeItemMenuState, setNewScopeItemMenuState] = useState<"product" | "service" | null>(null);
 
 	function addProduct(product: TContractRequest["produtos"][number]) {
 		setRequestInfo((prev) => ({
@@ -48,15 +35,10 @@ function ProductsAndServices({
 			produtos: [...prev.produtos, product],
 		}));
 	}
-	function updateProduct({
-		index,
-		item,
-	}: { index: number; item: TContractRequest["produtos"][number] }) {
+	function updateProduct({ index, item }: { index: number; item: TContractRequest["produtos"][number] }) {
 		setRequestInfo((prev) => ({
 			...prev,
-			produtos: prev.produtos.map((product, i) =>
-				i === index ? item : product,
-			),
+			produtos: prev.produtos.map((product, i) => (i === index ? item : product)),
 		}));
 	}
 	function removeProduct(index: number) {
@@ -72,15 +54,10 @@ function ProductsAndServices({
 			servicos: [...prev.servicos, service],
 		}));
 	}
-	function updateService({
-		index,
-		item,
-	}: { index: number; item: TContractRequest["servicos"][number] }) {
+	function updateService({ index, item }: { index: number; item: TContractRequest["servicos"][number] }) {
 		setRequestInfo((prev) => ({
 			...prev,
-			servicos: prev.servicos.map((service, i) =>
-				i === index ? item : service,
-			),
+			servicos: prev.servicos.map((service, i) => (i === index ? item : service)),
 		}));
 	}
 	function removeService(index: number) {
@@ -96,27 +73,11 @@ function ProductsAndServices({
 		}
 
 		if (requestInfo.tipoDeServico === "OPERAÇÃO E MANUTENÇÃO") {
-			if (
-				!requestInfo.qtdeModulosOem ||
-				requestInfo.qtdeModulosOem.trim().length === 0
-			)
-				return toast.error("Preencha a quantidade de módulos p/ manutenção.");
-			if (
-				!requestInfo.qtdeInversorOem ||
-				requestInfo.qtdeInversorOem.trim().length === 0
-			)
-				return toast.error(
-					"Preencha a quantidade de inversores p/ manutenção.",
-				);
-			if (
-				!requestInfo.potModulosOem ||
-				requestInfo.potModulosOem.trim().length === 0
-			)
-				return toast.error("Preencha a potência dos módulos p/ manutenção.");
-			if (
-				!requestInfo.potInversorOem ||
-				requestInfo.potInversorOem.trim().length === 0
-			)
+			if (!requestInfo.qtdeModulosOem || requestInfo.qtdeModulosOem.trim().length === 0) return toast.error("Preencha a quantidade de módulos p/ manutenção.");
+			if (!requestInfo.qtdeInversorOem || requestInfo.qtdeInversorOem.trim().length === 0)
+				return toast.error("Preencha a quantidade de inversores p/ manutenção.");
+			if (!requestInfo.potModulosOem || requestInfo.potModulosOem.trim().length === 0) return toast.error("Preencha a potência dos módulos p/ manutenção.");
+			if (!requestInfo.potInversorOem || requestInfo.potInversorOem.trim().length === 0)
 				return toast.error("Preencha a potência dos inversores p/ manutenção.");
 		}
 		setRequestInfo((prev) => ({
@@ -165,9 +126,7 @@ function ProductsAndServices({
 		<div className="flex w-full flex-col bg-background pb-2 gap-6 grow">
 			<div className="w-full flex items-center justify-center gap-2">
 				<Settings size={15} />
-				<span className="text-sm tracking-tight font-bold">
-					ESCOPO - PRODUTOS E SERVIÇOS
-				</span>
+				<span className="text-sm tracking-tight font-bold">ESCOPO - PRODUTOS E SERVIÇOS</span>
 			</div>
 			<div className="flex w-full flex-col grow gap-4">
 				<SelectInput
@@ -191,50 +150,28 @@ function ProductsAndServices({
 						<div className="flex w-full items-center justify-end gap-2">
 							<button
 								type="button"
-								onClick={() =>
-									setNewScopeItemMenuState((prev) =>
-										prev === "service" ? null : "service",
-									)
-								}
-								className={cn(
-									"flex items-center gap-1 rounded-lg px-2 py-1 text-primary duration-300 ease-in-out",
-									{
-										"bg-primary/30  hover:bg-red-300":
-											newScopeItemMenuState === "service",
-										"bg-green-300  hover:bg-green-400":
-											newScopeItemMenuState !== "service",
-									},
-								)}
+								onClick={() => setNewScopeItemMenuState((prev) => (prev === "service" ? null : "service"))}
+								className={cn("flex items-center gap-1 rounded-lg px-2 py-1 text-primary duration-300 ease-in-out", {
+									"bg-primary/30  hover:bg-red-300": newScopeItemMenuState === "service",
+									"bg-green-300  hover:bg-green-400": newScopeItemMenuState !== "service",
+								})}
 							>
 								<MdOutlineMiscellaneousServices />
 								<h1 className="text-xs font-medium tracking-tight">
-									{newScopeItemMenuState !== "service"
-										? "ABRIR MENU DE NOVO SERVIÇO"
-										: "FECHAR MENU DE NOVO SERVIÇO"}
+									{newScopeItemMenuState !== "service" ? "ABRIR MENU DE NOVO SERVIÇO" : "FECHAR MENU DE NOVO SERVIÇO"}
 								</h1>
 							</button>
 							<button
 								type="button"
-								onClick={() =>
-									setNewScopeItemMenuState((prev) =>
-										prev === "product" ? null : "product",
-									)
-								}
-								className={cn(
-									"flex items-center gap-1 rounded-lg px-2 py-1 text-primary duration-300 ease-in-out",
-									{
-										"bg-primary/30  hover:bg-red-300":
-											newScopeItemMenuState === "product",
-										"bg-green-300  hover:bg-green-400":
-											newScopeItemMenuState !== "product",
-									},
-								)}
+								onClick={() => setNewScopeItemMenuState((prev) => (prev === "product" ? null : "product"))}
+								className={cn("flex items-center gap-1 rounded-lg px-2 py-1 text-primary duration-300 ease-in-out", {
+									"bg-primary/30  hover:bg-red-300": newScopeItemMenuState === "product",
+									"bg-green-300  hover:bg-green-400": newScopeItemMenuState !== "product",
+								})}
 							>
 								<BsCart />
 								<h1 className="text-xs font-medium tracking-tight">
-									{newScopeItemMenuState !== "product"
-										? "ABRIR MENU DE NOVO PRODUTO"
-										: "FECHAR MENU DE NOVO PRODUTO"}
+									{newScopeItemMenuState !== "product" ? "ABRIR MENU DE NOVO PRODUTO" : "FECHAR MENU DE NOVO PRODUTO"}
 								</h1>
 							</button>
 						</div>
@@ -242,25 +179,14 @@ function ProductsAndServices({
 				) : null}
 
 				<AnimatePresence>
-					{newScopeItemMenuState === "product" ? (
-						<NewProductMenu addProduct={addProduct} />
-					) : null}
-					{newScopeItemMenuState === "service" ? (
-						<NewServiceMenu addSaleService={addService} />
-					) : null}
+					{newScopeItemMenuState === "product" ? <NewProductMenu addProduct={addProduct} /> : null}
+					{newScopeItemMenuState === "service" ? <NewServiceMenu addSaleService={addService} /> : null}
 				</AnimatePresence>
-				{requestInfo.tipoDeServico === "OPERAÇÃO E MANUTENÇÃO" ? (
-					<OemItemsMenu
-						requestInfo={requestInfo}
-						setRequestInfo={setRequestInfo}
-					/>
-				) : null}
+				{requestInfo.tipoDeServico === "OPERAÇÃO E MANUTENÇÃO" ? <OemItemsMenu requestInfo={requestInfo} setRequestInfo={setRequestInfo} /> : null}
 				<div className="w-full flex flex-col gap-2">
 					<div className="flex items-center gap-2 bg-primary/20 px-2 py-1 rounded-sm w-fit">
 						<ChevronRight size={15} />
-						<h1 className="text-xs tracking-tight font-medium text-start w-fit">
-							PRODUTOS
-						</h1>
+						<h1 className="text-xs tracking-tight font-medium text-start w-fit">PRODUTOS</h1>
 					</div>
 					{requestInfo.produtos.length > 0 ? (
 						requestInfo.produtos.map((product, index) => (
@@ -268,24 +194,18 @@ function ProductsAndServices({
 								editable={editable}
 								key={`${index}-${product.modelo}`}
 								product={product}
-								handleUpdate={(info) =>
-									updateProduct({ index: index, item: info })
-								}
+								handleUpdate={(info) => updateProduct({ index: index, item: info })}
 								handleRemove={() => removeProduct(index)}
 							/>
 						))
 					) : (
-						<div className="w-full text-center text-sm font-medium tracking-tight text-primary/80">
-							Nenhum produto adicionado
-						</div>
+						<div className="w-full text-center text-sm font-medium tracking-tight text-primary/80">Nenhum produto adicionado</div>
 					)}
 				</div>
 				<div className="w-full flex flex-col gap-2">
 					<div className="flex items-center gap-2 bg-primary/20 px-2 py-1 rounded-sm w-fit">
 						<ChevronRight size={15} />
-						<h1 className="text-xs tracking-tight font-medium text-start w-fit">
-							SERVIÇOS
-						</h1>
+						<h1 className="text-xs tracking-tight font-medium text-start w-fit">SERVIÇOS</h1>
 					</div>
 					{requestInfo.servicos.length > 0 ? (
 						requestInfo.servicos.map((service, index) => (
@@ -293,16 +213,12 @@ function ProductsAndServices({
 								editable={editable}
 								key={`${index}-${service.descricao}`}
 								service={service}
-								handleUpdate={(info) =>
-									updateService({ index: index, item: info })
-								}
+								handleUpdate={(info) => updateService({ index: index, item: info })}
 								handleRemove={() => removeService(index)}
 							/>
 						))
 					) : (
-						<div className="w-full text-center text-sm font-medium tracking-tight text-primary/80">
-							Nenhum serviço adicionado
-						</div>
+						<div className="w-full text-center text-sm font-medium tracking-tight text-primary/80">Nenhum serviço adicionado</div>
 					)}
 				</div>
 			</div>
@@ -337,12 +253,7 @@ type NewProductMenuProps = {
 	addProduct: (info: TContractRequest["produtos"][number]) => void;
 };
 function NewProductMenu({ addProduct }: NewProductMenuProps) {
-	const {
-		data: equipments,
-		isLoading,
-		isError,
-		isSuccess,
-	} = useEquipments({ category: null });
+	const { data: equipments, isLoading, isError, isSuccess } = useEquipments({ category: null });
 
 	const inverters = equipments?.filter((e) => e.categoria === "INVERSOR") || [];
 	const modules = equipments?.filter((e) => e.categoria === "MÓDULO") || [];
@@ -359,9 +270,7 @@ function NewProductMenu({ addProduct }: NewProductMenuProps) {
 		value: product.modelo,
 	}));
 
-	const [inverterHolder, setInverterHolder] = useState<
-		TContractRequest["produtos"][number]
-	>({
+	const [inverterHolder, setInverterHolder] = useState<TContractRequest["produtos"][number]>({
 		categoria: "INVERSOR",
 		fabricante: "",
 		modelo: "",
@@ -369,9 +278,7 @@ function NewProductMenu({ addProduct }: NewProductMenuProps) {
 		garantia: 10,
 		potencia: 0,
 	});
-	const [moduleHolder, setModuleHolder] = useState<
-		TContractRequest["produtos"][number]
-	>({
+	const [moduleHolder, setModuleHolder] = useState<TContractRequest["produtos"][number]>({
 		categoria: "MÓDULO",
 		fabricante: "",
 		modelo: "",
@@ -379,9 +286,7 @@ function NewProductMenu({ addProduct }: NewProductMenuProps) {
 		garantia: 10,
 		potencia: 0,
 	});
-	const [personalizedProductHolder, setPersonalizedProductHolder] = useState<
-		TContractRequest["produtos"][number]
-	>({
+	const [personalizedProductHolder, setPersonalizedProductHolder] = useState<TContractRequest["produtos"][number]>({
 		categoria: "OUTROS",
 		fabricante: "",
 		modelo: "",
@@ -390,12 +295,9 @@ function NewProductMenu({ addProduct }: NewProductMenuProps) {
 		potencia: 0,
 	});
 	function handleAddProduct(product: TContractRequest["produtos"][number]) {
-		if (product.fabricante.trim().length <= 1)
-			return toast.error("Preencha um fabricante válido.");
-		if (product.modelo.trim().length <= 1)
-			return toast.error("Preencha um modelo válido.");
-		if (product.qtde <= 0)
-			return toast.error("Preencha uma quantidade válida.");
+		if (product.fabricante.trim().length <= 1) return toast.error("Preencha um fabricante válido.");
+		if (product.modelo.trim().length <= 1) return toast.error("Preencha um modelo válido.");
+		if (product.qtde <= 0) return toast.error("Preencha uma quantidade válida.");
 		addProduct(product);
 	}
 	return (
@@ -407,9 +309,7 @@ function NewProductMenu({ addProduct }: NewProductMenuProps) {
 			exit="exit"
 			className="flex w-full flex-col gap-2 rounded-sm border border-green-600 bg-background shadow-md"
 		>
-			<h1 className="rounded-tl rounded-tr bg-green-600 p-1 text-center text-xs text-primary-foreground">
-				NOVO PRODUTO
-			</h1>
+			<h1 className="rounded-tl rounded-tr bg-green-600 p-1 text-center text-xs text-primary-foreground">NOVO PRODUTO</h1>
 			<div className="flex w-full flex-col gap-2 p-3">
 				<div className="flex w-full flex-col gap-2">
 					<div className="flex w-full flex-col items-center gap-2 lg:flex-row">
@@ -473,11 +373,7 @@ function NewProductMenu({ addProduct }: NewProductMenuProps) {
 						</div>
 					</div>
 					<div className="flex items-center justify-end">
-						<Button
-							onClick={() => handleAddProduct(inverterHolder)}
-							size={"sm"}
-							type="button"
-						>
+						<Button onClick={() => handleAddProduct(inverterHolder)} size={"sm"} type="button">
 							ADICIONAR INVERSOR
 						</Button>
 					</div>
@@ -545,11 +441,7 @@ function NewProductMenu({ addProduct }: NewProductMenuProps) {
 						</div>
 					</div>
 					<div className="flex items-center justify-end">
-						<Button
-							onClick={() => handleAddProduct(moduleHolder)}
-							size={"sm"}
-							type="button"
-						>
+						<Button onClick={() => handleAddProduct(moduleHolder)} size={"sm"} type="button">
 							ADICIONAR MÓDULO
 						</Button>
 					</div>
@@ -650,11 +542,7 @@ function NewProductMenu({ addProduct }: NewProductMenuProps) {
 					</div>
 
 					<div className="flex items-center justify-end">
-						<Button
-							onClick={() => handleAddProduct(personalizedProductHolder)}
-							size={"sm"}
-							type="button"
-						>
+						<Button onClick={() => handleAddProduct(personalizedProductHolder)} size={"sm"} type="button">
 							ADICIONAR PRODUTO PERSONALIZADO
 						</Button>
 					</div>
@@ -674,8 +562,7 @@ function ProductItem({
 	handleUpdate: (info: TContractRequest["produtos"][number]) => void;
 	handleRemove: () => void;
 }) {
-	const [itemHolder, setItemHolder] =
-		useState<TContractRequest["produtos"][number]>(product);
+	const [itemHolder, setItemHolder] = useState<TContractRequest["produtos"][number]>(product);
 	const [editMenuIsOpen, setEditMenuIsOpen] = useState<boolean>(false);
 	return (
 		<>
@@ -687,30 +574,24 @@ function ProductItem({
 								{renderCategoryIcon(product.categoria, 15)}
 							</div>
 							<p className="text-sm font-bold leading-none tracking-tight">
-								<strong className="text-[#FF9B50]">{product.qtde}</strong> x{" "}
-								{product.modelo}
+								<strong className="text-[#FF9B50]">{product.qtde}</strong> x {product.modelo}
 							</p>
 						</div>
 						<div className="flex grow items-center gap-2">
 							<div className="flex items-center gap-1">
 								<FaIndustry size={12} />
-								<p className="text-[0.6rem] font-light text-primary/70 lg:text-xs">
-									{product.fabricante}
-								</p>
+								<p className="text-[0.6rem] font-light text-primary/70 lg:text-xs">{product.fabricante}</p>
 							</div>
 							{product.potencia ? (
 								<div className="flex items-center gap-1">
 									<FaBolt size={12} />
-									<p className="text-[0.6rem] font-light text-primary/70 lg:text-xs">
-										{product.potencia} W
-									</p>
+									<p className="text-[0.6rem] font-light text-primary/70 lg:text-xs">{product.potencia} W</p>
 								</div>
 							) : null}
 							<div className="flex items-center gap-1">
 								<AiOutlineSafety size={12} />
 								<p className="text-[0.6rem] font-light text-primary/70 lg:text-xs">
-									{product.garantia}{" "}
-									{product.garantia && product.garantia > 0 ? "ANOS" : "ANO"}
+									{product.garantia} {product.garantia && product.garantia > 0 ? "ANOS" : "ANO"}
 								</p>
 							</div>
 						</div>
@@ -885,16 +766,13 @@ type NewServiceMenuProps = {
 	addSaleService: (info: TContractRequest["servicos"][number]) => void;
 };
 function NewServiceMenu({ addSaleService }: NewServiceMenuProps) {
-	const [serviceHolder, setServiceHolder] = useState<
-		TContractRequest["servicos"][number]
-	>({
+	const [serviceHolder, setServiceHolder] = useState<TContractRequest["servicos"][number]>({
 		descricao: "",
 		observacoes: "",
 		garantia: 0,
 	});
 	function handleAddService(service: TContractRequest["servicos"][number]) {
-		if (service.descricao.trim().length <= 1)
-			return toast.error("Preencha uma descrição válida.");
+		if (service.descricao.trim().length <= 1) return toast.error("Preencha uma descrição válida.");
 		addSaleService(service);
 		setServiceHolder({
 			descricao: "",
@@ -911,9 +789,7 @@ function NewServiceMenu({ addSaleService }: NewServiceMenuProps) {
 			exit="exit"
 			className="flex w-full flex-col gap-2 rounded-sm border border-green-600 bg-background shadow-md"
 		>
-			<h1 className="rounded-tl rounded-tr bg-green-600 p-1 text-center text-xs text-primary-foreground">
-				NOVO SERVIÇO
-			</h1>
+			<h1 className="rounded-tl rounded-tr bg-green-600 p-1 text-center text-xs text-primary-foreground">NOVO SERVIÇO</h1>
 			<div className="flex w-full flex-col gap-2 p-3">
 				<div className="flex w-full flex-col items-center gap-2 lg:flex-row">
 					<div className="w-full lg:w-3/4">
@@ -921,9 +797,7 @@ function NewServiceMenu({ addSaleService }: NewServiceMenuProps) {
 							label="DESCRIÇÃO"
 							placeholder="Preencha a descrição do serviço..."
 							value={serviceHolder.descricao}
-							handleChange={(value) =>
-								setServiceHolder((prev) => ({ ...prev, descricao: value }))
-							}
+							handleChange={(value) => setServiceHolder((prev) => ({ ...prev, descricao: value }))}
 							width="100%"
 						/>
 					</div>
@@ -932,9 +806,7 @@ function NewServiceMenu({ addSaleService }: NewServiceMenuProps) {
 							label="GARANTIA"
 							placeholder="Preencha a garantia do serviço..."
 							value={serviceHolder.garantia || null}
-							handleChange={(value) =>
-								setServiceHolder((prev) => ({ ...prev, garantia: value }))
-							}
+							handleChange={(value) => setServiceHolder((prev) => ({ ...prev, garantia: value }))}
 							width="100%"
 						/>
 					</div>
@@ -942,17 +814,11 @@ function NewServiceMenu({ addSaleService }: NewServiceMenuProps) {
 				<TextareaInput
 					label="OBSERVAÇÕES DO SERVIÇO"
 					value={serviceHolder.observacoes || ""}
-					handleChange={(value) =>
-						setServiceHolder((prev) => ({ ...prev, observacoes: value }))
-					}
+					handleChange={(value) => setServiceHolder((prev) => ({ ...prev, observacoes: value }))}
 					placeholder="Preencha aqui uma descrição acerca do serviço..."
 				/>
 				<div className="flex items-center justify-end">
-					<Button
-						onClick={() => handleAddService(serviceHolder)}
-						size={"sm"}
-						type="button"
-					>
+					<Button onClick={() => handleAddService(serviceHolder)} size={"sm"} type="button">
 						ADICIONAR SERVIÇO
 					</Button>
 				</div>
@@ -971,8 +837,7 @@ function ServiceItem({
 	handleUpdate: (info: TContractRequest["servicos"][number]) => void;
 	handleRemove: () => void;
 }) {
-	const [itemHolder, setItemHolder] =
-		useState<TContractRequest["servicos"][number]>(service);
+	const [itemHolder, setItemHolder] = useState<TContractRequest["servicos"][number]>(service);
 	const [editMenuIsOpen, setEditMenuIsOpen] = useState<boolean>(false);
 	return (
 		<>
@@ -983,25 +848,20 @@ function ServiceItem({
 							<div className="flex h-[25px] w-[25px] items-center justify-center rounded-full border border-black p-1">
 								<MdOutlineMiscellaneousServices />
 							</div>
-							<p className="text-sm font-bold leading-none tracking-tight">
-								{service.descricao}
-							</p>
+							<p className="text-sm font-bold leading-none tracking-tight">{service.descricao}</p>
 						</div>
 						<div className="flex grow items-center gap-2">
 							<div className="flex items-center gap-1">
 								<AiOutlineSafety size={12} />
 								<p className="text-[0.6rem] font-light text-primary/70 lg:text-xs">
-									{service.garantia}{" "}
-									{service.garantia && service.garantia > 0 ? "ANOS" : "ANO"}
+									{service.garantia} {service.garantia && service.garantia > 0 ? "ANOS" : "ANO"}
 								</p>
 							</div>
 						</div>
 					</div>
 					<div className="flex w-full items-center justify-center">
 						<div className="flex w-full items-center justify-center rounded-sm bg-primary/10 p-2">
-							<h1 className="whitespace-pre-line text-[0.6rem] font-medium">
-								{service.observacoes || "OBSERVAÇÕES NÃO DEFINIDAS"}
-							</h1>
+							<h1 className="whitespace-pre-line text-[0.6rem] font-medium">{service.observacoes || "OBSERVAÇÕES NÃO DEFINIDAS"}</h1>
 						</div>
 					</div>
 					{editable ? (
@@ -1041,9 +901,7 @@ function ServiceItem({
 									placeholder="Preencha a descrição do serviço..."
 									holderClassName="text-xs p-2 min-h-[34px]"
 									value={itemHolder.descricao}
-									handleChange={(value) =>
-										setItemHolder((prev) => ({ ...prev, descricao: value }))
-									}
+									handleChange={(value) => setItemHolder((prev) => ({ ...prev, descricao: value }))}
 									width="100%"
 								/>
 							</div>
@@ -1054,9 +912,7 @@ function ServiceItem({
 									placeholder="Preencha a garantia do serviço..."
 									holderClassName="text-xs p-2 min-h-[34px]"
 									value={itemHolder.garantia || null}
-									handleChange={(value) =>
-										setItemHolder((prev) => ({ ...prev, garantia: value }))
-									}
+									handleChange={(value) => setItemHolder((prev) => ({ ...prev, garantia: value }))}
 									width="100%"
 								/>
 							</div>
@@ -1065,9 +921,7 @@ function ServiceItem({
 							label="OBSERVAÇÕES DO SERVIÇO"
 							holderClassName="p-2 min-h-[50px] lg:min-h-[45px]"
 							value={itemHolder.observacoes || ""}
-							handleChange={(value) =>
-								setItemHolder((prev) => ({ ...prev, observacoes: value }))
-							}
+							handleChange={(value) => setItemHolder((prev) => ({ ...prev, observacoes: value }))}
 							placeholder="Preencha aqui uma descrição acerca do serviço..."
 						/>
 						<div className="flex items-center justify-end gap-2">
@@ -1111,37 +965,17 @@ type OemItemsMenuProps = {
 };
 function OemItemsMenu({ requestInfo, setRequestInfo }: OemItemsMenuProps) {
 	function getInitialItems(request: TContractRequest) {
-		const modulesQty = request.qtdeModulosOem
-			? request.qtdeModulosOem.split("/")
-			: [];
-		const modulesPower = request.potModulosOem
-			? request.potModulosOem.split("/")
-			: [];
-		const modulesDescription = request.marcaModulosOem
-			? request.marcaModulosOem.split("/")
-			: [];
-		const invertersQty = request.qtdeInversorOem
-			? request.qtdeInversorOem.split("/")
-			: [];
-		const invertersPower = request.potInversorOem
-			? request.potInversorOem.split("/")
-			: [];
-		const invertersDescription = request.marcaInversorOem
-			? request.marcaInversorOem.split("/")
-			: [];
+		const modulesQty = request.qtdeModulosOem ? request.qtdeModulosOem.split("/") : [];
+		const modulesPower = request.potModulosOem ? request.potModulosOem.split("/") : [];
+		const modulesDescription = request.marcaModulosOem ? request.marcaModulosOem.split("/") : [];
+		const invertersQty = request.qtdeInversorOem ? request.qtdeInversorOem.split("/") : [];
+		const invertersPower = request.potInversorOem ? request.potInversorOem.split("/") : [];
+		const invertersDescription = request.marcaInversorOem ? request.marcaInversorOem.split("/") : [];
 
 		const modulesArr = [];
-		const maxModulesPropertyLength = Math.max(
-			modulesQty.length,
-			modulesPower.length,
-			modulesDescription.length,
-		);
+		const maxModulesPropertyLength = Math.max(modulesQty.length, modulesPower.length, modulesDescription.length);
 		const invertersArr = [];
-		const maxInvertersPropertyLength = Math.max(
-			invertersQty.length,
-			invertersPower.length,
-			invertersDescription.length,
-		);
+		const maxInvertersPropertyLength = Math.max(invertersQty.length, invertersPower.length, invertersDescription.length);
 		for (let i = 0; i < maxModulesPropertyLength; i++) {
 			const iterModuleQty = modulesQty[i];
 			const iterModulePower = modulesPower[i];
@@ -1184,9 +1018,7 @@ function OemItemsMenu({ requestInfo, setRequestInfo }: OemItemsMenuProps) {
 		}
 		return itemsArr;
 	}
-	const [itemsHolder, setItemsHolder] = useState<TOemItemHolder[]>(
-		getInitialItems(requestInfo),
-	);
+	const [itemsHolder, setItemsHolder] = useState<TOemItemHolder[]>(getInitialItems(requestInfo));
 
 	function getItemsRequestMetadata(items: TOemItemHolder[]) {
 		const newItemsRequestMetadata = items.reduce(
@@ -1218,8 +1050,7 @@ function OemItemsMenu({ requestInfo, setRequestInfo }: OemItemsMenuProps) {
 			modulesDescription: newItemsRequestMetadata.modulesDescription.join("/"),
 			invertersQty: newItemsRequestMetadata.invertersQty.join("/"),
 			invertersPower: newItemsRequestMetadata.invertersPower.join("/"),
-			invertersDescription:
-				newItemsRequestMetadata.invertersDescription.join("/"),
+			invertersDescription: newItemsRequestMetadata.invertersDescription.join("/"),
 		};
 	}
 	function handleAddItem(item: TOemItemHolder) {
@@ -1254,13 +1085,8 @@ function OemItemsMenu({ requestInfo, setRequestInfo }: OemItemsMenuProps) {
 		}));
 	}
 
-	function handleUpdateItem({
-		index,
-		changes,
-	}: { index: number; changes: Partial<TOemItemHolder> }) {
-		const newItems = itemsHolder.map((item, i) =>
-			i === index ? { ...item, ...changes } : item,
-		);
+	function handleUpdateItem({ index, changes }: { index: number; changes: Partial<TOemItemHolder> }) {
+		const newItems = itemsHolder.map((item, i) => (i === index ? { ...item, ...changes } : item));
 
 		const newItemsRequestMetadata = getItemsRequestMetadata(newItems);
 
@@ -1280,9 +1106,7 @@ function OemItemsMenu({ requestInfo, setRequestInfo }: OemItemsMenuProps) {
 		<div className="w-full flex flex-col gap-2">
 			<div className="flex items-center gap-2 bg-primary/20 px-2 py-1 rounded-sm w-fit">
 				<ChevronRight size={15} />
-				<h1 className="text-xs tracking-tight font-medium text-start w-fit">
-					ITENS DA MANUTENÇÃO
-				</h1>
+				<h1 className="text-xs tracking-tight font-medium text-start w-fit">ITENS DA MANUTENÇÃO</h1>
 			</div>
 			<div className="w-full flex items-center justify-end gap-2 flex-wrap">
 				<div className="flex w-full items-center justify-end gap-2">
@@ -1296,14 +1120,10 @@ function OemItemsMenu({ requestInfo, setRequestInfo }: OemItemsMenuProps) {
 								potencia: 0,
 							})
 						}
-						className={cn(
-							"flex items-center gap-1 rounded-lg px-2 py-1 text-primary duration-300 ease-in-out bg-primary/30 hover:bg-green-400",
-						)}
+						className={cn("flex items-center gap-1 rounded-lg px-2 py-1 text-primary duration-300 ease-in-out bg-primary/30 hover:bg-green-400")}
 					>
 						<Plus className="w-4 h-4" />
-						<h1 className="text-xs font-medium tracking-tight">
-							ADICIONAR MÓDULO
-						</h1>
+						<h1 className="text-xs font-medium tracking-tight">ADICIONAR MÓDULO</h1>
 					</button>
 					<button
 						type="button"
@@ -1315,14 +1135,10 @@ function OemItemsMenu({ requestInfo, setRequestInfo }: OemItemsMenuProps) {
 								potencia: 0,
 							})
 						}
-						className={cn(
-							"flex items-center gap-1 rounded-lg px-2 py-1 text-primary duration-300 ease-in-out bg-primary/30 hover:bg-green-400",
-						)}
+						className={cn("flex items-center gap-1 rounded-lg px-2 py-1 text-primary duration-300 ease-in-out bg-primary/30 hover:bg-green-400")}
 					>
 						<Plus className="w-4 h-4" />
-						<h1 className="text-xs font-medium tracking-tight">
-							ADICIONAR INVERSOR
-						</h1>
+						<h1 className="text-xs font-medium tracking-tight">ADICIONAR INVERSOR</h1>
 					</button>
 				</div>
 			</div>
@@ -1351,12 +1167,8 @@ function OemItem({
 		<div className="flex w-full flex-col gap-1 rounded-sm border border-primary bg-background p-2">
 			<div className="w-full flex items-center justify-between">
 				<div className="flex items-center gap-2">
-					<div className="flex h-[25px] w-[25px] items-center justify-center rounded-full border border-black p-1">
-						{renderCategoryIcon(item.tipo, 15)}
-					</div>
-					<p className="text-sm font-bold leading-none tracking-tight">
-						{item.tipo}
-					</p>
+					<div className="flex h-[25px] w-[25px] items-center justify-center rounded-full border border-black p-1">{renderCategoryIcon(item.tipo, 15)}</div>
+					<p className="text-sm font-bold leading-none tracking-tight">{item.tipo}</p>
 				</div>
 				<button
 					type="button"
@@ -1376,9 +1188,7 @@ function OemItem({
 							placeholder="Preencha a descrição do item..."
 							holderClassName="text-xs p-2 min-h-[34px]"
 							value={item.descricao}
-							handleChange={(value) =>
-								handleUpdate({ ...item, descricao: value })
-							}
+							handleChange={(value) => handleUpdate({ ...item, descricao: value })}
 							width="100%"
 						/>
 					</div>
@@ -1400,9 +1210,7 @@ function OemItem({
 							placeholder="Preencha a potência do item..."
 							holderClassName="text-xs p-2 min-h-[34px]"
 							value={item.potencia}
-							handleChange={(value) =>
-								handleUpdate({ ...item, potencia: value })
-							}
+							handleChange={(value) => handleUpdate({ ...item, potencia: value })}
 							width="100%"
 						/>
 					</div>

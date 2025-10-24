@@ -1,7 +1,4 @@
-import {
-	insertPPSCall,
-	updatePPSCall,
-} from "@/repositories/integrations/app-ampere/pps-calls/mutations";
+import { insertPPSCall, updatePPSCall } from "@/repositories/integrations/app-ampere/pps-calls/mutations";
 import {
 	getAllPPSCalls,
 	getPPSCallsByApplicantId,
@@ -10,10 +7,7 @@ import {
 } from "@/repositories/integrations/app-ampere/pps-calls/queries";
 import connectToCallsDatabase from "@/services/mongodb/ampere/calls-db-connection";
 import { apiHandler, validateAuthenticationWithSession } from "@/utils/api";
-import {
-	InsertPPSCallSchema,
-	type TPPSCall,
-} from "@/utils/schemas/pps-calls.schema";
+import { InsertPPSCallSchema, type TPPSCall } from "@/utils/schemas/pps-calls.schema";
 import createHttpError from "http-errors";
 import { type Collection, type Filter, ObjectId } from "mongodb";
 import type { NextApiHandler } from "next";
@@ -30,21 +24,18 @@ const getPPSCalls: NextApiHandler<GetResponse> = async (req, res) => {
 	const db = await connectToCallsDatabase(process.env.OPERATIONAL_MONGODB_URI);
 	const collection: Collection<TPPSCall> = db.collection("pps");
 
-	const queryOpenOnly: Filter<TPPSCall> =
-		openOnly === "true" ? { status: { $ne: "REALIZADO" } } : {};
+	const queryOpenOnly: Filter<TPPSCall> = openOnly === "true" ? { status: { $ne: "REALIZADO" } } : {};
 
 	const query: Filter<TPPSCall> = { ...queryOpenOnly };
 
 	if (id) {
-		if (typeof id !== "string" || !ObjectId.isValid(id))
-			throw new createHttpError.BadRequest("ID inválido.");
+		if (typeof id !== "string" || !ObjectId.isValid(id)) throw new createHttpError.BadRequest("ID inválido.");
 		const call = await getPPSCallsById({ collection: collection, id: id });
 		if (!call) throw new createHttpError.NotFound("Chamado não encontrado.");
 		return res.status(200).json({ data: call });
 	}
 	if (opportunityId) {
-		if (typeof opportunityId !== "string" || !ObjectId.isValid(opportunityId))
-			throw new createHttpError.BadRequest("ID de oportunidade inválido.");
+		if (typeof opportunityId !== "string" || !ObjectId.isValid(opportunityId)) throw new createHttpError.BadRequest("ID de oportunidade inválido.");
 		const calls = await getPPSCallsByOpportunityId({
 			collection: collection,
 			opportunityId: opportunityId,
@@ -53,8 +44,7 @@ const getPPSCalls: NextApiHandler<GetResponse> = async (req, res) => {
 		return res.status(200).json({ data: calls });
 	}
 	if (applicantId) {
-		if (typeof applicantId !== "string" || !ObjectId.isValid(applicantId))
-			throw new createHttpError.BadRequest("ID de requerente inválido.");
+		if (typeof applicantId !== "string" || !ObjectId.isValid(applicantId)) throw new createHttpError.BadRequest("ID de requerente inválido.");
 		const calls = await getPPSCallsByApplicantId({
 			collection: collection,
 			applicantId: applicantId,
@@ -76,10 +66,7 @@ export type TCreatePPSCallOutput = {
 	message: string;
 };
 
-const createPPSCall: NextApiHandler<TCreatePPSCallOutput> = async (
-	req,
-	res,
-) => {
+const createPPSCall: NextApiHandler<TCreatePPSCallOutput> = async (req, res) => {
 	const session = await validateAuthenticationWithSession(req, res);
 
 	const call = InsertPPSCallSchema.parse(req.body);
@@ -91,15 +78,10 @@ const createPPSCall: NextApiHandler<TCreatePPSCallOutput> = async (
 		collection: collection,
 		info: call,
 	});
-	if (!insertResponse.acknowledged)
-		throw new createHttpError.InternalServerError(
-			"Oops, houve um erro desconhecido ao criar chamado.",
-		);
+	if (!insertResponse.acknowledged) throw new createHttpError.InternalServerError("Oops, houve um erro desconhecido ao criar chamado.");
 	const insertedId = insertResponse.insertedId.toString();
 
-	return res
-		.status(200)
-		.json({ data: { insertedId }, message: "Chamado criado com sucesso !" });
+	return res.status(200).json({ data: { insertedId }, message: "Chamado criado com sucesso !" });
 };
 
 export type TUpdatePPSCallOutput = {
@@ -107,14 +89,10 @@ export type TUpdatePPSCallOutput = {
 	message: string;
 };
 
-const updatePPSCallHandler: NextApiHandler<TUpdatePPSCallOutput> = async (
-	req,
-	res,
-) => {
+const updatePPSCallHandler: NextApiHandler<TUpdatePPSCallOutput> = async (req, res) => {
 	const session = await validateAuthenticationWithSession(req, res);
 	const { id } = req.query;
-	if (typeof id !== "string" || !ObjectId.isValid(id))
-		throw new createHttpError.BadRequest("ID inválido.");
+	if (typeof id !== "string" || !ObjectId.isValid(id)) throw new createHttpError.BadRequest("ID inválido.");
 
 	const call = InsertPPSCallSchema.partial().parse(req.body);
 
@@ -126,10 +104,7 @@ const updatePPSCallHandler: NextApiHandler<TUpdatePPSCallOutput> = async (
 		info: call,
 		id: id,
 	});
-	if (!updateResponse.acknowledged)
-		throw new createHttpError.InternalServerError(
-			"Oops, houve um erro desconhecido ao atualizar chamado.",
-		);
+	if (!updateResponse.acknowledged) throw new createHttpError.InternalServerError("Oops, houve um erro desconhecido ao atualizar chamado.");
 	const updatedId = updateResponse.upsertedId?.toString() || "";
 	return res.status(200).json({
 		message: "Chamado atualizado com sucesso !",

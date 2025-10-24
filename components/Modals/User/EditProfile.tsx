@@ -12,24 +12,8 @@ import SelectInput from "@/components/Inputs/SelectInput";
 import SelectWithImages from "@/components/Inputs/SelectWithImages";
 import ComissionPannel from "@/components/Users/ComissionPannel";
 import { Button } from "@/components/ui/button";
-import {
-	Dialog,
-	DialogClose,
-	DialogContent,
-	DialogDescription,
-	DialogFooter,
-	DialogHeader,
-	DialogTitle,
-} from "@/components/ui/dialog";
-import {
-	Drawer,
-	DrawerClose,
-	DrawerContent,
-	DrawerDescription,
-	DrawerFooter,
-	DrawerHeader,
-	DrawerTitle,
-} from "@/components/ui/drawer";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
 import ResponsiveDialogDrawer from "@/components/utils/ResponsiveDialogDrawer";
 import type { TUserSession } from "@/lib/auth/session";
 import { getErrorMessage } from "@/lib/methods/errors";
@@ -56,12 +40,7 @@ type EditUserProps = {
 	session: TUserSession;
 };
 
-function EditUserProfile({
-	closeModal,
-	userId,
-	partnerId,
-	session,
-}: EditUserProps) {
+function EditUserProfile({ closeModal, userId, partnerId, session }: EditUserProps) {
 	const queryClient = useQueryClient();
 
 	const [avatarFile, setAvatarFile] = useState<File | null>(null);
@@ -78,21 +57,15 @@ function EditUserProfile({
 		setUserInfo((prev) => ({ ...prev, ...info }));
 	}
 
-	async function handleUserUpdate({
-		userInfo,
-		avatarFile,
-	}: { userInfo: TUpdateProfileInput; avatarFile: File | null }) {
+	async function handleUserUpdate({ userInfo, avatarFile }: { userInfo: TUpdateProfileInput; avatarFile: File | null }) {
 		try {
 			let avatar_url = userInfo.avatar_url;
-			if (userInfo.nome.trim().length < 3)
-				return toast.error("Preencha um nome de ao menos 3 caracteres.");
+			if (userInfo.nome.trim().length < 3) return toast.error("Preencha um nome de ao menos 3 caracteres.");
 			if (avatarFile) {
 				const storageName = `saas-crm/usuarios/${userInfo.nome}`;
 				const fileRef = ref(storage, storageName);
 				const firebaseResponse = await uploadBytes(fileRef, avatarFile);
-				const fileUrl = await getDownloadURL(
-					ref(storage, firebaseResponse.metadata.fullPath),
-				);
+				const fileUrl = await getDownloadURL(ref(storage, firebaseResponse.metadata.fullPath));
 				avatar_url = fileUrl;
 			}
 			const response = await editProfile({
@@ -109,8 +82,7 @@ function EditUserProfile({
 		mutationFn: handleUserUpdate,
 		affectedQueryKey: ["user-by-id", userId],
 		queryClient: queryClient,
-		callbackFn: async () =>
-			await queryClient.invalidateQueries({ queryKey: ["users"] }),
+		callbackFn: async () => await queryClient.invalidateQueries({ queryKey: ["users"] }),
 	});
 
 	const MENU_TITLE = "ATUALIZAR PERFIL";
@@ -122,9 +94,7 @@ function EditUserProfile({
 			menuTitle={MENU_TITLE}
 			menuDescription={MENU_DESCRIPTION}
 			menuActionButtonText={BUTTON_TEXT}
-			actionFunction={() =>
-				mutate({ userInfo: userInfo, avatarFile: avatarFile })
-			}
+			actionFunction={() => mutate({ userInfo: userInfo, avatarFile: avatarFile })}
 			actionIsLoading={isPending}
 			stateIsLoading={false}
 			closeMenu={closeModal}
@@ -177,9 +147,7 @@ function EditUserProfile({
 								<BsCheckLg style={{ color: "green", fontSize: "25px" }} />
 							</div>
 						) : (
-							<p className="absolute w-full text-center text-xs font-bold text-primary/70">
-								ESCOLHA UMA IMAGEM
-							</p>
+							<p className="absolute w-full text-center text-xs font-bold text-primary/70">ESCOLHA UMA IMAGEM</p>
 						)}
 
 						<input
@@ -204,17 +172,13 @@ function EditUserProfile({
 				label="TELEFONE"
 				value={userInfo.telefone || ""}
 				placeholder="Preencha aqui o telefone do usuário."
-				handleChange={(value) =>
-					updateUserInfo({ telefone: formatToPhone(value) })
-				}
+				handleChange={(value) => updateUserInfo({ telefone: formatToPhone(value) })}
 				width="100%"
 			/>
 			<DateInput
 				label="DATA DE NASCIMENTO"
 				value={formatDateForInputValue(userInfo.dataNascimento)}
-				handleChange={(value) =>
-					updateUserInfo({ dataNascimento: formatDateOnInputChange(value) })
-				}
+				handleChange={(value) => updateUserInfo({ dataNascimento: formatDateOnInputChange(value) })}
 				width="100%"
 			/>
 		</ResponsiveDialogDrawer>

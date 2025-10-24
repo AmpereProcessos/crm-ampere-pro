@@ -46,7 +46,10 @@ async function fetchOpportunityHistoryAndActivities({ opportunityId }: { opportu
 		// Mapping through history and adding a reference date for sorting based on insertion date
 		const history = (historyResponse.data as TOpportunityHistoryDTO[]).map((h) => ({ ...h, dataReferencia: h.dataInsercao }));
 		// Mapping through activities and adding a reference date for sorting based on conclusion date or due date or insertion date
-		const activities = (activitiesResponse.data.byOpportunityId as TActivityDTO[]).map((h) => ({ ...h, dataReferencia: h.dataConclusao || h.dataVencimento || h.dataInsercao }));
+		const activities = (activitiesResponse.data.byOpportunityId as TActivityDTO[]).map((h) => ({
+			...h,
+			dataReferencia: h.dataConclusao || h.dataVencimento || h.dataInsercao,
+		}));
 		// Create reference date for sorting
 		const historyAndActivities: TOpportunityActivityHistoryDTO[] = [...history, ...activities].sort(
 			(a, b) => new Date(b.dataReferencia).getTime() - new Date(a.dataReferencia).getTime(),

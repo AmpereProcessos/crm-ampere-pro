@@ -3,10 +3,7 @@ import { type Db, MongoClient } from "mongodb";
 import clientPromise from "./mongo-client";
 
 let cachedDb: Db | null = null;
-export default async function connectToAmpereDatabase(
-	uri: unknown,
-	database: string,
-) {
+export default async function connectToAmpereDatabase(uri: unknown, database: string) {
 	if (cachedDb) {
 		return cachedDb;
 	}

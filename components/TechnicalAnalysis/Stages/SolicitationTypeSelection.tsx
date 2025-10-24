@@ -1,34 +1,34 @@
-import { TechnicalAnalysisSolicitationTypes } from '@/utils/select-options';
-import { MdAssessment } from 'react-icons/md';
+import { TechnicalAnalysisSolicitationTypes } from "@/utils/select-options";
+import { MdAssessment } from "react-icons/md";
 type SolicitationTypeSelectionProps = {
-  selectType: (string: (typeof TechnicalAnalysisSolicitationTypes)[number]['value']) => void;
+	selectType: (string: (typeof TechnicalAnalysisSolicitationTypes)[number]["value"]) => void;
 };
 function SolicitationTypeSelection({ selectType }: SolicitationTypeSelectionProps) {
-  return (
-    <div className='flex max-h-full flex-col overflow-y-auto px-2 py-1 scrollbar-thin scrollbar-track-primary/10 scrollbar-thumb-primary/30'>
-      <span className='py-2 text-center text-lg font-black uppercase text-[#15599a]'>SELECIONE O TIPO DE ANÁLISE</span>
-      <div className='flex w-full flex-col flex-wrap items-start justify-around gap-4 lg:flex-row'>
-        {TechnicalAnalysisSolicitationTypes.map((type) => (
-          <div
-            key={type.id}
-            onClick={() => selectType(type.value)}
-            className='flex min-h-[250px] w-full cursor-pointer flex-col rounded-md border border-primary/50 p-3 duration-300 ease-in-out hover:scale-[1.025] hover:border-blue-500 hover:bg-blue-50 lg:w-[45%]'
-          >
-            <h1 className='w-full text-center text-lg font-black tracking-tight'>{type.label}</h1>
-            <div className='flex w-full items-center justify-center py-2'>
-              <MdAssessment size={35} color='#000' />
-            </div>
-            <div className='flex w-full flex-col gap-2'>
-              {type.descriptions.map((desc, index) => (
-                <p key={`description-${index}`} className='w-full text-sm font-medium leading-none tracking-tight text-primary/70 lg:text-base'>
-                  {desc}
-                </p>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
-      {/* <div className="flex w-full items-center gap-2">
+	return (
+		<div className="flex max-h-full flex-col overflow-y-auto px-2 py-1 scrollbar-thin scrollbar-track-primary/10 scrollbar-thumb-primary/30">
+			<span className="py-2 text-center text-lg font-black uppercase text-[#15599a]">SELECIONE O TIPO DE ANÁLISE</span>
+			<div className="flex w-full flex-col flex-wrap items-start justify-around gap-4 lg:flex-row">
+				{TechnicalAnalysisSolicitationTypes.map((type) => (
+					<div
+						key={type.id}
+						onClick={() => selectType(type.value)}
+						className="flex min-h-[250px] w-full cursor-pointer flex-col rounded-md border border-primary/50 p-3 duration-300 ease-in-out hover:scale-[1.025] hover:border-blue-500 hover:bg-blue-50 lg:w-[45%]"
+					>
+						<h1 className="w-full text-center text-lg font-black tracking-tight">{type.label}</h1>
+						<div className="flex w-full items-center justify-center py-2">
+							<MdAssessment size={35} color="#000" />
+						</div>
+						<div className="flex w-full flex-col gap-2">
+							{type.descriptions.map((desc, index) => (
+								<p key={`description-${index}`} className="w-full text-sm font-medium leading-none tracking-tight text-primary/70 lg:text-base">
+									{desc}
+								</p>
+							))}
+						</div>
+					</div>
+				))}
+			</div>
+			{/* <div className="flex w-full items-center gap-2">
         <div
           onClick={() => selectType('VISITA TÉCNICA REMOTA - URBANA')}
           className="flex h-[300px] w-full cursor-pointer flex-col items-center gap-2 rounded-xs border border-primary/30 p-3 shadow-lg duration-300 ease-in-out hover:scale-[1.02] hover:bg-blue-100 lg:w-[50%]"
@@ -136,8 +136,8 @@ function SolicitationTypeSelection({ selectType }: SolicitationTypeSelectionProp
           <p className="text-center text-sm text-primary/70">Uma vez requisitado, um resultado será informado em um prazo de 72 horas úteis.</p>
         </div>
       </div> */}
-    </div>
-  );
+		</div>
+	);
 }
 
 export default SolicitationTypeSelection;

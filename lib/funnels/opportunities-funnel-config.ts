@@ -17,7 +17,12 @@ async function updateOpportunityKanbanConnection({
 	funnelId,
 	newFunnelStageId,
 	previousFunnelStageId,
-}: { funnelReferenceId: string; funnelId: string; newFunnelStageId: string; previousFunnelStageId: string }) {
+}: {
+	funnelReferenceId: string;
+	funnelId: string;
+	newFunnelStageId: string;
+	previousFunnelStageId: string;
+}) {
 	return await updateFunnelReference({ funnelReferenceId, newStageId: newFunnelStageId });
 }
 
@@ -39,14 +44,20 @@ export const useOpportunitiesDragAndDropLogic = ({ globalQueryParams, queryClien
 			]);
 
 			// Getting the previous stage query snapshot
-			const previousKanbanStageQuerySnapshot = queryClient.getQueryData(["opportunities-kanban-view", funnelId, previousFunnelStageId, globalQueryParams]) as InfiniteData<
-				TGetOpportunitiesKanbanViewOutput["data"]
-			>;
+			const previousKanbanStageQuerySnapshot = queryClient.getQueryData([
+				"opportunities-kanban-view",
+				funnelId,
+				previousFunnelStageId,
+				globalQueryParams,
+			]) as InfiniteData<TGetOpportunitiesKanbanViewOutput["data"]>;
 
 			// Getting the next stage query snapshot
-			const nextKanbanStageQuerySnapshot = queryClient.getQueryData(["opportunities-kanban-view", funnelId, newFunnelStageId, globalQueryParams]) as InfiniteData<
-				TGetOpportunitiesKanbanViewOutput["data"]
-			>;
+			const nextKanbanStageQuerySnapshot = queryClient.getQueryData([
+				"opportunities-kanban-view",
+				funnelId,
+				newFunnelStageId,
+				globalQueryParams,
+			]) as InfiniteData<TGetOpportunitiesKanbanViewOutput["data"]>;
 
 			let movedOpportunity: any = null;
 			if (previousKanbanStageQuerySnapshot) {

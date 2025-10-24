@@ -12,10 +12,7 @@ type LocationInformationProps = {
 	infoHolder: THomologation;
 	setInfoHolder: React.Dispatch<React.SetStateAction<THomologation>>;
 };
-function LocationInformation({
-	infoHolder,
-	setInfoHolder,
-}: LocationInformationProps) {
+function LocationInformation({ infoHolder, setInfoHolder }: LocationInformationProps) {
 	async function setAddressDataByCEP(cep: string) {
 		const addressInfo = await getCEPInfo(cep);
 		const toastID = toast.loading("Buscando informações sobre o CEP...", {
@@ -42,10 +39,7 @@ function LocationInformation({
 	}
 
 	return (
-		<ResponsiveDialogDrawerSection
-			sectionTitleText="LOCALIZAÇÃO DA INSTALAÇÃO ELÉTRICA"
-			sectionTitleIcon={<MapPin className="w-4 h-4 min-w-4 min-h-4" />}
-		>
+		<ResponsiveDialogDrawerSection sectionTitleText="LOCALIZAÇÃO DA INSTALAÇÃO ELÉTRICA" sectionTitleIcon={<MapPin className="w-4 h-4 min-w-4 min-h-4" />}>
 			<div className="flex w-full flex-col items-center gap-2 lg:flex-row">
 				<div className="w-full lg:w-1/3">
 					<TextInput
@@ -77,9 +71,7 @@ function LocationInformation({
 								localizacao: {
 									...prev.localizacao,
 									uf: value,
-									cidade: stateCities[
-										value as keyof typeof stateCities
-									][0] as string,
+									cidade: stateCities[value as keyof typeof stateCities][0] as string,
 								},
 							}))
 						}
@@ -110,9 +102,7 @@ function LocationInformation({
 						}
 						options={
 							infoHolder.localizacao.uf
-								? stateCities[
-										infoHolder.localizacao.uf as keyof typeof stateCities
-									].map((city, index) => ({
+								? stateCities[infoHolder.localizacao.uf as keyof typeof stateCities].map((city, index) => ({
 										id: index + 1,
 										value: city,
 										label: city,

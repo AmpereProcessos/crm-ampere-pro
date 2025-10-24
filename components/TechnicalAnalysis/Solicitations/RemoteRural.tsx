@@ -22,7 +22,16 @@ type RemoteRuralProps = {
 	handleRequestAnalysis: ({ info, files }: { info: TTechnicalAnalysis; files: TFileHolder }) => void;
 };
 
-function RemoteRural({ session, infoHolder, setInfoHolder, files, setFiles, activeProposalId, resetSolicitationType, handleRequestAnalysis }: RemoteRuralProps) {
+function RemoteRural({
+	session,
+	infoHolder,
+	setInfoHolder,
+	files,
+	setFiles,
+	activeProposalId,
+	resetSolicitationType,
+	handleRequestAnalysis,
+}: RemoteRuralProps) {
 	const [stage, setStage] = useState(1);
 
 	return (

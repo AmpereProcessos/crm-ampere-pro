@@ -1,10 +1,7 @@
 "use server";
 import { SESSION_COOKIE_NAME } from "@/configs/app-definitions";
 import { sha256 } from "@oslojs/crypto/sha2";
-import {
-	encodeBase32LowerCaseNoPadding,
-	encodeHexLowerCase,
-} from "@oslojs/encoding";
+import { encodeBase32LowerCaseNoPadding, encodeHexLowerCase } from "@oslojs/encoding";
 import dayjs from "dayjs";
 import { cookies } from "next/headers";
 import { cache } from "react";
@@ -49,9 +46,7 @@ type CreateSessionParams = {
 };
 export async function createSession({ token, userId }: CreateSessionParams) {
 	try {
-		const sessionId = encodeHexLowerCase(
-			sha256(new TextEncoder().encode(token)),
-		);
+		const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
 
 		const session: TSession = {
 			sessaoId: sessionId,
@@ -65,10 +60,8 @@ export async function createSession({ token, userId }: CreateSessionParams) {
 
 		const db = await connectToDatabase();
 		const authSessionsCollection = db.collection<TSession>("auth-sessions");
-		const insertSessionResponse =
-			await authSessionsCollection.insertOne(session);
-		if (!insertSessionResponse.acknowledged)
-			throw new Error("Erro ao criar a sessão.");
+		const insertSessionResponse = await authSessionsCollection.insertOne(session);
+		if (!insertSessionResponse.acknowledged) throw new Error("Erro ao criar a sessão.");
 		return {
 			insertedId: insertSessionResponse.insertedId,
 			session,
@@ -153,10 +146,7 @@ export async function validateSession(token: string) {
 	// Checking if session expires in less 15 days
 	if (dayjs().add(15, "days").isAfter(dayjs(session.dataExpiracao))) {
 		// If so, extending the session to a month from now
-		await authSessionsCollection.updateOne(
-			{ sessaoId: session.sessaoId },
-			{ $set: { dataExpiracao: dayjs().add(1, "month").toISOString() } },
-		);
+		await authSessionsCollection.updateOne({ sessaoId: session.sessaoId }, { $set: { dataExpiracao: dayjs().add(1, "month").toISOString() } });
 	}
 
 	return authSession;
@@ -202,15 +192,11 @@ export const getValidCurrentSessionUncached = async () => {
 
 		const sessionResult = await validateSession(token);
 
-		if (!sessionResult.session || !sessionResult.user)
-			throw new Error("Você não está autenticado.");
+		if (!sessionResult.session || !sessionResult.user) throw new Error("Você não está autenticado.");
 
 		return sessionResult;
 	} catch (error) {
-		console.log(
-			"Error accessing cookies in getValidCurrentSessionUncached:",
-			error,
-		);
+		console.log("Error accessing cookies in getValidCurrentSessionUncached:", error);
 		throw new Error("Você não está autenticado.");
 	}
 };
@@ -219,10 +205,7 @@ type SetSessionCookieParams = {
 	token: string;
 	expiresAt: Date;
 };
-export async function setSetSessionCookie({
-	token,
-	expiresAt,
-}: SetSessionCookieParams) {
+export async function setSetSessionCookie({ token, expiresAt }: SetSessionCookieParams) {
 	try {
 		const cookiesStore = await cookies();
 		cookiesStore.set(SESSION_COOKIE_NAME, token, {
