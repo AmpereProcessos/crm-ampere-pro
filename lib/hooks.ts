@@ -9,7 +9,7 @@ export function useKey(key: string, cb: () => void) {
 	useEffect(() => {
 		function handle(event: any) {
 			if (event.code === key) {
-				// @ts-ignore
+				// @ts-expect-error
 				callbackRef.current(event);
 			}
 		}
@@ -28,7 +28,7 @@ export function useClickOutside(ref: React.MutableRefObject<any>, cb: () => void
 		return () => {
 			document.removeEventListener("click", (e) => handleClickOutside(e), true);
 		};
-	}, [cb]);
+	}, [cb, ref]);
 }
 
 export async function copyToClipboard(text: string | undefined) {
@@ -40,7 +40,7 @@ export async function copyToClipboard(text: string | undefined) {
 // Optional: Memoized version for objects
 export function useDebounceMemo<T extends object>(value: T, delay: number): T {
 	const [debouncedValue, setDebouncedValue] = useState<T>(value);
-	const timeoutRef = useRef<NodeJS.Timeout>();
+	const timeoutRef = useRef<NodeJS.Timeout>(null);
 	const previousValueRef = useRef<T>(value);
 
 	useEffect(() => {

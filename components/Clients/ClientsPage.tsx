@@ -1,11 +1,10 @@
 "use client";
-import type { TUserSession } from "@/lib/auth/session";
-import { useClientsByPersonalizedFilters } from "@/utils/queries/clients";
-import { usePartnersSimplified } from "@/utils/queries/partners";
-import { useUsers } from "@/utils/queries/users";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { IoMdArrowDropdownCircle, IoMdArrowDropupCircle } from "react-icons/io";
+import type { TUserSession } from "@/lib/auth/session";
+import { useClientsByPersonalizedFilters } from "@/utils/queries/clients";
+import { useUsers } from "@/utils/queries/users";
 import EditClient from "../Modals/Client/EditClient";
 import NewClient from "../Modals/Client/NewClient";
 import { Sidebar } from "../Sidebar";
@@ -20,8 +19,6 @@ type ClientsPageProps = {
 };
 function ClientsPage({ session }: ClientsPageProps) {
 	const queryClient = useQueryClient();
-	// const userClientsScope = session.user.permissoes.clientes.escopo || null
-	const userPartnersScope = session.user.permissoes.parceiros.escopo || null;
 	const [filterMenuIsOpen, setFilterMenuIsOpen] = useState<boolean>(false);
 	const [newClientModalIsOpen, setNewClientModalIsOpen] = useState(false);
 	const [editClient, setEditClient] = useState<{
@@ -29,35 +26,21 @@ function ClientsPage({ session }: ClientsPageProps) {
 		id: string | null;
 	}>({ isOpen: false, id: null });
 
-	// Queries and functions
-	const [page, setPage] = useState<number>(1);
-	const [period, setPeriod] = useState<{
-		after: string | null;
-		before: string | null;
-	}>({ after: null, before: null });
-	const [authors, setAuthors] = useState<string[] | null>(null);
-	const [partners, setPartners] = useState<string[] | null>(userPartnersScope);
 	const { data: authorOptions } = useUsers();
-	const { data: partnersOptions } = usePartnersSimplified();
-	const { data, isLoading, isError, isSuccess, filters, updateFilters } = useClientsByPersonalizedFilters({
-		after: period.after,
-		before: period.before,
-		authors: authors,
-		partners: partners,
-		page: page,
-	});
+	const { data, queryKey, isLoading, isError, isSuccess, filters, updateFilters } = useClientsByPersonalizedFilters({});
 	const clients = data?.clients;
 	const clientsMatched = data?.clientsMatched;
 	const totalPages = data?.totalPages;
 
 	const handleOnMutate = async () =>
 		await queryClient.cancelQueries({
-			queryKey: ["clients-by-personalized-filters", period.after, period.before, page, authors, partners, filters],
+			queryKey,
 		});
 	const handleOnSettle = async () =>
 		await queryClient.invalidateQueries({
-			queryKey: ["clients-by-personalized-filters", period.after, period.before, page, authors, partners, filters],
+			queryKey,
 		});
+
 	return (
 		<div className="flex h-full flex-col md:flex-row">
 			<Sidebar session={session} />
@@ -91,24 +74,13 @@ function ClientsPage({ session }: ClientsPageProps) {
 						</div>
 					</div>
 					{filterMenuIsOpen ? (
-						<FilterMenu
-							updateFilters={updateFilters}
-							queryLoading={isLoading}
-							session={session}
-							selectedAuthors={authors}
-							setAuthors={setAuthors}
-							selectedPartners={partners}
-							setPartners={setPartners}
-							authorsOptions={authorOptions}
-							partnersOptions={partnersOptions}
-							resetSelectedPage={() => setPage(1)}
-						/>
+						<FilterMenu updateFilters={updateFilters} filters={filters} authorsOptions={authorOptions ?? []} queryLoading={isLoading} session={session} />
 					) : null}
 				</div>
 				<ClientsPagination
-					activePage={page}
+					activePage={filters.page}
 					totalPages={totalPages || 0}
-					selectPage={(x) => setPage(x)}
+					selectPage={(x) => updateFilters({ page: x })}
 					queryLoading={isLoading}
 					clientsMatched={clientsMatched}
 					clientsShowing={clients?.length}
@@ -136,7 +108,15 @@ function ClientsPage({ session }: ClientsPageProps) {
 				</div>
 			</div>
 			{newClientModalIsOpen ? (
-				<NewClient session={session} partnerId={session.user.idParceiro || ""} closeModal={() => setNewClientModalIsOpen(false)} />
+				<NewClient
+					session={session}
+					partnerId={session.user.idParceiro || ""}
+					closeModal={() => setNewClientModalIsOpen(false)}
+					callbacks={{
+						onMutate: handleOnMutate,
+						onSettled: handleOnSettle,
+					}}
+				/>
 			) : null}
 			{editClient.isOpen && editClient.id ? (
 				<EditClient
@@ -144,6 +124,10 @@ function ClientsPage({ session }: ClientsPageProps) {
 					session={session}
 					partnerId={session.user.idParceiro || ""}
 					closeModal={() => setEditClient({ isOpen: false, id: null })}
+					callbacks={{
+						onMutate: handleOnMutate,
+						onSettled: handleOnSettle,
+					}}
 				/>
 			) : null}
 		</div>

@@ -1,30 +1,27 @@
 "use client";
+import { useQueryClient } from "@tanstack/react-query";
+import { Share2 } from "lucide-react";
 import { useState } from "react";
-
-import Avatar from "../utils/Avatar";
-import LoadingComponent from "../utils/LoadingComponent";
-import OpportunityDetails from "./OpportunityDetails";
-import OpportunityFiles from "./OpportunityFiles";
-import OpportunityHistory from "./OpportunityHistory";
-import OpportunityHomologations from "./OpportunityHomologations";
-import OpportunityPPSCalls from "./OpportunityPPSCalls";
-import OpportunityProposals from "./OpportunityProposals";
-import OpportunityTechnicalAnalysis from "./OpportunityTechnicalAnalysis";
-
 import { BsCalendarPlus, BsCalendarX, BsCode, BsFillMegaphoneFill } from "react-icons/bs";
-
+import { MdDelete } from "react-icons/md";
 import type { TUserSession } from "@/lib/auth/session";
 import { formatDateAsLocale, formatNameAsInitials } from "@/lib/methods/formatting";
 import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
 import { deleteOpportunity } from "@/utils/mutations/opportunities";
 import { useOpportunityById } from "@/utils/queries/opportunities";
-import { useQueryClient } from "@tanstack/react-query";
-import { Share2 } from "lucide-react";
-import { MdDelete } from "react-icons/md";
 import { Sidebar } from "../Sidebar";
+import Avatar from "../utils/Avatar";
+import LoadingComponent from "../utils/LoadingComponent";
 import OpportunityClient from "./OpportunityClient";
 import OpportunityContractRequestedFlag from "./OpportunityContractRequestedFlag";
+import OpportunityDetails from "./OpportunityDetails";
+import OpportunityFiles from "./OpportunityFiles";
+import OpportunityHistory from "./OpportunityHistory";
+import OpportunityHomologations from "./OpportunityHomologations";
 import OpportunityLossBlock from "./OpportunityLossBlock";
+import OpportunityPPSCalls from "./OpportunityPPSCalls";
+import OpportunityProposals from "./OpportunityProposals";
+import OpportunityTechnicalAnalysis from "./OpportunityTechnicalAnalysis";
 import OpportunityWonFlag from "./OpportunityWonFlag";
 
 export type TOpportunityBlockMode = "PROPOSES" | "FILES" | "TECHNICAL ANALYSIS";
@@ -116,7 +113,7 @@ function OpportunityPage({ session, opportunityId }: OpportunityPageProps) {
 						{opportunity.descricao ? (
 							<div className="flex w-full flex-col gap-1 rounded-lg bg-primary/10 p-2">
 								<h1 className="block text-[0.6rem] font-medium tracking-tight lg:hidden">ANOTAÇÕES</h1>
-								<p className="text-center text-xs italic text-primary/70 lg:text-start">{opportunity.descricao}</p>
+								<p className="text-center text-xs italic text-primary/70 lg:text-start whitespace-pre-wrap">{opportunity.descricao}</p>
 							</div>
 						) : null}
 						<div className="flex w-full flex-col items-center justify-between gap-2 lg:flex-row">

@@ -1,5 +1,5 @@
 import type { TGetClientsRouteOutput } from "@/app/api/clients/route";
-import type { TGetClientsByFiltersRouteOutput, TGetSimilarClientsRouteOutput } from "@/app/api/clients/search/route";
+import type {TGetClientsByFiltersRouteInput, TGetClientsByPersonalizedFiltersOutput, TGetSimilarClientsRouteOutput } from "@/app/api/clients/search/route";
 import { TGetVinculationClientInput, TGetVinculationClientOutput } from "@/app/api/clients/vinculate/route";
 import { useDebounceMemo } from "@/lib/hooks";
 import { formatWithoutDiacritics } from "@/lib/methods/formatting";
@@ -7,7 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import type { Filter } from "mongodb";
 import { useState } from "react";
-import type { TClient, TClientDTO, TPersonalizedClientsFilter } from "../schemas/client.schema";
+import type { TClient, TClientDTO,  } from "../schemas/client.schema";
 
 type SearchClientsParams = {
 	cpfCnpj: string;
@@ -43,10 +43,10 @@ async function fetchClientById({ id }: { id: string }) {
 }
 
 export function useClientById({ id }: { id: string }) {
-	return useQuery({
+	return {...useQuery({
 		queryKey: ["client", id],
 		queryFn: async () => await fetchClientById({ id }),
-	});
+	}), queryKey: ["client", id]};
 }
 
 async function fetchClients({ author }: { author: string | null }) {
@@ -91,61 +91,41 @@ export function useClients({ author }: { author: string | null }) {
 	};
 }
 
-type FetchClientsByPersonalizedFiltersParams = {
-	after: string | null;
-	before: string | null;
-	page: number;
-	authors: string[] | null;
-	partners: string[] | null;
-	filters: Filter<TClient>;
-};
 
-async function fetchClientsByPersonalizedFilters({ after, before, page, authors, partners, filters }: FetchClientsByPersonalizedFiltersParams) {
-	const { data }: { data: TGetClientsByFiltersRouteOutput } = await axios.post(`/api/clients/search?after=${after}&before=${before}&page=${page}`, {
-		authors,
-		partners,
-		filters,
-	});
-
-	return data.data;
+async function fetchClientsByPersonalizedFilters(input: TGetClientsByFiltersRouteInput) {
+	const { data }= await axios.post<TGetClientsByPersonalizedFiltersOutput>(`/api/clients/search`, input);
+	return data.data
 }
 
 type UseClientsByPersonalizedFiltersParams = {
-	after: string | null;
-	before: string | null;
-	page: number;
-	authors: string[] | null;
-	partners: string[] | null;
+	initialFilters?: Partial<TGetClientsByFiltersRouteInput>;
 };
 
-export function useClientsByPersonalizedFilters({ after, before, page, authors, partners }: UseClientsByPersonalizedFiltersParams) {
-	const [filters, setFilters] = useState<TPersonalizedClientsFilter>({
-		name: "",
-		phone: "",
-		city: [],
-		acquisitionChannel: [],
+export function useClientsByPersonalizedFilters({ initialFilters }: UseClientsByPersonalizedFiltersParams) {
+	const [filters, setFilters] = useState<TGetClientsByFiltersRouteInput>({
+		page: initialFilters?.page ?? 1,
+		search: initialFilters?.search ?? null,
+		ufs: initialFilters?.ufs ?? [],
+		cities: initialFilters?.cities ?? [],
+		authorIds: initialFilters?.authorIds ?? [],
 	});
 
-	function updateFilters(filters: TPersonalizedClientsFilter) {
-		setFilters(filters);
+	function updateFilters(changes: Partial<TGetClientsByFiltersRouteInput>) {
+		setFilters(prev => ({ ...prev, ...changes }));
 	}
 
-	return {
-		...useQuery({
-			queryKey: ["clients-by-personalized-filters", after, before, page, authors, partners, filters],
-			queryFn: async () =>
-				fetchClientsByPersonalizedFilters({
-					after,
-					before,
-					page,
-					authors,
-					partners,
-					filters,
-				}),
-		}),
-		filters,
-		updateFilters,
+	const debouncedSearch = useDebounceMemo({ search: filters.search ?? "" }, 500);
+
+	const finalFilters = {
+		...filters,
+		...debouncedSearch,
 	};
+	return {...useQuery({
+		queryKey: ["clients-by-personalized-filters", finalFilters],
+		queryFn: async () => fetchClientsByPersonalizedFilters(finalFilters),
+	}),
+	queryKey: ["clients-by-personalized-filters", finalFilters],
+	updateFilters, filters};	
 }
 
 async function fetchVinculationClient(input: TGetVinculationClientInput) {

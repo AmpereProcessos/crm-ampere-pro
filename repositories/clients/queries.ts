@@ -3,9 +3,6 @@ import {
 	ClientSimplifiedProjection,
 	SimilarClientsSimplifiedProjection,
 	type TClient,
-	type TClientDTOSimplified,
-	type TClientSimplified,
-	type TSimilarClientSimplified,
 	type TSimilarClientSimplifiedDTO,
 } from "@/utils/schemas/client.schema";
 import { type Collection, type Filter, type MatchKeysAndValues, ObjectId, type WithId } from "mongodb";
@@ -55,7 +52,6 @@ export function getClientSearchParams({ cpfCnpj, phoneNumber, email }: { cpfCnpj
 		orArr.push({
 			telefonePrimarioBase: {
 				$regex: formatPhoneAsBase(phoneNumber),
-				$options: "i",
 			},
 		});
 		orArr.push({ telefonePrimarioBase: formatPhoneAsBase(phoneNumber) });
@@ -134,14 +130,29 @@ export async function getClientsByFilters({ collection, query, skip, limit }: Ge
 		const clientsMatched = await collection.countDocuments({ ...query });
 		const sort = { _id: -1 };
 		const match = { ...query };
-		const clients = await collection
-			.aggregate([{ $sort: sort }, { $match: match }, { $skip: skip }, { $project: ClientSimplifiedProjection }, { $limit: limit }])
-			.toArray();
-
-		return { clients, clientsMatched } as {
-			clients: TClientDTOSimplified[];
-			clientsMatched: number;
-		};
+		const clients = await collection.find(match, { projection: ClientSimplifiedProjection }).skip(skip).limit(limit).sort({ _id: -1 }).toArray();
+		
+		return {
+			clientsMatched,
+			clients: clients.map((c) => ({
+				_id: c._id.toString(),
+				nome: c.nome,
+				telefonePrimario: c.telefonePrimario,
+				telefonePrimarioBase: c.telefonePrimarioBase,
+				email: c.email,
+				cpfCnpj: c.cpfCnpj,
+				cep: c.cep,
+				uf: c.uf,
+				cidade: c.cidade,
+				bairro: c.bairro,
+				endereco: c.endereco,
+				numeroOuIdentificador: c.numeroOuIdentificador,
+				complemento: c.complemento,
+				autor: c.autor,
+				conecta: c.conecta,
+				dataInsercao: c.dataInsercao,
+			})) 
+		}
 	} catch (error) {
 		console.log("[ERROR] Error getting clients by filters", error);
 		throw error;

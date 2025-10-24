@@ -1,7 +1,7 @@
 {
 	"$schema": "https://biomejs.dev/schemas/2.2.4/schema.json",
 	"files": {
-		"includes": ["app/**", "components/**", "lib/**", "services/**", "configs/**"],
+		"includes": ["app/**", "components/**", "configs/**", "hooks/**", "lib/**", "pages/**", "repositories/**", "services/**", "utils/**"],
 		"experimentalScannerIgnores": [
 			"node_modules/**",
 			".git/**",

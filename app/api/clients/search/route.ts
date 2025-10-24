@@ -1,18 +1,16 @@
-import { type UnwrapNextResponse, apiHandler } from "@/lib/api";
-import { getValidCurrentSessionUncached } from "@/lib/auth/session";
-import { formatDateQuery } from "@/lib/methods/formatting";
-import { getClientSearchParams, getClientsByFilters, getSimilarClients } from "@/repositories/clients/queries";
-import connectToDatabase from "@/services/mongodb/crm-db-connection";
-import { PersonalizedClientQuerySchema, type TClient, type TClientDTOSimplified } from "@/utils/schemas/client.schema";
 import createHttpError from "http-errors";
 import type { Collection, Filter } from "mongodb";
 import { type NextRequest, NextResponse } from "next/server";
-import type { z } from "zod";
-import { GetClientsByFiltersQueryParams, GetSimilarClientsQueryParams } from "../inputs";
+import { z } from "zod";
+import { apiHandler, type UnwrapNextResponse } from "@/lib/api";
+import { getValidCurrentSessionUncached, type TUserSession } from "@/lib/auth/session";
+import { getClientSearchParams, getClientsByFilters, getSimilarClients } from "@/repositories/clients/queries";
+import connectToDatabase from "@/services/mongodb/crm-db-connection";
+import type { TClient, TClientDTOSimplified } from "@/utils/schemas/client.schema";
+import { GetSimilarClientsQueryParams } from "../inputs";
 
 async function getPartnerSimilarClients(request: NextRequest) {
-	const { user } = await getValidCurrentSessionUncached();
-	const partnerId = user.idParceiro;
+	await getValidCurrentSessionUncached();
 
 	const searchParams = request.nextUrl.searchParams;
 	const queryParams = GetSimilarClientsQueryParams.parse({
@@ -57,95 +55,97 @@ export type TGetSimilarClientsRouteOutputData = TGetSimilarClientsRouteOutput["d
 
 export const GET = apiHandler({ GET: getPartnerSimilarClients });
 
-function getClientByPersonalizedFilterORSearchParams({ name, phone }: { name: string; phone: string }): Filter<TClient> {
-	const orArr: Filter<TClient>[] = [];
-
-	if (name.trim().length > 0) {
-		orArr.push({ nome: { $regex: name, $options: "i" } });
-		orArr.push({ nome: name });
-	}
-
-	if (phone.trim().length > 0) {
-		orArr.push({ telefonePrimario: { $regex: phone, $options: "i" } });
-		orArr.push({ telefonePrimario: phone });
-	}
-
-	if (orArr.length === 0) return {};
-	return { $or: orArr };
-}
-
 export type TClientsByFilterResult = {
 	clients: TClientDTOSimplified[];
 	clientsMatched: number;
 	totalPages: number;
 };
 
-export type TGetClientsByFiltersRouteInput = z.infer<typeof PersonalizedClientQuerySchema>;
-async function getClientsByPersonalizedFilters(request: NextRequest) {
-	const PAGE_SIZE = 500;
-	const { user } = await getValidCurrentSessionUncached();
-	const partnerId = user.idParceiro;
-	const partnerScope = user.permissoes.parceiros.escopo;
-	const userScope = user.permissoes.clientes.escopo;
+const GetClientsByPersonalizedFiltersInputSchema = z.object({
+	page: z.number({
+		required_error: "Página não informada.",
+		invalid_type_error: "Tipo não válido para página.",
+	}),
+	search: z
+		.string({
+			required_error: "Filtro de busca não informado.",
+			invalid_type_error: "Tipo não válido para filtro de busca.",
+		})
+		.optional()
+		.nullable(),
+	ufs: z.array(
+		z.string({
+			required_error: "Estados não informados.",
+			invalid_type_error: "Tipo não válido para estados.",
+		}),
+		{
+			required_error: "Lista de estados não informada.",
+			invalid_type_error: "Tipo não válido para lista de estados.",
+		},
+	),
+	cities: z.array(
+		z.string({
+			required_error: "Cidades não informadas.",
+			invalid_type_error: "Tipo não válido para cidades.",
+		}),
+		{
+			required_error: "Lista de cidades não informada.",
+			invalid_type_error: "Tipo não válido para lista de cidades.",
+		},
+	),
+	authorIds: z.array(
+		z.string({
+			required_error: "IDs de autores não informados.",
+			invalid_type_error: "Tipo não válido para IDs de autores.",
+		}),
+		{
+			required_error: "Lista de IDs de autores não informada.",
+			invalid_type_error: "Tipo não válido para lista de IDs de autores.",
+		},
+	),
+});
+export type TGetClientsByFiltersRouteInput = z.infer<typeof GetClientsByPersonalizedFiltersInputSchema>;
+async function getClientsByPersonalizedFilters({ session, input }: { session: TUserSession; input: TGetClientsByFiltersRouteInput }) {
+	const PAGE_SIZE = 200;
+	const userClientsScope = session.user.permissoes.clientes.escopo;
 
-	const searchParams = request.nextUrl.searchParams;
-	const queryParams = GetClientsByFiltersQueryParams.parse({
-		after: searchParams.get("after"),
-		before: searchParams.get("before"),
-		page: searchParams.get("page"),
-	});
+	const { page, search, ufs, cities, authorIds } = input;
 
-	const { after, before, page } = queryParams;
-
-	const payload = await request.json();
-	const { authors, partners, filters } = PersonalizedClientQuerySchema.parse(payload);
-
-	// If user has a scope defined and in the request there isnt a partners arr defined, then user is trying
-	// to access a overall visualiation, which he/she isnt allowed
-	if (!!partnerScope && !partners) {
-		throw new createHttpError.Unauthorized("Seu usuário não possui solicitação para esse escopo de visualização.");
+	if (userClientsScope && authorIds.some((id) => !userClientsScope.includes(id))) {
+		throw new createHttpError.Unauthorized("Seu usuário não possui autorização para esse escopo de visualização.");
 	}
 
-	// Validating page parameter
-	if (!page || Number.isNaN(Number(page))) {
-		throw new createHttpError.BadRequest("Parâmetro de paginação inválido ou não informado.");
-	}
+	const authorsQuery: Filter<TClient> = authorIds.length > 0 ? { "autor.id": { $in: authorIds } } : {};
+	const citiesQuery: Filter<TClient> = cities.length > 0 ? { cidade: { $in: cities } } : {};
+	const ufsQuery: Filter<TClient> = ufs.length > 0 ? { uf: { $in: ufs } } : {};
 
-	// Defining the queries
-	const insertionQuery: Filter<TClient> =
-		after !== "null" && before !== "null"
+	const searchQuery: Filter<TClient> =
+		search && search.trim().length > 0
 			? {
-					$and: [
-						{
-							dataInsercao: { $gte: formatDateQuery(after, "start") as string },
-						},
-						{
-							dataInsercao: { $lte: formatDateQuery(before, "end") as string },
-						},
+					$or: [
+						// Name search
+						{ nome: { $regex: search, $options: "i" } },
+						{ nome: search },
+						// CPF/CNPJ search
+						{ cpfCnpj: { $regex: search } }, // No options, giving its numbers-only
+						{ cpfCnpj: search },
+						// Phone search
+						{ telefonePrimarioBase: { $regex: search } }, // No options, giving its numbers-only
+						{ telefonePrimarioBase: search },
+						// Email search
+						{ email: { $regex: search, $options: "i" } },
+						{ email: search },
 					],
 				}
 			: {};
-
-	const authorsQuery: Filter<TClient> = authors ? { "autor.id": { $in: authors } } : {};
-	const partnerQuery: Filter<TClient> = partners ? { idParceiro: { $in: [...partners] } } : {};
-	const orQuery = getClientByPersonalizedFilterORSearchParams({
-		name: filters.name,
-		phone: filters.phone,
-	});
-
-	const filtersQuery: Filter<TClient> = {
-		...orQuery,
-		cidade: filters.city.length > 0 ? { $in: filters.city } : { $ne: "" },
-		canalAquisicao: filters.acquisitionChannel.length > 0 ? { $in: filters.acquisitionChannel } : { $ne: "" },
-	};
-
 	const query = {
-		...filtersQuery,
-		...insertionQuery,
 		...authorsQuery,
-		...partnerQuery,
+		...citiesQuery,
+		...ufsQuery,
+		...searchQuery,
 	};
 
+	console.log("[INFO] [GET_CLIENTS_BY_PERSONALIZED_FILTERS] Query", JSON.stringify(query, null, 2));
 	const skip = PAGE_SIZE * (Number(page) - 1);
 	const limit = PAGE_SIZE;
 
@@ -161,15 +161,23 @@ async function getClientsByPersonalizedFilters(request: NextRequest) {
 
 	const totalPages = Math.ceil(clientsMatched / PAGE_SIZE);
 
-	return NextResponse.json({
+	return {
 		data: {
 			clients,
 			clientsMatched,
 			totalPages,
 		},
-		message: "Busca realizada com sucesso",
-	});
+	};
 }
+export type TGetClientsByPersonalizedFiltersOutput = Awaited<ReturnType<typeof getClientsByPersonalizedFilters>>;
 
-export type TGetClientsByFiltersRouteOutput = UnwrapNextResponse<Awaited<ReturnType<typeof getClientsByPersonalizedFilters>>>;
-export const POST = apiHandler({ POST: getClientsByPersonalizedFilters });
+const getClientsByPersonalizedFiltersRoute = async (req: NextRequest) => {
+	const session = await getValidCurrentSessionUncached();
+	const payload = await req.json();
+	console.log("[INFO] [GET_CLIENTS_BY_PERSONALIZED_FILTERS] Payload", JSON.stringify(payload, null, 2));
+	const input = GetClientsByPersonalizedFiltersInputSchema.parse(payload);
+	const result = await getClientsByPersonalizedFilters({ session, input });
+	return NextResponse.json(result);
+};
+
+export const POST = apiHandler({ POST: getClientsByPersonalizedFiltersRoute });
