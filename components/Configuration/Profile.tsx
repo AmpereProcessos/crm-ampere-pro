@@ -1,33 +1,45 @@
+import { useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
+import { BsCalendar4Event, BsCalendarPlus, BsTelephone } from "react-icons/bs";
+import { FaUser } from "react-icons/fa";
+import { MdOutlineEmail } from "react-icons/md";
 import type { TUserSession } from "@/lib/auth/session";
 import { formatDateAsLocale, formatNameAsInitials } from "@/lib/methods/formatting";
 import { usePartnerById } from "@/utils/queries/partners";
 import { useUserById } from "@/utils/queries/users";
-import { BsCalendar4Event, BsCalendarPlus, BsTelephone } from "react-icons/bs";
-import { FaUser } from "react-icons/fa";
-import { MdOutlineEmail } from "react-icons/md";
+import EditUserProfile from "../Modals/User/EditProfile";
+import UpdateProfileHint from "../Users/UpdateProfileHint";
+import { Button } from "../ui/button";
 import Avatar from "../utils/Avatar";
 import ErrorComponent from "../utils/ErrorComponent";
 import LoadingComponent from "../utils/LoadingComponent";
+
 type ProfileProps = {
 	session: TUserSession;
 };
 function Profile({ session }: ProfileProps) {
-	const { data: user, isSuccess, isLoading, isError } = useUserById({ id: session.user.id });
+	const [editProfileModalIsOpen, setEditProfileModalIsOpen] = useState<boolean>(false);
+	const queryClient = useQueryClient();
+	const { data: user, isSuccess, isLoading, isError, queryKey } = useUserById({ id: session.user.id });
 	const { data: partner } = usePartnerById({ id: session.user.idParceiro || "" });
-	console.log(user);
+	const handleOnMutate = async () => await queryClient.cancelQueries({ queryKey: queryKey });
+	const handleOnSettled = async () => await queryClient.invalidateQueries({ queryKey: queryKey });
 	if (isLoading) return <LoadingComponent />;
 	if (isError) return <ErrorComponent msg="Erro ao buscar informações do seu usuário." />;
 
 	return (
 		<div className="flex h-full grow flex-col">
-			<div className="flex w-full items-center justify-between border-b border-primary/30 pb-2 flex-col lg:flex-row">
+			<div className="flex w-full items-center justify-between gap-2 border-b border-primary/30 pb-2 flex-col lg:flex-row">
 				<div className="flex flex-col">
 					<h1 className={"text-lg font-bold"}>Meu Perfil</h1>
 					<p className="text-sm text-[#71717A]">Gerencie informações do seu usuário.</p>
 				</div>
-				<div className="flex items-center gap-2 rounded-md border border-primary/30 p-2 shadow-md">
-					<Avatar url={partner?.logo_url || undefined} fallback={formatNameAsInitials(partner?.nome || "")} height={28} width={28} />
-					<p className="text-xs font-medium text-primary/70">{partner?.nome}</p>
+				<div className="flex items-center gap-2 flex-col lg:flex-row">
+					<div className="flex items-center gap-2 rounded-md border border-primary/30 p-2 shadow-md">
+						<Avatar url={partner?.logo_url || undefined} fallback={formatNameAsInitials(partner?.nome || "")} height={28} width={28} />
+						<p className="text-xs font-medium text-primary/70">{partner?.nome}</p>
+					</div>
+					<Button onClick={() => setEditProfileModalIsOpen(true)}>EDITAR PERFIL</Button>
 				</div>
 			</div>
 			<div className="flex w-full flex-col gap-2 py-6">
@@ -68,6 +80,18 @@ function Profile({ session }: ProfileProps) {
 					</div>
 				</div>
 			</div>
+			{editProfileModalIsOpen && (
+				<EditUserProfile
+					closeModal={() => setEditProfileModalIsOpen(false)}
+					userId={session.user.id}
+					partnerId={session.user.idParceiro}
+					session={session}
+					callbacks={{
+						onMutate: handleOnMutate,
+						onSettled: handleOnSettled,
+					}}
+				/>
+			)}
 		</div>
 	);
 }

@@ -1,4 +1,4 @@
-import { useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -6,41 +6,33 @@ import { toast } from "react-hot-toast";
 
 import { BsCheckLg } from "react-icons/bs";
 
-import { LoadingButton } from "@/components/Buttons/loading-button";
 import DateInput from "@/components/Inputs/DateInput";
-import SelectInput from "@/components/Inputs/SelectInput";
-import SelectWithImages from "@/components/Inputs/SelectWithImages";
-import ComissionPannel from "@/components/Users/ComissionPannel";
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
+
 import ResponsiveDialogDrawer from "@/components/utils/ResponsiveDialogDrawer";
 import type { TUserSession } from "@/lib/auth/session";
-import { getErrorMessage } from "@/lib/methods/errors";
 import { formatDateOnInputChange } from "@/lib/methods/formatting";
-import { useMediaQuery } from "@/lib/utils";
 import type { TUpdateProfileInput } from "@/pages/api/users/profile";
 import { storage } from "@/services/firebase/storage-config";
 import { formatDateForInputValue, formatToPhone } from "@/utils/methods";
 import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
 import { editProfile, editUser } from "@/utils/mutations/users";
-import { usePartnersSimplified } from "@/utils/queries/partners";
-import { useUserGroups } from "@/utils/queries/user-groups";
-import { useUserById, useUsers } from "@/utils/queries/users";
-import type { TUser, TUserDTO } from "@/utils/schemas/user.schema";
-import CheckboxInput from "../../Inputs/CheckboxInput";
+
 import TextInput from "../../Inputs/TextInput";
-import PermissionsPannel from "../../Users/PermissionsPannel";
-import ErrorComponent from "../../utils/ErrorComponent";
-import LoadingComponent from "../../utils/LoadingComponent";
+
 type EditUserProps = {
 	closeModal: () => void;
 	userId: string;
 	partnerId: string;
 	session: TUserSession;
+	callbacks?: {
+		onMutate?: () => void;
+		onSuccess?: () => void;
+		onSettled?: () => void;
+		onError?: (error: Error) => void;
+	};
 };
 
-function EditUserProfile({ closeModal, userId, partnerId, session }: EditUserProps) {
+function EditUserProfile({ closeModal, userId, partnerId, session, callbacks }: EditUserProps) {
 	const queryClient = useQueryClient();
 
 	const [avatarFile, setAvatarFile] = useState<File | null>(null);
@@ -77,12 +69,22 @@ function EditUserProfile({ closeModal, userId, partnerId, session }: EditUserPro
 			throw error;
 		}
 	}
-	const { mutate, isPending } = useMutationWithFeedback({
-		mutationKey: ["edit-user", userId],
+	const { mutate, isPending } = useMutation({
+		mutationKey: ["edit-profile", userId],
 		mutationFn: handleUserUpdate,
-		affectedQueryKey: ["user-by-id", userId],
-		queryClient: queryClient,
-		callbackFn: async () => await queryClient.invalidateQueries({ queryKey: ["users"] }),
+		onMutate: async () => {
+			if (callbacks?.onMutate) callbacks.onMutate();
+		},
+		onSuccess: async (data) => {
+			if (callbacks?.onSuccess) callbacks.onSuccess();
+			return toast.success(data);
+		},
+		onError: async (error) => {
+			if (callbacks?.onError) callbacks.onError(error);
+		},
+		onSettled: async () => {
+			if (callbacks?.onSettled) callbacks.onSettled();
+		},
 	});
 
 	const MENU_TITLE = "ATUALIZAR PERFIL";

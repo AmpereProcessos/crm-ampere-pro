@@ -1,9 +1,9 @@
-import type { TUserSession } from "@/lib/auth/session";
-import { formatDateAsLocale } from "@/lib/methods/formatting";
-import { usePaymentMethods } from "@/utils/queries/payment-methods";
 import { useState } from "react";
 import { BsCalendarPlus } from "react-icons/bs";
 import { MdPayment } from "react-icons/md";
+import type { TUserSession } from "@/lib/auth/session";
+import { formatDateAsLocale } from "@/lib/methods/formatting";
+import { usePaymentMethods } from "@/utils/queries/payment-methods";
 import EditPaymentMethod from "../Modals/PaymentMethods/EditPaymentMethod";
 import NewPaymentMethod from "../Modals/PaymentMethods/NewPaymentMethod";
 import Avatar from "../utils/Avatar";

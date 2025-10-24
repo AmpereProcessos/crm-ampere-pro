@@ -1,9 +1,9 @@
 import { UseQueryResult, useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { useState } from "react";
+import type { TUsersWithFiltersResponse } from "@/pages/api/users/personalized";
 import { IUsuario } from "../models";
 import type { TUserDTO, TUserDTOSimplified, TUserDTOWithSaleGoals, TUsersQueryFilters } from "../schemas/user.schema";
-import type { TUsersWithFiltersResponse } from "@/pages/api/users/personalized";
-import { useState } from "react";
 
 async function fetchUsers() {
 	try {
@@ -63,10 +63,13 @@ type UseUserByIdParams = {
 	id: string;
 };
 export function useUserById({ id }: UseUserByIdParams) {
-	return useQuery({
+	return {
+		...useQuery({
+			queryKey: ["user-by-id", id],
+			queryFn: async () => await fetchUserById({ id }),
+		}),
 		queryKey: ["user-by-id", id],
-		queryFn: async () => await fetchUserById({ id }),
-	});
+	};
 }
 
 async function fetchOpportunityCreators() {

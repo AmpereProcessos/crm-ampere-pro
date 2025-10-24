@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import Funnels from "@/components/Configuration/Funnels";
 import Goals from "@/components/Configuration/Goals";
 import Integrations from "@/components/Configuration/Integrations";
@@ -13,7 +14,6 @@ import UserGroups from "@/components/Configuration/UserGroups";
 import Users from "@/components/Configuration/Users";
 import { Sidebar } from "@/components/Sidebar";
 import type { TUserSession } from "@/lib/auth/session";
-import { useState } from "react";
 
 type TConfigurationModes =
 	| "profile"
