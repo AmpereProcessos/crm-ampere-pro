@@ -1,3 +1,11 @@
+import { DndContext, DragOverlay, useDraggable, useDroppable } from "@dnd-kit/core";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { GripVertical, Loader2, Share2 } from "lucide-react";
+import Link from "next/link";
+import { useRef, useState } from "react";
+import { AiOutlinePlus } from "react-icons/ai";
+import { BsCalendarPlus, BsDownload, BsFillMegaphoneFill } from "react-icons/bs";
+import { MdDashboard } from "react-icons/md";
 import { Sidebar } from "@/components/Sidebar";
 import type { TUserSession } from "@/lib/auth/session";
 import { OPPORTUNITIES_FUNNEL_CONFIG, useOpportunitiesDragAndDropLogic } from "@/lib/funnels/opportunities-funnel-config";
@@ -7,14 +15,6 @@ import type { TGetOpportunitiesKanbanViewOutput } from "@/pages/api/opportunitie
 import type { TGetOpportunitiesQueryDefinitionsOutput, TUpdateOpportunityQueryDefinitionsInput } from "@/pages/api/opportunities/query-definitions";
 import { updateOpportunitiesQueryDefinitions } from "@/utils/mutations/opportunities";
 import { useOpportunitiesKanbanView } from "@/utils/queries/opportunities";
-import { DndContext, DragOverlay, useDraggable, useDroppable } from "@dnd-kit/core";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { GripVertical, Loader2, Share2 } from "lucide-react";
-import Link from "next/link";
-import { useRef, useState } from "react";
-import { AiOutlinePlus } from "react-icons/ai";
-import { BsCalendarPlus, BsDownload, BsFillMegaphoneFill } from "react-icons/bs";
-import { MdDashboard } from "react-icons/md";
 import UserConectaIndicationCodeFlag from "../Conecta/UserConectaIndicationCodeFlag";
 import MultipleSelectInput from "../Inputs/MultipleSelectInput";
 import { PeriodByFieldFilter } from "../Inputs/PeriodByFieldFilter";
@@ -136,7 +136,7 @@ export default function OpportunitiesKanbanModePageV2({ session, opportunityView
 						</div>
 					</div>
 					<div className="w-full flex flex-col lg:flex-row justify-between gap-2 items-center">
-						<UserConectaIndicationCodeFlag code={session.user.codigoIndicacaoConecta} />
+						<UserConectaIndicationCodeFlag sellerId={session.user.id} code={session.user.codigoIndicacaoConecta} />
 						<div className="flex items-center justify-end flex-wrap gap-2">
 							<button
 								type="button"

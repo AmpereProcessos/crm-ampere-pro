@@ -1,34 +1,28 @@
-import type { TUserSession } from "@/lib/auth/session";
 import { useQueryClient } from "@tanstack/react-query";
+import { Share2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { DragDropContext, type DropResult } from "react-beautiful-dnd";
 
 import { AiOutlinePlus } from "react-icons/ai";
 import { BsDownload, BsFillMegaphoneFill } from "react-icons/bs";
-
+import { FaRotate } from "react-icons/fa6";
+import type { TOpportunitiesPageModes } from "@/app/comercial/oportunidades/opportunities-main";
+import FunnelList from "@/components/dnd/FunnelList";
+import SelectInput from "@/components/Inputs/SelectInput";
 import NewOpportunity from "@/components/Modals/Opportunity/NewOpportunity";
 import SearchOpportunities from "@/components/Opportunities/SearchOpportunities";
 import { Sidebar } from "@/components/Sidebar";
-import FunnelList from "@/components/dnd/FunnelList";
 import LoadingComponent from "@/components/utils/LoadingComponent";
 import LoadingPage from "@/components/utils/LoadingPage";
-
-import SelectInput from "@/components/Inputs/SelectInput";
-
-import { fetchOpportunityExport, useOpportunities } from "@/utils/queries/opportunities";
-
-import type { TFunnelDTO } from "@/utils/schemas/funnel.schema";
-import type { TOpportunitySimplifiedDTOWithProposalAndActivitiesAndFunnels } from "@/utils/schemas/opportunity.schema";
-import type { TUserDTOSimplified } from "@/utils/schemas/user.schema";
-
-import { useFunnelReferenceUpdate } from "@/utils/mutations/funnel-references";
-
-import type { TOpportunitiesPageModes } from "@/app/comercial/oportunidades/opportunities-main";
+import type { TUserSession } from "@/lib/auth/session";
 import { getExcelFromJSON } from "@/lib/methods/excel-utils";
 import { formatDateAsLocale } from "@/lib/methods/formatting";
 import { cn } from "@/lib/utils";
-import { Share2 } from "lucide-react";
-import { FaRotate } from "react-icons/fa6";
+import { useFunnelReferenceUpdate } from "@/utils/mutations/funnel-references";
+import { fetchOpportunityExport, useOpportunities } from "@/utils/queries/opportunities";
+import type { TFunnelDTO } from "@/utils/schemas/funnel.schema";
+import type { TOpportunitySimplifiedDTOWithProposalAndActivitiesAndFunnels } from "@/utils/schemas/opportunity.schema";
+import type { TUserDTOSimplified } from "@/utils/schemas/user.schema";
 import UserConectaIndicationCodeFlag from "../Conecta/UserConectaIndicationCodeFlag";
 import MultipleSelectInput from "../Inputs/MultipleSelectInput";
 import { PeriodByFieldFilter } from "../Inputs/PeriodByFieldFilter";
@@ -239,7 +233,7 @@ export default function OpportunitiesKanbanModePage({ session, funnelsOptions, r
 					</div>
 
 					<div className="w-full flex flex-col lg:flex-row justify-between gap-2 items-center">
-						<UserConectaIndicationCodeFlag code={session.user.codigoIndicacaoConecta} />
+						<UserConectaIndicationCodeFlag sellerId={session.user.id} code={session.user.codigoIndicacaoConecta} />
 						<div className="flex items-center justify-end flex-wrap gap-2">
 							<button
 								type="button"

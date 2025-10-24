@@ -1,21 +1,4 @@
 "use client";
-import type { TGetGraphDataRouteInput } from "@/app/api/stats/graph/route";
-import type { TGetStatsRouteOutputData } from "@/app/api/stats/route";
-import UserConectaIndicationCodeFlag from "@/components/Conecta/UserConectaIndicationCodeFlag";
-import DateInput from "@/components/Inputs/DateInput";
-import MultipleSelectInput from "@/components/Inputs/MultipleSelectInput";
-import { Sidebar } from "@/components/Sidebar";
-import UpdateProfileHint from "@/components/Users/UpdateProfileHint";
-import { Button } from "@/components/ui/button";
-import { type ChartConfig, ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
-import { Progress } from "@/components/ui/progress";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import CoachMark from "@/components/utils/CoachMark";
-import type { TUserSession } from "@/lib/auth/session";
-import { formatDateOnInputChange, formatDecimalPlaces, formatToMoney } from "@/lib/methods/formatting";
-import { cn } from "@/lib/utils";
-import { formatDateForInputValue } from "@/utils/methods";
-import { useGraphData, useSellersRanking, useStats, useStatsQueryOptions } from "@/utils/queries/stats";
 import dayjs from "dayjs";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -35,13 +18,28 @@ import { useState } from "react";
 import { AiOutlineCloseCircle, AiOutlineTeam } from "react-icons/ai";
 import { BsFileEarmarkText, BsPatchCheck, BsTicketPerforated } from "react-icons/bs";
 import { FaBolt } from "react-icons/fa";
-import { FaListCheck } from "react-icons/fa6";
 import { VscDiffAdded } from "react-icons/vsc";
-import { Area, CartesianGrid, ComposedChart, Line, XAxis, YAxis } from "recharts";
+import { Area, CartesianGrid, ComposedChart, XAxis, YAxis } from "recharts";
+import type { TGetGraphDataRouteInput } from "@/app/api/stats/graph/route";
+import type { TGetStatsRouteOutputData } from "@/app/api/stats/route";
+import UserConectaIndicationCodeFlag from "@/components/Conecta/UserConectaIndicationCodeFlag";
+import DateInput from "@/components/Inputs/DateInput";
+import MultipleSelectInput from "@/components/Inputs/MultipleSelectInput";
+import { Sidebar } from "@/components/Sidebar";
+import UpdateProfileHint from "@/components/Users/UpdateProfileHint";
+import { Button } from "@/components/ui/button";
+import { type ChartConfig, ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import { Progress } from "@/components/ui/progress";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import type { TUserSession } from "@/lib/auth/session";
+import { formatDateOnInputChange, formatDecimalPlaces, formatToMoney } from "@/lib/methods/formatting";
+import { cn } from "@/lib/utils";
+import { formatDateForInputValue } from "@/utils/methods";
+import { useGraphData, useStats, useStatsQueryOptions } from "@/utils/queries/stats";
 import SellersRanking from "../rankings/Rankings";
 import OpenActivitiesBlock from "./OpenActivitiesBlock";
-import PPSOpenCallsBlock from "./PPSOpenCallsBlock";
 import PendingWinsBlock from "./PendingWinsBlock";
+import PPSOpenCallsBlock from "./PPSOpenCallsBlock";
 import WinsBlock from "./WinsBlock";
 
 const firstDayOfMonth = dayjs().startOf("month").toISOString();
@@ -68,7 +66,7 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
 		projectTypes: null,
 	});
 	const { data: queryOptions } = useStatsQueryOptions();
-	const { data, isLoading, isSuccess, isError, error } = useStats({
+	const { data } = useStats({
 		after: queryFilters.period.after,
 		before: queryFilters.period.before,
 		partners: queryFilters.partners,
@@ -95,7 +93,7 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
 				<div className="flex w-full flex-col gap-2 items-center justify-between border-b border-black pb-2 lg:flex-row">
 					<div className="flex flex-col items-center gap-2 lg:flex-row">
 						<h1 className="font-Raleway text-2xl font-black text-primary">DASHBOARD</h1>
-						<UserConectaIndicationCodeFlag code={session.user.codigoIndicacaoConecta} />
+						<UserConectaIndicationCodeFlag sellerId={session.user.id} code={session.user.codigoIndicacaoConecta} />
 					</div>
 					<div className="flex flex-col items-center gap-6 lg:flex-row">
 						{session?.user.permissoes.resultados?.visualizarComercial ? (
