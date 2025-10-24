@@ -71,31 +71,7 @@ async function getNewLeadReceiver(usersCollection: Collection<TUser>, opportunit
 }
 
 const getMetaLeadsHandler: NextApiHandler<TGetMetaLeadsHandlerResponse> = async (req, res) => {
-	// const payload = req.body;
-	const payload = {
-
-  "entry": [
-    {
-      "id": "295234391129271",
-      "time": 1761208848,
-      "changes": [
-        {
-          "value": {
-            "adgroup_id": "120230061166120044",
-            "ad_id": "120230061166120044",
-            "created_time": 1761208846,
-            "leadgen_id": "2354320981693141",
-            "page_id": "295234391129271",
-            "form_id": "1236493828289044"
-          },
-          "field": "leadgen"
-        }
-      ]
-    }
-  ],
-  "object": "page",
-  "receivedAt": "2025-10-23T08:40:50.420Z"
-}
+	const payload = req.body;
 
 	console.log("[META_WEBHOOK] [POST] Webhook received");
 
