@@ -234,6 +234,7 @@ export const ProjectSchema = z.object({
 		required_error: "Indexador de projeto não informado.",
 		invalid_type_error: "Tipo não válido para o indexador de projeto.",
 	}),
+	imagemCapaUrl: z.string({ invalid_type_error: "Tipo não válido para a URL da imagem de capa do projeto." }).optional().nullable(),
 	app: z.object({
 		data: z.string({ invalid_type_error: "Tipo não válido para a data de configuração do app do cliente." }).optional().nullable(),
 		login: z.string({ invalid_type_error: "Tipo não válido para o login do app do cliente." }).optional().nullable(),

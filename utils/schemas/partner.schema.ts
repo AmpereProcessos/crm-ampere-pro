@@ -1,6 +1,6 @@
 import { ObjectId } from "mongodb";
 import z from "zod";
-import { TUserEntity, TUserDTO } from "./user.schema";
+import { type TUserDTO, TUserEntity } from "./user.schema";
 
 const LocationSchema = z.object({
 	cep: z.string().optional().nullable(),

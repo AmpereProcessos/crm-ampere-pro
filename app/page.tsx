@@ -1,7 +1,8 @@
 export const dynamic = "force-dynamic";
+
+import { redirect } from "next/navigation";
 import MainDashboardPage from "@/components/Stats/MainDashboard/MainDashboardPage";
 import { getCurrentSession } from "@/lib/auth/session";
-import { redirect } from "next/navigation";
 
 export default async function Home() {
 	const session = await getCurrentSession();

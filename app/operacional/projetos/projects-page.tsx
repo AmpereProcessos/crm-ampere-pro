@@ -1,4 +1,8 @@
 "use client";
+import { AnimatePresence, motion } from "framer-motion";
+import { Code, Filter, LayoutGrid, MapPin, User } from "lucide-react";
+import Image from "next/image";
+import { useState } from "react";
 import DateInput from "@/components/Inputs/DateInput";
 import MultipleSelectWithImages from "@/components/Inputs/MultipleSelectWithImages";
 import SelectInput from "@/components/Inputs/SelectInput";
@@ -9,17 +13,14 @@ import { Button } from "@/components/ui/button";
 import ErrorComponent from "@/components/utils/ErrorComponent";
 import GeneralQueryPaginationMenu from "@/components/utils/GeneralQueryPaginationMenu";
 import LoadingComponent from "@/components/utils/LoadingComponent";
-import { TUserSession } from "@/lib/auth/session";
+import type { TUserSession } from "@/lib/auth/session";
 import { getErrorMessage } from "@/lib/methods/errors";
 import { formatDateForInputValue, formatDateOnInputChange } from "@/lib/methods/formatting";
 import { cn } from "@/lib/utils";
-import { TGetManyProjectsInput, TGetProjectsOutputDefault } from "@/pages/api/integration/app-ampere/projects";
+import type { TGetManyProjectsInput, TGetProjectsOutputDefault } from "@/pages/api/integration/app-ampere/projects";
 import { getProjectTypeColor, SlideMotionVariants } from "@/utils/constants";
 import { useProjects } from "@/utils/queries/project";
 import { useOpportunityCreators } from "@/utils/queries/users";
-import { AnimatePresence, motion } from "framer-motion";
-import { Code, Filter, MapPin, User } from "lucide-react";
-import { useState } from "react";
 
 type OperationalProjectsPageProps = {
 	session: TUserSession;
@@ -94,9 +95,7 @@ export default function OperationalProjectsPage({ session }: OperationalProjects
 					projects.length > 0 ? (
 						<div className="w-full flex items-center justify-around gap-x-4 gap-y-2 flex-wrap">
 							{projects.map((project) => (
-								<div key={project._id} className="w-full md:w-[500px]">
-									<ProjectCard project={project} handleViewClick={() => setViewProjectId(project._id)} />
-								</div>
+								<ProjectCard key={project._id} project={project} handleViewClick={() => setViewProjectId(project._id)} />
 							))}
 						</div>
 					) : (
@@ -193,64 +192,72 @@ type ProjectCardProps = {
 	handleViewClick: () => void;
 };
 function ProjectCard({ project, handleViewClick }: ProjectCardProps) {
-	function ProjectCardMetadata({ icon, label, value }: { icon: React.ReactNode; label?: string; value: string }) {
-		return (
-			<div className="flex items-center gap-1 bg-primary/20 px-2 py-0.5 rounded-lg">
-				{icon}
-				{label && <p className="text-[0.6rem] italic">{label}</p>}
-				<p className="text-[0.6rem] font-medium">{value}</p>
-			</div>
-		);
-	}
-	function ProjectCheckpoint({ label, checked }: { label: string; checked: boolean }) {
-		return (
-			<div className="flex items-center gap-1 bg-primary/20 px-2 py-0.5 rounded-lg">
-				<div className={cn("w-2 h-2 rounded-full", checked ? "bg-green-500" : "bg-red-500")} />
-				{label && <p className="text-[0.6rem] font-medium">{label}</p>}
-			</div>
-		);
-	}
 	return (
-		<div className={cn("bg-card border-primary/20 flex w-full flex-col gap-1 rounded-xl border  shadow-xs")}>
-			<div className={cn("text-[0.65rem] font-bold px-2 py-0.5 rounded-lg rounded-b-none w-full text-center", getProjectTypeColor(project.tipo))}>
-				{project.tipo}
-			</div>
-			<div className="w-full flex flex-col gap-3 px-3 pt-2 pb-4">
-				{/** HEADING */}
-				<div className="w-full flex items-center justify-start gap-2">
-					<div className="flex items-center gap-1 bg-primary text-primary-foreground px-2 py-0.5 rounded-lg">
-						<Code className="w-4 h-4" />
-						<p className="text-[0.6rem] font-bold">{project.inxedador}</p>
-					</div>
-					<h1 className="grow text-sm font-medium  text-truncate">{project.nome}</h1>
+		<div className={cn("bg-card border-primary/20 flex w-full flex-col sm:flex-row gap-2 rounded-xl border shadow-xs p-4")}>
+			<div className="flex items-center justify-center">
+				<div className="relative h-32 max-h-32 min-h-32 w-32 max-w-32 min-w-32 overflow-hidden rounded-lg">
+					{project.imagemCapaUrl ? (
+						<Image src={project.imagemCapaUrl} alt={project.nome} fill={true} objectFit="cover" />
+					) : (
+						<div className="bg-primary/50 text-primary-foreground flex h-full w-full items-center justify-center">
+							<LayoutGrid className="h-6 w-6" />
+						</div>
+					)}
 				</div>
-				{/** CONTENT */}
-				<div className="w-full flex flex-col gap-3 grow">
-					<div className="w-full flex flex-col gap-1">
-						<h3 className="text-[0.65rem] font-medium">INFORMAÇÕES</h3>
-						<div className="w-full flex items-center justify-start gap-2 flex-wrap">
+			</div>
+			<div className="flex h-full grow flex-col gap-2">
+				<div className="w-full flex flex-col gap-3 ">
+					{/** HEADING */}
+					<div className="w-full flex items-center justify-between gap-2 flex-col-reverse lg:flex-row">
+						<div className="flex items-center gap-2 flex-wrap">
+							<div className="flex items-center gap-1 bg-primary text-primary-foreground px-2 py-0.5 rounded-lg">
+								<Code className="w-4 h-4" />
+								<p className="text-[0.6rem] font-bold">{project.inxedador}</p>
+							</div>
+							<h1 className="text-sm font-medium  text-truncate">{project.nome}</h1>
 							<ProjectCardMetadata icon={<MapPin className="w-4 h-4" />} value={`${project.cidade}${project.uf ? `(${project.uf})` : ""}`} />
 							<ProjectCardMetadata icon={<User className="w-4 h-4" />} value={`${project.vendedor}${project.insider ? ` + ${project.insider}` : ""}`} />
 						</div>
+						<div className={cn("text-[0.65rem] font-bold px-2 py-0.5 rounded-lg text-center", getProjectTypeColor(project.tipo))}>{project.tipo}</div>
 					</div>
-					<div className="w-full flex flex-col gap-1">
-						<h3 className="text-[0.65rem] font-medium">CHECKPOINTS</h3>
-						<div className="w-full flex items-center justify-start gap-2 flex-wrap">
-							<ProjectCheckpoint label="CONTRATO ASSINADO" checked={project.contrato?.status === "ASSINADO"} />
-							<ProjectCheckpoint label="PAGAMENTO FEITO" checked={!!project.compra?.dataPagamento} />
-							<ProjectCheckpoint label="COMPRA FEITA" checked={!!project.compra?.dataPedido} />
-							<ProjectCheckpoint label="HOMOLOGADO" checked={!!project.homologacao?.acessoDataResposta} />
-							<ProjectCheckpoint label="OBRA EXECUTADA" checked={!!project.execucao?.fim} />
-							<ProjectCheckpoint label="VISTORIA REALIZADA" checked={!!project.homologacao?.vistoriaDataEfetivacao} />
+					{/** CONTENT */}
+					<div className="w-full flex flex-col gap-3 grow">
+						<div className="w-full flex flex-col gap-1">
+							<h3 className="text-[0.65rem] font-medium">CHECKPOINTS</h3>
+							<div className="w-full flex items-center justify-start gap-2 flex-wrap">
+								<ProjectCheckpoint label="CONTRATO ASSINADO" checked={project.contrato?.status === "ASSINADO"} />
+								<ProjectCheckpoint label="PAGAMENTO FEITO" checked={!!project.compra?.dataPagamento} />
+								<ProjectCheckpoint label="COMPRA FEITA" checked={!!project.compra?.dataPedido} />
+								<ProjectCheckpoint label="HOMOLOGADO" checked={!!project.homologacao?.acessoDataResposta} />
+								<ProjectCheckpoint label="OBRA EXECUTADA" checked={!!project.execucao?.fim} />
+								<ProjectCheckpoint label="VISTORIA REALIZADA" checked={!!project.homologacao?.vistoriaDataEfetivacao} />
+							</div>
 						</div>
 					</div>
-				</div>
-				<div className="w-full flex items-center justify-end">
-					<Button variant="ghost" size="fit" className="text-xs px-2 py-1" onClick={handleViewClick}>
-						VISUALIZAR
-					</Button>
+					<div className="w-full flex items-center justify-end">
+						<Button variant="ghost" size="fit" className="text-xs px-2 py-1" onClick={handleViewClick}>
+							VISUALIZAR
+						</Button>
+					</div>
 				</div>
 			</div>
+		</div>
+	);
+}
+function ProjectCardMetadata({ icon, label, value }: { icon: React.ReactNode; label?: string; value: string }) {
+	return (
+		<div className="flex items-center gap-1 bg-primary/20 px-2 py-0.5 rounded-lg">
+			{icon}
+			{label && <p className="text-[0.6rem] italic">{label}</p>}
+			<p className="text-[0.6rem] font-medium">{value}</p>
+		</div>
+	);
+}
+function ProjectCheckpoint({ label, checked }: { label: string; checked: boolean }) {
+	return (
+		<div className="flex items-center gap-1 bg-primary/20 px-2 py-0.5 rounded-lg">
+			<div className={cn("w-2 h-2 rounded-full", checked ? "bg-green-500" : "bg-red-500")} />
+			{label && <p className="text-[0.6rem] font-medium">{label}</p>}
 		</div>
 	);
 }

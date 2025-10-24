@@ -1,14 +1,14 @@
-import { TUserSession } from "@/lib/auth/session";
+import createHttpError from "http-errors";
+import { type Collection, type Filter, type FindCursor, ObjectId } from "mongodb";
+import type { NextApiHandler } from "next";
+import z from "zod";
+import type { TUserSession } from "@/lib/auth/session";
 import { getProjectContractValue } from "@/lib/project";
 import connectToAmpereProjectsDatabase from "@/services/mongodb/ampere/projects-db-connection";
 import connectToDatabase from "@/services/mongodb/crm-db-connection";
 import { apiHandler, validateAuthenticationWithSession } from "@/utils/api";
-import { TProject } from "@/utils/schemas/project.schema";
-import { TUser } from "@/utils/schemas/user.schema";
-import createHttpError from "http-errors";
-import { Collection, Filter, FindCursor, ObjectId } from "mongodb";
-import { NextApiHandler } from "next";
-import z from "zod";
+import type { TProject } from "@/utils/schemas/project.schema";
+import type { TUser } from "@/utils/schemas/user.schema";
 
 const GetProjectByIdInputSchema = z.object({
 	id: z
@@ -111,9 +111,7 @@ async function getProjects({ input, session }: { input: TGetProjectsInput; sessi
 		// If the user has an opportunity scope, then he has limited visibility
 		// In this case, we gotta check if within his visibility, he will have access to this project
 		if (userOpportunityScope) {
-			const userOpportunityScopeUserNames = userOpportunityScope
-				.map((uId) => users.find((u) => u._id.toString() === uId)?.nome)
-				.filter((r) => !!r) as string[];
+			const userOpportunityScopeUserNames = userOpportunityScope.map((uId) => users.find((u) => u._id.toString() === uId)?.nome).filter((r) => !!r) as string[];
 			// If none of the project commercial representatives are within the user opportunity scope, throw an error
 			if (projectCommercialRepresentatives.every((r) => !userOpportunityScopeUserNames.includes(r))) {
 				throw new createHttpError.Forbidden("Você não tem permissão para acessar este projeto.");
@@ -126,6 +124,7 @@ async function getProjects({ input, session }: { input: TGetProjectsInput; sessi
 					_id: project._id.toString(),
 					inxedador: project.qtde,
 					nome: project.nomeDoContrato,
+					imagemCapaUrl: project.imagemCapaUrl,
 					telefone: project.telefone,
 					email: project.email,
 					cpfCnpj: project.cpf_cnpj,
@@ -243,6 +242,7 @@ async function getProjects({ input, session }: { input: TGetProjectsInput; sessi
 					inxedador: project.qtde,
 					_id: project._id.toString(),
 					nome: project.nomeDoContrato,
+					imagemCapaUrl: project.imagemCapaUrl,
 					telefone: project.telefone,
 					email: project.email,
 					cpfCnpj: project.cpf_cnpj,
@@ -313,7 +313,7 @@ const updateProject: NextApiHandler<PutResponse> = async (req, res) => {
 	await validateAuthenticationWithSession(req, res);
 
 	const { id } = req.query;
-	if (!id || typeof id != "string" || !ObjectId.isValid(id)) throw new createHttpError.BadRequest("ID inválido.");
+	if (!id || typeof id !== "string" || !ObjectId.isValid(id)) throw new createHttpError.BadRequest("ID inválido.");
 
 	const changes = req.body;
 	const db = await connectToAmpereProjectsDatabase();

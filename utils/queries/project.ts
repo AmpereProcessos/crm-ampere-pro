@@ -1,8 +1,8 @@
-import { useDebounceMemo } from "@/lib/hooks";
-import { TGetManyProjectsInput, TGetProjectByIdInput, TGetProjectsOutput } from "@/pages/api/integration/app-ampere/projects";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useState } from "react";
+import { useDebounceMemo } from "@/lib/hooks";
+import type { TGetManyProjectsInput, TGetProjectByIdInput, TGetProjectsOutput } from "@/pages/api/integration/app-ampere/projects";
 
 async function fetchProjects(input: TGetManyProjectsInput) {
 	const searchParams = new URLSearchParams();

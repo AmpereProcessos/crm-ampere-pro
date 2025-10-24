@@ -17,7 +17,7 @@ function GeneralQueryPaginationMenu({ activePage, selectPage, totalPages, itemsM
 						Um número grande de itens foi encontrado, separamos em páginas para facilitar a visualização. Clique na página desejada para visualizar os demais
 						itens.
 					</p>
-					<div className="flex items-center justify-center gap-4">
+					<div className="flex items-center justify-center gap-4 flex-wrap">
 						<button
 							disabled={queryLoading}
 							onClick={() => {
