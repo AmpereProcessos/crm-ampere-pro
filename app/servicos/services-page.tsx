@@ -1,3 +1,4 @@
+"use client";
 import { useState } from "react";
 import { IoMdArrowDropdownCircle, IoMdArrowDropupCircle } from "react-icons/io";
 import Service from "@/components/Cards/Service";

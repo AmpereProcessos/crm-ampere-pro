@@ -1,4 +1,4 @@
-import React from "react";
+"use client";
 import LaudoFormularioVisitaRural from "@/components/TechnicalAnalysis/Reports/LaudoFormularioVisitaRural";
 import LaudoFormularioVisitaUrbano from "@/components/TechnicalAnalysis/Reports/LaudoFormularioVisitaUrbano";
 import LaudoIntermediarioUrbano from "@/components/TechnicalAnalysis/Reports/LaudoIntermediarioUrbano";
