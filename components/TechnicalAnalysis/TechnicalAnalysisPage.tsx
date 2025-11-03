@@ -1,3 +1,4 @@
+"use client";
 import { useState } from "react";
 import { AiOutlineTeam } from "react-icons/ai";
 import { IoMdArrowDropdownCircle, IoMdArrowDropupCircle } from "react-icons/io";
