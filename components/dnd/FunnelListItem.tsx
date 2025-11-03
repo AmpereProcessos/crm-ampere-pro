@@ -1,18 +1,16 @@
+import { Share2 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { AiOutlineRight } from "react-icons/ai";
+import { BsCalendarPlus, BsFillMegaphoneFill } from "react-icons/bs";
+import { FaBolt } from "react-icons/fa";
 import { MdAttachMoney, MdDashboard } from "react-icons/md";
-
+import type { TUserSession } from "@/lib/auth/session";
 import { formatDateAsLocale, formatDecimalPlaces, formatNameAsInitials, formatToMoney } from "@/lib/methods/formatting";
 import type { TOpportunityDTO, TOpportunityDTOWithFunnelReferenceAndActivitiesByStatus } from "@/utils/schemas/opportunity.schema";
-import { BsCalendarPlus, BsFillMegaphoneFill } from "react-icons/bs";
-import Avatar from "../utils/Avatar";
-
-import type { TUserSession } from "@/lib/auth/session";
-import { Share2 } from "lucide-react";
-import { FaBolt } from "react-icons/fa";
 import OpportunityActivitiesModal from "../Activities/OpportunityActivitiesModal";
+import Avatar from "../utils/Avatar";
 
 function getTagColor(activitiesByStatus: TOpportunityDTOWithFunnelReferenceAndActivitiesByStatus["statusAtividades"]) {
 	const overDue = activitiesByStatus["EM ATRASO"];
@@ -131,7 +129,7 @@ function FunnelListItem({ item, session, index }: FunnelListItemProps) {
 									if (index <= 1)
 										return (
 											<div key={resp.id} className="flex items-center gap-1">
-												<Avatar url={resp.avatar_url || undefined} fallback={formatNameAsInitials(resp.nome)} height={18} width={18} />
+												<Avatar url={resp.avatar_url || undefined} fallback={formatNameAsInitials(resp.nome ?? "")} height={18} width={18} />
 												<p className="text-[0.65rem] font-light text-primary/70">{resp.nome}</p>
 											</div>
 										);

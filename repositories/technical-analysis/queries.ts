@@ -1,9 +1,9 @@
+import { type Collection, type Filter, ObjectId } from "mongodb";
 import {
 	TechnicalAnalysisSimplifiedProjection,
-	TTechnicalAnalysis,
-	TTechnicalAnalysisDTOSimplified,
+	type TTechnicalAnalysis,
+	type TTechnicalAnalysisDTOSimplified,
 } from "@/utils/schemas/technical-analysis.schema";
-import { Collection, Filter, ObjectId } from "mongodb";
 
 type GetTechnicalAnalysisParams = {
 	collection: Collection<TTechnicalAnalysis>;

@@ -1,12 +1,9 @@
 "use client";
 import { useState } from "react";
-
-import { useOpportunitiesQueryOptions } from "@/utils/queries/opportunities";
-
 import OpportunitiesCardModePage from "@/components/Opportunities/OpportunitiesCardModePage";
 import OpportunitiesKanbanModePage from "@/components/Opportunities/OpportunitiesKanbanModePage";
 import type { TUserSession } from "@/lib/auth/session";
-import { handleSetCookie } from "@/lib/methods/cookies";
+import { useOpportunitiesQueryOptions } from "@/utils/queries/opportunities";
 
 export type TOpportunitiesPageModes = "card" | "kanban";
 
@@ -24,8 +21,6 @@ export default function OpportunitiesMainPage({ initialMode, session }: Opportun
 	const [mode, setMode] = useState<TOpportunitiesPageModes>(initialMode || "kanban");
 
 	function handleSetMode(selected: TOpportunitiesPageModes) {
-		// Setting selected mode in a cookie for futher preference use
-		handleSetCookie({ ctx: null, key: "opportunities-page-mode", value: selected, path: "/comercial/oportunidades" });
 		setMode(selected);
 	}
 

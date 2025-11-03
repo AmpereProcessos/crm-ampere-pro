@@ -1,28 +1,26 @@
 import { useState } from "react";
-
+import { IoMdArrowDropdownCircle, IoMdArrowDropupCircle } from "react-icons/io";
 import Service from "@/components/Cards/Service";
 import EditService from "@/components/Modals/Services/EditService";
 import NewService from "@/components/Modals/Services/NewService";
+import FiltersMenu from "@/components/Services/FiltersMenu";
 import { Sidebar } from "@/components/Sidebar";
-
+import { Button } from "@/components/ui/button";
 import ErrorComponent from "@/components/utils/ErrorComponent";
 import LoadingComponent from "@/components/utils/LoadingComponent";
-import LoadingPage from "@/components/utils/LoadingPage";
 import NotAuthorizedPage from "@/components/utils/NotAuthorizedPage";
-
-import { useSession } from "@/app/providers/SessionProvider";
-import FiltersMenu from "@/components/Services/FiltersMenu";
+import type { TUserSession } from "@/lib/auth/session";
 import { useComercialServices } from "@/utils/queries/services";
-import { IoMdArrowDropdownCircle, IoMdArrowDropupCircle } from "react-icons/io";
 
-function ServicesPage() {
-	const { session, status } = useSession({ required: true });
+type ServicesPageProps = {
+	session: TUserSession;
+};
+function ServicesPage({ session }: ServicesPageProps) {
 	const { data: services, isLoading, isError, isSuccess, filters, setFilters } = useComercialServices();
 	const [filterMenuIsOpen, setFilterMenuIsOpen] = useState<boolean>(false);
 	const [newServiceModalIsOpen, setNewServiceModalIsOpen] = useState<boolean>(false);
 	const [editServiceModal, setEditServiceModal] = useState<{ id: string | null; isOpen: boolean }>({ id: null, isOpen: false });
 
-	if (status !== "authenticated") return <LoadingPage />;
 	if (!session.user.permissoes.servicos.visualizar) return <NotAuthorizedPage session={session} />;
 
 	return (
@@ -48,14 +46,7 @@ function ServicesPage() {
 								</p>
 							</div>
 						</div>
-						{session?.user.permissoes.servicos.criar ? (
-							<button
-								onClick={() => setNewServiceModalIsOpen(true)}
-								className="h-9 whitespace-nowrap rounded-sm bg-primary/90 px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm disabled:bg-primary/50 disabled:text-primary-foreground enabled:hover:bg-primary/80 enabled:hover:text-primary-foreground"
-							>
-								CRIAR SERVIÇO
-							</button>
-						) : null}
+						{session?.user.permissoes.servicos.criar ? <Button onClick={() => setNewServiceModalIsOpen(true)}>CRIAR SERVIÇO</Button> : null}
 					</div>
 					{filterMenuIsOpen ? <FiltersMenu filters={filters} setFilters={setFilters} /> : null}
 				</div>
@@ -66,6 +57,7 @@ function ServicesPage() {
 						services.length > 0 ? (
 							services.map((service) => (
 								<Service
+									key={service._id}
 									service={service}
 									handleClick={(id) => setEditServiceModal({ id: id, isOpen: true })}
 									userHasEditPermission={session.user.permissoes.servicos.editar}

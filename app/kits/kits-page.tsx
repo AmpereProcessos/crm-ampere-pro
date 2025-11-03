@@ -1,7 +1,12 @@
+"use client";
 import { useState } from "react";
-
+import toast from "react-hot-toast";
+import { IoMdArrowDropdownCircle, IoMdArrowDropupCircle } from "react-icons/io";
+import { TbFileDownload, TbFileExport } from "react-icons/tb";
+import { useSession } from "@/app/providers/SessionProvider";
 import KitCard from "@/components/Cards/Kit";
 import FilterMenu from "@/components/Kits/FilterMenu";
+import KitBulkOperation from "@/components/Modals/Kit/BulkOperation";
 import EditKit from "@/components/Modals/Kit/EditKit";
 import NewKit from "@/components/Modals/Kit/NewKit";
 import { Sidebar } from "@/components/Sidebar";
@@ -9,23 +14,17 @@ import ErrorComponent from "@/components/utils/ErrorComponent";
 import LoadingComponent from "@/components/utils/LoadingComponent";
 import LoadingPage from "@/components/utils/LoadingPage";
 import NotAuthorizedPage from "@/components/utils/NotAuthorizedPage";
-
-import KitBulkOperation from "@/components/Modals/Kit/BulkOperation";
-import { fetchKitsExportation, useKits } from "@/utils/queries/kits";
-import { IoMdArrowDropdownCircle, IoMdArrowDropupCircle } from "react-icons/io";
-import { TbFileDownload, TbFileExport } from "react-icons/tb";
-
-import { useSession } from "@/app/providers/SessionProvider";
+import type { TUserSession } from "@/lib/auth/session";
 import { getErrorMessage } from "@/lib/methods/errors";
 import { getExcelFromJSON } from "@/lib/methods/excel-utils";
 import { formatDateAsLocale } from "@/lib/methods/formatting";
-import toast from "react-hot-toast";
+import { fetchKitsExportation, useKits } from "@/utils/queries/kits";
+
 type TEditModal = {
 	isOpen: boolean;
 	id: string | null;
 };
-function Kits() {
-	const { session, status } = useSession({ required: true });
+export default function KitsPage({ session }: { session: TUserSession }) {
 	const { data: kits, status: kitsStatus, isSuccess, isLoading, isError, filters, setFilters } = useKits();
 
 	const [editModal, setEditModal] = useState<TEditModal>({ isOpen: false, id: null });
@@ -44,7 +43,6 @@ function Kits() {
 		}
 	}
 
-	if (status !== "authenticated") return <LoadingPage />;
 	if (!session.user.permissoes.kits.visualizar) return <NotAuthorizedPage session={session} />;
 
 	return (
@@ -165,4 +163,3 @@ function Kits() {
 		</div>
 	);
 }
-export default Kits;

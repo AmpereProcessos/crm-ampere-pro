@@ -66,7 +66,7 @@ function OpportunityPage({ session, opportunityId }: OpportunityPageProps) {
 						<div className="flex w-full flex-col justify-center gap-2 lg:flex-row lg:justify-between">
 							<div className="flex flex-col items-center gap-3 lg:flex-row">
 								<div className="flex items-center gap-1 rounded-sm bg-[#15599a] px-2 py-1 text-primary-foreground">
-									<BsCode />
+									<BsCode className="w-4 h-4 min-w-4 min-h4" />
 									<h1 className="text-sm font-black">{opportunity.identificador}</h1>
 								</div>
 								<h1 className="flex text-center font-Raleway text-2xl font-bold leading-none tracking-tight text-primary lg:text-start">{opportunity.nome}</h1>

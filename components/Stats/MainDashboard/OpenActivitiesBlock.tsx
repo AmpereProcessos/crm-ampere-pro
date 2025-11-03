@@ -1,7 +1,7 @@
+import { BsCheckSquare } from "react-icons/bs";
 import ActivityCard from "@/components/Cards/ActivityCard";
 import type { TUserSession } from "@/lib/auth/session";
 import { useActivities } from "@/utils/queries/activities";
-import { BsCheckSquare } from "react-icons/bs";
 
 type OpenActivitiesBlockProps = {
 	session: TUserSession;
@@ -25,7 +25,7 @@ function OpenActivitiesBlock({ session }: OpenActivitiesBlockProps) {
 			<div className="flex grow flex-col justify-start gap-2 overflow-y-auto overscroll-y-auto py-2 scrollbar-thin scrollbar-track-primary/10 scrollbar-thumb-primary/30">
 				{activities ? (
 					activities.length > 0 ? (
-						activities.map((activity, index: number) => <ActivityCard key={activity._id} activity={activity} />)
+						activities.map((activity, index: number) => <ActivityCard key={`${activity._id}-${index}`} activity={activity} />)
 					) : (
 						<div className="flex grow items-center justify-center">
 							<p className="text-center text-sm italic text-primary/70">Sem atividades em aberto.</p>

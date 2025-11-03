@@ -1,4 +1,6 @@
-import { useSession } from "@/app/providers/SessionProvider";
+"use client";
+import { useState } from "react";
+import { IoMdArrowDropdownCircle, IoMdArrowDropupCircle } from "react-icons/io";
 import Product from "@/components/Cards/Product";
 import EditProduct from "@/components/Modals/Products/EditProduct";
 import NewProduct from "@/components/Modals/Products/NewProduct";
@@ -6,19 +8,18 @@ import FiltersMenu from "@/components/Products/FiltersMenu";
 import { Sidebar } from "@/components/Sidebar";
 import ErrorComponent from "@/components/utils/ErrorComponent";
 import LoadingComponent from "@/components/utils/LoadingComponent";
-import LoadingPage from "@/components/utils/LoadingPage";
 import NotAuthorizedPage from "@/components/utils/NotAuthorizedPage";
+import type { TUserSession } from "@/lib/auth/session";
 import { useComercialProducts } from "@/utils/queries/products";
-import { useState } from "react";
-import { IoMdArrowDropdownCircle, IoMdArrowDropupCircle } from "react-icons/io";
 
-function ProductsPage() {
-	const { session, status } = useSession({ required: true });
+type ProductsPageProps = {
+	session: TUserSession;
+};
+function ProductsPage({ session }: ProductsPageProps) {
 	const { data: products, isLoading, isError, isSuccess, filters, setFilters } = useComercialProducts();
 	const [filterMenuIsOpen, setFilterMenuIsOpen] = useState<boolean>(false);
 	const [newProductModalIsOpen, setNewProductModalIsOpen] = useState<boolean>(false);
 	const [editProductModal, setEditProductModal] = useState<{ id: string | null; isOpen: boolean }>({ id: null, isOpen: false });
-	if (status !== "authenticated") return <LoadingPage />;
 	if (!session.user.permissoes.produtos.visualizar) return <NotAuthorizedPage session={session} />;
 	return (
 		<div className="flex h-full flex-col md:flex-row">

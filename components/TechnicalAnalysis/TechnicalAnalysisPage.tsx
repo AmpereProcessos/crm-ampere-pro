@@ -1,9 +1,9 @@
-import type { TUserSession } from "@/lib/auth/session";
-import { useTechnicalAnalysisByPersonalizedFilters } from "@/utils/queries/technical-analysis";
-import { useTechnicalAnalysts, useUsers } from "@/utils/queries/users";
 import { useState } from "react";
 import { AiOutlineTeam } from "react-icons/ai";
 import { IoMdArrowDropdownCircle, IoMdArrowDropupCircle } from "react-icons/io";
+import type { TUserSession } from "@/lib/auth/session";
+import { useTechnicalAnalysisByPersonalizedFilters } from "@/utils/queries/technical-analysis";
+import { useTechnicalAnalysts, useUsers } from "@/utils/queries/users";
 import TechnicalAnalysisCard from "../Cards/TechnicalAnalysisCard";
 import ControlTechnicalAnalysis from "../Modals/TechnicalAnalysis/ControlTechnicalAnalysis";
 import { Sidebar } from "../Sidebar";
@@ -67,6 +67,7 @@ function TechnicalAnalysisPage({ session }: TechnicalAnalysisPageParams) {
 						</div>
 						{userHasOperationalResultsViewPermission ? (
 							<button
+								type="button"
 								onClick={() => setStatsBlockIsOpen(true)}
 								className="flex items-center gap-1 font-bold tracking-tight text-primary/70 duration-300 ease-in-out hover:text-cyan-500"
 							>
@@ -105,6 +106,7 @@ function TechnicalAnalysisPage({ session }: TechnicalAnalysisPageParams) {
 					{isSuccess && analysis
 						? analysis.map((analysisInfo) => (
 								<TechnicalAnalysisCard
+									key={analysisInfo._id}
 									analysis={analysisInfo}
 									handleClick={(id) => setEditModal({ id: id, isOpen: true })}
 									userHasEditPermission={session.user.permissoes.analisesTecnicas.editar}

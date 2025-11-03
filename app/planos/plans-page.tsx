@@ -1,4 +1,6 @@
-import { useSession } from "@/app/providers/SessionProvider";
+"use client";
+import { useState } from "react";
+import { IoMdArrowDropdownCircle, IoMdArrowDropupCircle } from "react-icons/io";
 import SignaturePlanCard from "@/components/Cards/SignaturePlan";
 import EditPlan from "@/components/Modals/SignaturePlans/EditPlan";
 import NewPlan from "@/components/Modals/SignaturePlans/NewPlan";
@@ -6,18 +8,18 @@ import { Sidebar } from "@/components/Sidebar";
 import FiltersMenu from "@/components/SignaturePlans/FiltersMenu";
 import ErrorComponent from "@/components/utils/ErrorComponent";
 import LoadingComponent from "@/components/utils/LoadingComponent";
+import type { TUserSession } from "@/lib/auth/session";
 import { useSignaturePlans } from "@/utils/queries/signature-plans";
-import { useState } from "react";
-import { IoMdArrowDropdownCircle, IoMdArrowDropupCircle } from "react-icons/io";
 
-function SignaturePlans() {
-	const { session, status } = useSession({ required: true });
+type PlansPageProps = {
+	session: TUserSession;
+};
+function PlansPage({ session }: PlansPageProps) {
 	const { data: plans, isLoading, isError, isSuccess, filters, setFilters } = useSignaturePlans();
 	const [filterMenuIsOpen, setFilterMenuIsOpen] = useState<boolean>(false);
 	const [newPlanModalIsOpen, setNewPlanModalIsOpen] = useState<boolean>(false);
 	const [editPlanModal, setEditPlanModal] = useState<{ id: string | null; isOpen: boolean }>({ id: null, isOpen: false });
 
-	if (status !== "authenticated") return <LoadingComponent />;
 	return (
 		<div className="flex h-full flex-col md:flex-row">
 			<Sidebar session={session} />
@@ -84,4 +86,4 @@ function SignaturePlans() {
 	);
 }
 
-export default SignaturePlans;
+export default PlansPage;
