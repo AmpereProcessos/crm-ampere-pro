@@ -3,7 +3,8 @@ import { useState } from "react";
 import OpportunitiesCardModePage from "@/components/Opportunities/OpportunitiesCardModePage";
 import OpportunitiesKanbanModePage from "@/components/Opportunities/OpportunitiesKanbanModePage";
 import type { TUserSession } from "@/lib/auth/session";
-import { useOpportunitiesQueryOptions } from "@/utils/queries/opportunities";
+import { useOpportunitiesQueryDefinitions, useOpportunitiesQueryOptions } from "@/utils/queries/opportunities";
+import OpportunitiesKanbanModePageV2 from "@/components/Opportunities/OpportunitiesKanbanModePageV2";
 
 export type TOpportunitiesPageModes = "card" | "kanban";
 
@@ -12,7 +13,7 @@ type OpportunitiesMainPageProps = { initialMode: TOpportunitiesPageModes | null 
 export default function OpportunitiesMainPage({ initialMode, session }: OpportunitiesMainPageProps) {
 	console.log(initialMode);
 	const { data: queryOptions } = useOpportunitiesQueryOptions();
-
+	const { data: opportunityViewPreferences } = useOpportunitiesQueryDefinitions();
 	const responsiblesOptions = queryOptions?.responsibles || [];
 	const partnersOptions = queryOptions?.partners || [];
 	const projectTypesOptions = queryOptions?.projectTypes || [];
@@ -35,9 +36,9 @@ export default function OpportunitiesMainPage({ initialMode, session }: Opportun
 				handleSetMode={handleSetMode}
 			/>
 		);
-	if (mode === "kanban")
+	if (mode === "kanban" && opportunityViewPreferences)
 		return (
-			<OpportunitiesKanbanModePage session={session} funnelsOptions={funnelsOptions} responsiblesOptions={responsiblesOptions} handleSetMode={handleSetMode} />
+			<OpportunitiesKanbanModePageV2 session={session} opportunityViewPreferences={opportunityViewPreferences} />
 		);
 	return <></>;
 }

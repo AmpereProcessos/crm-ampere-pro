@@ -1,6 +1,6 @@
 import { DndContext, DragOverlay, useDraggable, useDroppable } from "@dnd-kit/core";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { GripVertical, Loader2, Share2 } from "lucide-react";
+import { BadgeDollarSign, GripVertical, Loader2, Share2, Zap } from "lucide-react";
 import Link from "next/link";
 import { useRef, useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
@@ -9,7 +9,7 @@ import { MdDashboard } from "react-icons/md";
 import { Sidebar } from "@/components/Sidebar";
 import type { TUserSession } from "@/lib/auth/session";
 import { OPPORTUNITIES_FUNNEL_CONFIG, useOpportunitiesDragAndDropLogic } from "@/lib/funnels/opportunities-funnel-config";
-import { formatDateAsLocale, formatNameAsInitials } from "@/lib/methods/formatting";
+import { formatDateAsLocale, formatDecimalPlaces, formatToMoney, formatNameAsInitials } from "@/lib/methods/formatting";
 import { cn } from "@/lib/utils";
 import type { TGetOpportunitiesKanbanViewOutput } from "@/pages/api/opportunities/kanban";
 import type { TGetOpportunitiesQueryDefinitionsOutput, TUpdateOpportunityQueryDefinitionsInput } from "@/pages/api/opportunities/query-definitions";
@@ -404,6 +404,27 @@ function KanbanBoardStageCard({ stageId, opportunity, isDragOverlay = false }: K
 					</div>
 				</div>
 			</div>
+			{
+			opportunity.proposta ? <div className="flex w-full grow flex-col rounded-md border border-primary/30 p-2">
+								<h1 className="text-[0.6rem] font-extralight text-primary/70">PROPOSTA ATIVA</h1>
+								<div className="flex w-full flex-col justify-between">
+									<p className="text-xs font-medium text-cyan-500">{opportunity.proposta.nome}</p>
+									<div className="flex  items-center justify-between">
+										<div className="flex items-center gap-1">
+											<Zap  className="text-cyan-500 w-4 h-4 min-w-4 min-h-4" />
+											<p className="text-xs  text-primary/70">
+												{formatDecimalPlaces(opportunity.proposta.potenciaPico || 0)}
+												kWp
+											</p>
+										</div>
+										<div className="flex items-center gap-1">
+											<BadgeDollarSign  className="text-cyan-500 w-4 h-4 min-w-4 min-h-4" />
+											<p className="text-xs  text-primary/70">{formatToMoney(opportunity.proposta.valor)}</p>
+										</div>
+									</div>
+								</div>
+							</div> : null
+			}
 			<div className="flex w-full items-center justify-between gap-2">
 				<div className="flex grow flex-wrap items-center gap-2">
 					{opportunity.responsaveis.map((resp) => {
