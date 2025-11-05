@@ -379,7 +379,7 @@ function KanbanBoardStageCard({ stageId, opportunity, isDragOverlay = false }: K
 		<div
 			ref={setNodeRef}
 			style={style}
-			className="w-full group flex flex-col border border-primary bg-background dark:bg-[#121212] rounded-md shadow-xs p-2 gap-1"
+			className="w-full group flex flex-col border border-primary bg-background dark:bg-[#121212] rounded-md shadow-xs p-2 gap-1 relative"
 		>
 			<div
 				{...listeners}
