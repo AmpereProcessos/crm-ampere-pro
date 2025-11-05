@@ -1,4 +1,14 @@
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import dayjs from "dayjs";
+import { useState } from "react";
+import type { TGetComissionsRouteInput, TGetComissionsRouteOutput } from "@/app/api/opportunities/comissions/route";
+import type { TResultsExportsItem } from "@/app/api/stats/comercial-results/exports/route";
+import { useDebounceMemo } from "@/lib/hooks";
+import type { TGetOpportunitiesKanbanViewInput, TGetOpportunitiesKanbanViewOutput } from "@/pages/api/opportunities/kanban";
+import type { TGetOpportunitiesQueryDefinitionsOutput } from "@/pages/api/opportunities/query-definitions";
+import type { TOpportunitiesQueryOptions } from "@/pages/api/opportunities/query-options";
+import type { TOpportunitiesByFastSearch, TOpportunitiesByFilterResult } from "@/pages/api/opportunities/search";
 import type {
 	TOpportunityDTO,
 	TOpportunityDTOWithClient,
@@ -10,16 +20,6 @@ import type {
 	TOpportunityWithFunnelReferenceAndActivitiesByStatus,
 	TPersonalizedOpportunitiesFilter,
 } from "../schemas/opportunity.schema";
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import type { TResultsExportsItem } from "@/app/api/stats/comercial-results/exports/route";
-import type { TOpportunitiesByFastSearch, TOpportunitiesByFilterResult } from "@/pages/api/opportunities/search";
-import { useState } from "react";
-import type { TOpportunitiesQueryOptions } from "@/pages/api/opportunities/query-options";
-import type { TGetComissionsRouteInput, TGetComissionsRouteOutput } from "@/app/api/opportunities/comissions/route";
-import dayjs from "dayjs";
-import { useDebounceMemo } from "@/lib/hooks";
-import type { TGetOpportunitiesKanbanViewInput, TGetOpportunitiesKanbanViewOutput } from "@/pages/api/opportunities/kanban";
-import type { TGetOpportunitiesQueryDefinitionsOutput } from "@/pages/api/opportunities/query-definitions";
 
 type UseOpportunitiesParams = {
 	responsibles: string[] | null;
@@ -94,10 +94,13 @@ async function fetchOpportunity({ opportunityId }: { opportunityId: string }) {
 	}
 }
 export function useOpportunityById({ opportunityId }: { opportunityId: string }) {
-	return useQuery({
+	return {
+		...useQuery({
+			queryKey: ["opportunity-by-id", opportunityId],
+			queryFn: async () => await fetchOpportunity({ opportunityId }),
+		}),
 		queryKey: ["opportunity-by-id", opportunityId],
-		queryFn: async () => await fetchOpportunity({ opportunityId }),
-	});
+	};
 }
 
 export type TOpportunitiesByFastSearchParams = {
@@ -165,13 +168,7 @@ type FetchOpportunitiesByPersonalizedFiltersParams = {
 	projectTypes: string[] | null;
 	filters: TPersonalizedOpportunitiesFilter;
 };
-async function fetchOpportunitiesByPersonalizedFilters({
-	page,
-	responsibles,
-	partners,
-	projectTypes,
-	filters,
-}: FetchOpportunitiesByPersonalizedFiltersParams) {
+async function fetchOpportunitiesByPersonalizedFilters({ page, responsibles, partners, projectTypes, filters }: FetchOpportunitiesByPersonalizedFiltersParams) {
 	try {
 		const { data } = await axios.post(`/api/opportunities/search?page=${page}`, { responsibles, partners, projectTypes, filters });
 		return data.data as TOpportunitiesByFilterResult;

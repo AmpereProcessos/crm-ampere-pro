@@ -3,14 +3,7 @@ import { TechnicalAnalysisSolicitationTypes } from "../select-options";
 
 const EquipmentSchema = z.object({
 	id: z.string({ invalid_type_error: "Tipo não válido para ID do módulo." }).optional().nullable(),
-	categoria: z.union([
-		z.literal("MÓDULO"),
-		z.literal("INVERSOR"),
-		z.literal("INSUMO"),
-		z.literal("ESTRUTURA"),
-		z.literal("PADRÃO"),
-		z.literal("OUTROS"),
-	]),
+	categoria: z.union([z.literal("MÓDULO"), z.literal("INVERSOR"), z.literal("INSUMO"), z.literal("ESTRUTURA"), z.literal("PADRÃO"), z.literal("OUTROS")]),
 	fabricante: z.string({
 		required_error: "Fabricante do módulo não informado.",
 		invalid_type_error: "Tipo não válido para o fabricante do módulo.",
@@ -670,16 +663,7 @@ export type TTechnicalAnalysisDTO = TTechnicalAnalysis & { _id: string };
 
 export type TTechnicalAnalysisSimplified = Pick<
 	TTechnicalAnalysis,
-	| "nome"
-	| "status"
-	| "tipoSolicitacao"
-	| "complexidade"
-	| "oportunidade"
-	| "requerente"
-	| "localizacao"
-	| "dataEfetivacao"
-	| "dataInsercao"
-	| "analista"
+	"nome" | "status" | "tipoSolicitacao" | "complexidade" | "oportunidade" | "requerente" | "localizacao" | "dataEfetivacao" | "dataInsercao" | "analista"
 >;
 export type TTechnicalAnalysisDTOSimplified = TTechnicalAnalysisSimplified & {
 	_id: string;

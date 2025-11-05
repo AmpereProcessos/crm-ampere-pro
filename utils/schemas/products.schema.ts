@@ -14,14 +14,7 @@ export const GeneralProductSchema = z.object({
 		required_error: "Status de ativação do serviço não informado.",
 		invalid_type_error: "Tipo não válido para o status de ativação do produto.",
 	}),
-	categoria: z.union([
-		z.literal("MÓDULO"),
-		z.literal("INVERSOR"),
-		z.literal("INSUMO"),
-		z.literal("ESTRUTURA"),
-		z.literal("PADRÃO"),
-		z.literal("OUTROS"),
-	]),
+	categoria: z.union([z.literal("MÓDULO"), z.literal("INVERSOR"), z.literal("INSUMO"), z.literal("ESTRUTURA"), z.literal("PADRÃO"), z.literal("OUTROS")]),
 	fabricante: z.string({
 		required_error: "Fabricante do produto não informado.",
 		invalid_type_error: "Tipo não válido para o fabricante do produto.",
@@ -32,10 +25,7 @@ export const GeneralProductSchema = z.object({
 		.optional()
 		.nullable(),
 	garantia: z.number({ required_error: "Garantia do produto não informada.", invalid_type_error: "Tipo não válido para a garantia do produto." }),
-	preco: z
-		.number({ required_error: "Valor do produto não informado.", invalid_type_error: "Tipo não válido para o valor do produto." })
-		.optional()
-		.nullable(),
+	preco: z.number({ required_error: "Valor do produto não informado.", invalid_type_error: "Tipo não válido para o valor do produto." }).optional().nullable(),
 	autor: AuthorSchema,
 	dataInsercao: z
 		.string({ required_error: "Data de inserção não fornecida.", invalid_type_error: "Tipo não válido para a data de inserção." })
@@ -52,14 +42,7 @@ export const InsertProductSchema = z.object({
 		required_error: "Status de ativação do serviço não informado.",
 		invalid_type_error: "Tipo não válido para o status de ativação do produto.",
 	}),
-	categoria: z.union([
-		z.literal("MÓDULO"),
-		z.literal("INVERSOR"),
-		z.literal("INSUMO"),
-		z.literal("ESTRUTURA"),
-		z.literal("PADRÃO"),
-		z.literal("OUTROS"),
-	]),
+	categoria: z.union([z.literal("MÓDULO"), z.literal("INVERSOR"), z.literal("INSUMO"), z.literal("ESTRUTURA"), z.literal("PADRÃO"), z.literal("OUTROS")]),
 	fabricante: z.string({
 		required_error: "Fabricante do produto não informado.",
 		invalid_type_error: "Tipo não válido para o fabricante do produto.",
@@ -70,10 +53,7 @@ export const InsertProductSchema = z.object({
 		.optional()
 		.nullable(),
 	garantia: z.number({ required_error: "Garantia do produto não informada.", invalid_type_error: "Tipo não válido para a garantia do produto." }),
-	preco: z
-		.number({ required_error: "Valor do produto não informado.", invalid_type_error: "Tipo não válido para o valor do produto." })
-		.optional()
-		.nullable(),
+	preco: z.number({ required_error: "Valor do produto não informado.", invalid_type_error: "Tipo não válido para o valor do produto." }).optional().nullable(),
 	autor: AuthorSchema,
 	dataInsercao: z
 		.string({ required_error: "Data de inserção não fornecida.", invalid_type_error: "Tipo não válido para a data de inserção." })
@@ -90,14 +70,7 @@ export const ProductSchema = z.object({
 		required_error: "Status de ativação do serviço não informado.",
 		invalid_type_error: "Tipo não válido para o status de ativação do produto.",
 	}),
-	categoria: z.union([
-		z.literal("MÓDULO"),
-		z.literal("INVERSOR"),
-		z.literal("INSUMO"),
-		z.literal("ESTRUTURA"),
-		z.literal("PADRÃO"),
-		z.literal("OUTROS"),
-	]),
+	categoria: z.union([z.literal("MÓDULO"), z.literal("INVERSOR"), z.literal("INSUMO"), z.literal("ESTRUTURA"), z.literal("PADRÃO"), z.literal("OUTROS")]),
 	fabricante: z.string({
 		required_error: "Fabricante do produto não informado.",
 		invalid_type_error: "Tipo não válido para o fabricante do produto.",
@@ -108,10 +81,7 @@ export const ProductSchema = z.object({
 		.optional()
 		.nullable(),
 	garantia: z.number({ required_error: "Garantia do produto não informada.", invalid_type_error: "Tipo não válido para a garantia do produto." }),
-	preco: z
-		.number({ required_error: "Valor do produto não informado.", invalid_type_error: "Tipo não válido para o valor do produto." })
-		.optional()
-		.nullable(),
+	preco: z.number({ required_error: "Valor do produto não informado.", invalid_type_error: "Tipo não válido para o valor do produto." }).optional().nullable(),
 	autor: AuthorSchema,
 	dataInsercao: z
 		.string({ required_error: "Data de inserção não fornecida.", invalid_type_error: "Tipo não válido para a data de inserção." })

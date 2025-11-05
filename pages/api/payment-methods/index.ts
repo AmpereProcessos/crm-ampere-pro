@@ -73,8 +73,7 @@ const editPaymentMethod: NextApiHandler<PutResponse> = async (req, res) => {
 	const collection: Collection<TPaymentMethod> = db.collection("payment-methods");
 
 	const updateResponse = await updatePaymentMethod({ collection: collection, id: id, changes: changes, query: partnerQuery });
-	if (!updateResponse.acknowledged)
-		throw new createHttpError.InternalServerError("Oops, houve um erro desconhecido ao atualizar método de pagamento.");
+	if (!updateResponse.acknowledged) throw new createHttpError.InternalServerError("Oops, houve um erro desconhecido ao atualizar método de pagamento.");
 	if (updateResponse.matchedCount == 0) throw new createHttpError.NotFound("Método de pagamento não encontrado.");
 
 	return res.status(201).json({ data: "Método de pagamento atualizado com sucesso !", message: "Método de pagamento atualizado com sucesso !" });

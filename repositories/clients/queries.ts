@@ -1,10 +1,5 @@
 import { formatPhoneAsBase } from "@/utils/methods";
-import {
-	ClientSimplifiedProjection,
-	SimilarClientsSimplifiedProjection,
-	type TClient,
-	type TSimilarClientSimplifiedDTO,
-} from "@/utils/schemas/client.schema";
+import { ClientSimplifiedProjection, SimilarClientsSimplifiedProjection, type TClient, type TSimilarClientSimplifiedDTO } from "@/utils/schemas/client.schema";
 import { type Collection, type Filter, type MatchKeysAndValues, ObjectId, type WithId } from "mongodb";
 
 type GetClientByIdParams = {
@@ -131,7 +126,7 @@ export async function getClientsByFilters({ collection, query, skip, limit }: Ge
 		const sort = { _id: -1 };
 		const match = { ...query };
 		const clients = await collection.find(match, { projection: ClientSimplifiedProjection }).skip(skip).limit(limit).sort({ _id: -1 }).toArray();
-		
+
 		return {
 			clientsMatched,
 			clients: clients.map((c) => ({
@@ -151,8 +146,8 @@ export async function getClientsByFilters({ collection, query, skip, limit }: Ge
 				autor: c.autor,
 				conecta: c.conecta,
 				dataInsercao: c.dataInsercao,
-			})) 
-		}
+			})),
+		};
 	} catch (error) {
 		console.log("[ERROR] Error getting clients by filters", error);
 		throw error;

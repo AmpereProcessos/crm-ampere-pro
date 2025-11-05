@@ -11,9 +11,7 @@ export async function getExpenseById({ id, collection, query }: GetExpenseByIdPa
 		const addFields = { projectAsObjectId: { $toObjectId: "$projeto.id" } };
 		const lookup = { from: "projects", localField: "projectAsObjectId", foreignField: "_id", as: "projetoDados" };
 
-		const expensesArr = await collection
-			.aggregate([{ $match: { _id: new ObjectId(id), ...query } }, { $addFields: addFields }, { $lookup: lookup }])
-			.toArray();
+		const expensesArr = await collection.aggregate([{ $match: { _id: new ObjectId(id), ...query } }, { $addFields: addFields }, { $lookup: lookup }]).toArray();
 
 		const expense = expensesArr.map((e) => ({ ...e, projetoDados: e.projetoDados[0] }));
 

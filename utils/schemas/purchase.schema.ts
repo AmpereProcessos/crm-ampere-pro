@@ -9,14 +9,8 @@ export const UnitSchema = z.enum(["UN", "PC", "KG", "CX", "M", "M²", "M³", "L"
 
 const PurchaseProjectReference = z.object({
 	id: z.string({ required_error: "ID do projeto não informado.", invalid_type_error: "Tipo não válido para o ID do projeto." }).optional().nullable(),
-	nome: z
-		.string({ required_error: "Nome do projeto não informado.", invalid_type_error: "Tipo não válido para o nome do projeto." })
-		.optional()
-		.nullable(),
-	tipo: z
-		.string({ required_error: "Tipo do projeto não informado.", invalid_type_error: "Tipo não válido para o tipo do projeto." })
-		.optional()
-		.nullable(),
+	nome: z.string({ required_error: "Nome do projeto não informado.", invalid_type_error: "Tipo não válido para o nome do projeto." }).optional().nullable(),
+	tipo: z.string({ required_error: "Tipo do projeto não informado.", invalid_type_error: "Tipo não válido para o tipo do projeto." }).optional().nullable(),
 	indexador: z
 		.number({ required_error: "Indexador do projeto não informado.", invalid_type_error: "Tipo não válido para o indexador do projeto." })
 		.optional()
@@ -37,14 +31,7 @@ const PurchaseProjectReference = z.object({
 });
 
 const PurchaseCompositionItem = z.object({
-	categoria: z.union([
-		z.literal("MÓDULO"),
-		z.literal("INVERSOR"),
-		z.literal("INSUMO"),
-		z.literal("ESTRUTURA"),
-		z.literal("PADRÃO"),
-		z.literal("OUTROS"),
-	]),
+	categoria: z.union([z.literal("MÓDULO"), z.literal("INVERSOR"), z.literal("INSUMO"), z.literal("ESTRUTURA"), z.literal("PADRÃO"), z.literal("OUTROS")]),
 	descricao: z.string({
 		required_error: "Descrição do item de compra não informado.",
 		invalid_type_error: "Tipo não válido para a descrição do item de compra.",
@@ -134,10 +121,7 @@ const DeliveryLocation = z.object({
 	}),
 	bairro: z.string({ invalid_type_error: "Tipo não válido para o bairro de localização de entrega." }).optional().nullable(),
 	endereco: z.string({ invalid_type_error: "Tipo não válido para o endereço de localização de entrega." }).optional().nullable(),
-	numeroOuIdentificador: z
-		.string({ invalid_type_error: "Tipo não válido para o número ou identificador da localização de entrega." })
-		.optional()
-		.nullable(),
+	numeroOuIdentificador: z.string({ invalid_type_error: "Tipo não válido para o número ou identificador da localização de entrega." }).optional().nullable(),
 	complemento: z.string({ invalid_type_error: "Tipo não válido para o complemento da localização de entrega." }).optional().nullable(),
 	latitude: z.string({ invalid_type_error: "Tipo não válido para latitude da localização de entrega." }).optional().nullable(),
 	longitude: z.string({ invalid_type_error: "Tipo não válido para longitude da localização de entrega." }).optional().nullable(),
@@ -180,9 +164,7 @@ const GeneralPurchaseSchema = z.object({
 	transporte: PurchasePorterage,
 	faturamento: PurchaseInvoicing,
 	entrega: PurchaseDelivery,
-	dataInsercao: z
-		.string({ invalid_type_error: "Tipo não válido para a data de inserção." })
-		.datetime({ message: "Formato inválido para data de inserção." }),
+	dataInsercao: z.string({ invalid_type_error: "Tipo não válido para a data de inserção." }).datetime({ message: "Formato inválido para data de inserção." }),
 	dataEfetivacao: z
 		.string({ invalid_type_error: "Tipo não válido para a data de efetivação." })
 		.datetime({ message: "Formato inválido para data de efetivação." })
@@ -211,9 +193,7 @@ export const InsertPurchaseSchema = z.object({
 	transporte: PurchasePorterage,
 	faturamento: PurchaseInvoicing,
 	entrega: PurchaseDelivery,
-	dataInsercao: z
-		.string({ invalid_type_error: "Tipo não válido para a data de inserção." })
-		.datetime({ message: "Formato inválido para data de inserção." }),
+	dataInsercao: z.string({ invalid_type_error: "Tipo não válido para a data de inserção." }).datetime({ message: "Formato inválido para data de inserção." }),
 	dataEfetivacao: z
 		.string({ invalid_type_error: "Tipo não válido para a data de efetivação." })
 		.datetime({ message: "Formato inválido para data de efetivação." })

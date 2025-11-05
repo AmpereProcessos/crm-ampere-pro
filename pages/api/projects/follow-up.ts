@@ -82,8 +82,7 @@ const getProjectsFollowUp: NextApiHandler<GetResponse> = async (req, res) => {
 				if (ProjectTypeProcesses.includes("homologation_documents_elaboration")) {
 					if (!acc["ELABORAÇÃO DA DOCUMENTAÇÃO"]) acc["ELABORAÇÃO DA DOCUMENTAÇÃO"] = { concluido: false, data: null };
 					const isHomologationElaborated = !!homologationConcluded || !!homologationElaborationEndDate;
-					if (isHomologationElaborated)
-						acc["ELABORAÇÃO DA DOCUMENTAÇÃO"] = { concluido: true, data: homologationElaborationEndDate?.toISOString() || "-" };
+					if (isHomologationElaborated) acc["ELABORAÇÃO DA DOCUMENTAÇÃO"] = { concluido: true, data: homologationElaborationEndDate?.toISOString() || "-" };
 				}
 				if (ProjectTypeProcesses.includes("homologation_access_request")) {
 					if (!acc["SOLICITAÇÃO DE ACESSO A CONCESSIONÁRIA"]) acc["SOLICITAÇÃO DE ACESSO A CONCESSIONÁRIA"] = { concluido: false, data: null };
@@ -153,14 +152,12 @@ const getProjectsFollowUp: NextApiHandler<GetResponse> = async (req, res) => {
 				if (ProjectTypeProcesses.includes("homologation_vistory_request")) {
 					if (!acc["SOLICITAÇÃO DE VISTORIA"]) acc["SOLICITAÇÃO DE VISTORIA"] = { concluido: false, data: null };
 					const isHomologationVistoryRequested = !!homologationConcluded || !!homologationVistoryRequestDate;
-					if (isHomologationVistoryRequested)
-						acc["SOLICITAÇÃO DE VISTORIA"] = { concluido: true, data: homologationVistoryRequestDate?.toISOString() || "-" };
+					if (isHomologationVistoryRequested) acc["SOLICITAÇÃO DE VISTORIA"] = { concluido: true, data: homologationVistoryRequestDate?.toISOString() || "-" };
 				}
 				if (ProjectTypeProcesses.includes("homologation_vistory_approval")) {
 					if (!acc["APROVAÇÃO DA VISTORIA"]) acc["APROVAÇÃO DA VISTORIA"] = { concluido: false, data: null };
 					const isHomologationVistoryApproved = !!homologationConcluded || !!homologationVistoryApprovalDate;
-					if (isHomologationVistoryApproved)
-						acc["APROVAÇÃO DA VISTORIA"] = { concluido: true, data: homologationVistoryApprovalDate?.toISOString() || "-" };
+					if (isHomologationVistoryApproved) acc["APROVAÇÃO DA VISTORIA"] = { concluido: true, data: homologationVistoryApprovalDate?.toISOString() || "-" };
 				}
 			}
 			const processes = Object.entries(acc).map(([key, value]) => ({ processo: key, ...value }));

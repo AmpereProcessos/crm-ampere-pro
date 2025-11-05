@@ -45,9 +45,7 @@ const getPaymentMethods: NextApiHandler<TPostResponse> = async (req, res) => {
 		return res.status(200).json({ data: paymentMethods });
 	}
 	if (kitsIds.length > 0) {
-		const kits = await kitsCollection
-			.find({ _id: { $in: kitsIds.map((k) => new ObjectId(k)) } }, { projection: { idsMetodologiasPagamento: 1 } })
-			.toArray();
+		const kits = await kitsCollection.find({ _id: { $in: kitsIds.map((k) => new ObjectId(k)) } }, { projection: { idsMetodologiasPagamento: 1 } }).toArray();
 		const paymentMethodIds = kits.flatMap((k) => k.idsMetodologiasPagamento).map((p) => p.toString());
 
 		const paymentMethods = await paymentMethodsCollection.find({ _id: { $in: paymentMethodIds.map((p) => new ObjectId(p)) } }).toArray();
@@ -55,9 +53,7 @@ const getPaymentMethods: NextApiHandler<TPostResponse> = async (req, res) => {
 		return res.status(200).json({ data: paymentMethods });
 	}
 	if (plansIds.length > 0) {
-		const plans = await plansCollection
-			.find({ _id: { $in: plansIds.map((k) => new ObjectId(k)) } }, { projection: { idsMetodologiasPagamento: 1 } })
-			.toArray();
+		const plans = await plansCollection.find({ _id: { $in: plansIds.map((k) => new ObjectId(k)) } }, { projection: { idsMetodologiasPagamento: 1 } }).toArray();
 
 		const paymentMethodIds = plans.flatMap((k) => k.idsMetodologiasPagamento).map((p) => p.toString());
 

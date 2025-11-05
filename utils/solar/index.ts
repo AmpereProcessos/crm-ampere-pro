@@ -91,8 +91,7 @@ export function getIdealTotalModulesPowerFromConsumption({
 	if (!locationGenerationFactors) {
 		return energyConsumption / DEFAULT_GENERATION_FACTOR;
 	}
-	const locationGenerationFactorForOrientation =
-		locationGenerationFactors.POR_ORIENTACAO[orientation as keyof typeof locationGenerationFactors.POR_ORIENTACAO];
+	const locationGenerationFactorForOrientation = locationGenerationFactors.POR_ORIENTACAO[orientation as keyof typeof locationGenerationFactors.POR_ORIENTACAO];
 	if (!locationGenerationFactorForOrientation) {
 		return energyConsumption / locationGenerationFactors.POR_ORIENTACAO.NORTE; // using the default orientation (NORTE)
 	}
@@ -121,8 +120,7 @@ export function getEstimatedEnergyGenerationFromTotalModulesPower({
 	if (!locationGenerationFactors) {
 		return totalModulesPower * DEFAULT_GENERATION_FACTOR;
 	}
-	const locationGenerationFactorForOrientation =
-		locationGenerationFactors.POR_ORIENTACAO[orientation as keyof typeof locationGenerationFactors.POR_ORIENTACAO];
+	const locationGenerationFactorForOrientation = locationGenerationFactors.POR_ORIENTACAO[orientation as keyof typeof locationGenerationFactors.POR_ORIENTACAO];
 	if (!locationGenerationFactorForOrientation) {
 		return totalModulesPower * locationGenerationFactors.POR_ORIENTACAO.NORTE; // using the default orientation (NORTE)
 	}

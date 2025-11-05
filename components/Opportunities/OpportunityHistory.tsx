@@ -18,6 +18,8 @@ import NewActivity from "../Activities/NewActivity";
 import OpportunityActivity from "../Cards/OpportunityActivity";
 import OpportunityHistoryCard from "../Cards/OpportunityHistory";
 import NewOpportunityHistory from "../OpportunityHistories/NewOpportunityHistory";
+import { Button } from "../ui/button";
+import { ClipboardCheck, Plus } from "lucide-react";
 type GetInitialState = {
 	type?: "ATIVIDADE" | "ANOTAÇÃO";
 	project: {
@@ -56,40 +58,22 @@ function OpportunityHistory({ session, opportunityName, opportunityId, opportuni
 	const [view, setView] = useState<"NEW NOTE" | "NEW ACTIVITY" | "NEW INTERACTION" | null>(null);
 
 	return (
-		<div className="flex w-full flex-col gap-2 rounded-md border border-primary/30 bg-background p-3 shadow-lg">
-			<div className="flex h-fit flex-col items-center justify-between border-b border-primary/30 pb-2 lg:h-[40px] lg:flex-row">
-				<h1 className="font-bold text-primary">Histórico</h1>
-				<div className="mt-2 flex w-full grow flex-col items-center justify-end gap-2 lg:mt-0 lg:w-fit lg:flex-row">
-					<button
-						type="button"
-						onClick={() => {
-							setView((prev) => (prev === "NEW INTERACTION" ? null : "NEW INTERACTION"));
-						}}
-						className="flex w-full items-center justify-center gap-2 rounded-sm bg-[#15599a] text-white p-1.5 font-medium hover:bg-blue-800 lg:w-fit"
-					>
-						<AiFillInteraction />
-						<p className="text-xs font-normal">Nova Interação</p>
-					</button>
-					<button
-						type="button"
-						onClick={() => {
-							setView((prev) => (prev === "NEW ACTIVITY" ? null : "NEW ACTIVITY"));
-						}}
-						className="flex w-full items-center justify-center gap-2 rounded-sm bg-[#15599a] text-white p-1.5 font-medium hover:bg-blue-800 lg:w-fit"
-					>
-						<BsClipboardCheck />
-						<p className="text-xs font-normal">Nova Atividade</p>
-					</button>
-					<button
-						type="button"
-						onClick={() => {
-							setView((prev) => (prev === "NEW NOTE" ? null : "NEW NOTE"));
-						}}
-						className="flex w-full items-center justify-center gap-2 rounded-sm bg-[#15599a] text-white p-1.5 font-medium hover:bg-blue-800 lg:w-fit"
-					>
-						<TbNotes />
-						<p className="text-xs font-normal">Nova Anotação</p>
-					</button>
+	<div className={"bg-card border-primary/20 flex w-full flex-col gap-1 rounded-xl border px-3 py-4 shadow-xs"}>
+			<div className="flex items-center justify-between flex-col lg:flex-row gap-2">
+				<h1 className="text-xs font-bold tracking-tight uppercase">HISTÓRICO</h1>
+				<div className="flex items-center gap-x-2 flex-wrap gap-y-1">
+					<Button variant="ghost" size={"xs"} className="flex items-center gap-1" onClick={() => setView((prev) => (prev === "NEW INTERACTION" ? null : "NEW INTERACTION"))}>
+						<AiFillInteraction className="h-4 w-4 min-h-4 min-w-4" />
+						<p className="text-xs font-medium">NOVA INTERAÇÃO</p>
+					</Button>	
+					<Button variant="ghost" size={"xs"} className="flex items-center gap-1" onClick={() => setView((prev) => (prev === "NEW ACTIVITY" ? null : "NEW ACTIVITY"))}>
+						<ClipboardCheck className="h-4 w-4 min-h-4 min-w-4" />
+						<p className="text-xs font-medium">NOVA ATIVIDADE</p>
+					</Button>
+					<Button variant="ghost" size={"xs"} className="flex items-center gap-1" onClick={() => setView((prev) => (prev === "NEW NOTE" ? null : "NEW NOTE"))}>
+						<TbNotes className="h-4 w-4 min-h-4 min-w-4" />
+						<p className="text-xs font-medium">NOVA ANOTAÇÃO</p>
+					</Button>
 				</div>
 			</div>
 			{view === "NEW NOTE" || view === "NEW INTERACTION" ? (

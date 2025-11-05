@@ -11,6 +11,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import { IoMdArrowDropdownCircle, IoMdArrowDropupCircle } from "react-icons/io";
 import OpenPPSCall from "../Cards/OpportunityPPSCall";
 import NewCall from "../Modals/Call/NewCall";
+import { Button } from "../ui/button";
+import { Plus } from "lucide-react";
 
 type OpportunityTechnicalAnalysisBlockProps = {
 	session: TUserSession;
@@ -35,53 +37,29 @@ function OpportunityPPSCallsBlock({ session, opportunity }: OpportunityTechnical
 	const handleOnMutatee = async () => await queryClient.cancelQueries({ queryKey: queryKey });
 	const handleOnSettle = async () => await queryClient.invalidateQueries({ queryKey: queryKey });
 	return (
-		<div className="flex max-h-[250px] w-full flex-col rounded-md border border-primary/30 bg-background p-3 shadow-lg">
-			<div className="flex  h-[40px] items-center  justify-between border-b border-primary/30 pb-2">
-				<div className="flex items-center justify-center gap-5">
-					<h1 className="p-1 text-center font-bold text-primary">Chamados</h1>
-				</div>
-
+		<div className={"bg-card border-primary/20 flex w-full flex-col gap-1 rounded-xl border px-3 py-4 shadow-xs"}>
+			<div className="flex items-center justify-between">
+				<h1 className="text-xs font-bold tracking-tight uppercase">CHAMADOS</h1>
 				<div className="flex items-center gap-2">
-					<button
-						type="button"
-						onClick={() => setNewPPSCallModalIsOpen(true)}
-						className="hidden rounded-sm bg-green-600 p-1 text-[0.7rem] font-bold text-primary-foreground lg:flex"
-					>
-						ABRIR CHAMADO
-					</button>
-					<button
-						type="button"
-						onClick={() => setNewPPSCallModalIsOpen(true)}
-						className="flex rounded-sm bg-green-600 p-1 text-sm font-bold text-primary-foreground lg:hidden"
-					>
-						<MdAdd />
-					</button>
-					{blockIsOpen ? (
-						<button type="button" className="text-primary/60 hover:text-blue-400">
-							<IoMdArrowDropupCircle style={{ fontSize: "25px" }} onClick={() => setBlockIsOpen(false)} />
-						</button>
-					) : (
-						<button type="button" className="text-primary/60 hover:text-blue-400">
-							<IoMdArrowDropdownCircle style={{ fontSize: "25px" }} onClick={() => setBlockIsOpen(true)} />
-						</button>
-					)}
+					<Button variant="ghost" size={"xs"} className="flex items-center gap-1" onClick={() => setNewPPSCallModalIsOpen(true)}>
+						<Plus className="h-4 w-4 min-h-4 min-w-4" />
+						<p className="text-xs font-medium">NOVO CHAMADO</p>
+					</Button>
 				</div>
 			</div>
-			{blockIsOpen ? (
-				<div className="overscroll-y flex w-full grow flex-col gap-1 overflow-y-auto py-1 pr-2 scrollbar-thin scrollbar-track-primary/10 scrollbar-thumb-primary/30">
-					{isLoading ? <LoadingComponent /> : null}
-					{isError ? <ErrorComponent msg="Erro ao buscar análises técnicas da oportunidade." /> : null}
-					{isSuccess ? (
-						calls.length > 0 ? (
-							calls.map((call) => <OpenPPSCall key={call._id} session={session} call={call} />)
-						) : (
-							<p className="flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/70">
-								Sem chamados vinculados a essa oportunidade.
-							</p>
-						)
-					) : null}
-				</div>
-			) : null}
+			<div className="grow flex flex-col w-full max-h-[250px] pr-2 gap-1 overscroll-y overflow-y-auto scrollbar-thin scrollbar-track-primary/10 scrollbar-thumb-primary/30">
+				{isLoading ? <LoadingComponent /> : null}
+				{isError ? <ErrorComponent msg="Erro ao buscar chamados da oportunidade." /> : null}
+				{isSuccess ? (
+					calls && calls.length > 0 ? (
+						calls.map((call) => <OpenPPSCall key={call._id} session={session} call={call} />)
+					) : (
+						<p className="flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/70">
+							Sem chamados vinculados a essa oportunidade.
+						</p>
+					)
+				) : null}
+			</div>
 
 			{newPPSCallModalIsOpen ? (
 				<NewCall

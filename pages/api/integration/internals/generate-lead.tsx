@@ -12,9 +12,7 @@ import { createNovuTopicAndSubscribeResponsibles } from "../../opportunities/per
 import { formatPhoneAsBase } from "@/utils/methods";
 
 const NewLeadQueryInputSchema = z.object({
-	nome: z
-		.string({ required_error: "Nome é obrigatório", invalid_type_error: "Nome deve ser uma string" })
-		.min(3, "Nome deve ter pelo menos 3 caracteres"),
+	nome: z.string({ required_error: "Nome é obrigatório", invalid_type_error: "Nome deve ser uma string" }).min(3, "Nome deve ter pelo menos 3 caracteres"),
 	telefone: z
 		.string({ required_error: "Telefone é obrigatório", invalid_type_error: "Telefone deve ser uma string" })
 		.min(11, "Telefone deve ter pelo menos 11 caracteres"),

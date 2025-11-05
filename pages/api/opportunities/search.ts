@@ -45,10 +45,7 @@ const getOpportunitiesBySearch: NextApiHandler<GetResponse> = async (req, res) =
 	const collection: Collection<TOpportunity> = db.collection("opportunities");
 
 	const opportunityNameOrQuery: Filter<TOpportunity>[] = [{ nome: { $regex: searchParam, $options: "i" } }, { nome: searchParam }];
-	const opportunityIdentificatorOrQuery: Filter<TOpportunity>[] = [
-		{ identificador: { $regex: searchParam, $options: "i" } },
-		{ identificador: searchParam },
-	];
+	const opportunityIdentificatorOrQuery: Filter<TOpportunity>[] = [{ identificador: { $regex: searchParam, $options: "i" } }, { identificador: searchParam }];
 	const opportunityClientPhoneOrQuery: Filter<TOpportunity>[] = [
 		{ "cliente.telefonePrimario": { $regex: searchParam, $options: "i" } },
 		{ "cliente.telefonePrimario": searchParam },

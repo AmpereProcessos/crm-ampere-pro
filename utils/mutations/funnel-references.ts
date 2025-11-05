@@ -23,10 +23,7 @@ type UseUpdateFunnelReferenceParams = {
 	queryClient: QueryClient;
 	affectedQueryKey: QueryKey;
 };
-export async function updateFunnelReference({
-	funnelReferenceId,
-	newStageId,
-}: Omit<UseUpdateFunnelReferenceParams, "queryClient" | "affectedQueryKey">) {
+export async function updateFunnelReference({ funnelReferenceId, newStageId }: Omit<UseUpdateFunnelReferenceParams, "queryClient" | "affectedQueryKey">) {
 	try {
 		const { data } = await axios.put(`/api/opportunities/funnel-references?id=${funnelReferenceId}`, { idEstagioFunil: newStageId });
 		if (typeof data.data !== "string") return "Estágio atualizado com sucesso !";
@@ -36,10 +33,7 @@ export async function updateFunnelReference({
 		throw error;
 	}
 }
-export function useFunnelReferenceUpdate({
-	queryClient,
-	affectedQueryKey,
-}: Omit<UseUpdateFunnelReferenceParams, "funnelReferenceId" | "newStageId">) {
+export function useFunnelReferenceUpdate({ queryClient, affectedQueryKey }: Omit<UseUpdateFunnelReferenceParams, "funnelReferenceId" | "newStageId">) {
 	return useMutation({
 		mutationKey: ["upate-funnel-reference"],
 		mutationFn: async ({ funnelReferenceId, newStageId }: Omit<UseUpdateFunnelReferenceParams, "queryClient" | "affectedQueryKey">) => {

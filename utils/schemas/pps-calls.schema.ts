@@ -116,13 +116,10 @@ const GeneralPPSCallSchema = z.object({
 		invalid_type_error: "Tipo não válido para o status de resolução do chamado.",
 	}),
 	tipoSolicitacao: z
-		.enum(
-			["PROPOSTA COMERCIAL (ON GRID)", "PROPOSTA COMERCIAL (OFF GRID)", "ANÁLISE DE CRÉDITO", "DUVIDAS E AUXILIOS TÉCNICOS", "OUTROS", "NÃO DEFINIDO"],
-			{
-				required_error: "Tipo de solicitação do chamado não informado.",
-				invalid_type_error: "Tipo não válido para o tipo de solicitação do chamado.",
-			},
-		)
+		.enum(["PROPOSTA COMERCIAL (ON GRID)", "PROPOSTA COMERCIAL (OFF GRID)", "ANÁLISE DE CRÉDITO", "DUVIDAS E AUXILIOS TÉCNICOS", "OUTROS", "NÃO DEFINIDO"], {
+			required_error: "Tipo de solicitação do chamado não informado.",
+			invalid_type_error: "Tipo não válido para o tipo de solicitação do chamado.",
+		})
 		.optional()
 		.nullable(),
 	anotacoes: z.string({
@@ -176,13 +173,10 @@ export const InsertPPSCallSchema = z.object({
 		invalid_type_error: "Tipo não válido para o status de resolução do chamado.",
 	}),
 	tipoSolicitacao: z
-		.enum(
-			["PROPOSTA COMERCIAL (ON GRID)", "PROPOSTA COMERCIAL (OFF GRID)", "ANÁLISE DE CRÉDITO", "DUVIDAS E AUXILIOS TÉCNICOS", "OUTROS", "NÃO DEFINIDO"],
-			{
-				required_error: "Tipo de solicitação do chamado não informado.",
-				invalid_type_error: "Tipo não válido para o tipo de solicitação do chamado.",
-			},
-		)
+		.enum(["PROPOSTA COMERCIAL (ON GRID)", "PROPOSTA COMERCIAL (OFF GRID)", "ANÁLISE DE CRÉDITO", "DUVIDAS E AUXILIOS TÉCNICOS", "OUTROS", "NÃO DEFINIDO"], {
+			required_error: "Tipo de solicitação do chamado não informado.",
+			invalid_type_error: "Tipo não válido para o tipo de solicitação do chamado.",
+		})
 		.optional()
 		.nullable(),
 	anotacoes: z.string({

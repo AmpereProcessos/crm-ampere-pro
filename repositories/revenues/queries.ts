@@ -1,11 +1,4 @@
-import {
-	RevenueSimplifiedProjection,
-	TReceipt,
-	TRevenue,
-	TRevenueDTO,
-	TRevenueDTOSimplified,
-	TRevenueWithProject,
-} from "@/utils/schemas/revenues.schema";
+import { RevenueSimplifiedProjection, TReceipt, TRevenue, TRevenueDTO, TRevenueDTOSimplified, TRevenueWithProject } from "@/utils/schemas/revenues.schema";
 import { Collection, Filter, ObjectId } from "mongodb";
 
 type GetRevenueByIdParams = {
@@ -19,9 +12,7 @@ export async function getRevenueById({ id, collection, query }: GetRevenueByIdPa
 		const addFields = { projectAsObjectId: { $toObjectId: "$projeto.id" } };
 		const lookup = { from: "projects", localField: "projectAsObjectId", foreignField: "_id", as: "projetoDados" };
 
-		const revenuesArr = await collection
-			.aggregate([{ $match: { _id: new ObjectId(id), ...query } }, { $addFields: addFields }, { $lookup: lookup }])
-			.toArray();
+		const revenuesArr = await collection.aggregate([{ $match: { _id: new ObjectId(id), ...query } }, { $addFields: addFields }, { $lookup: lookup }]).toArray();
 
 		const revenue = revenuesArr.map((p) => ({ ...p, projetoDados: p.projetoDados[0] }));
 

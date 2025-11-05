@@ -8,6 +8,8 @@ import { MdAdd } from "react-icons/md";
 import OpportunityHomologationCard from "../Cards/OpportunityHomologation";
 import ErrorComponent from "../utils/ErrorComponent";
 import LoadingComponent from "../utils/LoadingComponent";
+import { Plus } from "lucide-react";
+import { Button } from "../ui/button";
 
 type OpportunityHomologationsProps = {
 	opportunity: TOpportunityDTOWithClient;
@@ -19,38 +21,18 @@ function OpportunityHomologations({ opportunity, session }: OpportunityHomologat
 	const [blockIsOpen, setBlockIsOpen] = useState<boolean>(false);
 
 	return (
-		<div className="flex max-h-[250px] w-full flex-col rounded-md border border-primary/30 bg-background p-3 shadow-lg">
-			<div className="flex  h-[40px] items-center  justify-between border-b border-primary/30 pb-2">
-				<div className="flex items-center justify-center gap-5">
-					<h1 className="p-1 text-center font-bold text-primary">Homologação</h1>
-				</div>
-
+		<div className={"bg-card border-primary/20 flex w-full flex-col gap-1 rounded-xl border px-3 py-4 shadow-xs"}>
+			<div className="flex items-center justify-between">
+				<h1 className="text-xs font-bold tracking-tight uppercase">HOMOLOGAÇÕES</h1>
 				<div className="flex items-center gap-2">
-					<button
-						onClick={() => setNewHomologationModalIsOpen(true)}
-						className="hidden rounded-sm bg-green-600 p-1 text-[0.7rem] font-bold text-primary-foreground lg:flex"
-					>
-						SOLICITAR HOMOLOGAÇÃO
-					</button>
-					<button
-						onClick={() => setNewHomologationModalIsOpen(true)}
-						className="flex rounded-sm bg-green-600 p-1 text-sm font-bold text-primary-foreground lg:hidden"
-					>
-						<MdAdd />
-					</button>
-					{blockIsOpen ? (
-						<button className="text-primary/60 hover:text-blue-400">
-							<IoMdArrowDropupCircle style={{ fontSize: "25px" }} onClick={() => setBlockIsOpen(false)} />
-						</button>
-					) : (
-						<button className="text-primary/60 hover:text-blue-400">
-							<IoMdArrowDropdownCircle style={{ fontSize: "25px" }} onClick={() => setBlockIsOpen(true)} />
-						</button>
-					)}
+					<Button variant="ghost" size={"xs"} className="flex items-center gap-1" onClick={() => setNewHomologationModalIsOpen(true)}>
+						<Plus className="h-4 w-4 min-h-4 min-w-4" />
+						<p className="text-xs font-medium">NOVA HOMOLOGAÇÃO</p>
+					</Button>
 				</div>
 			</div>
 			{blockIsOpen ? (
-				<div className="overscroll-y flex w-full grow flex-col gap-1 overflow-y-auto py-1 pr-2 scrollbar-thin scrollbar-track-primary/10 scrollbar-thumb-primary/30">
+				<div className="grow flex flex-col w-full max-h-[250px] pr-2 gap-1 overscroll-y overflow-y-auto scrollbar-thin scrollbar-track-primary/10 scrollbar-thumb-primary/30">
 					{isLoading ? <LoadingComponent /> : null}
 					{isError ? <ErrorComponent msg="Erro ao buscar homologações da oportunidade." /> : null}
 					{isSuccess ? (

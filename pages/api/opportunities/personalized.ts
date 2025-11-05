@@ -90,8 +90,7 @@ const createClientOpportunityAndFunnelReferences: NextApiHandler<PostResponse> =
 			},
 			partnerId: partnerId || "",
 		});
-		if (!insertOpportunityResponse.acknowledged)
-			throw new createHttpError.InternalServerError("Oops, houve um erro desconhecido ao criar oportunidade.");
+		if (!insertOpportunityResponse.acknowledged) throw new createHttpError.InternalServerError("Oops, houve um erro desconhecido ao criar oportunidade.");
 		const insertedOpportunityId = insertOpportunityResponse.insertedId.toString();
 		console.log("CLIENTE EXISTENTE - ID DA OPORTUNIDADE", insertedOpportunityId);
 		// Creating funnel reference referencing the inserted opportunity id
@@ -108,8 +107,7 @@ const createClientOpportunityAndFunnelReferences: NextApiHandler<PostResponse> =
 			},
 			partnerId: partnerId || "",
 		});
-		if (!insertFunnelReferenceResponse.acknowledged)
-			throw new createHttpError.InternalServerError("Oops, houve um erro desconhecido ao criar oportunidade.");
+		if (!insertFunnelReferenceResponse.acknowledged) throw new createHttpError.InternalServerError("Oops, houve um erro desconhecido ao criar oportunidade.");
 		const insertedFunnelReferenceId = insertFunnelReferenceResponse.insertedId.toString();
 		console.log("CLIENTE EXISTENTE - ID DA REFERÊNCIA DE FUNIL", insertedOpportunityId);
 		await createNovuTopicAndSubscribeResponsibles({
@@ -172,8 +170,7 @@ const createClientOpportunityAndFunnelReferences: NextApiHandler<PostResponse> =
 		},
 		partnerId: partnerId || "",
 	});
-	if (!insertOpportunityResponse.acknowledged)
-		throw new createHttpError.InternalServerError("Oops, houve um erro desconhecido ao criar oportunidade.");
+	if (!insertOpportunityResponse.acknowledged) throw new createHttpError.InternalServerError("Oops, houve um erro desconhecido ao criar oportunidade.");
 	const insertedOpportunityId = insertOpportunityResponse.insertedId.toString();
 	console.log("ID DA OPORTUNIDADE", insertedOpportunityId);
 	const insertFunnelReferenceResponse = await insertFunnelReference({
@@ -189,8 +186,7 @@ const createClientOpportunityAndFunnelReferences: NextApiHandler<PostResponse> =
 		},
 		partnerId: partnerId || "",
 	});
-	if (!insertFunnelReferenceResponse.acknowledged)
-		throw new createHttpError.InternalServerError("Oops, houve um erro desconhecido ao criar oportunidade.");
+	if (!insertFunnelReferenceResponse.acknowledged) throw new createHttpError.InternalServerError("Oops, houve um erro desconhecido ao criar oportunidade.");
 	const insertedFunnelReferenceId = insertFunnelReferenceResponse.insertedId.toString();
 	// Creating Novu topic for the opportunity and adding the responsibles as subscribers
 

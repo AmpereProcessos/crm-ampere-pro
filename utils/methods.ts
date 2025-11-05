@@ -212,8 +212,7 @@ export function getInverterStr(inverters: InverterType[], kitType: string | unde
 					`${inverters[i].qtde}x ${inverters[i].fabricante != "PERSONALIZADO" ? inverters[i].fabricante : inverters[i].modelo} (${inverters[i].modelo}) & `;
 			} else {
 				str =
-					str +
-					`${inverters[i].qtde}x ${inverters[i].fabricante != "PERSONALIZADO" ? inverters[i].fabricante : inverters[i].modelo} (${inverters[i].modelo})`;
+					str + `${inverters[i].qtde}x ${inverters[i].fabricante != "PERSONALIZADO" ? inverters[i].fabricante : inverters[i].modelo} (${inverters[i].modelo})`;
 			}
 		}
 	}

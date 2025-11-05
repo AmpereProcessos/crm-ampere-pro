@@ -18,8 +18,7 @@ const queryDistance: NextApiHandler<GetResponse> = async (req, res) => {
 	await validateAuthentication(req, res);
 	const { destination, origin } = req.query;
 
-	if (typeof destination != "string" || typeof origin != "string")
-		throw new createHttpError.BadRequest("Parâmetros de origem e/ou destino inválidos.");
+	if (typeof destination != "string" || typeof origin != "string") throw new createHttpError.BadRequest("Parâmetros de origem e/ou destino inválidos.");
 
 	const db = await connectToDatabase(process.env.MONGODB_URI, "crm");
 	const collection: Collection<TDistance> = db.collection("distances");

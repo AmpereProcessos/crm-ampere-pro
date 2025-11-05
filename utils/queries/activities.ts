@@ -100,15 +100,7 @@ export function useActivitiesByPurchaseId({ purchaseId }: { purchaseId: string }
 	});
 }
 
-async function fetchActivities({
-	responsibleIds,
-	openOnly,
-	dueOnly,
-}: {
-	responsibleIds?: string[] | null;
-	openOnly?: boolean;
-	dueOnly?: boolean;
-}) {
+async function fetchActivities({ responsibleIds, openOnly, dueOnly }: { responsibleIds?: string[] | null; openOnly?: boolean; dueOnly?: boolean }) {
 	try {
 		const baseUrl = "/api/activities?";
 		const params = new URLSearchParams();
@@ -125,15 +117,7 @@ async function fetchActivities({
 	}
 }
 
-export function useActivities({
-	responsibleIds,
-	openOnly,
-	dueOnly,
-}: {
-	responsibleIds?: string[] | null;
-	openOnly?: boolean;
-	dueOnly?: boolean;
-}) {
+export function useActivities({ responsibleIds, openOnly, dueOnly }: { responsibleIds?: string[] | null; openOnly?: boolean; dueOnly?: boolean }) {
 	return useQuery({
 		queryKey: ["activities", responsibleIds, openOnly, dueOnly],
 		queryFn: async () => await fetchActivities({ responsibleIds, openOnly, dueOnly }),

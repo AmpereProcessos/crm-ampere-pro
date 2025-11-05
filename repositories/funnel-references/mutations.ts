@@ -33,10 +33,7 @@ type UpdateFunnelReferenceParams = {
 
 export async function updateFunnelReference({ collection, funnelReferenceId, newStageId, additionalUpdates }: UpdateFunnelReferenceParams) {
 	try {
-		const updateResponse = await collection.updateOne(
-			{ _id: new ObjectId(funnelReferenceId) },
-			{ $set: { idEstagioFunil: newStageId, ...additionalUpdates } },
-		);
+		const updateResponse = await collection.updateOne({ _id: new ObjectId(funnelReferenceId) }, { $set: { idEstagioFunil: newStageId, ...additionalUpdates } });
 		return updateResponse;
 	} catch (error) {
 		throw error;

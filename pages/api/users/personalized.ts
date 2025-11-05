@@ -69,11 +69,9 @@ const getUsersWithFiltersRoute: NextApiHandler<PostResponse> = async (req, res) 
 
 	const filters = UsersQueryFiltersSchema.parse(req.body);
 
-	const nameQuery: Filter<TUser>[] =
-		filters.name?.trim().length > 0 ? [{ nome: { $regex: filters.name, $options: "i" } }, { nome: filters.name }] : [];
+	const nameQuery: Filter<TUser>[] = filters.name?.trim().length > 0 ? [{ nome: { $regex: filters.name, $options: "i" } }, { nome: filters.name }] : [];
 
-	const emailQuery: Filter<TUser>[] =
-		filters.email?.trim().length > 0 ? [{ email: { $regex: filters.email, $options: "i" } }, { email: filters.email }] : [];
+	const emailQuery: Filter<TUser>[] = filters.email?.trim().length > 0 ? [{ email: { $regex: filters.email, $options: "i" } }, { email: filters.email }] : [];
 
 	const orQuery: Filter<TUser> = nameQuery.length > 0 || emailQuery.length > 0 ? { $or: [...nameQuery, ...emailQuery] } : {};
 

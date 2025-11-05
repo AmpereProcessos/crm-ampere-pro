@@ -71,7 +71,7 @@
     "jspdf": "^2.5.2",
     "jszip": "^3.10.1",
     "lodash": "^4.17.21",
-    "lucide-react": "^0.462.0",
+    "lucide-react": "^0.552.0",
     "mongodb": "^5.9.2",
     "nanoid": "^5.0.7",
     "next": "15.3.3",

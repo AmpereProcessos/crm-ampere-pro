@@ -235,18 +235,7 @@ export type TSimilarClientSimplifiedDTO = Pick<
 >;
 export type TSimilarClientSimplified = Pick<
 	TClient,
-	| "nome"
-	| "autor"
-	| "telefonePrimario"
-	| "email"
-	| "cpfCnpj"
-	| "cep"
-	| "uf"
-	| "cidade"
-	| "bairro"
-	| "endereco"
-	| "numeroOuIdentificador"
-	| "complemento"
+	"nome" | "autor" | "telefonePrimario" | "email" | "cpfCnpj" | "cep" | "uf" | "cidade" | "bairro" | "endereco" | "numeroOuIdentificador" | "complemento"
 >;
 export type TClientSimplified = Pick<
 	TClient,

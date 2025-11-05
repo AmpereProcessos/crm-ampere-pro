@@ -7,13 +7,10 @@ import type { TFunnelReference, TFunnelReferenceDTO } from "./funnel-reference.s
 import { OpportunityInteractionTypesEnum } from "./opportunity-history.schema";
 import type { TPartnerSimplifiedDTO } from "./partner.schema";
 import type { TProposal } from "./proposal.schema";
-export const ElectricalInstallationGroupsSchema = z.union(
-	[z.literal("RESIDENCIAL"), z.literal("COMERCIAL"), z.literal("INDUSTRIAL"), z.literal("RURAL")],
-	{
-		required_error: "Grupo da instalação elétrica não informado.",
-		invalid_type_error: "Tipo não válido para grupo da instalação elétrica.",
-	},
-);
+export const ElectricalInstallationGroupsSchema = z.union([z.literal("RESIDENCIAL"), z.literal("COMERCIAL"), z.literal("INDUSTRIAL"), z.literal("RURAL")], {
+	required_error: "Grupo da instalação elétrica não informado.",
+	invalid_type_error: "Tipo não válido para grupo da instalação elétrica.",
+});
 export type TElectricalInstallationGroups = z.infer<typeof ElectricalInstallationGroupsSchema>;
 
 const ElectricalInstallationLigationTypesSchema = z.union([z.literal("NOVA"), z.literal("EXISTENTE")], {
@@ -76,10 +73,7 @@ export const EmbeddedOpportunityClientSchema = z.object({
 		required_error: "Telefone do cliente não informado.",
 		invalid_type_error: "Tipo não válido para telefone do cliente.",
 	}),
-	email: z
-		.string({ required_error: "Email do cliente não informado.", invalid_type_error: "Tipo não válido para email do cliente." })
-		.optional()
-		.nullable(),
+	email: z.string({ required_error: "Email do cliente não informado.", invalid_type_error: "Tipo não válido para email do cliente." }).optional().nullable(),
 	canalAquisicao: z.string({
 		required_error: "Canal de aquisição do cliente não informado.",
 		invalid_type_error: "Tipo não válido para canal de aquisição do cliente.",
@@ -166,10 +160,7 @@ export const GeneralOpportunitySchema = z.object({
 			required_error: "Telefone do cliente não informado.",
 			invalid_type_error: "Tipo não válido para telefone do cliente.",
 		}),
-		email: z
-			.string({ required_error: "Email do cliente não informado.", invalid_type_error: "Tipo não válido para email do cliente." })
-			.optional()
-			.nullable(),
+		email: z.string({ required_error: "Email do cliente não informado.", invalid_type_error: "Tipo não válido para email do cliente." }).optional().nullable(),
 		canalAquisicao: z.string({
 			required_error: "Canal de aquisição do cliente não informado.",
 			invalid_type_error: "Tipo não válido para canal de aquisição do cliente.",

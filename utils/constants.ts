@@ -1,14 +1,5 @@
 import { easeBackInOut } from "d3-ease";
-import {
-	BsFiletypeCsv,
-	BsFiletypeDocx,
-	BsFiletypePdf,
-	BsFiletypeXlsx,
-	BsFiletypeXml,
-	BsFillPlayBtnFill,
-	BsImage,
-	BsPeopleFill,
-} from "react-icons/bs";
+import { BsFiletypeCsv, BsFiletypeDocx, BsFiletypePdf, BsFiletypeXlsx, BsFiletypeXml, BsFillPlayBtnFill, BsImage, BsPeopleFill } from "react-icons/bs";
 import { FiPhoneCall } from "react-icons/fi";
 import { IconType } from "react-icons/lib";
 import { TbReportSearch } from "react-icons/tb";

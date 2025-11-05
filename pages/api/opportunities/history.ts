@@ -39,8 +39,7 @@ const createOpportunityHistory: NextApiHandler<PostResponse> = async (req, res) 
 		info: opportunityHistory,
 		partnerId: partnerId || "",
 	});
-	if (!insertResponse.acknowledged)
-		throw new createHttpError.InternalServerError("Oops, houve um erro desconhecido na criação do histórico da oportunidade.");
+	if (!insertResponse.acknowledged) throw new createHttpError.InternalServerError("Oops, houve um erro desconhecido na criação do histórico da oportunidade.");
 	// If opportunity history is an interaction, updating the opportunity with the latest interaction
 	if (opportunityHistory.categoria === "INTERAÇÃO") {
 		await opportunitiesCollection.updateOne(

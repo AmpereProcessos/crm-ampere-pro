@@ -164,8 +164,7 @@ export async function getOpportunitiesKanbanView({ payload, session }: { payload
 	const opportunityTypesQuery: Filter<TOpportunity> = isOpportunityTypesDefined ? { "tipo.id": { $in: opportunityTypeIds } } : {};
 	const opportunityStatusQuery: Filter<TOpportunity> = OpportunityStatusesMap[status] || {};
 	const opportunitySegmentsQuery: Filter<TOpportunity> = isSegmentsDefined ? { segmento: { $in: segments } } : {};
-	const opportunityPeriodQuery: Filter<TOpportunity> =
-		isPeriodDefined && period.field ? { [period.field]: { $gte: period.after, $lte: period.before } } : {};
+	const opportunityPeriodQuery: Filter<TOpportunity> = isPeriodDefined && period.field ? { [period.field]: { $gte: period.after, $lte: period.before } } : {};
 	const opportunityFromMarketingQuery: Filter<TOpportunity> = isFromMarketing ? { idMarketing: { $ne: null } } : {};
 	const opportunityFromIndicationQuery: Filter<TOpportunity> = isFromIndication ? { idIndicacao: { $ne: null } } : {};
 	const opportunityCitiesQuery: Filter<TOpportunity> = isCitiesDefined ? { "localizacao.cidade": { $in: cities } } : {};

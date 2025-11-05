@@ -9,7 +9,9 @@ import React, { useState } from "react";
 import toast from "react-hot-toast";
 import OpportunityFunnelReference from "../Cards/OpportunityFunnelReference";
 import SelectInput from "../Inputs/SelectInput";
-
+import ResponsiveDialogDrawerSection from "../utils/ResponsiveDialogDrawerSection";
+import { Funnel, Plus, X } from "lucide-react";
+import { Button } from "../ui/button";
 type GetFunnelInfoParams = {
 	funnelId: TFunnelReferenceDTO["idFunil"];
 	funnels: TFunnelDTO[] | undefined;
@@ -114,31 +116,24 @@ function OpportunityFunnelReferencesBlock({ opportunity, setOpportunity }: Oppor
 		affectedQueryKey: ["opportunity-by-id", opportunity._id],
 	});
 	return (
-		<div className=" flex w-full flex-col gap-2">
-			<h1 className="w-full rounded-md bg-[#fead41] p-1 text-center text-sm font-medium text-primary-foreground">FUNIS</h1>
-			<div className="flex flex-col gap-2">
-				{opportunity.referenciasFunil.map((funnelReference, index) => (
-					<OpportunityFunnelReference
-						key={funnelReference._id}
-						reference={funnelReference}
-						referenceIndex={index}
-						funnels={funnels}
-						opportunity={opportunity}
-						setOpportunity={setOpportunity}
-					/>
-				))}
-			</div>
+		<ResponsiveDialogDrawerSection sectionTitleText="FUNIS" sectionTitleIcon={<Funnel className="w-4 h-4 min-w-4 min-h-4" />}>
+			{opportunity.referenciasFunil.map((funnelReference, index) => (
+				<OpportunityFunnelReference
+					key={funnelReference._id}
+					reference={funnelReference}
+					referenceIndex={index}
+					funnels={funnels}
+					opportunity={opportunity}
+					setOpportunity={setOpportunity}
+				/>
+			))}
 			{!!newFunnelReferencesOptions ? (
 				<>
 					<div className="flex w-full items-center justify-end">
-						<button
-							onClick={() => setNewFunnelReferenceMenuIsOpen((prev) => !prev)}
-							className={`${
-								newFunnelReferenceMenuIsOpen ? "bg-red-500 hover:bg-red-600" : "bg-green-500 hover:bg-green-600"
-							} rounded  p-1 px-4 text-xs font-medium text-primary-foreground duration-300 ease-in-out `}
-						>
-							{newFunnelReferenceMenuIsOpen ? "FECHAR" : "ADICIONAR FUNIL"}
-						</button>
+						<Button size={"xs"} variant="ghost" onClick={() => setNewFunnelReferenceMenuIsOpen((prev) => !prev)} className="flex items-center gap-1">
+							{newFunnelReferenceMenuIsOpen ? <X className="h-4 w-4 min-h-4 min-w-4" /> : <Plus className="h-4 w-4 min-h-4 min-w-4" />}
+							<p className="text-xs font-medium">{newFunnelReferenceMenuIsOpen ? "FECHAR" : "ADICIONAR FUNIL"}</p>
+						</Button>
 					</div>
 					{newFunnelReferenceMenuIsOpen ? (
 						<div className="flex w-full flex-col gap-2">
@@ -175,22 +170,23 @@ function OpportunityFunnelReferencesBlock({ opportunity, setOpportunity }: Oppor
 								</div>
 							</div>
 							<div className="flex w-full items-center justify-end">
-								<button
+								<Button
+									size={"xs"}
+									variant="ghost"
 									disabled={addNewFunnelReferencePending}
 									// @ts-ignore
 									onClick={() => handleAddNewOpportunityFunnelReference(newFunnelReference)}
-									className={
-										"rounded-sm bg-green-500 p-1 px-4 text-xs font-medium text-primary-foreground duration-300 ease-in-out disabled:bg-primary/50 enabled:hover:bg-green-600"
-									}
+									className="flex items-center gap-1"
 								>
-									ADICIONAR
-								</button>
+									<Plus className="h-4 w-4 min-h-4 min-w-4" />
+									<p className="text-xs font-medium">ADICIONAR</p>
+								</Button>
 							</div>
 						</div>
 					) : null}
 				</>
 			) : null}
-		</div>
+		</ResponsiveDialogDrawerSection>
 	);
 }
 

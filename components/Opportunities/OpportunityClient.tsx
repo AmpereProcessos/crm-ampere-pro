@@ -2,7 +2,7 @@ import type { TUserSession } from "@/lib/auth/session";
 import { formatDateAsLocale, formatLocation } from "@/lib/methods/formatting";
 import type { TClientDTO } from "@/utils/schemas/client.schema";
 import type { TOpportunity } from "@/utils/schemas/opportunity.schema";
-import { Accessibility, BriefcaseBusiness, Building2, Cake, Filter, Phone, User, UserRound } from "lucide-react";
+import { Accessibility, BriefcaseBusiness, Building2, Cake, Edit, Filter, Phone, User, UserRound } from "lucide-react";
 import { useState } from "react";
 import { AiFillEdit } from "react-icons/ai";
 import { BsCalendarPlus } from "react-icons/bs";
@@ -11,29 +11,37 @@ import { FaLocationDot, FaRegIdCard } from "react-icons/fa6";
 import { MdEmail } from "react-icons/md";
 import EditClient from "../Modals/Client/EditClient";
 import Avatar from "../utils/Avatar";
+import { Button } from "../ui/button";
 
 type OpportunityClientProps = {
-	opportunityId: string;
 	client: TClientDTO;
 	responsibles: TOpportunity["responsaveis"];
 	session: TUserSession;
+	callbacks?: {
+		onMutate?: () => void;
+		onSuccess?: () => void;
+		onError?: (error: Error) => void;
+		onSettled?: () => void;
+	};
 };
-function OpportunityClient({ opportunityId, client, responsibles, session }: OpportunityClientProps) {
+function OpportunityClient({ client, responsibles, session, callbacks }: OpportunityClientProps) {
 	const [editModalIsOpen, setEditModalIsOpen] = useState<boolean>(false);
 	const userScope = session.user.permissoes.clientes.escopo;
 	const userHasClientEditPermission = !userScope || userScope.includes(client.autor.id) || responsibles.some((r) => userScope.includes(r.id));
 	return (
-		<div className="flex h-[450px] w-full flex-col rounded-md border border-primary/30 bg-background p-3 shadow-lg lg:h-[300px]">
-			<div className="flex h-[40px] items-center justify-between border-b border-primary/30 pb-2">
-				<h1 className="font-bold text-primary">Dados do Cliente</h1>
-				{userHasClientEditPermission ? (
-					<button type="button" onClick={() => setEditModalIsOpen(true)} className="text-md text-primary/40 duration-300 ease-in-out hover:text-blue-800">
-						<AiFillEdit />
-					</button>
-				) : null}
+		<div className={"bg-card border-primary/20 flex w-full h-full flex-col gap-1 rounded-xl border px-3 py-4 shadow-xs"}>
+			<div className="flex items-center justify-between">
+				<h1 className="text-xs font-bold tracking-tight uppercase">DADOS DO CLIENTE</h1>
+				<div className="flex items-center gap-2">
+					{userHasClientEditPermission ? (
+						<Button onClick={() => setEditModalIsOpen(true)} variant="ghost" size={"xs"} className="flex items-center gap-1">
+							<Edit className="h-4 w-4 min-h-4 min-w-4" />
+							<p className="text-xs font-medium">EDITAR</p>
+						</Button>
+					) : null}
+				</div>
 			</div>
-
-			<div className="mt-3 flex w-full grow flex-col gap-2">
+			<div className="flex w-full grow flex-col gap-2">
 				<div className="flex w-full flex-col items-center justify-between gap-2 lg:flex-row">
 					<div className="flex flex-col items-center gap-1 lg:items-start">
 						<p className="text-[0.65rem] font-medium text-primary/70">GERAIS</p>
@@ -172,13 +180,7 @@ function OpportunityClient({ opportunityId, client, responsibles, session }: Opp
 				</div>
 			</div>
 			{editModalIsOpen ? (
-				<EditClient
-					clientId={client._id}
-					session={session}
-					partnerId={client.idParceiro}
-					closeModal={() => setEditModalIsOpen(false)}
-					additionalAffectedQuery={["opportunity-by-id", opportunityId]}
-				/>
+				<EditClient clientId={client._id} session={session} partnerId={client.idParceiro} closeModal={() => setEditModalIsOpen(false)} callbacks={callbacks} />
 			) : null}
 		</div>
 	);

@@ -4,14 +4,8 @@ import { TProjectDTO } from "./project.schema";
 
 const RevenueProjectReference = z.object({
 	id: z.string({ required_error: "ID do projeto não informado.", invalid_type_error: "Tipo não válido para o ID do projeto." }).optional().nullable(),
-	nome: z
-		.string({ required_error: "Nome do projeto não informado.", invalid_type_error: "Tipo não válido para o nome do projeto." })
-		.optional()
-		.nullable(),
-	tipo: z
-		.string({ required_error: "Tipo do projeto não informado.", invalid_type_error: "Tipo não válido para o tipo do projeto." })
-		.optional()
-		.nullable(),
+	nome: z.string({ required_error: "Nome do projeto não informado.", invalid_type_error: "Tipo não válido para o nome do projeto." }).optional().nullable(),
+	tipo: z.string({ required_error: "Tipo do projeto não informado.", invalid_type_error: "Tipo não válido para o tipo do projeto." }).optional().nullable(),
 	indexador: z
 		.number({ required_error: "Indexador do projeto não informado.", invalid_type_error: "Tipo não válido para o indexador do projeto." })
 		.optional()
@@ -90,13 +84,10 @@ export const GeneralRevenueSchema = z.object({
 		.string({ required_error: "Título da receita não informada.", invalid_type_error: "Tipo não válido para o título da receita." })
 		.min(5, "Preencha um título de ao menos 5 caracteres."),
 	anotacoes: z.string({ required_error: "Anotações da receita não informada.", invalid_type_error: "Tipo não válido para as anotações da receita." }),
-	categorias: z.array(
-		z.string({ required_error: "Categoria da receita não informada.", invalid_type_error: "Tipo não válido para a categoria da receita." }),
-		{
-			required_error: "Lista de categorias da receita não informada.",
-			invalid_type_error: "Tipo não válido para a lista de categorias da receita.",
-		},
-	),
+	categorias: z.array(z.string({ required_error: "Categoria da receita não informada.", invalid_type_error: "Tipo não válido para a categoria da receita." }), {
+		required_error: "Lista de categorias da receita não informada.",
+		invalid_type_error: "Tipo não válido para a lista de categorias da receita.",
+	}),
 	projeto: RevenueProjectReference,
 	composicao: z.array(RevenueCompositionItem, {
 		required_error: "Lista dos itens de composição da receita não informada.",
@@ -119,13 +110,10 @@ export const InsertRevenueSchema = z.object({
 		.string({ required_error: "Título da receita não informada.", invalid_type_error: "Tipo não válido para o título da receita." })
 		.min(5, "Preencha um título de ao menos 5 caracteres."),
 	anotacoes: z.string({ required_error: "Anotações da receita não informada.", invalid_type_error: "Tipo não válido para as anotações da receita." }),
-	categorias: z.array(
-		z.string({ required_error: "Categoria da receita não informada.", invalid_type_error: "Tipo não válido para a categoria da receita." }),
-		{
-			required_error: "Lista de categorias da receita não informada.",
-			invalid_type_error: "Tipo não válido para a lista de categorias da receita.",
-		},
-	),
+	categorias: z.array(z.string({ required_error: "Categoria da receita não informada.", invalid_type_error: "Tipo não válido para a categoria da receita." }), {
+		required_error: "Lista de categorias da receita não informada.",
+		invalid_type_error: "Tipo não válido para a lista de categorias da receita.",
+	}),
 	projeto: RevenueProjectReference,
 	composicao: z.array(RevenueCompositionItem, {
 		required_error: "Lista dos itens de composição da receita não informada.",

@@ -1,5 +1,5 @@
 import type { TGetClientsRouteOutput } from "@/app/api/clients/route";
-import type {TGetClientsByFiltersRouteInput, TGetClientsByPersonalizedFiltersOutput, TGetSimilarClientsRouteOutput } from "@/app/api/clients/search/route";
+import type { TGetClientsByFiltersRouteInput, TGetClientsByPersonalizedFiltersOutput, TGetSimilarClientsRouteOutput } from "@/app/api/clients/search/route";
 import { TGetVinculationClientInput, TGetVinculationClientOutput } from "@/app/api/clients/vinculate/route";
 import { useDebounceMemo } from "@/lib/hooks";
 import { formatWithoutDiacritics } from "@/lib/methods/formatting";
@@ -7,7 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import type { Filter } from "mongodb";
 import { useState } from "react";
-import type { TClient, TClientDTO,  } from "../schemas/client.schema";
+import type { TClient, TClientDTO } from "../schemas/client.schema";
 
 type SearchClientsParams = {
 	cpfCnpj: string;
@@ -16,9 +16,7 @@ type SearchClientsParams = {
 };
 
 async function searchClients({ cpfCnpj, phoneNumber, email }: SearchClientsParams) {
-	const { data }: { data: TGetSimilarClientsRouteOutput } = await axios.get(
-		`/api/clients/search?cpfCnpj=${cpfCnpj}&phoneNumber=${phoneNumber}&email=${email}`,
-	);
+	const { data }: { data: TGetSimilarClientsRouteOutput } = await axios.get(`/api/clients/search?cpfCnpj=${cpfCnpj}&phoneNumber=${phoneNumber}&email=${email}`);
 	return data.data.similarClients;
 }
 
@@ -43,10 +41,13 @@ async function fetchClientById({ id }: { id: string }) {
 }
 
 export function useClientById({ id }: { id: string }) {
-	return {...useQuery({
+	return {
+		...useQuery({
+			queryKey: ["client", id],
+			queryFn: async () => await fetchClientById({ id }),
+		}),
 		queryKey: ["client", id],
-		queryFn: async () => await fetchClientById({ id }),
-	}), queryKey: ["client", id]};
+	};
 }
 
 async function fetchClients({ author }: { author: string | null }) {
@@ -91,10 +92,9 @@ export function useClients({ author }: { author: string | null }) {
 	};
 }
 
-
 async function fetchClientsByPersonalizedFilters(input: TGetClientsByFiltersRouteInput) {
-	const { data }= await axios.post<TGetClientsByPersonalizedFiltersOutput>(`/api/clients/search`, input);
-	return data.data
+	const { data } = await axios.post<TGetClientsByPersonalizedFiltersOutput>(`/api/clients/search`, input);
+	return data.data;
 }
 
 type UseClientsByPersonalizedFiltersParams = {
@@ -111,7 +111,7 @@ export function useClientsByPersonalizedFilters({ initialFilters }: UseClientsBy
 	});
 
 	function updateFilters(changes: Partial<TGetClientsByFiltersRouteInput>) {
-		setFilters(prev => ({ ...prev, ...changes }));
+		setFilters((prev) => ({ ...prev, ...changes }));
 	}
 
 	const debouncedSearch = useDebounceMemo({ search: filters.search ?? "" }, 500);
@@ -120,12 +120,15 @@ export function useClientsByPersonalizedFilters({ initialFilters }: UseClientsBy
 		...filters,
 		...debouncedSearch,
 	};
-	return {...useQuery({
+	return {
+		...useQuery({
+			queryKey: ["clients-by-personalized-filters", finalFilters],
+			queryFn: async () => fetchClientsByPersonalizedFilters(finalFilters),
+		}),
 		queryKey: ["clients-by-personalized-filters", finalFilters],
-		queryFn: async () => fetchClientsByPersonalizedFilters(finalFilters),
-	}),
-	queryKey: ["clients-by-personalized-filters", finalFilters],
-	updateFilters, filters};	
+		updateFilters,
+		filters,
+	};
 }
 
 async function fetchVinculationClient(input: TGetVinculationClientInput) {

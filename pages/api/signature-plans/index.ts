@@ -81,8 +81,7 @@ const editSignaturePlan: NextApiHandler<PutResponse> = async (req, res) => {
 
 	if (updateResponse.matchedCount == 0) throw new createHttpError.NotFound("Nenhum plano não encontrado.");
 
-	if (!updateResponse.acknowledged)
-		throw new createHttpError.InternalServerError("Oops, houve um erro desconhecido na atualização do plano de assinatura.");
+	if (!updateResponse.acknowledged) throw new createHttpError.InternalServerError("Oops, houve um erro desconhecido na atualização do plano de assinatura.");
 	return res.status(201).json({ data: "Plano de assinatura alterado com sucesso !", message: "Plano de assinatura alterado com sucesso !" });
 };
 

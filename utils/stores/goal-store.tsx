@@ -36,10 +36,7 @@ export type TGoalStore = {
 	updateGoalValues: (values: Partial<TGoalState["objetivo"]>) => void;
 	addUser: (user: TGoalState["usuarios"][number]) => void;
 	removeUser: (userIndex: number) => void;
-	updateUser: (payload: {
-		index: number;
-		change: Partial<TGoalState["usuarios"][number]>;
-	}) => void;
+	updateUser: (payload: { index: number; change: Partial<TGoalState["usuarios"][number]> }) => void;
 	setUsers: (users: TGoalState["usuarios"]) => void;
 	getGoal: () => TGoalState;
 	clearGoal: () => void;

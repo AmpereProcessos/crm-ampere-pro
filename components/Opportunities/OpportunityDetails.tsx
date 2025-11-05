@@ -22,6 +22,8 @@ import { ConsumerUnitHolderType, ElectricalInstallationGroups } from "@/utils/se
 import SelectWithImages from "../Inputs/SelectWithImages";
 import OpportunityFunnelReferencesBlock from "./OpportunityFunnelReferencesBlock";
 import OpportunityResponsiblesBlock from "./OpportunityResponsiblesBlock";
+import ResponsiveDialogDrawerSection from "../utils/ResponsiveDialogDrawerSection";
+import { Building2, MapPin, Tag, UserRound } from "lucide-react";
 type DetailsBlockType = {
 	info: TOpportunityDTOWithClientAndPartnerAndFunnelReferences;
 	session: TUserSession;
@@ -58,12 +60,12 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 		setInfoHolder(info);
 	}, [info]);
 	return (
-		<div className="flex w-full flex-col gap-6 lg:flex-row">
-			<div className="flex w-full flex-col rounded-md border border-primary/30 bg-background p-3 shadow-lg">
-				<div className="flex h-[40px] items-center justify-between border-b border-primary/30 pb-2">
-					<h1 className="font-bold text-primary">Detalhes</h1>
-				</div>
-				<div className="mt-3 flex w-full flex-col gap-2">
+		<div className={"bg-card border-primary/20 flex w-full h-full flex-col gap-1 rounded-xl border px-3 py-4 shadow-xs"}>
+			<div className="flex items-center justify-between">
+				<h1 className="text-xs font-bold tracking-tight uppercase">DETALHES</h1>
+			</div>
+			<div className="flex w-full grow flex-col gap-2">
+				<ResponsiveDialogDrawerSection sectionTitleText="DADOS DA OPORTUNIDADE" sectionTitleIcon={<Tag className="w-4 h-4 min-w-4 min-h-4" />}>
 					<div className="flex w-full gap-2">
 						<div className="grow">
 							<TextInput
@@ -214,15 +216,16 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 							/>
 						</button>
 					</div>
-					<OpportunityResponsiblesBlock
-						opportunityId={opportunityId}
-						infoHolder={infoHolder}
-						setInfoHolder={setInfoHolder}
-						session={session}
-						handleUpdateOpportunity={handleUpdateOpportunity}
-					/>
-					<OpportunityFunnelReferencesBlock opportunity={infoHolder} setOpportunity={setInfoHolder} />
-					<h1 className="w-full rounded-md bg-[#fead41] p-1 text-center text-sm font-medium text-primary-foreground">DADOS DA LOCALIZAÇÃO</h1>
+				</ResponsiveDialogDrawerSection>
+				<OpportunityResponsiblesBlock
+					opportunityId={opportunityId}
+					infoHolder={infoHolder}
+					setInfoHolder={setInfoHolder}
+					session={session}
+					handleUpdateOpportunity={handleUpdateOpportunity}
+				/>
+				<OpportunityFunnelReferencesBlock opportunity={infoHolder} setOpportunity={setInfoHolder} />
+				<ResponsiveDialogDrawerSection sectionTitleText="DADOS DA LOCALIZAÇÃO" sectionTitleIcon={<MapPin className="w-4 h-4 min-w-4 min-h-4" />}>
 					<div className="flex w-full gap-2">
 						<div className="flex grow items-center gap-1">
 							<div className="w-1/3">
@@ -430,7 +433,9 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 							/>
 						</button>
 					</div>
-					<h1 className="w-full rounded-md bg-[#fead41] p-1 text-center text-sm font-medium text-primary-foreground">DADOS ADICIONAIS DO CLIENTE</h1>
+				</ResponsiveDialogDrawerSection>
+
+				<ResponsiveDialogDrawerSection sectionTitleText="DADOS ADICIONAIS DO CLIENTE" sectionTitleIcon={<UserRound className="w-4 h-4 min-w-4 min-h-4" />}>
 					<div className="flex w-full gap-2">
 						<div className="grow">
 							<TextInput
@@ -714,7 +719,9 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 							/>
 						</button>
 					</div>
-					<h1 className="w-full rounded-md bg-[#fead41] p-1 text-center text-sm font-medium text-primary-foreground">DADOS DA INSTALAÇÃO</h1>
+				</ResponsiveDialogDrawerSection>
+
+				<ResponsiveDialogDrawerSection sectionTitleText="DADOS DA INSTALAÇÃO" sectionTitleIcon={<Building2 className="w-4 h-4 min-w-4 min-h-4" />}>
 					<div className="flex w-full gap-2">
 						<div className="grow">
 							<TextInput
@@ -1009,7 +1016,7 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 							/>
 						</button>
 					</div>
-				</div>
+				</ResponsiveDialogDrawerSection>
 			</div>
 		</div>
 	);

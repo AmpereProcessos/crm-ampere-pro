@@ -1,10 +1,12 @@
 "use client";
-import { useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Share2 } from "lucide-react";
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { BsCalendarPlus, BsCalendarX, BsCode, BsFillMegaphoneFill } from "react-icons/bs";
 import { MdDelete } from "react-icons/md";
 import type { TUserSession } from "@/lib/auth/session";
+import { getErrorMessage } from "@/lib/methods/errors";
 import { formatDateAsLocale, formatNameAsInitials } from "@/lib/methods/formatting";
 import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
 import { deleteOpportunity } from "@/utils/mutations/opportunities";
@@ -32,21 +34,38 @@ type OpportunityPageProps = {
 };
 function OpportunityPage({ session, opportunityId }: OpportunityPageProps) {
 	const queryClient = useQueryClient();
-	const [blockMode, setBlockMode] = useState<TOpportunityBlockMode>("PROPOSES");
 	const {
 		data: opportunity,
+		queryKey,
 		status,
 		isLoading: opportunityLoading,
 		isSuccess: opportunitySuccess,
 		isError: opportunityError,
 	} = useOpportunityById({ opportunityId: opportunityId });
+	const handleOnMutate = async () => await queryClient.cancelQueries({ queryKey });
+	const handleOnSettled = async () => await queryClient.invalidateQueries({ queryKey });
 
-	const { mutate: mutateDeleteOpportunity, isPending } = useMutationWithFeedback({
-		mutationKey: ["deleteOpportunity", opportunityId],
+	const { mutate: mutateDeleteOpportunity, isPending } = useMutation({
+		mutationKey: ["delete-opportunity", opportunityId],
 		mutationFn: deleteOpportunity,
-		queryClient: queryClient,
-		affectedQueryKey: ["opportunity-by-id", opportunityId],
+		onMutate: async () => {
+			await handleOnMutate();
+			return;
+		},
+		onSuccess: async (data) => {
+			await handleOnSettled();
+			return toast.success(data);
+		},
+		onSettled: async () => {
+			await handleOnSettled();
+			return;
+		},
+		onError: async (error) => {
+			toast.error(getErrorMessage(error));
+			return;
+		},
 	});
+
 	if (opportunityLoading) return <LoadingComponent />;
 	if (opportunityError)
 		return (
@@ -136,10 +155,8 @@ function OpportunityPage({ session, opportunityId }: OpportunityPageProps) {
 								{opportunity.ganho.data ? null : (
 									<OpportunityLossBlock
 										opportunityId={opportunity._id}
-										opportunityIsLost={!!opportunity.perda.data}
-										opportunityLossDate={opportunity.perda.data}
-										idMarketing={opportunity.idMarketing}
-										opportunityEmail={opportunity.cliente?.email}
+										opportunityLossDate={opportunity.perda.data || undefined}
+										callbacks={{ onMutate: handleOnMutate, onSettled: handleOnSettled }}
 									/>
 								)}
 							</div>
@@ -164,7 +181,6 @@ function OpportunityPage({ session, opportunityId }: OpportunityPageProps) {
 									session={session}
 									opportunityId={opportunity._id ? opportunity._id : ""}
 									idActiveProposal={opportunity.idPropostaAtiva || undefined}
-									setBlockMode={setBlockMode}
 									opportunityHasContractRequested={!!opportunity.ganho.dataSolicitacao}
 									opportunityIsWon={!!opportunity.ganho.data}
 									opportunityWonProposalId={opportunity.ganho.idProposta}

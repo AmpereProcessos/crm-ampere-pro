@@ -75,8 +75,7 @@ const editPurchaseRoute: NextApiHandler<PutResponse> = async (req, res) => {
 	const collection: Collection<TPurchase> = db.collection("purchases");
 
 	const updateResponse = await updatePurchase({ id, collection, changes, query: partnerQuery });
-	if (!updateResponse.acknowledged)
-		throw new createHttpError.InternalServerError("Oops, houve um erro desconhecido ao atualizar o registro de compra.");
+	if (!updateResponse.acknowledged) throw new createHttpError.InternalServerError("Oops, houve um erro desconhecido ao atualizar o registro de compra.");
 	if (updateResponse.matchedCount == 0) throw new createHttpError.NotFound("Registro de compra não encontrado.");
 
 	return res.status(201).json({ data: "Registro de compra atualizado com sucesso !", message: "Registro de compra atualizado com sucesso !" });

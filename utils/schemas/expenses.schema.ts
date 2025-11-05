@@ -4,14 +4,8 @@ import { TProjectDTO } from "./project.schema";
 
 const ExpenseProjectReference = z.object({
 	id: z.string({ required_error: "ID do projeto não informado.", invalid_type_error: "Tipo não válido para o ID do projeto." }).optional().nullable(),
-	nome: z
-		.string({ required_error: "Nome do projeto não informado.", invalid_type_error: "Tipo não válido para o nome do projeto." })
-		.optional()
-		.nullable(),
-	tipo: z
-		.string({ required_error: "Tipo do projeto não informado.", invalid_type_error: "Tipo não válido para o tipo do projeto." })
-		.optional()
-		.nullable(),
+	nome: z.string({ required_error: "Nome do projeto não informado.", invalid_type_error: "Tipo não válido para o nome do projeto." }).optional().nullable(),
+	tipo: z.string({ required_error: "Tipo do projeto não informado.", invalid_type_error: "Tipo não válido para o tipo do projeto." }).optional().nullable(),
 	indexador: z
 		.number({ required_error: "Indexador do projeto não informado.", invalid_type_error: "Tipo não válido para o indexador do projeto." })
 		.optional()
@@ -83,13 +77,10 @@ const GeneralExpenseSchema = z.object({
 		.string({ required_error: "Título da despesa não informada.", invalid_type_error: "Tipo não válido para o título da despesa." })
 		.min(5, "Preencha um título de ao menos 5 caracteres."),
 	anotacoes: z.string({ required_error: "Anotações da despesa não informada.", invalid_type_error: "Tipo não válido para as anotações da despesa." }),
-	categorias: z.array(
-		z.string({ required_error: "Categoria da despesa não informada.", invalid_type_error: "Tipo não válido para a categoria da despesa." }),
-		{
-			required_error: "Lista de categorias da despesa não informada.",
-			invalid_type_error: "Tipo não válido para a lista de categorias da despesa.",
-		},
-	),
+	categorias: z.array(z.string({ required_error: "Categoria da despesa não informada.", invalid_type_error: "Tipo não válido para a categoria da despesa." }), {
+		required_error: "Lista de categorias da despesa não informada.",
+		invalid_type_error: "Tipo não válido para a lista de categorias da despesa.",
+	}),
 	projeto: ExpenseProjectReference,
 	composicao: z.array(ExpenseCompositionItem, {
 		required_error: "Lista dos itens de composição da despesa não informada.",
@@ -116,13 +107,10 @@ export const InsertExpenseSchema = z.object({
 		.string({ required_error: "Título da despesa não informada.", invalid_type_error: "Tipo não válido para o título da despesa." })
 		.min(5, "Preencha um título de ao menos 5 caracteres."),
 	anotacoes: z.string({ required_error: "Anotações da despesa não informada.", invalid_type_error: "Tipo não válido para as anotações da despesa." }),
-	categorias: z.array(
-		z.string({ required_error: "Categoria da despesa não informada.", invalid_type_error: "Tipo não válido para a categoria da despesa." }),
-		{
-			required_error: "Lista de categorias da despesa não informada.",
-			invalid_type_error: "Tipo não válido para a lista de categorias da despesa.",
-		},
-	),
+	categorias: z.array(z.string({ required_error: "Categoria da despesa não informada.", invalid_type_error: "Tipo não válido para a categoria da despesa." }), {
+		required_error: "Lista de categorias da despesa não informada.",
+		invalid_type_error: "Tipo não válido para a lista de categorias da despesa.",
+	}),
 	projeto: ExpenseProjectReference,
 	composicao: z.array(ExpenseCompositionItem, {
 		required_error: "Lista dos itens de composição da despesa não informada.",

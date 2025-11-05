@@ -211,14 +211,7 @@ type GetInstallationCostParams = {
 	uf?: string | null;
 	installationCostFromTechnicalAnalysis: number;
 };
-function getInstallationCost({
-	willChangeLocal,
-	peakPower,
-	distance,
-	distanceNewLocal,
-	uf,
-	installationCostFromTechnicalAnalysis,
-}: GetInstallationCostParams) {
+function getInstallationCost({ willChangeLocal, peakPower, distance, distanceNewLocal, uf, installationCostFromTechnicalAnalysis }: GetInstallationCostParams) {
 	if (installationCostFromTechnicalAnalysis) return installationCostFromTechnicalAnalysis;
 	if (willChangeLocal) {
 		// Peak system power must be in kilowatts
@@ -274,14 +267,7 @@ type GetStructureCostParams = {
 	peakPower: number;
 	moduleQty: number;
 };
-function getStructureCost({
-	willChangeLocal,
-	structureCostFromTechnicalAnalysis,
-	structureType,
-	city,
-	peakPower,
-	moduleQty,
-}: GetStructureCostParams) {
+function getStructureCost({ willChangeLocal, structureCostFromTechnicalAnalysis, structureType, city, peakPower, moduleQty }: GetStructureCostParams) {
 	if (structureCostFromTechnicalAnalysis) {
 		return structureCostFromTechnicalAnalysis;
 	}

@@ -17,12 +17,8 @@ const updateObjectSchema = z.object({
 		invalid_type_error: "Tipo de operação inválido.",
 		required_error: "Tipo de operação não informado ou inválido.",
 	}),
-	proposalId: z
-		.string({ required_error: "ID da proposta não informado ou inválido.", invalid_type_error: "Tipo do ID da proposta inválido." })
-		.optional(),
-	projectId: z
-		.string({ required_error: "ID do projeto não informado ou inválido.", invalid_type_error: "Tipo do ID do projeto inválido." })
-		.optional(),
+	proposalId: z.string({ required_error: "ID da proposta não informado ou inválido.", invalid_type_error: "Tipo do ID da proposta inválido." }).optional(),
+	projectId: z.string({ required_error: "ID do projeto não informado ou inválido.", invalid_type_error: "Tipo do ID do projeto inválido." }).optional(),
 	signingDate: z
 		.string({
 			required_error: "Data de assinatura não informada ou inválido.",

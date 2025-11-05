@@ -70,10 +70,7 @@ const getTechnicalAnalysisByPersonalizedFilters: NextApiHandler<PostResponse> = 
 	const insertionQuery: Filter<TTechnicalAnalysis> =
 		after != "null" && before != "null"
 			? {
-					$and: [
-						{ dataInsercao: { $gte: formatDateQuery(after, "start") as string } },
-						{ dataInsercao: { $lte: formatDateQuery(before, "end") as string } },
-					],
+					$and: [{ dataInsercao: { $gte: formatDateQuery(after, "start") as string } }, { dataInsercao: { $lte: formatDateQuery(before, "end") as string } }],
 				}
 			: {};
 	const applicantQuery: Filter<TTechnicalAnalysis> = applicants ? { "requerente.id": { $in: applicants } } : {};

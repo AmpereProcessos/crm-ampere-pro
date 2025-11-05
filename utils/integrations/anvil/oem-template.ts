@@ -11,12 +11,7 @@ type GetTemplateDataParams = {
 export function getOeMTemplateData({ opportunity, proposal }: GetTemplateDataParams) {
 	const seller = opportunity.responsaveis.find((r) => r.papel == "VENDEDOR");
 	const sdr = opportunity.responsaveis.find((r) => r.papel == "SDR");
-	const estimatedGeneration = getEstimatedGen(
-		proposal.premissas.potenciaPico || 0,
-		opportunity.localizacao.cidade,
-		opportunity.localizacao.uf,
-		"NORTE",
-	);
+	const estimatedGeneration = getEstimatedGen(proposal.premissas.potenciaPico || 0, opportunity.localizacao.cidade, opportunity.localizacao.uf, "NORTE");
 	const annualLoss = 12 * (1 - (proposal.premissas.eficienciaGeracao || 0) / 100) * estimatedGeneration * (proposal.premissas.tarifaEnergia || 0);
 	function getPricing(plans: TProposal["planos"]) {
 		const manutencaoSimples = plans.find((p) => p.nome == "MANUTENÇÃO SIMPLES")?.valor || 0;

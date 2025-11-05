@@ -27,14 +27,7 @@ export type TInverter = z.infer<typeof InverterSchema>;
 
 export const ProductItemSchema = z.object({
 	id: z.string({ invalid_type_error: "Tipo não válido para ID do módulo." }).optional().nullable(),
-	categoria: z.union([
-		z.literal("MÓDULO"),
-		z.literal("INVERSOR"),
-		z.literal("INSUMO"),
-		z.literal("ESTRUTURA"),
-		z.literal("PADRÃO"),
-		z.literal("OUTROS"),
-	]),
+	categoria: z.union([z.literal("MÓDULO"), z.literal("INVERSOR"), z.literal("INSUMO"), z.literal("ESTRUTURA"), z.literal("PADRÃO"), z.literal("OUTROS")]),
 	fabricante: z.string({
 		required_error: "Fabricante do produto não informado.",
 		invalid_type_error: "Tipo não válido para o fabricante do produto.",
@@ -46,10 +39,7 @@ export const ProductItemSchema = z.object({
 		.optional()
 		.nullable(),
 	garantia: z.number({ required_error: "Garantia do produto não informada.", invalid_type_error: "Tipo não válido para a garantia do produto." }),
-	valor: z
-		.number({ required_error: "Valor do produto não informado.", invalid_type_error: "Tipo não válido para o valor do produto." })
-		.optional()
-		.nullable(),
+	valor: z.number({ required_error: "Valor do produto não informado.", invalid_type_error: "Tipo não válido para o valor do produto." }).optional().nullable(),
 });
 export type TProductItem = z.infer<typeof ProductItemSchema>;
 
@@ -58,10 +48,7 @@ export const ServiceItemSchema = z.object({
 	descricao: z.string({ required_error: "Descrição do serviço não informada.", invalid_type_error: "Tipo não válido para a descrição do serviço." }),
 	observacoes: z.string({ required_error: "Observações do serviço não informadas.", invalid_type_error: "Tipo não válido para observações " }),
 	garantia: z.number({ required_error: "Garantia do serviço não fornecida.", invalid_type_error: "Tipo não válido para garantia do serviço." }),
-	valor: z
-		.number({ required_error: "Valor do serviço não informado.", invalid_type_error: "Tipo não válido para o valor do serviço." })
-		.optional()
-		.nullable(),
+	valor: z.number({ required_error: "Valor do serviço não informado.", invalid_type_error: "Tipo não válido para o valor do serviço." }).optional().nullable(),
 });
 
 export type TServiceItem = z.infer<typeof ServiceItemSchema>;
@@ -89,10 +76,7 @@ export const InsertNewKitSchema = z.object({
 	nome: z
 		.string({ required_error: "Nome do kit não informado.", invalid_type_error: "Tipo não válido para o nome do kit." })
 		.min(3, "É necessário que o nome do kit tenha ao menos 3 letras."),
-	idParceiro: z
-		.string({ required_error: "ID do parceiro não informado.", invalid_type_error: "Tipo não válido para o ID do parceiro." })
-		.optional()
-		.nullable(),
+	idParceiro: z.string({ required_error: "ID do parceiro não informado.", invalid_type_error: "Tipo não válido para o ID do parceiro." }).optional().nullable(),
 	idMetodologiaPrecificacao: PricingMethodologyReferenceSchema,
 	idsMetodologiasPagamento: z.array(PaymentMethodReferenceSchema),
 	ativo: z.boolean({
@@ -129,10 +113,7 @@ export const KitDTOSchema = z.object({
 	nome: z
 		.string({ required_error: "Nome do kit não informado.", invalid_type_error: "Tipo não válido para o nome do kit." })
 		.min(3, "É necessário que o nome do kit tenha ao menos 3 letras."),
-	idParceiro: z
-		.string({ required_error: "ID do parceiro não informado.", invalid_type_error: "Tipo não válido para o ID do parceiro." })
-		.optional()
-		.nullable(),
+	idParceiro: z.string({ required_error: "ID do parceiro não informado.", invalid_type_error: "Tipo não válido para o ID do parceiro." }).optional().nullable(),
 	idMetodologiaPrecificacao: PricingMethodologyReferenceSchema,
 	idsMetodologiasPagamento: z.array(PaymentMethodReferenceSchema),
 	ativo: z.boolean({

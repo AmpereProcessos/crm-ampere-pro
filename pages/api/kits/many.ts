@@ -54,8 +54,7 @@ const updateKits: NextApiHandler<PutResponse> = async (req, res) => {
 	});
 	const filteredBulkwriteArr = bulkwriteArr.filter((o) => !!o);
 
-	if (filteredBulkwriteArr.length == 0)
-		return res.status(201).json({ data: "Operação concluída com sucesso!", message: "Operação concluída com sucesso!" });
+	if (filteredBulkwriteArr.length == 0) return res.status(201).json({ data: "Operação concluída com sucesso!", message: "Operação concluída com sucesso!" });
 	// @ts-ignore
 	const bulkwriteResponse = await kitsCollection.bulkWrite(filteredBulkwriteArr);
 

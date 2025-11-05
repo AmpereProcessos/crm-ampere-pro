@@ -1,9 +1,5 @@
 import { stateCities } from "../estados_cidades";
-import {
-	TElectricalInstallationGroups,
-	TElectricalInstallationLigationTypes,
-	TElectricalInstallationOwnerTypes,
-} from "../schemas/opportunity.schema";
+import { TElectricalInstallationGroups, TElectricalInstallationLigationTypes, TElectricalInstallationOwnerTypes } from "../schemas/opportunity.schema";
 import { ConsumerUnitHolderType, ConsumerUnitLigationType, ElectricalInstallationGroups } from "../select-options";
 
 const States = Object.keys(stateCities).map((k, index) => ({ id: index + 1, label: k, value: k }));

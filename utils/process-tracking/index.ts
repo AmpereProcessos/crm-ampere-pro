@@ -49,8 +49,7 @@ export const AllProcessTracked = {
 		{
 			id: "supplementation_order",
 			processo: "COMPRA DE PRODUTOS",
-			descricao:
-				"Processo de compra dos equipamentos ou produtos do projeto. Compreende o período entre a data de liberação para compra até a data do pedido.",
+			descricao: "Processo de compra dos equipamentos ou produtos do projeto. Compreende o período entre a data de liberação para compra até a data do pedido.",
 		},
 		{
 			id: "supplementation_delivery",
@@ -82,8 +81,7 @@ export const AllProcessTracked = {
 		{
 			id: "homologation_vistory_request",
 			processo: "SOLICITAÇÃO DE VISTORIA",
-			descricao:
-				"Processo de solicitação de vistoria a concessionária. Refere-se ao tempo necessário, uma vez concluída a obra, para o pedido de vistoria.",
+			descricao: "Processo de solicitação de vistoria a concessionária. Refere-se ao tempo necessário, uma vez concluída a obra, para o pedido de vistoria.",
 		},
 		{
 			id: "homologation_vistory_approval",

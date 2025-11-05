@@ -679,13 +679,7 @@ export const PaymentMethods = [
 	{ id: 7, label: "FINANCIAMENTO", value: "FINANCIAMENTO", apportionment: true, modality: "COMPOSTOS" },
 ];
 
-export const ProjectObservationTopics: TProject["observacoes"][number]["assunto"][] = [
-	"SERVIÇOS",
-	"PRODUTOS",
-	"NEGOCIAÇÃO",
-	"SUPRIMENTAÇÃO",
-	"EXECUÇÃO",
-];
+export const ProjectObservationTopics: TProject["observacoes"][number]["assunto"][] = ["SERVIÇOS", "PRODUTOS", "NEGOCIAÇÃO", "SUPRIMENTAÇÃO", "EXECUÇÃO"];
 
 export const OpportunityLossReasons = [
 	{ id: 1, label: "CLIENTE NÃO RESPONDE", value: "CLIENTE NÃO RESPONDE" },
@@ -1179,9 +1173,7 @@ export const OpportunityResponsibilityRoles = [
 	{ id: 2, label: "SDR", value: "SDR" },
 	{ id: 3, label: "ANALISTA TÉCNICO", value: "ANALISTA TÉCNICO" },
 ];
-export const OpportunityResponsibilityRolesCombinations = getAllValueCombinations(OpportunityResponsibilityRoles.map((r) => r.value)).map((c) =>
-	c.join(" + "),
-);
+export const OpportunityResponsibilityRolesCombinations = getAllValueCombinations(OpportunityResponsibilityRoles.map((r) => r.value)).map((c) => c.join(" + "));
 export const EnergyDistributorsOptions = [
 	{ id: 1, label: "AME", value: "AME" },
 	{ id: 2, label: "BOA VISTA", value: "BOA VISTA" },

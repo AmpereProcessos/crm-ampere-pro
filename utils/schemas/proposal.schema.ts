@@ -99,10 +99,7 @@ const PremissesSchema = z.object({
 	ativacaoReferencia: z.enum(["SIM", "NÃO"], { invalid_type_error: "Tipo inválido para a premissa lógica de referência" }).optional().nullable(),
 	faseamentoEletrico: ElectricalPhasesSchema.optional().nullable(),
 	custosInstalacao: z.number({ invalid_type_error: "Tipo inválido para a premissa de custo estimado de instalação." }).optional().nullable(),
-	custosPadraoEnergia: z
-		.number({ invalid_type_error: "Tipo inválido para a premissa de custo estimado de adequação de padrão." })
-		.optional()
-		.nullable(),
+	custosPadraoEnergia: z.number({ invalid_type_error: "Tipo inválido para a premissa de custo estimado de adequação de padrão." }).optional().nullable(),
 	custosEstruturaInstalacao: z
 		.number({ invalid_type_error: "Tipo inválido para a premissa de custo estimado de estrutura de instalação." })
 		.optional()
@@ -123,28 +120,15 @@ const ProposalPlanSchema = z.object({
 		invalid_type_error: "Tipo não válido para o ID de referência do plano.",
 	}),
 	nome: z.string({ required_error: "Nome do plano não informado.", invalid_type_error: "Tipo não válido para nome do plano." }),
-	valor: z
-		.number({ required_error: "Valor do plano não informado.", invalid_type_error: "Tipo não válido para valor do plano." })
-		.optional()
-		.nullable(),
-	preco: z
-		.number({ required_error: "Preço do plano não informado.", invalid_type_error: "Tipo não válido para preço do plano." })
-		.optional()
-		.nullable(),
+	valor: z.number({ required_error: "Valor do plano não informado.", invalid_type_error: "Tipo não válido para valor do plano." }).optional().nullable(),
+	preco: z.number({ required_error: "Preço do plano não informado.", invalid_type_error: "Tipo não válido para preço do plano." }).optional().nullable(),
 	descricao: z.string({ description: "Descrição do plano não informada.", invalid_type_error: "Tipo não válido para a descrição do plano." }),
 	intervalo: PlanIntervalSchema,
 	descritivo: z.array(PlanDescriptiveItemSchema),
 });
 const ProposalProductSchema = z.object({
 	id: z.string({ invalid_type_error: "Tipo não válido para ID do módulo." }).optional().nullable(),
-	categoria: z.union([
-		z.literal("MÓDULO"),
-		z.literal("INVERSOR"),
-		z.literal("INSUMO"),
-		z.literal("ESTRUTURA"),
-		z.literal("PADRÃO"),
-		z.literal("OUTROS"),
-	]),
+	categoria: z.union([z.literal("MÓDULO"), z.literal("INVERSOR"), z.literal("INSUMO"), z.literal("ESTRUTURA"), z.literal("PADRÃO"), z.literal("OUTROS")]),
 	fabricante: z.string({
 		required_error: "Fabricante do produto não informado.",
 		invalid_type_error: "Tipo não válido para o fabricante do produto.",
@@ -156,14 +140,8 @@ const ProposalProductSchema = z.object({
 		.optional()
 		.nullable(),
 	garantia: z.number({ required_error: "Garantia do produto não informada.", invalid_type_error: "Tipo não válido para a garantia do produto." }),
-	valor: z
-		.number({ required_error: "Valor do produto não informado.", invalid_type_error: "Tipo não válido para o valor do produto." })
-		.optional()
-		.nullable(),
-	preco: z
-		.number({ required_error: "Preço do produto não informado.", invalid_type_error: "Tipo não válido para o preço do produto." })
-		.optional()
-		.nullable(),
+	valor: z.number({ required_error: "Valor do produto não informado.", invalid_type_error: "Tipo não válido para o valor do produto." }).optional().nullable(),
+	preco: z.number({ required_error: "Preço do produto não informado.", invalid_type_error: "Tipo não válido para o preço do produto." }).optional().nullable(),
 });
 export type TProposalProduct = z.infer<typeof ProposalProductSchema>;
 const ProposalServiceSchema = z.object({
@@ -171,14 +149,8 @@ const ProposalServiceSchema = z.object({
 	descricao: z.string({ required_error: "Descrição do serviço não informada.", invalid_type_error: "Tipo não válido para a descrição do serviço." }),
 	observacoes: z.string({ required_error: "Observações do serviço não informadas.", invalid_type_error: "Tipo não válido para observações " }),
 	garantia: z.number({ required_error: "Garantia do serviço não fornecida.", invalid_type_error: "Tipo não válido para garantia do serviço." }),
-	valor: z
-		.number({ required_error: "Valor do serviço não informado.", invalid_type_error: "Tipo não válido para o valor do serviço." })
-		.optional()
-		.nullable(),
-	preco: z
-		.number({ required_error: "Preço do serviço não informado.", invalid_type_error: "Tipo não válido para o preço do serviço." })
-		.optional()
-		.nullable(),
+	valor: z.number({ required_error: "Valor do serviço não informado.", invalid_type_error: "Tipo não válido para o valor do serviço." }).optional().nullable(),
+	preco: z.number({ required_error: "Preço do serviço não informado.", invalid_type_error: "Tipo não válido para o preço do serviço." }).optional().nullable(),
 });
 export type TProposalService = z.infer<typeof ProposalServiceSchema>;
 export const GeneralProposalSchema = z.object({

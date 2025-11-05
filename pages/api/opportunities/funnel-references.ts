@@ -24,8 +24,7 @@ const createFunnelReference: NextApiHandler<PostResponse> = async (req, res) => 
 
 	const insertResponse = await insertFunnelReference({ collection: funnelReferencesCollection, info: funnelReference, partnerId: partnerId || "" });
 	// In case something went wrong, acknowledged would be false, so throwing an error
-	if (!insertResponse.acknowledged)
-		throw new createHttpError.InternalServerError("Oops, houve um erro desconhecido na criação da referência de funil.");
+	if (!insertResponse.acknowledged) throw new createHttpError.InternalServerError("Oops, houve um erro desconhecido na criação da referência de funil.");
 	// Else, returning the inserted ID
 	const insertedId = insertResponse.insertedId.toString();
 	return res.status(201).json({ data: { insertedId: insertedId }, message: "Referência de funil criada com sucesso!" });
@@ -70,8 +69,7 @@ const editFunnelReference: NextApiHandler<PutResponse> = async (req, res) => {
 		additionalUpdates,
 		// query: partnerQuery,
 	});
-	if (!updateResponse.acknowledged)
-		throw new createHttpError.InternalServerError("Oops, houve um erro desconhecido na atualização da referência de funil.");
+	if (!updateResponse.acknowledged) throw new createHttpError.InternalServerError("Oops, houve um erro desconhecido na atualização da referência de funil.");
 	res.status(201).json({ data: "Atualização feita com sucesso!", message: "Atualização feita com sucesso !" });
 };
 

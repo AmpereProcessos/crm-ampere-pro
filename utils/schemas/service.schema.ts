@@ -17,10 +17,7 @@ export const GeneralServiceSchema = z.object({
 	descricao: z.string({ required_error: "Descrição do serviço não informada.", invalid_type_error: "Tipo não válido para a descrição do serviço." }),
 	observacoes: z.string({ required_error: "Observações do serviço não informadas.", invalid_type_error: "Tipo não válido para observações " }),
 	garantia: z.number({ required_error: "Garantia do serviço não fornecida.", invalid_type_error: "Tipo não válido para garantia do serviço." }),
-	preco: z
-		.number({ required_error: "Preço do serviço não informado.", invalid_type_error: "Tipo não válido para o preço do serviço." })
-		.optional()
-		.nullable(),
+	preco: z.number({ required_error: "Preço do serviço não informado.", invalid_type_error: "Tipo não válido para o preço do serviço." }).optional().nullable(),
 	autor: AuthorSchema,
 	dataInsercao: z
 		.string({ required_error: "Data de inserção não fornecida.", invalid_type_error: "Tipo não válido para a data de inserção." })
@@ -41,10 +38,7 @@ export const InsertServiceSchema = z.object({
 	descricao: z.string({ required_error: "Descrição do serviço não informada.", invalid_type_error: "Tipo não válido para a descrição do serviço." }),
 	observacoes: z.string({ required_error: "Observações do serviço não informadas.", invalid_type_error: "Tipo não válido para observações " }),
 	garantia: z.number({ required_error: "Garantia do serviço não fornecida.", invalid_type_error: "Tipo não válido para garantia do serviço." }),
-	preco: z
-		.number({ required_error: "Preço do serviço não informado.", invalid_type_error: "Tipo não válido para o preço do serviço." })
-		.optional()
-		.nullable(),
+	preco: z.number({ required_error: "Preço do serviço não informado.", invalid_type_error: "Tipo não válido para o preço do serviço." }).optional().nullable(),
 	autor: AuthorSchema,
 	dataInsercao: z
 		.string({ required_error: "Data de inserção não fornecida.", invalid_type_error: "Tipo não válido para a data de inserção." })
@@ -65,10 +59,7 @@ export const ServiceEntitySchema = z.object({
 	descricao: z.string({ required_error: "Descrição do serviço não informada.", invalid_type_error: "Tipo não válido para a descrição do serviço." }),
 	observacoes: z.string({ required_error: "Observações do serviço não informadas.", invalid_type_error: "Tipo não válido para observações " }),
 	garantia: z.number({ required_error: "Garantia do serviço não fornecida.", invalid_type_error: "Tipo não válido para garantia do serviço." }),
-	preco: z
-		.number({ required_error: "Preço do serviço não informado.", invalid_type_error: "Tipo não válido para o preço do serviço." })
-		.optional()
-		.nullable(),
+	preco: z.number({ required_error: "Preço do serviço não informado.", invalid_type_error: "Tipo não válido para o preço do serviço." }).optional().nullable(),
 	autor: AuthorSchema,
 	dataInsercao: z
 		.string({ required_error: "Data de inserção não fornecida.", invalid_type_error: "Tipo não válido para a data de inserção." })

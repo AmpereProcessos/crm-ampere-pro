@@ -44,9 +44,7 @@ const getServiceOrderByPersonalizedFiltersRoute: NextApiHandler<PostResponse> = 
 
 	// Defining the queries
 	const nameQuery: Filter<TServiceOrder> =
-		filters.name.trim().length > 0
-			? { $or: [{ "favorecido.nome": { $regex: filters.name, $options: "i" } }, { "favorecido.nome": filters.name }] }
-			: {};
+		filters.name.trim().length > 0 ? { $or: [{ "favorecido.nome": { $regex: filters.name, $options: "i" } }, { "favorecido.nome": filters.name }] } : {};
 	const dateQuery: Filter<TServiceOrder> =
 		filters.period.after && filters.period.before && filters.period.field
 			? {
@@ -58,8 +56,7 @@ const getServiceOrderByPersonalizedFiltersRoute: NextApiHandler<PostResponse> = 
 			: {};
 	const stateQuery: Filter<TServiceOrder> = filters.state.length > 0 ? { "localizacao.uf": { $in: filters.state } } : {};
 	const cityQuery: Filter<TServiceOrder> = filters.city.length > 0 ? { "localizacao.cidade": { $in: filters.city } } : {};
-	const categoryQuery: Filter<TServiceOrder> =
-		filters.category.length > 0 ? { categoria: { $in: filters.category as TServiceOrder["categoria"][] } } : {};
+	const categoryQuery: Filter<TServiceOrder> = filters.category.length > 0 ? { categoria: { $in: filters.category as TServiceOrder["categoria"][] } } : {};
 	const urgencyQuery: Filter<TServiceOrder> = filters.urgency.length > 0 ? { urgencia: { $in: filters.urgency as TServiceOrder["urgencia"][] } } : {};
 	const pendingQuery: Filter<TServiceOrder> = !!filters.pending ? { dataEfetivacao: null } : {};
 

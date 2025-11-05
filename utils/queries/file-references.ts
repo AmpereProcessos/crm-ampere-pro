@@ -86,17 +86,7 @@ async function fetchFileReferencesByQuery({
 	const revenueParam = revenueId ? `revenueId=${revenueId}` : null;
 	const expenseParam = expenseId ? `expenseId=${expenseId}` : null;
 	const serviceOrderParam = serviceOrderId ? `serviceOrderId=${serviceOrderId}` : null;
-	const param = [
-		clientParam,
-		opportunityParam,
-		analysisParam,
-		homologationParam,
-		projectParam,
-		purchaseParam,
-		revenueParam,
-		expenseParam,
-		serviceOrderParam,
-	]
+	const param = [clientParam, opportunityParam, analysisParam, homologationParam, projectParam, purchaseParam, revenueParam, expenseParam, serviceOrderParam]
 		.filter((q) => !!q)
 		.join("&");
 

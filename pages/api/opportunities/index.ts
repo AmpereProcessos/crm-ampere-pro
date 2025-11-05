@@ -266,8 +266,7 @@ const editOpportunity: NextApiHandler<PutResponse> = async (req, res) => {
 	// Validating if user either: has global opportunity scope, its one of the opportunity responsibles or has one of the opportunity responsibles within his scope
 	const hasEditAuthorizationForOpportunity =
 		!userScope || previousOpportunity.responsaveis.some((opResp) => opResp.id === userId || userScope.includes(opResp.id));
-	if (!hasEditAuthorizationForOpportunity)
-		throw new createHttpError.Unauthorized("Você não possui permissão para alterar informações dessa oportunidade.");
+	if (!hasEditAuthorizationForOpportunity) throw new createHttpError.Unauthorized("Você não possui permissão para alterar informações dessa oportunidade.");
 
 	if (changes["tipo.id"] || changes?.tipo?.id) {
 		console.log("Attemp to change opportunity type", changes["tipo.id"], changes.tipo?.id);

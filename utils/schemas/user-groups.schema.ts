@@ -12,9 +12,7 @@ const GeneralUserGroupSchema = z.object({
 	}),
 	permissoes: PermissionsSchema,
 	autor: AuthorSchema,
-	dataInsercao: z
-		.string({ required_error: "Data de inserção não fornecida.", invalid_type_error: "Tipo não válido para a data de inserção." })
-		.datetime(),
+	dataInsercao: z.string({ required_error: "Data de inserção não fornecida.", invalid_type_error: "Tipo não válido para a data de inserção." }).datetime(),
 });
 
 export const InsertUserGroupSchema = z.object({
@@ -28,9 +26,7 @@ export const InsertUserGroupSchema = z.object({
 	}),
 	permissoes: PermissionsSchema,
 	autor: AuthorSchema,
-	dataInsercao: z
-		.string({ required_error: "Data de inserção não fornecida.", invalid_type_error: "Tipo não válido para a data de inserção." })
-		.datetime(),
+	dataInsercao: z.string({ required_error: "Data de inserção não fornecida.", invalid_type_error: "Tipo não válido para a data de inserção." }).datetime(),
 });
 
 export type TUserGroup = z.infer<typeof GeneralUserGroupSchema>;

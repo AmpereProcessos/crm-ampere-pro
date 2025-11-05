@@ -27,9 +27,7 @@ export function getComplexTemplateData({ opportunity, proposal }: GetTemplateDat
 	const YearsTillPositivePayback = Math.floor(MonthsTillPositivePayback / 12);
 	const MonthsFixedTillPositivePayback = MonthsTillPositivePayback % 12;
 	const PaybackText =
-		MonthsFixedTillPositivePayback > 0
-			? `${YearsTillPositivePayback} anos e ${MonthsFixedTillPositivePayback} meses`
-			: `${YearsTillPositivePayback} anos`;
+		MonthsFixedTillPositivePayback > 0 ? `${YearsTillPositivePayback} anos e ${MonthsFixedTillPositivePayback} meses` : `${YearsTillPositivePayback} anos`;
 	const ArrOfNewBillProgression = Table.map((obj) => obj["EnergyBillValue"]);
 	const NewBillAvgValue = getAverageValue(ArrOfNewBillProgression);
 

@@ -40,13 +40,7 @@ type GetPaymentMethodsPersonalized = {
 	productsIds: string[];
 	servicesIds: string[];
 };
-export async function fetchPaymentMethodsPersonalized({
-	methodologyIds,
-	kitsIds,
-	plansIds,
-	productsIds,
-	servicesIds,
-}: GetPaymentMethodsPersonalized) {
+export async function fetchPaymentMethodsPersonalized({ methodologyIds, kitsIds, plansIds, productsIds, servicesIds }: GetPaymentMethodsPersonalized) {
 	try {
 		const { data } = await axios.post("/api/payment-methods/personalized", { methodologyIds, kitsIds, plansIds, productsIds, servicesIds });
 

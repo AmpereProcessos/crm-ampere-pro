@@ -414,4 +414,3 @@ function ClientBlock({ infoHolder, setInfoHolder, moveToNextStage, moveToPreviou
 }
 
 export default ClientBlock;
-

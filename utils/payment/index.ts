@@ -1,10 +1,7 @@
 import { TFractionnementItem, TPaymentMethodDTO } from "../schemas/payment-methods";
 import { TProposalPaymentMethodItem } from "../schemas/proposal.schema";
 
-export function getPaymentMethodFinalValue({
-	method,
-	proposalValue,
-}: { method: TPaymentMethodDTO | TProposalPaymentMethodItem; proposalValue: number }) {
+export function getPaymentMethodFinalValue({ method, proposalValue }: { method: TPaymentMethodDTO | TProposalPaymentMethodItem; proposalValue: number }) {
 	const finalValue = method.fracionamento.reduce((acc, current) => {
 		const fractionnementPart = proposalValue * (current.porcentagem / 100);
 		const fractionnementTotalWithInterest = fractionnementPart * (1 + current.taxaJuros / 100) ** (current.parcelas || current.maximoParcelas);

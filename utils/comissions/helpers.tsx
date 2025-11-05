@@ -135,10 +135,7 @@ type GetComissionScenarioConditionApplicableDefinitionsParams = {
 	conditionType: TComissionScenarioConditionType;
 	definitions: typeof SaleDefinitions;
 };
-export function getComissionScenarioConditionApplicableDefinitions({
-	conditionType,
-	definitions,
-}: GetComissionScenarioConditionApplicableDefinitionsParams) {
+export function getComissionScenarioConditionApplicableDefinitions({ conditionType, definitions }: GetComissionScenarioConditionApplicableDefinitionsParams) {
 	const applicableDefinitionTypes = MethodConditionTypes.find((c) => c.value === conditionType)?.applicableDefinitionTypes;
 	return definitions.filter((p) => applicableDefinitionTypes?.includes(p.type as "NÚMERICO" | "SELEÇÃO" | "BOOLEANO"));
 }
@@ -316,9 +313,7 @@ export function getComissionValue({ userComissionConfig, projectTypeId, userRole
 	const comissionConfig = userComissionConfig.find((c) => c.tipoProjeto.id === projectTypeId && c.papel === userRole);
 	if (!comissionConfig) return 0;
 
-	const orderedPossibleResults = comissionConfig.resultados.sort((a, b) =>
-		a.condicao.aplicavel === b.condicao.aplicavel ? 0 : a.condicao.aplicavel ? -1 : 1,
-	);
+	const orderedPossibleResults = comissionConfig.resultados.sort((a, b) => (a.condicao.aplicavel === b.condicao.aplicavel ? 0 : a.condicao.aplicavel ? -1 : 1));
 
 	const applicableResult = orderedPossibleResults.find((r) => {
 		// Since general formulas are last, if condicao aplicavel equals false, either:
@@ -413,8 +408,7 @@ type GetConditionOptions = {
 	variable: keyof TComissionConditionData;
 };
 export function getComissionScenarioConditionOptions({ variable }: GetConditionOptions) {
-	if (variable === "combinacaoResponsaveis")
-		return OpportunityResponsibilityRolesCombinations.map((c, index) => ({ id: index + 1, label: c, value: c }));
+	if (variable === "combinacaoResponsaveis") return OpportunityResponsibilityRolesCombinations.map((c, index) => ({ id: index + 1, label: c, value: c }));
 	return [];
 }
 
