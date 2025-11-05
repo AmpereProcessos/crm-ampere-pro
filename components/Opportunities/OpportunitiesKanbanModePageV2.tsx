@@ -384,10 +384,10 @@ function KanbanBoardStageCard({ stageId, opportunity, isDragOverlay = false }: K
 			<div
 				{...listeners}
 				{...attributes}
-				className="absolute top-1 right-1 cursor-grab active:cursor-grabbing opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded-sm bg-primary/10 hover:bg-primary/20"
+				className="absolute top-1 right-1 cursor-grab active:cursor-grabbing opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded-sm bg-primary/30 hover:bg-primary/80 hover:text-primary-foreground"
 				title="Arrastar para mover"
 			>
-				<GripVertical className="w-3 h-3 text-primary/60" />
+				<GripVertical className="w-3 h-3" />
 			</div>
 			<div className={`h-1 w-full rounded-xs  ${getBarColor({ isWon, isRequested, isLost })}`} />
 			<div className="w-full flex flex-col gap-1">
