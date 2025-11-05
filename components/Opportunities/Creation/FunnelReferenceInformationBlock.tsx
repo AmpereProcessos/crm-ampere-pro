@@ -1,24 +1,23 @@
 import DropdownSelect from "@/components/Inputs/DropdownSelect";
 import SelectInput from "@/components/Inputs/SelectInput";
+import { TGetOpportunitiesQueryDefinitionsOutput } from "@/pages/api/opportunities/query-definitions";
 import type { TFunnelReference } from "@/utils/schemas/funnel-reference.schema";
 import type { TFunnelDTO } from "@/utils/schemas/funnel.schema";
 import React, { type Dispatch, type SetStateAction } from "react";
 import { BsFillFunnelFill } from "react-icons/bs";
-function getCurrentActiveFunnelOptions(funnelId: number | string, funnels: TFunnelDTO[]) {
-	const funnel = funnels.filter((funnel) => funnel._id.toString() === funnelId)[0];
-	return funnel.etapas.map((stage) => {
-		return {
-			id: stage.id,
-			label: stage.nome,
-			value: stage.id.toString(),
-		};
-	});
+function getCurrentActiveFunnelOptions(funnelId: number | string, funnels: TGetOpportunitiesQueryDefinitionsOutput["data"]["filterOptions"]["funnels"]) {
+	const funnel = funnels.filter((funnel) => funnel.id === funnelId)[0];
+	return funnel?.stages.map((stage) => ({
+		id: stage.id,
+		label: stage.label,
+		value: stage.id,
+	})) ?? [];
 }
 
 type FunnelReferenceInformationBlockProps = {
 	funnelReference: TFunnelReference;
 	setFunnelReference: Dispatch<SetStateAction<TFunnelReference>>;
-	funnels: TFunnelDTO[];
+	funnels: TGetOpportunitiesQueryDefinitionsOutput["data"]["filterOptions"]["funnels"];
 };
 function FunnelReferenceInformationBlock({ funnelReference, setFunnelReference, funnels }: FunnelReferenceInformationBlockProps) {
 	return (
@@ -32,15 +31,15 @@ function FunnelReferenceInformationBlock({ funnelReference, setFunnelReference, 
 					<SelectInput
 						label="FUNIL"
 						options={funnels.map((funnel) => ({
-							id: funnel._id,
-							label: funnel.nome,
-							value: funnel._id,
+							id: funnel.id,
+							label: funnel.label,
+							value: funnel.id,
 						}))}
 						value={funnelReference.idFunil || null}
 						resetOptionLabel="NÃO DEFINIDO"
 						handleChange={(selected) => {
-							const selectedFunnel = funnels.find((f) => f._id === selected);
-							const firstStage = selectedFunnel?.etapas[0].id || "";
+							const selectedFunnel = funnels.find((f) => f.id === selected);
+							const firstStage = selectedFunnel?.stages[0].id || "";
 							setFunnelReference((prev) => ({ ...prev, idFunil: selected, idEstagioFunil: firstStage.toString() }));
 						}}
 						onReset={() => setFunnelReference((prev) => ({ ...prev, idFunil: "" }))}

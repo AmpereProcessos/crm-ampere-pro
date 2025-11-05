@@ -2,6 +2,7 @@ import SelectInput from "@/components/Inputs/SelectInput";
 import SelectWithImages from "@/components/Inputs/SelectWithImages";
 import Avatar from "@/components/utils/Avatar";
 import type { TUserSession } from "@/lib/auth/session";
+import { TGetOpportunitiesQueryDefinitionsOutput } from "@/pages/api/opportunities/query-definitions";
 import type { TOpportunity, TOpportunityResponsible } from "@/utils/schemas/opportunity.schema";
 import type { TUserDTOSimplified } from "@/utils/schemas/user.schema";
 import { OpportunityResponsibilityRoles } from "@/utils/select-options";
@@ -14,16 +15,16 @@ type ResponsiblesInformationBlockProps = {
 	session: TUserSession;
 	opportunity: TOpportunity;
 	setOpportunity: Dispatch<SetStateAction<TOpportunity>>;
-	opportunityCreators: TUserDTOSimplified[];
+	opportunityCreators: TGetOpportunitiesQueryDefinitionsOutput["data"]["filterOptions"]["responsibles"];
 };
 function ResponsiblesInformationBlock({ session, opportunity, setOpportunity, opportunityCreators }: ResponsiblesInformationBlockProps) {
-	const initialResponsibleHolder = opportunityCreators.find((opCreator) => opCreator._id.toString() === session.user.id);
+	const initialResponsibleHolder = opportunityCreators.find((opCreator) => opCreator.id === session.user.id);
 	const [responsibleHolder, setResponsibleHolder] = useState<TOpportunityResponsible>({
-		id: initialResponsibleHolder?._id || "",
-		nome: initialResponsibleHolder?.nome || "",
+		id: initialResponsibleHolder?.id || "",
+		nome: initialResponsibleHolder?.label || "",
 		papel: OpportunityResponsibilityRoles[0].value,
-		avatar_url: initialResponsibleHolder?.avatar_url || null,
-		telefone: initialResponsibleHolder?.telefone || "",
+		avatar_url: initialResponsibleHolder?.coverUrl || null,
+		telefone: initialResponsibleHolder?.phone || "",
 		dataInsercao: new Date().toISOString(),
 	});
 	function addOpportunityResponsible(responsible: TOpportunityResponsible) {
@@ -49,19 +50,19 @@ function ResponsiblesInformationBlock({ session, opportunity, setOpportunity, op
 						label="USUÁRIO"
 						value={responsibleHolder.id}
 						options={opportunityCreators.map((user) => ({
-							id: user._id.toString(),
-							label: user.nome,
-							value: user._id.toString(),
-							url: user.avatar_url || undefined,
+							id: user.id,
+							label: user.label,
+							value: user.id,
+							url: user.coverUrl || undefined,
 						}))}
 						handleChange={(value) => {
-							const equivalentUser = opportunityCreators.find((opCreator) => value === opCreator._id.toString());
+							const equivalentUser = opportunityCreators.find((opCreator) => value === opCreator.id);
 							setResponsibleHolder((prev) => ({
 								...prev,
-								id: equivalentUser?._id.toString() || "",
-								nome: equivalentUser?.nome || "",
-								avatar_url: equivalentUser?.avatar_url || null,
-								telefone: equivalentUser?.telefone || "",
+								id: equivalentUser?.id || "",
+									nome: equivalentUser?.label || "",
+								avatar_url: equivalentUser?.coverUrl || null,
+								telefone: equivalentUser?.phone || "",
 							}));
 						}}
 						resetOptionLabel="NÃO DEFINIDO"

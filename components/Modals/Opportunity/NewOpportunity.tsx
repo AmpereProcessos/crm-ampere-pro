@@ -10,6 +10,7 @@ import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, Di
 import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
 import type { TUserSession } from "@/lib/auth/session";
 import { useMediaQuery } from "@/lib/utils";
+import { TGetOpportunitiesQueryDefinitionsOutput } from "@/pages/api/opportunities/query-definitions";
 import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
 import { createClientOpportunityAndFunnelReference } from "@/utils/mutations/opportunities";
 import { useSearchClients } from "@/utils/queries/clients";
@@ -29,8 +30,8 @@ import { toast } from "react-hot-toast";
 
 type NewOpportunityProps = {
 	session: TUserSession;
-	opportunityCreators: TUserDTOSimplified[];
-	funnels: TFunnelDTO[];
+	opportunityCreators: TGetOpportunitiesQueryDefinitionsOutput["data"]["filterOptions"]["responsibles"];
+	funnels: TGetOpportunitiesQueryDefinitionsOutput["data"]["filterOptions"]["funnels"];
 	closeModal: () => void;
 };
 function NewOpportunity({ session, closeModal, opportunityCreators, funnels }: NewOpportunityProps) {
@@ -312,8 +313,8 @@ function NewOpportunity({ session, closeModal, opportunityCreators, funnels }: N
 export default NewOpportunity;
 
 type NewOpportunityContentProps = {
-	opportunityCreators: TUserDTOSimplified[];
-	funnels: TFunnelDTO[];
+	opportunityCreators: TGetOpportunitiesQueryDefinitionsOutput["data"]["filterOptions"]["responsibles"];
+	funnels: TGetOpportunitiesQueryDefinitionsOutput["data"]["filterOptions"]["funnels"];
 	session: TUserSession;
 	clientHolder: TClient;
 	setClientHolder: Dispatch<SetStateAction<TClient>>;

@@ -22,6 +22,7 @@ import SelectInput from "../Inputs/SelectInput";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import SearchOpportunities from "./SearchOpportunities";
+import NewOpportunity from "../Modals/Opportunity/NewOpportunity";
 
 type OpportunitiesKanbanModePageV2Props = {
 	session: TUserSession;
@@ -260,6 +261,14 @@ export default function OpportunitiesKanbanModePageV2({ session, opportunityView
 					</DndContext>
 				) : null}
 			</div>
+			{newProjectModalIsOpen ? (
+				<NewOpportunity
+					session={session}
+					opportunityCreators={opportunityViewPreferences.filterOptions.responsibles || []}
+					funnels={opportunityViewPreferences.filterOptions.funnels || []}
+					closeModal={() => setNewProjectModalIsOpen(false)}
+				/>
+			) : null}
 		</div>
 	);
 }
