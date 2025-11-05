@@ -128,7 +128,7 @@ export const handleRemoveResponsibleFromOpportunity: NextApiHandler<TRemoveRespo
 	if (!opportunity) throw new createHttpError.NotFound("Oportunidade não encontrada.");
 
 	const newResponsiblesArr = opportunity.responsaveis.filter((responsible) => responsible.id !== responsibleId);
-	if(newResponsiblesArr.length === 0) throw new createHttpError.BadRequest("Não é possível remover o único responsável da oportunidade.");
+	if (newResponsiblesArr.length === 0) throw new createHttpError.BadRequest("Não é possível remover o único responsável da oportunidade.");
 
 	await opportunitiesCollection.updateOne({ _id: new ObjectId(opportunityId) }, { $set: { responsaveis: newResponsiblesArr } });
 

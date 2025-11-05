@@ -52,7 +52,13 @@ type OpportunityFunnelReferencesBlockProps = {
 		onError?: (error: Error) => void;
 	};
 };
-function OpportunityFunnelReferencesBlock({ opportunityId, opportunityQueryKey, opportunity, setOpportunity, callbacks }: OpportunityFunnelReferencesBlockProps) {
+function OpportunityFunnelReferencesBlock({
+	opportunityId,
+	opportunityQueryKey,
+	opportunity,
+	setOpportunity,
+	callbacks,
+}: OpportunityFunnelReferencesBlockProps) {
 	const queryClient = useQueryClient();
 	const { data: funnels } = useFunnels();
 

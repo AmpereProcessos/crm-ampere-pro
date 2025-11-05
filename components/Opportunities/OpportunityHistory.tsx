@@ -20,15 +20,6 @@ import OpportunityHistoryCard from "../Cards/OpportunityHistory";
 import NewOpportunityHistory from "../OpportunityHistories/NewOpportunityHistory";
 import { Button } from "../ui/button";
 import { ClipboardCheck, Plus } from "lucide-react";
-type GetInitialState = {
-	type?: "ATIVIDADE" | "ANOTAÇÃO";
-	project: {
-		id: string;
-		name: string;
-		identifier: string;
-	};
-	session: TUserSession;
-};
 
 type OpportunityHistoryProps = {
 	opportunityName: string;

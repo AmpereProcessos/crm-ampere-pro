@@ -14,14 +14,7 @@ import { TbDownload, TbUpload } from "react-icons/tb";
 import { getErrorMessage } from "@/lib/methods/errors";
 import { Check, Funnel, Trash2 } from "lucide-react";
 import { Button } from "../ui/button";
-import {
-	DropdownMenu,
-	DropdownMenuItem,
-	DropdownMenuGroup,
-	DropdownMenuContent,
-	DropdownMenuLabel,
-	DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuItem, DropdownMenuGroup, DropdownMenuContent, DropdownMenuLabel, DropdownMenuTrigger } from "../ui/dropdown-menu";
 
 type GetFunnelInfoParams = {
 	funnelId: TFunnelReferenceDTO["idFunil"];
@@ -96,7 +89,16 @@ type OpportunityFunnelReferenceProps = {
 		onError?: (error: Error) => void;
 	};
 };
-function OpportunityFunnelReference({ reference, referenceIndex, funnels, opportunityId, opportunityQueryKey, opportunity, setOpportunity, callbacks }: OpportunityFunnelReferenceProps) {
+function OpportunityFunnelReference({
+	reference,
+	referenceIndex,
+	funnels,
+	opportunityId,
+	opportunityQueryKey,
+	opportunity,
+	setOpportunity,
+	callbacks,
+}: OpportunityFunnelReferenceProps) {
 	const queryClient = useQueryClient();
 	const [logsMenuIsOpen, setLogsMenuIsOpen] = useState<boolean>(false);
 	const { funnelLabel, stageOptions } = getFunnelInfo({ funnelId: reference.idFunil, funnels });
@@ -121,9 +123,7 @@ function OpportunityFunnelReference({ reference, referenceIndex, funnels, opport
 				if (!old) return old;
 				return {
 					...old,
-					referenciasFunil: old?.referenciasFunil?.map((fr, index) =>
-						index === referenceIndex ? { ...fr, idEstagioFunil: variables.newStageId } : fr,
-					),
+					referenciasFunil: old?.referenciasFunil?.map((fr, index) => (index === referenceIndex ? { ...fr, idEstagioFunil: variables.newStageId } : fr)),
 				};
 			});
 			if (callbacks?.onMutate) callbacks.onMutate();

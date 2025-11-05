@@ -172,7 +172,7 @@ function OpportunityPage({ session, opportunityId }: OpportunityPageProps) {
 					<div className="flex w-full flex-col gap-6">
 						<div className="flex w-full flex-col gap-6 lg:flex-row">
 							<div className="w-full lg:w-[40%]">
-								<OpportunityClient client={opportunity.cliente} session={session}responsibles={opportunity.responsaveis} />
+								<OpportunityClient client={opportunity.cliente} session={session} responsibles={opportunity.responsaveis} />
 							</div>
 							<div className="w-full lg:w-[60%]">
 								<OpportunityProposals
@@ -190,11 +190,16 @@ function OpportunityPage({ session, opportunityId }: OpportunityPageProps) {
 						<div className="flex w-full flex-col gap-4 lg:w-[40%]" />
 						<div className="flex w-full flex-col gap-6 lg:flex-row">
 							<div className="flex w-full flex-col gap-4 lg:w-[40%]">
-								<OpportunityDetails info={opportunity} session={session} opportunityId={opportunity._id} opportunityQueryKey={queryKey} callbacks={{
-									onMutate: handleOnMutate,
-									onSettled: handleOnSettled,
-									
-								}} />
+								<OpportunityDetails
+									info={opportunity}
+									session={session}
+									opportunityId={opportunity._id}
+									opportunityQueryKey={queryKey}
+									callbacks={{
+										onMutate: handleOnMutate,
+										onSettled: handleOnSettled,
+									}}
+								/>
 							</div>
 							<div className="flex w-full flex-col gap-4 lg:w-[60%]">
 								<OpportunityFiles opportunityId={opportunity._id} clientId={opportunity.idCliente} session={session} />

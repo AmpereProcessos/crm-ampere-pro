@@ -89,14 +89,15 @@ function OpportunityHistoryInteraction({ interaction, handleEditHistory }: Oppor
 	}
 	return (
 		<div className="flex w-full flex-col gap-2 border border-primary/30 p-3 shadow-md">
-			<div className="flex w-full items-center justify-between">
-				<div className="flex items-center gap-2">
+			<div className="flex w-full items-center justify-between flex-col lg:flex-row gap-2">
+				<div className="flex items-center gap-2 flex-wrap">
 					<p className="rounded-lg bg-[#15599a] px-2 py-0.5 text-[0.65rem] font-medium text-white">INTERAÇÃO</p>
-
-					{renderIcon(getInteractionIcon(interaction.tipoInteracao))}
-					<p className="text-xs font-medium text-primary/70">{interaction.tipoInteracao}</p>
+					<div className="flex items-center gap-1">
+						{renderIcon(getInteractionIcon(interaction.tipoInteracao))}
+						<p className="text-xs font-medium text-primary/70">{interaction.tipoInteracao}</p>
+					</div>
 				</div>
-				<div className="flex items-center gap-2">
+				<div className="flex items-center gap-2 flex-wrap">
 					<Button onClick={handleEditHistory} variant="ghost" size="fit" className="rounded-full p-1">
 						<Pencil className="h-4 w-4 min-w-4 min-h-4" />
 					</Button>
