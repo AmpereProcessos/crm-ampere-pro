@@ -58,15 +58,25 @@ function OpportunityHistory({ session, opportunityName, opportunityId, opportuni
 	const [view, setView] = useState<"NEW NOTE" | "NEW ACTIVITY" | "NEW INTERACTION" | null>(null);
 
 	return (
-	<div className={"bg-card border-primary/20 flex w-full flex-col gap-1 rounded-xl border px-3 py-4 shadow-xs"}>
+		<div className={"bg-card border-primary/20 flex w-full flex-col gap-1 rounded-xl border px-3 py-4 shadow-xs"}>
 			<div className="flex items-center justify-between flex-col lg:flex-row gap-2">
 				<h1 className="text-xs font-bold tracking-tight uppercase">HISTÓRICO</h1>
 				<div className="flex items-center gap-x-2 flex-wrap gap-y-1">
-					<Button variant="ghost" size={"xs"} className="flex items-center gap-1" onClick={() => setView((prev) => (prev === "NEW INTERACTION" ? null : "NEW INTERACTION"))}>
+					<Button
+						variant="ghost"
+						size={"xs"}
+						className="flex items-center gap-1"
+						onClick={() => setView((prev) => (prev === "NEW INTERACTION" ? null : "NEW INTERACTION"))}
+					>
 						<AiFillInteraction className="h-4 w-4 min-h-4 min-w-4" />
 						<p className="text-xs font-medium">NOVA INTERAÇÃO</p>
-					</Button>	
-					<Button variant="ghost" size={"xs"} className="flex items-center gap-1" onClick={() => setView((prev) => (prev === "NEW ACTIVITY" ? null : "NEW ACTIVITY"))}>
+					</Button>
+					<Button
+						variant="ghost"
+						size={"xs"}
+						className="flex items-center gap-1"
+						onClick={() => setView((prev) => (prev === "NEW ACTIVITY" ? null : "NEW ACTIVITY"))}
+					>
 						<ClipboardCheck className="h-4 w-4 min-h-4 min-w-4" />
 						<p className="text-xs font-medium">NOVA ATIVIDADE</p>
 					</Button>

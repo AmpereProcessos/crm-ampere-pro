@@ -4,7 +4,11 @@ import type { TOpportunity } from "../schemas/opportunity.schema";
 import type { TClient } from "../schemas/client.schema";
 import type { TFunnelReference } from "../schemas/funnel-reference.schema";
 import { updateAppProject } from "./app-projects";
-import type { TAddResponsibleToOpportunityInput, TRemoveResponsibleFromOpportunityInput } from "@/pages/api/opportunities/responsibles";
+import type {
+	TAddResponsibleToOpportunityInput,
+	TRemoveResponsibleFromOpportunityInput,
+	TUpdateOpportunityResponsibleInput,
+} from "@/pages/api/opportunities/responsibles";
 import type { TBulkUpdateComissionsRouteInput, TBulkUpdateComissionsRouteOutput } from "@/app/api/opportunities/comissions/route";
 import type { TUpdateOpportunityQueryDefinitionsInput, TUpdateOpportunityQueryDefinitionsOutput } from "@/pages/api/opportunities/query-definitions";
 
@@ -134,6 +138,12 @@ export async function removeResponsibleFromOpportunity({ opportunityId, responsi
 		console.log("Error running removeResponsibleFromOpportunity", error);
 		throw error;
 	}
+}
+
+export async function updateResponsibleInOpportunity(input: TUpdateOpportunityResponsibleInput) {
+	const { data } = await axios.put("/api/opportunities/responsibles", input);
+	if (typeof data.message !== "string") return "Responsável atualizado com sucesso !";
+	return data.message as string;
 }
 
 export async function bulkUpdateComissions({ comissions }: { comissions: TBulkUpdateComissionsRouteInput }) {

@@ -1,19 +1,27 @@
 import { getHoursDiff } from "@/lib/methods/dates";
 import { formatDateAsLocale, formatDecimalPlaces } from "@/lib/methods/formatting";
 import { deleteFunnelReference, updateFunnelReference } from "@/utils/mutations/funnel-references";
-import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
-import { TFunnelReferenceDTO } from "@/utils/schemas/funnel-reference.schema";
-import { TFunnelDTO } from "@/utils/schemas/funnel.schema";
-import { TOpportunityDTOWithClientAndPartnerAndFunnelReferences } from "@/utils/schemas/opportunity.schema";
-import { useQueryClient } from "@tanstack/react-query";
+import type { TFunnelReferenceDTO } from "@/utils/schemas/funnel-reference.schema";
+import type { TFunnelDTO } from "@/utils/schemas/funnel.schema";
+import type { TOpportunityDTOWithClientAndPartnerAndFunnelReferences } from "@/utils/schemas/opportunity.schema";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
-import { AiOutlineCheck } from "react-icons/ai";
-import { BsFunnelFill } from "react-icons/bs";
+import { BsCalendarPlus, BsFunnelFill } from "react-icons/bs";
 import { FaClipboardList } from "react-icons/fa";
-import { MdDelete, MdTimer } from "react-icons/md";
+import { MdTimer } from "react-icons/md";
 import { TbDownload, TbUpload } from "react-icons/tb";
-import SelectInput from "../Inputs/SelectInput";
+import { getErrorMessage } from "@/lib/methods/errors";
+import { Check, Funnel, Trash2 } from "lucide-react";
+import { Button } from "../ui/button";
+import {
+	DropdownMenu,
+	DropdownMenuItem,
+	DropdownMenuGroup,
+	DropdownMenuContent,
+	DropdownMenuLabel,
+	DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 
 type GetFunnelInfoParams = {
 	funnelId: TFunnelReferenceDTO["idFunil"];
@@ -77,10 +85,18 @@ type OpportunityFunnelReferenceProps = {
 	reference: TFunnelReferenceDTO;
 	referenceIndex: number;
 	funnels: TFunnelDTO[] | undefined;
+	opportunityId: string;
+	opportunityQueryKey: any;
 	opportunity: TOpportunityDTOWithClientAndPartnerAndFunnelReferences;
 	setOpportunity: React.Dispatch<React.SetStateAction<TOpportunityDTOWithClientAndPartnerAndFunnelReferences>>;
+	callbacks: {
+		onMutate?: () => void;
+		onSettled?: () => void;
+		onSuccess?: () => void;
+		onError?: (error: Error) => void;
+	};
 };
-function OpportunityFunnelReference({ reference, referenceIndex, funnels, opportunity, setOpportunity }: OpportunityFunnelReferenceProps) {
+function OpportunityFunnelReference({ reference, referenceIndex, funnels, opportunityId, opportunityQueryKey, opportunity, setOpportunity, callbacks }: OpportunityFunnelReferenceProps) {
 	const queryClient = useQueryClient();
 	const [logsMenuIsOpen, setLogsMenuIsOpen] = useState<boolean>(false);
 	const { funnelLabel, stageOptions } = getFunnelInfo({ funnelId: reference.idFunil, funnels });
@@ -94,106 +110,141 @@ function OpportunityFunnelReference({ reference, referenceIndex, funnels, opport
 			throw error;
 		}
 	}
-	const { mutate: handleUpdateOpportunityFunnelReference, isPending } = useMutationWithFeedback({
+	const { mutate: handleUpdateOpportunityFunnelReference, isPending: isUpdatingFunnelReference } = useMutation({
 		mutationKey: ["update-funnel-reference"],
 		mutationFn: updateOpportunityFunnelReference,
-		queryClient: queryClient,
-		affectedQueryKey: ["opportunity-by-id", reference.idOportunidade],
+		onMutate: async (variables) => {
+			const previousOpportunity = queryClient.getQueryData<TOpportunityDTOWithClientAndPartnerAndFunnelReferences>(opportunityQueryKey);
+			if (!previousOpportunity) return { previousOpportunity };
+
+			queryClient.setQueryData<TOpportunityDTOWithClientAndPartnerAndFunnelReferences>(opportunityQueryKey, (old) => {
+				if (!old) return old;
+				return {
+					...old,
+					referenciasFunil: old?.referenciasFunil?.map((fr, index) =>
+						index === referenceIndex ? { ...fr, idEstagioFunil: variables.newStageId } : fr,
+					),
+				};
+			});
+			if (callbacks?.onMutate) callbacks.onMutate();
+		},
+		onSuccess: async (data) => {
+			if (callbacks?.onSuccess) callbacks.onSuccess();
+			return toast.success(data as string);
+		},
+		onSettled: async () => {
+			if (callbacks?.onSettled) callbacks.onSettled();
+		},
+		onError: async (error, variables, context) => {
+			await queryClient.setQueryData<TOpportunityDTOWithClientAndPartnerAndFunnelReferences>(opportunityQueryKey, context?.previousOpportunity);
+			if (callbacks?.onError) callbacks.onError(error);
+			return toast.error(getErrorMessage(error));
+		},
 	});
 
 	// Deleting
-	async function removeFunnelReference({
-		funnelReferenceToRemoveIndex,
-		opportunityFunnelReferences,
-	}: {
-		funnelReferenceToRemoveIndex: number;
-		opportunityFunnelReferences: TFunnelReferenceDTO[];
-	}) {
-		try {
-			if (opportunityFunnelReferences.length == 1) return toast.error("Não é possível remover a única referência de funil da oportundiade.");
-
-			const funnelReferenceId = opportunityFunnelReferences[funnelReferenceToRemoveIndex]._id;
-			const response = await deleteFunnelReference({ id: funnelReferenceId });
-			const newReferences = [...opportunity.referenciasFunil];
-			newReferences.splice(funnelReferenceToRemoveIndex, 1);
-			setOpportunity((prev) => ({ ...prev, referenciasFunil: newReferences }));
-			return response;
-		} catch (error) {
-			throw error;
-		}
+	async function removeFunnelReference({ funnelReferenceId }: { funnelReferenceId: string }) {
+		if (opportunity.referenciasFunil.length === 1) throw new Error("Não é possível remover a única referência de funil da oportunidade.");
+		const response = await deleteFunnelReference({ id: funnelReferenceId });
+		return response;
 	}
-	const { mutate: handleRemoveFunnelReference, isPending: removeFunnelReferencePending } = useMutationWithFeedback({
+	const { mutate: handleRemoveFunnelReference, isPending: isRemovingFunnelReference } = useMutation({
 		mutationKey: ["remove-funnel-reference"],
 		mutationFn: removeFunnelReference,
-		queryClient: queryClient,
-		affectedQueryKey: ["opportunity-by-id", opportunity._id],
+		onMutate: async (variables) => {
+			const previousOpportunity = queryClient.getQueryData<TOpportunityDTOWithClientAndPartnerAndFunnelReferences>(opportunityQueryKey);
+			if (!previousOpportunity) return { previousOpportunity };
+
+			queryClient.setQueryData<TOpportunityDTOWithClientAndPartnerAndFunnelReferences>(opportunityQueryKey, (old) => {
+				if (!old) return old;
+				return {
+					...old,
+					referenciasFunil: old?.referenciasFunil?.filter((fr) => fr._id !== variables.funnelReferenceId),
+				};
+			});
+			if (callbacks?.onMutate) callbacks.onMutate();
+		},
+		onSuccess: async (data) => {
+			if (callbacks?.onSuccess) callbacks.onSuccess();
+			return toast.success(data as string);
+		},
+		onSettled: async () => {
+			if (callbacks?.onSettled) callbacks.onSettled();
+		},
+		onError: async (error, variables, context) => {
+			await queryClient.setQueryData<TOpportunityDTOWithClientAndPartnerAndFunnelReferences>(opportunityQueryKey, context?.previousOpportunity);
+			if (callbacks?.onError) callbacks.onError(error);
+			return toast.error(getErrorMessage(error));
+		},
 	});
+	const currentStageLabel = stageOptions.find((opt) => opt.value === reference.idEstagioFunil.toString())?.label || "CARREGANDO...";
+
 	return (
 		<div className="flex w-full flex-col rounded-md border border-primary/30 p-3">
-			<div className="flex w-full items-center gap-2">
+			<div className="flex w-full justify-between items-center gap-x-2 flex-col lg:flex-row gap-y-1">
 				<div className="flex items-center gap-2">
-					<div className="flex h-[25px] w-[25px] items-center justify-center rounded-full border border-black p-1">
-						<BsFunnelFill />
+					<div className="flex h-[25px] w-[25px] items-center justify-center rounded-full border border-primary/30 p-1">
+						<Funnel className="h-3.5 w-3.5 min-h-3.5 min-w-3.5" />
 					</div>
-					<h1 className="font-sans font-bold  text-primary">{funnelLabel || "CARREGANDO..."}</h1>
+					<h1 className="font-sans font-bold text-primary">{funnelLabel || "CARREGANDO..."}</h1>
 				</div>
-				<div className="flex grow items-center justify-end gap-2">
-					<button
-						onClick={() =>
-							// @ts-ignore
-							handleRemoveFunnelReference({ funnelReferenceToRemoveIndex: referenceIndex, opportunityFunnelReferences: opportunity.referenciasFunil })
-						}
-						type="button"
-						className="flex items-center justify-center gap-2 rounded-lg p-1 duration-300 ease-linear hover:scale-105 hover:bg-red-200"
-					>
-						<MdDelete style={{ color: "red" }} size={15} />
-					</button>
-					<button
-						disabled={isPending}
-						onClick={() =>
-							// @ts-ignore
-							handleUpdateOpportunityFunnelReference({ id: reference._id, newStageId: reference.idEstagioFunil })
-						}
-						className="flex items-end justify-center text-green-200 duration-300 ease-in-out disabled:text-primary/70 enabled:hover:text-green-500"
-					>
-						<AiOutlineCheck
-							style={{
-								fontSize: "18px",
-								// color: infoHolder.responsaveis[index].papel != info.responsaveis[index].papel ? 'rgb(34,197,94)' : 'rgb(156,163,175)',
-								color: "rgb(34,197,94)",
-							}}
-						/>
-					</button>
+				<DropdownMenu>
+					<DropdownMenuTrigger asChild>
+						<Button variant="ghost" size={"fit"} className="flex items-center gap-2 px-2 py-1 rounded-lg text-xs">
+							<BsFunnelFill className="h-3.5 w-3.5 min-h-3.5 min-w-3.5" />
+							<h3>{currentStageLabel}</h3>
+						</Button>
+					</DropdownMenuTrigger>
+					<DropdownMenuContent className="w-64 max-h-[60vh] overflow-y-auto scrollbar-thin scrollbar-track-primary/10 scrollbar-thumb-primary/30">
+						<DropdownMenuLabel>ESTÁGIO</DropdownMenuLabel>
+						<DropdownMenuGroup>
+							{stageOptions.map((stage) => (
+								<button
+									key={stage.id}
+									type="button"
+									className="w-full"
+									onClick={() => handleUpdateOpportunityFunnelReference({ id: reference._id, newStageId: stage.value })}
+								>
+									<DropdownMenuItem className="flex items-center justify-between">
+										<div className="flex items-center gap-1">
+											<h1 className="text-sm lg:text-base">{stage.label}</h1>
+										</div>
+										{reference.idEstagioFunil.toString() === stage.value ? <Check size={15} /> : null}
+									</DropdownMenuItem>
+								</button>
+							))}
+						</DropdownMenuGroup>
+					</DropdownMenuContent>
+				</DropdownMenu>
+			</div>
+			<div className="mt-2 flex w-full items-center justify-between">
+				<Button
+					size={"fit"}
+					variant="ghost"
+					className="flex items-center gap-1 hover:bg-red-200 hover:text-red-600 px-2 py-1 transition-colors duration-300 ease-linear rounded-lg"
+					onClick={() => handleRemoveFunnelReference({ funnelReferenceId: reference._id })}
+					disabled={isRemovingFunnelReference}
+				>
+					<Trash2 className="h-3.5 w-3.5 min-h-3.5 min-w-3.5" />
+					<p className="text-[0.65rem] font-medium">REMOVER</p>
+				</Button>
+				<div className="flex items-center gap-1">
+					<BsCalendarPlus />
+					<p className="text-[0.65rem] font-medium text-primary/70">{formatDateAsLocale(reference.dataInsercao, true)}</p>
 				</div>
 			</div>
-			<div className="mt-1 flex grow">
-				<SelectInput
-					label="ESTÁGIO"
-					showLabel={false}
-					value={reference.idEstagioFunil.toString()}
-					options={stageOptions}
-					handleChange={(value) => {
-						const references = [...opportunity.referenciasFunil];
-						references[referenceIndex].idEstagioFunil = value.toString();
-						setOpportunity((prev) => ({ ...prev, referenciasFunil: references }));
-					}}
-					resetOptionLabel="NÃO DEFINIDO"
-					onReset={() => {
-						const references = [...opportunity.referenciasFunil];
-						references[referenceIndex].idEstagioFunil = opportunity.referenciasFunil[referenceIndex].idEstagioFunil;
-						setOpportunity((prev) => ({ ...prev, referenciasFunil: references }));
-					}}
-					width="100%"
-				/>
-			</div>
-			<div className="mt-1 flex w-full items-center justify-start">
-				<button onClick={() => setLogsMenuIsOpen((prev) => !prev)} className="flex items-center gap-1 py-1 text-[0.6rem] text-primary/70">
+			<div className="mt-2 flex w-full items-center justify-start">
+				<button
+					type="button"
+					onClick={() => setLogsMenuIsOpen((prev) => !prev)}
+					className="flex items-center gap-1 py-1 text-[0.6rem] text-primary/70 hover:text-primary transition-colors"
+				>
 					<FaClipboardList />
-					<p className="font-medium">MOSTRAR HISTÓRICO</p>
+					<p className="font-medium">{logsMenuIsOpen ? "OCULTAR HISTÓRICO" : "MOSTRAR HISTÓRICO"}</p>
 				</button>
 			</div>
 			{logsMenuIsOpen ? (
-				<div className="flex w-full flex-col gap-2">
+				<div className="mt-2 flex w-full flex-col gap-2 rounded-md border border-primary/20 bg-primary/5 p-2">
 					{renderLogs({ activeStageId: reference.idEstagioFunil, stages: reference.estagios, funnelId: reference.idFunil, funnels: funnels })}
 				</div>
 			) : null}

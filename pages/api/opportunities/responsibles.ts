@@ -128,6 +128,7 @@ export const handleRemoveResponsibleFromOpportunity: NextApiHandler<TRemoveRespo
 	if (!opportunity) throw new createHttpError.NotFound("Oportunidade não encontrada.");
 
 	const newResponsiblesArr = opportunity.responsaveis.filter((responsible) => responsible.id !== responsibleId);
+	if(newResponsiblesArr.length === 0) throw new createHttpError.BadRequest("Não é possível remover o único responsável da oportunidade.");
 
 	await opportunitiesCollection.updateOne({ _id: new ObjectId(opportunityId) }, { $set: { responsaveis: newResponsiblesArr } });
 
@@ -149,4 +150,41 @@ export const handleRemoveResponsibleFromOpportunity: NextApiHandler<TRemoveRespo
 	res.status(200).json({ message: "Responsável removido com sucesso." });
 };
 
-export default apiHandler({ POST: handleAddResponsibleToOpportunity, DELETE: handleRemoveResponsibleFromOpportunity });
+const UpdateResponsibleSchema = z.object({
+	opportunityId: z.string({
+		required_error: "ID da oportunidade não fornecido.",
+		invalid_type_error: "Tipo não válido para ID da oportunidade.",
+	}),
+	responsibleIndex: z.number({
+		required_error: "Índice do responsável não fornecido.",
+		invalid_type_error: "Tipo não válido para índice do responsável.",
+	}),
+	responsibleRole: z.enum(["VENDEDOR", "SDR", "ANALISTA TÉCNICO"]),
+});
+export type TUpdateOpportunityResponsibleInput = z.infer<typeof UpdateResponsibleSchema>;
+export type TUpdateOpportunityResponsibleOutput = {
+	message: string;
+};
+const handleUpdateResponsible: NextApiHandler<TUpdateOpportunityResponsibleOutput> = async (req, res) => {
+	const session = await validateAuthorization(req, res, "oportunidades", "editar", true);
+
+	const { opportunityId, responsibleIndex, responsibleRole } = UpdateResponsibleSchema.parse(req.body);
+
+	const db = await connectToDatabase();
+	const opportunitiesCollection = db.collection<TOpportunity>("opportunities");
+
+	const opportunity = await opportunitiesCollection.findOne({ _id: new ObjectId(opportunityId) });
+	if (!opportunity) throw new createHttpError.NotFound("Oportunidade não encontrada.");
+
+	const newOpportunityResponsibles = opportunity.responsaveis.map((responsible, index) => {
+		if (index === responsibleIndex) {
+			return { ...responsible, papel: responsibleRole };
+		}
+		return responsible;
+	});
+
+	await opportunitiesCollection.updateOne({ _id: new ObjectId(opportunityId) }, { $set: { responsaveis: newOpportunityResponsibles } });
+
+	res.status(200).json({ message: "Responsável atualizado com sucesso." });
+};
+export default apiHandler({ POST: handleAddResponsibleToOpportunity, DELETE: handleRemoveResponsibleFromOpportunity, PUT: handleUpdateResponsible });

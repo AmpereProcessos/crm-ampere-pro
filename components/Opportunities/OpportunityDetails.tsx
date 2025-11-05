@@ -4,7 +4,7 @@ import DateInput from "../Inputs/DateInput";
 import SelectInput from "../Inputs/SelectInput";
 import TextInput from "../Inputs/TextInput";
 
-import { useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AiOutlineCheck } from "react-icons/ai";
 
 import type { TUserSession } from "@/lib/auth/session";
@@ -24,13 +24,23 @@ import OpportunityFunnelReferencesBlock from "./OpportunityFunnelReferencesBlock
 import OpportunityResponsiblesBlock from "./OpportunityResponsiblesBlock";
 import ResponsiveDialogDrawerSection from "../utils/ResponsiveDialogDrawerSection";
 import { Building2, MapPin, Tag, UserRound } from "lucide-react";
+import { toast } from "react-hot-toast";
+import { getErrorMessage } from "@/lib/methods/errors";
+
 type DetailsBlockType = {
 	info: TOpportunityDTOWithClientAndPartnerAndFunnelReferences;
 	session: TUserSession;
 	opportunityId: string;
+	opportunityQueryKey: any;
+	callbacks: {
+		onMutate?: () => void;
+		onSettled?: () => void;
+		onSuccess?: () => void;
+		onError?: (error: Error) => void;
+	};
 };
 
-function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
+function DetailsBlock({ info, opportunityQueryKey, session, opportunityId, callbacks }: DetailsBlockType) {
 	const queryClient = useQueryClient();
 	const partnersScope = session.user.permissoes.parceiros.escopo;
 	const [infoHolder, setInfoHolder] = useState<TOpportunityDTOWithClientAndPartnerAndFunnelReferences>({
@@ -41,17 +51,41 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 	const { data: projectTypes } = useProjectTypes();
 
 	const vinculationPartners = partners ? (partnersScope ? partners?.filter((p) => partnersScope.includes(p._id)) : partners) : [];
-	const { mutate: handleUpdateOpportunity } = useMutationWithFeedback({
+	const { mutate: handleUpdateOpportunity } = useMutation({
 		mutationKey: ["update-opportunity", opportunityId],
 		mutationFn: updateOpportunity,
-		queryClient: queryClient,
-		affectedQueryKey: ["opportunity-by-id", opportunityId],
+		onMutate: async () => {
+			if (callbacks?.onMutate) callbacks.onMutate();
+		},
+		onSuccess: async (data) => {
+			if (callbacks?.onSuccess) callbacks.onSuccess();
+			return toast.success(data as string);
+		},
+		onSettled: async () => {
+			if (callbacks?.onSettled) callbacks.onSettled();
+		},
+		onError: async (error) => {
+			if (callbacks?.onError) callbacks.onError(error);
+			return toast.error(getErrorMessage(error));
+		},
 	});
-	const { mutate: handleUpdateClient } = useMutationWithFeedback({
+	const { mutate: handleUpdateClient } = useMutation({
 		mutationKey: ["update-client", opportunityId],
 		mutationFn: updateClient,
-		queryClient: queryClient,
-		affectedQueryKey: ["opportunity-by-id", opportunityId],
+		onMutate: async () => {
+			if (callbacks?.onMutate) callbacks.onMutate();
+		},
+		onSuccess: async (data) => {
+			if (callbacks?.onSuccess) callbacks.onSuccess();
+			return toast.success(data as string);
+		},
+		onSettled: async () => {
+			if (callbacks?.onSettled) callbacks.onSettled();
+		},
+		onError: async (error) => {
+			if (callbacks?.onError) callbacks.onError(error);
+			return toast.error(getErrorMessage(error));
+		},
 	});
 
 	const { data: acquisitionChannels } = useAcquisitionChannels();
@@ -219,12 +253,20 @@ function DetailsBlock({ info, session, opportunityId }: DetailsBlockType) {
 				</ResponsiveDialogDrawerSection>
 				<OpportunityResponsiblesBlock
 					opportunityId={opportunityId}
+					opportunityQueryKey={opportunityQueryKey}
 					infoHolder={infoHolder}
 					setInfoHolder={setInfoHolder}
 					session={session}
 					handleUpdateOpportunity={handleUpdateOpportunity}
+					callbacks={callbacks}
 				/>
-				<OpportunityFunnelReferencesBlock opportunity={infoHolder} setOpportunity={setInfoHolder} />
+				<OpportunityFunnelReferencesBlock
+					opportunityId={opportunityId}
+					opportunityQueryKey={opportunityQueryKey}
+					opportunity={infoHolder}
+					setOpportunity={setInfoHolder}
+					callbacks={callbacks}
+				/>
 				<ResponsiveDialogDrawerSection sectionTitleText="DADOS DA LOCALIZAÇÃO" sectionTitleIcon={<MapPin className="w-4 h-4 min-w-4 min-h-4" />}>
 					<div className="flex w-full gap-2">
 						<div className="flex grow items-center gap-1">

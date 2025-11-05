@@ -20,7 +20,6 @@ type OpportunityProposalsProps = {
 	session: TUserSession;
 	opportunityId: string;
 	idActiveProposal?: string;
-	setBlockMode: React.Dispatch<React.SetStateAction<TOpportunityBlockMode>>;
 	opportunityHasContractRequested: boolean;
 	opportunityIsWon: boolean;
 	opportunityWonProposalId?: string | null;
