@@ -15,16 +15,16 @@ type ResponsiblesInformationBlockProps = {
 	session: TUserSession;
 	opportunity: TOpportunity;
 	setOpportunity: Dispatch<SetStateAction<TOpportunity>>;
-	opportunityCreators: TGetOpportunitiesQueryDefinitionsOutput["data"]["filterOptions"]["responsibles"];
+	opportunityCreators: TUserDTOSimplified[]
 };
 function ResponsiblesInformationBlock({ session, opportunity, setOpportunity, opportunityCreators }: ResponsiblesInformationBlockProps) {
-	const initialResponsibleHolder = opportunityCreators.find((opCreator) => opCreator.id === session.user.id);
+	const initialResponsibleHolder = opportunityCreators.find((opCreator) => opCreator._id.toString() === session.user.id);
 	const [responsibleHolder, setResponsibleHolder] = useState<TOpportunityResponsible>({
-		id: initialResponsibleHolder?.id || "",
-		nome: initialResponsibleHolder?.label || "",
+		id: initialResponsibleHolder?._id.toString() || "",
+		nome: initialResponsibleHolder?.nome || "",
 		papel: OpportunityResponsibilityRoles[0].value,
-		avatar_url: initialResponsibleHolder?.coverUrl || null,
-		telefone: initialResponsibleHolder?.phone || "",
+		avatar_url: initialResponsibleHolder?.avatar_url || null,
+		telefone: initialResponsibleHolder?.telefone || "",
 		dataInsercao: new Date().toISOString(),
 	});
 	function addOpportunityResponsible(responsible: TOpportunityResponsible) {
@@ -50,19 +50,19 @@ function ResponsiblesInformationBlock({ session, opportunity, setOpportunity, op
 						label="USUÁRIO"
 						value={responsibleHolder.id}
 						options={opportunityCreators.map((user) => ({
-							id: user.id,
-							label: user.label,
-							value: user.id,
-							url: user.coverUrl || undefined,
+							id: user._id.toString(),
+							label: user.nome,	
+							value: user._id.toString(),
+							url: user.avatar_url || undefined,
 						}))}
 						handleChange={(value) => {
-							const equivalentUser = opportunityCreators.find((opCreator) => value === opCreator.id);
+							const equivalentUser = opportunityCreators.find((opCreator) => value === opCreator._id.toString());
 							setResponsibleHolder((prev) => ({
 								...prev,
-								id: equivalentUser?.id || "",
-									nome: equivalentUser?.label || "",
-								avatar_url: equivalentUser?.coverUrl || null,
-								telefone: equivalentUser?.phone || "",
+								id: equivalentUser?._id.toString() || "",
+								nome: equivalentUser?.nome || "",
+								avatar_url: equivalentUser?.avatar_url || null,
+								telefone: equivalentUser?.telefone || "",
 							}));
 						}}
 						resetOptionLabel="NÃO DEFINIDO"

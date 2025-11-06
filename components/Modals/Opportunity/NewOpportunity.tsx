@@ -15,6 +15,7 @@ import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
 import { createClientOpportunityAndFunnelReference } from "@/utils/mutations/opportunities";
 import { useSearchClients } from "@/utils/queries/clients";
 import { useProjectTypes } from "@/utils/queries/project-types";
+import { useOpportunityCreators } from "@/utils/queries/users";
 import type { TClient, TSimilarClientSimplifiedDTO } from "@/utils/schemas/client.schema";
 import type { TFunnelReference } from "@/utils/schemas/funnel-reference.schema";
 import type { TFunnelDTO } from "@/utils/schemas/funnel.schema";
@@ -23,7 +24,7 @@ import type { TUserDTOSimplified } from "@/utils/schemas/user.schema";
 import { CustomersAcquisitionChannels } from "@/utils/select-options";
 import { useQueryClient } from "@tanstack/react-query";
 import createHttpError from "http-errors";
-import { BadgeCheck } from "lucide-react";
+import { BadgeCheck, UsersRound } from "lucide-react";
 import Link from "next/link";
 import { type Dispatch, type SetStateAction, useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
@@ -212,7 +213,6 @@ function NewOpportunity({ session, closeModal, opportunityCreators, funnels }: N
 								clientHolder={newClient}
 								funnelReferenceHolder={newFunnelReference}
 								funnels={funnels || []}
-								opportunityCreators={opportunityCreators}
 								opportunityHolder={newOpportunity}
 								session={session}
 								setClientHolder={setNewClient}
@@ -279,7 +279,6 @@ function NewOpportunity({ session, closeModal, opportunityCreators, funnels }: N
 								clientHolder={newClient}
 								funnelReferenceHolder={newFunnelReference}
 								funnels={funnels || []}
-								opportunityCreators={opportunityCreators}
 								opportunityHolder={newOpportunity}
 								session={session}
 								setClientHolder={setNewClient}
@@ -313,7 +312,6 @@ function NewOpportunity({ session, closeModal, opportunityCreators, funnels }: N
 export default NewOpportunity;
 
 type NewOpportunityContentProps = {
-	opportunityCreators: TGetOpportunitiesQueryDefinitionsOutput["data"]["filterOptions"]["responsibles"];
 	funnels: TGetOpportunitiesQueryDefinitionsOutput["data"]["filterOptions"]["funnels"];
 	session: TUserSession;
 	clientHolder: TClient;
@@ -335,10 +333,12 @@ function NewOpportunityContent({
 	setFunnelReferenceHolder,
 	similarClientHolder,
 	setSimilarClientHolder,
-	opportunityCreators,
 	funnels,
 }: NewOpportunityContentProps) {
 	const { data: projectTypes } = useProjectTypes();
+	const { data: opportunityCreators } = useOpportunityCreators();
+	const isDesktop = useMediaQuery("(min-width: 768px)");
+	const [similarDrawerOpen, setSimilarDrawerOpen] = useState(false);
 	const {
 		data: similarClients,
 		isSuccess: clientsSuccess,
@@ -388,6 +388,7 @@ function NewOpportunityContent({
 			cpfCnpj,
 			autor,
 		}));
+		if (!isDesktop) setSimilarDrawerOpen(false);
 		return toast.success("Cliente vinculado com sucesso !");
 	}
 	useEffect(() => {
@@ -397,11 +398,43 @@ function NewOpportunityContent({
 		return () => clearTimeout(getData);
 	}, [clientHolder.cpfCnpj, clientHolder.email, clientHolder.telefonePrimario, refetch]);
 	return (
-		<div className="flex h-full w-full flex-col gap-6 px-4 lg:flex-row lg:px-0">
+		<div className="flex h-full w-full flex-col gap-6 px-4 lg:flex-row lg:px-0 relative">
+			{/* Mobile floating bubble and nested drawer */}
+			{!isDesktop && clientsSuccess && (similarClients?.length || 0) > 0 ? (
+				<>
+					<Button
+						className="sticky top-0 right-5 z-100 lg:hidden shadow-md flex items-center gap-1 bg-[#15599a] text-white text-xs"
+						onClick={() => setSimilarDrawerOpen(true)}
+						variant="default"
+						size={'xs'}
+					>
+						<UsersRound className="h-4 w-4" />
+						{`${similarClients?.length ?? 0} CLIENTES ENCONTRADOS`}
+					</Button>
+					<Drawer open={similarDrawerOpen} onOpenChange={setSimilarDrawerOpen}>
+						<DrawerContent className="flex max-h-[70vh] flex-col">
+							<DrawerHeader className="text-left">
+								<DrawerTitle>Clientes semelhantes</DrawerTitle>
+								<DrawerDescription>Selecione um cliente para vincular à oportunidade.</DrawerDescription>
+							</DrawerHeader>
+							<div className="flex-1 overflow-auto px-2 pb-2">
+								<SimilarClients
+									clients={similarClients || []}
+									handleSelectSimilarClient={handleSelectSimilarClient}
+									isError={clientsError}
+									isLoading={clientsLoading}
+									isSuccess={clientsSuccess}
+									selectedClientId={similarClientHolder?._id || null}
+								/>
+							</div>
+						</DrawerContent>
+					</Drawer>
+				</>
+			) : null}
 			<div className="scrollbar-thin scrollbar-track-primary/10 scrollbar-thumb-primary/30 flex w-full flex-col gap-2 px-2 lg:h-full lg:max-h-full lg:w-[60%] lg:overflow-y-auto">
 				<ResponsiblesInformationBlock
 					opportunity={opportunityHolder}
-					opportunityCreators={opportunityCreators}
+					opportunityCreators={opportunityCreators || []}
 					session={session}
 					setOpportunity={setOpportunityHolder}
 				/>
@@ -418,7 +451,7 @@ function NewOpportunityContent({
 				/>
 				<AddressInformationBlock client={clientHolder} opportunity={opportunityHolder} setClient={setClientHolder} setOpportunity={setOpportunityHolder} />
 			</div>
-			<div className="flex w-full lg:w-[40%]">
+			<div className="hidden lg:flex w-full lg:w-[40%] sticky top-0">
 				<SimilarClients
 					clients={similarClients || []}
 					handleSelectSimilarClient={handleSelectSimilarClient}
@@ -428,6 +461,8 @@ function NewOpportunityContent({
 					selectedClientId={similarClientHolder?._id || null}
 				/>
 			</div>
+
+			
 		</div>
 	);
 }
