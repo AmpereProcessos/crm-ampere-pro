@@ -4,11 +4,11 @@ import { TOpportunityDTOWithClient } from "@/utils/schemas/opportunity.schema";
 import { useState } from "react";
 import { IoMdArrowDropdownCircle, IoMdArrowDropupCircle } from "react-icons/io";
 import { MdAdd } from "react-icons/md";
-import OpportunityTechnicalAnalysisItem from "../Cards/OpportunityTechnicalAnalysisItem";
-import NewTechnicalAnalysis from "../Modals/TechnicalAnalysis/NewTechnicalAnalysis";
-import ErrorComponent from "../utils/ErrorComponent";
-import LoadingComponent from "../utils/LoadingComponent";
-import { Button } from "../ui/button";
+import OpportunityTechnicalAnalysisItem from "../../Cards/OpportunityTechnicalAnalysisItem";
+import NewTechnicalAnalysis from "../../Modals/TechnicalAnalysis/NewTechnicalAnalysis";
+import ErrorComponent from "../../utils/ErrorComponent";
+import LoadingComponent from "../../utils/LoadingComponent";
+import { Button } from "../../ui/button";
 import { Plus } from "lucide-react";
 
 type OpportunityTechnicalAnalysisProps = {

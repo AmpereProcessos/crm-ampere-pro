@@ -6,11 +6,11 @@ import type { TOpportunityDTOWithClientAndPartnerAndFunnelReferences } from "@/u
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
-import OpportunityFunnelReference from "../Cards/OpportunityFunnelReference";
-import SelectInput from "../Inputs/SelectInput";
-import ResponsiveDialogDrawerSection from "../utils/ResponsiveDialogDrawerSection";
+import OpportunityFunnelReference from "../../Cards/OpportunityFunnelReference";
+import SelectInput from "../../Inputs/SelectInput";
+import ResponsiveDialogDrawerSection from "../../utils/ResponsiveDialogDrawerSection";
 import { Funnel, Plus, X } from "lucide-react";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import { getErrorMessage } from "@/lib/methods/errors";
 type GetFunnelInfoParams = {
 	funnelId: TFunnelReferenceDTO["idFunil"];

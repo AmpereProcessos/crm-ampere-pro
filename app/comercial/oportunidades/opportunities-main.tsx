@@ -1,10 +1,9 @@
 "use client";
 import { useState } from "react";
 import OpportunitiesCardModePage from "@/components/Opportunities/OpportunitiesCardModePage";
-import OpportunitiesKanbanModePage from "@/components/Opportunities/OpportunitiesKanbanModePage";
 import type { TUserSession } from "@/lib/auth/session";
 import { useOpportunitiesQueryDefinitions, useOpportunitiesQueryOptions } from "@/utils/queries/opportunities";
-import OpportunitiesKanbanModePageV2 from "@/components/Opportunities/OpportunitiesKanbanModePageV2";
+import OpportunitiesKanbanModePageV2 from "@/components/Opportunities/OpportunitiesKanbanModePage";
 
 export type TOpportunitiesPageModes = "card" | "kanban";
 
@@ -37,8 +36,6 @@ export default function OpportunitiesMainPage({ initialMode, session }: Opportun
 			/>
 		);
 	if (mode === "kanban" && opportunityViewPreferences)
-		return (
-			<OpportunitiesKanbanModePageV2 session={session} opportunityViewPreferences={opportunityViewPreferences} />
-		);
+		return <OpportunitiesKanbanModePageV2 session={session} opportunityViewPreferences={opportunityViewPreferences} />;
 	return <></>;
 }

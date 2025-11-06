@@ -5,14 +5,14 @@ import { MdAdd } from "react-icons/md";
 import type { TUserSession } from "@/lib/auth/session";
 import { useOpportunityProposals } from "@/utils/queries/proposals";
 import type { TProposalDTO } from "@/utils/schemas/proposal.schema";
-import ProposalItem from "../Cards/OpportunityProposal";
-import ErrorComponent from "../utils/ErrorComponent";
-import LoadingComponent from "../utils/LoadingComponent";
+import ProposalItem from "../../Cards/OpportunityProposal";
+import ErrorComponent from "../../utils/ErrorComponent";
+import LoadingComponent from "../../utils/LoadingComponent";
 import type { TOpportunityBlockMode } from "./OpportunityPage";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import Link from "next/link";
 import { Plus } from "lucide-react";
-import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "../ui/tooltip";
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "../../ui/tooltip";
 
 type OpportunityProposalsProps = {
 	city?: string | null;

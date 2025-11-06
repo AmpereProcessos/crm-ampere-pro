@@ -10,10 +10,10 @@ import { formatDateAsLocale } from "@/lib/methods/formatting";
 import { cn } from "@/lib/utils";
 import { leadLoseJustification } from "@/utils/constants";
 import { updateOpportunity } from "@/utils/mutations/opportunities";
-import { LoadingButton } from "../Buttons/loading-button";
-import SelectInput from "../Inputs/SelectInput";
-import { Button } from "../ui/button";
-import ResponsiveDialogDrawer from "../utils/ResponsiveDialogDrawer";
+import { LoadingButton } from "../../Buttons/loading-button";
+import SelectInput from "../../Inputs/SelectInput";
+import { Button } from "../../ui/button";
+import ResponsiveDialogDrawer from "../../utils/ResponsiveDialogDrawer";
 
 type LoseProjectProps = {
 	opportunityId: string;

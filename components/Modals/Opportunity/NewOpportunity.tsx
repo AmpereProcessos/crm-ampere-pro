@@ -406,7 +406,7 @@ function NewOpportunityContent({
 						className="sticky top-0 right-5 z-100 lg:hidden shadow-md flex items-center gap-1 bg-[#15599a] text-white text-xs"
 						onClick={() => setSimilarDrawerOpen(true)}
 						variant="default"
-						size={'xs'}
+						size={"xs"}
 					>
 						<UsersRound className="h-4 w-4" />
 						{`${similarClients?.length ?? 0} CLIENTES ENCONTRADOS`}
@@ -461,8 +461,6 @@ function NewOpportunityContent({
 					selectedClientId={similarClientHolder?._id || null}
 				/>
 			</div>
-
-			
 		</div>
 	);
 }

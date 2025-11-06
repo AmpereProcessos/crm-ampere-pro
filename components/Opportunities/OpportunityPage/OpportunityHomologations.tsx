@@ -3,13 +3,11 @@ import type { TUserSession } from "@/lib/auth/session";
 import { useOpportunityHomologations } from "@/utils/queries/homologations";
 import { TOpportunityDTOWithClient } from "@/utils/schemas/opportunity.schema";
 import { useState } from "react";
-import { IoMdArrowDropdownCircle, IoMdArrowDropupCircle } from "react-icons/io";
-import { MdAdd } from "react-icons/md";
-import OpportunityHomologationCard from "../Cards/OpportunityHomologation";
-import ErrorComponent from "../utils/ErrorComponent";
-import LoadingComponent from "../utils/LoadingComponent";
+import OpportunityHomologationCard from "../../Cards/OpportunityHomologation";
+import ErrorComponent from "../../utils/ErrorComponent";
+import LoadingComponent from "../../utils/LoadingComponent";
 import { Plus } from "lucide-react";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 
 type OpportunityHomologationsProps = {
 	opportunity: TOpportunityDTOWithClient;

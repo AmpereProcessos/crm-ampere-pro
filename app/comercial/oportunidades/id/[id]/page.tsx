@@ -1,5 +1,5 @@
 export const dynamic = "force-dynamic";
-import OpportunityPage from "@/components/Opportunities/OpportunityPage";
+import OpportunityPage from "@/components/Opportunities/OpportunityPage/OpportunityPage";
 import ErrorComponent from "@/components/utils/ErrorComponent";
 import { getCurrentSession } from "@/lib/auth/session";
 import { redirect } from "next/navigation";

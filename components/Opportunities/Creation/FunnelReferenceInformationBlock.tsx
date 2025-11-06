@@ -7,11 +7,13 @@ import React, { type Dispatch, type SetStateAction } from "react";
 import { BsFillFunnelFill } from "react-icons/bs";
 function getCurrentActiveFunnelOptions(funnelId: number | string, funnels: TGetOpportunitiesQueryDefinitionsOutput["data"]["filterOptions"]["funnels"]) {
 	const funnel = funnels.filter((funnel) => funnel.id === funnelId)[0];
-	return funnel?.stages.map((stage) => ({
-		id: stage.id,
-		label: stage.label,
-		value: stage.id,
-	})) ?? [];
+	return (
+		funnel?.stages.map((stage) => ({
+			id: stage.id,
+			label: stage.label,
+			value: stage.id,
+		})) ?? []
+	);
 }
 
 type FunnelReferenceInformationBlockProps = {

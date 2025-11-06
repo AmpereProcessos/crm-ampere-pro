@@ -8,16 +8,16 @@ import { useState, type Dispatch, type SetStateAction } from "react";
 import toast from "react-hot-toast";
 import { AiOutlineCheck } from "react-icons/ai";
 import { MdDelete } from "react-icons/md";
-import SelectInput from "../Inputs/SelectInput";
-import SelectWithImages from "../Inputs/SelectWithImages";
-import Avatar from "../utils/Avatar";
+import SelectInput from "../../Inputs/SelectInput";
+import SelectWithImages from "../../Inputs/SelectWithImages";
+import Avatar from "../../utils/Avatar";
 
 import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
 import { addResponsibleToOpportunity, removeResponsibleFromOpportunity, updateResponsibleInOpportunity } from "@/utils/mutations/opportunities";
 import { BsCalendarPlus } from "react-icons/bs";
 import { Check, ChevronDown, Diamond, Plus, Trash2, UsersRound, X } from "lucide-react";
-import ResponsiveDialogDrawerSection from "../utils/ResponsiveDialogDrawerSection";
-import { Button } from "../ui/button";
+import ResponsiveDialogDrawerSection from "../../utils/ResponsiveDialogDrawerSection";
+import { Button } from "../../ui/button";
 import { getErrorMessage } from "@/lib/methods/errors";
 import { cn } from "@/lib/utils";
 import {
@@ -28,7 +28,7 @@ import {
 	DropdownMenuLabel,
 	DropdownMenuTrigger,
 	DropdownMenuSeparator,
-} from "../ui/dropdown-menu";
+} from "../../ui/dropdown-menu";
 type OpportunityResponsiblesBlockProps = {
 	opportunityId: string;
 	opportunityQueryKey: any;

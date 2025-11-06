@@ -3,15 +3,15 @@ import type { TOpportunityDTOWithClient } from "@/utils/schemas/opportunity.sche
 import { useState } from "react";
 import { MdAdd } from "react-icons/md";
 
-import ErrorComponent from "../utils/ErrorComponent";
-import LoadingComponent from "../utils/LoadingComponent";
+import ErrorComponent from "../../utils/ErrorComponent";
+import LoadingComponent from "../../utils/LoadingComponent";
 
 import { usePPSCallsByOpportunityId } from "@/utils/queries/pps-calls";
 import { useQueryClient } from "@tanstack/react-query";
 import { IoMdArrowDropdownCircle, IoMdArrowDropupCircle } from "react-icons/io";
-import OpenPPSCall from "../Cards/OpportunityPPSCall";
-import NewCall from "../Modals/Call/NewCall";
-import { Button } from "../ui/button";
+import OpenPPSCall from "../../Cards/OpportunityPPSCall";
+import NewCall from "../../Modals/Call/NewCall";
+import { Button } from "../../ui/button";
 import { Plus } from "lucide-react";
 
 type OpportunityTechnicalAnalysisBlockProps = {

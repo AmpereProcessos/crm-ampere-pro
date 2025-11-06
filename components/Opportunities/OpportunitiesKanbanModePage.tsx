@@ -1,221 +1,126 @@
-import { useQueryClient } from "@tanstack/react-query";
-import { Share2 } from "lucide-react";
-import { useEffect, useState } from "react";
-import { DragDropContext, type DropResult } from "react-beautiful-dnd";
-
+import { DndContext, DragOverlay, useDraggable, useDroppable } from "@dnd-kit/core";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { BadgeDollarSign, GripVertical, Loader2, Share2, Zap } from "lucide-react";
+import Link from "next/link";
+import { useRef, useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
-import { BsDownload, BsFillMegaphoneFill } from "react-icons/bs";
-import { FaRotate } from "react-icons/fa6";
-import type { TOpportunitiesPageModes } from "@/app/comercial/oportunidades/opportunities-main";
-import FunnelList from "@/components/dnd/FunnelList";
-import SelectInput from "@/components/Inputs/SelectInput";
-import NewOpportunity from "@/components/Modals/Opportunity/NewOpportunity";
-import SearchOpportunities from "@/components/Opportunities/SearchOpportunities";
+import { BsCalendarPlus, BsDownload, BsFillMegaphoneFill } from "react-icons/bs";
+import { MdDashboard } from "react-icons/md";
 import { Sidebar } from "@/components/Sidebar";
-import LoadingComponent from "@/components/utils/LoadingComponent";
-import LoadingPage from "@/components/utils/LoadingPage";
 import type { TUserSession } from "@/lib/auth/session";
-import { getExcelFromJSON } from "@/lib/methods/excel-utils";
-import { formatDateAsLocale } from "@/lib/methods/formatting";
+import { OPPORTUNITIES_FUNNEL_CONFIG, useOpportunitiesDragAndDropLogic } from "@/lib/funnels/opportunities-funnel-config";
+import { formatDateAsLocale, formatDecimalPlaces, formatToMoney, formatNameAsInitials } from "@/lib/methods/formatting";
 import { cn } from "@/lib/utils";
-import { useFunnelReferenceUpdate } from "@/utils/mutations/funnel-references";
-import { fetchOpportunityExport, useOpportunities } from "@/utils/queries/opportunities";
-import type { TFunnelDTO } from "@/utils/schemas/funnel.schema";
-import type { TOpportunitySimplifiedDTOWithProposalAndActivitiesAndFunnels } from "@/utils/schemas/opportunity.schema";
-import type { TUserDTOSimplified } from "@/utils/schemas/user.schema";
+import type { TGetOpportunitiesKanbanViewOutput } from "@/pages/api/opportunities/kanban";
+import type { TGetOpportunitiesQueryDefinitionsOutput, TUpdateOpportunityQueryDefinitionsInput } from "@/pages/api/opportunities/query-definitions";
+import { updateOpportunitiesQueryDefinitions } from "@/utils/mutations/opportunities";
+import { useOpportunitiesKanbanView } from "@/utils/queries/opportunities";
 import UserConectaIndicationCodeFlag from "../Conecta/UserConectaIndicationCodeFlag";
 import MultipleSelectInput from "../Inputs/MultipleSelectInput";
 import { PeriodByFieldFilter } from "../Inputs/PeriodByFieldFilter";
+import SelectInput from "../Inputs/SelectInput";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Button } from "../ui/button";
+import SearchOpportunities from "./SearchOpportunities";
+import NewOpportunity from "../Modals/Opportunity/NewOpportunity";
 
-type Options = {
-	activeResponsible: string[] | null;
-	activeFunnel: string | null;
-	responsibleOptions:
-		| {
-				id: string;
-				label: string;
-				value: string;
-		  }[]
-		| null;
-	funnelOptions:
-		| {
-				id: string | number;
-				label: string;
-				value: string | number;
-		  }[]
-		| null;
-};
-type ParamFilter = {
-	status: "GANHOS" | "PERDIDOS" | undefined;
-	mode: "GERAL" | "ATIVO" | "LEAD";
-	isFromMarketing: boolean;
-	isFromIndication: boolean;
-};
-
-type DateFilterType = {
-	after: string | undefined;
-	before: string | undefined;
-	field: "dataInsercao" | "dataGanho" | "dataPerda" | "ultimaInteracao.data";
-};
-type GetStageOpportunities = {
-	opportunities: TOpportunitySimplifiedDTOWithProposalAndActivitiesAndFunnels[];
-	stageId: string | number;
-};
-function getStageOpportunities({ opportunities, stageId }: GetStageOpportunities) {
-	if (opportunities) {
-		const filteredOpportunities = opportunities.filter((project) => project.funil.idEstagio?.toString() === stageId.toString());
-		return filteredOpportunities;
-	}
-	return [];
-}
-type GetOptionsParams = {
-	session: TUserSession | null;
-	responsiblesOptions: TUserDTOSimplified[] | undefined;
-	funnelsOptions: TFunnelDTO[] | undefined;
-};
-function getOptions({ session, responsiblesOptions, funnelsOptions }: GetOptionsParams) {
-	const responsibleFilterPreference = typeof window !== "undefined" ? localStorage.getItem("responsible") : null;
-	const funnelFilterPreference = typeof window !== "undefined" ? localStorage.getItem("funnel") : null;
-
-	const options: Options = {
-		activeResponsible: null,
-		activeFunnel: null,
-		responsibleOptions: null,
-		funnelOptions: null,
-	};
-
-	if (!session || !responsiblesOptions || !funnelsOptions) return options;
-	// Case were user has a global scope, which means able to visualize all opportunities
-	if (!session.user.permissoes.oportunidades.escopo) {
-		options.activeResponsible = null;
-		// If defined in local storage, using the stored option instead of null
-		if (responsibleFilterPreference) options.activeResponsible = JSON.parse(responsibleFilterPreference) as string[];
-
-		options.responsibleOptions = responsiblesOptions.map((resp) => {
-			return {
-				id: resp._id.toString(),
-				label: resp.nome,
-				value: resp._id.toString(),
-			};
-		});
-	}
-	// Case were user has a defined limited scope, which means able to visualize opportunities from a given list of users
-	if (session.user.permissoes.oportunidades.escopo) {
-		// filtering options to the defined user ids
-		const visibleUsers = session.user.permissoes.oportunidades.escopo;
-		const filteredresponsibles = responsiblesOptions.filter((responsible) => visibleUsers.includes(responsible._id.toString()));
-
-		options.activeResponsible = [session.user.id];
-
-		options.responsibleOptions = filteredresponsibles.map((resp) => ({
-			id: resp._id.toString(),
-			label: resp.nome,
-			value: resp._id.toString(),
-		}));
-	}
-	// Defining funnel related options
-	options.activeFunnel = funnelsOptions[0]?._id.toString() || null;
-	if (funnelFilterPreference) options.activeFunnel = funnelFilterPreference;
-	options.funnelOptions = funnelsOptions.map((funnel) => ({ id: funnel._id.toString(), label: funnel.nome, value: funnel._id.toString() }));
-
-	return options;
-}
-type OpportunitiesKanbanModePageProps = {
+type OpportunitiesKanbanModePageV2Props = {
 	session: TUserSession;
-	funnelsOptions: TFunnelDTO[];
-	responsiblesOptions: TUserDTOSimplified[];
-	handleSetMode: (mode: TOpportunitiesPageModes) => void;
+	opportunityViewPreferences: TGetOpportunitiesQueryDefinitionsOutput["data"];
 };
-export default function OpportunitiesKanbanModePage({ session, funnelsOptions, responsiblesOptions, handleSetMode }: OpportunitiesKanbanModePageProps) {
+export default function OpportunitiesKanbanModePageV2({ session, opportunityViewPreferences }: OpportunitiesKanbanModePageV2Props) {
 	const queryClient = useQueryClient();
+	const [newProjectModalIsOpen, setNewProjectModalIsOpen] = useState(false);
+	const [selectedFunnelId, setSelectedFunnelId] = useState<string | null>(opportunityViewPreferences.filterOptions.funnels[0].id || null);
 
-	const [newProjectModalIsOpen, setNewProjectModalIsOpen] = useState<boolean>(false);
+	const selectedFunnel = opportunityViewPreferences.filterOptions.funnels.find((funnel) => funnel.id === selectedFunnelId);
 
-	const [funnel, setFunnel] = useState<string | null>(getOptions({ session, responsiblesOptions, funnelsOptions }).activeFunnel);
-	const [responsible, setResponsible] = useState<string[] | null>(getOptions({ session, responsiblesOptions, funnelsOptions }).activeResponsible);
-	const [dateParam, setDateParam] = useState<DateFilterType>({
-		after: undefined,
-		before: undefined,
-		field: "dataInsercao",
-	});
-	const [params, setParams] = useState<ParamFilter>({
-		status: undefined,
-		mode: "GERAL",
-		isFromMarketing: false,
-		isFromIndication: false,
-	});
-
-	const { data: projects, queryKey } = useOpportunities({
-		responsibles: responsible,
-		funnel: funnel,
-		periodAfter: dateParam.after,
-		periodBefore: dateParam.before,
-		periodField: dateParam.field,
-		status: params.status,
-		isFromMarketing: params.isFromMarketing,
-		isFromIndication: params.isFromIndication,
-	});
-	const { mutate: handleFunnelReferenceUpdate } = useFunnelReferenceUpdate({
+	const { activeDragItem, handleOnDragStart, handleOnDragEnd, handleOnDragCancel } = useOpportunitiesDragAndDropLogic({
+		globalQueryParams: opportunityViewPreferences.filterSelections,
 		queryClient,
-		affectedQueryKey: queryKey,
 	});
 
-	function handleFunnelChange(value: string) {
-		setFunnel(value);
-		localStorage.setItem("funnel", value.toString());
-		return;
-	}
-	async function onDragEnd(result: DropResult) {
-		const { source, destination, draggableId } = result;
-		if (!destination) return;
-		if (destination.droppableId === source.droppableId) return;
-		const funnelReferenceId = draggableId;
-		const newStageId = destination.droppableId;
-		handleFunnelReferenceUpdate({ funnelReferenceId, newStageId });
-	}
+	const { mutate: updateOpportunitiesQueryDefinitionsMutation, isPending } = useMutation({
+		mutationKey: ["update-opportunities-query-definitions"],
+		mutationFn: updateOpportunitiesQueryDefinitions,
+		onMutate: async (payload) => {
+			await queryClient.cancelQueries({ queryKey: ["opportunities-query-definitions"] });
 
-	async function handleExportData() {
-		const results = await fetchOpportunityExport({
-			responsibles: responsible,
-			periodAfter: dateParam.after,
-			periodBefore: dateParam.before,
-			periodField: dateParam.field,
-			status: params.status,
+			const snapshot = queryClient.getQueryData(["opportunities-query-definitions"]) as TGetOpportunitiesQueryDefinitionsOutput["data"];
+			if (snapshot) return { snapshot };
+
+			await queryClient.setQueryData(["opportunities-query-definitions"], (prev: TGetOpportunitiesQueryDefinitionsOutput["data"]) => ({
+				identificador: prev.identificador,
+				mode: prev.mode,
+				filterOptions: prev.filterOptions,
+				filterSelections: {
+					partnerIds: payload.preferences.filtrosKanban.parceirosIds ?? prev.filterSelections.partnerIds,
+					responsiblesIds: payload.preferences.filtrosKanban.responsaveisIds ?? prev.filterSelections.responsiblesIds,
+					opportunityTypeIds: payload.preferences.filtrosKanban.tiposOportunidadeIds ?? prev.filterSelections.opportunityTypeIds,
+					period: payload.preferences.filtrosKanban.periodo
+						? {
+								field: payload.preferences.filtrosKanban.periodo.parametro ?? undefined,
+								after: payload.preferences.filtrosKanban.periodo.depois ?? undefined,
+								before: payload.preferences.filtrosKanban.periodo.antes ?? undefined,
+							}
+						: prev.filterSelections.period,
+					cities: payload.preferences.filtrosKanban.cidades ?? prev.filterSelections.cities,
+					ufs: payload.preferences.filtrosKanban.ufs ?? prev.filterSelections.ufs,
+					segments: payload.preferences.filtrosKanban.segmentos ?? prev.filterSelections.segments,
+					status: payload.preferences.filtrosKanban.status ?? prev.filterSelections.status,
+					isFromMarketing: payload.preferences.filtrosKanban.viaMarketing ?? prev.filterSelections.isFromMarketing,
+					isFromIndication: payload.preferences.filtrosKanban.viaIndicacao ?? prev.filterSelections.isFromIndication,
+				},
+			}));
+			return { snapshot };
+		},
+		onSettled: async (data, error, variables, context) => {
+			await queryClient.invalidateQueries({ queryKey: ["opportunities-query-definitions"] });
+		},
+		onError: (error, variables, context) => {
+			if (context?.snapshot) queryClient.setQueryData(["opportunities-query-definitions"], context.snapshot);
+		},
+	});
+	function updateOpportunitiesQueryDefinitionsMutationPartial(payload: Partial<TUpdateOpportunityQueryDefinitionsInput["preferences"]["filtrosKanban"]>) {
+		updateOpportunitiesQueryDefinitionsMutation({
+			preferences: {
+				modo: opportunityViewPreferences.mode,
+				identificador: opportunityViewPreferences.identificador,
+				filtrosKanban: {
+					parceirosIds: opportunityViewPreferences.filterSelections.partnerIds,
+					responsaveisIds: opportunityViewPreferences.filterSelections.responsiblesIds,
+					tiposOportunidadeIds: opportunityViewPreferences.filterSelections.opportunityTypeIds,
+					periodo: {
+						parametro: opportunityViewPreferences.filterSelections.period.field,
+						depois: opportunityViewPreferences.filterSelections.period.after,
+						antes: opportunityViewPreferences.filterSelections.period.before,
+					},
+					cidades: opportunityViewPreferences.filterSelections.cities,
+					ufs: opportunityViewPreferences.filterSelections.ufs,
+					segmentos: opportunityViewPreferences.filterSelections.segments,
+					status: opportunityViewPreferences.filterSelections.status,
+					viaMarketing: opportunityViewPreferences.filterSelections.isFromMarketing,
+					viaIndicacao: opportunityViewPreferences.filterSelections.isFromIndication,
+					...payload,
+				},
+				usuarioId: session.user.id,
+			},
 		});
-		getExcelFromJSON(results, `EXPORTAÇÃO DE OPORTUNIDADES ${formatDateAsLocale(new Date().toISOString())}`);
 	}
-	useEffect(() => {
-		if (!funnel) {
-			setFunnel(getOptions({ session, responsiblesOptions, funnelsOptions }).activeFunnel);
-		}
-		if (!responsible) {
-			setResponsible(getOptions({ session, responsiblesOptions, funnelsOptions }).activeResponsible);
-		}
-	}, [session, responsiblesOptions, funnelsOptions]);
-
-	if (!session.user) return <LoadingPage />;
 	return (
 		<div className="flex h-full flex-col md:flex-row">
 			<Sidebar session={session} />
-			<div className="flex w-full max-w-full grow flex-col overflow-x-hidden bg-background p-6">
+			<div className="flex w-full max-w-full grow flex-col overflow-x-hidden bg-background p-6 gap-3">
 				<div className="flex flex-col items-center border-b border-black pb-2 gap-1">
 					<div className="w-full flex items-center justify-between gap-2 flex-col lg:flex-row">
 						<div className="flex items-center gap-1">
 							<div className="text-xl font-black leading-none tracking-tight md:text-2xl">OPORTUNIDADES</div>
-							<button
-								type="button"
-								onClick={() => handleSetMode("card")}
-								className="flex items-center gap-1 px-2 text-xs text-primary/70 duration-300 ease-out hover:text-primary/80"
-							>
-								<FaRotate />
-								<h1 className="font-medium">ALTERAR MODO</h1>
-							</button>
 						</div>
 
 						<div className="flex grow flex-col items-center justify-end  gap-2 xl:flex-row">
 							<button
 								type="button"
-								onClick={() => handleExportData()}
+								// onClick={() => handleExportData()}
 								className="flex h-[46.6px] items-center justify-center gap-2 rounded-md border bg-[#2c6e49] p-2 px-3 text-sm font-medium text-primary-foreground shadow-md duration-300 ease-in-out hover:scale-105"
 							>
 								<BsDownload style={{ fontSize: "18px" }} />
@@ -231,37 +136,42 @@ export default function OpportunitiesKanbanModePage({ session, funnelsOptions, r
 							</button>
 						</div>
 					</div>
-
 					<div className="w-full flex flex-col lg:flex-row justify-between gap-2 items-center">
 						<UserConectaIndicationCodeFlag sellerId={session.user.id} code={session.user.codigoIndicacaoConecta} />
 						<div className="flex items-center justify-end flex-wrap gap-2">
 							<button
 								type="button"
 								className={cn("flex items-center justify-center p-2 max-h-[36px] min-h-[36px] border border-[#3e53b2] rounded-md transition-colors", {
-									"bg-[#3e53b2] text-primary-foreground": params.isFromMarketing,
-									"text-[#3e53b2]": !params.isFromMarketing,
+									"bg-[#3e53b2] text-primary-foreground": opportunityViewPreferences.filterSelections.isFromMarketing,
+									"text-[#3e53b2]": !opportunityViewPreferences.filterSelections.isFromMarketing,
 								})}
-								onClick={() => setParams((prev) => ({ ...prev, isFromMarketing: !prev.isFromMarketing }))}
+								onClick={() =>
+									updateOpportunitiesQueryDefinitionsMutationPartial({ viaMarketing: !opportunityViewPreferences.filterSelections.isFromMarketing })
+								}
 							>
 								<BsFillMegaphoneFill className="w-4 h-4" />
 							</button>
 							<button
-								onClick={() => setParams((prev) => ({ ...prev, isFromIndication: !prev.isFromIndication }))}
+								onClick={() =>
+									updateOpportunitiesQueryDefinitionsMutationPartial({ viaIndicacao: !opportunityViewPreferences.filterSelections.isFromIndication })
+								}
 								type="button"
 								className={cn("flex items-center justify-center p-2 max-h-[36px] min-h-[36px] border border-[#06b6d4] rounded-md transition-colors", {
-									"bg-[#06b6d4] text-primary-foreground": params.isFromIndication,
-									"text-[#06b6d4]": !params.isFromIndication,
+									"bg-[#06b6d4] text-primary-foreground": opportunityViewPreferences.filterSelections.isFromIndication,
+									"text-[#06b6d4]": !opportunityViewPreferences.filterSelections.isFromIndication,
 								})}
 							>
 								<Share2 className="w-4 h-4" />
 							</button>
 							<PeriodByFieldFilter
-								value={dateParam}
+								value={opportunityViewPreferences.filterSelections.period}
 								handleChange={(v) =>
-									setDateParam({
-										after: v?.after,
-										before: v?.before,
-										field: v?.field as DateFilterType["field"],
+									updateOpportunitiesQueryDefinitionsMutationPartial({
+										periodo: {
+											depois: v?.after ?? undefined,
+											antes: v?.before ?? undefined,
+											parametro: v?.field as "dataInsercao" | "dataGanho" | "dataPerda" | "ultimaInteracao.data",
+										},
 									})
 								}
 								holderClassName="text-xs p-2 max-h-[36px] min-h-[36px]"
@@ -279,15 +189,16 @@ export default function OpportunitiesKanbanModePage({ session, funnelsOptions, r
 									labelClassName="text-[0.6rem]"
 									holderClassName="text-xs p-2 min-h-[34px]"
 									resetOptionLabel="EM ANDAMENTO"
-									value={params.status}
+									value={opportunityViewPreferences.filterSelections.status}
 									options={[
-										{ id: 1, label: "GANHOS", value: "GANHOS" },
-										{ id: 2, label: "PERDIDOS", value: "PERDIDOS" },
+										{ id: 1, label: "EM ANDAMENTO", value: "ongoing" },
+										{ id: 2, label: "GANHOS", value: "won" },
+										{ id: 3, label: "PERDIDOS", value: "lost" },
 									]}
 									handleChange={(selected) => {
-										setParams((prev) => ({ ...prev, status: selected }));
+										updateOpportunitiesQueryDefinitionsMutationPartial({ status: selected });
 									}}
-									onReset={() => setParams((prev) => ({ ...prev, status: undefined }))}
+									onReset={() => updateOpportunitiesQueryDefinitionsMutationPartial({ status: undefined })}
 									width="100%"
 								/>
 							</div>
@@ -298,19 +209,16 @@ export default function OpportunitiesKanbanModePage({ session, funnelsOptions, r
 									holderClassName="text-xs p-2 min-h-[34px]"
 									showLabel={false}
 									resetOptionLabel="Todos"
-									selected={responsible}
-									options={getOptions({ session, responsiblesOptions, funnelsOptions }).responsibleOptions}
+									selected={opportunityViewPreferences.filterSelections.responsiblesIds}
+									options={opportunityViewPreferences.filterOptions.responsibles}
 									handleChange={(selected) => {
-										localStorage.setItem("responsible", JSON.stringify(selected as string[]));
-										setResponsible(selected as string[]);
+										updateOpportunitiesQueryDefinitionsMutationPartial({ responsaveisIds: selected as string[] });
 									}}
 									onReset={() => {
 										if (!session.user.permissoes.oportunidades.escopo) {
-											setResponsible(null);
-											localStorage.removeItem("responsible");
+											updateOpportunitiesQueryDefinitionsMutationPartial({ responsaveisIds: [] });
 										} else {
-											setResponsible(session.user.permissoes.oportunidades.escopo);
-											localStorage.setItem("responsible", JSON.stringify(session.user.permissoes.oportunidades.escopo));
+											updateOpportunitiesQueryDefinitionsMutationPartial({ responsaveisIds: session.user.permissoes.oportunidades.escopo ?? [] });
 										}
 									}}
 									width="100%"
@@ -323,14 +231,14 @@ export default function OpportunitiesKanbanModePage({ session, funnelsOptions, r
 									holderClassName="text-xs p-2 min-h-[34px]"
 									showLabel={false}
 									resetOptionLabel="NÃO DEFINIDO"
-									value={funnel}
-									options={getOptions({ session, responsiblesOptions, funnelsOptions }).funnelOptions}
+									value={selectedFunnelId}
+									options={opportunityViewPreferences.filterOptions.funnels}
 									handleChange={(selected) => {
-										handleFunnelChange(selected);
+										setSelectedFunnelId(selected);
 										// setFunnel(selected.value)
 									}}
 									onReset={() => {
-										if (funnelsOptions) handleFunnelChange(funnelsOptions[0]._id.toString());
+										setSelectedFunnelId(selectedFunnelId);
 									}}
 									width="100%"
 								/>
@@ -338,53 +246,213 @@ export default function OpportunitiesKanbanModePage({ session, funnelsOptions, r
 						</div>
 					</div>
 				</div>
-				<DragDropContext onDragEnd={(e) => onDragEnd(e)}>
-					<div className="1.5xl:max-h- mt-2 flex w-full overflow-x-auto scrollbar-thin scrollbar-track-primary/10 scrollbar-thumb-primary/30 md:max-h-[500px] lg:max-h-[calc(100vh-200px)]">
-						{!projects || !funnelsOptions ? (
-							<div className="flex min-h-[600px] w-full items-center justify-center">
-								<LoadingComponent />
-							</div>
-						) : funnelsOptions.filter((funn) => funn._id === funnel)[0] ? (
-							funnelsOptions
-								.filter((funn) => funn._id === funnel)[0]
-								.etapas.map((stage) => (
-									<FunnelList
-										key={stage.id}
-										id={stage.id}
-										session={session}
-										stageName={stage.nome}
-										items={getStageOpportunities({ opportunities: projects, stageId: stage.id }).map((item, index) => {
-											return {
-												id: item.funil.id,
-												idOportunidade: item._id,
-												nome: item.nome,
-												identificador: item.identificador,
-												tipo: item.tipo.titulo,
-												responsaveis: item.responsaveis,
-												idIndicacao: item.idIndicacao || undefined,
-												idMarketing: item.idMarketing || undefined,
-												proposta: item.proposta,
-												statusAtividades: item.statusAtividades,
-												ganho: !!item.ganho.data,
-												perca: !!item.perda.data,
-												contratoSolicitado: !!item.ganho.dataSolicitacao,
-												dataInsercao: item.dataInsercao,
-											};
-										})}
-									/>
-								))
-						) : null}
-					</div>
-				</DragDropContext>
+				{selectedFunnel ? (
+					<DndContext
+						onDragStart={handleOnDragStart}
+						onDragEnd={(event) => handleOnDragEnd({ funnelId: selectedFunnel.id, event })}
+						onDragCancel={handleOnDragCancel}
+					>
+						<div className="flex items-start overflow-x-auto gap-2 flex-1 min-h-0 w-full max-w-full max-h-[calc(100vh-200px)] scrollbar-thin scrollbar-track-primary/10 scrollbar-thumb-primary/30">
+							{selectedFunnel.stages.map((stage) => (
+								<KanbanBoardStage key={stage.id} funnelId={selectedFunnel.id} stage={stage} globalQueryParams={opportunityViewPreferences.filterSelections} />
+							))}
+						</div>
+						<DragOverlay>{activeDragItem ? <KanbanBoardStageCard stageId="" opportunity={activeDragItem} isDragOverlay={true} /> : null}</DragOverlay>
+					</DndContext>
+				) : null}
 			</div>
 			{newProjectModalIsOpen ? (
 				<NewOpportunity
 					session={session}
-					opportunityCreators={responsiblesOptions || []}
-					funnels={funnelsOptions || []}
+					opportunityCreators={opportunityViewPreferences.filterOptions.responsibles || []}
+					funnels={opportunityViewPreferences.filterOptions.funnels || []}
 					closeModal={() => setNewProjectModalIsOpen(false)}
 				/>
 			) : null}
+		</div>
+	);
+}
+
+type KanbanBoardStageProps = {
+	funnelId: string;
+	stage: TGetOpportunitiesQueryDefinitionsOutput["data"]["filterOptions"]["funnels"][number]["stages"][number];
+	globalQueryParams: TGetOpportunitiesQueryDefinitionsOutput["data"]["filterSelections"];
+};
+function KanbanBoardStage({ funnelId, stage, globalQueryParams }: KanbanBoardStageProps) {
+	const parentRef = useRef<HTMLDivElement>(null);
+
+	const { isOver, setNodeRef } = useDroppable({
+		id: stage.id,
+		data: {
+			stage,
+		},
+	});
+
+	const {
+		data: oppportunitesKanbanViewStage,
+		isLoading,
+		isError,
+		isSuccess,
+		isFetchingNextPage,
+		hasNextPage,
+		fetchNextPage,
+	} = useOpportunitiesKanbanView({
+		funnelId,
+		funnelStage: stage.id,
+		globalFilters: globalQueryParams,
+	});
+
+	const stageOpportunitiesMatched = oppportunitesKanbanViewStage?.pages[0]?.opportunitiesMatched || 0;
+	const stageOpportunities = oppportunitesKanbanViewStage?.pages.flatMap((page) => page.opportunities) || [];
+
+	return (
+		<div
+			className="flex flex-col gap-2 h-full"
+			style={{ width: OPPORTUNITIES_FUNNEL_CONFIG.STAGE_WIDTH, minWidth: OPPORTUNITIES_FUNNEL_CONFIG.STAGE_MIN_WIDTH }}
+		>
+			<div className="w-full bg-primary text-primary-foreground flex flex-col gap-2 p-3 rounded-md">
+				<div className="w-full flex items-center justify-center gap-2">
+					<h1 className="text-sm font-medium text-center">{stage.label}</h1>
+				</div>
+				<div className="w-full flex items-center justify-center gap-2">
+					<MdDashboard className="w-4 h-4" />
+					<p className="text-xs">{stageOpportunitiesMatched}</p>
+				</div>
+			</div>
+
+			<div
+				ref={(node) => {
+					setNodeRef(node);
+					// Usar uma função de callback para atualizar o ref de forma segura
+					if (node && parentRef.current !== node) {
+						(parentRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+					}
+				}}
+				className="flex flex-col flex-1 overflow-auto scrollbar-thin scrollbar-track-primary/10 scrollbar-thumb-primary/30 gap-2"
+			>
+				{stageOpportunities.map((opportunity) => (
+					<KanbanBoardStageCard key={opportunity._id} stageId={stage.id} opportunity={opportunity} />
+				))}
+			</div>
+
+			{hasNextPage ? (
+				<div className="flex items-center justify-center">
+					<Button type="button" variant="ghost" onClick={() => fetchNextPage()} disabled={!hasNextPage || isFetchingNextPage}>
+						{isFetchingNextPage ? <Loader2 className="w-4 h-4 animate-spin" /> : hasNextPage ? "Carregar mais projetos" : null}
+					</Button>
+				</div>
+			) : null}
+		</div>
+	);
+}
+
+function getBarColor({ isWon, isRequested, isLost }: { isWon: boolean; isRequested: boolean; isLost: boolean }) {
+	if (isWon) return "bg-green-500";
+	if (isRequested) return "bg-orange-400";
+	if (isLost) return "bg-red-500";
+	return "bg-blue-400";
+}
+type KanbanBoardStageCardProps = {
+	stageId: string;
+	opportunity: TGetOpportunitiesKanbanViewOutput["data"]["opportunities"][number];
+	isDragOverlay?: boolean;
+};
+function KanbanBoardStageCard({ stageId, opportunity, isDragOverlay = false }: KanbanBoardStageCardProps) {
+	const { attributes, listeners, setNodeRef, transform } = useDraggable({
+		id: opportunity.referenciaFunil.id,
+		data: {
+			stageId,
+			opportunity,
+		},
+		disabled: isDragOverlay, // Desabilita drag quando for overlay
+	});
+	const isWon = !!opportunity.ganho.data;
+	const isRequested = !!opportunity.ganho?.dataSolicitacao;
+	const isLost = !!opportunity.perda?.data;
+	const style =
+		!isDragOverlay && transform
+			? {
+					transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+				}
+			: undefined;
+	return (
+		<div
+			ref={setNodeRef}
+			style={style}
+			className="w-full group flex flex-col border border-primary bg-background dark:bg-[#121212] rounded-md shadow-xs p-2 gap-1 relative"
+		>
+			<div
+				{...listeners}
+				{...attributes}
+				className="absolute top-1 right-1 cursor-grab active:cursor-grabbing opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded-sm bg-primary/30 hover:bg-primary/80 hover:text-primary-foreground"
+				title="Arrastar para mover"
+			>
+				<GripVertical className="w-3 h-3" />
+			</div>
+			<div className={`h-1 w-full rounded-xs  ${getBarColor({ isWon, isRequested, isLost })}`} />
+			<div className="w-full flex flex-col gap-1">
+				<div className="flex items-center gap-1">
+					<h1 className="text-xs font-bold text-[#fead41]">{opportunity.identificador}</h1>
+					{opportunity.idMarketing ? <BsFillMegaphoneFill color="#3e53b2" /> : null}
+					{opportunity.idIndicacao ? <Share2 size={15} color="#06b6d4" /> : null}
+				</div>
+				<Link href={`/comercial/oportunidades/id/${opportunity._id}`} prefetch={false}>
+					<h1 className="font-bold text-primary hover:text-blue-400">{opportunity.nome}</h1>
+				</Link>
+			</div>
+			<div {...listeners} {...attributes} className="w-full grow flex flex-col gap-2">
+				{isWon ? (
+					<div className="z-8 absolute right-2 top-4 flex items-center justify-center text-green-500">
+						<p className="text-sm font-medium italic">GANHO</p>
+					</div>
+				) : null}
+				<div className="flex w-full flex-col">
+					<div className="flex items-center gap-1">
+						<MdDashboard />
+						<h3 className="text-[0.6rem] font-light">{opportunity.tipo.titulo}</h3>
+					</div>
+				</div>
+			</div>
+			{opportunity.proposta ? (
+				<div className="flex w-full grow flex-col rounded-md border border-primary/30 p-2">
+					<h1 className="text-[0.6rem] font-extralight text-primary/70">PROPOSTA ATIVA</h1>
+					<div className="flex w-full flex-col justify-between">
+						<p className="text-xs font-medium text-cyan-500">{opportunity.proposta.nome}</p>
+						<div className="flex  items-center justify-between">
+							<div className="flex items-center gap-1">
+								<Zap className="text-cyan-500 w-4 h-4 min-w-4 min-h-4" />
+								<p className="text-xs  text-primary/70">
+									{formatDecimalPlaces(opportunity.proposta.potenciaPico || 0)}
+									kWp
+								</p>
+							</div>
+							<div className="flex items-center gap-1">
+								<BadgeDollarSign className="text-cyan-500 w-4 h-4 min-w-4 min-h-4" />
+								<p className="text-xs  text-primary/70">{formatToMoney(opportunity.proposta.valor)}</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			) : null}
+			<div className="flex w-full items-center justify-between gap-2">
+				<div className="flex grow flex-wrap items-center gap-2">
+					{opportunity.responsaveis.map((resp) => {
+						return (
+							<div key={resp.id} className="flex items-center gap-1">
+								<Avatar className="h-5 w-5 min-w-5 min-h-5">
+									<AvatarImage src={resp.avatar_url || undefined} alt={resp.nome} />
+									<AvatarFallback className="text-xs">{formatNameAsInitials(resp.nome)}</AvatarFallback>
+								</Avatar>
+							</div>
+						);
+					})}
+				</div>
+
+				<div className="ites-center flex min-w-fit gap-1">
+					<BsCalendarPlus />
+					<p className={"text-[0.65rem] font-medium text-primary/70"}>{formatDateAsLocale(opportunity.dataInsercao, true)}</p>
+				</div>
+			</div>
 		</div>
 	);
 }

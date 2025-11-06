@@ -3,13 +3,13 @@ import { useFileReferencesByOpportunityId } from "@/utils/queries/file-reference
 import { useState } from "react";
 import { IoMdArrowDropdownCircle, IoMdArrowDropupCircle } from "react-icons/io";
 import { MdAdd } from "react-icons/md";
-import FileReferenceCard from "../FileReference/FileReferenceCard";
-import ControlFileReference from "../Modals/FileReference/ControlFileReference";
-import NewFileReference from "../Modals/FileReference/NewFileReference";
-import ErrorComponent from "../utils/ErrorComponent";
-import LoadingComponent from "../utils/LoadingComponent";
+import FileReferenceCard from "../../FileReference/FileReferenceCard";
+import ControlFileReference from "../../Modals/FileReference/ControlFileReference";
+import NewFileReference from "../../Modals/FileReference/NewFileReference";
+import ErrorComponent from "../../utils/ErrorComponent";
+import LoadingComponent from "../../utils/LoadingComponent";
 import { Plus } from "lucide-react";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 type OpportunityFilesProps = {
 	session: TUserSession;
 	opportunityId: string;

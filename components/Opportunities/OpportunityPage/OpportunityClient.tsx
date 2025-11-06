@@ -9,9 +9,9 @@ import { BsCalendarPlus } from "react-icons/bs";
 import { FaRing } from "react-icons/fa";
 import { FaLocationDot, FaRegIdCard } from "react-icons/fa6";
 import { MdEmail } from "react-icons/md";
-import EditClient from "../Modals/Client/EditClient";
-import Avatar from "../utils/Avatar";
-import { Button } from "../ui/button";
+import EditClient from "../../Modals/Client/EditClient";
+import Avatar from "../../utils/Avatar";
+import { Button } from "../../ui/button";
 
 type OpportunityClientProps = {
 	client: TClientDTO;

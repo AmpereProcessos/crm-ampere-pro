@@ -1,8 +1,8 @@
 import { formatDateForInputValue, formatToCPForCNPJ } from "@/utils/methods";
 import { useEffect, useState } from "react";
-import DateInput from "../Inputs/DateInput";
-import SelectInput from "../Inputs/SelectInput";
-import TextInput from "../Inputs/TextInput";
+import DateInput from "../../Inputs/DateInput";
+import SelectInput from "../../Inputs/SelectInput";
+import TextInput from "../../Inputs/TextInput";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AiOutlineCheck } from "react-icons/ai";
@@ -19,10 +19,10 @@ import { usePartnersSimplified } from "@/utils/queries/partners";
 import { useProjectTypes } from "@/utils/queries/project-types";
 import { useAcquisitionChannels } from "@/utils/queries/utils";
 import { ConsumerUnitHolderType, ElectricalInstallationGroups } from "@/utils/select-options";
-import SelectWithImages from "../Inputs/SelectWithImages";
+import SelectWithImages from "../../Inputs/SelectWithImages";
 import OpportunityFunnelReferencesBlock from "./OpportunityFunnelReferencesBlock";
 import OpportunityResponsiblesBlock from "./OpportunityResponsiblesBlock";
-import ResponsiveDialogDrawerSection from "../utils/ResponsiveDialogDrawerSection";
+import ResponsiveDialogDrawerSection from "../../utils/ResponsiveDialogDrawerSection";
 import { Building2, MapPin, Tag, UserRound } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { getErrorMessage } from "@/lib/methods/errors";

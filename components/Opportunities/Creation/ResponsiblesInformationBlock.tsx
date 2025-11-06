@@ -15,7 +15,7 @@ type ResponsiblesInformationBlockProps = {
 	session: TUserSession;
 	opportunity: TOpportunity;
 	setOpportunity: Dispatch<SetStateAction<TOpportunity>>;
-	opportunityCreators: TUserDTOSimplified[]
+	opportunityCreators: TUserDTOSimplified[];
 };
 function ResponsiblesInformationBlock({ session, opportunity, setOpportunity, opportunityCreators }: ResponsiblesInformationBlockProps) {
 	const initialResponsibleHolder = opportunityCreators.find((opCreator) => opCreator._id.toString() === session.user.id);
@@ -51,7 +51,7 @@ function ResponsiblesInformationBlock({ session, opportunity, setOpportunity, op
 						value={responsibleHolder.id}
 						options={opportunityCreators.map((user) => ({
 							id: user._id.toString(),
-							label: user.nome,	
+							label: user.nome,
 							value: user._id.toString(),
 							url: user.avatar_url || undefined,
 						}))}

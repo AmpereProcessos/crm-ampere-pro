@@ -61,7 +61,13 @@ async function getOpportunitiesQueryDefinitions({ session }: { session: TUserSes
 				isFromIndication: userPreferences?.filtrosKanban.viaIndicacao ?? false,
 			},
 			filterOptions: {
-					responsibles: responsibles.map((r) => ({ id: r._id.toString(), label: r.nome, value: r._id.toString(), phone: r.telefone ?? undefined, coverUrl: r.avatar_url ?? undefined })),
+				responsibles: responsibles.map((r) => ({
+					id: r._id.toString(),
+					label: r.nome,
+					value: r._id.toString(),
+					phone: r.telefone ?? undefined,
+					coverUrl: r.avatar_url ?? undefined,
+				})),
 				partners: partners.map((p) => ({ id: p._id.toString(), label: p.nome, value: p._id.toString(), coverUrl: p.logo_url ?? undefined })),
 				projectTypes: projectTypes.map((p) => ({ id: p._id.toString(), label: p.nome, value: p._id.toString() })),
 				funnels: funnels.map((f) => ({
