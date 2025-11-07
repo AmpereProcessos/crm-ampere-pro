@@ -2,14 +2,10 @@ import ResponsiveDialogDrawer from "@/components/utils/ResponsiveDialogDrawer";
 import type { TUserSession } from "@/lib/auth/session";
 import { getErrorMessage } from "@/lib/methods/errors";
 import { uploadFile } from "@/lib/methods/firebase";
-import { storage } from "@/services/firebase/storage-config";
-import { fileTypes } from "@/utils/constants";
 import { createPPSCall, updatePPSCall } from "@/utils/mutations/pps-calls";
 import type { TOpportunityDTOWithClient } from "@/utils/schemas/opportunity.schema";
 import type { TPPSCall } from "@/utils/schemas/pps-calls.schema";
-import type { TAttachmentState } from "@/utils/schemas/utils";
 import { useMutation } from "@tanstack/react-query";
-import { type UploadResult, getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { AttachFileBlock, ClientBlock, GeneralBlock, PremissesBlock } from "./Content";
@@ -69,8 +65,8 @@ export default function NewCall({ opportunity, session, closeModal, callbacks }:
 	};
 	const [infoHolder, setInfoHolder] = useState<TPPSCall>(initialState);
 
-	const [attachments, setAttachments] = useState<TAttachmentState[]>([]);
-	function addAttachment(attachment: TAttachmentState) {
+	const [attachments, setAttachments] = useState<any[]>([]);
+	function addAttachment(attachment: any) {
 		setAttachments((prev) => [...prev, attachment]);
 	}
 	function removeAttachment(index: number) {
@@ -165,10 +161,10 @@ export default function NewCall({ opportunity, session, closeModal, callbacks }:
 		}
 		return true;
 	}
-	async function handleUploadFiles({ callId, attachments }: { callId: string; attachments: TAttachmentState[] }) {
+	async function handleUploadFiles({ callId, attachments }: { callId: string; attachments: any[] }) {
 		const filesToUpload = attachments
 			.flatMap((attachment) =>
-				attachment.arquivos.map((f) => ({
+				attachment.arquivos.map((f: any) => ({
 					title: attachment.arquivos.length > 0 ? `${attachment.titulo} (${attachment.arquivos.length})` : attachment.titulo,
 					arquivo: f.arquivo as File,
 				})),
@@ -192,7 +188,7 @@ export default function NewCall({ opportunity, session, closeModal, callbacks }:
 		);
 		return links;
 	}
-	async function handleCallCreation({ call, attachments }: { call: TPPSCall; attachments: TAttachmentState[] }) {
+	async function handleCallCreation({ call, attachments }: { call: TPPSCall; attachments: any[] }) {
 		if (!validateFields()) return;
 		const loadingToastId = toast.loading("Criando chamado...");
 		const createPPSCallResponse = await createPPSCall({ ...call });
