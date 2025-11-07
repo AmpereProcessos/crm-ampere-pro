@@ -11,7 +11,8 @@
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "check": "knip"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^2.0.37",
@@ -92,7 +93,6 @@
     "recharts": "^3.0.2",
     "tailwind-merge": "^2.4.0",
     "tailwindcss-animate": "^1.0.7",
-    "typescript": "5.0.2",
     "usehooks-ts": "^2.9.1",
     "vaul": "^0.9.4",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz",
@@ -110,7 +110,7 @@
     "@types/lodash": "^4.14.194",
     "@types/mongodb": "^4.0.7",
     "@types/multer": "^1.4.7",
-    "@types/node": "^20.3.3",
+    "@types/node": "^20.19.24",
     "@typescript-eslint/eslint-plugin": "^8.40.0",
     "@typescript-eslint/parser": "^8.40.0",
     "eslint": "^9.33.0",
@@ -123,9 +123,11 @@
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
     "husky": "^9.1.7",
+    "knip": "^5.68.0",
     "postcss": "^8.4.21",
     "prettier": "^3.6.2",
-    "tailwindcss": "^4.1.12"
+    "tailwindcss": "^4.1.12",
+    "typescript": "^5.9.3"
   },
   "overrides": {
     "@types/react": "19.1.6",
