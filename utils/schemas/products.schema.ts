@@ -8,6 +8,7 @@ export const GeneralProductSchema = z.object({
 		.string({ required_error: "ID de referência do parceiro não informado.", invalid_type_error: "ID de referência do parceiro não informado." })
 		.optional()
 		.nullable(),
+	imagemCapaUrl: z.string().optional().nullable(),
 	idMetodologiaPrecificacao: PricingMethodologyReferenceSchema,
 	idsMetodologiasPagamento: z.array(PaymentMethodReferenceSchema),
 	ativo: z.boolean({
@@ -36,6 +37,7 @@ export const InsertProductSchema = z.object({
 		.string({ required_error: "ID de referência do parceiro não informado.", invalid_type_error: "ID de referência do parceiro não informado." })
 		.optional()
 		.nullable(),
+	imagemCapaUrl: z.string({ invalid_type_error: "Tipo não válido para a URL da imagem de capa do produto." }).optional().nullable(),
 	idMetodologiaPrecificacao: PricingMethodologyReferenceSchema,
 	idsMetodologiasPagamento: z.array(PaymentMethodReferenceSchema),
 	ativo: z.boolean({
@@ -64,6 +66,7 @@ export const ProductSchema = z.object({
 		.string({ required_error: "ID de referência do parceiro não informado.", invalid_type_error: "ID de referência do parceiro não informado." })
 		.optional()
 		.nullable(),
+	imagemCapaUrl: z.string({ invalid_type_error: "Tipo não válido para a URL da imagem de capa do produto." }).optional().nullable(),
 	idMetodologiaPrecificacao: PricingMethodologyReferenceSchema,
 	idsMetodologiasPagamento: z.array(PaymentMethodReferenceSchema),
 	ativo: z.boolean({

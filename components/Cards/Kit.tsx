@@ -1,23 +1,16 @@
-import { AiOutlineSafety } from "react-icons/ai";
 import { FaIndustry, FaTag } from "react-icons/fa";
-import { ImPower } from "react-icons/im";
-import { MdAttachMoney, MdOutlineMiscellaneousServices } from "react-icons/md";
 import { TbTopologyFull } from "react-icons/tb";
 
-import { formatDateAsLocale } from "@/lib/methods/formatting";
-import { renderIcon } from "@/lib/methods/rendering";
+import { formatDateAsLocale, formatNameAsInitials } from "@/lib/methods/formatting";
 import { formatToMoney } from "@/utils/methods";
-import { TKitDTO, TProductItem } from "@/utils/schemas/kits.schema";
-import { ProductItemCategories } from "@/utils/select-options";
+import { TKitDTO } from "@/utils/schemas/kits.schema";
 import dayjs from "dayjs";
-import { BsCalendarEvent, BsCalendarPlus, BsCart } from "react-icons/bs";
-import Avatar from "../utils/Avatar";
+import { BsCalendarEvent, BsCalendarPlus } from "react-icons/bs";
+import Image from "next/image";
+import { BadgeDollarSign, Pencil, ShieldCheck, Zap } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Button } from "../ui/button";
 
-function renderCategoryIcon(category: TProductItem["categoria"]) {
-	const CategoryInfo = ProductItemCategories.find((productCategory) => productCategory.value == category);
-	if (!CategoryInfo) return <BsCart />;
-	return renderIcon(CategoryInfo.icon);
-}
 function getStatusTag({ active, expiryDate }: { active: boolean; expiryDate?: string | null }) {
 	if (!active) return <h1 className="rounded-full bg-primary/60 px-2 py-1 text-[0.65rem] font-bold text-primary-foreground lg:text-xs">INATIVO</h1>;
 	if (expiryDate && dayjs(expiryDate).isBefore(new Date()))
@@ -32,117 +25,115 @@ type KitCardProps = {
 };
 function Kit({ kit, handleClick, userHasEditPermission, userHasPricingViewPermission }: KitCardProps) {
 	return (
-		<div className="flex min-h-[250px] w-full gap-2 rounded-md border border-primary/50 bg-background font-Inter shadow-md lg:w-[600px]">
-			{/* <div className={`h-full w-[6px]  ${getBarColor({ active: kit.ativo, expiryDate: kit.dataValidade })} rounded-bl-md rounded-tl-md`}></div> */}
-			<div className="flex grow flex-col p-4">
-				<div className="flex w-full items-center justify-between gap-2">
-					<div className="flex items-center gap-1">
-						<div className="flex h-[25px] min-h-[25px] w-[25px] min-w-[25px] items-center justify-center rounded-full border border-black p-1">
-							<FaTag size={12} />
+		<div className="flex w-full flex-col rounded-md border border-primary/50 bg-background p-4 gap-2 sm:flex-row">
+			<div className="flex items-center justify-center">
+				<div className="relative h-36 max-h-36 min-h-36 w-36 max-w-36 min-w-36 overflow-hidden rounded-lg">
+					{kit.imagemCapaUrl ? (
+						<Image src={kit.imagemCapaUrl} alt="Imagem de capa do kit" fill={true} objectFit="cover" />
+					) : (
+						<div className="bg-primary/50 text-primary-foreground flex h-full w-full items-center justify-center">
+							<FaTag className="h-6 w-6" />
 						</div>
-						{userHasEditPermission ? (
-							<h1
-								onClick={() => handleClick(kit)}
-								className="cursor-pointer text-sm font-black leading-none tracking-tight duration-300 ease-in-out hover:text-cyan-500"
-							>
-								{kit.nome}
-							</h1>
-						) : (
-							<h1 className="text-sm font-black leading-none tracking-tight">{kit.nome}</h1>
-						)}
+					)}
+				</div>
+			</div>
+			<div className="flex h-full grow flex-col gap-2">
+				<div className="flex w-full flex-col-reverse lg:flex-row items-center justify-between gap-2">
+					<div className="flex items-start gap-2 flex-wrap">
+						<h1 className="text-sm font-bold leading-none tracking-tight">{kit.nome}</h1>
+						{userHasPricingViewPermission ? (
+							<div className="flex items-center gap-1">
+								<BadgeDollarSign className="w-4 h-4 min-w-4 min-h-4" />
+								<p className="text-[0.7rem] font-medium text-primary/80">{formatToMoney(kit.preco)}</p>
+							</div>
+						) : null}
+
+						<div className="flex items-center gap-1">
+							<Zap className="w-4 h-4 min-w-4 min-h-4" />
+							<p className="text-[0.7rem] font-medium text-primary/80">{kit.potenciaPico} kW</p>
+						</div>
+						<div className="flex items-center gap-1">
+							<TbTopologyFull className="w-4 h-4 min-w-4 min-h-4" />
+							<p className="text-[0.7rem] font-medium text-primary/80">{kit.topologia}</p>
+						</div>
 					</div>
 					{getStatusTag({ active: kit.ativo, expiryDate: kit.dataValidade })}
 				</div>
 
-				<div className="flex w-full grow flex-col">
-					<div className="mt-2 flex w-full items-center gap-2">
-						{userHasPricingViewPermission ? (
-							<div className="flex items-center gap-1 text-green-500">
-								<MdAttachMoney />
-								<p className="text-[0.65rem] font-bold lg:text-xs">{formatToMoney(kit.preco)}</p>
-							</div>
-						) : null}
-
-						<div className="flex items-center gap-1 text-red-500">
-							<ImPower color="rgb(239,68,68)" />
-							<p className="text-[0.65rem] font-bold lg:text-xs">{kit.potenciaPico} kW</p>
-						</div>
-						<div className="flex items-center gap-1">
-							<TbTopologyFull />
-							<p className="text-[0.65rem] font-light lg:text-xs">{kit.topologia}</p>
+				<div className="flex w-full grow flex-col gap-1">
+					<div className="w-full flex flex-col">
+						<h1 className="text-xs tracking-tight">PRODUTOS</h1>
+						<div className="flex items-center gap-x-2 gap-y-1 flex-wrap">
+							{kit.produtos.map((product, index) => (
+								<div key={index} className="flex items-center gap-2 px-2 py-1 rounded-lg bg-primary/10">
+									<div className="flex items-start gap-2">
+										<h1 className="text-xs font-bold tracking-tight uppercase">{`${product.qtde} x ${product.modelo}`}</h1>
+										<div className="hidden md:flex items-center gap-1">
+											<FaIndustry className="w-4 h-4 min-w-4 min-h-4" />
+											<p className="text-[0.7rem] font-medium text-primary/80">{product.fabricante}</p>
+										</div>
+										<div className="hidden md:flex items-center gap-1">
+											<Zap className="w-4 h-4 min-w-4 min-h-4" />
+											<p className="text-[0.7rem] font-medium text-primary/80">{product.potencia} W</p>
+										</div>
+										<div className="hidden md:flex items-center gap-1">
+											<ShieldCheck className="w-4 h-4 min-w-4 min-h-4" />
+											<p className="text-[0.7rem] font-medium text-primary/80">
+												{product.garantia} {product.garantia > 1 ? "ANOS" : "ANO"}
+											</p>
+										</div>
+									</div>
+								</div>
+							))}
 						</div>
 					</div>
-					<h1 className="my-2 mb-0 text-[0.65rem] font-bold leading-none tracking-tight text-primary/70 lg:text-xs">PRODUTOS</h1>
-					{kit.produtos.map((product, index) => (
-						<div key={index} className="mt-1 flex w-full flex-col rounded-md border border-primary/30 p-2">
-							<div className="flex w-full flex-col items-start justify-between gap-2 lg:flex-row lg:items-center">
-								<div className="flex items-center gap-1">
-									<div className="flex h-[20px] w-[20px] items-center justify-center rounded-full border border-black p-1 text-[15px]">
-										{renderCategoryIcon(product.categoria)}
-									</div>
-									<p className="text-[0.6rem] font-medium leading-none tracking-tight lg:text-xs">
-										<strong className="text-[#FF9B50]">{product.qtde}</strong> x {product.modelo}
-									</p>
-								</div>
-								<div className="flex w-full grow items-center justify-end gap-2 pl-2 lg:w-fit">
-									<div className="flex items-center gap-1">
-										<FaIndustry size={12} />
-										<p className="text-[0.6rem] font-light text-primary/70">{product.fabricante}</p>
-									</div>
-									<div className="flex items-center gap-1">
-										<ImPower size={12} />
-										<p className="text-[0.6rem] font-light text-primary/70">{product.potencia} W</p>
-									</div>
-									<div className="flex items-center gap-1">
-										<AiOutlineSafety size={12} />
-										<p className="text-[0.6rem] font-light text-primary/70">{product.garantia} ANOS</p>
-									</div>
-								</div>
-							</div>
-						</div>
-						// <ProductItem product={module} index={index} removeProductFromKit={(index) => console.log()} showRemoveButton={false} />
-					))}
-					<h1 className="my-2 mb-0 text-[0.65rem] font-bold leading-none tracking-tight text-primary/70 lg:text-xs">SERVIÇOS</h1>
-					<div className="flex w-full flex-wrap items-center gap-2">
-						{kit.servicos.map((service, index) => (
-							<div key={index} className="mt-1 flex flex-col gap-1 rounded-md border border-primary/30 p-2">
-								<div className="flex w-full items-center justify-between gap-2">
-									<div className="flex items-center gap-1">
-										<div className="flex h-[20px] w-[20px] items-center justify-center rounded-full border border-black p-1">
-											<MdOutlineMiscellaneousServices />
+					<div className="w-full flex flex-col">
+						<h1 className="text-xs tracking-tight">SERVIÇOS</h1>
+						<div className="flex items-center gap-x-2 gap-y-1 flex-wrap">
+							{kit.servicos.map((service, index) => (
+								<div key={index} className="flex items-center gap-2 px-2 py-1 rounded-lg bg-primary/10">
+									<div className="flex items-start gap-2">
+										<h1 className="text-xs font-bold tracking-tight uppercase">{service.descricao}</h1>
+
+										<div className="hidden md:flex items-center gap-1">
+											<ShieldCheck className="w-4 h-4 min-w-4 min-h-4" />
+											<p className="text-[0.7rem] font-medium text-primary/80">
+												{service.garantia} {service.garantia > 1 ? "ANOS" : "ANO"}
+											</p>
 										</div>
-										<p className="text-[0.6rem] font-medium leading-none tracking-tight lg:text-xs">{service.descricao}</p>
 									</div>
 								</div>
-								<div className="flex w-full items-center justify-end gap-1">
-									<AiOutlineSafety size={12} />
-									<p className="text-[0.6rem] font-light text-primary/70">{service.garantia > 1 ? `${service.garantia} ANOS` : `${service.garantia} ANO`} </p>
-								</div>
-							</div>
-						))}
+							))}
+						</div>
 					</div>
 				</div>
-				<div className="mt-2 flex w-full items-center justify-between gap-2">
-					<div className="flex items-center gap-2">
-						{kit.dataValidade ? (
-							<div className={`flex items-center gap-2 text-primary/70`}>
-								<BsCalendarEvent />
-								<p className="text-[0.65rem] font-medium text-primary/70">
-									Valido até: <strong className="text-orange-500">{formatDateAsLocale(kit.dataValidade)}</strong>{" "}
-								</p>
-							</div>
-						) : null}
-					</div>
-					<div className="flex items-center gap-2">
-						<div className={`flex items-center gap-1`}>
-							<BsCalendarPlus />
-							<p className="text-[0.65rem] font-medium text-primary/70">{formatDateAsLocale(kit.dataInsercao, true)}</p>
+
+				<div className="w-full flex items-center gap-2 flex-col md:flex-row justify-center md:justify-end">
+					{kit.dataValidade ? (
+						<div className={`flex items-center gap-2 text-primary/70`}>
+							<BsCalendarEvent />
+							<p className="text-[0.65rem] font-medium text-primary/70">
+								Valido até: <strong className="text-orange-500">{formatDateAsLocale(kit.dataValidade)}</strong>{" "}
+							</p>
 						</div>
-						<div className="flex items-center gap-1">
-							<Avatar fallback={"R"} url={kit.autor.avatar_url || undefined} height={20} width={20} />
-							<p className="text-[0.65rem] font-medium text-primary/70">{kit.autor.nome}</p>
-						</div>
+					) : null}
+					<div className={`flex items-center gap-1`}>
+						<BsCalendarPlus className="w-4 h-4 min-w-4 min-h-4" />
+						<p className="text-[0.65rem] font-medium text-primary/70">{formatDateAsLocale(kit.dataInsercao, true)}</p>
 					</div>
+					<div className="flex items-center gap-1">
+						<Avatar className="w-5 h-5 min-w-5 min-h-5">
+							<AvatarImage src={kit.autor.avatar_url || undefined} alt={kit.autor.nome} />
+							<AvatarFallback className="text-xs">{formatNameAsInitials(kit.autor.nome)}</AvatarFallback>
+						</Avatar>
+						<p className="text-[0.65rem] font-medium text-primary/70">{kit.autor.nome}</p>
+					</div>
+					{userHasEditPermission ? (
+						<Button onClick={() => handleClick(kit)} variant="ghost" size="fit" className="flex items-center gap-1 px-2 py-1 text-xs">
+							<Pencil className="w-4 h-4 min-w-4 min-h-4" />
+							EDITAR
+						</Button>
+					) : null}
 				</div>
 			</div>
 		</div>

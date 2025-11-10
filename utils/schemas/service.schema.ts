@@ -8,6 +8,7 @@ export const GeneralServiceSchema = z.object({
 		.string({ required_error: "ID de referência do parceiro não informado.", invalid_type_error: "ID de referência do parceiro não informado." })
 		.optional()
 		.nullable(),
+	imagemCapaUrl: z.string().optional().nullable(),
 	idMetodologiaPrecificacao: PricingMethodologyReferenceSchema,
 	idsMetodologiasPagamento: z.array(PaymentMethodReferenceSchema),
 	ativo: z.boolean({
@@ -29,6 +30,7 @@ export const InsertServiceSchema = z.object({
 		.string({ required_error: "ID de referência do parceiro não informado.", invalid_type_error: "ID de referência do parceiro não informado." })
 		.optional()
 		.nullable(),
+	imagemCapaUrl: z.string({ invalid_type_error: "Tipo não válido para a URL da imagem de capa do serviço." }).optional().nullable(),
 	idMetodologiaPrecificacao: PricingMethodologyReferenceSchema,
 	idsMetodologiasPagamento: z.array(PaymentMethodReferenceSchema),
 	ativo: z.boolean({
@@ -50,6 +52,7 @@ export const ServiceEntitySchema = z.object({
 		.string({ required_error: "ID de referência do parceiro não informado.", invalid_type_error: "ID de referência do parceiro não informado." })
 		.optional()
 		.nullable(),
+	imagemCapaUrl: z.string({ invalid_type_error: "Tipo não válido para a URL da imagem de capa do serviço." }).optional().nullable(),
 	idMetodologiaPrecificacao: PricingMethodologyReferenceSchema,
 	idsMetodologiasPagamento: z.array(PaymentMethodReferenceSchema),
 	ativo: z.boolean({

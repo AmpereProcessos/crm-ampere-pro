@@ -52,8 +52,9 @@ export const ServiceItemSchema = z.object({
 });
 
 export type TServiceItem = z.infer<typeof ServiceItemSchema>;
-const GeneralNewKitSchema = z.object({
+export const GeneralNewKitSchema = z.object({
 	nome: z.string(),
+	imagemCapaUrl: z.string().optional().nullable(),
 	idParceiro: z.string().optional().nullable(),
 	idMetodologiaPrecificacao: PricingMethodologyReferenceSchema,
 	idsMetodologiasPagamento: z.array(PaymentMethodReferenceSchema),
@@ -76,6 +77,7 @@ export const InsertNewKitSchema = z.object({
 	nome: z
 		.string({ required_error: "Nome do kit não informado.", invalid_type_error: "Tipo não válido para o nome do kit." })
 		.min(3, "É necessário que o nome do kit tenha ao menos 3 letras."),
+	imagemCapaUrl: z.string({ invalid_type_error: "Tipo não válido para a URL da imagem de capa do kit." }).optional().nullable(),
 	idParceiro: z.string({ required_error: "ID do parceiro não informado.", invalid_type_error: "Tipo não válido para o ID do parceiro." }).optional().nullable(),
 	idMetodologiaPrecificacao: PricingMethodologyReferenceSchema,
 	idsMetodologiasPagamento: z.array(PaymentMethodReferenceSchema),
@@ -113,6 +115,7 @@ export const KitDTOSchema = z.object({
 	nome: z
 		.string({ required_error: "Nome do kit não informado.", invalid_type_error: "Tipo não válido para o nome do kit." })
 		.min(3, "É necessário que o nome do kit tenha ao menos 3 letras."),
+	imagemCapaUrl: z.string({ invalid_type_error: "Tipo não válido para a URL da imagem de capa do kit." }).optional().nullable(),
 	idParceiro: z.string({ required_error: "ID do parceiro não informado.", invalid_type_error: "Tipo não válido para o ID do parceiro." }).optional().nullable(),
 	idMetodologiaPrecificacao: PricingMethodologyReferenceSchema,
 	idsMetodologiasPagamento: z.array(PaymentMethodReferenceSchema),

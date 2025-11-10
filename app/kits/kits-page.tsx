@@ -1,4 +1,5 @@
 "use client";
+import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { IoMdArrowDropdownCircle, IoMdArrowDropupCircle } from "react-icons/io";
@@ -25,7 +26,8 @@ type TEditModal = {
 	id: string | null;
 };
 export default function KitsPage({ session }: { session: TUserSession }) {
-	const { data: kits, status: kitsStatus, isSuccess, isLoading, isError, filters, setFilters } = useKits();
+	const queryClient = useQueryClient();
+	const { data: kits, queryKey: kitsQueryKey, status: kitsStatus, isSuccess, isLoading, isError, filters, setFilters } = useKits();
 
 	const [editModal, setEditModal] = useState<TEditModal>({ isOpen: false, id: null });
 	const [newKitModalIsOpen, setNewKitModalIsOpen] = useState(false);
@@ -155,9 +157,26 @@ export default function KitsPage({ session }: { session: TUserSession }) {
 					) : null}
 				</div>
 			</div>
-			{newKitModalIsOpen ? <NewKit isOpen={newKitModalIsOpen} session={session} closeModal={() => setNewKitModalIsOpen(false)} /> : null}
+			{newKitModalIsOpen ? (
+				<NewKit
+					session={session}
+					closeModal={() => setNewKitModalIsOpen(false)}
+					callbacks={{
+						onMutate: async () => await queryClient.cancelQueries({ queryKey: kitsQueryKey }),
+						onSettled: async () => await queryClient.invalidateQueries({ queryKey: kitsQueryKey }),
+					}}
+				/>
+			) : null}
 			{editModal.isOpen && editModal.id ? (
-				<EditKit kitId={editModal.id} session={session} closeModal={() => setEditModal({ isOpen: false, id: null })} />
+				<EditKit
+					kitId={editModal.id}
+					session={session}
+					closeModal={() => setEditModal({ isOpen: false, id: null })}
+					callbacks={{
+						onMutate: async () => await queryClient.cancelQueries({ queryKey: kitsQueryKey }),
+						onSettled: async () => await queryClient.invalidateQueries({ queryKey: kitsQueryKey }),
+					}}
+				/>
 			) : null}
 			{bulkOperationModalIsOpen ? <KitBulkOperation session={session} closeModal={() => setBulkOperationModalIsOpen(false)} /> : null}
 		</div>

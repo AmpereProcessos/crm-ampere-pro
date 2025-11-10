@@ -17,7 +17,7 @@ export async function createKit({ info }: CreateKitParams) {
 
 type HandleKitEditParams = {
 	id: string;
-	info: IKit;
+	info: TKit;
 };
 
 export async function updateKit({ id, info }: HandleKitEditParams) {

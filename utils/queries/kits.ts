@@ -257,6 +257,7 @@ export function useKits() {
 			queryFn: fetchKits,
 			select: (data) => handleModelData(data),
 		}),
+		queryKey: ["kits"],
 		filters,
 		setFilters,
 	};
@@ -385,10 +386,13 @@ async function fetchKitById({ id }: { id: string }) {
 }
 
 export function useKitById({ id }: { id: string }) {
-	return useQuery({
+	return {
+		...useQuery({
+			queryKey: ["kit-by-id", id],
+			queryFn: async () => await fetchKitById({ id }),
+		}),
 		queryKey: ["kit-by-id", id],
-		queryFn: async () => await fetchKitById({ id }),
-	});
+	};
 }
 
 export async function fetchKitsExportation() {

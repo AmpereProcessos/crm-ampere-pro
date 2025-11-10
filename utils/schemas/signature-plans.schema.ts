@@ -27,6 +27,7 @@ const GeneralSignaturePlanSchema = z.object({
 		invalid_type_error: "Tipo não válido para o status de ativação do plano.",
 	}),
 	nome: z.string({ description: "Nome do item de plano comercial." }),
+	imagemCapaUrl: z.string().optional().nullable(),
 	idParceiro: z
 		.string({ required_error: "ID de referência do parceiro não informado.", invalid_type_error: "ID de referência do parceiro não informado." })
 		.optional()
@@ -54,6 +55,7 @@ export const InsertSignaturePlanSchema = z.object({
 		invalid_type_error: "Tipo não válido para o status de ativação do plano.",
 	}),
 	nome: z.string({ description: "Nome do item de plano comercial." }),
+	imagemCapaUrl: z.string({ invalid_type_error: "Tipo não válido para a URL da imagem de capa do plano." }).optional().nullable(),
 	idParceiro: z
 		.string({ required_error: "ID de referência do parceiro não informado.", invalid_type_error: "ID de referência do parceiro não informado." })
 		.optional()

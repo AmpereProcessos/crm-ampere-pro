@@ -45,8 +45,6 @@ function OpportunityPage({ session, opportunityId }: OpportunityPageProps) {
 	const handleOnMutate = async () => await queryClient.cancelQueries({ queryKey });
 	const handleOnSettled = async () => await queryClient.invalidateQueries({ queryKey });
 
-
-
 	if (opportunityLoading) return <LoadingComponent />;
 	if (opportunityError)
 		return (
