@@ -1,18 +1,19 @@
+import { ListFilter, Mail, Pencil, Phone, Plus } from "lucide-react";
+import { useState } from "react";
+import { BsCalendarMinus, BsCalendarPlus } from "react-icons/bs";
 import type { TUserSession } from "@/lib/auth/session";
 import { formatDateAsLocale, formatNameAsInitials } from "@/lib/methods/formatting";
 import type { TUsersWithFiltersResponse } from "@/pages/api/users/personalized";
 import { useUsersWithFilters } from "@/utils/queries/users";
-import { ListFilter, Mail, Pencil, Phone } from "lucide-react";
-import { useState } from "react";
-import { BsCalendarMinus, BsCalendarPlus } from "react-icons/bs";
 import EditUser from "../Modals/User/EditUser";
 import NewUserModal from "../Modals/User/NewUser";
-import { Button } from "../ui/button";
 import ConfigUsersFilterMenu from "../Users/ConfigUsersFilterMenu";
+import { Button } from "../ui/button";
 import Avatar from "../utils/Avatar";
 import ErrorComponent from "../utils/ErrorComponent";
 import GeneralQueryPaginationMenu from "../utils/GeneralQueryPaginationMenu";
 import LoadingComponent from "../utils/LoadingComponent";
+
 type UsersProps = {
 	session: TUserSession;
 };
@@ -39,11 +40,14 @@ function Users({ session }: UsersProps) {
 					<p className="text-sm text-[#71717A]">Gerencie, adicione e edite os usuários</p>
 				</div>
 				<div className="flex items-center gap-2">
-					<Button onClick={() => setFilterMenuIsOpen((prev) => !prev)} className="flex items-center gap-2">
+					<Button onClick={() => setFilterMenuIsOpen((prev) => !prev)} size={"xs"} variant={"ghost"} className="flex items-center gap-1">
 						<ListFilter className="w-4 h-4 min-w-4 min-h-4" />
 						FILTRAR
 					</Button>
-					<Button onClick={() => setUserModalIsOpen(true)}>NOVO USUÁRIO</Button>
+					<Button onClick={() => setUserModalIsOpen(true)} size={"xs"} className="flex items-center gap-1">
+						<Plus className="w-4 h-4 min-w-4 min-h-4" />
+						NOVO USUÁRIO
+					</Button>
 				</div>
 			</div>
 			<div className="flex w-full flex-col gap-2 py-2">

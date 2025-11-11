@@ -1,11 +1,13 @@
-import type { TUserSession } from "@/lib/auth/session";
-import { formatDateAsLocale } from "@/lib/methods/formatting";
-import { usePricingMethods } from "@/utils/queries/pricing-methods";
+import { Plus } from "lucide-react";
 import { useState } from "react";
 import { BsCalendarPlus } from "react-icons/bs";
 import { ImPriceTag } from "react-icons/im";
+import type { TUserSession } from "@/lib/auth/session";
+import { formatDateAsLocale } from "@/lib/methods/formatting";
+import { usePricingMethods } from "@/utils/queries/pricing-methods";
 import EditPricingMethod from "../Modals/PricingMethods/EditPricingMethod";
 import NewPricingMethod from "../Modals/PricingMethods/NewPricingMethod";
+import { Button } from "../ui/button";
 import Avatar from "../utils/Avatar";
 import ErrorComponent from "../utils/ErrorComponent";
 import LoadingComponent from "../utils/LoadingComponent";
@@ -26,12 +28,10 @@ function PricingMethods({ session }: PricingMethodsProps) {
 					<h1 className={`text-lg font-bold uppercase`}>Controle de metodologias de precificação</h1>
 					<p className="text-sm text-[#71717A]">Gerencie, adicione e edite os metodologias de precificação</p>
 				</div>
-				<button
-					onClick={() => setNewPricingMethodModalIsOpen(true)}
-					className="h-9 whitespace-nowrap rounded-sm bg-primary/90 px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm disabled:bg-primary/50 disabled:text-primary-foreground enabled:hover:bg-primary/80 enabled:hover:text-primary-foreground"
-				>
+				<Button onClick={() => setNewPricingMethodModalIsOpen(true)} size={"xs"} className="flex items-center gap-1">
+					<Plus className="w-4 h-4 min-w-4 min-h-4" />
 					NOVA METODOLOGIA
-				</button>
+				</Button>
 			</div>
 
 			{newPricingMethodModalIsOpen ? <NewPricingMethod session={session} closeModal={() => setNewPricingMethodModalIsOpen(false)} /> : null}
@@ -47,12 +47,13 @@ function PricingMethods({ session }: PricingMethodsProps) {
 											<ImPriceTag size={13} />
 										</div>
 										{!FixedPricingMethod.includes(method._id) ? (
-											<p
+											<button
 												onClick={() => setEditModal({ id: method._id, isOpen: true })}
+												type="button"
 												className="cursor-pointer text-sm font-medium leading-none tracking-tight duration-300 ease-in-out hover:text-cyan-500"
 											>
 												{method.nome}
-											</p>
+											</button>
 										) : (
 											<p className="text-sm font-medium leading-none tracking-tight">{method.nome}</p>
 										)}

@@ -1,14 +1,11 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { Plus, Send, Zap } from "lucide-react";
 import { useState } from "react";
-import { BsCalendarPlus } from "react-icons/bs";
-import { FaRegUserCircle } from "react-icons/fa";
 import type { TGetAutomationsOutputDefault } from "@/app/api/automations/route";
 import type { TUserSession } from "@/lib/auth/session";
-import { formatDateAsLocale, formatNameAsInitials } from "@/lib/methods/formatting";
+import { formatNameAsInitials } from "@/lib/methods/formatting";
 import { useAutomations } from "@/utils/queries/automations";
 import { AutomationConfigurationActionTypes, AutomationConfigurationTriggerTypes } from "@/utils/select-options";
-import UserGroup from "../Cards/UserGroup";
 import EditAutomation from "../Modals/Automation/EditAutomation";
 import NewAutomation from "../Modals/Automation/NewAutomation";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";

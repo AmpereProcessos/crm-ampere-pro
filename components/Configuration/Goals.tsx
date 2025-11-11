@@ -1,13 +1,14 @@
-import type { TGetGoalsRouteOutput } from "@/app/api/goals/route";
-import type { TUserSession } from "@/lib/auth/session";
-import { formatDecimalPlaces, formatToMoney } from "@/lib/methods/formatting";
-import { useGoals } from "@/utils/queries/goals";
 import { useQueryClient } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import { BadgeDollarSign, Check, Goal, Percent, Plus, Send, Zap } from "lucide-react";
 import { useState } from "react";
+import type { TGetGoalsRouteOutput } from "@/app/api/goals/route";
+import type { TUserSession } from "@/lib/auth/session";
+import { formatDecimalPlaces, formatToMoney } from "@/lib/methods/formatting";
+import { useGoals } from "@/utils/queries/goals";
 import EditGoal from "../Modals/Goals/EditGoal";
 import NewGoal from "../Modals/Goals/NewGoal";
+import { Button } from "../ui/button";
 import ErrorComponent from "../utils/ErrorComponent";
 import LoadingComponent from "../utils/LoadingComponent";
 
@@ -26,19 +27,14 @@ function Goals({ session }: GoalsProps) {
 	return (
 		<div className="flex h-full grow flex-col">
 			<div className="flex w-full items-center justify-between border-primary/30 border-b pb-2">
-				<div className="flex w-full items-center justify-between border-primary/30 border-b pb-2">
-					<div className="flex flex-col">
-						<h1 className={"font-bold text-lg"}>Metas</h1>
-						<p className="text-[#71717A] text-sm">Gerencie as metas.</p>
-					</div>
-					<button
-						className="h-9 whitespace-nowrap rounded-sm bg-primary/90 px-4 py-2 font-medium text-sm text-primary-foreground shadow-sm enabled:hover:bg-primary/80 enabled:hover:text-primary-foreground disabled:bg-primary/50 disabled:text-primary-foreground"
-						onClick={() => setNewGoalModalIsOpen(true)}
-						type="button"
-					>
-						NOVA META
-					</button>
+				<div className="flex flex-col">
+					<h1 className={"font-bold text-lg"}>Metas</h1>
+					<p className="text-[#71717A] text-sm">Gerencie as metas.</p>
 				</div>
+				<Button onClick={() => setNewGoalModalIsOpen(true)} size={"xs"} className="flex items-center gap-1">
+					<Plus className="w-4 h-4 min-w-4 min-h-4" />
+					NOVA META
+				</Button>
 			</div>
 			<div className="flex w-full flex-col gap-2 py-2">
 				{isLoading ? <LoadingComponent /> : null}
@@ -83,16 +79,13 @@ function GoalCard({ goal, handleEditClick }: { goal: Exclude<TGetGoalsRouteOutpu
 				<div className="flex h-[25px] w-[25px] items-center justify-center rounded-full border border-black p-1">
 					<Goal className="w-4 min-w-4" />
 				</div>
-				{true ? (
-					<button
-						className="cursor-pointer font-medium text-sm leading-none tracking-tight duration-300 ease-in-out hover:text-cyan-500"
-						onClick={handleEditClick}
-					>
-						META: {periodStr}
-					</button>
-				) : (
-					<p className="font-medium text-sm leading-none tracking-tight">META: {periodStr}</p>
-				)}
+				<button
+					type="button"
+					className="cursor-pointer font-medium text-sm leading-none tracking-tight duration-300 ease-in-out hover:text-cyan-500"
+					onClick={handleEditClick}
+				>
+					META: {periodStr}
+				</button>
 			</div>
 			<div className="flex w-full flex-col gap-2">
 				<h1 className='"w-full text-start font-medium text-xs'>OBJETIVOS</h1>

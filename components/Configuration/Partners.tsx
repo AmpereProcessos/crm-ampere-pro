@@ -1,12 +1,13 @@
+import { Plus } from "lucide-react";
+import { useState } from "react";
 import type { TUserSession } from "@/lib/auth/session";
 import { usePartners } from "@/utils/queries/partners";
-import { useState } from "react";
-import ErrorComponent from "../utils/ErrorComponent";
-import LoadingComponent from "../utils/LoadingComponent";
-
 import Partner from "../Cards/Partner";
 import EditPartner from "../Modals/Partner/EditPartner";
 import NewPartner from "../Modals/Partner/NewPartner";
+import { Button } from "../ui/button";
+import ErrorComponent from "../utils/ErrorComponent";
+import LoadingComponent from "../utils/LoadingComponent";
 
 type PartnersProps = {
 	session: TUserSession;
@@ -28,12 +29,10 @@ function Partners({ session }: PartnersProps) {
 					<p className="text-sm text-[#71717A]">Gerencie, adicione e edite parceiros</p>
 				</div>
 				{isAllowedToCreatePartner ? (
-					<button
-						onClick={() => setNewPartnerModalIsOpen(true)}
-						className="h-9 whitespace-nowrap rounded-sm bg-primary/90 px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm disabled:bg-primary/50 disabled:text-primary-foreground enabled:hover:bg-primary/80 enabled:hover:text-primary-foreground"
-					>
+					<Button onClick={() => setNewPartnerModalIsOpen(true)} size={"xs"} className="flex items-center gap-1">
+						<Plus className="w-4 h-4 min-w-4 min-h-4" />
 						NOVO PARCEIRO
-					</button>
+					</Button>
 				) : null}
 			</div>
 			<div className="flex w-full flex-col gap-2 py-2">

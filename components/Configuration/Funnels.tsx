@@ -1,9 +1,11 @@
-import type { TUserSession } from "@/lib/auth/session";
-import { useFunnels } from "@/utils/queries/funnels";
+import { Plus } from "lucide-react";
 import { useState } from "react";
 import { BsFunnelFill } from "react-icons/bs";
+import type { TUserSession } from "@/lib/auth/session";
+import { useFunnels } from "@/utils/queries/funnels";
 import EditFunnel from "../Modals/Funnels/EditFunnel";
 import NewFunnel from "../Modals/Funnels/NewFunnel";
+import { Button } from "../ui/button";
 import ErrorComponent from "../utils/ErrorComponent";
 import LoadingComponent from "../utils/LoadingComponent";
 
@@ -21,12 +23,10 @@ function Funnels({ session }: FunnelsProps) {
 					<h1 className={`text-lg font-bold uppercase`}>Controle de funis</h1>
 					<p className="text-sm text-[#71717A]">Gerencie, adicione e edite os funis existentes</p>
 				</div>
-				<button
-					onClick={() => setNewFunnelModalIsOpen(true)}
-					className="h-9 whitespace-nowrap rounded-sm bg-primary/90 px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm disabled:bg-primary/50 disabled:text-primary-foreground enabled:hover:bg-primary/80 enabled:hover:text-primary-foreground"
-				>
+				<Button onClick={() => setNewFunnelModalIsOpen(true)} size={"xs"} className="flex items-center gap-1">
+					<Plus className="w-4 h-4 min-w-4 min-h-4" />
 					NOVO FUNIL
-				</button>
+				</Button>
 			</div>
 			{newFunnelModalIsOpen ? <NewFunnel session={session} closeModal={() => setNewFunnelModalIsOpen(false)} /> : null}
 			<div className="flex w-full flex-col gap-2 py-2">
@@ -39,12 +39,13 @@ function Funnels({ session }: FunnelsProps) {
 								<div className="flex h-[25px] w-[25px] items-center justify-center rounded-full border border-black p-1">
 									<BsFunnelFill />
 								</div>
-								<p
+								<button
 									onClick={() => setEditModal({ id: funnel._id, isOpen: true })}
+									type="button"
 									className="cursor-pointer text-sm font-medium leading-none tracking-tight duration-300 ease-in-out hover:text-cyan-500"
 								>
 									{funnel.nome}
-								</p>
+								</button>
 							</div>
 							<div className="flex w-full flex-col gap-2">
 								<h1 className='"w-full mt-2 text-start text-xs font-medium'>ETAPAS</h1>
