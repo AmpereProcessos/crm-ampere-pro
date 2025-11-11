@@ -1,10 +1,10 @@
-import { TGetLeadsOutput, TGetManyLeadsInput } from "@/app/api/leads/route";
-import { TGetLeadsStatsInput, TGetLeadsStatsRouteOutput } from "@/app/api/leads/stats/route";
-import { useDebounceMemo } from "@/lib/hooks";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import dayjs from "dayjs";
 import { useState } from "react";
+import type { TGetLeadsOutput, TGetManyLeadsInput } from "@/app/api/leads/route";
+import type { TGetLeadsStatsInput, TGetLeadsStatsRouteOutput } from "@/app/api/leads/stats/route";
+import { useDebounceMemo } from "@/lib/hooks";
 
 async function fetchLeads(input: TGetManyLeadsInput) {
 	const queryString = new URLSearchParams();

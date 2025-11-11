@@ -1,18 +1,18 @@
-import { apiHandler } from "@/lib/api";
-import { getValidCurrentSessionUncached, TUserSession } from "@/lib/auth/session";
-import connectToDatabase from "@/services/mongodb/crm-db-connection";
-import { TLead } from "@/utils/schemas/leads.schema";
 import createHttpError from "http-errors";
-import { Filter, ObjectId } from "mongodb";
-import { NextRequest, NextResponse } from "next/server";
-import z from "zod";
+import { type Filter, ObjectId } from "mongodb";
+import { type NextRequest, NextResponse } from "next/server";
+import type z from "zod";
+import { apiHandler } from "@/lib/api";
+import { getValidCurrentSessionUncached, type TUserSession } from "@/lib/auth/session";
+import connectToDatabase from "@/services/mongodb/crm-db-connection";
+import type { TLead } from "@/utils/schemas/leads.schema";
 import {
 	CreateLeadInputSchema,
-	CreateManyLeadInputSchema,
-	CreateOneLeadInputSchema,
-	GetLeadByIdInputSchema,
+	type CreateManyLeadInputSchema,
+	type CreateOneLeadInputSchema,
+	type GetLeadByIdInputSchema,
 	GetLeadsInputSchema,
-	GetManyLeadsInputSchema,
+	type GetManyLeadsInputSchema,
 	UpdateLeadInputSchema,
 } from "./input";
 

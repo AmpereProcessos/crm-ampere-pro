@@ -1,8 +1,8 @@
-import { formatDateAsLocale, formatNameAsInitials } from "@/lib/methods/formatting";
-import { TUserGroupDTOWithUsers } from "@/utils/schemas/user-groups.schema";
 import { BsCalendarPlus } from "react-icons/bs";
 import { FaRegUserCircle } from "react-icons/fa";
 import { FaUserGroup } from "react-icons/fa6";
+import { formatDateAsLocale, formatNameAsInitials } from "@/lib/methods/formatting";
+import type { TUserGroupDTOWithUsers } from "@/utils/schemas/user-groups.schema";
 import Avatar from "../utils/Avatar";
 
 type UserGroupProps = {
@@ -16,16 +16,13 @@ function UserGroup({ group, openModal }: UserGroupProps) {
 				<div className="flex h-[25px] w-[25px] items-center justify-center rounded-full border border-black p-1">
 					<FaUserGroup />
 				</div>
-				{true ? (
-					<p
-						onClick={() => openModal(group._id)}
-						className="cursor-pointer text-sm font-medium leading-none tracking-tight duration-300 ease-in-out hover:text-cyan-500"
-					>
-						{group.titulo}
-					</p>
-				) : (
-					<p className="text-sm font-medium leading-none tracking-tight">{group.titulo}</p>
-				)}
+				<button
+					onClick={() => openModal(group._id)}
+					type="button"
+					className="cursor-pointer text-sm font-medium leading-none tracking-tight duration-300 ease-in-out hover:text-cyan-500"
+				>
+					{group.titulo}
+				</button>
 			</div>
 			<div className="my-2 text-start text-xs tracking-tight text-primary/70">{group.descricao || "NENHUMA DESCRIÇÃO DEFINIDA."}</div>
 			{group.usuarios ? (
@@ -46,6 +43,7 @@ function UserGroup({ group, openModal }: UserGroupProps) {
 										<p className="font-Inter text-xs font-medium text-primary/70">{user.nome}</p>
 									</div>
 								);
+							return null;
 						})}
 						{group.usuarios.length > 10 ? <p className="font-Inter text-xs font-medium text-primary/70">E MAIS...</p> : null}
 					</div>

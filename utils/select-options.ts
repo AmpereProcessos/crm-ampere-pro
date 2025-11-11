@@ -1,6 +1,6 @@
+import { BsCart, BsFillHouseFill } from "react-icons/bs";
 import { FaHouseUser, FaSolarPanel } from "react-icons/fa";
 import {
-	MdAssessment,
 	MdEast,
 	MdElectricMeter,
 	MdEmail,
@@ -16,17 +16,17 @@ import {
 	MdSouthWest,
 	MdWest,
 } from "react-icons/md";
-import { BsCart, BsFillHouseFill } from "react-icons/bs";
 import { TbTopologyFull } from "react-icons/tb";
-import { TComissionScenarioConditionType, TUserDTO } from "./schemas/user.schema";
-import { ElectricalPhasesSchema, TEletricalPhases, TProposalPremisses } from "./schemas/proposal.schema";
-import { TSaleCategory } from "./schemas/opportunity.schema";
-import { TSignaturePlanDTO } from "./schemas/signature-plans.schema";
-import { TProject } from "./schemas/project.schema";
-import { TTechnicalAnalysisPendencyCategory } from "./schemas/technical-analysis.schema";
-import { TPricingMethodConditionType } from "./schemas/pricing-method.schema";
 import { getAllValueCombinations } from "@/lib/methods/array-manipulation";
-import { TPurchaseDeliveryStatus, TPurchaseStatus } from "./schemas/purchase.schema";
+import type { TAutomationConfiguration } from "./schemas/automations.schema";
+import type { TTimeDurationEnum } from "./schemas/enums.schema";
+import type { TPricingMethodConditionType } from "./schemas/pricing-method.schema";
+import type { TProject } from "./schemas/project.schema";
+import type { TEletricalPhases, TProposalPremisses } from "./schemas/proposal.schema";
+import type { TPurchaseDeliveryStatus, TPurchaseStatus } from "./schemas/purchase.schema";
+import type { TSignaturePlanDTO } from "./schemas/signature-plans.schema";
+import type { TTechnicalAnalysisPendencyCategory } from "./schemas/technical-analysis.schema";
+import type { TComissionScenarioConditionType, TUserDTO } from "./schemas/user.schema";
 
 export const AllSellers = [
 	{
@@ -679,7 +679,7 @@ export const PaymentMethods = [
 	{ id: 7, label: "FINANCIAMENTO", value: "FINANCIAMENTO", apportionment: true, modality: "COMPOSTOS" },
 ];
 
-export const ProjectObservationTopics: TProject["observacoes"][number]["assunto"][] = ["SERVIÇOS", "PRODUTOS", "NEGOCIAÇÃO", "SUPRIMENTAÇÃO", "EXECUÇÃO"];
+export const ProjectObservationTopics = ["SERVIÇOS", "PRODUTOS", "NEGOCIAÇÃO", "SUPRIMENTAÇÃO", "EXECUÇÃO"];
 
 export const OpportunityLossReasons = [
 	{ id: 1, label: "CLIENTE NÃO RESPONDE", value: "CLIENTE NÃO RESPONDE" },
@@ -1688,4 +1688,61 @@ export const OpportunityInteractionTypes = [
 		generalContent: "Criação/envio de proposta para o cliente.",
 		icon: MdOutlineFileOpen,
 	},
+];
+
+export const AutomationConfigurationTriggerTypes = [
+	{
+		id: 1,
+		label: "MUDANÇA DE ESTÁGIO DE FUNIL",
+		value: "OPORTUNIDADE-MUDANÇA-ESTÁGIO-FUNIL",
+		supportedExecutions: ["AGENDADA"],
+	},
+	{
+		id: 2,
+		label: "PERDA DA OPORTUNIDADE",
+		value: "OPORTUNIDADE-PERDA",
+		supportedExecutions: ["AGENDADA"],
+	},
+	{
+		id: 3,
+		label: "PERÍODO DESDE INTERAÇÃO",
+		value: "OPORTUNIDADE-PERÍODO-DESDE-INTERAÇÃO",
+		supportedExecutions: ["RECORRENTE"],
+	},
+	{
+		id: 4,
+		label: "PERÍODO DESDE PERDA",
+		value: "OPORTUNIDADE-PERÍODO-DESDE-PERDA",
+		supportedExecutions: ["RECORRENTE"],
+	},
+];
+
+export const AutomationConfigurationActionTypes: { id: number; label: string; value: TAutomationConfiguration["acao"]["tipo"] }[] = [
+	{
+		id: 1,
+		label: "ENVIO DE E-MAIL",
+		value: "ENVIO-CLIENTE-EMAIL",
+	},
+	{
+		id: 2,
+		label: "ENVIO DE WHATSAPP",
+		value: "ENVIO-CLIENTE-WHATSAPP",
+	},
+];
+
+export const AutomationConfigurationRecurrentExecutionExpressions = [
+	{ id: 1, label: "TODOS OS DIAS", value: "0 0 * * *" },
+	{ id: 2, label: "A CADA 6 HORAS", value: "0 */6 * * *" },
+	{ id: 3, label: "A CADA 12 HORAS", value: "0 */12 * * *" },
+	{ id: 4, label: "A CADA 24 HORAS", value: "0 0 * * *" },
+	{ id: 5, label: "A CADA SEMANA", value: "0 0 * * 0" },
+	{ id: 6, label: "A CADA MÊS", value: "0 0 1 * *" },
+];
+
+export const TimeDurationEnumOptions: { id: number; label: string; value: TTimeDurationEnum }[] = [
+	{ id: 1, label: "HORAS", value: "HORAS" },
+	{ id: 2, label: "DIAS", value: "DIAS" },
+	{ id: 3, label: "SEMANAS", value: "SEMANAS" },
+	{ id: 4, label: "MESES", value: "MESES" },
+	{ id: 5, label: "ANOS", value: "ANOS" },
 ];

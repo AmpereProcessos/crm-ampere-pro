@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import Automations from "@/components/Configuration/Automations";
 import Funnels from "@/components/Configuration/Funnels";
 import Goals from "@/components/Configuration/Goals";
 import Integrations from "@/components/Configuration/Integrations";
@@ -27,7 +28,8 @@ type TConfigurationModes =
 	| "project-types"
 	| "partners"
 	| "goals"
-	| "personalization";
+	| "personalization"
+	| "automations";
 
 type ConfigurationsPageProps = {
 	session: TUserSession;
@@ -174,6 +176,15 @@ function ConfigurationsPage({ session }: ConfigurationsPageProps) {
 								Metas
 							</button>
 						) : null}
+						<button
+							className={`${
+								mode === "automations" ? "bg-primary/10" : ""
+							} w-full rounded-md px-4 py-2 text-center font-semibold text-primary/60 text-xs duration-300 ease-in-out hover:bg-primary/10 lg:text-start lg:text-base`}
+							onClick={() => setMode("automations")}
+							type="button"
+						>
+							Automações
+						</button>
 					</div>
 					<div className="flex h-full w-full flex-col gap-1 px-2 py-2 lg:w-4/5">
 						{mode === "profile" ? <Profile session={session} /> : null}
@@ -188,6 +199,7 @@ function ConfigurationsPage({ session }: ConfigurationsPageProps) {
 						{mode === "project-types" ? <ProjectTypes session={session} /> : null}
 						{mode === "personalization" ? <Personalization session={session} /> : null}
 						{mode === "goals" ? <Goals session={session} /> : null}
+						{mode === "automations" ? <Automations session={session} /> : null}
 					</div>
 				</div>
 			</div>

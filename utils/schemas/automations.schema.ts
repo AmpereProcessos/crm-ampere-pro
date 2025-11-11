@@ -59,6 +59,7 @@ export const AutomationActionSchema = z.discriminatedUnion("tipo", [
 	}),
 ]);
 export const AutomationConfigurationSchema = z.object({
+	ativo: z.boolean({ required_error: "Status da automação não informado.", invalid_type_error: "Tipo não válido para o status da automação." }),
 	titulo: z.string({ required_error: "Título da automação não informado.", invalid_type_error: "Tipo não válido para o título da automação." }),
 	descricao: z.string({ required_error: "Descrição da automação não informada.", invalid_type_error: "Tipo não válido para a descrição da automação." }),
 	gatilho: AutomationTriggerSchema,

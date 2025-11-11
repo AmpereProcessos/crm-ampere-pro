@@ -1,3 +1,4 @@
+import { Plus } from "lucide-react";
 import { useState } from "react";
 import { BsCalendarPlus } from "react-icons/bs";
 import { MdPayment } from "react-icons/md";
@@ -6,6 +7,7 @@ import { formatDateAsLocale } from "@/lib/methods/formatting";
 import { usePaymentMethods } from "@/utils/queries/payment-methods";
 import EditPaymentMethod from "../Modals/PaymentMethods/EditPaymentMethod";
 import NewPaymentMethod from "../Modals/PaymentMethods/NewPaymentMethod";
+import { Button } from "../ui/button";
 import Avatar from "../utils/Avatar";
 import ErrorComponent from "../utils/ErrorComponent";
 import LoadingComponent from "../utils/LoadingComponent";
@@ -24,12 +26,10 @@ function PaymentMethods({ session }: PaymentMethodsProps) {
 					<h1 className={`text-lg font-bold uppercase`}>Controle de métodos de pagamento</h1>
 					<p className="text-sm text-[#71717A]">Gerencie, adicione e edite os métodos de pagamento</p>
 				</div>
-				<button
-					onClick={() => setNewPaymentMethodModalIsOpen(true)}
-					className="h-9 whitespace-nowrap rounded-sm bg-primary/90 px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm disabled:bg-primary/50 disabled:text-primary-foreground enabled:hover:bg-primary/80 enabled:hover:text-primary-foreground"
-				>
+				<Button onClick={() => setNewPaymentMethodModalIsOpen(true)} size="xs" className="flex items-center gap-1">
+					<Plus className="w-4 h-4 min-w-4 min-h-4" />
 					NOVO MÉTODO
-				</button>
+				</Button>
 			</div>
 
 			<div className="flex w-full flex-col gap-2 py-2">
@@ -37,22 +37,24 @@ function PaymentMethods({ session }: PaymentMethodsProps) {
 				{isError ? <ErrorComponent msg="Erro ao buscar metodologias de precificação" /> : null}
 				{isSuccess
 					? paymentMethods.map((method) => (
-							<div
-								onClick={() => setEditPaymentMethodModal({ id: method._id, isOpen: true })}
-								key={method._id.toString()}
-								className="flex w-full flex-col rounded-md border border-primary/30 p-2"
-							>
+							<div key={method._id.toString()} className="flex w-full flex-col rounded-md border border-primary/30 p-2">
 								<div className="flex grow items-center gap-1">
 									<div className="flex h-[25px] w-[25px] items-center justify-center rounded-full border border-black p-1">
 										<MdPayment size={13} />
 									</div>
-									<p className="cursor-pointer text-sm font-medium leading-none tracking-tight duration-300 ease-in-out hover:text-cyan-500">{method.nome}</p>
+									<button
+										onClick={() => setEditPaymentMethodModal({ id: method._id, isOpen: true })}
+										type="button"
+										className="cursor-pointer text-sm font-medium leading-none tracking-tight duration-300 ease-in-out hover:text-cyan-500"
+									>
+										{method.nome}
+									</button>
 								</div>
 								<div className="flex w-full flex-col gap-2">
 									<h1 className='"w-full mt-2 text-start text-xs font-medium'>FRACIONAMENTO</h1>
 									<div className="flex w-full flex-wrap items-center justify-start gap-2">
 										{method.fracionamento.map((item, itemIndex) => (
-											<div key={itemIndex} className="rounded-lg border border-primary/30 bg-primary/20 px-2 py-1 text-[0.57rem] font-medium">
+											<div key={itemIndex.toString()} className="rounded-lg border border-primary/30 bg-primary/20 px-2 py-1 text-[0.57rem] font-medium">
 												{item.porcentagem}% {item.metodo}
 											</div>
 										))}
