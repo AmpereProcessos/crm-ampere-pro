@@ -1,6 +1,6 @@
 import z from "zod";
-import { PricingMethodologyReferenceSchema, TPricingMethodDTO } from "./pricing-method.schema";
 import { PaymentMethodReferenceSchema } from "./payment-methods";
+import { PricingMethodologyReferenceSchema, type TPricingMethodDTO } from "./pricing-method.schema";
 
 export const ModuleSchema = z.object({
 	id: z.string({ invalid_type_error: "Tipo não válido para ID do módulo." }).optional().nullable(),
