@@ -138,7 +138,7 @@ export async function GET() {
 					// Incrementing the automation execution count
 					await automationsCollection.updateOne(
 						{ _id: new ObjectId(automation._id) },
-						{ $inc: { execucoesContagemTotal: 1, execucoesContagemTotalSucessos: 1 } },
+						{ $set: { dataUltimaExecucao: new Date().toISOString() }, $inc: { execucoesContagemTotal: 1, execucoesContagemTotalSucessos: 1 } },
 					);
 
 					// Updating the automation execution log
@@ -213,7 +213,7 @@ export async function GET() {
 					// Incrementing the automation execution count
 					await automationsCollection.updateOne(
 						{ _id: new ObjectId(automation._id) },
-						{ $inc: { execucoesContagemTotal: 1, execucoesContagemTotalSucessos: 1 } },
+						{ $set: { dataUltimaExecucao: new Date().toISOString() }, $inc: { execucoesContagemTotal: 1, execucoesContagemTotalSucessos: 1 } },
 					);
 					// Updating the automation execution log
 					await automationExecutionLogsCollection.updateOne(
@@ -375,7 +375,7 @@ export async function GET() {
 					// Incrementing the automation execution count
 					await automationsCollection.updateOne(
 						{ _id: new ObjectId(automation._id) },
-						{ $inc: { execucoesContagemTotal: 1, execucoesContagemTotalSucessos: 1 } },
+						{ $set: { dataUltimaExecucao: new Date().toISOString() }, $inc: { execucoesContagemTotal: 1, execucoesContagemTotalSucessos: 1 } },
 					);
 					// Updating the automation execution log
 					await automationExecutionLogsCollection.updateOne(
@@ -448,7 +448,7 @@ export async function GET() {
 					// Incrementing the automation execution count
 					await automationsCollection.updateOne(
 						{ _id: new ObjectId(automation._id) },
-						{ $inc: { execucoesContagemTotal: 1, execucoesContagemTotalSucessos: 1 } },
+						{ $set: { dataUltimaExecucao: new Date().toISOString() }, $inc: { execucoesContagemTotal: 1, execucoesContagemTotalSucessos: 1 } },
 					);
 					// Updating the automation execution log
 					await automationExecutionLogsCollection.updateOne(
@@ -496,7 +496,7 @@ export async function GET() {
 				}
 				await automationsCollection.updateOne(
 					{ _id: new ObjectId(automation._id) },
-					{ $inc: { execucoesContagemTotal: 1, execucoesContagemTotalSucessos: 1 } },
+					{ $set: { dataUltimaExecucao: new Date().toISOString() }, $inc: { execucoesContagemTotal: 1, execucoesContagemTotalSucessos: 1 } },
 				);
 				return null;
 			});
