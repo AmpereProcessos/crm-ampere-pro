@@ -1,8 +1,7 @@
 import z from "zod";
-import { GeneralClientSchema, type TClientDTO } from "./client.schema";
-
 import type { ActivitiesByStatus } from "@/pages/api/opportunities";
 import type { TActivityDTO } from "./activities.schema";
+import { GeneralClientSchema, type TClientDTO } from "./client.schema";
 import type { TFunnelReference, TFunnelReferenceDTO } from "./funnel-reference.schema";
 import { OpportunityInteractionTypesEnum } from "./opportunity-history.schema";
 import type { TPartnerSimplifiedDTO } from "./partner.schema";
@@ -244,6 +243,7 @@ export const GeneralOpportunitySchema = z.object({
 		.optional()
 		.nullable(),
 	proximaInteracao: z.string().datetime().optional().nullable(),
+	automacoesUltimasExecucoes: z.record(z.string(), z.string().datetime()).optional().nullable(), // key is the automation trigger type, value is the last execution date
 	dataExclusao: z.string().datetime().optional().nullable(),
 	dataInsercao: z.string().datetime(),
 	// adicionar contrato e solicitação de contrato futuramente

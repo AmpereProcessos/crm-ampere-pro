@@ -57,6 +57,8 @@ function EditAutomation({ automationId, session, closeModal, callbacks }: EditAu
 					nome: session.user.nome,
 					avatar_url: session.user.avatar_url,
 				},
+				dataInsercao: new Date().toISOString(),
+				dataUltimaExecucao: null,
 			},
 		},
 	});

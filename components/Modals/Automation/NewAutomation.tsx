@@ -54,6 +54,7 @@ function NewAutomation({ session, closeModal, callbacks }: NewAutomationModalPro
 					nome: session.user.nome,
 					avatar_url: session.user.avatar_url,
 				},
+				dataInsercao: new Date().toISOString(),
 			},
 		},
 	});

@@ -1,12 +1,22 @@
+import dayjs from "dayjs";
+import { formatToPhone } from "@/utils/methods";
 import type { TInverter, TModule, TProductItem } from "@/utils/schemas/kits.schema";
 import type { TOpportunity } from "@/utils/schemas/opportunity.schema";
-import dayjs from "dayjs";
 import { isValidNumber } from "./validation";
 
 export function formatDateAsLocale(date?: string | Date | null, showHours = false) {
 	if (!date) return null;
 	if (showHours) return dayjs(date).format("DD/MM/YYYY HH:mm");
 	return dayjs(date).add(3, "hour").format("DD/MM/YYYY");
+}
+
+export function formatPhoneAsWhatsappId(phone: string) {
+	const onlyNumbers = phone.replace(/[^0-9]/g, "");
+	return `55${onlyNumbers}`;
+}
+export function formatWhatsappIdAsPhone(whatsappId: string) {
+	const stringWithoutCountryCode = whatsappId.replace(/^55/, "");
+	return formatToPhone(stringWithoutCountryCode);
 }
 
 // export function formatDateOnInputChange<T extends 'date' | 'string' | undefined>(

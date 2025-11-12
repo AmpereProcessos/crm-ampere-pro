@@ -77,6 +77,20 @@ export const AutomationConfigurationSchema = z.object({
 		required_error: "Total de execuções da automação não informado.",
 		invalid_type_error: "Tipo não válido para o total de execuções da automação.",
 	}),
+	dataInsercao: z
+		.string({
+			required_error: "Data de inserção da automação não informada.",
+			invalid_type_error: "Tipo não válido para a data de inserção da automação.",
+		})
+		.datetime({ message: "Tipo não válido para data de inserção." }),
+	dataUltimaExecucao: z
+		.string({
+			required_error: "Data de última execução da automação não informada.",
+			invalid_type_error: "Tipo não válido para a data de última execução da automação.",
+		})
+		.datetime({ message: "Tipo não válido para data de última execução." })
+		.optional()
+		.nullable(),
 	autor: AuthorSchema,
 });
 export type TAutomationConfiguration = z.infer<typeof AutomationConfigurationSchema>;
@@ -102,13 +116,31 @@ export const AutomationExecutionLogSchema = z.object({
 		required_error: "Ação da execução da automação não informada.",
 		invalid_type_error: "Tipo não válido para a ação da execução da automação.",
 	}), // refers to the action type
-	resultado: z.enum(["SUCESSO", "FALHA"], {
+	resultado: z.enum(["PENDENTE", "SUCESSO", "FALHA"], {
 		required_error: "Resultado da execução da automação não informado.",
 		invalid_type_error: "Tipo não válido para o resultado da execução da automação.",
 	}),
-	dataExecucao: z.string({
-		required_error: "Data de execução da automação não informada.",
-		invalid_type_error: "Tipo não válido para a data de execução da automação.",
-	}),
+	dataExecucao: z
+		.string({
+			required_error: "Data de execução da automação não informada.",
+			invalid_type_error: "Tipo não válido para a data de execução da automação.",
+		})
+		.datetime({ message: "Tipo não válido para data de execução." })
+		.optional()
+		.nullable(),
+	// Tracks conversions related to messages (Whatsapp or Email) sent by the automation
+	conversaoInteracaoMensagem: z
+		.boolean({
+			required_error: "Conversão de interação mensagem da automação não informada.",
+			invalid_type_error: "Tipo não válido para a conversão de interação mensagem da automação.",
+		})
+		.optional()
+		.nullable(),
+	dataInsercao: z
+		.string({
+			required_error: "Data de inserção do log da execução da automação não informada.",
+			invalid_type_error: "Tipo não válido para a data de inserção do log da execução da automação.",
+		})
+		.datetime({ message: "Tipo não válido para data de inserção do log da execução da automação." }),
 });
 export type TAutomationExecutionLog = z.infer<typeof AutomationExecutionLogSchema>;
