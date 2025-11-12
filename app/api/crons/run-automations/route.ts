@@ -241,6 +241,10 @@ export async function GET() {
 					});
 					return { success: true, message: "Template enviado com sucesso !" };
 				}
+				await automationsCollection.updateOne(
+					{ _id: new ObjectId(automation._id) },
+					{ $inc: { execucoesContagemTotal: 1, execucoesContagemTotalSucessos: 1 } },
+				);
 				return null;
 			});
 
@@ -465,6 +469,10 @@ export async function GET() {
 					});
 					return { success: true, message: "Template enviado com sucesso !" };
 				}
+				await automationsCollection.updateOne(
+					{ _id: new ObjectId(automation._id) },
+					{ $inc: { execucoesContagemTotal: 1, execucoesContagemTotalSucessos: 1 } },
+				);
 				return null;
 			});
 
