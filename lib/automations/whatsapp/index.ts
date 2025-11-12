@@ -91,7 +91,7 @@ export const WHATSAPP_TEMPLATES = {
 							parameters: [
 								{
 									type: "text",
-									text: `${process.env.NEXT_PUBLIC_APP_URL}/api/integration/meta/redirect?opportunityId=${payload.oportunidade.id}&automationExecutionLogId=${payload.logAutomacaoId}`,
+									text: `?opportunityId=${payload.oportunidade.id}&automationExecutionLogId=${payload.logAutomacaoId}`,
 								},
 							],
 						},

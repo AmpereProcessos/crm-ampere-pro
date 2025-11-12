@@ -1,16 +1,18 @@
 import { ObjectId } from "mongodb";
-import { type NextRequest, NextResponse } from "next/server";
+import type { NextApiRequest, NextApiResponse } from "next";
+import { NextResponse } from "next/server";
 import connectToDatabase from "@/services/mongodb/crm-db-connection";
+import { apiHandler } from "@/utils/api";
 import type { TAutomationExecutionLog } from "@/utils/schemas/automations.schema";
 import type { TOpportunity } from "@/utils/schemas/opportunity.schema";
 
-export async function GET(request: NextRequest) {
-	const searchParams = request.nextUrl.searchParams;
+async function handleRedirect(req: NextApiRequest, res: NextApiResponse) {
+	const searchParams = req.query;
 
-	const automationExecutionLogId = searchParams.get("automationExecutionLogId");
-	const opportunityId = searchParams.get("opportunityId");
+	const automationExecutionLogId = searchParams.automationExecutionLogId;
+	const opportunityId = searchParams.opportunityId;
 
-	if (!automationExecutionLogId || !opportunityId) {
+	if (!automationExecutionLogId || !opportunityId || typeof automationExecutionLogId !== "string" || typeof opportunityId !== "string") {
 		return NextResponse.json({ message: "Parâmetros de URL inválidos." }, { status: 400 });
 	}
 	const db = await connectToDatabase();
@@ -32,12 +34,14 @@ export async function GET(request: NextRequest) {
 Gostaria de retornar meu atendimento ${opportunity.identificador} !`;
 
 	if (opportunitySeller && opportunitySeller.telefone) {
-		return NextResponse.redirect(`https://api.whatsapp.com/send?phone=${opportunitySeller.telefone}&text=${encodeURIComponent(message.trim())}`);
+		return res.redirect(`https://api.whatsapp.com/send?phone=${opportunitySeller.telefone}&text=${encodeURIComponent(message.trim())}`);
 	}
 	if (opportunitySDR && opportunitySDR.telefone) {
-		return NextResponse.redirect(`https://api.whatsapp.com/send?phone=${opportunitySDR.telefone}&text=${encodeURIComponent(message.trim())}`);
+		return res.redirect(`https://api.whatsapp.com/send?phone=${opportunitySDR.telefone}&text=${encodeURIComponent(message.trim())}`);
 	}
 	// If none of the responsible phones are available, redirect to the default phone
 	const DEFAULT_REDIRECT_PHONE = "(34) 3700-7001";
-	return NextResponse.redirect(`https://api.whatsapp.com/send?phone=${DEFAULT_REDIRECT_PHONE}&text=${encodeURIComponent(message.trim())}`);
+	return res.redirect(`https://api.whatsapp.com/send?phone=${DEFAULT_REDIRECT_PHONE}&text=${encodeURIComponent(message.trim())}`);
 }
+
+export default apiHandler({ GET: handleRedirect });

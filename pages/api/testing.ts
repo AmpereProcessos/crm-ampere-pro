@@ -11,58 +11,6 @@ import type { TClient } from "@/utils/schemas/client.schema";
 import type { TOpportunity } from "@/utils/schemas/opportunity.schema";
 import type { TProject } from "@/utils/schemas/project.schema";
 
-type TClientsGrouped = {
-	[key: string]: {
-		quantity: number;
-		clients: {
-			id: string;
-			nome: string;
-			cpfCnpj: string;
-			email: string;
-			cep: string;
-			uf: string;
-			cidade: string;
-			score: number;
-		}[];
-		cpfCnpjs: string[];
-		projects: string[];
-		opportunities: string[];
-	};
-};
-
-type TClientsOperationHolder = {
-	key: string;
-	clientsToKeep: {
-		id: string;
-		nome: string;
-		cpfCnpj: string;
-		email: string;
-		cep: string;
-		uf: string;
-		cidade: string;
-		score: number;
-	}[];
-	clientsToRemove: {
-		id: string;
-		nome: string;
-		cpfCnpj: string;
-		email: string;
-		cep: string;
-		uf: string;
-		cidade: string;
-		score: number;
-	}[];
-	clientsToClear: {
-		id: string;
-		nome: string;
-		cpfCnpj: string;
-		email: string;
-		cep: string;
-		uf: string;
-		cidade: string;
-		score: number;
-	}[];
-};
 const getManualTesting = async (req: NextApiRequest, res: NextApiResponse) => {
 	// const db = await connectToDatabase();
 	// const opportunitiesCollection = db.collection<TOpportunity>("opportunities");
@@ -91,7 +39,9 @@ const getManualTesting = async (req: NextApiRequest, res: NextApiResponse) => {
 	// });
 
 	// console.log({ data, message, whatsappMessageId });
-	return res.status(200).json("{ data, message, whatsappMessageId }");
+	// return res.status(200).json({ data, message, whatsappMessageId });
+
+	return res.status(200).json({ message: "Teste realizado com sucesso." });
 };
 
 export default apiHandler({ GET: getManualTesting });
