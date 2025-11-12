@@ -53,7 +53,7 @@ export const EMAIL_TEMPLATES = {
 			const { data, error } = await resend.emails.send({
 				from: "Ampère Energias <vendas@ampereenergias.com.br>",
 				to: [payload.cliente.email],
-				subject: "CONDIÇÕES ESPECIAIS PARA SEU SISTEMA SOLAR !",
+				subject: "Oportunidade imperdível para adquirir energia solar !",
 				react: ReactivateOpportunityVariantOne({
 					clientName: payload.cliente.nome,
 					consultantName,

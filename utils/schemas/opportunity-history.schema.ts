@@ -45,6 +45,21 @@ const GeneralOpportunityInteraction = z.object({
 		}),
 		avatar_url: z.string().optional().nullable(),
 	}),
+	// Automation related
+	automacaoId: z
+		.string({
+			required_error: "ID da automação não informado.",
+			invalid_type_error: "Tipo não válido para o ID da automação.",
+		})
+		.optional()
+		.nullable(),
+	automacaoExecucaoId: z
+		.string({
+			required_error: "ID da execução da automação não informado.",
+			invalid_type_error: "Tipo não válido para o ID da execução da automação.",
+		})
+		.optional()
+		.nullable(),
 	dataInsercao: z
 		.string({
 			required_error: "Data de inserção não informado.",

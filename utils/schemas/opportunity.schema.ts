@@ -243,7 +243,25 @@ export const GeneralOpportunitySchema = z.object({
 		.optional()
 		.nullable(),
 	proximaInteracao: z.string().datetime().optional().nullable(),
-	automacoesUltimasExecucoes: z.record(z.string(), z.string().datetime()).optional().nullable(), // key is the automation trigger type, value is the last execution date
+	automacoesHabilitadas: z.boolean({
+		required_error: "Flag de liberação para execuções de automações na oportunidade não definida.",
+		invalid_type_error: "Tipo não válido para a flag de liberação para execuções de automações na oportunidade.",
+	}),
+	automacoesUltimasExecucoes: z
+		.record(
+			z.string({
+				required_error: "Tipo de gatilho da automação não informado.",
+				invalid_type_error: "Tipo não válido para o tipo de gatilho da automação.",
+			}),
+			z
+				.string({
+					required_error: "Data de última execução da automação não informada.",
+					invalid_type_error: "Tipo não válido para a data de última execução da automação.",
+				})
+				.datetime({ message: "Tipo não válido para data de última execução da automação." }),
+		)
+		.optional()
+		.nullable(), // key is the automation trigger type, value is the last execution date
 	dataExclusao: z.string().datetime().optional().nullable(),
 	dataInsercao: z.string().datetime(),
 	// adicionar contrato e solicitação de contrato futuramente
