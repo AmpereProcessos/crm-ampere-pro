@@ -77,6 +77,10 @@ export const AutomationConfigurationSchema = z.object({
 		required_error: "Total de execuções da automação não informado.",
 		invalid_type_error: "Tipo não válido para o total de execuções da automação.",
 	}),
+	conversoesContagemTotalInteracaoMensagem: z.number({
+		required_error: "Total de conversões de interação mensagem da automação não informado.",
+		invalid_type_error: "Tipo não válido para o total de conversões de interação mensagem da automação.",
+	}),
 	dataInsercao: z
 		.string({
 			required_error: "Data de inserção da automação não informada.",
