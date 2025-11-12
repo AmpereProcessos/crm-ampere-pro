@@ -243,10 +243,12 @@ export const GeneralOpportunitySchema = z.object({
 		.optional()
 		.nullable(),
 	proximaInteracao: z.string().datetime().optional().nullable(),
-	automacoesHabilitadas: z.boolean({
-		required_error: "Flag de liberação para execuções de automações na oportunidade não definida.",
-		invalid_type_error: "Tipo não válido para a flag de liberação para execuções de automações na oportunidade.",
-	}),
+	automacoesHabilitadas: z
+		.boolean({
+			required_error: "Flag de liberação para execuções de automações na oportunidade não definida.",
+			invalid_type_error: "Tipo não válido para a flag de liberação para execuções de automações na oportunidade.",
+		})
+		.default(true),
 	automacoesUltimasExecucoes: z
 		.record(
 			z.string({
