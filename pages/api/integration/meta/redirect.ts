@@ -1,6 +1,7 @@
 import { ObjectId } from "mongodb";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { NextResponse } from "next/server";
+import { formatPhoneAsWhatsappId } from "@/lib/methods/formatting";
 import connectToDatabase from "@/services/mongodb/crm-db-connection";
 import { apiHandler } from "@/utils/api";
 import type { TAutomationExecutionLog } from "@/utils/schemas/automations.schema";
@@ -34,14 +35,16 @@ async function handleRedirect(req: NextApiRequest, res: NextApiResponse) {
 Gostaria de retornar meu atendimento ${opportunity.identificador} !`;
 
 	if (opportunitySeller && opportunitySeller.telefone) {
-		return res.redirect(`https://api.whatsapp.com/send?phone=${opportunitySeller.telefone}&text=${encodeURIComponent(message.trim())}`);
+		return res.redirect(
+			`https://api.whatsapp.com/send?phone=${formatPhoneAsWhatsappId(opportunitySeller.telefone)}&text=${encodeURIComponent(message.trim())}`,
+		);
 	}
 	if (opportunitySDR && opportunitySDR.telefone) {
-		return res.redirect(`https://api.whatsapp.com/send?phone=${opportunitySDR.telefone}&text=${encodeURIComponent(message.trim())}`);
+		return res.redirect(`https://api.whatsapp.com/send?phone=${formatPhoneAsWhatsappId(opportunitySDR.telefone)}&text=${encodeURIComponent(message.trim())}`);
 	}
 	// If none of the responsible phones are available, redirect to the default phone
 	const DEFAULT_REDIRECT_PHONE = "(34) 3700-7001";
-	return res.redirect(`https://api.whatsapp.com/send?phone=${DEFAULT_REDIRECT_PHONE}&text=${encodeURIComponent(message.trim())}`);
+	return res.redirect(`https://api.whatsapp.com/send?phone=${formatPhoneAsWhatsappId(DEFAULT_REDIRECT_PHONE)}&text=${encodeURIComponent(message.trim())}`);
 }
 
 export default apiHandler({ GET: handleRedirect });

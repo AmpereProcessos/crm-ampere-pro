@@ -11,8 +11,23 @@ export function formatDateAsLocale(date?: string | Date | null, showHours = fals
 }
 
 export function formatPhoneAsWhatsappId(phone: string) {
+	// Remove non-numeric characters
 	const onlyNumbers = phone.replace(/[^0-9]/g, "");
-	return `55${onlyNumbers}`;
+
+	// Remove leading country code if it exists (with or without plus, e.g., +55, 55)
+	let normalized = onlyNumbers;
+	if (normalized.startsWith("55")) {
+		normalized = normalized.slice(2);
+	}
+	// Remove leading 0 (trunk code) if present
+	if (normalized.startsWith("0")) {
+		normalized = normalized.slice(1);
+	}
+
+	// Only support phones with 10 or 11 digits (Brazil standards)
+	// Pad or trim as necessary
+	// Returns in format: 55 + {number}
+	return `55${normalized}`;
 }
 export function formatWhatsappIdAsPhone(whatsappId: string) {
 	const stringWithoutCountryCode = whatsappId.replace(/^55/, "");
