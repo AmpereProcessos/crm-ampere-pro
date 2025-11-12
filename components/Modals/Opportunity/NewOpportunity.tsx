@@ -1,3 +1,9 @@
+import { useQueryClient } from "@tanstack/react-query";
+import createHttpError from "http-errors";
+import { BadgeCheck, UsersRound } from "lucide-react";
+import Link from "next/link";
+import { type Dispatch, type SetStateAction, useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
 import { LoadingButton } from "@/components/Buttons/loading-button";
 import AddressInformationBlock from "@/components/Opportunities/Creation/AddressInformationBlock";
 import FunnelReferenceInformationBlock from "@/components/Opportunities/Creation/FunnelReferenceInformationBlock";
@@ -10,24 +16,18 @@ import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, Di
 import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
 import type { TUserSession } from "@/lib/auth/session";
 import { useMediaQuery } from "@/lib/utils";
-import { TGetOpportunitiesQueryDefinitionsOutput } from "@/pages/api/opportunities/query-definitions";
+import type { TGetOpportunitiesQueryDefinitionsOutput } from "@/pages/api/opportunities/query-definitions";
 import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
 import { createClientOpportunityAndFunnelReference } from "@/utils/mutations/opportunities";
 import { useSearchClients } from "@/utils/queries/clients";
 import { useProjectTypes } from "@/utils/queries/project-types";
 import { useOpportunityCreators } from "@/utils/queries/users";
 import type { TClient, TSimilarClientSimplifiedDTO } from "@/utils/schemas/client.schema";
-import type { TFunnelReference } from "@/utils/schemas/funnel-reference.schema";
 import type { TFunnelDTO } from "@/utils/schemas/funnel.schema";
+import type { TFunnelReference } from "@/utils/schemas/funnel-reference.schema";
 import type { TOpportunity } from "@/utils/schemas/opportunity.schema";
 import type { TUserDTOSimplified } from "@/utils/schemas/user.schema";
 import { CustomersAcquisitionChannels } from "@/utils/select-options";
-import { useQueryClient } from "@tanstack/react-query";
-import createHttpError from "http-errors";
-import { BadgeCheck, UsersRound } from "lucide-react";
-import Link from "next/link";
-import { type Dispatch, type SetStateAction, useEffect, useState } from "react";
-import { toast } from "react-hot-toast";
 
 type NewOpportunityProps = {
 	session: TUserSession;
@@ -123,6 +123,7 @@ function NewOpportunity({ session, closeModal, opportunityCreators, funnels }: N
 			nome: session.user.nome,
 			avatar_url: session.user.avatar_url,
 		},
+		automacoesHabilitadas: true,
 		dataInsercao: new Date().toISOString(),
 		// adicionar contrato e solicitação de contrato futuramente
 	};
