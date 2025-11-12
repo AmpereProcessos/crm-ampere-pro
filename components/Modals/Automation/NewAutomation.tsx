@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import ResponsiveDialogDrawer from "@/components/utils/ResponsiveDialogDrawer";
 import useAutomationStateHook from "@/hooks/use-automation-state-hook";
 import type { TUserSession } from "@/lib/auth/session";
+import { getErrorMessage } from "@/lib/methods/errors";
 import { createAutomation } from "@/utils/mutations/automations";
 import AutomationActionBlock from "./Blocks/Action";
 import AutomationExecutionBlock from "./Blocks/Execution";
@@ -46,6 +47,7 @@ function NewAutomation({ session, closeModal, callbacks }: NewAutomationModalPro
 					tipo: "ENVIO-CLIENTE-EMAIL",
 					templateId: "",
 				},
+				conversoesContagemTotalInteracaoMensagem: 0,
 				execucoesContagemTotal: 0,
 				execucoesContagemTotalSucessos: 0,
 				execucoesContagemTotalFalhas: 0,
@@ -83,6 +85,7 @@ function NewAutomation({ session, closeModal, callbacks }: NewAutomationModalPro
 		},
 		onError: async (error) => {
 			if (callbacks?.onError) callbacks.onError(error);
+			return toast.error(getErrorMessage(error));
 		},
 		onSettled: async () => {
 			if (callbacks?.onSettled) callbacks.onSettled();

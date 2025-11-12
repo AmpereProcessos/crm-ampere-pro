@@ -116,11 +116,18 @@ export async function GET() {
 					const { data, message, whatsappMessageId } = await sendTemplateWhatsappMessage({
 						payload: whatsappTemplatePayload,
 					});
-					console.log("[INFO] [WHATSAPP_TEMPLATE_SEND] Message sent successfully:", {
-						data,
-						message,
-						whatsappMessageId,
-					});
+					console.log(
+						"[INFO] [WHATSAPP_TEMPLATE_SEND] Message sent successfully:",
+						JSON.stringify(
+							{
+								data,
+								message,
+								whatsappMessageId,
+							},
+							null,
+							2,
+						),
+					);
 
 					// Updating the automation execution log
 					await automationExecutionLogsCollection.updateOne(
@@ -252,11 +259,18 @@ export async function GET() {
 			const interval = CronExpressionParser.parse(configuredCronExpression, { currentDate: previousExecutionDate.toDate() });
 			const expectedNewExecutionDate = dayjs(interval.next().toDate());
 
-			const expectedNewExecutionDatePlusMargin = expectedNewExecutionDate.add(10, "minute").toDate().getTime();
-			const expectedNewExecutionDateMinusMargin = expectedNewExecutionDate.subtract(10, "minute").toDate().getTime();
+			// const expectedNewExecutionDatePlusMargin = expectedNewExecutionDate.add(10, "minute").toDate().getTime();
+			// const expectedNewExecutionDateMinusMargin = expectedNewExecutionDate.subtract(10, "minute").toDate().getTime();
 
-			const executeInThisRun = currentDate.getTime() >= expectedNewExecutionDateMinusMargin && currentDate.getTime() <= expectedNewExecutionDatePlusMargin;
-			if (!executeInThisRun) return;
+			// const executeInThisRun = currentDate.getTime() >= expectedNewExecutionDateMinusMargin && currentDate.getTime() <= expectedNewExecutionDatePlusMargin;
+			// if (!executeInThisRun) {
+			// 	console.log("[INFO] [AUTOMATION_EXECUTION] Automation not executed in this run:", {
+			// 		expectedNewExecutionDatePlusMargin: new Date(expectedNewExecutionDatePlusMargin).toLocaleString("pt-BR"),
+			// 		expectedNewExecutionDateMinusMargin: new Date(expectedNewExecutionDateMinusMargin).toLocaleString("pt-BR"),
+			// 		currentDate: new Date(currentDate).toLocaleString("pt-BR"),
+			// 	});
+			// 	return;
+			// }
 
 			const triggerTimeMeasure = automation.gatilho.tempoMedida;
 			const triggerTimeValue = automation.gatilho.tempoValor;
@@ -327,11 +341,18 @@ export async function GET() {
 					const { data, message, whatsappMessageId } = await sendTemplateWhatsappMessage({
 						payload: whatsappTemplatePayload,
 					});
-					console.log("[INFO] [WHATSAPP_TEMPLATE_SEND] Message sent successfully:", {
-						data,
-						message,
-						whatsappMessageId,
-					});
+					console.log(
+						"[INFO] [WHATSAPP_TEMPLATE_SEND] Message sent successfully:",
+						JSON.stringify(
+							{
+								data,
+								message,
+								whatsappMessageId,
+							},
+							null,
+							2,
+						),
+					);
 					// Updating the automation execution log
 					await automationExecutionLogsCollection.updateOne(
 						{

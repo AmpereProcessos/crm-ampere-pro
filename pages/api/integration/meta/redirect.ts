@@ -14,7 +14,7 @@ async function handleRedirect(req: NextApiRequest, res: NextApiResponse) {
 	const opportunityId = searchParams.opportunityId;
 
 	if (!automationExecutionLogId || !opportunityId || typeof automationExecutionLogId !== "string" || typeof opportunityId !== "string") {
-		return NextResponse.json({ message: "Parâmetros de URL inválidos." }, { status: 400 });
+		return res.status(400).json({ message: "Parâmetros de URL inválidos." });
 	}
 	const db = await connectToDatabase();
 	const opportunitiesCollection = db.collection<TOpportunity>("opportunities");
@@ -23,13 +23,13 @@ async function handleRedirect(req: NextApiRequest, res: NextApiResponse) {
 
 	const opportunity = await opportunitiesCollection.findOne({ _id: new ObjectId(opportunityId) });
 	if (!opportunity) {
-		return NextResponse.json({ message: "Oportunidade não encontrada." }, { status: 404 });
+		return res.status(404).json({ message: "Oportunidade não encontrada." });
 	}
 
 	// Declaring conversion in the automation execution log
 	const automationExecutionLog = await automationExecutionLogsCollection.findOne({ _id: new ObjectId(automationExecutionLogId) });
 	if (!automationExecutionLog) {
-		return NextResponse.json({ message: "Log de execução da automação não encontrado." }, { status: 404 });
+		return res.status(404).json({ message: "Log de execução da automação não encontrado." });
 	}
 	await automationsCollection.updateOne({ _id: new ObjectId(automationExecutionLog.automacao.id) }, { $inc: { conversoesContagemTotalInteracaoMensagem: 1 } });
 	await automationExecutionLogsCollection.updateOne({ _id: new ObjectId(automationExecutionLogId) }, { $set: { conversaoInteracaoMensagem: true } });

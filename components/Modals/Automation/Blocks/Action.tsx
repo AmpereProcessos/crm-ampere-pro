@@ -1,10 +1,9 @@
 import { Send } from "lucide-react";
 import SelectInput from "@/components/Inputs/SelectInput";
 import TextInput from "@/components/Inputs/TextInput";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import ResponsiveDialogDrawerSection from "@/components/utils/ResponsiveDialogDrawerSection";
+import { WHATSAPP_TEMPLATES } from "@/lib/automations/whatsapp";
+import { EMAIL_TEMPLATES_OPTIONS } from "@/lib/email/templates";
 import type { TAutomationConfiguration } from "@/utils/schemas/automations.schema";
 import { AutomationConfigurationActionTypes } from "@/utils/select-options";
 
@@ -28,6 +27,16 @@ export default function AutomationActionBlock({ action, updateAction }: Automati
 		}
 	}
 
+	const whatsappTemplateOptions = Object.entries(WHATSAPP_TEMPLATES).map(([key, value]) => ({
+		id: key,
+		label: value.title,
+		value: key,
+	}));
+	const emailTemplateOptions = Object.entries(EMAIL_TEMPLATES_OPTIONS).map(([key, value]) => ({
+		id: key,
+		label: value.title,
+		value: key,
+	}));
 	return (
 		<ResponsiveDialogDrawerSection sectionTitleText="AÇÃO" sectionTitleIcon={<Send className="h-4 w-4" />}>
 			<SelectInput
@@ -40,21 +49,25 @@ export default function AutomationActionBlock({ action, updateAction }: Automati
 				width="100%"
 			/>
 			{action.tipo === "ENVIO-CLIENTE-EMAIL" && (
-				<TextInput
-					label="ID DO TEMPLATE"
+				<SelectInput
+					label="TEMPLATE DE E-MAIL"
 					value={action.templateId}
-					placeholder="ID do template de e-mail"
+					resetOptionLabel="NÃO DEFINIDO"
+					options={emailTemplateOptions}
 					handleChange={(value) => updateAction({ ...action, templateId: value })}
+					onReset={() => updateAction({ ...action, templateId: "" })}
 					width="100%"
 				/>
 			)}
 
 			{action.tipo === "ENVIO-CLIENTE-WHATSAPP" && (
-				<TextInput
-					label="ID DO TEMPLATE"
+				<SelectInput
+					label="TEMPLATE DE WHATSAPP"
 					value={action.templateId}
-					placeholder="ID do template de WhatsApp"
+					resetOptionLabel="NÃO DEFINIDO"
+					options={whatsappTemplateOptions}
 					handleChange={(value) => updateAction({ ...action, templateId: value })}
+					onReset={() => updateAction({ ...action, templateId: "" })}
 					width="100%"
 				/>
 			)}
