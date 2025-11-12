@@ -17,7 +17,7 @@ export const GET = async (req: NextRequest) => {
 	const db = await connectToDatabase();
 	const opportunitiesCollection = db.collection<TOpportunity>("opportunities");
 	const automationsCollection = db.collection<TAutomationConfiguration>("automations");
-	const automationExecutionLogsCollection = db.collection<TAutomationExecutionLog>("automation-execution-logs");
+	const automationExecutionLogsCollection = db.collection<TAutomationExecutionLog>("automations-execution-logs");
 
 	const opportunity = await opportunitiesCollection.findOne({ _id: new ObjectId(opportunityId) });
 	if (!opportunity) {

@@ -8,6 +8,9 @@ import type { TAutomationConfiguration, TAutomationExecutionLog } from "@/utils/
 import type { TOpportunity } from "@/utils/schemas/opportunity.schema";
 
 async function handleRedirect(req: NextApiRequest, res: NextApiResponse) {
+	console.log("[INFO] [META_REDIRECT] [HANDLE_REDIRECT] Request received");
+	console.log("[INFO] [META_REDIRECT] [HANDLE_REDIRECT] Query:", req.query);
+	console.log("[INFO] [META_REDIRECT] [HANDLE_REQUEST] Body:", req.body);
 	const searchParams = req.query;
 
 	const automationExecutionLogId = searchParams.automationExecutionLogId;
@@ -19,7 +22,7 @@ async function handleRedirect(req: NextApiRequest, res: NextApiResponse) {
 	const db = await connectToDatabase();
 	const opportunitiesCollection = db.collection<TOpportunity>("opportunities");
 	const automationsCollection = db.collection<TAutomationConfiguration>("automations");
-	const automationExecutionLogsCollection = db.collection<TAutomationExecutionLog>("automation-execution-logs");
+	const automationExecutionLogsCollection = db.collection<TAutomationExecutionLog>("automations-execution-logs");
 
 	const opportunity = await opportunitiesCollection.findOne({ _id: new ObjectId(opportunityId) });
 	if (!opportunity) {
