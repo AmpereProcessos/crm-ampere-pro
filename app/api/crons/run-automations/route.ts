@@ -45,7 +45,14 @@ export async function GET() {
 			const expectedNewExecutionDateMinusMargin = expectedNewExecutionDate.subtract(10, "minute").toDate().getTime();
 
 			const executeInThisRun = currentDate.getTime() >= expectedNewExecutionDateMinusMargin && currentDate.getTime() <= expectedNewExecutionDatePlusMargin;
-			if (!executeInThisRun) return;
+			if (automation.dataUltimaExecucao && !executeInThisRun) {
+				console.log("[INFO] [AUTOMATION_EXECUTION] Automation not executed in this run:", {
+					expectedNewExecutionDatePlusMargin: new Date(expectedNewExecutionDatePlusMargin).toLocaleString("pt-BR"),
+					expectedNewExecutionDateMinusMargin: new Date(expectedNewExecutionDateMinusMargin).toLocaleString("pt-BR"),
+					currentDate: new Date(currentDate).toLocaleString("pt-BR"),
+				});
+				return;
+			}
 
 			const triggerTimeMeasure = automation.gatilho.tempoMedida;
 			const triggerTimeValue = automation.gatilho.tempoValor;
@@ -128,6 +135,11 @@ export async function GET() {
 							2,
 						),
 					);
+					// Incrementing the automation execution count
+					await automationsCollection.updateOne(
+						{ _id: new ObjectId(automation._id) },
+						{ $inc: { execucoesContagemTotal: 1, execucoesContagemTotalSucessos: 1 } },
+					);
 
 					// Updating the automation execution log
 					await automationExecutionLogsCollection.updateOne(
@@ -197,6 +209,12 @@ export async function GET() {
 						data: emailSendResponse.data,
 						error: emailSendResponse.error,
 					});
+
+					// Incrementing the automation execution count
+					await automationsCollection.updateOne(
+						{ _id: new ObjectId(automation._id) },
+						{ $inc: { execucoesContagemTotal: 1, execucoesContagemTotalSucessos: 1 } },
+					);
 					// Updating the automation execution log
 					await automationExecutionLogsCollection.updateOne(
 						{
@@ -241,10 +259,7 @@ export async function GET() {
 					});
 					return { success: true, message: "Template enviado com sucesso !" };
 				}
-				await automationsCollection.updateOne(
-					{ _id: new ObjectId(automation._id) },
-					{ $inc: { execucoesContagemTotal: 1, execucoesContagemTotalSucessos: 1 } },
-				);
+
 				return null;
 			});
 
@@ -263,18 +278,18 @@ export async function GET() {
 			const interval = CronExpressionParser.parse(configuredCronExpression, { currentDate: previousExecutionDate.toDate() });
 			const expectedNewExecutionDate = dayjs(interval.next().toDate());
 
-			// const expectedNewExecutionDatePlusMargin = expectedNewExecutionDate.add(10, "minute").toDate().getTime();
-			// const expectedNewExecutionDateMinusMargin = expectedNewExecutionDate.subtract(10, "minute").toDate().getTime();
+			const expectedNewExecutionDatePlusMargin = expectedNewExecutionDate.add(10, "minute").toDate().getTime();
+			const expectedNewExecutionDateMinusMargin = expectedNewExecutionDate.subtract(10, "minute").toDate().getTime();
 
-			// const executeInThisRun = currentDate.getTime() >= expectedNewExecutionDateMinusMargin && currentDate.getTime() <= expectedNewExecutionDatePlusMargin;
-			// if (!executeInThisRun) {
-			// 	console.log("[INFO] [AUTOMATION_EXECUTION] Automation not executed in this run:", {
-			// 		expectedNewExecutionDatePlusMargin: new Date(expectedNewExecutionDatePlusMargin).toLocaleString("pt-BR"),
-			// 		expectedNewExecutionDateMinusMargin: new Date(expectedNewExecutionDateMinusMargin).toLocaleString("pt-BR"),
-			// 		currentDate: new Date(currentDate).toLocaleString("pt-BR"),
-			// 	});
-			// 	return;
-			// }
+			const executeInThisRun = currentDate.getTime() >= expectedNewExecutionDateMinusMargin && currentDate.getTime() <= expectedNewExecutionDatePlusMargin;
+			if (automation.dataUltimaExecucao && !executeInThisRun) {
+				console.log("[INFO] [AUTOMATION_EXECUTION] Automation not executed in this run:", {
+					expectedNewExecutionDatePlusMargin: new Date(expectedNewExecutionDatePlusMargin).toLocaleString("pt-BR"),
+					expectedNewExecutionDateMinusMargin: new Date(expectedNewExecutionDateMinusMargin).toLocaleString("pt-BR"),
+					currentDate: new Date(currentDate).toLocaleString("pt-BR"),
+				});
+				return;
+			}
 
 			const triggerTimeMeasure = automation.gatilho.tempoMedida;
 			const triggerTimeValue = automation.gatilho.tempoValor;
@@ -357,6 +372,11 @@ export async function GET() {
 							2,
 						),
 					);
+					// Incrementing the automation execution count
+					await automationsCollection.updateOne(
+						{ _id: new ObjectId(automation._id) },
+						{ $inc: { execucoesContagemTotal: 1, execucoesContagemTotalSucessos: 1 } },
+					);
 					// Updating the automation execution log
 					await automationExecutionLogsCollection.updateOne(
 						{
@@ -425,6 +445,11 @@ export async function GET() {
 						data: emailSendResponse.data,
 						error: emailSendResponse.error,
 					});
+					// Incrementing the automation execution count
+					await automationsCollection.updateOne(
+						{ _id: new ObjectId(automation._id) },
+						{ $inc: { execucoesContagemTotal: 1, execucoesContagemTotalSucessos: 1 } },
+					);
 					// Updating the automation execution log
 					await automationExecutionLogsCollection.updateOne(
 						{
