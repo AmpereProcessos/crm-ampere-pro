@@ -1,5 +1,8 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+import type { NextConfig } from 'next';
+import {withWorkflow} from 'workflow/next';
+
+
+const nextConfig: NextConfig = {
 	reactStrictMode: false,
 	typescript: {
 		ignoreBuildErrors: true,
@@ -34,5 +37,4 @@ const nextConfig = {
 	},
 };
 
-export default nextConfig;
-// module.exports = nextConfig;
+export default withWorkflow(nextConfig);

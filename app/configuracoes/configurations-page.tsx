@@ -3,7 +3,6 @@ import { useState } from "react";
 import Automations from "@/components/Configuration/Automations";
 import Funnels from "@/components/Configuration/Funnels";
 import Goals from "@/components/Configuration/Goals";
-import Integrations from "@/components/Configuration/Integrations";
 import Partner from "@/components/Configuration/Partner";
 import Partners from "@/components/Configuration/Partners";
 import PaymentMethods from "@/components/Configuration/PaymentMethods";
@@ -146,17 +145,6 @@ function ConfigurationsPage({ session }: ConfigurationsPageProps) {
 						{session.user.permissoes.configuracoes.parceiro ? (
 							<button
 								className={`${
-									mode === "integrations" ? "bg-primary/10" : ""
-								} w-full rounded-md px-4 py-2 text-center font-semibold text-primary/60 text-xs duration-300 ease-in-out hover:bg-primary/10 lg:text-start lg:text-base`}
-								onClick={() => setMode("integrations")}
-								type="button"
-							>
-								Integrações
-							</button>
-						) : null}
-						{session.user.permissoes.configuracoes.parceiro ? (
-							<button
-								className={`${
 									mode === "personalization" ? "bg-primary/10" : ""
 								} w-full rounded-md px-4 py-2 text-center font-semibold text-primary/60 text-xs duration-300 ease-in-out hover:bg-primary/10 lg:text-start lg:text-base`}
 								onClick={() => setMode("personalization")}
@@ -195,7 +183,6 @@ function ConfigurationsPage({ session }: ConfigurationsPageProps) {
 						{mode === "pricing-methods" ? <PricingMethods session={session} /> : null}
 						{mode === "payment-methods" ? <PaymentMethods session={session} /> : null}
 						{mode === "partners" ? <Partners session={session} /> : null}
-						{mode === "integrations" ? <Integrations session={session} /> : null}
 						{mode === "project-types" ? <ProjectTypes session={session} /> : null}
 						{mode === "personalization" ? <Personalization session={session} /> : null}
 						{mode === "goals" ? <Goals session={session} /> : null}

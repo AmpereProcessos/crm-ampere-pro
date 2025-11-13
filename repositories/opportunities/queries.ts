@@ -45,11 +45,15 @@ export async function getOpportunityById({ collection, id, query }: GetOpportuni
 				},
 			])
 			.toArray();
+
 		const opportunity = opportunityArr.map((op) => ({
 			...op,
-			cliente: op.cliente[0],
-			parceiro: op.parceiro[0],
-			referenciasFunil: op.referenciasFunil,
+			_id: op._id.toString(),
+			clientAsObjectId: undefined,
+			partnerAsObjectId: undefined,
+			cliente: op.cliente[0] ? { ...op.cliente[0], _id: op.cliente[0]._id.toString() } : null,
+			parceiro: op.parceiro[0] ? { ...op.parceiro[0], _id: op.parceiro[0]._id.toString() } : null,
+			referenciasFunil: op.referenciasFunil ? op.referenciasFunil.map((ref: any) => ({ ...ref, _id: ref._id.toString() })) : null,
 		}));
 
 		return opportunity[0] as TOpportunityDTOWithClientAndPartnerAndFunnelReferences;

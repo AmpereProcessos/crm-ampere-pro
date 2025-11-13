@@ -21,7 +21,9 @@ import { type Collection, type Filter, ObjectId, type WithId } from "mongodb";
 import type { NextApiHandler } from "next";
 import { z } from "zod";
 import type { TClient } from "../../../utils/schemas/client.schema";
-
+import { TAutomationConfiguration } from "@/utils/schemas/automations.schema";
+import { runOpportunityLossAutomation } from "@/lib/automations";
+import { start } from "workflow/api";
 export const config = {
 	maxDuration: 25,
 };
@@ -255,6 +257,7 @@ const editOpportunity: NextApiHandler<PutResponse> = async (req, res) => {
 	const proposalsCollection: Collection<TProposal> = db.collection("proposals");
 	const clientsCollection: Collection<TClient> = db.collection("clients");
 	const conectaIndicationsCollection: Collection<TConectaIndication> = db.collection("conecta-indications");
+	const automationsCollection: Collection<TAutomationConfiguration> = db.collection("automations");
 
 	const previousOpportunity = await getOpportunityById({
 		collection: opportunitiesCollection,
@@ -370,6 +373,21 @@ const editOpportunity: NextApiHandler<PutResponse> = async (req, res) => {
 		}
 	}
 	if (!updateResponse.acknowledged) throw new createHttpError.InternalServerError("Oops, houve um erro desconhecido na atualização da oportunidade.");
+
+	// Checking for possible automation to run
+	if (!previousOpportunity.perda.data && !!updatedOpportunity.perda.data) {
+		const automations = await automationsCollection.find({ "gatilho.tipo": "OPORTUNIDADE-PERDA" }).toArray();
+		const automationsPromises = automations.map(async (automation) => {
+			console.log(`Running automation ${automation.titulo} for opportunity ${updatedOpportunity._id.toString()}`);
+			console.log("Workflow", runOpportunityLossAutomation);
+			await start(runOpportunityLossAutomation, [
+				{ ...updatedOpportunity, _id: updatedOpportunity._id.toString() },
+				{ ...automation, _id: automation._id.toString() },
+			]);
+			return;
+		});
+		await Promise.all(automationsPromises);
+	}
 	return res.status(201).json({
 		data: "Oportunidade alterada com sucesso !",
 		message: "Oportunidade alterada com sucesso !",

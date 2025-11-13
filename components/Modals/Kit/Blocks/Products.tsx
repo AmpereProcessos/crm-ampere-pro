@@ -66,9 +66,7 @@ function ProductItem({ product, handleUpdateKit, handleRemoveKitProduct }: Produ
 							<h1 className="text-xs font-bold tracking-tight uppercase">{`${product.qtde} x ${product.modelo}`}</h1>
 							<div className="flex items-center gap-1">
 								<FaIndustry className="w-4 h-4 min-w-4 min-h-4" />
-								<p className="text-[0.7rem] font-medium text-primary/80">
-									{product.fabricante}
-								</p>
+								<p className="text-[0.7rem] font-medium text-primary/80">{product.fabricante}</p>
 							</div>
 							<div className="flex items-center gap-1">
 								<Zap className="w-4 h-4 min-w-4 min-h-4" />
