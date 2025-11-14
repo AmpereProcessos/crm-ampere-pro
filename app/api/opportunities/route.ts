@@ -422,19 +422,22 @@ async function editOpportunities({ input, session }: { input: TEditOpportunities
 	if (!updateResponse.acknowledged) throw new createHttpError.InternalServerError("Oops, houve um erro desconhecido na atualização da oportunidade.");
 
 	// Checking for possible automation to run
-	if (!previousOpportunity.perda.data && !!updatedOpportunity.perda.data) {
-		const automations = await automationsCollection.find({ "gatilho.tipo": "OPORTUNIDADE-PERDA" }).toArray();
-		const automationsPromises = automations.map(async (automation) => {
-			console.log(`Running automation ${automation.titulo} for opportunity ${updatedOpportunity._id.toString()}`);
-			console.log("Workflow", runOpportunityLossAutomation);
-			await start(runOpportunityLossAutomation, [
-				{ ...updatedOpportunity, _id: updatedOpportunity._id.toString() },
-				{ ...automation, _id: automation._id.toString() },
-			]);
-			return;
-		});
-		await Promise.all(automationsPromises);
+	if (updatedOpportunity.automacoesHabilitadas) {
+		if (!previousOpportunity.perda.data && !!updatedOpportunity.perda.data) {
+			const automations = await automationsCollection.find({ "gatilho.tipo": "OPORTUNIDADE-PERDA" }).toArray();
+			const automationsPromises = automations.map(async (automation) => {
+				console.log(`Running automation ${automation.titulo} for opportunity ${updatedOpportunity._id.toString()}`);
+				console.log("Workflow", runOpportunityLossAutomation);
+				await start(runOpportunityLossAutomation, [
+					{ ...updatedOpportunity, _id: updatedOpportunity._id.toString() },
+					{ ...automation, _id: automation._id.toString() },
+				]);
+				return;
+			});
+			await Promise.all(automationsPromises);
+		}
 	}
+
 	return {
 		data: "Oportunidade alterada com sucesso !",
 		message: "Oportunidade alterada com sucesso !",
