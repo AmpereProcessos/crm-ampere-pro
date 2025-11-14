@@ -1,15 +1,14 @@
-import connectToDatabase from "@/services/mongodb/crm-db-connection";
-import { TAutomationConfiguration, TAutomationExecutionLog } from "@/utils/schemas/automations.schema";
-import { TTimeDurationEnum } from "@/utils/schemas/enums.schema";
-import { TOpportunityHistory } from "@/utils/schemas/opportunity-history.schema";
-import { TOpportunity, TOpportunityDTO } from "@/utils/schemas/opportunity.schema";
-import { ManipulateType } from "dayjs";
 import { ObjectId, WithId } from "mongodb";
+import type ms from "ms";
 import { sleep } from "workflow";
-import { sendTemplateWhatsappMessage, WHATSAPP_TEMPLATES } from "./whatsapp";
+import type { TAutomationConfigurationDTO } from "@/app/api/automations/route";
+import connectToDatabase from "@/services/mongodb/crm-db-connection";
+import type { TAutomationConfiguration, TAutomationExecutionLog } from "@/utils/schemas/automations.schema";
+import type { TTimeDurationEnum } from "@/utils/schemas/enums.schema";
+import type { TOpportunity, TOpportunityDTO } from "@/utils/schemas/opportunity.schema";
+import type { TOpportunityHistory } from "@/utils/schemas/opportunity-history.schema";
 import { EMAIL_TEMPLATES } from "../email";
-import ms from "ms";
-import { TAutomationConfigurationDTO } from "@/app/api/automations/route";
+import { sendTemplateWhatsappMessage, WHATSAPP_TEMPLATES } from "./whatsapp";
 
 type RunOpportunityLossAutomationParams = {
 	opportunity: TOpportunityDTO;
@@ -34,7 +33,8 @@ export async function runOpportunityLossAutomation(
 
 	console.log("[INFO] [RUN_OPPORTUNITY_LOSS_AUTOMATION] Waiting for the configured delay:", delay);
 	// Wait for the configured delay
-	await sleep(delay);
+	// await sleep(delay);
+	await sleep("10s");
 
 	// Create automation execution log
 	const logId = await createAutomationLog(automation, opportunity);
@@ -244,7 +244,7 @@ async function sendWhatsappTemplate(opportunity: TOpportunityDTO, automation: TA
 
 	console.log("[INFO] [WHATSAPP_TEMPLATE_SEND] Message sent successfully:", JSON.stringify({ data, message, whatsappMessageId }, null, 2));
 
-	return { template: whatsappTemplate, success: true };
+	return { template: whatsappTemplate.title, success: true };
 }
 
 // Helper function to send Email template

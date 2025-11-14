@@ -1,16 +1,16 @@
 import axios from "axios";
-import toast from "react-hot-toast";
-import type { TOpportunity } from "../schemas/opportunity.schema";
-import type { TClient } from "../schemas/client.schema";
-import type { TFunnelReference } from "../schemas/funnel-reference.schema";
-import { updateAppProject } from "./app-projects";
+import type { TBulkUpdateComissionsRouteInput, TBulkUpdateComissionsRouteOutput } from "@/app/api/opportunities/comissions/route";
+import type { TEditOpportunitiesInput, TEditOpportunitiesOutput } from "@/app/api/opportunities/route";
+import type { TUpdateOpportunityQueryDefinitionsInput, TUpdateOpportunityQueryDefinitionsOutput } from "@/pages/api/opportunities/query-definitions";
 import type {
 	TAddResponsibleToOpportunityInput,
 	TRemoveResponsibleFromOpportunityInput,
 	TUpdateOpportunityResponsibleInput,
 } from "@/pages/api/opportunities/responsibles";
-import type { TBulkUpdateComissionsRouteInput, TBulkUpdateComissionsRouteOutput } from "@/app/api/opportunities/comissions/route";
-import type { TUpdateOpportunityQueryDefinitionsInput, TUpdateOpportunityQueryDefinitionsOutput } from "@/pages/api/opportunities/query-definitions";
+import type { TClient } from "../schemas/client.schema";
+import type { TFunnelReference } from "../schemas/funnel-reference.schema";
+import type { TOpportunity } from "../schemas/opportunity.schema";
+import { updateAppProject } from "./app-projects";
 
 type HandleProjectCreationParams = {
 	info: TOpportunity;
@@ -46,23 +46,15 @@ export async function createClientOpportunityAndFunnelReference({
 		if (typeof data.message !== "string") return "Oportunidade criada com sucesso !";
 		return data.data as string;
 	} catch (error) {
-		console.log("Error running createClientOpportunityAndFunnelReference", error);
+		if (axios.isAxiosError(error) && error.response?.status === 409) {
+			throw error;
+		}
 		throw error;
 	}
 }
-type UpdateOpportunityParams = {
-	id: string;
-	changes: any;
-};
-export async function updateOpportunity({ id, changes }: UpdateOpportunityParams) {
-	try {
-		const { data } = await axios.put(`/api/opportunities?id=${id}`, changes);
-		if (typeof data.data !== "string") return "Oportunidade alterada com sucesso !";
-		return data.message;
-	} catch (error) {
-		console.log("Error running updateOpportunity", error);
-		throw error;
-	}
+export async function updateOpportunity({ id, changes }: TEditOpportunitiesInput) {
+	const { data } = await axios.put<TEditOpportunitiesOutput>(`/api/opportunities?id=${id}`, { id, changes });
+	return data.message;
 }
 export async function winOpportunity({ proposalId, opportunityId }: { proposalId: string; opportunityId: string }) {
 	try {
@@ -163,6 +155,15 @@ export async function updateOpportunitiesQueryDefinitions(input: TUpdateOpportun
 		return data;
 	} catch (error) {
 		console.log("Error running updateOpportunitiesQueryDefinitions", error);
+		throw error;
+	}
+}
+
+export async function createApprovalRequest(payload: any) {
+	try {
+		const { data } = await axios.post("/api/approval-requests", payload);
+		return data;
+	} catch (error) {
 		throw error;
 	}
 }

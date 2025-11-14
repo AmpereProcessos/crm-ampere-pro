@@ -1,3 +1,7 @@
+import createHttpError from "http-errors";
+import { type Collection, ObjectId } from "mongodb";
+import type { NextApiHandler } from "next";
+import { z } from "zod";
 import { insertClient } from "@/repositories/clients/mutations";
 import { getExistentClientByProperties } from "@/repositories/clients/queries";
 import { insertFunnelReference } from "@/repositories/funnel-references/mutations";
@@ -9,17 +13,39 @@ import { apiHandler, validateAuthenticationWithSession } from "@/utils/api";
 import { GeneralClientSchema, type TClient } from "@/utils/schemas/client.schema";
 import { InsertFunnelReferenceSchema, type TFunnelReference } from "@/utils/schemas/funnel-reference.schema";
 import { InsertOpportunitySchema, type TOpportunity } from "@/utils/schemas/opportunity.schema";
-import createHttpError from "http-errors";
-import { type Collection, ObjectId } from "mongodb";
-import type { NextApiHandler } from "next";
-import { z } from "zod";
 
 type PostResponse = {
-	data: {
-		insertedClientId: string;
-		insertedOpportunityId: string;
-		insertedFunnelReferenceId: string;
-	};
+	data:
+		| {
+				insertedClientId: string;
+				insertedOpportunityId: string;
+				insertedFunnelReferenceId: string;
+		  }
+		| {
+				code: string;
+				message: string;
+				data: {
+					client: {
+						id: string;
+						nome: string;
+						cpfCnpj: string | null;
+						telefonePrimario: string;
+						email: string;
+					};
+					opportunity: {
+						id: string;
+						identificador: string;
+						nome: string;
+						tipoId: string;
+						responsaveis: Array<{
+							id: string;
+							nome: string;
+							papel: string;
+							avatar_url: string | null;
+						}>;
+					};
+				};
+		  };
 	message: string;
 };
 
@@ -55,6 +81,63 @@ const createClientOpportunityAndFunnelReferences: NextApiHandler<PostResponse> =
 	const opportunitiesCollection: Collection<TOpportunity> = db.collection("opportunities");
 	const clientsCollection: Collection<TClient> = db.collection("clients");
 	const funnelReferencesCollection: Collection<TFunnelReference> = db.collection("funnel-references");
+
+	// Resolve client ID and check for ongoing opportunities
+	let resolvedClientId = clientId;
+	if (!resolvedClientId) {
+		const email = client.email || undefined;
+		const cpfCnpj = client.cpfCnpj || undefined;
+		const phoneNumber = client.telefonePrimario || undefined;
+		const existingClientInDb = await getExistentClientByProperties({
+			collection: clientsCollection,
+			email,
+			cpfCnpj,
+			phoneNumber,
+		});
+		if (existingClientInDb) {
+			resolvedClientId = existingClientInDb._id.toString();
+		}
+	}
+
+	// Check for ongoing opportunities with the same client and project type
+	if (resolvedClientId) {
+		const ongoingOpportunity = await opportunitiesCollection.findOne({
+			idParceiro: partnerId,
+			idCliente: resolvedClientId,
+			"tipo.id": opportunity.tipo.id,
+			$and: [{ $or: [{ "perda.data": { $exists: false } }, { "perda.data": null }] }, { $or: [{ "ganho.data": { $exists: false } }, { "ganho.data": null }] }],
+		});
+
+		if (ongoingOpportunity) {
+			const conflictPayload: any = {
+				code: "ONGOING_OPPORTUNITY_EXISTS",
+				message: "Já existe uma oportunidade em andamento para este cliente e tipo de projeto.",
+				data: {
+					client: {
+						id: ongoingOpportunity.idCliente,
+						nome: ongoingOpportunity.cliente.nome,
+						cpfCnpj: ongoingOpportunity.cliente.cpfCnpj || null,
+						telefonePrimario: ongoingOpportunity.cliente.telefonePrimario,
+						email: ongoingOpportunity.cliente.email || "",
+					},
+					opportunity: {
+						id: ongoingOpportunity._id.toString(),
+						identificador: ongoingOpportunity.identificador,
+						nome: ongoingOpportunity.nome,
+						tipoId: ongoingOpportunity.tipo.id,
+						responsaveis: ongoingOpportunity.responsaveis.map((r) => ({
+							id: r.id,
+							nome: r.nome,
+							papel: r.papel,
+							avatar_url: r.avatar_url,
+						})),
+					},
+				},
+			};
+			return res.status(409).json(conflictPayload);
+		}
+	}
+
 	if (clientId) {
 		console.log("[INFO] [CREATE_OPPORTUNITY_PERSONALIZED] Existing client provider.");
 		// If there is a client ID, then the opportunity will be reference to an existing client, therefore, there is no need to create a new client
@@ -87,7 +170,7 @@ const createClientOpportunityAndFunnelReferences: NextApiHandler<PostResponse> =
 					canalAquisicao: client.canalAquisicao,
 				},
 				idCliente: clientId,
-			},
+			} as TOpportunity,
 			partnerId: partnerId || "",
 		});
 		if (!insertOpportunityResponse.acknowledged) throw new createHttpError.InternalServerError("Oops, houve um erro desconhecido ao criar oportunidade.");
@@ -167,7 +250,7 @@ const createClientOpportunityAndFunnelReferences: NextApiHandler<PostResponse> =
 				canalAquisicao: client.canalAquisicao,
 			},
 			idCliente: insertedClientId,
-		},
+		} as TOpportunity,
 		partnerId: partnerId || "",
 	});
 	if (!insertOpportunityResponse.acknowledged) throw new createHttpError.InternalServerError("Oops, houve um erro desconhecido ao criar oportunidade.");

@@ -1,17 +1,19 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Funnel, Plus, X } from "lucide-react";
+import type React from "react";
+import { useState } from "react";
+import toast from "react-hot-toast";
+import { getErrorMessage } from "@/lib/methods/errors";
 import { createFunnelReference, deleteFunnelReference, updateFunnelReference } from "@/utils/mutations/funnel-references";
 import { useFunnels } from "@/utils/queries/funnels";
-import { TFunnelReference, TFunnelReferenceDTO } from "@/utils/schemas/funnel-reference.schema";
-import { TFunnelDTO } from "@/utils/schemas/funnel.schema";
+import type { TFunnelDTO } from "@/utils/schemas/funnel.schema";
+import type { TFunnelReference, TFunnelReferenceDTO } from "@/utils/schemas/funnel-reference.schema";
 import type { TOpportunityDTOWithClientAndPartnerAndFunnelReferences } from "@/utils/schemas/opportunity.schema";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import React, { useState } from "react";
-import toast from "react-hot-toast";
 import OpportunityFunnelReference from "../../Cards/OpportunityFunnelReference";
 import SelectInput from "../../Inputs/SelectInput";
-import ResponsiveDialogDrawerSection from "../../utils/ResponsiveDialogDrawerSection";
-import { Funnel, Plus, X } from "lucide-react";
 import { Button } from "../../ui/button";
-import { getErrorMessage } from "@/lib/methods/errors";
+import ResponsiveDialogDrawerSection from "../../utils/ResponsiveDialogDrawerSection";
+
 type GetFunnelInfoParams = {
 	funnelId: TFunnelReferenceDTO["idFunil"];
 	funnels: TFunnelDTO[] | undefined;
@@ -19,7 +21,7 @@ type GetFunnelInfoParams = {
 function getFunnelInfo({ funnelId, funnels }: GetFunnelInfoParams) {
 	if (!funnels) return { funnelLabel: null, funnelStageLabel: null, stageOptions: [] };
 
-	const funnel = funnels.find((f) => f._id == funnelId);
+	const funnel = funnels.find((f) => f._id === funnelId);
 	if (!funnel) return { funnelLabel: null, funnelStageLabel: null, stageOptions: [] };
 	const funnelLabel = funnel.nome;
 
@@ -72,17 +74,10 @@ function OpportunityFunnelReferencesBlock({
 		estagios: {},
 		dataInsercao: new Date().toISOString(),
 	});
-	async function addNewFunnelReference(info: TFunnelReference) {
-		try {
-			const response = await createFunnelReference({ info });
-			return response;
-		} catch (error) {
-			throw error;
-		}
-	}
+
 	const { mutate: handleAddNewOpportunityFunnelReference, isPending: addNewFunnelReferencePending } = useMutation({
 		mutationKey: ["add-new-funnel-reference"],
-		mutationFn: addNewFunnelReference,
+		mutationFn: createFunnelReference,
 		onMutate: async (variables) => {
 			const previousOpportunity = queryClient.getQueryData<TOpportunityDTOWithClientAndPartnerAndFunnelReferences>(opportunityQueryKey);
 			if (!previousOpportunity) return { previousOpportunity };
@@ -149,7 +144,7 @@ function OpportunityFunnelReferencesBlock({
 					callbacks={callbacks}
 				/>
 			))}
-			{!!newFunnelReferencesOptions ? (
+			{newFunnelReferencesOptions ? (
 				<>
 					<div className="flex w-full items-center justify-end">
 						<Button size={"xs"} variant="ghost" onClick={() => setNewFunnelReferenceMenuIsOpen((prev) => !prev)} className="flex items-center gap-1">
@@ -170,7 +165,7 @@ function OpportunityFunnelReferencesBlock({
 											value: funnel._id,
 										}))}
 										handleChange={(value) => {
-											const selectedFunnel = newFunnelReferencesOptions.find((f) => f._id == value);
+											const selectedFunnel = newFunnelReferencesOptions.find((f) => f._id === value);
 											const firstStage = selectedFunnel?.etapas[0].id || "";
 											setNewFunnelReference((prev) => ({ ...prev, idFunil: value, idEstagioFunil: firstStage.toString() }));
 										}}

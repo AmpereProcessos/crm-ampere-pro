@@ -1,21 +1,17 @@
-import axios from "axios";
-import type { TFunnelReference } from "../schemas/funnel-reference.schema";
 import { type QueryClient, type QueryKey, useMutation } from "@tanstack/react-query";
+import axios from "axios";
+import type {
+	TCreateFunnelReferenceInput,
+	TCreateFunnelReferenceOutput,
+	TDeleteFunnelReferenceOutput,
+	TEditFunnelReferenceInput,
+	TEditFunnelReferenceOutput,
+} from "@/app/api/opportunities/funnel-references/route";
 import type { TOpportunitySimplifiedDTOWithProposalAndActivitiesAndFunnels } from "../schemas/opportunity.schema";
 
-type HandleFunnelReferenceCreation = {
-	info: TFunnelReference;
-};
-
-export async function createFunnelReference({ info }: HandleFunnelReferenceCreation) {
-	try {
-		const { data } = await axios.post("/api/opportunities/funnel-references", info);
-		if (data.data?.insertedId) return data.data.insertedId as string;
-		return "Referência de funil criada com sucesso !";
-	} catch (error) {
-		console.log("Error running createFunnelReference", error);
-		throw error;
-	}
+export async function createFunnelReference(input: TCreateFunnelReferenceInput) {
+	const { data } = await axios.post<TCreateFunnelReferenceOutput>("/api/opportunities/funnel-references", input);
+	return data.message;
 }
 type UseUpdateFunnelReferenceParams = {
 	funnelReferenceId: string;
@@ -24,14 +20,14 @@ type UseUpdateFunnelReferenceParams = {
 	affectedQueryKey: QueryKey;
 };
 export async function updateFunnelReference({ funnelReferenceId, newStageId }: Omit<UseUpdateFunnelReferenceParams, "queryClient" | "affectedQueryKey">) {
-	try {
-		const { data } = await axios.put(`/api/opportunities/funnel-references?id=${funnelReferenceId}`, { idEstagioFunil: newStageId });
-		if (typeof data.data !== "string") return "Estágio atualizado com sucesso !";
-		return data.data;
-	} catch (error) {
-		console.log("Error running updateFunnelReference", error);
-		throw error;
-	}
+	const payload: TEditFunnelReferenceInput = {
+		id: funnelReferenceId,
+		changes: {
+			idEstagioFunil: newStageId,
+		},
+	};
+	const { data } = await axios.put<TEditFunnelReferenceOutput>(`/api/opportunities/funnel-references?id=${funnelReferenceId}`, payload);
+	return data.message;
 }
 export function useFunnelReferenceUpdate({ queryClient, affectedQueryKey }: Omit<UseUpdateFunnelReferenceParams, "funnelReferenceId" | "newStageId">) {
 	return useMutation({
@@ -74,12 +70,6 @@ export function useFunnelReferenceUpdate({ queryClient, affectedQueryKey }: Omit
 }
 
 export async function deleteFunnelReference({ id }: { id: string }) {
-	try {
-		const { data } = await axios.delete(`/api/opportunities/funnel-references?id=${id}`);
-		if (typeof data.message !== "string") return "Referência de funil removida com sucesso !";
-		return data.message as string;
-	} catch (error) {
-		console.log("Error running deleteFunnelReference", error);
-		throw error;
-	}
+	const { data } = await axios.delete<TDeleteFunnelReferenceOutput>(`/api/opportunities/funnel-references?id=${id}`);
+	return data.message;
 }

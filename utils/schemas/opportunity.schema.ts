@@ -415,6 +415,27 @@ export const InsertOpportunitySchema = z.object({
 		.optional()
 		.nullable(),
 	proximaInteracao: z.string().datetime().optional().nullable(),
+	automacoesHabilitadas: z
+		.boolean({
+			required_error: "Flag de liberação para execuções de automações na oportunidade não definida.",
+			invalid_type_error: "Tipo não válido para a flag de liberação para execuções de automações na oportunidade.",
+		})
+		.default(true),
+	automacoesUltimasExecucoes: z
+		.record(
+			z.string({
+				required_error: "Tipo de gatilho da automação não informado.",
+				invalid_type_error: "Tipo não válido para o tipo de gatilho da automação.",
+			}),
+			z
+				.string({
+					required_error: "Data de última execução da automação não informada.",
+					invalid_type_error: "Tipo não válido para a data de última execução da automação.",
+				})
+				.datetime({ message: "Tipo não válido para data de última execução da automação." }),
+		)
+		.optional()
+		.nullable(), // key is the automation trigger type, value is the last execution date
 	dataExclusao: z
 		.string({ invalid_type_error: "Tipo não válido para data de exclusão." })
 		.datetime({ message: "Tipo não válido para data de exclusão." })

@@ -3,6 +3,7 @@ import axios from "axios";
 import dayjs from "dayjs";
 import { useState } from "react";
 import type { TGetComissionsRouteInput, TGetComissionsRouteOutput } from "@/app/api/opportunities/comissions/route";
+import type { TGetExportOpportunitiesInput } from "@/app/api/opportunities/export/route";
 import type { TResultsExportsItem } from "@/app/api/stats/comercial-results/exports/route";
 import { useDebounceMemo } from "@/lib/hooks";
 import type { TGetOpportunitiesKanbanViewInput, TGetOpportunitiesKanbanViewOutput } from "@/pages/api/opportunities/kanban";
@@ -10,79 +11,10 @@ import type { TGetOpportunitiesQueryDefinitionsOutput } from "@/pages/api/opport
 import type { TOpportunitiesQueryOptions } from "@/pages/api/opportunities/query-options";
 import type { TOpportunitiesByFastSearch, TOpportunitiesByFilterResult } from "@/pages/api/opportunities/search";
 import type {
-	TOpportunityDTO,
-	TOpportunityDTOWithClient,
 	TOpportunityDTOWithClientAndPartnerAndFunnelReferences,
-	TOpportunityDTOWithFunnelReferenceAndActivities,
-	TOpportunityDTOWithFunnelReferenceAndActivitiesByStatus,
 	TOpportunitySimplifiedDTO,
-	TOpportunitySimplifiedDTOWithProposalAndActivitiesAndFunnels,
-	TOpportunityWithFunnelReferenceAndActivitiesByStatus,
 	TPersonalizedOpportunitiesFilter,
 } from "../schemas/opportunity.schema";
-
-type UseOpportunitiesParams = {
-	responsibles: string[] | null;
-	funnel: string | null;
-	periodAfter: string | undefined;
-	periodBefore: string | undefined;
-	periodField: string | undefined;
-	status: "GANHOS" | "PERDIDOS" | undefined;
-	isFromMarketing: boolean;
-	isFromIndication: boolean;
-};
-async function fetchOpportunities({
-	responsibles,
-	funnel,
-	periodAfter,
-	periodBefore,
-	periodField,
-	status,
-	isFromMarketing,
-	isFromIndication,
-}: UseOpportunitiesParams) {
-	try {
-		const queryParamsArr = [
-			{ key: "responsibles", value: responsibles },
-			{ key: "funnel", value: funnel },
-			{ key: "periodAfter", value: periodAfter },
-			{ key: "periodBefore", value: periodBefore },
-			{ key: "periodField", value: periodField },
-			{ key: "status", value: status },
-			{ key: "isFromMarketing", value: isFromMarketing },
-			{ key: "isFromIndication", value: isFromIndication },
-		];
-		const queryParams = queryParamsArr
-			.filter((q) => !!q.value)
-			.map((q) => `${q.key}=${q.value}`)
-			.join("&");
-		const { data } = await axios.get(`/api/opportunities?${queryParams}`);
-		return data.data as TOpportunitySimplifiedDTOWithProposalAndActivitiesAndFunnels[];
-	} catch (error) {
-		console.log("Error fetching opportunities", error);
-		throw error;
-	}
-}
-export function useOpportunities({
-	responsibles,
-	funnel,
-	periodAfter,
-	periodBefore,
-	periodField,
-	status,
-	isFromMarketing,
-	isFromIndication,
-}: UseOpportunitiesParams) {
-	return {
-		...useQuery({
-			queryKey: ["opportunities", responsibles, funnel, periodAfter, periodBefore, periodField, status, isFromMarketing, isFromIndication],
-			queryFn: async () =>
-				await fetchOpportunities({ responsibles, funnel, periodAfter, periodBefore, periodField, status, isFromMarketing, isFromIndication }),
-			gcTime: 1000 * 60 * 5, // 5 minutes
-		}),
-		queryKey: ["opportunities", responsibles, funnel, periodAfter, periodBefore, periodField, status, isFromMarketing, isFromIndication],
-	};
-}
 
 async function fetchOpportunity({ opportunityId }: { opportunityId: string }) {
 	try {
@@ -130,31 +62,28 @@ export function useOpportunitiesBySearch({ searchParam, page }: { searchParam: s
 	});
 }
 
-type TExportOpportunitiesParams = {
-	responsibles: string[] | null;
-	periodAfter?: string | null;
-	periodBefore?: string | null;
-	periodField?: string | null;
-	status: "GANHOS" | "PERDIDOS" | undefined;
-};
-export async function fetchOpportunityExport({ responsibles, periodAfter, periodBefore, periodField, status }: TExportOpportunitiesParams) {
+export async function fetchOpportunityExport({ responsibles, periodAfter, periodBefore, periodField, status }: TGetExportOpportunitiesInput) {
 	try {
-		const queryParamsArr = [
-			{ key: "responsibles", value: responsibles },
-			{ key: "periodAfter", value: periodAfter },
-			{ key: "periodBefore", value: periodBefore },
-			{ key: "periodField", value: periodField },
-			{ key: "status", value: status },
-		];
+		const searchParams = new URLSearchParams();
+		if (responsibles) {
+			searchParams.set("responsibles", responsibles.join(","));
+		}
+		if (periodAfter) {
+			searchParams.set("periodAfter", periodAfter);
+		}
+		if (periodBefore) {
+			searchParams.set("periodBefore", periodBefore);
+		}
+		if (periodField) {
+			searchParams.set("periodField", periodField);
+		}
+		if (status) {
+			searchParams.set("status", status);
+		}
 
-		const queryParams = queryParamsArr
-			.filter((param) => !!param.value)
-			.map((param) => `${param.key}=${param.value}`)
-			.join("&");
-
-		console.log(queryParams);
-		const { data } = await axios.get(`/api/opportunities/export?${queryParams}`);
-		return data.data as TResultsExportsItem[];
+		const searchParamsString = searchParams.toString();
+		const { data } = await axios.get(`/api/opportunities/export?${searchParamsString}`);
+		return data.data;
 	} catch (error) {
 		console.log("Error fetching opportunities by personalized filters", error);
 		throw error;
@@ -329,7 +258,7 @@ export function useOpportunitiesKanbanView({ funnelId, funnelStage, globalFilter
 	return useInfiniteQuery({
 		queryKey: ["opportunities-kanban-view", funnelId, funnelStage, globalFilters],
 		queryFn: async ({ pageParam }) => await fetchOpportunitiesKanbanView({ ...globalFilters, funnelId, funnelStage, page: pageParam }),
-		getNextPageParam: (lastPage, pages) => lastPage.nextCursor,
+		getNextPageParam: (lastPage) => lastPage.nextCursor,
 		initialPageParam: 1,
 	});
 }

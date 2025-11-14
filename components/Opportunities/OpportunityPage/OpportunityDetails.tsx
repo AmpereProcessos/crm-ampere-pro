@@ -1,31 +1,27 @@
-import { formatDateForInputValue, formatToCPForCNPJ } from "@/utils/methods";
+import { useMutation } from "@tanstack/react-query";
+import { Building2, Loader2, MapPin, Tag, UserRound } from "lucide-react";
 import { useEffect, useState } from "react";
-import DateInput from "../../Inputs/DateInput";
-import SelectInput from "../../Inputs/SelectInput";
-import TextInput from "../../Inputs/TextInput";
-
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "react-hot-toast";
 import { AiOutlineCheck } from "react-icons/ai";
-
 import type { TUserSession } from "@/lib/auth/session";
-import { updateClient } from "@/utils/mutations/clients";
-import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
-import { updateOpportunity } from "@/utils/mutations/opportunities";
-import type { TOpportunity, TOpportunityDTOWithClientAndPartnerAndFunnelReferences } from "@/utils/schemas/opportunity.schema";
-
+import { getErrorMessage } from "@/lib/methods/errors";
 import { formatDateOnInputChange } from "@/lib/methods/formatting";
 import { stateCities } from "@/utils/estados_cidades";
+import { formatDateForInputValue, formatToCPForCNPJ } from "@/utils/methods";
+import { updateClient } from "@/utils/mutations/clients";
+import { updateOpportunity } from "@/utils/mutations/opportunities";
 import { usePartnersSimplified } from "@/utils/queries/partners";
 import { useProjectTypes } from "@/utils/queries/project-types";
 import { useAcquisitionChannels } from "@/utils/queries/utils";
+import type { TOpportunity, TOpportunityDTOWithClientAndPartnerAndFunnelReferences } from "@/utils/schemas/opportunity.schema";
 import { ConsumerUnitHolderType, ElectricalInstallationGroups } from "@/utils/select-options";
+import DateInput from "../../Inputs/DateInput";
+import SelectInput from "../../Inputs/SelectInput";
 import SelectWithImages from "../../Inputs/SelectWithImages";
+import TextInput from "../../Inputs/TextInput";
+import ResponsiveDialogDrawerSection from "../../utils/ResponsiveDialogDrawerSection";
 import OpportunityFunnelReferencesBlock from "./OpportunityFunnelReferencesBlock";
 import OpportunityResponsiblesBlock from "./OpportunityResponsiblesBlock";
-import ResponsiveDialogDrawerSection from "../../utils/ResponsiveDialogDrawerSection";
-import { Building2, MapPin, Tag, UserRound } from "lucide-react";
-import { toast } from "react-hot-toast";
-import { getErrorMessage } from "@/lib/methods/errors";
 
 type DetailsBlockType = {
 	info: TOpportunityDTOWithClientAndPartnerAndFunnelReferences;
@@ -41,7 +37,6 @@ type DetailsBlockType = {
 };
 
 function DetailsBlock({ info, opportunityQueryKey, session, opportunityId, callbacks }: DetailsBlockType) {
-	const queryClient = useQueryClient();
 	const partnersScope = session.user.permissoes.parceiros.escopo;
 	const [infoHolder, setInfoHolder] = useState<TOpportunityDTOWithClientAndPartnerAndFunnelReferences>({
 		...info,
@@ -51,7 +46,7 @@ function DetailsBlock({ info, opportunityQueryKey, session, opportunityId, callb
 	const { data: projectTypes } = useProjectTypes();
 
 	const vinculationPartners = partners ? (partnersScope ? partners?.filter((p) => partnersScope.includes(p._id)) : partners) : [];
-	const { mutate: handleUpdateOpportunity } = useMutation({
+	const { mutate: handleUpdateOpportunity, isPending: isUpdatingOpportunity } = useMutation({
 		mutationKey: ["update-opportunity", opportunityId],
 		mutationFn: updateOpportunity,
 		onMutate: async () => {
@@ -118,9 +113,8 @@ function DetailsBlock({ info, opportunityQueryKey, session, opportunityId, callb
 						</div>
 						<button
 							type="button"
-							disabled={infoHolder?.nome === info.nome}
+							disabled={infoHolder?.nome === info.nome || isUpdatingOpportunity}
 							onClick={() =>
-								// @ts-ignore
 								handleUpdateOpportunity({
 									id: opportunityId,
 									changes: { nome: infoHolder.nome },
@@ -128,12 +122,16 @@ function DetailsBlock({ info, opportunityQueryKey, session, opportunityId, callb
 							}
 							className="flex items-end justify-center pb-4 text-green-200"
 						>
-							<AiOutlineCheck
-								style={{
-									fontSize: "18px",
-									color: infoHolder?.nome !== info.nome ? "rgb(34,197,94)" : "rgb(156,163,175)",
-								}}
-							/>
+							{isUpdatingOpportunity ? (
+								<Loader2 className="w-4 h-4 min-w-4 min-h-4 animate-spin text-primary" />
+							) : (
+								<AiOutlineCheck
+									style={{
+										fontSize: "18px",
+										color: infoHolder?.nome !== info.nome ? "rgb(34,197,94)" : "rgb(156,163,175)",
+									}}
+								/>
+							)}
 						</button>
 					</div>
 					<div className="flex w-full gap-2">
@@ -177,9 +175,8 @@ function DetailsBlock({ info, opportunityQueryKey, session, opportunityId, callb
 						</div>
 						<button
 							type="button"
-							disabled={infoHolder?.tipo.id === info.tipo.id}
+							disabled={infoHolder?.tipo.id === info.tipo.id || isUpdatingOpportunity}
 							onClick={() =>
-								// @ts-ignore
 								handleUpdateOpportunity({
 									id: opportunityId,
 									changes: {
@@ -193,12 +190,16 @@ function DetailsBlock({ info, opportunityQueryKey, session, opportunityId, callb
 							}
 							className="flex items-end justify-center pb-4 text-green-200"
 						>
-							<AiOutlineCheck
-								style={{
-									fontSize: "18px",
-									color: infoHolder?.tipo.id !== info.tipo.id ? "rgb(34,197,94)" : "rgb(156,163,175)",
-								}}
-							/>
+							{isUpdatingOpportunity ? (
+								<Loader2 className="w-4 h-4 min-w-4 min-h-4 animate-spin text-primary" />
+							) : (
+								<AiOutlineCheck
+									style={{
+										fontSize: "18px",
+										color: infoHolder?.tipo.id !== info.tipo.id ? "rgb(34,197,94)" : "rgb(156,163,175)",
+									}}
+								/>
+							)}
 						</button>
 					</div>
 					<div className="flex w-full gap-2">
@@ -232,9 +233,8 @@ function DetailsBlock({ info, opportunityQueryKey, session, opportunityId, callb
 						</div>
 						<button
 							type="button"
-							disabled={infoHolder?.idParceiro === info.idParceiro}
+							disabled={infoHolder?.idParceiro === info.idParceiro || isUpdatingOpportunity}
 							onClick={() =>
-								// @ts-ignore
 								handleUpdateOpportunity({
 									id: opportunityId,
 									changes: { idParceiro: infoHolder.idParceiro },
@@ -242,12 +242,16 @@ function DetailsBlock({ info, opportunityQueryKey, session, opportunityId, callb
 							}
 							className="flex items-end justify-center pb-4 text-green-200"
 						>
-							<AiOutlineCheck
-								style={{
-									fontSize: "18px",
-									color: infoHolder?.idParceiro !== info.idParceiro ? "rgb(34,197,94)" : "rgb(156,163,175)",
-								}}
-							/>
+							{isUpdatingOpportunity ? (
+								<Loader2 className="w-4 h-4 min-w-4 min-h-4 animate-spin text-primary" />
+							) : (
+								<AiOutlineCheck
+									style={{
+										fontSize: "18px",
+										color: infoHolder?.idParceiro !== info.idParceiro ? "rgb(34,197,94)" : "rgb(156,163,175)",
+									}}
+								/>
+							)}
 						</button>
 					</div>
 				</ResponsiveDialogDrawerSection>
@@ -334,9 +338,10 @@ function DetailsBlock({ info, opportunityQueryKey, session, opportunityId, callb
 						</div>
 						<button
 							type="button"
-							disabled={infoHolder?.localizacao.uf === info.localizacao.uf && infoHolder?.localizacao.cidade === info.localizacao.cidade}
+							disabled={
+								(infoHolder?.localizacao.uf === info.localizacao.uf && infoHolder?.localizacao.cidade === info.localizacao.cidade) || isUpdatingOpportunity
+							}
 							onClick={() =>
-								// @ts-ignore
 								handleUpdateOpportunity({
 									id: opportunityId,
 									changes: {
@@ -347,15 +352,19 @@ function DetailsBlock({ info, opportunityQueryKey, session, opportunityId, callb
 							}
 							className="flex items-end justify-center pb-4 text-green-200"
 						>
-							<AiOutlineCheck
-								style={{
-									fontSize: "18px",
-									color:
-										infoHolder?.localizacao.uf !== info.localizacao.uf || infoHolder?.localizacao.cidade !== info.localizacao.cidade
-											? "rgb(34,197,94)"
-											: "rgb(156,163,175)",
-								}}
-							/>
+							{isUpdatingOpportunity ? (
+								<Loader2 className="w-4 h-4 min-w-4 min-h-4 animate-spin text-primary" />
+							) : (
+								<AiOutlineCheck
+									style={{
+										fontSize: "18px",
+										color:
+											infoHolder?.localizacao.uf !== info.localizacao.uf || infoHolder?.localizacao.cidade !== info.localizacao.cidade
+												? "rgb(34,197,94)"
+												: "rgb(156,163,175)",
+									}}
+								/>
+							)}
 						</button>
 					</div>
 					<div className="flex w-full gap-2">
@@ -375,9 +384,8 @@ function DetailsBlock({ info, opportunityQueryKey, session, opportunityId, callb
 						</div>
 						<button
 							type="button"
-							disabled={infoHolder?.localizacao.bairro === info.localizacao.bairro}
+							disabled={infoHolder?.localizacao.bairro === info.localizacao.bairro || isUpdatingOpportunity}
 							onClick={() =>
-								// @ts-ignore
 								handleUpdateOpportunity({
 									id: opportunityId,
 									changes: {
@@ -385,14 +393,18 @@ function DetailsBlock({ info, opportunityQueryKey, session, opportunityId, callb
 									},
 								})
 							}
-							className="flex items-end justify-center pb-4 text-green-200"
+							className="flex items-end justify-center pb-4"
 						>
-							<AiOutlineCheck
-								style={{
-									fontSize: "18px",
-									color: infoHolder?.localizacao.bairro !== info.localizacao.bairro ? "rgb(34,197,94)" : "rgb(156,163,175)",
-								}}
-							/>
+							{isUpdatingOpportunity ? (
+								<Loader2 className="w-4 h-4 min-w-4 min-h-4 animate-spin text-primary" />
+							) : (
+								<AiOutlineCheck
+									style={{
+										fontSize: "18px",
+										color: infoHolder?.localizacao.bairro !== info.localizacao.bairro ? "rgb(34,197,94)" : "rgb(156,163,175)",
+									}}
+								/>
+							)}
 						</button>
 					</div>
 					<div className="flex w-full gap-2">
@@ -415,9 +427,8 @@ function DetailsBlock({ info, opportunityQueryKey, session, opportunityId, callb
 						</div>
 						<button
 							type="button"
-							disabled={infoHolder?.localizacao.endereco === info.localizacao.endereco}
+							disabled={infoHolder?.localizacao.endereco === info.localizacao.endereco || isUpdatingOpportunity}
 							onClick={() =>
-								// @ts-ignore
 								handleUpdateOpportunity({
 									id: opportunityId,
 									changes: {
@@ -427,12 +438,16 @@ function DetailsBlock({ info, opportunityQueryKey, session, opportunityId, callb
 							}
 							className="flex items-end justify-center pb-4 text-green-200"
 						>
-							<AiOutlineCheck
-								style={{
-									fontSize: "18px",
-									color: infoHolder?.localizacao.endereco !== info.localizacao.endereco ? "rgb(34,197,94)" : "rgb(156,163,175)",
-								}}
-							/>
+							{isUpdatingOpportunity ? (
+								<Loader2 className="w-4 h-4 min-w-4 min-h-4 animate-spin text-primary" />
+							) : (
+								<AiOutlineCheck
+									style={{
+										fontSize: "18px",
+										color: infoHolder?.localizacao.endereco !== info.localizacao.endereco ? "rgb(34,197,94)" : "rgb(156,163,175)",
+									}}
+								/>
+							)}
 						</button>
 					</div>
 					<div className="flex w-full gap-2">
@@ -455,9 +470,8 @@ function DetailsBlock({ info, opportunityQueryKey, session, opportunityId, callb
 						</div>
 						<button
 							type="button"
-							disabled={infoHolder?.localizacao.numeroOuIdentificador === info.localizacao.numeroOuIdentificador}
+							disabled={infoHolder?.localizacao.numeroOuIdentificador === info.localizacao.numeroOuIdentificador || isUpdatingOpportunity}
 							onClick={() =>
-								// @ts-ignore
 								handleUpdateOpportunity({
 									id: opportunityId,
 									changes: {
@@ -467,12 +481,16 @@ function DetailsBlock({ info, opportunityQueryKey, session, opportunityId, callb
 							}
 							className="flex items-end justify-center pb-4 text-green-200"
 						>
-							<AiOutlineCheck
-								style={{
-									fontSize: "18px",
-									color: infoHolder?.localizacao.numeroOuIdentificador !== info.localizacao.numeroOuIdentificador ? "rgb(34,197,94)" : "rgb(156,163,175)",
-								}}
-							/>
+							{isUpdatingOpportunity ? (
+								<Loader2 className="w-4 h-4 min-w-4 min-h-4 animate-spin text-primary" />
+							) : (
+								<AiOutlineCheck
+									style={{
+										fontSize: "18px",
+										color: infoHolder?.localizacao.numeroOuIdentificador !== info.localizacao.numeroOuIdentificador ? "rgb(34,197,94)" : "rgb(156,163,175)",
+									}}
+								/>
+							)}
 						</button>
 					</div>
 				</ResponsiveDialogDrawerSection>
@@ -498,9 +516,8 @@ function DetailsBlock({ info, opportunityQueryKey, session, opportunityId, callb
 						</div>
 						<button
 							type="button"
-							disabled={infoHolder?.cliente?.cpfCnpj === info.cliente?.cpfCnpj}
+							disabled={infoHolder?.cliente?.cpfCnpj === info.cliente?.cpfCnpj || isUpdatingOpportunity}
 							onClick={() =>
-								// @ts-ignore
 								handleUpdateClient({
 									id: infoHolder.idCliente,
 									changes: { cpfCnpj: infoHolder.cliente?.cpfCnpj },
@@ -508,12 +525,16 @@ function DetailsBlock({ info, opportunityQueryKey, session, opportunityId, callb
 							}
 							className="flex items-end justify-center pb-4 text-green-200"
 						>
-							<AiOutlineCheck
-								style={{
-									fontSize: "18px",
-									color: infoHolder?.cliente?.cpfCnpj !== info.cliente?.cpfCnpj ? "rgb(34,197,94)" : "rgb(156,163,175)",
-								}}
-							/>
+							{isUpdatingOpportunity ? (
+								<Loader2 className="w-4 h-4 min-w-4 min-h-4 animate-spin text-primary" />
+							) : (
+								<AiOutlineCheck
+									style={{
+										fontSize: "18px",
+										color: infoHolder?.cliente?.cpfCnpj !== info.cliente?.cpfCnpj ? "rgb(34,197,94)" : "rgb(156,163,175)",
+									}}
+								/>
+							)}
 						</button>
 					</div>
 					<div className="flex w-full gap-2">
@@ -534,9 +555,8 @@ function DetailsBlock({ info, opportunityQueryKey, session, opportunityId, callb
 						</div>
 						<button
 							type="button"
-							disabled={infoHolder?.cliente?.rg === info.cliente?.rg}
+							disabled={infoHolder?.cliente?.rg === info.cliente?.rg || isUpdatingOpportunity}
 							onClick={() =>
-								// @ts-ignore
 								handleUpdateClient({
 									id: infoHolder.idCliente,
 									changes: { rg: infoHolder.cliente?.rg },
@@ -544,12 +564,16 @@ function DetailsBlock({ info, opportunityQueryKey, session, opportunityId, callb
 							}
 							className="flex items-end justify-center pb-4 text-green-200"
 						>
-							<AiOutlineCheck
-								style={{
-									fontSize: "18px",
-									color: infoHolder?.cliente?.rg !== info.cliente?.rg ? "rgb(34,197,94)" : "rgb(156,163,175)",
-								}}
-							/>
+							{isUpdatingOpportunity ? (
+								<Loader2 className="w-4 h-4 min-w-4 min-h-4 animate-spin text-primary" />
+							) : (
+								<AiOutlineCheck
+									style={{
+										fontSize: "18px",
+										color: infoHolder?.cliente?.rg !== info.cliente?.rg ? "rgb(34,197,94)" : "rgb(156,163,175)",
+									}}
+								/>
+							)}
 						</button>
 					</div>
 					<div className="flex w-full gap-2">
@@ -580,9 +604,8 @@ function DetailsBlock({ info, opportunityQueryKey, session, opportunityId, callb
 						</div>
 						<button
 							type="button"
-							disabled={infoHolder?.cliente?.dataNascimento === info.cliente?.dataNascimento}
+							disabled={infoHolder?.cliente?.dataNascimento === info.cliente?.dataNascimento || isUpdatingOpportunity}
 							onClick={() =>
-								// @ts-ignore
 								handleUpdateClient({
 									id: infoHolder.idCliente,
 									changes: {
@@ -592,12 +615,16 @@ function DetailsBlock({ info, opportunityQueryKey, session, opportunityId, callb
 							}
 							className="flex items-end justify-center pb-4 text-green-200"
 						>
-							<AiOutlineCheck
-								style={{
-									fontSize: "18px",
-									color: infoHolder?.cliente?.dataNascimento !== info.cliente?.dataNascimento ? "rgb(34,197,94)" : "rgb(156,163,175)",
-								}}
-							/>
+							{isUpdatingOpportunity ? (
+								<Loader2 className="w-4 h-4 min-w-4 min-h-4 animate-spin text-primary" />
+							) : (
+								<AiOutlineCheck
+									style={{
+										fontSize: "18px",
+										color: infoHolder?.cliente?.dataNascimento !== info.cliente?.dataNascimento ? "rgb(34,197,94)" : "rgb(156,163,175)",
+									}}
+								/>
+							)}
 						</button>
 					</div>
 					<div className="flex w-full gap-2">
@@ -652,9 +679,8 @@ function DetailsBlock({ info, opportunityQueryKey, session, opportunityId, callb
 						</div>
 						<button
 							type="button"
-							disabled={infoHolder?.cliente?.estadoCivil === info.cliente?.estadoCivil}
+							disabled={infoHolder?.cliente?.estadoCivil === info.cliente?.estadoCivil || isUpdatingOpportunity}
 							onClick={() =>
-								// @ts-ignore
 								handleUpdateClient({
 									id: infoHolder.idCliente,
 									changes: { estadoCivil: infoHolder.cliente?.estadoCivil },
@@ -662,12 +688,16 @@ function DetailsBlock({ info, opportunityQueryKey, session, opportunityId, callb
 							}
 							className="flex items-end justify-center pb-4 text-green-200"
 						>
-							<AiOutlineCheck
-								style={{
-									fontSize: "18px",
-									color: infoHolder?.cliente?.estadoCivil !== info.cliente?.estadoCivil ? "rgb(34,197,94)" : "rgb(156,163,175)",
-								}}
-							/>
+							{isUpdatingOpportunity ? (
+								<Loader2 className="w-4 h-4 min-w-4 min-h-4 animate-spin text-primary" />
+							) : (
+								<AiOutlineCheck
+									style={{
+										fontSize: "18px",
+										color: infoHolder?.cliente?.estadoCivil !== info.cliente?.estadoCivil ? "rgb(34,197,94)" : "rgb(156,163,175)",
+									}}
+								/>
+							)}
 						</button>
 					</div>
 					<div className="flex w-full gap-2">
@@ -691,9 +721,8 @@ function DetailsBlock({ info, opportunityQueryKey, session, opportunityId, callb
 						</div>
 						<button
 							type="button"
-							disabled={infoHolder?.cliente?.profissao === info.cliente?.profissao}
+							disabled={infoHolder?.cliente?.profissao === info.cliente?.profissao || isUpdatingOpportunity}
 							onClick={() =>
-								// @ts-ignore
 								handleUpdateClient({
 									id: infoHolder.idCliente,
 									changes: { profissao: infoHolder.cliente?.profissao },
@@ -701,12 +730,16 @@ function DetailsBlock({ info, opportunityQueryKey, session, opportunityId, callb
 							}
 							className="flex items-end justify-center pb-4 text-green-200"
 						>
-							<AiOutlineCheck
-								style={{
-									fontSize: "18px",
-									color: infoHolder?.cliente?.profissao !== info.cliente?.profissao ? "rgb(34,197,94)" : "rgb(156,163,175)",
-								}}
-							/>
+							{isUpdatingOpportunity ? (
+								<Loader2 className="w-4 h-4 min-w-4 min-h-4 animate-spin text-primary" />
+							) : (
+								<AiOutlineCheck
+									style={{
+										fontSize: "18px",
+										color: infoHolder?.cliente?.profissao !== info.cliente?.profissao ? "rgb(34,197,94)" : "rgb(156,163,175)",
+									}}
+								/>
+							)}
 						</button>
 					</div>
 					<div className="flex w-full gap-2">
@@ -741,9 +774,8 @@ function DetailsBlock({ info, opportunityQueryKey, session, opportunityId, callb
 						</div>
 						<button
 							type="button"
-							disabled={infoHolder?.cliente?.canalAquisicao === info.cliente?.canalAquisicao}
+							disabled={infoHolder?.cliente?.canalAquisicao === info.cliente?.canalAquisicao || isUpdatingOpportunity}
 							onClick={() =>
-								// @ts-ignore
 								handleUpdateClient({
 									id: infoHolder.idCliente,
 									changes: {
@@ -753,12 +785,16 @@ function DetailsBlock({ info, opportunityQueryKey, session, opportunityId, callb
 							}
 							className="flex items-end justify-center pb-4 text-green-200"
 						>
-							<AiOutlineCheck
-								style={{
-									fontSize: "18px",
-									color: infoHolder?.cliente?.canalAquisicao !== info.cliente?.canalAquisicao ? "rgb(34,197,94)" : "rgb(156,163,175)",
-								}}
-							/>
+							{isUpdatingOpportunity ? (
+								<Loader2 className="w-4 h-4 min-w-4 min-h-4 animate-spin text-primary" />
+							) : (
+								<AiOutlineCheck
+									style={{
+										fontSize: "18px",
+										color: infoHolder?.cliente?.canalAquisicao !== info.cliente?.canalAquisicao ? "rgb(34,197,94)" : "rgb(156,163,175)",
+									}}
+								/>
+							)}
 						</button>
 					</div>
 				</ResponsiveDialogDrawerSection>
@@ -786,9 +822,8 @@ function DetailsBlock({ info, opportunityQueryKey, session, opportunityId, callb
 						</div>
 						<button
 							type="button"
-							disabled={infoHolder?.instalacao.concessionaria === info.instalacao.concessionaria}
+							disabled={infoHolder?.instalacao.concessionaria === info.instalacao.concessionaria || isUpdatingOpportunity}
 							onClick={() =>
-								// @ts-ignore
 								handleUpdateOpportunity({
 									id: opportunityId,
 									changes: {
@@ -798,12 +833,16 @@ function DetailsBlock({ info, opportunityQueryKey, session, opportunityId, callb
 							}
 							className="flex items-end justify-center pb-4 text-green-200"
 						>
-							<AiOutlineCheck
-								style={{
-									fontSize: "18px",
-									color: infoHolder?.instalacao.concessionaria !== info.instalacao.concessionaria ? "rgb(34,197,94)" : "rgb(156,163,175)",
-								}}
-							/>
+							{isUpdatingOpportunity ? (
+								<Loader2 className="w-4 h-4 min-w-4 min-h-4 animate-spin text-primary" />
+							) : (
+								<AiOutlineCheck
+									style={{
+										fontSize: "18px",
+										color: infoHolder?.instalacao.concessionaria !== info.instalacao.concessionaria ? "rgb(34,197,94)" : "rgb(156,163,175)",
+									}}
+								/>
+							)}
 						</button>
 					</div>
 					<div className="flex w-full gap-2">
@@ -828,9 +867,8 @@ function DetailsBlock({ info, opportunityQueryKey, session, opportunityId, callb
 						</div>
 						<button
 							type="button"
-							disabled={infoHolder?.instalacao.numero === info.instalacao.numero}
+							disabled={infoHolder?.instalacao.numero === info.instalacao.numero || isUpdatingOpportunity}
 							onClick={() =>
-								// @ts-ignore
 								handleUpdateOpportunity({
 									id: opportunityId,
 									changes: {
@@ -840,12 +878,16 @@ function DetailsBlock({ info, opportunityQueryKey, session, opportunityId, callb
 							}
 							className="flex items-end justify-center pb-4 text-green-200"
 						>
-							<AiOutlineCheck
-								style={{
-									fontSize: "18px",
-									color: infoHolder?.instalacao.numero !== info.instalacao.numero ? "rgb(34,197,94)" : "rgb(156,163,175)",
-								}}
-							/>
+							{isUpdatingOpportunity ? (
+								<Loader2 className="w-4 h-4 min-w-4 min-h-4 animate-spin text-primary" />
+							) : (
+								<AiOutlineCheck
+									style={{
+										fontSize: "18px",
+										color: infoHolder?.instalacao.numero !== info.instalacao.numero ? "rgb(34,197,94)" : "rgb(156,163,175)",
+									}}
+								/>
+							)}
 						</button>
 					</div>
 					<div className="flex w-full gap-2">
@@ -881,9 +923,8 @@ function DetailsBlock({ info, opportunityQueryKey, session, opportunityId, callb
 						</div>
 						<button
 							type="button"
-							disabled={infoHolder?.instalacao.grupo === info.instalacao.grupo}
+							disabled={infoHolder?.instalacao.grupo === info.instalacao.grupo || isUpdatingOpportunity}
 							onClick={() =>
-								// @ts-ignore
 								handleUpdateOpportunity({
 									id: opportunityId,
 									changes: { "instalacao.grupo": infoHolder.instalacao.grupo },
@@ -891,12 +932,16 @@ function DetailsBlock({ info, opportunityQueryKey, session, opportunityId, callb
 							}
 							className="flex items-end justify-center pb-4 text-green-200"
 						>
-							<AiOutlineCheck
-								style={{
-									fontSize: "18px",
-									color: infoHolder?.instalacao.grupo !== info.instalacao.grupo ? "rgb(34,197,94)" : "rgb(156,163,175)",
-								}}
-							/>
+							{isUpdatingOpportunity ? (
+								<Loader2 className="w-4 h-4 min-w-4 min-h-4 animate-spin text-primary" />
+							) : (
+								<AiOutlineCheck
+									style={{
+										fontSize: "18px",
+										color: infoHolder?.instalacao.grupo !== info.instalacao.grupo ? "rgb(34,197,94)" : "rgb(156,163,175)",
+									}}
+								/>
+							)}
 						</button>
 					</div>
 					<div className="flex w-full gap-2">
@@ -943,9 +988,8 @@ function DetailsBlock({ info, opportunityQueryKey, session, opportunityId, callb
 						</div>
 						<button
 							type="button"
-							disabled={infoHolder?.instalacao.tipoLigacao === info.instalacao.tipoLigacao}
+							disabled={infoHolder?.instalacao.tipoLigacao === info.instalacao.tipoLigacao || isUpdatingOpportunity}
 							onClick={() =>
-								// @ts-ignore
 								handleUpdateOpportunity({
 									id: opportunityId,
 									changes: {
@@ -955,12 +999,16 @@ function DetailsBlock({ info, opportunityQueryKey, session, opportunityId, callb
 							}
 							className="flex items-end justify-center pb-4 text-green-200"
 						>
-							<AiOutlineCheck
-								style={{
-									fontSize: "18px",
-									color: infoHolder?.instalacao.tipoLigacao !== info.instalacao.tipoLigacao ? "rgb(34,197,94)" : "rgb(156,163,175)",
-								}}
-							/>
+							{isUpdatingOpportunity ? (
+								<Loader2 className="w-4 h-4 min-w-4 min-h-4 animate-spin text-primary" />
+							) : (
+								<AiOutlineCheck
+									style={{
+										fontSize: "18px",
+										color: infoHolder?.instalacao.tipoLigacao !== info.instalacao.tipoLigacao ? "rgb(34,197,94)" : "rgb(156,163,175)",
+									}}
+								/>
+							)}
 						</button>
 					</div>
 					<div className="flex w-full gap-2">
@@ -996,10 +1044,9 @@ function DetailsBlock({ info, opportunityQueryKey, session, opportunityId, callb
 						</div>
 						<button
 							type="button"
-							disabled={infoHolder?.instalacao.tipoTitular === info.instalacao.tipoTitular}
+							disabled={infoHolder?.instalacao.tipoTitular === info.instalacao.tipoTitular || isUpdatingOpportunity}
 							className="flex items-end justify-center pb-4 text-green-200"
 							onClick={() =>
-								// @ts-ignore
 								handleUpdateOpportunity({
 									id: opportunityId,
 									changes: {
@@ -1008,12 +1055,16 @@ function DetailsBlock({ info, opportunityQueryKey, session, opportunityId, callb
 								})
 							}
 						>
-							<AiOutlineCheck
-								style={{
-									fontSize: "18px",
-									color: infoHolder?.instalacao.tipoTitular !== info.instalacao.tipoTitular ? "rgb(34,197,94)" : "rgb(156,163,175)",
-								}}
-							/>
+							{isUpdatingOpportunity ? (
+								<Loader2 className="w-4 h-4 min-w-4 min-h-4 animate-spin text-primary" />
+							) : (
+								<AiOutlineCheck
+									style={{
+										fontSize: "18px",
+										color: infoHolder?.instalacao.tipoTitular !== info.instalacao.tipoTitular ? "rgb(34,197,94)" : "rgb(156,163,175)",
+									}}
+								/>
+							)}
 						</button>
 					</div>
 					<div className="flex w-full gap-2">
@@ -1038,9 +1089,8 @@ function DetailsBlock({ info, opportunityQueryKey, session, opportunityId, callb
 						</div>
 						<button
 							type="button"
-							disabled={infoHolder?.instalacao.nomeTitular === info.instalacao.nomeTitular}
+							disabled={infoHolder?.instalacao.nomeTitular === info.instalacao.nomeTitular || isUpdatingOpportunity}
 							onClick={() =>
-								// @ts-ignore
 								handleUpdateOpportunity({
 									id: opportunityId,
 									changes: {
@@ -1050,12 +1100,16 @@ function DetailsBlock({ info, opportunityQueryKey, session, opportunityId, callb
 							}
 							className="flex items-end justify-center pb-4 text-green-200"
 						>
-							<AiOutlineCheck
-								style={{
-									fontSize: "18px",
-									color: infoHolder?.instalacao.nomeTitular !== info.instalacao.nomeTitular ? "rgb(34,197,94)" : "rgb(156,163,175)",
-								}}
-							/>
+							{isUpdatingOpportunity ? (
+								<Loader2 className="w-4 h-4 min-w-4 min-h-4 animate-spin text-primary" />
+							) : (
+								<AiOutlineCheck
+									style={{
+										fontSize: "18px",
+										color: infoHolder?.instalacao.nomeTitular !== info.instalacao.nomeTitular ? "rgb(34,197,94)" : "rgb(156,163,175)",
+									}}
+								/>
+							)}
 						</button>
 					</div>
 				</ResponsiveDialogDrawerSection>

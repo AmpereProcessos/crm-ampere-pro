@@ -1,6 +1,7 @@
-import { useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
 import createHttpError from "http-errors";
-import { BadgeCheck, UsersRound } from "lucide-react";
+import { BadgeCheck, AlertCircle, UsersRound } from "lucide-react";
 import Link from "next/link";
 import { type Dispatch, type SetStateAction, useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
@@ -18,7 +19,7 @@ import type { TUserSession } from "@/lib/auth/session";
 import { useMediaQuery } from "@/lib/utils";
 import type { TGetOpportunitiesQueryDefinitionsOutput } from "@/pages/api/opportunities/query-definitions";
 import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
-import { createClientOpportunityAndFunnelReference } from "@/utils/mutations/opportunities";
+import { createClientOpportunityAndFunnelReference, createApprovalRequest } from "@/utils/mutations/opportunities";
 import { useSearchClients } from "@/utils/queries/clients";
 import { useProjectTypes } from "@/utils/queries/project-types";
 import { useOpportunityCreators } from "@/utils/queries/users";
@@ -28,14 +29,21 @@ import type { TFunnelReference } from "@/utils/schemas/funnel-reference.schema";
 import type { TOpportunity } from "@/utils/schemas/opportunity.schema";
 import type { TUserDTOSimplified } from "@/utils/schemas/user.schema";
 import { CustomersAcquisitionChannels } from "@/utils/select-options";
+import type { TOpportunityConflictPayload } from "@/utils/types/opportunity-conflict";
 
 type NewOpportunityProps = {
 	session: TUserSession;
 	opportunityCreators: TGetOpportunitiesQueryDefinitionsOutput["data"]["filterOptions"]["responsibles"];
 	funnels: TGetOpportunitiesQueryDefinitionsOutput["data"]["filterOptions"]["funnels"];
 	closeModal: () => void;
+	callbacks?: {
+		onMutate?: () => void;
+		onSuccess?: () => void;
+		onSettled?: () => void;
+		onError?: (error: Error) => void;
+	};
 };
-function NewOpportunity({ session, closeModal, opportunityCreators, funnels }: NewOpportunityProps) {
+function NewOpportunity({ session, closeModal, opportunityCreators, funnels, callbacks }: NewOpportunityProps) {
 	const isDesktop = useMediaQuery("(min-width: 768px)");
 
 	const queryClient = useQueryClient();
@@ -140,6 +148,8 @@ function NewOpportunity({ session, closeModal, opportunityCreators, funnels }: N
 	const [newFunnelReference, setNewFunnelReference] = useState<TFunnelReference>(initialFunnelReference);
 
 	const [createdProjectId, setCreateProjectId] = useState<string | null>(null);
+	const [conflictPayload, setConflictPayload] = useState<TOpportunityConflictPayload | null>(null);
+	const [isTransferOpen, setIsTransferOpen] = useState(false);
 
 	async function handleOpportunityCreation() {
 		try {
@@ -165,11 +175,26 @@ function NewOpportunity({ session, closeModal, opportunityCreators, funnels }: N
 		isPending,
 		isSuccess,
 		reset: resetMutation,
-	} = useMutationWithFeedback({
+	} = useMutation({
 		mutationKey: ["create-project"],
 		mutationFn: handleOpportunityCreation,
-		queryClient,
-		affectedQueryKey: ["opportunities"],
+		onMutate: async () => {
+			if (callbacks?.onMutate) callbacks.onMutate();
+		},
+		onSuccess: async (data) => {
+			if (callbacks?.onSuccess) callbacks.onSuccess();
+			return toast.success(data);
+		},
+		onSettled: async () => {
+			if (callbacks?.onSettled) callbacks.onSettled();
+		},
+		onError: (error) => {
+			if (axios.isAxiosError(error) && error.response?.status === 409) {
+				const conflictData = error.response.data as TOpportunityConflictPayload;
+				setConflictPayload(conflictData);
+				setIsTransferOpen(true);
+			}
+		},
 	});
 
 	const MENU_TITLE = "NOVA OPORTUNIDADE";
@@ -178,65 +203,97 @@ function NewOpportunity({ session, closeModal, opportunityCreators, funnels }: N
 	return isDesktop ? (
 		<Dialog onOpenChange={(v) => (v ? null : closeModal())} open>
 			<DialogContent className="flex h-fit max-h-[80vh] min-h-[60vh] min-w-[80vw] flex-col dark:bg-background">
-				<DialogHeader>
-					<DialogTitle>{MENU_TITLE}</DialogTitle>
-					<DialogDescription>{MENU_DESCRIPTION}</DialogDescription>
-				</DialogHeader>
-				{isSuccess ? (
-					<div className="flex w-full grow flex-col items-center justify-center gap-2">
-						<div className="flex flex-col items-center gap-1">
-							<BadgeCheck className="h-10 min-h-10 w-10 min-w-10 text-green-500 lg:h-20 lg:w-20" />
-							<h1 className="text-center font-bold text-lg text-primary tracking-tight">Oportunidade criada com sucesso!</h1>
-						</div>
-						<div className="flex flex-col items-center gap-2 lg:flex-row">
-							<Button
-								onClick={() => {
-									setNewClient(initialClient);
-									setNewOpportunity(initialOpportunity);
-									setNewFunnelReference(initialFunnelReference);
-									setSimilarClient(null);
-									setCreateProjectId(null);
-									resetMutation();
-								}}
-								variant={"secondary"}
-							>
-								NOVA OPORTUNIDADE
+				{isTransferOpen && conflictPayload ? (
+					<>
+						<DialogHeader>
+							<DialogTitle className="flex items-center gap-2">
+								<AlertCircle className="h-5 w-5 text-yellow-500" />
+								Oportunidade Existente
+							</DialogTitle>
+							<DialogDescription>Uma oportunidade em andamento foi encontrada para este cliente. Deseja solicitar a transferência?</DialogDescription>
+						</DialogHeader>
+						<TransferRequestForm
+							conflictPayload={conflictPayload}
+							session={session}
+							opportunityCreators={opportunityCreators || []}
+							onSuccess={() => {
+								setIsTransferOpen(false);
+								setConflictPayload(null);
+								toast.success("Solicitação de transferência enviada com sucesso!");
+							}}
+							onError={() => {
+								toast.error("Erro ao enviar solicitação de transferência.");
+							}}
+						/>
+						<DialogFooter>
+							<Button variant="outline" onClick={() => setIsTransferOpen(false)}>
+								VOLTAR
 							</Button>
-							<Link href={`/comercial/oportunidades/id/${createdProjectId}`}>
-								<Button>VISUALIZAR OPORTUNIDADE</Button>
-							</Link>
-						</div>
-					</div>
+						</DialogFooter>
+					</>
 				) : (
 					<>
-						<div className="flex-1 overflow-auto">
-							<NewOpportunityContent
-								clientHolder={newClient}
-								funnelReferenceHolder={newFunnelReference}
-								funnels={funnels || []}
-								opportunityHolder={newOpportunity}
-								session={session}
-								setClientHolder={setNewClient}
-								setFunnelReferenceHolder={setNewFunnelReference}
-								setOpportunityHolder={setNewOpportunity}
-								setSimilarClientHolder={setSimilarClient}
-								similarClientHolder={similarClient}
-							/>
-						</div>
-						<DialogFooter>
-							<DialogClose asChild>
-								<Button variant="outline">FECHAR</Button>
-							</DialogClose>
-							<LoadingButton
-								loading={isPending}
-								onClick={() =>
-									// @ts-expect-error
-									mutate()
-								}
-							>
-								{BUTTON_TEXT}
-							</LoadingButton>
-						</DialogFooter>
+						<DialogHeader>
+							<DialogTitle>{MENU_TITLE}</DialogTitle>
+							<DialogDescription>{MENU_DESCRIPTION}</DialogDescription>
+						</DialogHeader>
+						{isSuccess ? (
+							<div className="flex w-full grow flex-col items-center justify-center gap-2">
+								<div className="flex flex-col items-center gap-1">
+									<BadgeCheck className="h-10 min-h-10 w-10 min-w-10 text-green-500 lg:h-20 lg:w-20" />
+									<h1 className="text-center font-bold text-lg text-primary tracking-tight">Oportunidade criada com sucesso!</h1>
+								</div>
+								<div className="flex flex-col items-center gap-2 lg:flex-row">
+									<Button
+										onClick={() => {
+											setNewClient(initialClient);
+											setNewOpportunity(initialOpportunity);
+											setNewFunnelReference(initialFunnelReference);
+											setSimilarClient(null);
+											setCreateProjectId(null);
+											resetMutation();
+										}}
+										variant={"secondary"}
+									>
+										NOVA OPORTUNIDADE
+									</Button>
+									<Link href={`/comercial/oportunidades/id/${createdProjectId}`}>
+										<Button>VISUALIZAR OPORTUNIDADE</Button>
+									</Link>
+								</div>
+							</div>
+						) : (
+							<>
+								<div className="flex-1 overflow-auto">
+									<NewOpportunityContent
+										clientHolder={newClient}
+										funnelReferenceHolder={newFunnelReference}
+										funnels={funnels || []}
+										opportunityHolder={newOpportunity}
+										session={session}
+										setClientHolder={setNewClient}
+										setFunnelReferenceHolder={setNewFunnelReference}
+										setOpportunityHolder={setNewOpportunity}
+										setSimilarClientHolder={setSimilarClient}
+										similarClientHolder={similarClient}
+									/>
+								</div>
+								<DialogFooter>
+									<DialogClose asChild>
+										<Button variant="outline">FECHAR</Button>
+									</DialogClose>
+									<LoadingButton
+										loading={isPending}
+										onClick={() =>
+											// @ts-expect-error
+											mutate()
+										}
+									>
+										{BUTTON_TEXT}
+									</LoadingButton>
+								</DialogFooter>
+							</>
+						)}
 					</>
 				)}
 			</DialogContent>
@@ -244,65 +301,99 @@ function NewOpportunity({ session, closeModal, opportunityCreators, funnels }: N
 	) : (
 		<Drawer onOpenChange={(v) => (v ? null : closeModal())} open>
 			<DrawerContent className="flex h-fit max-h-[70vh] flex-col">
-				<DrawerHeader className="text-left">
-					<DrawerTitle>{MENU_TITLE}</DrawerTitle>
-					<DrawerDescription>{MENU_DESCRIPTION}</DrawerDescription>
-				</DrawerHeader>
-				{isSuccess ? (
-					<div className="flex w-full grow flex-col items-center justify-center gap-2">
-						<div className="flex flex-col items-center gap-1">
-							<BadgeCheck className="h-10 min-h-10 w-10 min-w-10 text-green-500 lg:h-20 lg:w-20" />
-							<h1 className="text-center font-bold text-lg text-primary tracking-tight">Oportunidade criada com sucesso!</h1>
-						</div>
-						<div className="flex flex-col items-center gap-2 lg:flex-row">
-							<Button
-								onClick={() => {
-									setNewClient(initialClient);
-									setNewOpportunity(initialOpportunity);
-									setNewFunnelReference(initialFunnelReference);
-									setSimilarClient(null);
-									setCreateProjectId(null);
-									resetMutation();
-								}}
-								variant={"secondary"}
-							>
-								NOVA OPORTUNIDADE
-							</Button>
-							<Link href={`/comercial/oportunidades/id/${createdProjectId}`}>
-								<Button>VISUALIZAR OPORTUNIDADE</Button>
-							</Link>
-						</div>
-					</div>
-				) : (
+				{isTransferOpen && conflictPayload ? (
 					<>
-						<div className="flex-1 overflow-auto">
-							<NewOpportunityContent
-								clientHolder={newClient}
-								funnelReferenceHolder={newFunnelReference}
-								funnels={funnels || []}
-								opportunityHolder={newOpportunity}
+						<DrawerHeader className="text-left">
+							<DrawerTitle className="flex items-center gap-2">
+								<AlertCircle className="h-5 w-5 text-yellow-500" />
+								Oportunidade Existente
+							</DrawerTitle>
+							<DrawerDescription>Uma oportunidade em andamento foi encontrada para este cliente. Deseja solicitar a transferência?</DrawerDescription>
+						</DrawerHeader>
+						<div className="overflow-auto px-4 pb-4">
+							<TransferRequestForm
+								conflictPayload={conflictPayload}
 								session={session}
-								setClientHolder={setNewClient}
-								setFunnelReferenceHolder={setNewFunnelReference}
-								setOpportunityHolder={setNewOpportunity}
-								setSimilarClientHolder={setSimilarClient}
-								similarClientHolder={similarClient}
+								opportunityCreators={opportunityCreators || []}
+								onSuccess={() => {
+									setIsTransferOpen(false);
+									setConflictPayload(null);
+									toast.success("Solicitação de transferência enviada com sucesso!");
+								}}
+								onError={() => {
+									toast.error("Erro ao enviar solicitação de transferência.");
+								}}
 							/>
 						</div>
 						<DrawerFooter>
-							<DrawerClose asChild>
-								<Button variant="outline">FECHAR</Button>
-							</DrawerClose>
-							<LoadingButton
-								loading={isPending}
-								onClick={() =>
-									// @ts-expect-error
-									mutate()
-								}
-							>
-								{BUTTON_TEXT}
-							</LoadingButton>
+							<Button variant="outline" onClick={() => setIsTransferOpen(false)}>
+								VOLTAR
+							</Button>
 						</DrawerFooter>
+					</>
+				) : (
+					<>
+						<DrawerHeader className="text-left">
+							<DrawerTitle>{MENU_TITLE}</DrawerTitle>
+							<DrawerDescription>{MENU_DESCRIPTION}</DrawerDescription>
+						</DrawerHeader>
+						{isSuccess ? (
+							<div className="flex w-full grow flex-col items-center justify-center gap-2">
+								<div className="flex flex-col items-center gap-1">
+									<BadgeCheck className="h-10 min-h-10 w-10 min-w-10 text-green-500 lg:h-20 lg:w-20" />
+									<h1 className="text-center font-bold text-lg text-primary tracking-tight">Oportunidade criada com sucesso!</h1>
+								</div>
+								<div className="flex flex-col items-center gap-2 lg:flex-row">
+									<Button
+										onClick={() => {
+											setNewClient(initialClient);
+											setNewOpportunity(initialOpportunity);
+											setNewFunnelReference(initialFunnelReference);
+											setSimilarClient(null);
+											setCreateProjectId(null);
+											resetMutation();
+										}}
+										variant={"secondary"}
+									>
+										NOVA OPORTUNIDADE
+									</Button>
+									<Link href={`/comercial/oportunidades/id/${createdProjectId}`}>
+										<Button>VISUALIZAR OPORTUNIDADE</Button>
+									</Link>
+								</div>
+							</div>
+						) : (
+							<>
+								<div className="flex-1 overflow-auto">
+									<NewOpportunityContent
+										clientHolder={newClient}
+										funnelReferenceHolder={newFunnelReference}
+										funnels={funnels || []}
+										opportunityHolder={newOpportunity}
+										session={session}
+										setClientHolder={setNewClient}
+										setFunnelReferenceHolder={setNewFunnelReference}
+										setOpportunityHolder={setNewOpportunity}
+										setSimilarClientHolder={setSimilarClient}
+										similarClientHolder={similarClient}
+									/>
+								</div>
+								<DrawerFooter>
+									<DrawerClose asChild>
+										<Button variant="outline">FECHAR</Button>
+									</DrawerClose>
+									<LoadingButton
+										loading={isPending}
+										onClick={() =>
+											// @ts-expect-error
+											mutate()
+										}
+									>
+										{BUTTON_TEXT}
+									</LoadingButton>
+								</DrawerFooter>
+							</>
+						)}
 					</>
 				)}
 			</DrawerContent>
@@ -311,6 +402,131 @@ function NewOpportunity({ session, closeModal, opportunityCreators, funnels }: N
 }
 
 export default NewOpportunity;
+
+type TransferRequestFormProps = {
+	conflictPayload: TOpportunityConflictPayload;
+	session: TUserSession;
+	opportunityCreators: TGetOpportunitiesQueryDefinitionsOutput["data"]["filterOptions"]["responsibles"];
+	onSuccess: () => void;
+	onError: () => void;
+};
+
+function TransferRequestForm({ conflictPayload, session, opportunityCreators, onSuccess, onError }: TransferRequestFormProps) {
+	const [selectedCurrentResponsible, setSelectedCurrentResponsible] = useState<string>(conflictPayload.data.opportunity.responsaveis[0]?.id || "");
+	const [selectedNewResponsible, setSelectedNewResponsible] = useState<string>("");
+	const [reason, setReason] = useState("");
+	const [isSubmitting, setIsSubmitting] = useState(false);
+
+	const currentResponsible = conflictPayload.data.opportunity.responsaveis.find((r) => r.id === selectedCurrentResponsible);
+	const newResponsibleCreator = opportunityCreators.find((r) => r.id === selectedNewResponsible);
+
+	async function handleSubmitTransferRequest() {
+		if (!currentResponsible || !newResponsibleCreator || !reason.trim()) {
+			toast.error("Preencha todos os campos obrigatórios.");
+			return;
+		}
+
+		setIsSubmitting(true);
+		try {
+			await createApprovalRequest({
+				oportunidade: {
+					id: conflictPayload.data.opportunity.id,
+					nome: conflictPayload.data.opportunity.nome,
+					identificador: conflictPayload.data.opportunity.identificador,
+				},
+				requisicao: {
+					tipo: "OPORTUNIDADE-TRANSFERÊNCIA-RESPONSAVEL",
+					responsavelAtual: {
+						papel: currentResponsible.papel,
+						id: currentResponsible.id,
+						nome: currentResponsible.nome,
+						avatarUrl: currentResponsible.avatar_url,
+					},
+					responsavelNovo: {
+						papel: "Responsável",
+						id: newResponsibleCreator.id,
+						nome: newResponsibleCreator.label,
+						avatarUrl: newResponsibleCreator.coverUrl || null,
+					},
+				},
+				requerente: {
+					id: session.user.id,
+					nome: session.user.nome,
+					avatarUrl: session.user.avatar_url || null,
+				},
+				autorizador: null,
+				comentarios: reason,
+				dataSolicitacao: new Date().toISOString(),
+			});
+			onSuccess();
+		} catch (error) {
+			onError();
+		} finally {
+			setIsSubmitting(false);
+		}
+	}
+
+	return (
+		<div className="flex flex-col gap-4">
+			<div className="rounded-lg border border-yellow-200 bg-yellow-50 p-3 dark:bg-yellow-950/20 dark:border-yellow-900">
+				<p className="text-sm text-yellow-800 dark:text-yellow-200">
+					<span className="font-semibold">Oportunidade encontrada:</span> {conflictPayload.data.opportunity.identificador} -{" "}
+					{conflictPayload.data.opportunity.nome}
+				</p>
+			</div>
+
+			<div className="flex flex-col gap-2">
+				<label className="text-sm font-semibold">Responsável Atual *</label>
+				<select
+					value={selectedCurrentResponsible}
+					onChange={(e) => setSelectedCurrentResponsible(e.target.value)}
+					className="rounded border border-input bg-background px-3 py-2 text-sm"
+				>
+					{conflictPayload.data.opportunity.responsaveis.map((resp) => (
+						<option key={resp.id} value={resp.id}>
+							{resp.nome}
+						</option>
+					))}
+				</select>
+			</div>
+
+			<div className="flex flex-col gap-2">
+				<label className="text-sm font-semibold">Novo Responsável *</label>
+				<select
+					value={selectedNewResponsible}
+					onChange={(e) => setSelectedNewResponsible(e.target.value)}
+					className="rounded border border-input bg-background px-3 py-2 text-sm"
+				>
+					<option value="">Selecione um responsável</option>
+					{opportunityCreators.map((creator) => (
+						<option key={creator.id} value={creator.id}>
+							{creator.label}
+						</option>
+					))}
+				</select>
+			</div>
+
+			<div className="flex flex-col gap-2">
+				<label className="text-sm font-semibold">Motivo da Solicitação *</label>
+				<textarea
+					value={reason}
+					onChange={(e) => setReason(e.target.value)}
+					placeholder="Descreva o motivo da transferência..."
+					className="rounded border border-input bg-background px-3 py-2 text-sm"
+					rows={3}
+				/>
+			</div>
+
+			<Button
+				onClick={handleSubmitTransferRequest}
+				disabled={isSubmitting || !selectedNewResponsible || !reason.trim() || !currentResponsible}
+				className="w-full"
+			>
+				{isSubmitting ? "Enviando..." : "ENVIAR SOLICITAÇÃO"}
+			</Button>
+		</div>
+	);
+}
 
 type NewOpportunityContentProps = {
 	funnels: TGetOpportunitiesQueryDefinitionsOutput["data"]["filterOptions"]["funnels"];

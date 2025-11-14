@@ -1,3 +1,6 @@
+import createHttpError from "http-errors";
+import { type Collection, type Filter, ObjectId } from "mongodb";
+import type { NextApiHandler } from "next";
 import { insertOpportunityHistory, updateOpportunityHistory } from "@/repositories/opportunity-history/mutation";
 import { getOpportunityHistory, getOpportunityHistoryById } from "@/repositories/opportunity-history/queries";
 import connectToDatabase from "@/services/mongodb/crm-db-connection";
@@ -5,16 +8,13 @@ import { novu } from "@/services/novu";
 import { NOVU_WORKFLOW_IDS } from "@/services/novu/workflows";
 import { apiHandler, validateAuthorization } from "@/utils/api";
 import type { TConectaIndication } from "@/utils/schemas/conecta-indication.schema";
+import type { TOpportunity } from "@/utils/schemas/opportunity.schema";
 import {
 	InsertOpportunityHistorySchema,
 	type TOpportunityHistory,
 	type TOpportunityHistoryEntity,
 	UpdateOpportunityHistorySchema,
 } from "@/utils/schemas/opportunity-history.schema";
-import type { TOpportunity } from "@/utils/schemas/opportunity.schema";
-import createHttpError from "http-errors";
-import { type Collection, type Filter, ObjectId } from "mongodb";
-import type { NextApiHandler } from "next";
 
 type PostResponse = {
 	data: {
@@ -116,25 +116,6 @@ const getOpportunitiesHistory: NextApiHandler<GetResponse> = async (req, res) =>
 	const history = await getOpportunityHistory({ opportunityId: opportunityId, collection: collection, query: {} });
 
 	return res.status(200).json({ data: history });
-	// if (!!opportunityId) {
-	//   if (!!type) {
-	//     if (typeof type != 'string') throw new createHttpError.BadRequest('Tipo de requisição inválido.')
-	//     if (!getTypes.includes(type)) throw new createHttpError.BadGateway('Tipo de requisição inválido.')
-	//     const opportunityOpenActivities = await getOpportunityOpenActivitiesByOpportunityId({
-	//       opportunityId: opportunityId,
-	//       collection: opportunityHistoryCollection,
-	//       partnerId: partnerId || '',
-	//     })
-	//     return res.status(200).json({ data: opportunityOpenActivities })
-	//   }
-	//   const opportunityHistory = await getOpportunityHistoryByOpportunityId({
-	//     opportunityId: opportunityId,
-	//     collection: opportunityHistoryCollection,
-	//     partnerId: partnerId || '',
-	//   })
-	//   return res.status(200).json({ data: opportunityHistory })
-	// }
-	// return res.status(400).json({ data: [] });
 };
 
 type PutResponse = {
@@ -161,7 +142,7 @@ const editOpportunityHistory: NextApiHandler<PutResponse> = async (req, res) => 
 	const opportunityHistory = await getOpportunityHistoryById({ collection: opportunityHistoryCollection, id: id, query: partnerQuery });
 	if (!opportunityHistory) throw new createHttpError.NotFound("Objeto de alteração não encontrada.");
 	// Checking for opportunity history edit authorization
-	// @ts-ignore
+	// @ts-expect-error
 	if (!!userScope && !userScope.includes(opportunityHistory.responsavel?.id))
 		new createHttpError.Unauthorized("Usuário não possui permissão para essa alteração.");
 
