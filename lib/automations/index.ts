@@ -33,8 +33,7 @@ export async function runOpportunityLossAutomation(
 
 	console.log("[INFO] [RUN_OPPORTUNITY_LOSS_AUTOMATION] Waiting for the configured delay:", delay);
 	// Wait for the configured delay
-	// await sleep(delay);
-	await sleep("10s");
+	await sleep(delay);
 
 	// Create automation execution log
 	const logId = await createAutomationLog(automation, opportunity);
@@ -57,7 +56,7 @@ export async function runOpportunityLossAutomation(
 			opportunity,
 			automation,
 			logId,
-			`Template de Whatsapp (${template.title}) enviado via automação (${automation.titulo}).`,
+			`Template de Whatsapp (${template}) enviado via automação (${automation.titulo}).`,
 			"MENSAGEM",
 		);
 		console.log("[INFO] [RUN_OPPORTUNITY_LOSS_AUTOMATION] Opportunity history entry created:", opportunity._id.toString(), automation.gatilho.tipo);

@@ -1,6 +1,7 @@
-import { cn } from "@/lib/utils";
 import React from "react";
 import { BsCheck } from "react-icons/bs";
+import { cn } from "@/lib/utils";
+
 type CheckboxInputProps = {
 	checked: boolean;
 	labelTrue: string;
@@ -34,7 +35,7 @@ function CheckboxInput({
 			</button>
 			<button
 				type="button"
-				className={cn("grow cursor-pointer text-xs font-medium leading-none", labelClassName)}
+				className={cn("text-start grow cursor-pointer text-xs font-medium leading-none", labelClassName)}
 				onClick={() => {
 					if (editable) handleChange(!checked);
 				}}

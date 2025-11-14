@@ -3,6 +3,7 @@ import { Building2, Loader2, MapPin, Tag, UserRound } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { AiOutlineCheck } from "react-icons/ai";
+import CheckboxInput from "@/components/Inputs/CheckboxInput";
 import type { TUserSession } from "@/lib/auth/session";
 import { getErrorMessage } from "@/lib/methods/errors";
 import { formatDateOnInputChange } from "@/lib/methods/formatting";
@@ -249,6 +250,44 @@ function DetailsBlock({ info, opportunityQueryKey, session, opportunityId, callb
 									style={{
 										fontSize: "18px",
 										color: infoHolder?.idParceiro !== info.idParceiro ? "rgb(34,197,94)" : "rgb(156,163,175)",
+									}}
+								/>
+							)}
+						</button>
+					</div>
+					<div className="flex w-full gap-2">
+						<div className="grow">
+							<SelectInput
+								label="AUTOMAÇÕES HABILITADAS"
+								value={infoHolder.automacoesHabilitadas}
+								options={[
+									{ id: 1, label: "SIM", value: true },
+									{ id: 2, label: "NÃO", value: false },
+								]}
+								handleChange={(value) => setInfoHolder((prev) => ({ ...prev, automacoesHabilitadas: value }))}
+								resetOptionLabel="NÃO DEFINIDO"
+								onReset={() => setInfoHolder((prev) => ({ ...prev, automacoesHabilitadas: false }))}
+								width="100%"
+							/>
+						</div>
+						<button
+							type="button"
+							disabled={infoHolder?.automacoesHabilitadas === info.automacoesHabilitadas || isUpdatingOpportunity}
+							onClick={() =>
+								handleUpdateOpportunity({
+									id: opportunityId,
+									changes: { automacoesHabilitadas: infoHolder.automacoesHabilitadas },
+								})
+							}
+							className="flex items-end justify-center pb-4 text-green-200"
+						>
+							{isUpdatingOpportunity ? (
+								<Loader2 className="w-4 h-4 min-w-4 min-h-4 animate-spin text-primary" />
+							) : (
+								<AiOutlineCheck
+									style={{
+										fontSize: "18px",
+										color: infoHolder?.automacoesHabilitadas !== info.automacoesHabilitadas ? "rgb(34,197,94)" : "rgb(156,163,175)",
 									}}
 								/>
 							)}
