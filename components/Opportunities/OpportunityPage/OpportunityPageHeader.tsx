@@ -1,16 +1,16 @@
-import { TUserSession } from "@/lib/auth/session";
-import { getErrorMessage } from "@/lib/methods/errors";
-import { formatDateAsLocale, formatNameAsInitials } from "@/lib/methods/formatting";
-import { deleteOpportunity } from "@/utils/mutations/opportunities";
-import { TOpportunityDTOWithClientAndPartnerAndFunnelReferences } from "@/utils/schemas/opportunity.schema";
 import { useMutation } from "@tanstack/react-query";
 import { Share2, Trash2 } from "lucide-react";
 import toast from "react-hot-toast";
 import { BsCalendarPlus, BsCalendarX, BsCode, BsFillMegaphoneFill } from "react-icons/bs";
-import OpportunityContractRequestedFlag from "./OpportunityContractRequestedFlag";
-import OpportunityWonFlag from "./OpportunityWonFlag";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import type { TUserSession } from "@/lib/auth/session";
+import { getErrorMessage } from "@/lib/methods/errors";
+import { formatDateAsLocale, formatNameAsInitials } from "@/lib/methods/formatting";
+import { deleteOpportunity } from "@/utils/mutations/opportunities";
+import type { TOpportunityDTOWithClientAndPartnerAndFunnelReferences } from "@/utils/schemas/opportunity.schema";
+import OpportunityContractRequestedFlag from "./OpportunityContractRequestedFlag";
 import OpportunityLossBlock from "./OpportunityLossBlock";
+import OpportunityWonFlag from "./OpportunityWonFlag";
 
 type OpportunityPageHeaderProps = {
 	opportunity: TOpportunityDTOWithClientAndPartnerAndFunnelReferences;

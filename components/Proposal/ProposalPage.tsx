@@ -1,54 +1,46 @@
 "use client";
-import type { TUserSession } from "@/lib/auth/session";
 import { useQueryClient } from "@tanstack/react-query";
+import { CalendarRange, ChartArea, Diamond, LayoutGrid, PiggyBank, ShoppingCart, Variable } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
-
+import toast from "react-hot-toast";
 import { AiFillEdit, AiFillStar, AiOutlineSafety } from "react-icons/ai";
+import { BsCalendarPlus, BsFillFunnelFill } from "react-icons/bs";
 import { FaExternalLinkAlt, FaIndustry } from "react-icons/fa";
+import { FaTrophy } from "react-icons/fa6";
 import { ImPower } from "react-icons/im";
 import { MdContentCopy, MdOutlineMiscellaneousServices } from "react-icons/md";
 import { TbDownload } from "react-icons/tb";
-
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
+import type { TUserSession } from "@/lib/auth/session";
+import { copyToClipboard } from "@/lib/hooks";
+import { handleDownload } from "@/lib/methods/download";
+import { formatDateAsLocale, formatDecimalPlaces, formatNameAsInitials } from "@/lib/methods/formatting";
+import { renderCategoryIcon } from "@/lib/methods/rendering";
+import { formatToMoney, getEstimatedGen } from "@/utils/methods";
+import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
+import { setOpportunityActiveProposal, updateWinningProposal } from "@/utils/mutations/opportunities";
+import { formatProposalPremissesLabel, formatProposalPremissesValue } from "@/utils/proposal";
+import { usePricingMethods } from "@/utils/queries/pricing-methods";
 import { useProposalById } from "@/utils/queries/proposals";
-
+import type { TPricingMethodDTO } from "@/utils/schemas/pricing-method.schema";
+import type { TProposalDTOWithOpportunityAndClient, TProposalPremisses } from "@/utils/schemas/proposal.schema";
+import { getSalesProposalScenarios } from "@/utils/solar";
 import NewContractRequest from "../Modals/ContractRequest/NewContractRequest";
+import EditProposalFile from "../Modals/Proposal/EditFile";
 import EditProposal from "../Modals/Proposal/EditProposal";
+import UFVEnergyEconomyAnalysis from "../Modals/Proposal/UFVEconomicAnalysis";
 import NewProjectRequest from "../ProjectRequest/NewProjectRequest";
 import { Sidebar } from "../Sidebar";
+import { Button } from "../ui/button";
+import { type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "../ui/chart";
 import Avatar from "../utils/Avatar";
 import ErrorComponent from "../utils/ErrorComponent";
 import LoadingComponent from "../utils/LoadingComponent";
 import ProposalViewPlansBlock from "./Blocks/ProposalViewPlansBlock";
 import ProposalViewPricingBlock from "./Blocks/ProposalViewPricingBlock";
-import WinBlock from "./WinBlock";
-
 import ProposalUpdateRecords from "./ProposalUpdateRecords";
-
-import { formatDateAsLocale, formatDecimalPlaces, formatNameAsInitials } from "@/lib/methods/formatting";
-
-import { formatToMoney, getEstimatedGen } from "@/utils/methods";
-
-import { renderCategoryIcon } from "@/lib/methods/rendering";
-import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
-import { setOpportunityActiveProposal, updateWinningProposal } from "@/utils/mutations/opportunities";
-import { usePricingMethods } from "@/utils/queries/pricing-methods";
-import type { TPricingMethodDTO } from "@/utils/schemas/pricing-method.schema";
-
-import { copyToClipboard } from "@/lib/hooks";
-import { handleDownload } from "@/lib/methods/download";
-import { formatProposalPremissesLabel, formatProposalPremissesValue } from "@/utils/proposal";
-import type { TProposalDTOWithOpportunityAndClient, TProposalPremisses } from "@/utils/schemas/proposal.schema";
-import { getSalesProposalScenarios } from "@/utils/solar";
-import { CalendarRange, ChartArea, Diamond, LayoutGrid, PiggyBank, ShoppingCart, Variable } from "lucide-react";
-import toast from "react-hot-toast";
-import { BsCalendarPlus, BsFillFunnelFill } from "react-icons/bs";
-import { FaTrophy } from "react-icons/fa6";
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
-import EditProposalFile from "../Modals/Proposal/EditFile";
-import UFVEnergyEconomyAnalysis from "../Modals/Proposal/UFVEconomicAnalysis";
-import { Button } from "../ui/button";
-import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "../ui/chart";
+import WinBlock from "./WinBlock";
 
 function getPricingMethodById({ methods, id }: { methods?: TPricingMethodDTO[]; id: string }) {
 	if (!methods) return "NÃO DEFINIDO";
@@ -163,7 +155,6 @@ function ProposalPage({ proposalId, session }: ProposalPageProps) {
 							{session.user.permissoes.propostas.editar ? (
 								<button
 									type="button"
-									// @ts-ignore
 									onClick={() => setEditProposalModalIsOpen(true)}
 									className="flex w-fit items-center gap-2 rounded-sm bg-orange-400 p-2 text-xs font-black hover:bg-orange-500"
 								>
@@ -174,7 +165,6 @@ function ProposalPage({ proposalId, session }: ProposalPageProps) {
 							{proposalId !== proposal.oportunidadeDados.idPropostaAtiva ? (
 								<button
 									type="button"
-									// @ts-ignore
 									onClick={() => handleSetActiveProposal({ proposalId, opportunityId: proposal.oportunidade.id })}
 									className="flex w-fit items-center gap-2 rounded-sm bg-blue-700 p-2 text-xs font-black text-primary-foreground hover:bg-blue-800"
 								>
@@ -185,9 +175,7 @@ function ProposalPage({ proposalId, session }: ProposalPageProps) {
 							{proposal.oportunidadeDados.ganho.idProposta && proposalId !== proposal.oportunidadeDados.ganho.idProposta ? (
 								<button
 									type="button"
-									// @ts-ignore
 									onClick={() =>
-										// @ts-ignore
 										handleUpdateWinningProposal({
 											proposalId,
 											opportunityId: proposal.oportunidade.id,

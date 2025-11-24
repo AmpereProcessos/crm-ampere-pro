@@ -402,6 +402,7 @@ async function editOpportunities({ input, session }: { input: TEditOpportunities
 			// We gotta clean up the opportunity proposal fields
 			await opportunitiesCollection.updateOne({ _id: new ObjectId(input.id) }, { $set: { proposta: null } });
 		} else {
+			console.log(`SET NEW ACTIVE PROPOSAL - OPPORTUNITY OF ID ${input.id} TO PROPOSAL OF ID ${newActiveProposalId}`);
 			const newActiveProposal = await proposalsCollection.findOne({
 				_id: new ObjectId(newActiveProposalId),
 			});
@@ -410,6 +411,7 @@ async function editOpportunities({ input, session }: { input: TEditOpportunities
 				{ _id: new ObjectId(input.id) },
 				{
 					$set: {
+						idPropostaAtiva: newActiveProposalId,
 						"proposta.nome": newActiveProposal.nome,
 						"proposta.valor": newActiveProposal.valor,
 						"proposta.potenciaPico": newActiveProposal.potenciaPico,

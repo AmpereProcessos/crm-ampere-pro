@@ -59,10 +59,13 @@ export async function updateOpportunity({ id, changes }: TEditOpportunitiesInput
 export async function winOpportunity({ proposalId, opportunityId }: { proposalId: string; opportunityId: string }) {
 	try {
 		const { data } = await axios.put(`/api/opportunities?id=${opportunityId}`, {
-			"ganho.data": new Date().toISOString(),
-			"ganho.idProposta": proposalId,
-			"perda.descricaoMotivo": null,
-			"perda.data": null,
+			id: opportunityId,
+			changes: {
+				"ganho.data": new Date().toISOString(),
+				"ganho.idProposta": proposalId,
+				"perda.descricaoMotivo": null,
+				"perda.data": null,
+			},
 		});
 		if (typeof data.data !== "string") return "Oportunidade alterada com sucesso !";
 		return data.message;
@@ -74,7 +77,10 @@ export async function winOpportunity({ proposalId, opportunityId }: { proposalId
 export async function setOpportunityActiveProposal({ proposalId, opportunityId }: { proposalId: string; opportunityId: string }) {
 	try {
 		const { data } = await axios.put(`/api/opportunities?id=${opportunityId}`, {
-			idPropostaAtiva: proposalId,
+			id: opportunityId,
+			changes: {
+				idPropostaAtiva: proposalId,
+			},
 		});
 		if (typeof data.data !== "string") return "Oportunidade alterada com sucesso !";
 		return data.message;
