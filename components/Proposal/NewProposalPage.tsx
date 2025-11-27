@@ -1,31 +1,29 @@
 "use client";
-import { useEffect, useState } from "react";
-
-import { Sidebar } from "@/components/Sidebar";
-
-import LoadingPage from "@/components/utils/LoadingPage";
-
-import type { TUserSession } from "@/lib/auth/session";
-import { useOpportunityById } from "@/utils/queries/opportunities";
-import type { TProposal } from "@/utils/schemas/proposal.schema";
-import ErrorComponent from "../utils/ErrorComponent";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { FaStepBackward } from "react-icons/fa";
+import { Sidebar } from "@/components/Sidebar";
+import LoadingPage from "@/components/utils/LoadingPage";
+import type { TUserSession } from "@/lib/auth/session";
+import { useOpportunityById } from "@/utils/queries/opportunities";
+import { useProjectTypes } from "@/utils/queries/project-types";
+import type { TProposal } from "@/utils/schemas/proposal.schema";
+import ErrorComponent from "../utils/ErrorComponent";
 import ProposalWithKits from "./ProposalsCreationByCategory/ProposeWithKits";
 import ProposalWithPlans from "./ProposalsCreationByCategory/ProposeWithPlans";
 import ProposalWithProducts from "./ProposalsCreationByCategory/ProposeWithProducts";
 import ProposalWithServices from "./ProposalsCreationByCategory/ProposeWithServices";
+
 type NewProposalPageprops = {
 	session: TUserSession;
 	opportunityId: string;
 };
 function NewProposalPage({ session, opportunityId }: NewProposalPageprops) {
-	const partnerId = session.user.idParceiro;
+	const { data: projectTypes } = useProjectTypes();
 
 	const {
 		data: opportunity,
-		status,
 		isLoading: opportunityLoading,
 		isSuccess: opportunitySuccess,
 		isError: opportunityError,
@@ -67,13 +65,15 @@ function NewProposalPage({ session, opportunityId }: NewProposalPageprops) {
 		},
 		dataInsercao: new Date().toISOString(),
 	});
+
+	const opportunityProjectType = projectTypes?.find((type) => type._id === opportunity?.tipo.id);
 	useEffect(() => {
 		if (opportunity) setInfoHolder((prev) => ({ ...prev, oportunidade: { id: opportunity._id, nome: opportunity.nome }, idCliente: opportunity.idCliente }));
 	}, [opportunity]);
 
 	if (opportunityLoading) return <LoadingPage />;
 	if (opportunityError) return <ErrorComponent msg="Erro ao carregar informações sobre a oportunidade." />;
-	if (opportunitySuccess)
+	if (opportunitySuccess && opportunityProjectType)
 		return (
 			<div className="flex h-full flex-col md:flex-row">
 				<Sidebar session={session} />
@@ -99,6 +99,7 @@ function NewProposalPage({ session, opportunityId }: NewProposalPageprops) {
 					{saleCategory === "KIT" ? (
 						<ProposalWithKits
 							opportunity={opportunity}
+							opportunityProjectType={opportunityProjectType}
 							partner={opportunity.parceiro}
 							session={session}
 							infoHolder={infoHolder}
@@ -108,6 +109,7 @@ function NewProposalPage({ session, opportunityId }: NewProposalPageprops) {
 					{saleCategory === "PLANO" ? (
 						<ProposalWithPlans
 							opportunity={opportunity}
+							opportunityProjectType={opportunityProjectType}
 							partner={opportunity.parceiro}
 							session={session}
 							infoHolder={infoHolder}
@@ -116,6 +118,7 @@ function NewProposalPage({ session, opportunityId }: NewProposalPageprops) {
 					) : null}
 					{saleCategory === "PRODUTOS" ? (
 						<ProposalWithProducts
+							opportunityProjectType={opportunityProjectType}
 							opportunity={opportunity}
 							partner={opportunity.parceiro}
 							session={session}
@@ -125,6 +128,7 @@ function NewProposalPage({ session, opportunityId }: NewProposalPageprops) {
 					) : null}
 					{saleCategory === "SERVIÇOS" ? (
 						<ProposalWithServices
+							opportunityProjectType={opportunityProjectType}
 							opportunity={opportunity}
 							partner={opportunity.parceiro}
 							session={session}

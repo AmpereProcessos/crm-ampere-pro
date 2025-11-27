@@ -1,3 +1,6 @@
+import { useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
+import { VscChromeClose } from "react-icons/vsc";
 import DocumentationInformationBlock from "@/components/ProjectType/DocumentationInformationBlock";
 import GeneralInformationBlock from "@/components/ProjectType/GeneralInformationBlock";
 import ProposalTemplatesInformationBlock from "@/components/ProjectType/ProposalTemplatesInformationBlock";
@@ -5,10 +8,7 @@ import SizingInformationBlock from "@/components/ProjectType/SizingInformationBl
 import type { TUserSession } from "@/lib/auth/session";
 import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
 import { createProjectType } from "@/utils/mutations/project-types";
-import { TProjectType } from "@/utils/schemas/project-types.schema";
-import { useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
-import { VscChromeClose } from "react-icons/vsc";
+import type { TProjectType } from "@/utils/schemas/project-types.schema";
 
 type NewProjectTypeProps = {
 	session: TUserSession;
@@ -24,6 +24,7 @@ function NewProjectType({ session, closeModal }: NewProjectTypeProps) {
 		dimensionamento: [],
 		modelosProposta: [],
 		documentacao: [],
+		metodosPagamento: [],
 		autor: {
 			id: session.user.id,
 			nome: session.user.nome,
@@ -66,10 +67,8 @@ function NewProjectType({ session, closeModal }: NewProjectTypeProps) {
 					<div className="flex w-full items-center justify-end p-2">
 						<button
 							disabled={isPending}
-							onClick={() => {
-								// @ts-ignore
-								handleCreateProjectType({ info: { nome: infoHolder.nome.toUpperCase(), ...infoHolder } });
-							}}
+							onClick={() => handleCreateProjectType({ info: { ...infoHolder, nome: infoHolder.nome.toUpperCase() } })}
+							type="button"
 							className="h-9 whitespace-nowrap rounded-sm bg-green-700 px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm disabled:bg-primary/50 disabled:text-primary-foreground enabled:hover:bg-green-600 enabled:hover:text-primary-foreground"
 						>
 							CRIAR TIPO DE PROJETO

@@ -1,3 +1,6 @@
+import { useQueryClient } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+import { VscChromeClose } from "react-icons/vsc";
 import DocumentationInformationBlock from "@/components/ProjectType/DocumentationInformationBlock";
 import GeneralInformationBlock from "@/components/ProjectType/GeneralInformationBlock";
 import ProcessSettingsBlock from "@/components/ProjectType/ProcessSettingsBlock";
@@ -7,10 +10,7 @@ import type { TUserSession } from "@/lib/auth/session";
 import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
 import { editProjectType } from "@/utils/mutations/project-types";
 import { useProjectTypeById } from "@/utils/queries/project-types";
-import { TProjectType } from "@/utils/schemas/project-types.schema";
-import { useQueryClient } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
-import { VscChromeClose } from "react-icons/vsc";
+import type { TProjectType } from "@/utils/schemas/project-types.schema";
 
 type EditProjectTypeProps = {
 	projectTypeId: string;
@@ -27,6 +27,7 @@ function EditProjectType({ projectTypeId, session, closeModal }: EditProjectType
 		dimensionamento: [],
 		modelosProposta: [],
 		documentacao: [],
+		metodosPagamento: [],
 		autor: {
 			id: session.user.id,
 			nome: session.user.nome,
@@ -74,10 +75,8 @@ function EditProjectType({ projectTypeId, session, closeModal }: EditProjectType
 					<div className="flex w-full items-center justify-end p-2">
 						<button
 							disabled={isPending}
-							onClick={() => {
-								// @ts-ignore
-								handleEditProjectType({ id: projectTypeId, changes: { nome: infoHolder.nome.toUpperCase(), ...infoHolder } });
-							}}
+							onClick={() => handleEditProjectType({ id: projectTypeId, changes: { ...infoHolder, nome: infoHolder.nome.toUpperCase() } })}
+							type="button"
 							className="h-9 whitespace-nowrap rounded-sm bg-blue-800 px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm disabled:bg-primary/50 disabled:text-primary-foreground enabled:hover:bg-blue-800 enabled:hover:text-primary-foreground"
 						>
 							ATUALIZAR TIPO DE PROJETO

@@ -8,6 +8,7 @@ import type { TUserSession } from "@/lib/auth/session";
 import { useProjectTypes } from "@/utils/queries/project-types";
 import type { TOpportunityDTOWithClientAndPartnerAndFunnelReferences } from "@/utils/schemas/opportunity.schema";
 import type { TPartnerSimplifiedDTO } from "@/utils/schemas/partner.schema";
+import type { TProjectTypeDTO } from "@/utils/schemas/project-types.schema";
 import type { TProposal } from "@/utils/schemas/proposal.schema";
 import GeneralSizing from "../NewProposalStages/GeneralSizing";
 import KitsSelection from "../NewProposalStages/KitsSelection";
@@ -17,15 +18,16 @@ import Proposal from "../NewProposalStages/Proposal";
 
 type ProposalWithKitsProps = {
 	opportunity: TOpportunityDTOWithClientAndPartnerAndFunnelReferences;
+	opportunityProjectType: TProjectTypeDTO;
 	infoHolder: TProposal;
 	setInfoHolder: React.Dispatch<React.SetStateAction<TProposal>>;
 	session: TUserSession;
 	partner: TPartnerSimplifiedDTO;
 };
-function ProposalWithKits({ opportunity, infoHolder, setInfoHolder, session, partner }: ProposalWithKitsProps) {
-	const { data: projectTypes } = useProjectTypes();
+function ProposalWithKits({ opportunity, opportunityProjectType, infoHolder, setInfoHolder, session, partner }: ProposalWithKitsProps) {
 	const [stage, setStage] = useState<number>(1);
 	const [applicablePaymentMethodsIds, setApplicablePaymentMethodsIds] = useState<string[]>([]);
+
 	console.log(infoHolder);
 	return (
 		<div className="m-6 flex h-fit flex-col rounded-md border border-primary/30 bg-background p-2 shadow-lg">
@@ -56,7 +58,7 @@ function ProposalWithKits({ opportunity, infoHolder, setInfoHolder, session, par
 					infoHolder={infoHolder}
 					setInfoHolder={setInfoHolder}
 					opportunity={opportunity}
-					projectTypes={projectTypes || []}
+					opportunityProjectType={opportunityProjectType}
 					moveToNextStage={() => setStage((prev) => prev + 1)}
 					session={session}
 				/>
@@ -87,6 +89,7 @@ function ProposalWithKits({ opportunity, infoHolder, setInfoHolder, session, par
 					infoHolder={infoHolder}
 					setInfoHolder={setInfoHolder}
 					opportunity={opportunity}
+					opportunityProjectType={opportunityProjectType}
 					moveToPreviousStage={() => setStage((prev) => prev - 1)}
 					moveToNextStage={() => setStage((prev) => prev + 1)}
 					applicablePaymentMethodsIds={applicablePaymentMethodsIds}
@@ -98,7 +101,7 @@ function ProposalWithKits({ opportunity, infoHolder, setInfoHolder, session, par
 					infoHolder={infoHolder}
 					setInfoHolder={setInfoHolder}
 					opportunity={opportunity}
-					projectTypes={projectTypes || []}
+					opportunityProjectType={opportunityProjectType}
 					moveToPreviousStage={() => setStage((prev) => prev - 1)}
 					moveToNextStage={() => setStage((prev) => prev + 1)}
 					session={session}

@@ -1,34 +1,31 @@
-import type { TUserSession } from "@/lib/auth/session";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import React, { useState } from "react";
-
+import { Eye } from "lucide-react";
+import Link from "next/link";
+import type React from "react";
+import { useState } from "react";
+import toast from "react-hot-toast";
 import { ImPower, ImPriceTag } from "react-icons/im";
-
-import TextInput from "../../Inputs/TextInput";
-
-import Products from "../Blocks/Products";
-import Services from "../Blocks/Services";
-import ProposalWithKitTemplate from "../Templates/ProposalWithKitTemplate";
-import ProposalWithKitUFVTemplate from "../Templates/ProposalWithKitUFVTemplate";
-
 import CheckboxInput from "@/components/Inputs/CheckboxInput";
 import SelectInput from "@/components/Inputs/SelectInput";
 import TextareaInput from "@/components/Inputs/TextareaInput";
 import ErrorComponent from "@/components/utils/ErrorComponent";
 import LoadingComponent from "@/components/utils/LoadingComponent";
+import type { TUserSession } from "@/lib/auth/session";
 import { handleDownload } from "@/lib/methods/download";
 import { formatToMoney } from "@/utils/methods";
 import { createProposalPersonalized } from "@/utils/mutations/proposals";
-import { TOpportunityDTOWithClient, TOpportunityDTOWithClientAndPartnerAndFunnelReferences } from "@/utils/schemas/opportunity.schema";
-import { TPartnerSimplifiedDTO } from "@/utils/schemas/partner.schema";
-import { TProjectTypeDTO } from "@/utils/schemas/project-types.schema";
-import { TProposal } from "@/utils/schemas/proposal.schema";
-import { Eye } from "lucide-react";
-import Link from "next/link";
-import toast from "react-hot-toast";
+import type { TOpportunityDTOWithClient, TOpportunityDTOWithClientAndPartnerAndFunnelReferences } from "@/utils/schemas/opportunity.schema";
+import type { TPartnerSimplifiedDTO } from "@/utils/schemas/partner.schema";
+import type { TProjectTypeDTO } from "@/utils/schemas/project-types.schema";
+import type { TProposal } from "@/utils/schemas/proposal.schema";
+import TextInput from "../../Inputs/TextInput";
 import Kits from "../Blocks/Kits";
 import PaymentMethods from "../Blocks/PaymentMethods";
 import Plans from "../Blocks/Plans";
+import Products from "../Blocks/Products";
+import Services from "../Blocks/Services";
+import ProposalWithKitTemplate from "../Templates/ProposalWithKitTemplate";
+import ProposalWithKitUFVTemplate from "../Templates/ProposalWithKitUFVTemplate";
 import ProposalWithPlanTemplate from "../Templates/ProposalWithPlanTemplate";
 import ProposalWithProductsTemplate from "../Templates/ProposalWithProductsTemplate";
 import ProposalWithServicesTemplate from "../Templates/ProposalWithServicesTemplate";
@@ -43,8 +40,8 @@ function renderProposalPreview({
 	opportunity: TOpportunityDTOWithClient;
 	partner: TPartnerSimplifiedDTO;
 }) {
-	const isSolarSystemSale = opportunity.tipo.titulo == "SISTEMA FOTOVOLTAICO" && opportunity.categoriaVenda == "KIT";
-	const isGeneralKitSale = opportunity.categoriaVenda == "KIT" && opportunity.tipo.titulo != "SISTEMA FOTOVOLTAICO";
+	const isSolarSystemSale = opportunity.tipo.titulo === "SISTEMA FOTOVOLTAICO" && opportunity.categoriaVenda === "KIT";
+	const isGeneralKitSale = opportunity.categoriaVenda === "KIT" && opportunity.tipo.titulo !== "SISTEMA FOTOVOLTAICO";
 	if (proposal.idModeloAnvil)
 		return (
 			<div className="relative flex h-fit w-full flex-col items-center justify-center overflow-hidden bg-background lg:h-[297mm] lg:w-[210mm]">
@@ -53,29 +50,29 @@ function renderProposalPreview({
 				</p>
 			</div>
 		);
-	if (opportunity.categoriaVenda == "KIT" && isSolarSystemSale)
+	if (opportunity.categoriaVenda === "KIT" && isSolarSystemSale)
 		return <ProposalWithKitUFVTemplate proposal={proposal} opportunity={opportunity} partner={partner} />;
 
-	if (opportunity.categoriaVenda == "KIT" && isGeneralKitSale)
+	if (opportunity.categoriaVenda === "KIT" && isGeneralKitSale)
 		return <ProposalWithKitTemplate proposal={proposal} opportunity={opportunity} partner={partner} />;
 
-	if (opportunity.categoriaVenda == "PLANO") return <ProposalWithPlanTemplate proposal={proposal} opportunity={opportunity} partner={partner} />;
-	if (opportunity.categoriaVenda == "PRODUTOS") return <ProposalWithProductsTemplate proposal={proposal} opportunity={opportunity} partner={partner} />;
-	if (opportunity.categoriaVenda == "SERVIÇOS") return <ProposalWithServicesTemplate proposal={proposal} opportunity={opportunity} partner={partner} />;
+	if (opportunity.categoriaVenda === "PLANO") return <ProposalWithPlanTemplate proposal={proposal} opportunity={opportunity} partner={partner} />;
+	if (opportunity.categoriaVenda === "PRODUTOS") return <ProposalWithProductsTemplate proposal={proposal} opportunity={opportunity} partner={partner} />;
+	if (opportunity.categoriaVenda === "SERVIÇOS") return <ProposalWithServicesTemplate proposal={proposal} opportunity={opportunity} partner={partner} />;
 }
 
 type ProposalProps = {
 	infoHolder: TProposal;
 	setInfoHolder: React.Dispatch<React.SetStateAction<TProposal>>;
-	projectTypes: TProjectTypeDTO[];
 	opportunity: TOpportunityDTOWithClientAndPartnerAndFunnelReferences;
+	opportunityProjectType: TProjectTypeDTO;
 	moveToNextStage: () => void;
 	moveToPreviousStage: () => void;
 	session: TUserSession;
 	partner: TPartnerSimplifiedDTO;
 };
-function Proposal({ opportunity, projectTypes, infoHolder, setInfoHolder, moveToNextStage, moveToPreviousStage, session, partner }: ProposalProps) {
-	const ProposalTemplateOptions = projectTypes.find((t) => t._id == opportunity.tipo.id)?.modelosProposta || null;
+function Proposal({ opportunity, opportunityProjectType, infoHolder, setInfoHolder, moveToNextStage, moveToPreviousStage, session, partner }: ProposalProps) {
+	const ProposalTemplateOptions = opportunityProjectType.modelosProposta || null;
 	const queryClient = useQueryClient();
 
 	const [saveAsActive, setSaveAsActive] = useState<boolean>(true);
@@ -152,7 +149,10 @@ function Proposal({ opportunity, projectTypes, infoHolder, setInfoHolder, moveTo
 					<p className="text-center font-bold text-[#15599a]">A proposta foi gerada com sucesso e vinculada à oportunidade em questão.</p>
 					<p className="text-center text-primary/70">Você pode voltar a acessá-la no futuro através da área de controle da oportunidade.</p>
 					<Link href={`/comercial/oportunidades/id/${opportunity._id}`}>
-						<button className="flex items-center gap-2 rounded-sm bg-primary/50 px-2 py-1 text-[0.6rem] font-bold tracking-tight text-primary-foreground duration-300 ease-in-out hover:bg-primary/60">
+						<button
+							type="button"
+							className="flex items-center gap-2 rounded-sm bg-primary/50 px-2 py-1 text-[0.6rem] font-bold tracking-tight text-primary-foreground duration-300 ease-in-out hover:bg-primary/60"
+						>
 							VOLTAR À OPORTUNIDADE
 						</button>
 					</Link>
@@ -166,7 +166,10 @@ function Proposal({ opportunity, projectTypes, infoHolder, setInfoHolder, moveTo
 						</a>
 					) : (
 						<Link href={`/comercial/proposta/documento/${data.id}`}>
-							<button className="flex items-center gap-1 rounded-sm bg-blue-600 px-2 py-1 text-[0.7rem] font-black text-primary-foreground duration-300 ease-in-out hover:bg-blue-700">
+							<button
+								type="button"
+								className="flex items-center gap-1 rounded-sm bg-blue-600 px-2 py-1 text-[0.7rem] font-black text-primary-foreground duration-300 ease-in-out hover:bg-blue-700"
+							>
 								CLIQUE AQUI PARA ACESSAR A PROPOSTA
 								<Eye size={18} />
 							</button>
@@ -182,12 +185,12 @@ function Proposal({ opportunity, projectTypes, infoHolder, setInfoHolder, moveTo
 			{!isPending && !isSuccess ? (
 				<>
 					<div className="mt-4 flex w-full items-center justify-between">
-						<button onClick={() => moveToPreviousStage()} className="rounded pl-4 font-bold text-primary/70 duration-300 hover:scale-105">
+						<button type="button" onClick={() => moveToPreviousStage()} className="rounded pl-4 font-bold text-primary/70 duration-300 hover:scale-105">
 							Voltar
 						</button>
 						<button
+							type="button"
 							onClick={() =>
-								// @ts-ignore
 								handleCreateProposal({
 									proposal: infoHolder,
 									opportunityWithClient: opportunity,

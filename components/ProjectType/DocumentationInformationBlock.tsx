@@ -1,11 +1,12 @@
-import { formatCondition } from "@/utils/project-documentation/helpers";
-import { TProjectType } from "@/utils/schemas/project-types.schema";
-import React, { useState } from "react";
+import type React from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import { BsLockFill } from "react-icons/bs";
 import { FaEquals } from "react-icons/fa6";
 import { MdDelete, MdOutlineAttachFile } from "react-icons/md";
 import { TbBoxMultiple } from "react-icons/tb";
+import { formatCondition } from "@/utils/project-documentation/helpers";
+import type { TProjectType } from "@/utils/schemas/project-types.schema";
 import NewDocumentMenu from "./NewDocumentMenu";
 
 type DocumentationInformationBlockProps = {
@@ -34,6 +35,7 @@ function DocumentationInformationBlock({ infoHolder, setInfoHolder }: Documentat
 			) : (
 				<div className="flex w-full items-center justify-end">
 					<button
+						type="button"
 						className="rounded bg-green-500 p-1 px-4 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-green-600"
 						onClick={() => setNewDocumentMenuIsOpen(true)}
 					>
@@ -45,7 +47,7 @@ function DocumentationInformationBlock({ infoHolder, setInfoHolder }: Documentat
 			<div className="flex w-full flex-col gap-1">
 				{infoHolder.documentacao.length > 0 ? (
 					infoHolder.documentacao.map((document, index) => (
-						<div key={index} className="flex w-full flex-col rounded-md border border-primary/30 p-2">
+						<div key={index.toString()} className="flex w-full flex-col rounded-md border border-primary/30 p-2">
 							<div className="flex w-full flex-row items-center justify-between gap-2">
 								<div className="flex grow items-center gap-2">
 									<div className="flex items-center gap-1">

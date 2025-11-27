@@ -35,7 +35,7 @@ export const FractionnementItemSchema = z.object({
 		.optional(),
 });
 export type TFractionnementItem = z.infer<typeof FractionnementItemSchema>;
-const GeneralPaymentMethodSchema = z.object({
+export const GeneralPaymentMethodSchema = z.object({
 	nome: z.string(),
 	ativo: z.boolean(),
 	descricao: z.string(),

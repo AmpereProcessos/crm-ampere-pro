@@ -1,3 +1,9 @@
+import { useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
+import { BsCircleHalf } from "react-icons/bs";
+import { FaPercentage } from "react-icons/fa";
+import { MdDelete, MdPayment } from "react-icons/md";
+import { VscChromeClose } from "react-icons/vsc";
 import SelectWithImages from "@/components/Inputs/SelectWithImages";
 import TextInput from "@/components/Inputs/TextInput";
 import NewFractionnement from "@/components/PaymentMethods/NewFractionnement";
@@ -5,13 +11,7 @@ import type { TUserSession } from "@/lib/auth/session";
 import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
 import { createPaymentMethod } from "@/utils/mutations/payment-methods";
 import { usePartnersSimplified } from "@/utils/queries/partners";
-import { TFractionnementItem, TPaymentMethod } from "@/utils/schemas/payment-methods";
-import { useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
-import { BsCircleHalf } from "react-icons/bs";
-import { FaPercentage } from "react-icons/fa";
-import { MdDelete, MdPayment } from "react-icons/md";
-import { VscChromeClose } from "react-icons/vsc";
+import type { TFractionnementItem, TPaymentMethod } from "@/utils/schemas/payment-methods";
 
 type NewPaymentMethodProps = {
 	session: TUserSession;
@@ -131,6 +131,7 @@ function NewPaymentMethod({ session, closeModal }: NewPaymentMethodProps) {
 						) : (
 							<div className="flex w-full items-center justify-end">
 								<button
+									type="button"
 									className="rounded bg-green-500 p-1 px-4 text-sm font-medium text-primary-foreground duration-300 ease-in-out hover:bg-green-600"
 									onClick={() => setNewFractionnementItemMenuIsOpen(true)}
 								>
@@ -142,7 +143,7 @@ function NewPaymentMethod({ session, closeModal }: NewPaymentMethodProps) {
 						{infoHolder.fracionamento.length > 0 ? (
 							<div className="flex w-full flex-wrap items-center justify-around gap-2">
 								{infoHolder.fracionamento.map((fractionnement, index) => (
-									<div key={index} className="flex w-full flex-col rounded-md border border-primary/50 p-3 shadow-md lg:w-[500px]">
+									<div key={index.toString()} className="flex w-full flex-col rounded-md border border-primary/50 p-3 shadow-md lg:w-[500px]">
 										<div className="flex w-full items-center justify-between gap-2">
 											<h1 className="text-sm font-black leading-none tracking-tight">FRAÇÃO DE {fractionnement.porcentagem}%</h1>
 											<button
@@ -187,11 +188,9 @@ function NewPaymentMethod({ session, closeModal }: NewPaymentMethodProps) {
 					</div>
 					<div className="flex w-full items-center justify-end">
 						<button
+							type="button"
 							className="h-9 whitespace-nowrap rounded-sm bg-green-700 px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm disabled:bg-primary/50 disabled:text-primary-foreground enabled:hover:bg-green-600 enabled:hover:text-primary-foreground"
-							onClick={() =>
-								// @ts-ignore
-								handleCreatePaymentMethod({ info: infoHolder })
-							}
+							onClick={() => handleCreatePaymentMethod({ info: infoHolder })}
 						>
 							CRIAR MÉTODO
 						</button>

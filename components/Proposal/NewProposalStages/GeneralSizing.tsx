@@ -1,20 +1,22 @@
+import type React from "react";
+import { useEffect } from "react";
 import type { TUserSession } from "@/lib/auth/session";
 import { renderProposalPremisseField } from "@/premisses";
 import { useDistanceData } from "@/utils/queries/utils";
-import { TOpportunityDTOWithClientAndPartnerAndFunnelReferences } from "@/utils/schemas/opportunity.schema";
-import { TProjectTypeDTO } from "@/utils/schemas/project-types.schema";
-import { TProposal, TProposalPremisses } from "@/utils/schemas/proposal.schema";
-import React, { useEffect } from "react";
+import type { TOpportunityDTOWithClientAndPartnerAndFunnelReferences } from "@/utils/schemas/opportunity.schema";
+import type { TProjectTypeDTO } from "@/utils/schemas/project-types.schema";
+import type { TProposal, TProposalPremisses } from "@/utils/schemas/proposal.schema";
 import TechnicalAnalysisVinculation from "../TechnicalAnalysisVinculation";
+
 type GeneralSizingProps = {
 	opportunity: TOpportunityDTOWithClientAndPartnerAndFunnelReferences;
-	projectTypes: TProjectTypeDTO[];
+	opportunityProjectType: TProjectTypeDTO;
 	session: TUserSession;
 	infoHolder: TProposal;
 	setInfoHolder: React.Dispatch<React.SetStateAction<TProposal>>;
 	moveToNextStage: () => void;
 };
-function GeneralSizing({ opportunity, projectTypes, session, infoHolder, setInfoHolder, moveToNextStage }: GeneralSizingProps) {
+function GeneralSizing({ opportunity, opportunityProjectType, session, infoHolder, setInfoHolder, moveToNextStage }: GeneralSizingProps) {
 	const userHasPricingEditPermission = session.user.permissoes.precos.editar;
 	// Using the vinculated opportunity partner location reference as the origin city and uf
 	const originCity = opportunity.parceiro?.localizacao.cidade || "ITUIUTABA";
@@ -34,7 +36,7 @@ function GeneralSizing({ opportunity, projectTypes, session, infoHolder, setInfo
 	}
 	useEffect(() => {
 		if (distance) return setInfoHolder((prev) => ({ ...prev, premissas: { ...prev.premissas, distancia: distance } }));
-	}, [distance]);
+	}, [distance, setInfoHolder]);
 	return (
 		<>
 			<div className="flex w-full flex-col gap-4 py-4">
@@ -45,24 +47,22 @@ function GeneralSizing({ opportunity, projectTypes, session, infoHolder, setInfo
 							projeto.
 						</h1>
 					</div>
-					{projectTypes
-						?.find((type) => type._id == opportunity.tipo.id)
-						?.dimensionamento.map((category, categoryIndex) => (
-							<div key={categoryIndex} className="flex w-full flex-col gap-1">
-								<h1 className="justify-center text-center text-sm font-bold text-[#15599a]">{category.titulo}</h1>
-								<div className="flex w-full flex-col flex-wrap items-center justify-center gap-2 lg:flex-row">
-									{category.campos.map((field) => (
-										<div className="flex w-full items-center justify-center lg:w-[48%]">
-											{renderProposalPremisseField({
-												field: field as keyof TProposalPremisses,
-												value: infoHolder.premissas[field as keyof TProposalPremisses],
-												handleChange: (value) => setInfoHolder((prev) => ({ ...prev, premissas: { ...prev.premissas, [field]: value } })),
-											})}
-										</div>
-									))}
-								</div>
+					{opportunityProjectType.dimensionamento.map((category, categoryIndex) => (
+						<div key={categoryIndex.toString()} className="flex w-full flex-col gap-1">
+							<h1 className="justify-center text-center text-sm font-bold text-[#15599a]">{category.titulo}</h1>
+							<div className="flex w-full flex-col flex-wrap items-center justify-center gap-2 lg:flex-row">
+								{category.campos.map((field) => (
+									<div key={field.toString()} className="flex w-full items-center justify-center lg:w-[48%]">
+										{renderProposalPremisseField({
+											field: field as keyof TProposalPremisses,
+											value: infoHolder.premissas[field as keyof TProposalPremisses],
+											handleChange: (value) => setInfoHolder((prev) => ({ ...prev, premissas: { ...prev.premissas, [field]: value } })),
+										})}
+									</div>
+								))}
 							</div>
-						))}
+						</div>
+					))}
 
 					<TechnicalAnalysisVinculation
 						infoHolder={infoHolder}
@@ -73,7 +73,7 @@ function GeneralSizing({ opportunity, projectTypes, session, infoHolder, setInfo
 				</div>
 			</div>
 			<div className="flex w-full items-center justify-end gap-2 px-1">
-				<button onClick={() => validateFields()} className="rounded p-2 font-bold hover:bg-black hover:text-primary-foreground">
+				<button type="button" onClick={() => validateFields()} className="rounded p-2 font-bold hover:bg-black hover:text-primary-foreground">
 					Prosseguir
 				</button>
 			</div>

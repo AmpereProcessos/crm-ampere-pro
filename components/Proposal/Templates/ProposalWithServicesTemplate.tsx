@@ -1,9 +1,3 @@
-import { formatLocation } from "@/lib/methods/formatting";
-import { formatToMoney } from "@/utils/methods";
-import { getFractionnementValue } from "@/utils/payment";
-import type { TOpportunityDTOWithClient } from "@/utils/schemas/opportunity.schema";
-import type { TPartnerSimplifiedDTO } from "@/utils/schemas/partner.schema";
-import type { TProposal } from "@/utils/schemas/proposal.schema";
 import Image from "next/image";
 import { AiOutlineSafety } from "react-icons/ai";
 import { BsCircleHalf } from "react-icons/bs";
@@ -11,6 +5,12 @@ import { FaInstagram, FaPhone } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
 import { MdEmail, MdOutlineMiscellaneousServices, MdPayment } from "react-icons/md";
 import { TbWorld } from "react-icons/tb";
+import { formatLocation } from "@/lib/methods/formatting";
+import { formatToMoney } from "@/utils/methods";
+import { getFractionnementValue } from "@/utils/payment";
+import type { TOpportunityDTOWithClient } from "@/utils/schemas/opportunity.schema";
+import type { TPartnerSimplifiedDTO } from "@/utils/schemas/partner.schema";
+import type { TProposal } from "@/utils/schemas/proposal.schema";
 
 type ProposalWithServicesTemplateProps = {
 	proposalDocumentRef: any;
@@ -78,37 +78,41 @@ function ProposalWithServicesTemplate({ proposalDocumentRef, proposal, opportuni
 				</div>
 				<h1 className="w-full py-2 text-start text-lg font-black">FORMAS DE PAGAMENTO DESSA PROPOSTA</h1>
 				<div className="flex w-full flex-col gap-1">
-					{proposal.pagamento.metodos.map((method, index) => (
-						<div key={`${method.descricao}-${index}`} className="flex w-full flex-col border border-primary/50 p-2">
-							<div className="flex w-full items-center justify-between gap-2">
-								<div className="flex items-center gap-1">
-									<div className="flex h-[35px] w-[35px] items-center justify-center rounded-full border border-black p-1">
-										<MdPayment size={18} />
-									</div>
-									<p className="text-sm font-medium leading-none tracking-tight">{method.descricao}</p>
-								</div>
-								<div className="flex grow items-center justify-end gap-2">
-									{method.fracionamento.map((fractionnement, itemIndex) => (
-										<div
-											key={`${method.descricao}-${itemIndex}`}
-											className={"flex w-fit min-w-fit items-center gap-1 rounded-md border border-primary/30 p-2 shadow-md"}
-										>
-											<BsCircleHalf color="#ed174c" />
-											<h1 className="text-[0.55rem] font-medium leading-none tracking-tight">
-												{fractionnement.parcelas || fractionnement.maximoParcelas} x{" "}
-												<strong>
-													{formatToMoney(
-														getFractionnementValue({ fractionnement, proposalValue: proposal.valor }) /
-															(fractionnement.parcelas || fractionnement.maximoParcelas),
-													)}
-												</strong>
-											</h1>
+					{proposal.pagamento.metodos.length > 0 ? (
+						proposal.pagamento.metodos.map((method, index) => (
+							<div key={`${method.descricao}-${index}`} className="flex w-full flex-col border border-primary/50 p-2">
+								<div className="flex w-full items-center justify-between gap-2">
+									<div className="flex items-center gap-1">
+										<div className="flex h-[35px] w-[35px] items-center justify-center rounded-full border border-black p-1">
+											<MdPayment size={18} />
 										</div>
-									))}
+										<p className="text-sm font-medium leading-none tracking-tight">{method.descricao}</p>
+									</div>
+									<div className="flex grow items-center justify-end gap-2">
+										{method.fracionamento.map((fractionnement, itemIndex) => (
+											<div
+												key={`${method.descricao}-${itemIndex}`}
+												className={"flex w-fit min-w-fit items-center gap-1 rounded-md border border-primary/30 p-2 shadow-md"}
+											>
+												<BsCircleHalf color="#ed174c" />
+												<h1 className="text-[0.55rem] font-medium leading-none tracking-tight">
+													{fractionnement.parcelas || fractionnement.maximoParcelas} x{" "}
+													<strong>
+														{formatToMoney(
+															getFractionnementValue({ fractionnement, proposalValue: proposal.valor }) /
+																(fractionnement.parcelas || fractionnement.maximoParcelas),
+														)}
+													</strong>
+												</h1>
+											</div>
+										))}
+									</div>
 								</div>
 							</div>
-						</div>
-					))}
+						))
+					) : (
+						<p className="w-full text-center text-sm italic text-primary/70">Nenhum método de pagamento especificado para essa proposta...</p>
+					)}
 				</div>
 				<span className="my-4 px-2 text-center text-[0.47rem] font-medium">
 					OBS.: EFETIVAÇÃO DE VÍNCULO COMERCIAL PODE ESTAR SUJEITA A UMA VISITA TÉCNICA IN LOCO E CONFECÇÃO DE UM CONTRATO DE PRESTAÇÃO DE SERVIÇO ENTRE AS

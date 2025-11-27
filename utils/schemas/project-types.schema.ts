@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { SaleCategorySchema } from "./opportunity.schema";
+import { GeneralPaymentMethodSchema } from "./payment-methods";
 import { AuthorSchema } from "./user.schema";
 
 const SizingSpecificationSchema = z.object({
@@ -71,6 +72,14 @@ const GeneralProjectTypeSchema = z.object({
 	dimensionamento: z.array(SizingSpecificationSchema),
 	modelosProposta: z.array(ProposalModelReferenceSchema),
 	documentacao: z.array(DocumentSpecificationSchema),
+	metodosPagamento: z.array(
+		GeneralPaymentMethodSchema.pick({ nome: true }).extend({
+			id: z.string({
+				required_error: "ID do método de pagamento não informado.",
+				invalid_type_error: "Tipo não válido para o ID do método de pagamento.",
+			}),
+		}),
+	),
 	autor: AuthorSchema,
 	dataInsercao: z
 		.string({ required_error: "Data de inserção não informada.", invalid_type_error: "Tipo não válido para a data de inserção." })
@@ -89,6 +98,14 @@ export const InsertProjectTypeSchema = z.object({
 	categoriaVenda: SaleCategorySchema,
 	dimensionamento: z.array(SizingSpecificationSchema),
 	modelosProposta: z.array(ProposalModelReferenceSchema),
+	metodosPagamento: z.array(
+		GeneralPaymentMethodSchema.pick({ nome: true }).extend({
+			id: z.string({
+				required_error: "ID do método de pagamento não informado.",
+				invalid_type_error: "Tipo não válido para o ID do método de pagamento.",
+			}),
+		}),
+	),
 	documentacao: z.array(DocumentSpecificationSchema),
 	autor: AuthorSchema,
 	dataInsercao: z

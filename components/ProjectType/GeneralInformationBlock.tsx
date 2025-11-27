@@ -1,6 +1,8 @@
+import type React from "react";
 import { usePartnersSimplified } from "@/utils/queries/partners";
-import { TProjectType } from "@/utils/schemas/project-types.schema";
-import React from "react";
+import { usePaymentMethods } from "@/utils/queries/payment-methods";
+import type { TProjectType } from "@/utils/schemas/project-types.schema";
+import MultipleSelectInput from "../Inputs/MultipleSelectInput";
 import SelectInput from "../Inputs/SelectInput";
 import SelectWithImages from "../Inputs/SelectWithImages";
 import TextInput from "../Inputs/TextInput";
@@ -11,6 +13,7 @@ type GeneralInformationBlockProps = {
 };
 function GeneralInformationBlock({ infoHolder, setInfoHolder }: GeneralInformationBlockProps) {
 	const { data: partners } = usePartnersSimplified();
+	const { data: paymentMethods } = usePaymentMethods();
 	return (
 		<div className="flex w-full flex-col gap-y-2">
 			<h1 className="w-full bg-primary/70  p-1 text-center font-medium text-primary-foreground">INFORMAÇÕES GERAIS</h1>
@@ -41,27 +44,37 @@ function GeneralInformationBlock({ infoHolder, setInfoHolder }: GeneralInformati
 					/>
 				</div>
 			</div>
-			<div className="w-full">
-				<SelectWithImages
-					label="VISIBILIDADE DE PARCEIRO"
-					value={infoHolder.idParceiro || null}
-					options={partners?.map((p) => ({ id: p._id, value: p._id, label: p.nome, url: p.logo_url || undefined })) || []}
-					resetOptionLabel="TODOS"
-					handleChange={(value) =>
-						setInfoHolder((prev) => ({
-							...prev,
-							idParceiro: value,
-						}))
-					}
-					onReset={() =>
-						setInfoHolder((prev) => ({
-							...prev,
-							idParceiro: null,
-						}))
-					}
-					width="100%"
-				/>
-			</div>
+			<MultipleSelectInput
+				label="MÉTODOS DE PAGAMENTO"
+				selected={infoHolder.metodosPagamento.map((method) => method.id)}
+				options={paymentMethods?.map((method) => ({ id: method._id, value: method._id, label: method.nome })) || []}
+				resetOptionLabel="NÃO DEFINIDO"
+				handleChange={(selectedMethodsIds) => {
+					const selectedMethods = paymentMethods?.filter((method) => selectedMethodsIds.includes(method._id));
+					setInfoHolder((prev) => ({ ...prev, metodosPagamento: selectedMethods?.map((method) => ({ id: method._id, nome: method.nome })) || [] }));
+				}}
+				onReset={() => setInfoHolder((prev) => ({ ...prev, metodosPagamento: [] }))}
+				width="100%"
+			/>
+			<SelectWithImages
+				label="VISIBILIDADE DE PARCEIRO"
+				value={infoHolder.idParceiro || null}
+				options={partners?.map((p) => ({ id: p._id, value: p._id, label: p.nome, url: p.logo_url || undefined })) || []}
+				resetOptionLabel="TODOS"
+				handleChange={(value) =>
+					setInfoHolder((prev) => ({
+						...prev,
+						idParceiro: value,
+					}))
+				}
+				onReset={() =>
+					setInfoHolder((prev) => ({
+						...prev,
+						idParceiro: null,
+					}))
+				}
+				width="100%"
+			/>
 		</div>
 	);
 }
