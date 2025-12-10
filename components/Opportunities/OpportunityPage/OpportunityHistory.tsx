@@ -1,25 +1,21 @@
+import { useQueryClient } from "@tanstack/react-query";
+import { ClipboardCheck, Plus } from "lucide-react";
 import { useState } from "react";
+import { AiFillInteraction } from "react-icons/ai";
 import { BsClipboardCheck } from "react-icons/bs";
 import { TbNotes } from "react-icons/tb";
-
-import { useQueryClient } from "@tanstack/react-query";
-
-import LoadingComponent from "../../utils/LoadingComponent";
-
 import type { TUserSession } from "@/lib/auth/session";
-import type { TOpportunityHistoryDTO } from "@/utils/schemas/opportunity-history.schema";
 
 import { useOpportunityHistoryAndActivities } from "@/utils/queries/opportunity-history";
-import ErrorComponent from "../../utils/ErrorComponent";
-
 import type { TActivityDTO } from "@/utils/schemas/activities.schema";
-import { AiFillInteraction } from "react-icons/ai";
+import type { TOpportunityHistoryDTO } from "@/utils/schemas/opportunity-history.schema";
 import NewActivity from "../../Activities/NewActivity";
 import OpportunityActivity from "../../Cards/OpportunityActivity";
 import OpportunityHistoryCard from "../../Cards/OpportunityHistory";
 import NewOpportunityHistory from "../../OpportunityHistories/NewOpportunityHistory";
 import { Button } from "../../ui/button";
-import { ClipboardCheck, Plus } from "lucide-react";
+import ErrorComponent from "../../utils/ErrorComponent";
+import LoadingComponent from "../../utils/LoadingComponent";
 
 type OpportunityHistoryProps = {
 	opportunityName: string;

@@ -1,3 +1,6 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useEffect } from "react";
+import { toast } from "react-hot-toast";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
 import type { TUserSession } from "@/lib/auth/session";
@@ -6,9 +9,6 @@ import { useMediaQuery } from "@/lib/utils";
 import { createOpportunityHistory } from "@/utils/mutations/opportunity-history";
 import type { TOpportunityHistory } from "@/utils/schemas/opportunity-history.schema";
 import { useOpportunityHistoryStore } from "@/utils/stores/opportunity-history-store";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useEffect } from "react";
-import { toast } from "react-hot-toast";
 import { LoadingButton } from "../Buttons/loading-button";
 import { Button } from "../ui/button";
 import AnnotationInfo from "./Blocks/AnnotationInfo";
@@ -59,6 +59,12 @@ function NewOpportunityHistory({ closeModal, session, opportunity, initialCatego
 
 	// Initialize the store with the initial values
 	useEffect(() => {
+		const current = getOpportunityHistory();
+		// Reset if the stored opportunity is different from the current one
+		if (current.oportunidade.id && current.oportunidade.id !== opportunity.id) {
+			reset();
+		}
+
 		setCategory(initialCategory);
 		updateOpportunityHistory({
 			oportunidade: opportunity,
@@ -69,11 +75,7 @@ function NewOpportunityHistory({ closeModal, session, opportunity, initialCatego
 				avatar_url: session.user.avatar_url,
 			},
 		});
-		// Cleanup when component is unmounted
-		return () => {
-			reset();
-		};
-	}, [session, opportunity, initialCategory, updateOpportunityHistory, setCategory, reset]);
+	}, [session, opportunity, initialCategory, updateOpportunityHistory, setCategory, reset, getOpportunityHistory]);
 	const MENU_TITLE = "NOVA REGISTRO DA OPORTUNIDADE";
 	const MENU_DESCRIPTION = "Preencha os campos abaixo para criar uma nova interação ou anotação.";
 	const BUTTON_TEXT = "CADASTRAR";
