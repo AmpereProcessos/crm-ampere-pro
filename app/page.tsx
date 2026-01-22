@@ -6,7 +6,7 @@ import { getCurrentSession } from "@/lib/auth/session";
 
 export default async function Home() {
 	const session = await getCurrentSession();
-
+	console.log("SESSION", session)
 	if (!session.user || !session.session) {
 		return redirect("/auth/signin");
 	}
