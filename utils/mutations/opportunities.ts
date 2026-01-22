@@ -93,7 +93,10 @@ export async function setOpportunityActiveProposal({ proposalId, opportunityId }
 export async function updateWinningProposal({ proposalId, opportunityId, appProjectId }: { proposalId: string; opportunityId: string; appProjectId?: string }) {
 	try {
 		const { data } = await axios.put(`/api/opportunities?id=${opportunityId}`, {
-			"ganho.idProposta": proposalId,
+			id: opportunityId,
+			changes: {
+				"ganho.idProposta": proposalId,
+			},
 		});
 		if (appProjectId) await updateAppProject(appProjectId, { idPropostaCRM: proposalId });
 		return data.message as string;
