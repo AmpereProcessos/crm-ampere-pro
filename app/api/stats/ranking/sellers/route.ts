@@ -1,13 +1,13 @@
-import { apiHandler } from "@/lib/api";
-import { type TUserSession, getValidCurrentSessionUncached } from "@/lib/auth/session";
-import connectToAmpereProjectsDatabase from "@/services/mongodb/ampere/projects-db-connection";
-import connectToDatabase from "@/services/mongodb/crm-db-connection";
-import type { TProject } from "@/utils/schemas/project.schema";
-import type { TUser } from "@/utils/schemas/user.schema";
 import dayjs from "dayjs";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { apiHandler } from "@/lib/api";
+import { getValidCurrentSessionUncached, type TUserSession } from "@/lib/auth/session";
+import connectToAmpereProjectsDatabase from "@/services/mongodb/ampere/projects-db-connection";
+import connectToDatabase from "@/services/mongodb/crm-db-connection";
+import type { TProject } from "@/utils/schemas/project.schema";
+import type { TUser } from "@/utils/schemas/user.schema";
 
 const GetSellersRankingQueryParams = z.object({
 	type: z.enum(["current-month", "current-semester", "current-year"], {
@@ -101,7 +101,7 @@ async function getSellersRanking(input: TGetSellersRankingInput, session: TUserS
 			},
 			{
 				$group: {
-					_id: "$vendedor.nome",
+					_id: "$vendedor.idCRM",
 					qtdeVendida: {
 						$count: {},
 					},
@@ -153,7 +153,7 @@ async function getSellersRanking(input: TGetSellersRankingInput, session: TUserS
 	}[];
 
 	const ranking = aggregated.map((item, index) => {
-		const equivalentUser = users.find((user) => user.nome === item._id);
+		const equivalentUser = users.find((user) => user._id.toString() === item._id);
 		const valueMap = {
 			"sales-total-qty": item.qtdeVendida,
 			"sales-total-value": item.valorTotal,
