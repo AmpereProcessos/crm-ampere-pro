@@ -1,5 +1,5 @@
 import createHttpError from "http-errors";
-import { Db, MongoClient } from "mongodb";
+import { type Db, MongoClient } from "mongodb";
 
 let cachedDb: Db | null = null;
 export default async function connectToCallsDatabase(uri: unknown) {
