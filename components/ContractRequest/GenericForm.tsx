@@ -1,6 +1,12 @@
+import { getDownloadURL, getMetadata, ref, type UploadResult, uploadBytes } from "firebase/storage";
 import type { Dispatch, SetStateAction } from "react";
 import { useState } from "react";
-
+import toast from "react-hot-toast";
+import { storage } from "@/services/firebase/storage-config";
+import { fileTypes } from "@/utils/constants";
+import { createContractRequest } from "@/utils/mutations/contract-request";
+import type { TContractRequest } from "@/utils/schemas//contract-request.schema";
+import type { TProposalDTOWithOpportunity } from "@/utils/schemas/proposal.schema";
 import ContractInfo from "./Generical/ContractInfo";
 import DeliveryInfo from "./Generical/DeliveryInfo";
 import Documents from "./Generical/Documents";
@@ -8,17 +14,8 @@ import HomologationInfo from "./Generical/HomologationInfo";
 import OtherServices from "./Generical/OtherServices";
 import PaymentInfo from "./Generical/PaymentInfo";
 import ProductsAndServices from "./Generical/ProductsAndServices";
-import SignaturePlans from "./Generical/SignaturePlans";
-
-import type { TContractRequest } from "@/utils/schemas//contract-request.schema";
-import type { TProposalDTOWithOpportunity } from "@/utils/schemas/proposal.schema";
-import { type UploadResult, getDownloadURL, getMetadata, ref, uploadBytes } from "firebase/storage";
-import toast from "react-hot-toast";
-
-import { storage } from "@/services/firebase/storage-config";
-import { fileTypes } from "@/utils/constants";
-import { createContractRequest } from "@/utils/mutations/contract-request";
 import Review from "./Generical/Review";
+import SignaturePlans from "./Generical/SignaturePlans";
 
 type GenericFormProps = {
 	requestInfo: TContractRequest;

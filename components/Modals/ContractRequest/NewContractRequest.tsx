@@ -1,5 +1,6 @@
+import { useState } from "react";
+import { VscChromeClose } from "react-icons/vsc";
 import GenericForm from "@/components/ContractRequest/GenericForm";
-
 import SelectWithImages from "@/components/Inputs/SelectWithImages";
 import TextInput from "@/components/Inputs/TextInput";
 import type { TUserSession } from "@/lib/auth/session";
@@ -10,8 +11,6 @@ import type { TClientDTO } from "@/utils/schemas/client.schema";
 import type { TOpportunity } from "@/utils/schemas/opportunity.schema";
 import type { TProposalDTOWithOpportunity } from "@/utils/schemas/proposal.schema";
 import type { TUserDTOSimplified } from "@/utils/schemas/user.schema";
-import { useState } from "react";
-import { VscChromeClose } from "react-icons/vsc";
 
 type GetRequestObjectByProjectTypeArguments = {
 	propose: TProposalDTOWithOpportunity;
@@ -125,7 +124,7 @@ function getRequestObjectByProjectType({ propose, projectType, responsible, clie
 		servicos: propose.servicos,
 		tipoEstrutura: propose.premissas.tipoEstrutura ? propose.premissas.tipoEstrutura : "",
 		materialEstrutura: null,
-		estruturaAmpere: "NÃO",
+		estruturaAmpere: null,
 		responsavelEstrutura: "NÃO SE APLICA",
 		formaPagamentoEstrutura: null,
 		valorEstrutura: 0,
@@ -136,7 +135,7 @@ function getRequestObjectByProjectType({ propose, projectType, responsible, clie
 		tempoSegurado: "NÃO SE APLICA",
 		formaPagamentoOeMOuSeguro: "NÃO SE APLICA",
 		valorOeMOuSeguro: null,
-		aumentoDeCarga: "NÃO",
+		aumentoDeCarga: null,
 		caixaConjugada: "NÃO",
 		tipoDePadrao: null,
 		aumentoDisjuntor: null,
