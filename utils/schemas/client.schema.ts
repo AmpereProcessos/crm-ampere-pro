@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { CustomFieldReferenceSchema } from "./custom-fields.schema";
 import { AuthorSchema } from "./user.schema";
 
 export const RestrictionSchema = z.object({
@@ -185,6 +186,7 @@ export const GeneralClientSchema = z.object({
 		required_error: "Canal de aquisição não informado.",
 		invalid_type_error: "Tipo não válido para canal de aquisição.",
 	}),
+	camposPersonalizados: CustomFieldReferenceSchema.default({}),
 	dataInsercao: z
 		.string({
 			required_error: "Data de inserção não informada.",

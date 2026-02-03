@@ -1,7 +1,7 @@
 import z from "zod";
-import type { ActivitiesByStatus } from "@/pages/api/opportunities";
 import type { TActivityDTO } from "./activities.schema";
 import { GeneralClientSchema, type TClientDTO } from "./client.schema";
+import { CustomFieldReferenceSchema } from "./custom-fields.schema";
 import type { TFunnelReference, TFunnelReferenceDTO } from "./funnel-reference.schema";
 import { OpportunityInteractionTypesEnum } from "./opportunity-history.schema";
 import type { TPartnerSimplifiedDTO } from "./partner.schema";
@@ -202,6 +202,7 @@ export const GeneralOpportunitySchema = z.object({
 			.nullable(),
 		nomeTitular: z.string().optional().nullable(),
 	}),
+	camposPersonalizados: CustomFieldReferenceSchema.default({}),
 	autor: z.object({
 		id: z.string(),
 		nome: z.string(),
@@ -362,6 +363,7 @@ export const InsertOpportunitySchema = z.object({
 			.nullable(),
 		nomeTitular: z.string().optional().nullable(),
 	}),
+	camposPersonalizados: CustomFieldReferenceSchema.default({}),
 	autor: z.object({
 		id: z.string({
 			required_error: "ID do criador da oportunidade não informado.",
@@ -541,6 +543,7 @@ export const UpdateOpportunitySchema = z.object({
 			.nullable(),
 		nomeTitular: z.string().optional().nullable(),
 	}),
+	camposPersonalizados: CustomFieldReferenceSchema.default({}),
 	autor: z.object({
 		id: z.string({
 			required_error: "ID do criador da oportunidade não informado.",
@@ -796,7 +799,6 @@ export type TOpportunitySimplifiedWithProposalAndActivitiesAndFunnels = TOpportu
 		valor: TProposal["valor"];
 		potenciaPico: TProposal["potenciaPico"];
 	};
-	statusAtividades?: ActivitiesByStatus;
 	funil: {
 		id: string;
 		idFunil: TFunnelReference["idFunil"];
@@ -806,7 +808,6 @@ export type TOpportunitySimplifiedWithProposalAndActivitiesAndFunnels = TOpportu
 
 export type TOpportunityWithFunnelReferenceAndActivitiesByStatus = TOpportunity & {
 	funil: { id: string; idFunil: string; idEstagio: string };
-	statusAtividades: ActivitiesByStatus;
 };
 export type TOpportunityWithFunnelReferenceAndActivities = TOpportunity & {
 	funil: { id: string; idFunil: string; idEstagio: string };
@@ -835,7 +836,6 @@ export type TOpportunitySimplifiedDTOWithProposalAndActivitiesAndFunnels = TOppo
 		valor: TProposal["valor"];
 		potenciaPico: TProposal["potenciaPico"];
 	};
-	statusAtividades?: ActivitiesByStatus;
 	funil: {
 		id: string;
 		idFunil: TFunnelReference["idFunil"];
@@ -854,7 +854,6 @@ export type TOpportunityDTOWithClientAndPartnerAndFunnelReferences = TOpportunit
 
 export type TOpportunityDTOWithFunnelReferenceAndActivitiesByStatus = TOpportunityDTO & {
 	funil: { id: string; idFunil: string; idEstagio: string };
-	statusAtividades: ActivitiesByStatus;
 };
 export type TOpportunityDTOWithFunnelReferenceAndActivities = TOpportunityDTO & {
 	funil: { id: string; idFunil: string; idEstagio: string };

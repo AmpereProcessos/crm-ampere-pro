@@ -1,10 +1,11 @@
-import z from "zod";
-import { InverterSchema, ModuleSchema, ProductItemSchema, ServiceItemSchema } from "./kits.schema";
 import { ObjectId } from "mongodb";
-import { ElectricalInstallationGroupsSchema, TOpportunityDTO } from "./opportunity.schema";
+import z from "zod";
+import type { TClientDTO } from "./client.schema";
+import { CustomFieldReferenceSchema } from "./custom-fields.schema";
+import { ProductItemSchema, ServiceItemSchema } from "./kits.schema";
+import { ElectricalInstallationGroupsSchema, type TOpportunityDTO } from "./opportunity.schema";
 import { FractionnementItemSchema } from "./payment-methods";
 import { PlanDescriptiveItemSchema, PlanIntervalSchema } from "./signature-plans.schema";
-import { TClientDTO } from "./client.schema";
 
 const OrientationsSchema = z.union(
 	[
@@ -187,6 +188,7 @@ export const GeneralProposalSchema = z.object({
 		avatar_url: z.string().optional().nullable(),
 	}),
 	dataInsercao: z.string().datetime(),
+	camposPersonalizados: CustomFieldReferenceSchema.default({}),
 });
 export const InsertProposalSchema = z.object({
 	nome: z.string({ required_error: "Nome da proposta não informado.", invalid_type_error: "Tipo não válido para o nome da proposta." }),
@@ -253,6 +255,7 @@ export const InsertProposalSchema = z.object({
 		nome: z.string({ required_error: "Nome do autor não informado.", invalid_type_error: "Tipo não válido para o nome do autor." }),
 		avatar_url: z.string().optional().nullable(),
 	}),
+	camposPersonalizados: CustomFieldReferenceSchema.default({}),
 	dataInsercao: z
 		.string({ required_error: "Data de inserção não informada.", invalid_type_error: "Tipo não válido para a data de inserção." })
 		.datetime({ message: "Tipo não válido para a data de inserção." }),
@@ -318,6 +321,7 @@ export const UpdateProposalSchema = z.object({
 		nome: z.string({ required_error: "Nome do autor não informado.", invalid_type_error: "Tipo não válido para o nome do autor." }),
 		avatar_url: z.string().optional().nullable(),
 	}),
+	camposPersonalizados: CustomFieldReferenceSchema.default({}),
 	dataInsercao: z
 		.string({ required_error: "Data de inserção não informada.", invalid_type_error: "Tipo não válido para a data de inserção." })
 		.datetime({ message: "Tipo não válido para a data de inserção." }),
@@ -356,6 +360,7 @@ const ProposalEntitySchema = z.object({
 		nome: z.string(),
 		avatar_url: z.string().optional().nullable(),
 	}),
+	camposPersonalizados: CustomFieldReferenceSchema.default({}),
 	dataInsercao: z.string().datetime(),
 });
 
