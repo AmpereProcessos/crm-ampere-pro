@@ -137,8 +137,8 @@ export const CustomFieldSchema = z.object({
 		})
 		.min(2)
 		.max(50)
-		.regex(/^[a-z][a-z0-9_]*$/, {
-			message: "Identificador deve começar com letra e conter apenas letras minúsculas, números e underscore",
+		.regex(/^[a-z][a-z0-9_-]*$/, {
+			message: "Identificador deve começar com letra e conter apenas letras minúsculas, números, underscore ou hífen (-)",
 		}),
 	nome: z
 		.string({

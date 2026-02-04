@@ -145,8 +145,9 @@ async function getCustomFields({ input, session }: { input: TGetCustomFieldsInpu
 		};
 	}
 	const searchQuery: Filter<TCustomField> | null = input.search ? { nome: { $regex: input.search, $options: "i" } } : null;
-	const entitiesQuery: Filter<TCustomField> | null = input.entities ? { entidades: { $in: input.entities as TCustomField["entidades"] } } : null;
-	const projectTypesQuery: Filter<TCustomField> | null = input.projectTypes ? { tiposProjetos: { $in: input.projectTypes } } : null;
+	const entitiesQuery: Filter<TCustomField> | null = input.entities.length > 0 ? { entidades: { $in: input.entities as TCustomField["entidades"] } } : null;
+	const projectTypesQuery: Filter<TCustomField> | null =
+		input.projectTypes && input.projectTypes.length > 0 ? { tiposProjetos: { $in: input.projectTypes } } : null;
 	const query: Filter<TCustomField> = {
 		...searchQuery,
 		...entitiesQuery,

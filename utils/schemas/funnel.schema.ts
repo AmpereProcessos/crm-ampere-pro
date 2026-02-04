@@ -1,5 +1,39 @@
-import { ObjectId } from "mongodb";
 import z from "zod";
+
+// Native block keys for kanban card configuration
+export const KanbanCardNativeBlockKeyEnum = z.enum(["TIPO_OPORTUNIDADE", "PROPOSTA_ATIVA", "RESPONSAVEIS_E_DATA", "INFO_CLIENTE", "LOCALIZACAO", "SEGMENTO"]);
+
+// Block entry: either native or custom field
+export const KanbanCardBlockSchema = z.discriminatedUnion("tipo", [
+	z.object({
+		tipo: z.literal("NATIVO"),
+		chave: KanbanCardNativeBlockKeyEnum,
+		ativo: z.boolean().default(true),
+		ordem: z.number().int().min(0),
+	}),
+	z.object({
+		tipo: z.literal("CAMPO_PERSONALIZADO"),
+		campoPersonalizadoId: z.string(),
+		ativo: z.boolean().default(true),
+		ordem: z.number().int().min(0),
+	}),
+]);
+
+export const KanbanCardConfigSchema = z.object({
+	blocos: z.array(KanbanCardBlockSchema),
+});
+
+export type TKanbanCardNativeBlockKey = z.infer<typeof KanbanCardNativeBlockKeyEnum>;
+export type TKanbanCardBlock = z.infer<typeof KanbanCardBlockSchema>;
+export type TKanbanCardConfig = z.infer<typeof KanbanCardConfigSchema>;
+
+// Default config matching current card behavior
+export const DEFAULT_KANBAN_CARD_BLOCKS: TKanbanCardBlock[] = [
+	{ tipo: "NATIVO", chave: "TIPO_OPORTUNIDADE", ativo: true, ordem: 0 },
+	{ tipo: "NATIVO", chave: "PROPOSTA_ATIVA", ativo: true, ordem: 1 },
+	{ tipo: "NATIVO", chave: "RESPONSAVEIS_E_DATA", ativo: true, ordem: 2 },
+];
+
 const GeneralFunnelSchema = z.object({
 	nome: z.string(),
 	descricao: z.string(),
@@ -16,6 +50,7 @@ const GeneralFunnelSchema = z.object({
 		avatar_url: z.string().optional().nullable(),
 	}),
 	dataInsercao: z.string(),
+	configuracaoCartao: KanbanCardConfigSchema.optional().nullable(),
 });
 
 export const InsertFunnelSchema = z.object({
@@ -45,10 +80,11 @@ export const InsertFunnelSchema = z.object({
 		avatar_url: z.string().optional().nullable(),
 	}),
 	dataInsercao: z.string({ required_error: "Data de inserção não informada.", invalid_type_error: "Tipo não válido para a data de inserção." }),
+	configuracaoCartao: KanbanCardConfigSchema.optional().nullable(),
 });
 
 const FunnelEntitySchema = z.object({
-	_id: z.instanceof(ObjectId),
+	_id: z.string(),
 	nome: z.string(),
 	descricao: z.string(),
 	idParceiro: z.string().optional().nullable(),
@@ -64,6 +100,7 @@ const FunnelEntitySchema = z.object({
 		avatar_url: z.string().optional().nullable(),
 	}),
 	dataInsercao: z.string(),
+	configuracaoCartao: KanbanCardConfigSchema.optional().nullable(),
 });
 
 export type TFunnel = z.infer<typeof GeneralFunnelSchema>;

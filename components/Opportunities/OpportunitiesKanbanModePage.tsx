@@ -1,6 +1,6 @@
 import { DndContext, DragOverlay, useDraggable, useDroppable } from "@dnd-kit/core";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { BadgeDollarSign, GripVertical, Loader2, Share2, Zap } from "lucide-react";
+import { BadgeDollarSign, GripVertical, Loader2, MapPin, Settings, Share2, Zap } from "lucide-react";
 import Link from "next/link";
 import { useRef, useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
@@ -9,20 +9,22 @@ import { MdDashboard } from "react-icons/md";
 import { Sidebar } from "@/components/Sidebar";
 import type { TUserSession } from "@/lib/auth/session";
 import { OPPORTUNITIES_FUNNEL_CONFIG, useOpportunitiesDragAndDropLogic } from "@/lib/funnels/opportunities-funnel-config";
-import { formatDateAsLocale, formatDecimalPlaces, formatToMoney, formatNameAsInitials } from "@/lib/methods/formatting";
+import { formatDateAsLocale, formatDecimalPlaces, formatNameAsInitials, formatToMoney } from "@/lib/methods/formatting";
 import { cn } from "@/lib/utils";
 import type { TGetOpportunitiesKanbanViewOutput } from "@/pages/api/opportunities/kanban";
 import type { TGetOpportunitiesQueryDefinitionsOutput, TUpdateOpportunityQueryDefinitionsInput } from "@/pages/api/opportunities/query-definitions";
 import { updateOpportunitiesQueryDefinitions } from "@/utils/mutations/opportunities";
 import { useOpportunitiesKanbanView } from "@/utils/queries/opportunities";
+import { DEFAULT_KANBAN_CARD_BLOCKS, type TKanbanCardBlock, type TKanbanCardConfig } from "@/utils/schemas/funnel.schema";
 import UserConectaIndicationCodeFlag from "../Conecta/UserConectaIndicationCodeFlag";
 import MultipleSelectInput from "../Inputs/MultipleSelectInput";
 import { PeriodByFieldFilter } from "../Inputs/PeriodByFieldFilter";
 import SelectInput from "../Inputs/SelectInput";
+import KanbanCardConfigModal from "../Modals/Funnels/KanbanCardConfigModal";
+import NewOpportunity from "../Modals/Opportunity/NewOpportunity";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import SearchOpportunities from "./SearchOpportunities";
-import NewOpportunity from "../Modals/Opportunity/NewOpportunity";
 
 type OpportunitiesKanbanModePageV2Props = {
 	session: TUserSession;
@@ -31,9 +33,12 @@ type OpportunitiesKanbanModePageV2Props = {
 export default function OpportunitiesKanbanModePageV2({ session, opportunityViewPreferences }: OpportunitiesKanbanModePageV2Props) {
 	const queryClient = useQueryClient();
 	const [newProjectModalIsOpen, setNewProjectModalIsOpen] = useState(false);
+	const [cardConfigModalIsOpen, setCardConfigModalIsOpen] = useState(false);
 	const [selectedFunnelId, setSelectedFunnelId] = useState<string | null>(opportunityViewPreferences.filterOptions.funnels[0].id || null);
 
 	const selectedFunnel = opportunityViewPreferences.filterOptions.funnels.find((funnel) => funnel.id === selectedFunnelId);
+
+	const cardConfig = selectedFunnel?.configuracaoCartao ?? null;
 
 	const { activeDragItem, handleOnDragStart, handleOnDragEnd, handleOnDragCancel } = useOpportunitiesDragAndDropLogic({
 		globalQueryParams: opportunityViewPreferences.filterSelections,
@@ -127,6 +132,16 @@ export default function OpportunitiesKanbanModePageV2({ session, opportunityView
 							</button>
 
 							<SearchOpportunities />
+							{selectedFunnel ? (
+								<button
+									type="button"
+									onClick={() => setCardConfigModalIsOpen(true)}
+									title="Configurar cartão do Kanban"
+									className="flex h-[46.6px] items-center justify-center gap-2 rounded-md border bg-primary/80 p-2 px-3 text-sm font-medium text-primary-foreground shadow-md duration-300 ease-in-out hover:scale-105 hover:bg-primary"
+								>
+									<Settings style={{ fontSize: "18px" }} className="w-[18px] h-[18px]" />
+								</button>
+							) : null}
 							<button
 								type="button"
 								onClick={() => setNewProjectModalIsOpen(true)}
@@ -254,10 +269,18 @@ export default function OpportunitiesKanbanModePageV2({ session, opportunityView
 					>
 						<div className="flex items-start overflow-x-auto gap-2 flex-1 min-h-0 w-full max-w-full max-h-[calc(100vh-200px)] scrollbar-thin scrollbar-track-primary/10 scrollbar-thumb-primary/30">
 							{selectedFunnel.stages.map((stage) => (
-								<KanbanBoardStage key={stage.id} funnelId={selectedFunnel.id} stage={stage} globalQueryParams={opportunityViewPreferences.filterSelections} />
+								<KanbanBoardStage
+									key={stage.id}
+									funnelId={selectedFunnel.id}
+									stage={stage}
+									globalQueryParams={opportunityViewPreferences.filterSelections}
+									cardConfig={cardConfig}
+								/>
 							))}
 						</div>
-						<DragOverlay>{activeDragItem ? <KanbanBoardStageCard stageId="" opportunity={activeDragItem} isDragOverlay={true} /> : null}</DragOverlay>
+						<DragOverlay>
+							{activeDragItem ? <KanbanBoardStageCard stageId="" opportunity={activeDragItem} isDragOverlay={true} cardConfig={cardConfig} /> : null}
+						</DragOverlay>
 					</DndContext>
 				) : null}
 			</div>
@@ -269,6 +292,9 @@ export default function OpportunitiesKanbanModePageV2({ session, opportunityView
 					closeModal={() => setNewProjectModalIsOpen(false)}
 				/>
 			) : null}
+			{cardConfigModalIsOpen && selectedFunnel ? (
+				<KanbanCardConfigModal funnelId={selectedFunnel.id} currentConfig={cardConfig} closeModal={() => setCardConfigModalIsOpen(false)} />
+			) : null}
 		</div>
 	);
 }
@@ -277,8 +303,9 @@ type KanbanBoardStageProps = {
 	funnelId: string;
 	stage: TGetOpportunitiesQueryDefinitionsOutput["data"]["filterOptions"]["funnels"][number]["stages"][number];
 	globalQueryParams: TGetOpportunitiesQueryDefinitionsOutput["data"]["filterSelections"];
+	cardConfig: TKanbanCardConfig | null;
 };
-function KanbanBoardStage({ funnelId, stage, globalQueryParams }: KanbanBoardStageProps) {
+function KanbanBoardStage({ funnelId, stage, globalQueryParams, cardConfig }: KanbanBoardStageProps) {
 	const parentRef = useRef<HTMLDivElement>(null);
 
 	const { isOver, setNodeRef } = useDroppable({
@@ -331,7 +358,7 @@ function KanbanBoardStage({ funnelId, stage, globalQueryParams }: KanbanBoardSta
 				className="flex flex-col flex-1 overflow-auto scrollbar-thin scrollbar-track-primary/10 scrollbar-thumb-primary/30 gap-2"
 			>
 				{stageOpportunities.map((opportunity) => (
-					<KanbanBoardStageCard key={opportunity._id} stageId={stage.id} opportunity={opportunity} />
+					<KanbanBoardStageCard key={opportunity._id} stageId={stage.id} opportunity={opportunity} cardConfig={cardConfig} />
 				))}
 			</div>
 
@@ -352,19 +379,140 @@ function getBarColor({ isWon, isRequested, isLost }: { isWon: boolean; isRequest
 	if (isLost) return "bg-red-500";
 	return "bg-blue-400";
 }
+
+type TOpportunityCard = TGetOpportunitiesKanbanViewOutput["data"]["opportunities"][number];
+
+function renderNativeBlock(chave: string, opportunity: TOpportunityCard) {
+	switch (chave) {
+		case "TIPO_OPORTUNIDADE":
+			return (
+				<div className="flex w-full flex-col">
+					<div className="flex items-center gap-1">
+						<MdDashboard />
+						<h3 className="text-[0.6rem] font-light">{opportunity.tipo.titulo}</h3>
+					</div>
+				</div>
+			);
+		case "PROPOSTA_ATIVA":
+			if (!opportunity.proposta) return null;
+			return (
+				<div className="flex w-full grow flex-col rounded-md border border-primary/30 p-2">
+					<h1 className="text-[0.6rem] font-extralight text-primary/70">PROPOSTA ATIVA</h1>
+					<div className="flex w-full flex-col justify-between">
+						<p className="text-xs font-medium text-cyan-500">{opportunity.proposta.nome}</p>
+						<div className="flex items-center justify-between">
+							<div className="flex items-center gap-1">
+								<Zap className="text-cyan-500 w-4 h-4 min-w-4 min-h-4" />
+								<p className="text-xs text-primary/70">
+									{formatDecimalPlaces(opportunity.proposta.potenciaPico || 0)}
+									kWp
+								</p>
+							</div>
+							<div className="flex items-center gap-1">
+								<BadgeDollarSign className="text-cyan-500 w-4 h-4 min-w-4 min-h-4" />
+								<p className="text-xs text-primary/70">{formatToMoney(opportunity.proposta.valor)}</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			);
+		case "RESPONSAVEIS_E_DATA":
+			return (
+				<div className="flex w-full items-center justify-between gap-2">
+					<div className="flex grow flex-wrap items-center gap-2">
+						{opportunity.responsaveis.map((resp) => (
+							<div key={resp.id} className="flex items-center gap-1">
+								<Avatar className="h-5 w-5 min-w-5 min-h-5">
+									<AvatarImage src={resp.avatar_url || undefined} alt={resp.nome} />
+									<AvatarFallback className="text-xs">{formatNameAsInitials(resp.nome)}</AvatarFallback>
+								</Avatar>
+							</div>
+						))}
+					</div>
+					<div className="flex items-center min-w-fit gap-1">
+						<BsCalendarPlus />
+						<p className="text-[0.65rem] font-medium text-primary/70">{formatDateAsLocale(opportunity.dataInsercao, true)}</p>
+					</div>
+				</div>
+			);
+		case "INFO_CLIENTE": {
+			const cliente = (opportunity as any).cliente;
+			if (!cliente) return null;
+			return (
+				<div className="flex w-full flex-col gap-0.5">
+					<p className="text-xs font-medium text-primary/90 truncate">{cliente.nome}</p>
+					{cliente.telefonePrimario ? <p className="text-[0.6rem] text-primary/60">{cliente.telefonePrimario}</p> : null}
+				</div>
+			);
+		}
+		case "LOCALIZACAO": {
+			const localizacao = (opportunity as any).localizacao;
+			if (!localizacao?.cidade && !localizacao?.uf) return null;
+			const parts = [localizacao.cidade, localizacao.uf].filter(Boolean);
+			return (
+				<div className="flex items-center gap-1">
+					<MapPin className="w-3 h-3 text-primary/60 min-w-3 min-h-3" />
+					<p className="text-[0.6rem] text-primary/70">{parts.join("/")}</p>
+				</div>
+			);
+		}
+		case "SEGMENTO": {
+			const grupo = (opportunity as any).instalacao?.grupo;
+			if (!grupo) return null;
+			return (
+				<div className="flex items-center">
+					<span className="text-[0.6rem] px-1.5 py-0.5 rounded-sm bg-primary/10 text-primary/70 font-medium">{grupo}</span>
+				</div>
+			);
+		}
+		default:
+			return null;
+	}
+}
+
+function renderCustomFieldBlock(fieldId: string, opportunity: TOpportunityCard) {
+	const camposPersonalizados = (opportunity as any).camposPersonalizados;
+	const fieldRef = camposPersonalizados?.[fieldId];
+	if (!fieldRef?.valor) return null;
+
+	const { campo, valor } = fieldRef;
+	const label = campo?.nome || fieldId;
+
+	let displayValue: string;
+	if (typeof valor === "boolean") {
+		displayValue = valor ? "SIM" : "NÃO";
+	} else if (Array.isArray(valor)) {
+		displayValue = valor.join(", ");
+	} else if (valor instanceof Date || (typeof valor === "string" && /^\d{4}-\d{2}-\d{2}/.test(valor))) {
+		displayValue = formatDateAsLocale(valor as string) || "NÃO DEFINIDO";
+	} else if (typeof valor === "number") {
+		displayValue = String(valor);
+	} else {
+		displayValue = String(valor);
+	}
+
+	return (
+		<div className="w-fit flex items-center gap-2 px-2 py-1 rounded-lg bg-primary/10">
+			<p className="text-[0.65rem] text-primary uppercase">{label}</p>
+			<p className="text-[0.65rem] text-primary truncate font-bold">{displayValue}</p>
+		</div>
+	);
+}
+
 type KanbanBoardStageCardProps = {
 	stageId: string;
-	opportunity: TGetOpportunitiesKanbanViewOutput["data"]["opportunities"][number];
+	opportunity: TOpportunityCard;
 	isDragOverlay?: boolean;
+	cardConfig: TKanbanCardConfig | null;
 };
-function KanbanBoardStageCard({ stageId, opportunity, isDragOverlay = false }: KanbanBoardStageCardProps) {
+function KanbanBoardStageCard({ stageId, opportunity, isDragOverlay = false, cardConfig }: KanbanBoardStageCardProps) {
 	const { attributes, listeners, setNodeRef, transform } = useDraggable({
 		id: opportunity.referenciaFunil.id,
 		data: {
 			stageId,
 			opportunity,
 		},
-		disabled: isDragOverlay, // Desabilita drag quando for overlay
+		disabled: isDragOverlay,
 	});
 	const isWon = !!opportunity.ganho.data;
 	const isRequested = !!opportunity.ganho?.dataSolicitacao;
@@ -375,6 +523,10 @@ function KanbanBoardStageCard({ stageId, opportunity, isDragOverlay = false }: K
 					transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
 				}
 			: undefined;
+
+	const blocks = cardConfig?.blocos ?? DEFAULT_KANBAN_CARD_BLOCKS;
+	const activeBlocks = [...blocks].filter((b) => b.ativo).sort((a, b) => a.ordem - b.ordem);
+
 	return (
 		<div
 			ref={setNodeRef}
@@ -400,58 +552,19 @@ function KanbanBoardStageCard({ stageId, opportunity, isDragOverlay = false }: K
 					<h1 className="font-bold text-primary hover:text-blue-400">{opportunity.nome}</h1>
 				</Link>
 			</div>
-			<div {...listeners} {...attributes} className="w-full grow flex flex-col gap-2">
-				{isWon ? (
-					<div className="z-8 absolute right-2 top-4 flex items-center justify-center text-green-500">
-						<p className="text-sm font-medium italic">GANHO</p>
-					</div>
-				) : null}
-				<div className="flex w-full flex-col">
-					<div className="flex items-center gap-1">
-						<MdDashboard />
-						<h3 className="text-[0.6rem] font-light">{opportunity.tipo.titulo}</h3>
-					</div>
-				</div>
-			</div>
-			{opportunity.proposta ? (
-				<div className="flex w-full grow flex-col rounded-md border border-primary/30 p-2">
-					<h1 className="text-[0.6rem] font-extralight text-primary/70">PROPOSTA ATIVA</h1>
-					<div className="flex w-full flex-col justify-between">
-						<p className="text-xs font-medium text-cyan-500">{opportunity.proposta.nome}</p>
-						<div className="flex  items-center justify-between">
-							<div className="flex items-center gap-1">
-								<Zap className="text-cyan-500 w-4 h-4 min-w-4 min-h-4" />
-								<p className="text-xs  text-primary/70">
-									{formatDecimalPlaces(opportunity.proposta.potenciaPico || 0)}
-									kWp
-								</p>
-							</div>
-							<div className="flex items-center gap-1">
-								<BadgeDollarSign className="text-cyan-500 w-4 h-4 min-w-4 min-h-4" />
-								<p className="text-xs  text-primary/70">{formatToMoney(opportunity.proposta.valor)}</p>
-							</div>
-						</div>
-					</div>
+			{isWon ? (
+				<div className="z-8 absolute right-2 top-4 flex items-center justify-center text-green-500">
+					<p className="text-sm font-medium italic">GANHO</p>
 				</div>
 			) : null}
-			<div className="flex w-full items-center justify-between gap-2">
-				<div className="flex grow flex-wrap items-center gap-2">
-					{opportunity.responsaveis.map((resp) => {
-						return (
-							<div key={resp.id} className="flex items-center gap-1">
-								<Avatar className="h-5 w-5 min-w-5 min-h-5">
-									<AvatarImage src={resp.avatar_url || undefined} alt={resp.nome} />
-									<AvatarFallback className="text-xs">{formatNameAsInitials(resp.nome)}</AvatarFallback>
-								</Avatar>
-							</div>
-						);
-					})}
-				</div>
-
-				<div className="ites-center flex min-w-fit gap-1">
-					<BsCalendarPlus />
-					<p className={"text-[0.65rem] font-medium text-primary/70"}>{formatDateAsLocale(opportunity.dataInsercao, true)}</p>
-				</div>
+			<div {...listeners} {...attributes} className="w-full grow flex flex-col gap-2">
+				{activeBlocks.map((block) => {
+					const key = block.tipo === "NATIVO" ? block.chave : block.campoPersonalizadoId;
+					const rendered =
+						block.tipo === "NATIVO" ? renderNativeBlock(block.chave, opportunity) : renderCustomFieldBlock(block.campoPersonalizadoId, opportunity);
+					if (!rendered) return null;
+					return <div key={key}>{rendered}</div>;
+				})}
 			</div>
 		</div>
 	);

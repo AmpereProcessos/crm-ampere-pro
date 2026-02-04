@@ -323,7 +323,7 @@ export function EditCustomField({ customFieldId, closeModal, callbacks }: EditCu
 		}
 
 		// Validate identifier format
-		const identifierRegex = /^[a-z][a-z0-9_]*$/;
+		const identifierRegex = /^[a-z][a-z0-9_-]*$/;
 		if (!identifierRegex.test(infoHolder.identificador)) {
 			return toast.error("O identificador deve começar com letra minúscula e conter apenas letras minúsculas, números e underscore.");
 		}

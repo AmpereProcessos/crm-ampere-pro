@@ -58,7 +58,7 @@ export function NewCustomField({ closeModal, callbacks }: NewCustomFieldProps) {
 		nome: "",
 		tipo: "TEXTO",
 		valorPadrao: "",
-		entidades: [],
+		entidades: ["CLIENTES", "OPORTUNIDADES", "PROPOSTAS"],
 		tiposProjetos: [],
 		obrigatorio: {
 			CLIENTES: false,
@@ -256,7 +256,7 @@ export function NewCustomField({ closeModal, callbacks }: NewCustomFieldProps) {
 		}
 
 		// Validate identifier format
-		const identifierRegex = /^[a-z][a-z0-9_]*$/;
+		const identifierRegex = /^[a-z][a-z0-9_-]*$/;
 		if (!identifierRegex.test(infoHolder.identificador)) {
 			return toast.error("O identificador deve começar com letra minúscula e conter apenas letras minúsculas, números e underscore.");
 		}

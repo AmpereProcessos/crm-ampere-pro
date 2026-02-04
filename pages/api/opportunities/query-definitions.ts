@@ -75,6 +75,7 @@ async function getOpportunitiesQueryDefinitions({ session }: { session: TUserSes
 					label: f.nome,
 					value: f._id.toString(),
 					stages: f.etapas.map((s) => ({ id: s.id.toString(), label: s.nome, value: s.id.toString() })),
+					configuracaoCartao: f.configuracaoCartao ?? null,
 				})),
 			},
 		},

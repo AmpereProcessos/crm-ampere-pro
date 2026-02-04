@@ -2,7 +2,7 @@ import type { NextApiHandler } from "next";
 import { z } from "zod";
 
 import { apiHandler, validateAuthenticationWithSession } from "@/utils/api";
-import { OpportunityKanbanViewInputSchema, getOpportunitiesKanbanView } from "./kanban";
+import { getOpportunitiesKanbanView, OpportunityKanbanViewInputSchema } from "./kanban";
 
 const OpportunityKanbanBatchInputSchema = z.object({
 	requests: z.array(OpportunityKanbanViewInputSchema),
