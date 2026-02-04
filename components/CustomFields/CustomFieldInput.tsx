@@ -32,6 +32,7 @@ export function CustomFieldInput({ customField, value, onChange, editable = true
 				handleChange={(v) => onChange(v)}
 				placeholder={customField.placeholder || `Digite ${nome.toLowerCase()}...`}
 				editable={editable}
+				width="100%"
 			/>
 		);
 	}
@@ -59,6 +60,7 @@ export function CustomFieldInput({ customField, value, onChange, editable = true
 				handleChange={(v) => onChange(v)}
 				placeholder={customField.placeholder || `Digite ${nome.toLowerCase()}...`}
 				editable={editable}
+				width="100%"
 			/>
 		);
 	}
@@ -80,6 +82,7 @@ export function CustomFieldInput({ customField, value, onChange, editable = true
 					label: opt.rotulo,
 					value: opt.valor,
 				}))}
+				width="100%"
 			/>
 		);
 	}
@@ -102,6 +105,7 @@ export function CustomFieldInput({ customField, value, onChange, editable = true
 					label: opt.rotulo,
 					value: opt.valor,
 				}))}
+				width="100%"
 			/>
 		);
 	}
@@ -131,6 +135,7 @@ export function CustomFieldInput({ customField, value, onChange, editable = true
 				value={typeof value === "string" ? value : undefined}
 				handleChange={(v) => onChange(v)}
 				editable={editable}
+				width="100%"
 			/>
 		);
 	}
@@ -144,6 +149,7 @@ export function CustomFieldInput({ customField, value, onChange, editable = true
 				value={typeof value === "string" ? value : ""}
 				handleChange={(newValue) => onChange(newValue)}
 				editable={editable}
+				width="100%"
 			/>
 		);
 	}
@@ -185,6 +191,7 @@ export function CustomFieldInput({ customField, value, onChange, editable = true
 			handleChange={(v) => onChange(v)}
 			placeholder={customField.placeholder || `Digite ${nome.toLowerCase()}...`}
 			editable={editable}
+			width="100%"
 		/>
 	);
 }

@@ -17,11 +17,11 @@ type GetResponse = {
 };
 
 const getPPSCalls: NextApiHandler<GetResponse> = async (req, res) => {
-	const session = await validateAuthenticationWithSession(req, res);
+	await validateAuthenticationWithSession(req, res);
 
 	const { id, opportunityId, applicantId, openOnly } = req.query;
 
-	const db = await connectToCallsDatabase(process.env.OPERATIONAL_MONGODB_URI);
+	const db = await connectToCallsDatabase();
 	const collection: Collection<TPPSCall> = db.collection("pps");
 
 	const queryOpenOnly: Filter<TPPSCall> = openOnly === "true" ? { status: { $ne: "REALIZADO" } } : {};
@@ -67,11 +67,11 @@ export type TCreatePPSCallOutput = {
 };
 
 const createPPSCall: NextApiHandler<TCreatePPSCallOutput> = async (req, res) => {
-	const session = await validateAuthenticationWithSession(req, res);
+	await validateAuthenticationWithSession(req, res);
 
 	const call = InsertPPSCallSchema.parse(req.body);
 
-	const db = await connectToCallsDatabase(process.env.OPERATIONAL_MONGODB_URI);
+	const db = await connectToCallsDatabase();
 	const collection: Collection<TPPSCall> = db.collection("pps");
 
 	const insertResponse = await insertPPSCall({
@@ -90,13 +90,13 @@ export type TUpdatePPSCallOutput = {
 };
 
 const updatePPSCallHandler: NextApiHandler<TUpdatePPSCallOutput> = async (req, res) => {
-	const session = await validateAuthenticationWithSession(req, res);
+	await validateAuthenticationWithSession(req, res);
 	const { id } = req.query;
 	if (typeof id !== "string" || !ObjectId.isValid(id)) throw new createHttpError.BadRequest("ID inválido.");
 
 	const call = InsertPPSCallSchema.partial().parse(req.body);
 
-	const db = await connectToCallsDatabase(process.env.OPERATIONAL_MONGODB_URI);
+	const db = await connectToCallsDatabase();
 	const collection: Collection<TPPSCall> = db.collection("pps");
 
 	const updateResponse = await updatePPSCall({

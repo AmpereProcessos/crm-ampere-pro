@@ -36,6 +36,7 @@ function OpportunityCustomFieldsBlock({ opportunity, opportunityQueryKey, callba
 	} = useCustomFields({
 		initialFilters: {
 			entities: ["OPORTUNIDADES"],
+			projectTypes: [opportunity.tipo.id],
 		},
 	});
 
@@ -128,7 +129,7 @@ function OpportunityCustomFieldsBlock({ opportunity, opportunityQueryKey, callba
 	}
 
 	return (
-		<div className="bg-card border-primary/20 flex w-full flex-col gap-2 rounded-xl border px-3 py-4 shadow-xs">
+		<div className="bg-card border-primary/20 flex w-full flex-col gap-2 rounded-xl border px-3 py-4 shadow-xs max-h-[600px]">
 			<div className="flex items-center justify-between">
 				<div className="flex items-center gap-2">
 					<Settings className="h-4 w-4 min-h-4 min-w-4 text-primary/70" />
@@ -142,13 +143,13 @@ function OpportunityCustomFieldsBlock({ opportunity, opportunityQueryKey, callba
 				)}
 			</div>
 
-			<div className="flex flex-col w-full gap-3 py-2">
+			<div className="flex flex-col w-full gap-3 py-4 scrollbar-thin scrollbar-track-primary/10 scrollbar-thumb-primary/30 overflow-auto">
 				{isLoading && <LoadingComponent />}
 				{isError && <ErrorComponent msg="Erro ao carregar campos personalizados." />}
 				{isSuccess && customFields && customFields.length > 0 && (
-					<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+					<div className="w-full flex flex-col gap-4">
 						{customFields.map((field) => (
-							<div key={field._id} className="flex flex-col">
+							<div key={field._id} className="w-full flex flex-col gap-1.5">
 								<CustomFieldInput
 									customField={field}
 									value={customFieldValues[field._id]}

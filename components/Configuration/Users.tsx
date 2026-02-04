@@ -89,13 +89,13 @@ type UserCardProps = {
 };
 function UserCard({ user, handleClick }: UserCardProps) {
 	return (
-		<div className="flex min-h-[100px] w-full flex-col items-center gap-2 rounded-md border border-primary/30 shadow-md lg:flex-row p-3">
+		<div className="flex min-h-[100px] w-full flex-col items-center gap-2 rounded-md border border-primary/30 p-2 lg:flex-row">
 			<div className="w-fit h-full flex items-center justify-center">
 				<Avatar width={50} height={50} fallback={formatNameAsInitials(user.nome)} url={user.avatar_url || undefined} />
 			</div>
 			<div className="w-full h-full flex flex-col items-center gap-1">
 				<h1 className="font-black leading-none tracking-tight w-full text-center lg:text-start">{user.nome}</h1>
-				<div className="w-full flex items-center gap-2 flex-wrap justify-center lg:justify-start">
+				<div className="grow w-full flex items-center gap-2 flex-wrap justify-center lg:justify-start">
 					<div className="flex items-center gap-1">
 						<Mail className="w-4 h-4 min-w-4 min-h-4" />
 						<p className="text-xs lg:text-sm text-primary/80 font-medium break-all">{user.email}</p>

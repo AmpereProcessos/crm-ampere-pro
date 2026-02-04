@@ -201,6 +201,12 @@ export const CustomFieldSchema = z.object({
 			invalid_type_error: "Tipo não válido para tipo.",
 		},
 	),
+	tiposProjetos: z.array(
+		z.string({
+			required_error: "Tipos de projetos não informados.",
+			invalid_type_error: "Tipo não válido para tipos de projetos.",
+		}),
+	),
 	entidades: z.array(EntityEnum),
 	obrigatorio: z.record(EntityEnum, z.boolean()).default({}),
 	valorPadrao: z.unknown().optional(),

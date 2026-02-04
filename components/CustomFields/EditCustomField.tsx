@@ -64,6 +64,7 @@ export function EditCustomField({ customFieldId, closeModal, callbacks }: EditCu
 		tipo: "TEXTO",
 		valorPadrao: "",
 		entidades: [],
+		tiposProjetos: [],
 		obrigatorio: {
 			CLIENTES: false,
 			OPORTUNIDADES: false,
@@ -128,6 +129,7 @@ export function EditCustomField({ customFieldId, closeModal, callbacks }: EditCu
 				descricao: customField.descricao,
 				valorPadrao: customField.valorPadrao,
 				entidades: customField.entidades,
+				tiposProjetos: customField.tiposProjetos,
 				obrigatorio: customField.obrigatorio,
 				heranca: customField.heranca || {},
 			});

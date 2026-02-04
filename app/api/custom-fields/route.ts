@@ -109,6 +109,14 @@ const GetCustomFieldsInputSchema = z.object({
 		.nullable()
 		.transform((v) => (v ? v.split(",") : []))
 		.refine((v) => (v ? v.every((entity) => entity in EntityEnum.Values) : null)),
+	projectTypes: z
+		.string({
+			required_error: "Tipos de projetos não informados.",
+			invalid_type_error: "Tipo não válido para tipos de projetos.",
+		})
+		.optional()
+		.nullable()
+		.transform((v) => (v ? v.split(",") : [])),
 	id: z
 		.string({
 			required_error: "ID do campo personalizado não informado.",
@@ -137,9 +145,12 @@ async function getCustomFields({ input, session }: { input: TGetCustomFieldsInpu
 		};
 	}
 	const searchQuery: Filter<TCustomField> | null = input.search ? { nome: { $regex: input.search, $options: "i" } } : null;
-
+	const entitiesQuery: Filter<TCustomField> | null = input.entities ? { entidades: { $in: input.entities as TCustomField["entidades"] } } : null;
+	const projectTypesQuery: Filter<TCustomField> | null = input.projectTypes ? { tiposProjetos: { $in: input.projectTypes } } : null;
 	const query: Filter<TCustomField> = {
 		...searchQuery,
+		...entitiesQuery,
+		...projectTypesQuery,
 	};
 
 	const customFields = await customFieldsCollection.find(query).toArray();
@@ -162,6 +173,8 @@ const getCustomFieldsHandler = async (req: NextRequest) => {
 	const input = GetCustomFieldsInputSchema.parse({
 		id: searchParams.get("id"),
 		search: searchParams.get("search"),
+		entities: searchParams.get("entities"),
+		projectTypes: searchParams.get("projectTypes"),
 	});
 	const result = await getCustomFields({ input, session });
 	return NextResponse.json(result);

@@ -59,6 +59,7 @@ export function NewCustomField({ closeModal, callbacks }: NewCustomFieldProps) {
 		tipo: "TEXTO",
 		valorPadrao: "",
 		entidades: [],
+		tiposProjetos: [],
 		obrigatorio: {
 			CLIENTES: false,
 			OPORTUNIDADES: false,

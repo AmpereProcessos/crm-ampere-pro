@@ -3,6 +3,7 @@ import type { TCreateCustomFieldInput } from "@/app/api/custom-fields/route";
 import CheckboxInput from "@/components/Inputs/CheckboxInput";
 import MultipleSelectInput from "@/components/Inputs/MultipleSelectInput";
 import ResponsiveDialogDrawerSection from "@/components/utils/ResponsiveDialogDrawerSection";
+import { useProjectTypes } from "@/utils/queries/project-types";
 
 export const ENTITY_OPTIONS = [
 	{ id: "CLIENTES", value: "CLIENTES", label: "CLIENTES" },
@@ -16,6 +17,8 @@ type EntityConfigBlockProps = {
 };
 
 export default function EntityConfigBlock({ infoHolder, updateInfoHolder }: EntityConfigBlockProps) {
+	const { data: projectTypes } = useProjectTypes();
+	const fieldAppliesToEntityImpactedByProjectTypes = infoHolder.entidades.some((s) => s === "OPORTUNIDADES" || s === "PROPOSTAS");
 	return (
 		<ResponsiveDialogDrawerSection sectionTitleText="ENTIDADES" sectionTitleIcon={<Database className="w-4 h-4 min-w-4 min-h-4" />}>
 			<MultipleSelectInput
@@ -48,6 +51,19 @@ export default function EntityConfigBlock({ infoHolder, updateInfoHolder }: Enti
 							/>
 						))}
 					</div>
+					{fieldAppliesToEntityImpactedByProjectTypes && (
+						<>
+							<MultipleSelectInput
+								label="TIPOS DE PROJETO QUE USARÃO ESTE CAMPO (*)"
+								selected={infoHolder.tiposProjetos}
+								options={projectTypes?.map((projectType) => ({ id: projectType._id, value: projectType._id, label: projectType.nome })) || []}
+								handleChange={(values) => updateInfoHolder({ tiposProjetos: values as TCreateCustomFieldInput["customField"]["tiposProjetos"] })}
+								onReset={() => updateInfoHolder({ tiposProjetos: [] })}
+								resetOptionLabel="NENHUM"
+								width="100%"
+							/>
+						</>
+					)}
 				</div>
 			)}
 		</ResponsiveDialogDrawerSection>

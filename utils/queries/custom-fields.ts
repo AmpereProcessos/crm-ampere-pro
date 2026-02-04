@@ -8,6 +8,7 @@ async function fetchCustomFields(input: Omit<TGetCustomFieldsInput, "id">) {
 	const searchParams = new URLSearchParams();
 	if (input.search) searchParams.set("search", input.search);
 	if (input.entities) searchParams.set("entities", input.entities.join(","));
+	if (input.projectTypes) searchParams.set("projectTypes", input.projectTypes.join(","));
 	const { data } = await axios.get<TGetCustomFieldsOutput>(`/api/custom-fields?${searchParams.toString()}`);
 	const customFields = data.data.default;
 	if (!customFields) {
@@ -23,6 +24,7 @@ export function useCustomFields({ initialFilters }: TUseCustomFieldsParams = {})
 	const [filters, setFilters] = useState<Omit<TGetCustomFieldsInput, "id">>({
 		search: initialFilters?.search ?? null,
 		entities: initialFilters?.entities ?? [],
+		projectTypes: initialFilters?.projectTypes ?? [],
 	});
 
 	function updateFilters(newFilters: Partial<Omit<TGetCustomFieldsInput, "id">>) {
