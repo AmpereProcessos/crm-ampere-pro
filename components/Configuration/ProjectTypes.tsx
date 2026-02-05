@@ -47,12 +47,13 @@ function ProjectTypes({ session }: ProjectTypesProps) {
 											<MdDashboard size={13} />
 										</div>
 										{userHasProjectTypeEditingPermission ? (
-											<p
+											<button
+												type="button"
 												onClick={() => setEditModal({ id: type._id, isOpen: true })}
 												className="cursor-pointer text-sm font-medium leading-none tracking-tight duration-300 ease-in-out hover:text-cyan-500"
 											>
 												{type.nome}
-											</p>
+											</button>
 										) : (
 											<p className="text-sm font-medium leading-none tracking-tight">{type.nome}</p>
 										)}
@@ -65,7 +66,7 @@ function ProjectTypes({ session }: ProjectTypesProps) {
 									<h1 className='"w-full mt-2 text-start text-xs font-medium'>SEÇÕES DE DIMENSIONAMENTO</h1>
 									<div className="flex w-full items-center justify-start gap-2">
 										{type.dimensionamento.map((item, itemIndex) => (
-											<div key={itemIndex} className="rounded-lg border border-primary/30 bg-primary/20 px-2 py-1 text-[0.57rem] font-medium">
+											<div key={itemIndex.toFixed()} className="rounded-lg border border-primary/30 bg-primary/20 px-2 py-1 text-[0.57rem] font-medium">
 												{item.titulo}
 											</div>
 										))}

@@ -87,7 +87,7 @@ const GeneralContractRequestSchema = z.object({
 
 	tipoEstrutura: z.string().nullable().optional(), // replace with the actual Zod schema for structureTypes
 	materialEstrutura: z.enum(["MADEIRA", "FERRO"]).nullable().optional(),
-	estruturaAmpere: z.enum(["SIM", "NÃO"]),
+	estruturaAmpere: z.enum(["SIM", "NÃO"]).nullable(),
 	responsavelEstrutura: z.enum(["NÃO SE APLICA", "AMPERE", "CLIENTE"]),
 	formaPagamentoEstrutura: z.string().nullable().optional(),
 	valorEstrutura: z.number().nullable().optional(),

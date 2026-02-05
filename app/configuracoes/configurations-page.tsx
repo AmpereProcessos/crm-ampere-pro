@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import Automations from "@/components/Configuration/Automations";
+import CustomFields from "@/components/Configuration/CustomFields";
 import Funnels from "@/components/Configuration/Funnels";
 import Goals from "@/components/Configuration/Goals";
 import Partner from "@/components/Configuration/Partner";
@@ -28,6 +29,7 @@ type TConfigurationModes =
 	| "partners"
 	| "goals"
 	| "personalization"
+	| "custom-fields"
 	| "automations";
 
 type ConfigurationsPageProps = {
@@ -142,6 +144,17 @@ function ConfigurationsPage({ session }: ConfigurationsPageProps) {
 								Parceiros
 							</button>
 						) : null}
+						{session.user.permissoes.configuracoes.tiposProjeto ? (
+							<button
+								className={`${
+									mode === "custom-fields" ? "bg-primary/10" : ""
+								} w-full rounded-md px-4 py-2 text-center font-semibold text-primary/60 text-xs duration-300 ease-in-out hover:bg-primary/10 lg:text-start lg:text-base`}
+								onClick={() => setMode("custom-fields")}
+								type="button"
+							>
+								Campos personalizados
+							</button>
+						) : null}
 						{session.user.permissoes.configuracoes.parceiro ? (
 							<button
 								className={`${
@@ -184,6 +197,7 @@ function ConfigurationsPage({ session }: ConfigurationsPageProps) {
 						{mode === "payment-methods" ? <PaymentMethods session={session} /> : null}
 						{mode === "partners" ? <Partners session={session} /> : null}
 						{mode === "project-types" ? <ProjectTypes session={session} /> : null}
+						{mode === "custom-fields" ? <CustomFields session={session} /> : null}
 						{mode === "personalization" ? <Personalization session={session} /> : null}
 						{mode === "goals" ? <Goals session={session} /> : null}
 						{mode === "automations" ? <Automations session={session} /> : null}

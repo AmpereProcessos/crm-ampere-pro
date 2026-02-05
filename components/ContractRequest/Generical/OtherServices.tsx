@@ -1,12 +1,12 @@
+import { ChevronRight, CircleOff, Hammer, Plus } from "lucide-react";
+import type { Dispatch, SetStateAction } from "react";
+import toast from "react-hot-toast";
 import CheckboxInput from "@/components/Inputs/CheckboxInput";
 import NumberInput from "@/components/Inputs/NumberInput";
 import SelectInput from "@/components/Inputs/SelectInput";
 import { Button } from "@/components/ui/button";
 import { structureTypes } from "@/utils/constants";
 import type { TContractRequest } from "@/utils/schemas//contract-request.schema";
-import { ChevronRight, Hammer } from "lucide-react";
-import { type Dispatch, type SetStateAction } from "react";
-import toast from "react-hot-toast";
 
 type OtherServicesProps = {
 	requestInfo: TContractRequest;
@@ -17,6 +17,10 @@ type OtherServicesProps = {
 };
 function OtherServices({ requestInfo, setRequestInfo, showActions, goToPreviousStage, goToNextStage }: OtherServicesProps) {
 	function validateFields() {
+		if (!requestInfo.estruturaAmpere) {
+			toast.error("Por favor, preencha se há inclusão de estrutura na venda.");
+			return false;
+		}
 		if (requestInfo.estruturaAmpere === "SIM") {
 			if (!requestInfo.tipoEstrutura) {
 				toast.error("Por favor, preencha o tipo da estrutura");
@@ -43,6 +47,11 @@ function OtherServices({ requestInfo, setRequestInfo, showActions, goToPreviousS
 				toast.error("Por favor, preencha o valor da estrutura");
 				return false;
 			}
+		}
+
+		if (!requestInfo.aumentoDeCarga) {
+			toast.error("Por favor, preencha se há troca de padrão ou aumento de carga.");
+			return false;
 		}
 		if (requestInfo.aumentoDeCarga === "SIM") {
 			if (!requestInfo.caixaConjugada) {
@@ -82,16 +91,29 @@ function OtherServices({ requestInfo, setRequestInfo, showActions, goToPreviousS
 						<ChevronRight size={15} />
 						<h1 className="text-xs tracking-tight font-medium text-start w-fit">INFORMAÇÕES DA ESTRUTURA</h1>
 					</div>
-					<div className="w-full flex items-center justify-center">
-						<div className="w-fit">
-							<CheckboxInput
-								labelFalse="INCLUSO VENDA DE NOVA (OU ADEQUAÇÃO) DE ESTRUTURA"
-								labelTrue="INCLUSO VENDA DE NOVA (OU ADEQUAÇÃO) DE ESTRUTURA"
-								checked={requestInfo.estruturaAmpere === "SIM"}
-								handleChange={(value) => setRequestInfo({ ...requestInfo, estruturaAmpere: value ? "SIM" : "NÃO" })} // Update the state based on the checkbox value
-							/>
+					<div className="w-full flex flex-col gap-1">
+						<p className="text-sm tracking-tight font-medium text-start w-fit">
+							Define explicitamente abaixo sobre a inclusão, no escopo da venda, de uma nova estrutura ou de adequação de estrutura existente.
+						</p>
+						<div className="w-full flex items-center justify-center gap-2 flex-wrap">
+							<Button
+								variant={requestInfo.estruturaAmpere === "NÃO" ? "ghost" : "default"}
+								onClick={() => setRequestInfo({ ...requestInfo, estruturaAmpere: "NÃO" })}
+								className="flex items-center gap-2 w-fit"
+							>
+								<CircleOff className="w-4 h-4" />
+								NÃO INCLUI NOVA/ADEQUAÇÃO DE ESTRUTURA
+							</Button>
+							<Button
+								variant={requestInfo.estruturaAmpere === "SIM" ? "ghost" : "default"}
+								onClick={() => setRequestInfo({ ...requestInfo, estruturaAmpere: "SIM" })}
+							>
+								<Plus className="w-4 h-4" />
+								INCLUI NOVA/ADEQUAÇÃO DE ESTRUTURA
+							</Button>
 						</div>
 					</div>
+
 					{requestInfo.estruturaAmpere === "SIM" ? (
 						<>
 							<div className="w-full flex items-center gap-2 flex-col lg:flex-row">
@@ -239,14 +261,26 @@ function OtherServices({ requestInfo, setRequestInfo, showActions, goToPreviousS
 						<h1 className="text-xs tracking-tight font-medium text-start w-fit">INFORMAÇÕES DO PADRÃO DE ENERGIA</h1>
 					</div>
 
-					<div className="w-full flex items-center justify-center">
-						<div className="w-fit">
-							<CheckboxInput
-								labelFalse="HAVERÁ TROCA DE PADRÃO/AUMENTO DE CARGA"
-								labelTrue="HAVERÁ TROCA DE PADRÃO/AUMENTO DE CARGA"
-								checked={requestInfo.aumentoDeCarga === "SIM"}
-								handleChange={(value) => setRequestInfo({ ...requestInfo, aumentoDeCarga: value ? "SIM" : "NÃO" })} // Update the state based on the checkbox value
-							/>
+					<div className="w-full flex flex-col gap-1">
+						<p className="text-sm tracking-tight font-medium text-start w-fit">
+							Define explicitamente abaixo sobre a inclusão, no escopo da venda, de troca de padrão ou aumento de carga.
+						</p>
+						<div className="w-full flex items-center justify-center gap-2 flex-wrap">
+							<Button
+								variant={requestInfo.aumentoDeCarga === "NÃO" ? "ghost" : "default"}
+								onClick={() => setRequestInfo({ ...requestInfo, aumentoDeCarga: "NÃO" })}
+								className="flex items-center gap-2 w-fit"
+							>
+								<CircleOff className="w-4 h-4" />
+								NÃO INCLUI TROCA DE PADRÃO/AUMENTO DE CARGA
+							</Button>
+							<Button
+								variant={requestInfo.estruturaAmpere === "SIM" ? "ghost" : "default"}
+								onClick={() => setRequestInfo({ ...requestInfo, aumentoDeCarga: "SIM" })}
+							>
+								<Plus className="w-4 h-4" />
+								INCLUI TROCA DE PADRÃO/AUMENTO DE CARGA
+							</Button>
 						</div>
 					</div>
 					{requestInfo.aumentoDeCarga === "SIM" ? (

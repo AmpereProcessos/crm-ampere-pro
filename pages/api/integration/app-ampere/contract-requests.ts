@@ -1,15 +1,14 @@
+import createHttpError from "http-errors";
+import { type Collection, ObjectId } from "mongodb";
+import type { NextApiHandler } from "next";
 import connectToRequestsDatabase from "@/services/mongodb/ampere/resquests-db-connection";
 import connectoToCRMDatabase from "@/services/mongodb/crm-db-connection";
 import { apiHandler } from "@/utils/api";
-import { type Collection, ObjectId } from "mongodb";
-import type { NextApiHandler } from "next";
-
 import type { TContractRequest } from "@/utils/schemas//contract-request.schema";
 import type { TClient } from "@/utils/schemas/client.schema";
 import type { TOpportunity } from "@/utils/schemas/opportunity.schema";
 import type { TPartner } from "@/utils/schemas/partner.schema";
-import { TProposal } from "@/utils/schemas/proposal.schema";
-import createHttpError from "http-errors";
+import type { TProposal } from "@/utils/schemas/proposal.schema";
 
 type PostResponse = {
 	data: { insertedId: string };
@@ -46,7 +45,7 @@ const createRequest: NextApiHandler<PostResponse> = async (req, res) => {
 	const partner = await partnersCollection.findOne({ _id: new ObjectId(crmOpportunity.idParceiro) });
 	const { responsaveis, idMarketing } = crmOpportunity;
 
-	let insiderName: string | undefined = undefined;
+	let insiderName: string | undefined;
 
 	const seller = responsaveis.find((r) => r.papel === "VENDEDOR");
 	const sdr = responsaveis.find((r) => r.papel === "SDR" || r.papel === "ANALISTA TÉCNICO");

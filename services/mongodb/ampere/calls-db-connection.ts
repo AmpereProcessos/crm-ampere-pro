@@ -1,13 +1,12 @@
-import createHttpError from "http-errors";
-import { type Db, MongoClient } from "mongodb";
+import type { Db } from "mongodb";
+import clientPromise from "../mongo-client";
 
 let cachedDb: Db | null = null;
-export default async function connectToCallsDatabase(uri: unknown) {
-	if (typeof uri != "string") throw createHttpError.InternalServerError("Wrong databse URI.");
+export default async function connectToCallsDatabase() {
 	if (cachedDb) {
 		return cachedDb;
 	}
-	const client = await MongoClient.connect(uri);
+	const client = await clientPromise;
 	const db = client.db("chamados");
 	cachedDb = db;
 	return db;

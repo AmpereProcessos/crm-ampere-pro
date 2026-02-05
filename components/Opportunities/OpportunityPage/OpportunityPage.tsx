@@ -15,16 +15,17 @@ import Avatar from "../../utils/Avatar";
 import LoadingComponent from "../../utils/LoadingComponent";
 import OpportunityClient from "./OpportunityClient";
 import OpportunityContractRequestedFlag from "./OpportunityContractRequestedFlag";
+import OpportunityCustomFieldsBlock from "./OpportunityCustomFieldsBlock";
 import OpportunityDetails from "./OpportunityDetails";
 import OpportunityFiles from "./OpportunityFiles";
 import OpportunityHistory from "./OpportunityHistory";
 import OpportunityHomologations from "./OpportunityHomologations";
 import OpportunityLossBlock from "./OpportunityLossBlock";
+import OpportunityPageHeader from "./OpportunityPageHeader";
 import OpportunityPPSCalls from "./OpportunityPPSCalls";
 import OpportunityProposals from "./OpportunityProposals";
 import OpportunityTechnicalAnalysis from "./OpportunityTechnicalAnalysis";
 import OpportunityWonFlag from "./OpportunityWonFlag";
-import OpportunityPageHeader from "./OpportunityPageHeader";
 
 export type TOpportunityBlockMode = "PROPOSES" | "FILES" | "TECHNICAL ANALYSIS";
 
@@ -94,6 +95,15 @@ function OpportunityPage({ session, opportunityId }: OpportunityPageProps) {
 								/>
 							</div>
 							<div className="flex w-full flex-col gap-4 lg:w-[60%]">
+								<OpportunityCustomFieldsBlock
+									opportunity={opportunity}
+									session={session}
+									opportunityQueryKey={queryKey}
+									callbacks={{
+										onMutate: handleOnMutate,
+										onSettled: handleOnSettled,
+									}}
+								/>
 								<OpportunityFiles opportunityId={opportunity._id} clientId={opportunity.idCliente} session={session} />
 								<OpportunityPPSCalls opportunity={opportunity} session={session} />
 								<OpportunityTechnicalAnalysis session={session} opportunity={opportunity} />
