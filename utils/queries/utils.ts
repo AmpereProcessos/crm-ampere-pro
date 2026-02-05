@@ -71,5 +71,8 @@ async function fetchAcquisitionChannels() {
 }
 
 export function useAcquisitionChannels() {
-	return useQuery({ queryKey: ["acquisitionChannels"], queryFn: fetchAcquisitionChannels });
+	return {
+		...useQuery({ queryKey: ["acquisitionChannels"], queryFn: fetchAcquisitionChannels }),
+		queryKey: ["acquisitionChannels"],
+	};
 }

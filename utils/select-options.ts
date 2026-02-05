@@ -1172,6 +1172,7 @@ export const OpportunityResponsibilityRoles = [
 	{ id: 1, label: "VENDEDOR", value: "VENDEDOR" },
 	{ id: 2, label: "SDR", value: "SDR" },
 	{ id: 3, label: "ANALISTA TÉCNICO", value: "ANALISTA TÉCNICO" },
+	{ id: 4, label: "ANALISTA DE LICITAÇÕES", value: "ANALISTA DE LICITAÇÕES" },
 ];
 export const OpportunityResponsibilityRolesCombinations = getAllValueCombinations(OpportunityResponsibilityRoles.map((r) => r.value)).map((c) => c.join(" + "));
 export const EnergyDistributorsOptions = [
@@ -1378,6 +1379,7 @@ export const ComercialSegments = [
 	{ id: 2, label: "COMERCIAL", value: "COMERCIAL" },
 	{ id: 3, label: "INDUSTRIAL", value: "INDUSTRIAL" },
 	{ id: 4, label: "RURAL", value: "RURAL" },
+	{ id: 5, label: "ORGÃO PÚBLICO", value: "ORGÃO PÚBLICO" },
 ];
 export const TechnicalAnalysisReportTypes = [
 	{

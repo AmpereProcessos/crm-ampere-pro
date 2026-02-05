@@ -1,3 +1,5 @@
+import { LayoutGrid } from "lucide-react";
+import type { Dispatch, SetStateAction } from "react";
 import SelectInput from "@/components/Inputs/SelectInput";
 import SelectWithImages from "@/components/Inputs/SelectWithImages";
 import TextInput from "@/components/Inputs/TextInput";
@@ -6,8 +8,6 @@ import { usePartnersSimplified } from "@/utils/queries/partners";
 import type { TOpportunity } from "@/utils/schemas/opportunity.schema";
 import type { TProjectTypeDTO } from "@/utils/schemas/project-types.schema";
 import { ComercialSegments } from "@/utils/select-options";
-import { LayoutGrid } from "lucide-react";
-import { type Dispatch, type SetStateAction } from "react";
 
 type GeneralInformationBlockProps = {
 	opportunity: TOpportunity;
