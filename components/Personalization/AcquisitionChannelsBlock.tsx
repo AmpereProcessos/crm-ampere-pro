@@ -1,13 +1,15 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Barcode, Megaphone } from "lucide-react";
+import { useState } from "react";
+import { toast } from "react-hot-toast";
+import { BsCalendarPlus } from "react-icons/bs";
 import type { TUserSession } from "@/lib/auth/session";
+import { getErrorMessage } from "@/lib/methods/errors";
 import { formatDateAsLocale, formatToSlug } from "@/lib/methods/formatting";
 import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
 import { createUtil } from "@/utils/mutations/utils";
 import { useAcquisitionChannels } from "@/utils/queries/utils";
 import type { TAcquisitionChannel, TAcquisitionChannelDTO } from "@/utils/schemas/utils";
-import { useQueryClient } from "@tanstack/react-query";
-import { Barcode, Megaphone } from "lucide-react";
-import { useState } from "react";
-import { BsCalendarPlus } from "react-icons/bs";
 import Avatar from "../utils/Avatar";
 import ErrorComponent from "../utils/ErrorComponent";
 import LoadingComponent from "../utils/LoadingComponent";
@@ -24,13 +26,25 @@ function AcquisitionChannelsBlock({ session }: AcquisitionChannelsBlockProps) {
 		value: "",
 		slug: "",
 	});
-	const { data: acquisitionChannels, isLoading, isError, isSuccess } = useAcquisitionChannels();
-	const { mutate: handleCreateAcquisitionChannel, isPending } = useMutationWithFeedback({
+	const { data: acquisitionChannels, queryKey, isLoading, isError, isSuccess } = useAcquisitionChannels();
+
+	const handleOnMutate = async () => await queryClient.cancelQueries({ queryKey });
+	const handleOnSettle = async () => await queryClient.invalidateQueries({ queryKey });
+	const { mutate: handleCreateAcquisitionChannel, isPending } = useMutation({
 		mutationKey: ["create-acquisition-channel"],
 		mutationFn: createUtil,
-		queryClient: queryClient,
-		affectedQueryKey: ["acquisition-channels"],
-		callbackFn: () => setAcquisitionChannelHolder({ value: "", slug: "" }),
+		onMutate: async () => {
+			await handleOnMutate();
+		},
+		onSuccess: async (data) => {
+			return toast.success(data);
+		},
+		onError: async (error) => {
+			return toast.error(getErrorMessage(error));
+		},
+		onSettled: async () => {
+			await handleOnSettle();
+		},
 	});
 	return (
 		<div className="flex min-h-[450px] w-full flex-col rounded-sm border border-blue-500">

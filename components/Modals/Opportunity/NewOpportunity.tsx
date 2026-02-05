@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import createHttpError from "http-errors";
-import { BadgeCheck, AlertCircle, UsersRound } from "lucide-react";
+import { AlertCircle, BadgeCheck, UsersRound } from "lucide-react";
 import Link from "next/link";
 import { type Dispatch, type SetStateAction, useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
@@ -19,7 +19,7 @@ import type { TUserSession } from "@/lib/auth/session";
 import { useMediaQuery } from "@/lib/utils";
 import type { TGetOpportunitiesQueryDefinitionsOutput } from "@/pages/api/opportunities/query-definitions";
 import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
-import { createClientOpportunityAndFunnelReference, createApprovalRequest } from "@/utils/mutations/opportunities";
+import { createApprovalRequest, createClientOpportunityAndFunnelReference } from "@/utils/mutations/opportunities";
 import { useSearchClients } from "@/utils/queries/clients";
 import { useProjectTypes } from "@/utils/queries/project-types";
 import { useOpportunityCreators } from "@/utils/queries/users";
