@@ -2,29 +2,25 @@
 import dayjs from "dayjs";
 import { useState } from "react";
 import toast from "react-hot-toast";
-
-import { Sidebar } from "@/components/Sidebar";
-
 import { BsDownload } from "react-icons/bs";
-
 import DateInput from "@/components/Inputs/DateInput";
 import MultipleSelectInput from "@/components/Inputs/MultipleSelectInput";
 import EditPromoter from "@/components/Modals/EditPromoter";
+import { Sidebar } from "@/components/Sidebar";
 import InProgressResults from "@/components/Stats/Results/InProgress";
 import OverallResults from "@/components/Stats/Results/Overall";
+
+import RegionResults from "@/components/Stats/Results/Region";
 import SalesTeamResults from "@/components/Stats/Results/SalesTeam";
 import SDRTeamResults from "@/components/Stats/Results/SDRTeam";
-
+import Sellers from "@/components/Stats/Results/Sellers";
+import type { TUserSession } from "@/lib/auth/session";
 import { getErrorMessage } from "@/lib/methods/errors";
 import { getExcelFromJSON } from "@/lib/methods/excel-utils";
 import { formatDateOnInputChange } from "@/lib/methods/formatting";
-
-import RegionResults from "@/components/Stats/Results/Region";
-import Sellers from "@/components/Stats/Results/Sellers";
-import type { TUserSession } from "@/lib/auth/session";
 import { formatDateForInputValue } from "@/utils/methods";
 import { useComercialResultsQueryOptions } from "@/utils/queries/stats";
-import { fetchResultsExports } from "@/utils/queries/stats/exports";
+import { fetchResultsExportsAll } from "@/utils/queries/stats/exports";
 import type { TUserDTOWithSaleGoals } from "@/utils/schemas/user.schema";
 
 const firstDayOfMonth = dayjs().startOf("month").toISOString();
@@ -55,16 +51,17 @@ function ManagementComercialResults({ session }: ComercialResultsProps) {
 		isOpen: false,
 		promoter: null,
 	});
-	const { data: queryOptions, isSuccess: queryOptionsSuccess } = useComercialResultsQueryOptions();
+	const { data: queryOptions } = useComercialResultsQueryOptions();
 	async function handleDataExport() {
 		const loadingToastId = toast.loading("Carregando...");
 		try {
-			const results = await fetchResultsExports({
+			const results = await fetchResultsExportsAll({
 				after: queryFilters.period.after,
 				before: queryFilters.period.before,
-				responsibles: queryFilters.responsibles,
-				partners: queryFilters.partners,
-				projectTypes: queryFilters.projectTypes,
+				responsibles: queryFilters.responsibles ?? undefined,
+				partners: queryFilters.partners ?? undefined,
+				projectTypes: queryFilters.projectTypes ?? undefined,
+				pageSize: 500,
 			});
 			getExcelFromJSON(results, "RESULTADOS_COMERCIAIS");
 			toast.dismiss(loadingToastId);
