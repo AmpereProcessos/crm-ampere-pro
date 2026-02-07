@@ -131,6 +131,7 @@ function NewOpportunity({ session, closeModal, opportunityCreators, funnels, cal
 			nome: session.user.nome,
 			avatar_url: session.user.avatar_url,
 		},
+		camposPersonalizados: {},
 		automacoesHabilitadas: true,
 		dataInsercao: new Date().toISOString(),
 		// adicionar contrato e solicitação de contrato futuramente
