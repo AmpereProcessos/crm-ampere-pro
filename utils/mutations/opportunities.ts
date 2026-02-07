@@ -40,17 +40,10 @@ export async function createClientOpportunityAndFunnelReference({
 	funnelReference,
 	returnId = false,
 }: CreateClientOpportunityAndFunnelReferenceParams) {
-	try {
-		const { data } = await axios.post("/api/opportunities/personalized", { clientId, client, opportunity, funnelReference });
-		if (returnId) return data.data?.insertedOpportunityId as string;
-		if (typeof data.message !== "string") return "Oportunidade criada com sucesso !";
-		return data.data as string;
-	} catch (error) {
-		if (axios.isAxiosError(error) && error.response?.status === 409) {
-			throw error;
-		}
-		throw error;
-	}
+	const { data } = await axios.post("/api/opportunities/personalized", { clientId, client, opportunity, funnelReference });
+	if (returnId) return data.data?.insertedOpportunityId as string;
+	if (typeof data.message !== "string") return "Oportunidade criada com sucesso !";
+	return data.data as string;
 }
 export async function updateOpportunity({ id, changes }: TEditOpportunitiesInput) {
 	const { data } = await axios.put<TEditOpportunitiesOutput>(`/api/opportunities?id=${id}`, { id, changes });

@@ -1,3 +1,8 @@
+import dayjs from "dayjs";
+import createHttpError from "http-errors";
+import type { Collection } from "mongodb";
+import { type NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
 import { apiHandler, type UnwrapNextResponse } from "@/lib/api";
 import { getValidCurrentSessionUncached } from "@/lib/auth/session";
 import { getProductQtyByCategory, getProductsStr, getServicesStr } from "@/lib/methods/extracting";
@@ -7,10 +12,6 @@ import type { TClient } from "@/utils/schemas/client.schema";
 import type { TOpportunity } from "@/utils/schemas/opportunity.schema";
 import type { TProposal } from "@/utils/schemas/proposal.schema";
 import { GeneralStatsFiltersSchema } from "@/utils/schemas/stats.schema";
-import dayjs from "dayjs";
-import createHttpError from "http-errors";
-import type { Collection } from "mongodb";
-import { NextResponse, type NextRequest } from "next/server";
 import { QueryDatesSchema } from "../inputs";
 
 export type TResultsExportsItem = {
@@ -63,6 +64,54 @@ type TResultsExportsOpportunity = {
 	ultimaInteracao: Exclude<TOpportunity["ultimaInteracao"], undefined | null>["data"];
 };
 
+const GetResultsExportsInputSchema = z.object({
+	page: z
+		.string({
+			required_error: "Página não informada.",
+			invalid_type_error: "Tipo inválido para a página.",
+		})
+		.transform((v) => Number.parseInt(v, 10)),
+	pageSize: z
+		.string({
+			required_error: "Tamanho da página não informado.",
+			invalid_type_error: "Tipo inválido para o tamanho da página.",
+		})
+		.transform((v) => Number.parseInt(v, 10)),
+	after: z
+		.string({
+			required_error: "Parâmetros de período não fornecidos ou inválidos.",
+			invalid_type_error: "Parâmetros de período não fornecidos ou inválidos.",
+		})
+		.datetime({ message: "Tipo inválido para parâmetro de período." }),
+	before: z
+		.string({
+			required_error: "Parâmetros de período não fornecidos ou inválidos.",
+			invalid_type_error: "Parâmetros de período não fornecidos ou inválidos.",
+		})
+		.datetime({ message: "Tipo inválido para parâmetro de período." }),
+	responsibles: z
+		.string({
+			invalid_type_error: "Tipo inválido para a lista de responsáveis.",
+		})
+		.optional()
+		.nullable()
+		.transform((v) => v?.split(",")),
+	partners: z
+		.string({
+			invalid_type_error: "Tipo inválido para a lista de parceiros.",
+		})
+		.optional()
+		.nullable()
+		.transform((v) => v?.split(",")),
+	projectTypes: z
+		.string({
+			invalid_type_error: "Tipo inválido para a lista de tipos de projetos.",
+		})
+		.optional()
+		.nullable()
+		.transform((v) => v?.split(",")),
+});
+export type TGetResultsExportsInput = z.infer<typeof GetResultsExportsInputSchema>;
 async function exportData(request: NextRequest) {
 	const { user } = await getValidCurrentSessionUncached();
 
@@ -70,15 +119,15 @@ async function exportData(request: NextRequest) {
 	const userScope = user.permissoes.resultados.escopo;
 
 	const searchParams = request.nextUrl.searchParams;
-	const { after, before } = QueryDatesSchema.parse({
+	const { page, pageSize, after, before, responsibles, partners, projectTypes } = GetResultsExportsInputSchema.parse({
+		page: searchParams.get("page"),
+		pageSize: searchParams.get("pageSize"),
 		after: searchParams.get("after"),
 		before: searchParams.get("before"),
+		responsibles: searchParams.get("responsibles"),
+		partners: searchParams.get("partners"),
+		projectTypes: searchParams.get("projectTypes"),
 	});
-	const payload = await request.json();
-	const { responsibles, partners, projectTypes } = GeneralStatsFiltersSchema.parse(payload);
-
-	console.log("[INFO] [GET_EXPORTS_DATA] Query Params", { after, before });
-	console.log("[INFO] [GET_EXPORTS_DATA] Payload", { responsibles, partners, projectTypes });
 
 	// Authorization checks
 	if (!!userScope && !responsibles) {
@@ -107,13 +156,15 @@ async function exportData(request: NextRequest) {
 	const db = await connectToDatabase();
 	const opportunitiesCollection: Collection<TOpportunity> = db.collection("opportunities");
 
-	const opportunities = await getOpportunities({
+	const { opportunities, totalPages } = await getOpportunities({
 		opportunitiesCollection,
 		responsiblesQuery,
 		partnerQuery,
 		projectTypesQuery,
 		afterDate,
 		beforeDate,
+		page,
+		pageSize,
 	});
 
 	const exportation = opportunities.map((project) => {
@@ -164,7 +215,7 @@ async function exportData(request: NextRequest) {
 			"QTDE ESTRUTURAS VENDIDOS": getProductQtyByCategory(proposeProducts, "ESTRUTURA"),
 			"QTDE PADRÕES VENDIDOS": getProductQtyByCategory(proposeProducts, "PADRÃO"),
 			"PRODUTOS VENDIDOS": getProductsStr(proposeProducts),
-			"QTDE SERVIÇOS VENDIDOS": proposeServices.reduce((acc: number, current: any) => acc + 1, 0),
+			"QTDE SERVIÇOS VENDIDOS": proposeServices.length,
 			"SERVIÇOS VENDIDOS": getServicesStr(proposeServices),
 			"VALOR VENDA": proposeValue,
 			"CANAL DE AQUISIÇÃO": aquisitionOrigin,
@@ -181,6 +232,9 @@ async function exportData(request: NextRequest) {
 
 	return NextResponse.json({
 		data: exportation,
+		page,
+		pageSize,
+		totalPages,
 		message: "Dados exportados com sucesso",
 	});
 }
@@ -192,9 +246,20 @@ type GetProjectsParams = {
 	projectTypesQuery: any;
 	afterDate: Date;
 	beforeDate: Date;
+	page: number;
+	pageSize: number;
 };
 
-async function getOpportunities({ opportunitiesCollection, partnerQuery, responsiblesQuery, projectTypesQuery, afterDate, beforeDate }: GetProjectsParams) {
+async function getOpportunities({
+	opportunitiesCollection,
+	partnerQuery,
+	responsiblesQuery,
+	projectTypesQuery,
+	afterDate,
+	beforeDate,
+	page,
+	pageSize,
+}: GetProjectsParams) {
 	try {
 		const afterDateStr = afterDate.toISOString();
 		const beforeDateStr = beforeDate.toISOString();
@@ -210,6 +275,8 @@ async function getOpportunities({ opportunitiesCollection, partnerQuery, respons
 			],
 			dataExclusao: null,
 		};
+		const totalCount = await opportunitiesCollection.countDocuments(match);
+		const totalPages = totalCount === 0 ? 0 : Math.ceil(totalCount / pageSize);
 		const addFields = {
 			activeProposeObjectID: { $toObjectId: "$ganho.idProposta" },
 		};
@@ -233,7 +300,15 @@ async function getOpportunities({ opportunitiesCollection, partnerQuery, respons
 			dataInsercao: 1,
 		};
 		const result = await opportunitiesCollection
-			.aggregate([{ $match: match }, { $addFields: addFields }, { $lookup: proposeLookup }, { $project: projection }])
+			.aggregate([
+				{ $match: match },
+				{ $sort: { dataInsercao: -1 } },
+				{ $skip: (page - 1) * pageSize },
+				{ $limit: pageSize },
+				{ $addFields: addFields },
+				{ $lookup: proposeLookup },
+				{ $project: projection },
+			])
 			.toArray();
 
 		const opportunities: TResultsExportsOpportunity[] = result.map((r) => ({
@@ -257,7 +332,7 @@ async function getOpportunities({ opportunitiesCollection, partnerQuery, respons
 			ultimaInteracao: r.ultimaInteracao?.data || null,
 		}));
 
-		return opportunities;
+		return { opportunities, totalPages };
 	} catch (error) {
 		throw new createHttpError.InternalServerError(`Erro ao buscar oportunidades: ${error}`);
 	}
@@ -265,3 +340,16 @@ async function getOpportunities({ opportunitiesCollection, partnerQuery, respons
 
 export type TExportDataRouteOutput = UnwrapNextResponse<Awaited<ReturnType<typeof exportData>>>;
 export const POST = apiHandler({ POST: exportData });
+
+function parsePositiveInt(value: string | null, fallback: number) {
+	if (!value) return fallback;
+	const parsed = Number.parseInt(value, 10);
+	if (Number.isNaN(parsed) || parsed < 1) return fallback;
+	return parsed;
+}
+
+function clampPositiveInt(value: number, min: number, max: number) {
+	if (value < min) return min;
+	if (value > max) return max;
+	return value;
+}
