@@ -26,7 +26,7 @@ const createRequest: NextApiHandler<PostResponse> = async (req, res) => {
 	if (!proposalId || typeof proposalId !== "string" || !ObjectId.isValid(proposalId))
 		throw new createHttpError.BadRequest("Referência da proposta não encontrada ou inválida, não é possível prosseguir com a solicitação.");
 
-	const appAmpereDb = await connectToRequestsDatabase(process.env.OPERATIONAL_MONGODB_URI);
+	const appAmpereDb = await connectToRequestsDatabase();
 	const contractRequestsCollection: Collection<TContractRequest> = appAmpereDb.collection("contrato");
 
 	const crmDb = await connectoToCRMDatabase();

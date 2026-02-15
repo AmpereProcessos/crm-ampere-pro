@@ -1,15 +1,16 @@
+import { BadgeDollarSign, ChevronRight } from "lucide-react";
+import type { Dispatch, SetStateAction } from "react";
+import toast from "react-hot-toast";
 import CheckboxInput from "@/components/Inputs/CheckboxInput";
 import NumberInput from "@/components/Inputs/NumberInput";
 import SelectInput from "@/components/Inputs/SelectInput";
 import TextareaInput from "@/components/Inputs/TextareaInput";
 import TextInput from "@/components/Inputs/TextInput";
 import { Button } from "@/components/ui/button";
-import { formatToCPForCNPJ, formatToPhone } from "@/utils/methods";
+import { BrazilianCitiesOptionsFromUF, BrazilianStatesOptions } from "@/utils/estados_cidades";
+import { formatToCEP, formatToCPForCNPJ, formatToPhone, getCEPInfo } from "@/utils/methods";
 import { useCreditors } from "@/utils/queries/utils";
 import type { TContractRequest } from "@/utils/schemas//contract-request.schema";
-import { BadgeDollarSign, ChevronRight } from "lucide-react";
-import { type Dispatch, type SetStateAction } from "react";
-import toast from "react-hot-toast";
 
 type PaymentInfoProps = {
 	requestInfo: TContractRequest;
@@ -21,13 +22,41 @@ type PaymentInfoProps = {
 function PaymentInfo({ requestInfo, setRequestInfo, showActions, goToPreviousStage, goToNextStage }: PaymentInfoProps) {
 	const { data: creditors } = useCreditors();
 
-	function usePaymentInfoFromContract() {
+	function updatePayerData(data: Partial<TContractRequest["pagador"]>) {
 		setRequestInfo((prev) => ({
 			...prev,
-			nomePagador: prev.nomeDoContrato,
-			contatoPagador: prev.telefone,
-			cpf_cnpjNF: prev.cpf_cnpj,
+			pagador: { ...prev.pagador, ...data },
 		}));
+	}
+	function updatePayerLocation(data: Partial<TContractRequest["pagador"]["localizacao"]>) {
+		setRequestInfo((prev) => ({
+			...prev,
+			pagador: { ...prev.pagador, localizacao: { ...prev.pagador.localizacao, ...data } },
+		}));
+	}
+	async function setAddressDataByCEP(cep: string) {
+		const addressInfo = await getCEPInfo(cep);
+		const toastID = toast.loading("Buscando informações sobre o CEP...", {
+			duration: 2000,
+		});
+		setTimeout(() => {
+			if (addressInfo) {
+				toast.dismiss(toastID);
+				toast.success("Dados do CEP buscados com sucesso.", {
+					duration: 1000,
+				});
+				setRequestInfo((prev) => ({
+					...prev,
+					localizacaoPagador: {
+						...prev.localizacaoPagador,
+						endereco: addressInfo.logradouro,
+						bairro: addressInfo.bairro,
+						uf: addressInfo.uf,
+						cidade: addressInfo.localidade.toUpperCase(),
+					},
+				}));
+			}
+		}, 1000);
 	}
 	function validateFields() {
 		if (requestInfo.nomePagador.trim().length < 3) {
@@ -84,51 +113,147 @@ function PaymentInfo({ requestInfo, setRequestInfo, showActions, goToPreviousSta
 					<div className="flex w-full items-center justify-end">
 						<button
 							type="button"
-							onClick={() => usePaymentInfoFromContract()}
+							onClick={() =>
+								updatePayerData({
+									nome: requestInfo.nomeDoContrato,
+									cpfCnpj: requestInfo.cpf_cnpj,
+									telefone: requestInfo.telefone,
+									email: requestInfo.email,
+									localizacao: {
+										cep: requestInfo.cep,
+										uf: requestInfo.uf || "",
+										cidade: requestInfo.cidade || "",
+										bairro: requestInfo.bairro,
+										endereco: requestInfo.enderecoCobranca,
+										numeroOuIdentificador: requestInfo.numeroResCobranca,
+										complemento: requestInfo.pontoDeReferencia,
+									},
+								})
+							}
 							className="rounded-lg border border-cyan-500 bg-cyan-50 px-2 py-1 text-xs font-medium text-cyan-500"
 						>
 							USAR DADOS DO TITULAR DO CONTRATO
 						</button>
 					</div>
 					<div className="w-full flex items-center justify-center gap-2 flex-col lg:flex-row">
-						<div className="w-full lg:w-1/3">
+						<div className="w-full lg:w-1/2">
 							<TextInput
 								width={"100%"}
 								label={"NOME DO PAGADOR"}
 								placeholder="Preencha aqui o nome da pessoa/empresa que realizará o pagamento"
 								editable={true}
-								value={requestInfo.nomePagador}
-								handleChange={(value) => setRequestInfo({ ...requestInfo, nomePagador: value })}
+								value={requestInfo.pagador.nome}
+								handleChange={(value) => updatePayerData({ nome: value })}
+							/>
+						</div>
+						<div className="w-full lg:w-1/2">
+							<TextInput
+								width={"100%"}
+								label={"CPF/CNPJ DO PAGADOR"}
+								placeholder="Preencha aqui o CPF/CNPJ do pagador."
+								editable={true}
+								value={requestInfo.pagador.cpfCnpj || ""}
+								handleChange={(value) => updatePayerData({ cpfCnpj: formatToCPForCNPJ(value) })}
+							/>
+						</div>
+					</div>
+					<div className="w-full flex items-center justify-center gap-2 flex-col lg:flex-row">
+						<div className="w-full lg:w-1/2">
+							<TextInput
+								width={"100%"}
+								label={"TELEFONE DO PAGADOR"}
+								placeholder="Preencha aqui o telefone da pessoa que realizará o pagamento"
+								editable={true}
+								value={requestInfo.pagador.telefone}
+								handleChange={(value) => updatePayerData({ telefone: formatToPhone(value) })}
+							/>
+						</div>
+						<div className="w-full lg:w-1/2">
+							<TextInput
+								width={"100%"}
+								label={"EMAIL DO PAGADOR"}
+								placeholder="Preencha aqui o email da pessoa que realizará o pagamento"
+								editable={true}
+								value={requestInfo.pagador.email || ""}
+								handleChange={(value) => updatePayerData({ email: value })}
+							/>
+						</div>
+					</div>
+					<div className="flex w-full flex-col items-center gap-2 lg:flex-row">
+						<div className="w-full lg:w-1/3">
+							<TextInput
+								label="CEP"
+								value={requestInfo.pagador.localizacao?.cep || ""}
+								placeholder="Preencha aqui o CEP do pagador."
+								handleChange={(value) => {
+									if (value.length === 9) {
+										setAddressDataByCEP(value);
+									}
+									updatePayerLocation({ cep: formatToCEP(value) });
+								}}
+								width="100%"
 							/>
 						</div>
 						<div className="w-full lg:w-1/3">
-							<TextInput
-								width={"100%"}
-								label={"CPF/CNPJ PARA NF"}
-								placeholder="Preencha aqui o CPF/CNPJ para faturamento do serviço/equipamentos."
-								editable={true}
-								value={requestInfo.cpf_cnpjNF}
-								handleChange={(value) =>
-									setRequestInfo({
-										...requestInfo,
-										cpf_cnpjNF: formatToCPForCNPJ(value),
-									})
-								}
+							<SelectInput
+								label="ESTADO"
+								value={requestInfo.pagador.localizacao?.uf || ""}
+								handleChange={(value) => updatePayerLocation({ uf: value, cidade: BrazilianCitiesOptionsFromUF(value)[0]?.value })}
+								resetOptionLabel="NÃO DEFINIDO"
+								onReset={() => updatePayerLocation({ uf: "", cidade: "" })}
+								options={BrazilianStatesOptions}
+								width="100%"
 							/>
 						</div>
 						<div className="w-full lg:w-1/3">
+							<SelectInput
+								label="CIDADE"
+								value={requestInfo.pagador.localizacao.cidade || ""}
+								handleChange={(value) => updatePayerLocation({ cidade: value })}
+								options={BrazilianCitiesOptionsFromUF(requestInfo.pagador.localizacao.uf || "")}
+								resetOptionLabel="NÃO DEFINIDO"
+								onReset={() => updatePayerLocation({ cidade: "" })}
+								width="100%"
+							/>
+						</div>
+					</div>
+					<div className="flex w-full flex-col items-center gap-2 lg:flex-row">
+						<div className="w-full lg:w-1/2">
 							<TextInput
-								width={"100%"}
-								label={"CONTATO DO PAGADOR"}
-								placeholder="Preencha aqui o contato da pessoa que realizará o pagamento"
-								editable={true}
-								value={requestInfo.contatoPagador}
-								handleChange={(value) =>
-									setRequestInfo({
-										...requestInfo,
-										contatoPagador: formatToPhone(value),
-									})
-								}
+								label="BAIRRO"
+								value={requestInfo.pagador.localizacao.bairro || ""}
+								placeholder="Preencha aqui o bairro do cliente."
+								handleChange={(value) => updatePayerLocation({ bairro: value })}
+								width="100%"
+							/>
+						</div>
+						<div className="w-full lg:w-1/2">
+							<TextInput
+								label="LOGRADOURO/RUA"
+								value={requestInfo.pagador.localizacao.endereco || ""}
+								placeholder="Preencha aqui o logradouro do cliente."
+								handleChange={(value) => updatePayerLocation({ endereco: value })}
+								width="100%"
+							/>
+						</div>
+					</div>
+					<div className="flex w-full flex-col items-center gap-2 lg:flex-row">
+						<div className="w-full lg:w-1/2">
+							<TextInput
+								label="NÚMERO/IDENTIFICADOR"
+								value={requestInfo.pagador.localizacao.numeroOuIdentificador || ""}
+								placeholder="Preencha aqui o número ou identificador da residência do cliente."
+								handleChange={(value) => updatePayerLocation({ numeroOuIdentificador: value })}
+								width="100%"
+							/>
+						</div>
+						<div className="w-full lg:w-1/2">
+							<TextInput
+								label="COMPLEMENTO"
+								value={requestInfo.pagador.localizacao.complemento || ""}
+								placeholder="Preencha aqui algum complemento do endereço."
+								handleChange={(value) => updatePayerLocation({ complemento: value })}
+								width="100%"
 							/>
 						</div>
 					</div>
@@ -171,7 +296,7 @@ function PaymentInfo({ requestInfo, setRequestInfo, showActions, goToPreviousSta
 							},
 						]}
 						value={requestInfo.formaDePagamento}
-						handleChange={(value) => setRequestInfo({ ...requestInfo, formaDePagamento: value })}
+						handleChange={(value) => setRequestInfo((prev) => ({ ...prev, formaDePagamento: value }))}
 						resetOptionLabel="NÃO DEFINIDO"
 						onReset={() => {
 							setRequestInfo((prev) => ({
