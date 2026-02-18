@@ -1,31 +1,20 @@
 "use client";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Share2 } from "lucide-react";
-import { useState } from "react";
-import toast from "react-hot-toast";
-import { BsCalendarPlus, BsCalendarX, BsCode, BsFillMegaphoneFill } from "react-icons/bs";
-import { MdDelete } from "react-icons/md";
+import { useQueryClient } from "@tanstack/react-query";
 import type { TUserSession } from "@/lib/auth/session";
-import { getErrorMessage } from "@/lib/methods/errors";
-import { formatDateAsLocale, formatNameAsInitials } from "@/lib/methods/formatting";
-import { deleteOpportunity } from "@/utils/mutations/opportunities";
 import { useOpportunityById } from "@/utils/queries/opportunities";
 import { Sidebar } from "../../Sidebar";
-import Avatar from "../../utils/Avatar";
 import LoadingComponent from "../../utils/LoadingComponent";
 import OpportunityClient from "./OpportunityClient";
-import OpportunityContractRequestedFlag from "./OpportunityContractRequestedFlag";
 import OpportunityCustomFieldsBlock from "./OpportunityCustomFieldsBlock";
 import OpportunityDetails from "./OpportunityDetails";
 import OpportunityFiles from "./OpportunityFiles";
 import OpportunityHistory from "./OpportunityHistory";
 import OpportunityHomologations from "./OpportunityHomologations";
-import OpportunityLossBlock from "./OpportunityLossBlock";
 import OpportunityPageHeader from "./OpportunityPageHeader";
 import OpportunityPPSCalls from "./OpportunityPPSCalls";
+import OpportunityProject from "./OpportunityProject";
 import OpportunityProposals from "./OpportunityProposals";
 import OpportunityTechnicalAnalysis from "./OpportunityTechnicalAnalysis";
-import OpportunityWonFlag from "./OpportunityWonFlag";
 
 export type TOpportunityBlockMode = "PROPOSES" | "FILES" | "TECHNICAL ANALYSIS";
 
@@ -38,7 +27,6 @@ function OpportunityPage({ session, opportunityId }: OpportunityPageProps) {
 	const {
 		data: opportunity,
 		queryKey,
-		status,
 		isLoading: opportunityLoading,
 		isSuccess: opportunitySuccess,
 		isError: opportunityError,
@@ -63,6 +51,7 @@ function OpportunityPage({ session, opportunityId }: OpportunityPageProps) {
 				<div className="flex w-full max-w-full grow flex-col gap-4 overflow-x-hidden bg-background p-6">
 					<OpportunityPageHeader opportunity={opportunity} session={session} handleOnMutate={handleOnMutate} handleOnSettled={handleOnSettled} />
 					<div className="flex w-full flex-col gap-4">
+						{opportunity.ganho.idProjeto ? <OpportunityProject opportunityProjectId={opportunity.ganho.idProjeto} session={session} /> : null}
 						<div className="flex w-full flex-col gap-4 lg:flex-row">
 							<div className="w-full lg:w-[40%]">
 								<OpportunityClient client={opportunity.cliente} session={session} responsibles={opportunity.responsaveis} />

@@ -16,6 +16,7 @@ const GeneralFileReferenceSchema = z.object({
 	formato: z.string(),
 	url: z.string(),
 	tamanho: z.number().optional().nullable(),
+	categorias: z.array(z.string({})).optional().nullable(),
 	autor: z.object({
 		id: z.string(),
 		nome: z.string(),
@@ -99,7 +100,23 @@ export const InsertFileReferenceSchema = z.object({
 		required_error: "URL do arquivo não informada.",
 		invalid_type_error: "Tipo válido para a URL do arquivo.",
 	}),
-	tamanho: z.number().optional().nullable(),
+	tamanho: z
+		.number({
+			required_error: "Tamanho do arquivo não informado.",
+			invalid_type_error: "Tipo não válido para o tamanho do arquivo.",
+		})
+		.optional()
+		.nullable(),
+	categorias: z
+		.array(
+			z.string({
+				required_error: "Categoria do arquivo não informada.",
+				invalid_type_error: "Tipo não válido para a categoria do arquivo.",
+			}),
+		)
+		.optional()
+		.nullable(),
+
 	autor: z.object({
 		id: z.string({
 			required_error: "ID do criador do arquivo não informado.",
@@ -130,6 +147,7 @@ const FileReferenceEntitySchema = z.object({
 	formato: z.string(),
 	url: z.string(),
 	tamanho: z.number().optional().nullable(),
+	categorias: z.array(z.string()).optional().nullable(),
 	autor: z.object({
 		id: z.string(),
 		nome: z.string(),

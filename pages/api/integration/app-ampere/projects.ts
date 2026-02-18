@@ -312,16 +312,20 @@ type PutResponse = {
 const updateProject: NextApiHandler<PutResponse> = async (req, res) => {
 	await validateAuthenticationWithSession(req, res);
 
-	const { id } = req.query;
-	if (!id || typeof id !== "string" || !ObjectId.isValid(id)) throw new createHttpError.BadRequest("ID inválido.");
+	console.log("[FAKEUPDATE]", {
+		id: req.query.id,
+		changes: req.body,
+	});
+	// const { id } = req.query;
+	// if (!id || typeof id !== "string" || !ObjectId.isValid(id)) throw new createHttpError.BadRequest("ID inválido.");
 
-	const changes = req.body;
-	const db = await connectToAmpereProjectsDatabase();
-	const collection: Collection<TProject> = db.collection("dados");
+	// const changes = req.body;
+	// const db = await connectToAmpereProjectsDatabase();
+	// const collection: Collection<TProject> = db.collection("dados");
 
-	const updateResponse = await collection.updateOne({ _id: new ObjectId(id) }, { $set: { ...changes } });
+	// const updateResponse = await collection.updateOne({ _id: new ObjectId(id) }, { $set: { ...changes } });
 
-	if (!updateResponse.acknowledged) throw new createHttpError.InternalServerError("Oops, ocorreu um erro ao atualizar o projeto.");
+	// if (!updateResponse.acknowledged) throw new createHttpError.InternalServerError("Oops, ocorreu um erro ao atualizar o projeto.");
 
 	return res.status(200).json({ data: "Projeto atualizado com sucesso !", message: "Projeto atualizado com sucesso !" });
 };
