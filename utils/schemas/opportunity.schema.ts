@@ -313,7 +313,7 @@ export const InsertOpportunitySchema = z.object({
 		.optional()
 		.nullable(),
 	segmento: z
-		.union([z.literal("RESIDENCIAL"), z.literal("RURAL"), z.literal("COMERCIAL"), z.literal("INDUSTRIAL")], {
+		.union([z.literal("RESIDENCIAL"), z.literal("RURAL"), z.literal("COMERCIAL"), z.literal("INDUSTRIAL"), z.literal("ORGÃO PÚBLICO")], {
 			required_error: "Segmento da oportunidade não informado.",
 			invalid_type_error: "Tipo não válido para o segmento da oportunidade.",
 		})
