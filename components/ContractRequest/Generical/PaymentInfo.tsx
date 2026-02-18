@@ -59,15 +59,15 @@ function PaymentInfo({ requestInfo, setRequestInfo, showActions, goToPreviousSta
 		}, 1000);
 	}
 	function validateFields() {
-		if (requestInfo.nomePagador.trim().length < 3) {
+		if (requestInfo.pagador.nome.trim().length < 3) {
 			toast.error("Por favor, preencha o nome do pagador.");
 			return false;
 		}
-		if (requestInfo.contatoPagador.trim().length < 8) {
+		if (requestInfo.pagador.telefone.trim().length < 8) {
 			toast.error("Por favor, preencha o contato do pagador.");
 			return false;
 		}
-		if (requestInfo.cpf_cnpjNF.trim().length < 11) {
+		if (requestInfo.pagador.cpfCnpj.trim().length < 11) {
 			toast.error("Por favor, preencha um CPF/CPNJ válido para NF");
 			return false;
 		}
