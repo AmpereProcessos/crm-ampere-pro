@@ -1,10 +1,12 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import dayjs from "dayjs";
 import { useState } from "react";
 import type { TGetComissionsRouteInput, TGetComissionsRouteOutput } from "@/app/api/opportunities/comissions/route";
-import type { TGetExportOpportunitiesInput } from "@/app/api/opportunities/export/route";
-import type { TResultsExportsItem } from "@/app/api/stats/comercial-results/exports/route";
+import type {
+	TExportOpportunitiesRouteOutput,
+	TGetExportOpportunitiesInput,
+	TOpportunityExportItem,
+} from "@/app/api/opportunities/export/route";
 import { useDebounceMemo } from "@/lib/hooks";
 import type { TGetOpportunitiesKanbanViewInput, TGetOpportunitiesKanbanViewOutput } from "@/pages/api/opportunities/kanban";
 import type { TGetOpportunitiesQueryDefinitionsOutput } from "@/pages/api/opportunities/query-definitions";
@@ -62,30 +64,201 @@ export function useOpportunitiesBySearch({ searchParam, page }: { searchParam: s
 	});
 }
 
-export async function fetchOpportunityExport({ responsibles, periodAfter, periodBefore, periodField, status }: TGetExportOpportunitiesInput) {
-	try {
-		const searchParams = new URLSearchParams();
-		if (responsibles) {
-			searchParams.set("responsibles", responsibles.join(","));
-		}
-		if (periodAfter) {
-			searchParams.set("periodAfter", periodAfter);
-		}
-		if (periodBefore) {
-			searchParams.set("periodBefore", periodBefore);
-		}
-		if (periodField) {
-			searchParams.set("periodField", periodField);
-		}
-		if (status) {
-			searchParams.set("status", status);
-		}
+type TFetchOpportunitiesExportsPageInput = Omit<TGetExportOpportunitiesInput, "page"> & {
+	page?: number;
+	signal?: AbortSignal;
+};
 
-		const searchParamsString = searchParams.toString();
-		const { data } = await axios.get(`/api/opportunities/export?${searchParamsString}`);
-		return data.data;
+function getSafeConcurrency(concurrency: number | undefined) {
+	if (!concurrency || Number.isNaN(concurrency)) return 3;
+	if (concurrency < 1) return 1;
+	if (concurrency > 4) return 4;
+	return concurrency;
+}
+
+export async function fetchOpportunitiesExportsPage({
+	page = 1,
+	pageSize,
+	funnelsIds,
+	responsibles,
+	periodAfter,
+	periodBefore,
+	periodField,
+	status,
+	signal,
+}: TFetchOpportunitiesExportsPageInput) {
+	const { data } = await axios.post<TExportOpportunitiesRouteOutput>(
+		"/api/opportunities/export",
+		{
+			page,
+			pageSize,
+			funnelsIds,
+			responsibles,
+			periodAfter,
+			periodBefore,
+			periodField,
+			status,
+		},
+		{ signal },
+	);
+	return data;
+}
+
+type TFetchOpportunitiesExportsAllInput = Omit<TFetchOpportunitiesExportsPageInput, "page"> & {
+	concurrency?: number;
+	callbacks?: {
+		onInit?: (payload: { totalPages: number; totalItems: number; pageSize: number }) => void;
+		onPageDone?: (payload: {
+			page: number;
+			pageItems: number;
+			pagesProcessed: number;
+			totalPages: number;
+			opportunitiesProcessed: number;
+			totalItems: number;
+		}) => void;
+	};
+};
+
+async function processExportChunks({
+	chunks,
+	currentChunkIndex,
+	commonInput,
+	state,
+	callbacks,
+	signal,
+}: {
+	chunks: number[][];
+	currentChunkIndex: number;
+	commonInput: Omit<TFetchOpportunitiesExportsPageInput, "page" | "signal">;
+	state: { rows: TOpportunityExportItem[]; pagesProcessed: number; opportunitiesProcessed: number; totalPages: number; totalItems: number };
+	callbacks?: TFetchOpportunitiesExportsAllInput["callbacks"];
+	signal?: AbortSignal;
+}): Promise<TOpportunityExportItem[]> {
+	if (signal?.aborted) throw new Error("Exportação cancelada.");
+	if (currentChunkIndex >= chunks.length) return state.rows;
+
+	const pages = chunks[currentChunkIndex] ?? [];
+	const results = await Promise.all(
+		pages.map((page) =>
+			fetchOpportunitiesExportsPage({
+				...commonInput,
+				page,
+				signal,
+			}),
+		),
+	);
+
+	results.forEach((result) => {
+		state.rows.push(...result.data);
+		state.pagesProcessed += 1;
+		state.opportunitiesProcessed += result.data.length;
+		callbacks?.onPageDone?.({
+			page: result.page,
+			pageItems: result.data.length,
+			pagesProcessed: state.pagesProcessed,
+			totalPages: state.totalPages,
+			opportunitiesProcessed: state.opportunitiesProcessed,
+			totalItems: state.totalItems,
+		});
+	});
+
+	return processExportChunks({
+		chunks,
+		currentChunkIndex: currentChunkIndex + 1,
+		commonInput,
+		state,
+		callbacks,
+		signal,
+	});
+}
+
+export async function fetchOpportunitiesExportsAll({
+	pageSize = 500,
+	funnelsIds,
+	responsibles,
+	periodAfter,
+	periodBefore,
+	periodField,
+	status,
+	concurrency,
+	callbacks,
+	signal,
+}: TFetchOpportunitiesExportsAllInput) {
+	const firstPage = await fetchOpportunitiesExportsPage({
+		page: 1,
+		pageSize,
+		funnelsIds,
+		responsibles,
+		periodAfter,
+		periodBefore,
+		periodField,
+		status,
+		signal,
+	});
+
+	callbacks?.onInit?.({
+		totalPages: firstPage.totalPages,
+		totalItems: firstPage.totalItems,
+		pageSize: firstPage.pageSize,
+	});
+	callbacks?.onPageDone?.({
+		page: firstPage.page,
+		pageItems: firstPage.data.length,
+		pagesProcessed: firstPage.totalPages > 0 ? 1 : 0,
+		totalPages: firstPage.totalPages,
+		opportunitiesProcessed: firstPage.data.length,
+		totalItems: firstPage.totalItems,
+	});
+
+	if (!firstPage.totalPages || firstPage.totalPages <= 1) {
+		return firstPage.data as TOpportunityExportItem[];
+	}
+
+	const pages = Array.from({ length: firstPage.totalPages - 1 }, (_, index) => index + 2);
+	const chunkSize = getSafeConcurrency(concurrency);
+	const chunks = Array.from({ length: Math.ceil(pages.length / chunkSize) }, (_, index) =>
+		pages.slice(index * chunkSize, index * chunkSize + chunkSize),
+	);
+
+	const state = {
+		rows: [...(firstPage.data as TOpportunityExportItem[])],
+		pagesProcessed: 1,
+		opportunitiesProcessed: firstPage.data.length,
+		totalPages: firstPage.totalPages,
+		totalItems: firstPage.totalItems,
+	};
+
+	return processExportChunks({
+		chunks,
+		currentChunkIndex: 0,
+		commonInput: {
+			pageSize: firstPage.pageSize,
+			funnelsIds,
+			responsibles,
+			periodAfter,
+			periodBefore,
+			periodField,
+			status,
+		},
+		state,
+		callbacks,
+		signal,
+	});
+}
+
+export async function fetchOpportunityExport({ responsibles, periodAfter, periodBefore, periodField, status, funnelsIds, pageSize }: TGetExportOpportunitiesInput) {
+	try {
+		return await fetchOpportunitiesExportsAll({
+			responsibles,
+			periodAfter,
+			periodBefore,
+			periodField,
+			status,
+			funnelsIds,
+			pageSize,
+		});
 	} catch (error) {
-		console.log("Error fetching opportunities by personalized filters", error);
+		console.log("Error fetching opportunities export", error);
 		throw error;
 	}
 }
