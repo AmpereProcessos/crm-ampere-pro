@@ -1,12 +1,17 @@
 import { DndContext, DragOverlay, useDraggable, useDroppable } from "@dnd-kit/core";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import dayjs from "dayjs";
 import { BadgeDollarSign, GripVertical, Loader2, MapPin, Settings, Share2, Zap } from "lucide-react";
 import Link from "next/link";
 import { useRef, useState } from "react";
+import toast from "react-hot-toast";
 import { AiOutlinePlus } from "react-icons/ai";
 import { BsCalendarPlus, BsDownload, BsFillMegaphoneFill } from "react-icons/bs";
 import { MdDashboard } from "react-icons/md";
 import { Sidebar } from "@/components/Sidebar";
+import { Progress } from "@/components/ui/progress";
+import ResponsiveDialogDrawer from "@/components/utils/ResponsiveDialogDrawer";
+import useOpportunitiesExportStateHook from "@/hooks/use-opportunities-export-state-hook";
 import type { TUserSession } from "@/lib/auth/session";
 import { OPPORTUNITIES_FUNNEL_CONFIG, useOpportunitiesDragAndDropLogic } from "@/lib/funnels/opportunities-funnel-config";
 import { formatDateAsLocale, formatDecimalPlaces, formatNameAsInitials, formatToMoney } from "@/lib/methods/formatting";
@@ -15,7 +20,7 @@ import type { TGetOpportunitiesKanbanViewOutput } from "@/pages/api/opportunitie
 import type { TGetOpportunitiesQueryDefinitionsOutput, TUpdateOpportunityQueryDefinitionsInput } from "@/pages/api/opportunities/query-definitions";
 import { updateOpportunitiesQueryDefinitions } from "@/utils/mutations/opportunities";
 import { useOpportunitiesKanbanView } from "@/utils/queries/opportunities";
-import { DEFAULT_KANBAN_CARD_BLOCKS, type TKanbanCardBlock, type TKanbanCardConfig } from "@/utils/schemas/funnel.schema";
+import { DEFAULT_KANBAN_CARD_BLOCKS, type TKanbanCardConfig } from "@/utils/schemas/funnel.schema";
 import UserConectaIndicationCodeFlag from "../Conecta/UserConectaIndicationCodeFlag";
 import MultipleSelectInput from "../Inputs/MultipleSelectInput";
 import { PeriodByFieldFilter } from "../Inputs/PeriodByFieldFilter";
@@ -34,18 +39,63 @@ export default function OpportunitiesKanbanModePageV2({ session, opportunityView
 	const queryClient = useQueryClient();
 	const [newProjectModalIsOpen, setNewProjectModalIsOpen] = useState(false);
 	const [cardConfigModalIsOpen, setCardConfigModalIsOpen] = useState(false);
+	const [exportMenuIsOpen, setExportMenuIsOpen] = useState(false);
 	const [selectedFunnelId, setSelectedFunnelId] = useState<string | null>(opportunityViewPreferences.filterOptions.funnels[0].id || null);
 
 	const selectedFunnel = opportunityViewPreferences.filterOptions.funnels.find((funnel) => funnel.id === selectedFunnelId);
+	const exportState = useOpportunitiesExportStateHook({
+		initialInput: {
+			responsibles: opportunityViewPreferences.filterSelections.responsiblesIds ?? [],
+			funnelsIds: selectedFunnelId ? [selectedFunnelId] : [],
+			periodAfter: opportunityViewPreferences.filterSelections.period.after ?? null,
+			periodBefore: opportunityViewPreferences.filterSelections.period.before ?? null,
+			periodField: opportunityViewPreferences.filterSelections.period.field ?? null,
+			status: opportunityViewPreferences.filterSelections.status,
+			pageSize: 500,
+			fileName: `OPORTUNIDADES_${dayjs().format("YYYYMMDD_HHmmss")}.xlsx`,
+		},
+	});
 
 	const cardConfig = selectedFunnel?.configuracaoCartao ?? null;
+	const pagesProgress = exportState.progress.pagesFound > 0 ? (exportState.progress.pagesProcessed / exportState.progress.pagesFound) * 100 : 0;
+	const opportunitiesProgress =
+		exportState.progress.opportunitiesFound > 0 ? (exportState.progress.opportunitiesProcessed / exportState.progress.opportunitiesFound) * 100 : 0;
+
+	function openExportMenu() {
+		exportState.updateInput({
+			responsibles: opportunityViewPreferences.filterSelections.responsiblesIds ?? [],
+			funnelsIds: selectedFunnelId ? [selectedFunnelId] : [],
+			periodAfter: opportunityViewPreferences.filterSelections.period.after ?? null,
+			periodBefore: opportunityViewPreferences.filterSelections.period.before ?? null,
+			periodField: opportunityViewPreferences.filterSelections.period.field ?? null,
+			status: opportunityViewPreferences.filterSelections.status,
+			fileName: `OPORTUNIDADES_${dayjs().format("YYYYMMDD_HHmmss")}.xlsx`,
+		});
+		exportState.resetProgress();
+		setExportMenuIsOpen(true);
+	}
+
+	async function handleStartExport() {
+		const success = await exportState.startExport();
+		if (success) {
+			toast.success("Exportação concluída com sucesso.");
+			setExportMenuIsOpen(false);
+		}
+	}
+
+	function closeExportMenu() {
+		if (exportState.isRunning) {
+			exportState.cancelExport();
+		}
+		setExportMenuIsOpen(false);
+	}
 
 	const { activeDragItem, handleOnDragStart, handleOnDragEnd, handleOnDragCancel } = useOpportunitiesDragAndDropLogic({
 		globalQueryParams: opportunityViewPreferences.filterSelections,
 		queryClient,
 	});
 
-	const { mutate: updateOpportunitiesQueryDefinitionsMutation, isPending } = useMutation({
+	const { mutate: updateOpportunitiesQueryDefinitionsMutation } = useMutation({
 		mutationKey: ["update-opportunities-query-definitions"],
 		mutationFn: updateOpportunitiesQueryDefinitions,
 		onMutate: async (payload) => {
@@ -79,10 +129,10 @@ export default function OpportunitiesKanbanModePageV2({ session, opportunityView
 			}));
 			return { snapshot };
 		},
-		onSettled: async (data, error, variables, context) => {
+		onSettled: async () => {
 			await queryClient.invalidateQueries({ queryKey: ["opportunities-query-definitions"] });
 		},
-		onError: (error, variables, context) => {
+		onError: (_error, _variables, context) => {
 			if (context?.snapshot) queryClient.setQueryData(["opportunities-query-definitions"], context.snapshot);
 		},
 	});
@@ -125,7 +175,7 @@ export default function OpportunitiesKanbanModePageV2({ session, opportunityView
 						<div className="flex grow flex-col items-center justify-end  gap-2 xl:flex-row">
 							<button
 								type="button"
-								// onClick={() => handleExportData()}
+								onClick={openExportMenu}
 								className="flex h-[46.6px] items-center justify-center gap-2 rounded-md border bg-[#2c6e49] p-2 px-3 text-sm font-medium text-primary-foreground shadow-md duration-300 ease-in-out hover:scale-105"
 							>
 								<BsDownload style={{ fontSize: "18px" }} />
@@ -295,6 +345,103 @@ export default function OpportunitiesKanbanModePageV2({ session, opportunityView
 			{cardConfigModalIsOpen && selectedFunnel ? (
 				<KanbanCardConfigModal funnelId={selectedFunnel.id} currentConfig={cardConfig} closeModal={() => setCardConfigModalIsOpen(false)} />
 			) : null}
+			{exportMenuIsOpen ? (
+				<ResponsiveDialogDrawer
+					menuTitle="EXPORTAÇÃO DE OPORTUNIDADES"
+					menuDescription="Configure os filtros e acompanhe o progresso da exportação."
+					menuActionButtonText={exportState.isRunning ? "EXPORTANDO..." : "INICIAR EXPORTAÇÃO"}
+					menuCancelButtonText="FECHAR"
+					menuSecondaryActionButtonText={exportState.isRunning ? "CANCELAR EXPORTAÇÃO" : undefined}
+					secondaryActionFunction={exportState.isRunning ? exportState.cancelExport : undefined}
+					closeMenu={closeExportMenu}
+					actionFunction={handleStartExport}
+					actionIsLoading={exportState.isRunning}
+					stateIsLoading={false}
+				>
+					<div className="flex w-full flex-col gap-3">
+						<MultipleSelectInput
+							label="RESPONSÁVEIS"
+							labelClassName="text-[0.6rem]"
+							holderClassName="text-xs p-2 min-h-[34px]"
+							resetOptionLabel="TODOS"
+							selected={exportState.input.responsibles}
+							options={opportunityViewPreferences.filterOptions.responsibles}
+							handleChange={(selected) => exportState.updateInput({ responsibles: selected as string[] })}
+							onReset={() => exportState.updateInput({ responsibles: [] })}
+							width="100%"
+						/>
+						<MultipleSelectInput
+							label="FUNIS"
+							labelClassName="text-[0.6rem]"
+							holderClassName="text-xs p-2 min-h-[34px]"
+							resetOptionLabel="TODOS"
+							selected={exportState.input.funnelsIds}
+							options={opportunityViewPreferences.filterOptions.funnels}
+							handleChange={(selected) => exportState.updateInput({ funnelsIds: selected as string[] })}
+							onReset={() => exportState.updateInput({ funnelsIds: [] })}
+							width="100%"
+						/>
+						<SelectInput
+							label="STATUS"
+							labelClassName="text-[0.6rem]"
+							holderClassName="text-xs p-2 min-h-[34px]"
+							resetOptionLabel="EM ANDAMENTO"
+							value={exportState.input.status}
+							options={[
+								{ id: 1, label: "EM ANDAMENTO", value: "ongoing" },
+								{ id: 2, label: "GANHOS", value: "won" },
+								{ id: 3, label: "PERDIDOS", value: "lost" },
+							]}
+							handleChange={(selected) => exportState.updateInput({ status: selected as "ongoing" | "won" | "lost" })}
+							onReset={() => exportState.updateInput({ status: "ongoing" })}
+							width="100%"
+						/>
+
+						<PeriodByFieldFilter
+							value={{
+								after: exportState.input.periodAfter ?? undefined,
+								before: exportState.input.periodBefore ?? undefined,
+								field: exportState.input.periodField ?? undefined,
+							}}
+							handleChange={(value) =>
+								exportState.updateInput({
+									periodAfter: value.after ?? null,
+									periodBefore: value.before ?? null,
+									periodField: (value.field as "dataInsercao" | "dataGanho" | "dataPerda" | "ultimaInteracao.data" | undefined) ?? null,
+								})
+							}
+							holderClassName="text-xs p-2 min-h-[34px]"
+							fieldOptions={[
+								{ id: 1, label: "DATA DE INSERÇÃO", value: "dataInsercao" },
+								{ id: 2, label: "DATA DE GANHO", value: "dataGanho" },
+								{ id: 3, label: "DATA DE PERDA", value: "dataPerda" },
+								{ id: 4, label: "DATA DA ÚLTIMA INTERAÇÃO", value: "ultimaInteracao.data" },
+							]}
+						/>
+
+						<div className="rounded-md border border-primary/20 p-3 flex flex-col gap-3">
+							<div className="flex items-center justify-between text-xs">
+								<p className="font-medium">Páginas processadas</p>
+								<p>
+									{exportState.progress.pagesProcessed}/{exportState.progress.pagesFound}
+								</p>
+							</div>
+							<Progress value={pagesProgress} />
+							<div className="flex items-center justify-between text-xs">
+								<p className="font-medium">Oportunidades processadas</p>
+								<p>
+									{exportState.progress.opportunitiesProcessed}/{exportState.progress.opportunitiesFound}
+								</p>
+							</div>
+							<Progress value={opportunitiesProgress} indicatorClassName="bg-emerald-500 dark:bg-emerald-400" />
+							{exportState.progress.lastProcessedPage ? (
+								<p className="text-[11px] text-primary/70">Última página concluída: {exportState.progress.lastProcessedPage}</p>
+							) : null}
+							{exportState.error ? <p className="text-[11px] text-red-500">{exportState.error}</p> : null}
+						</div>
+					</div>
+				</ResponsiveDialogDrawer>
+			) : null}
 		</div>
 	);
 }
@@ -308,7 +455,7 @@ type KanbanBoardStageProps = {
 function KanbanBoardStage({ funnelId, stage, globalQueryParams, cardConfig }: KanbanBoardStageProps) {
 	const parentRef = useRef<HTMLDivElement>(null);
 
-	const { isOver, setNodeRef } = useDroppable({
+	const { setNodeRef } = useDroppable({
 		id: stage.id,
 		data: {
 			stage,
@@ -317,9 +464,6 @@ function KanbanBoardStage({ funnelId, stage, globalQueryParams, cardConfig }: Ka
 
 	const {
 		data: oppportunitesKanbanViewStage,
-		isLoading,
-		isError,
-		isSuccess,
 		isFetchingNextPage,
 		hasNextPage,
 		fetchNextPage,
