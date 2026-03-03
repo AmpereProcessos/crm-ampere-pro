@@ -1,3 +1,7 @@
+import createHttpError from "http-errors";
+import { type Collection, type Filter, ObjectId } from "mongodb";
+import type { NextApiHandler } from "next";
+import { z } from "zod";
 import type { TUserSession } from "@/lib/auth/session";
 import { getPartnerFunnels } from "@/repositories/funnels/queries";
 import { getPartnersSimplified } from "@/repositories/partner-simplified/query";
@@ -8,12 +12,8 @@ import { apiHandler, validateAuthentication, validateAuthenticationWithSession }
 import type { TFunnel } from "@/utils/schemas/funnel.schema";
 import type { TPartner } from "@/utils/schemas/partner.schema";
 import type { TProjectType } from "@/utils/schemas/project-types.schema";
-import { OpportunityViewPreferencesSchema, UserPreferencesSchema, type TUserPreferences } from "@/utils/schemas/user-preferences.schema";
 import type { TUser } from "@/utils/schemas/user.schema";
-import createHttpError from "http-errors";
-import type { Collection, Filter } from "mongodb";
-import type { NextApiHandler } from "next";
-import { z } from "zod";
+import { OpportunityViewPreferencesSchema, type TUserPreferences, UserPreferencesSchema } from "@/utils/schemas/user-preferences.schema";
 
 async function getOpportunitiesQueryDefinitions({ session }: { session: TUserSession }) {
 	const db = await connectToDatabase();
@@ -26,9 +26,8 @@ async function getOpportunitiesQueryDefinitions({ session }: { session: TUserSes
 
 	const partnerScope = session.user.permissoes.parceiros.escopo;
 	const opportunityScope = session.user.permissoes.oportunidades.escopo;
-
 	const partnerQuery = partnerScope ? { idParceiro: { $in: [...partnerScope, null] } } : {};
-	const opportunityQuery = opportunityScope ? { idParceiro: { $in: [...opportunityScope, null] } } : {};
+	const opportunityQuery = opportunityScope ? { _id: { $in: [...opportunityScope.map((o) => new ObjectId(o)), null] } } : {};
 
 	const userPreferences = await userPreferencesCollection.findOne({
 		identificador: "opportunity-view-definition-v1",

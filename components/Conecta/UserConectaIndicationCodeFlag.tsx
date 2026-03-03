@@ -17,7 +17,7 @@ function UserConectaIndicationCodeFlag({ sellerId, code }: UserConectaIndication
 			size={"fit"}
 		>
 			<Share2 className="h-4 w-4 min-w-4 min-h-4" />
-			<p className="text-xs">COMPARTILHE SEU CARTÃO DO CONECTAME</p>
+			<p className="text-xs">CARTÃO DO CONECTAME</p>
 		</Button>
 	);
 }

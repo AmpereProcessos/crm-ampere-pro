@@ -162,6 +162,7 @@ export default function OpportunitiesKanbanModePageV2({ session, opportunityView
 			},
 		});
 	}
+	console.log(opportunityViewPreferences);
 	return (
 		<div className="flex h-full flex-col md:flex-row">
 			<Sidebar session={session} />
@@ -264,6 +265,28 @@ export default function OpportunitiesKanbanModePageV2({ session, opportunityView
 										updateOpportunitiesQueryDefinitionsMutationPartial({ status: selected });
 									}}
 									onReset={() => updateOpportunitiesQueryDefinitionsMutationPartial({ status: undefined })}
+									width="100%"
+								/>
+							</div>
+							<div className="w-full lg:w-[250px]">
+								<MultipleSelectInput
+									label="PARCEIROS"
+									labelClassName="text-[0.6rem]"
+									holderClassName="text-xs p-2 min-h-[34px]"
+									showLabel={false}
+									resetOptionLabel="TODOS"
+									selected={opportunityViewPreferences.filterSelections.partnerIds}
+									options={opportunityViewPreferences.filterOptions.partners}
+									handleChange={(selected) => {
+										updateOpportunitiesQueryDefinitionsMutationPartial({ parceirosIds: selected as string[] });
+									}}
+									onReset={() => {
+										if (!session.user.permissoes.parceiros.escopo) {
+											updateOpportunitiesQueryDefinitionsMutationPartial({ parceirosIds: [] });
+										} else {
+											updateOpportunitiesQueryDefinitionsMutationPartial({ parceirosIds: session.user.permissoes.parceiros.escopo ?? [] });
+										}
+									}}
 									width="100%"
 								/>
 							</div>
