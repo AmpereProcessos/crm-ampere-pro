@@ -1,7 +1,21 @@
 import { DndContext, DragOverlay, useDraggable, useDroppable } from "@dnd-kit/core";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import dayjs from "dayjs";
-import { BadgeDollarSign, GripVertical, Loader2, MapPin, Settings, Share2, Zap } from "lucide-react";
+import {
+	BadgeDollarSign,
+	Briefcase,
+	Building2,
+	CalendarDays,
+	Check,
+	GitBranch,
+	GripVertical,
+	Loader2,
+	MapPin,
+	Settings,
+	Share2,
+	Users,
+	Zap,
+} from "lucide-react";
 import Link from "next/link";
 import { useRef, useState } from "react";
 import toast from "react-hot-toast";
@@ -22,6 +36,7 @@ import { updateOpportunitiesQueryDefinitions } from "@/utils/mutations/opportuni
 import { useOpportunitiesKanbanView } from "@/utils/queries/opportunities";
 import { DEFAULT_KANBAN_CARD_BLOCKS, type TKanbanCardConfig } from "@/utils/schemas/funnel.schema";
 import UserConectaIndicationCodeFlag from "../Conecta/UserConectaIndicationCodeFlag";
+import FilterChipMenu from "../Inputs/FilterChipMenu";
 import MultipleSelectInput from "../Inputs/MultipleSelectInput";
 import { PeriodByFieldFilter } from "../Inputs/PeriodByFieldFilter";
 import SelectInput from "../Inputs/SelectInput";
@@ -35,12 +50,42 @@ type OpportunitiesKanbanModePageV2Props = {
 	session: TUserSession;
 	opportunityViewPreferences: TGetOpportunitiesQueryDefinitionsOutput["data"];
 };
+
+const STATUS_OPTIONS = [
+	{ id: 1, label: "EM ANDAMENTO", value: "ongoing" },
+	{ id: 2, label: "GANHOS", value: "won" },
+	{ id: 3, label: "PERDIDOS", value: "lost" },
+] as const;
+
+const PERIOD_FIELD_OPTIONS = [
+	{ id: 1, label: "DATA DE INSERÇÃO", value: "dataInsercao" },
+	{ id: 2, label: "DATA DE GANHO", value: "dataGanho" },
+	{ id: 3, label: "DATA DE PERDA", value: "dataPerda" },
+	{ id: 4, label: "DATA DA ÚLTIMA INTERAÇÃO", value: "ultimaInteracao.data" },
+] as const;
+
+function areArraysEqual(first: string[] | undefined, second: string[] | undefined) {
+	const firstArr = first ?? [];
+	const secondArr = second ?? [];
+	if (firstArr.length !== secondArr.length) return false;
+	const sortedA = [...firstArr].sort();
+	const sortedB = [...secondArr].sort();
+	return sortedA.every((value, index) => value === sortedB[index]);
+}
+
+function summarizeSelectedLabels(labels: string[]) {
+	if (labels.length === 0) return null;
+	if (labels.length === 1) return labels[0];
+	if (labels.length <= 3) return labels.join(", ");
+	return `${labels.length} selecionados`;
+}
+
 export default function OpportunitiesKanbanModePageV2({ session, opportunityViewPreferences }: OpportunitiesKanbanModePageV2Props) {
 	const queryClient = useQueryClient();
 	const [newProjectModalIsOpen, setNewProjectModalIsOpen] = useState(false);
 	const [cardConfigModalIsOpen, setCardConfigModalIsOpen] = useState(false);
 	const [exportMenuIsOpen, setExportMenuIsOpen] = useState(false);
-	const [selectedFunnelId, setSelectedFunnelId] = useState<string | null>(opportunityViewPreferences.filterOptions.funnels[0].id || null);
+	const [selectedFunnelId, setSelectedFunnelId] = useState<string | null>(opportunityViewPreferences.filterOptions.funnels[0]?.id || null);
 
 	const selectedFunnel = opportunityViewPreferences.filterOptions.funnels.find((funnel) => funnel.id === selectedFunnelId);
 	const exportState = useOpportunitiesExportStateHook({
@@ -162,12 +207,68 @@ export default function OpportunitiesKanbanModePageV2({ session, opportunityView
 			},
 		});
 	}
-	console.log(opportunityViewPreferences);
+
+	const defaultFunnelId = opportunityViewPreferences.filterOptions.funnels[0]?.id ?? null;
+	const defaultPartnerIds = session.user.permissoes.parceiros.escopo ?? [];
+	const defaultResponsiblesIds = session.user.permissoes.oportunidades.escopo ?? [];
+
+	const selectedPartnerOptions = opportunityViewPreferences.filterOptions.partners.filter((partner) =>
+		opportunityViewPreferences.filterSelections.partnerIds.includes(partner.value),
+	);
+	const selectedResponsiblesOptions = opportunityViewPreferences.filterOptions.responsibles.filter((responsible) =>
+		opportunityViewPreferences.filterSelections.responsiblesIds.includes(responsible.value),
+	);
+	const selectedProjectTypeOptions = opportunityViewPreferences.filterOptions.projectTypes.filter((projectType) =>
+		opportunityViewPreferences.filterSelections.opportunityTypeIds.includes(projectType.value),
+	);
+
+	const statusSummary = STATUS_OPTIONS.find((status) => status.value === opportunityViewPreferences.filterSelections.status)?.label;
+	const periodFieldLabel = PERIOD_FIELD_OPTIONS.find((field) => field.value === opportunityViewPreferences.filterSelections.period.field)?.label;
+	const periodSummary = (() => {
+		const { after, before } = opportunityViewPreferences.filterSelections.period;
+		if (!periodFieldLabel && !after && !before) return null;
+		if (after && before) return `${periodFieldLabel ?? "PERÍODO"} ${formatDateAsLocale(after)} - ${formatDateAsLocale(before)}`;
+		if (after) return `${periodFieldLabel ?? "PERÍODO"} desde ${formatDateAsLocale(after)}`;
+		if (before) return `${periodFieldLabel ?? "PERÍODO"} até ${formatDateAsLocale(before)}`;
+		return periodFieldLabel ?? "PERÍODO";
+	})();
+
+	const partnersSummary = summarizeSelectedLabels(selectedPartnerOptions.map((partner) => partner.label));
+	const responsiblesSummary = summarizeSelectedLabels(selectedResponsiblesOptions.map((responsible) => responsible.label));
+	const projectTypesSummary = summarizeSelectedLabels(selectedProjectTypeOptions.map((projectType) => projectType.label));
+	const funnelSummary = opportunityViewPreferences.filterOptions.funnels.find((funnel) => funnel.id === selectedFunnelId)?.label ?? null;
+
+	const isPartnerFilterActive = !areArraysEqual(opportunityViewPreferences.filterSelections.partnerIds, defaultPartnerIds);
+	const isResponsiblesFilterActive = !areArraysEqual(opportunityViewPreferences.filterSelections.responsiblesIds, defaultResponsiblesIds);
+	const isProjectTypeFilterActive = opportunityViewPreferences.filterSelections.opportunityTypeIds.length > 0;
+	const isStatusFilterActive = opportunityViewPreferences.filterSelections.status !== "ongoing";
+	const isFunnelFilterActive = !!selectedFunnelId && selectedFunnelId !== defaultFunnelId;
+	const isPeriodFilterActive =
+		!!opportunityViewPreferences.filterSelections.period.field ||
+		!!opportunityViewPreferences.filterSelections.period.after ||
+		!!opportunityViewPreferences.filterSelections.period.before;
+
+	function resetPartnersFilter() {
+		if (!session.user.permissoes.parceiros.escopo) {
+			updateOpportunitiesQueryDefinitionsMutationPartial({ parceirosIds: [] });
+			return;
+		}
+		updateOpportunitiesQueryDefinitionsMutationPartial({ parceirosIds: session.user.permissoes.parceiros.escopo ?? [] });
+	}
+
+	function resetResponsiblesFilter() {
+		if (!session.user.permissoes.oportunidades.escopo) {
+			updateOpportunitiesQueryDefinitionsMutationPartial({ responsaveisIds: [] });
+			return;
+		}
+		updateOpportunitiesQueryDefinitionsMutationPartial({ responsaveisIds: session.user.permissoes.oportunidades.escopo ?? [] });
+	}
+
 	return (
 		<div className="flex h-full flex-col md:flex-row">
 			<Sidebar session={session} />
 			<div className="flex w-full max-w-full grow flex-col overflow-x-hidden bg-background p-6 gap-3">
-				<div className="flex flex-col items-center border-b border-black pb-2 gap-1">
+				<div className="flex flex-col items-center border-b border-black pb-2 gap-3">
 					<div className="w-full flex items-center justify-between gap-2 flex-col lg:flex-row">
 						<div className="flex items-center gap-1">
 							<div className="text-xl font-black leading-none tracking-tight md:text-2xl">OPORTUNIDADES</div>
@@ -202,136 +303,248 @@ export default function OpportunitiesKanbanModePageV2({ session, opportunityView
 							</button>
 						</div>
 					</div>
-					<div className="w-full flex flex-col lg:flex-row justify-between gap-2 items-center">
-						<UserConectaIndicationCodeFlag sellerId={session.user.id} code={session.user.codigoIndicacaoConecta} />
-						<div className="flex items-center justify-end flex-wrap gap-2">
-							<button
-								type="button"
-								className={cn("flex items-center justify-center p-2 max-h-[36px] min-h-[36px] border border-[#3e53b2] rounded-md transition-colors", {
-									"bg-[#3e53b2] text-primary-foreground": opportunityViewPreferences.filterSelections.isFromMarketing,
-									"text-[#3e53b2]": !opportunityViewPreferences.filterSelections.isFromMarketing,
-								})}
-								onClick={() =>
-									updateOpportunitiesQueryDefinitionsMutationPartial({ viaMarketing: !opportunityViewPreferences.filterSelections.isFromMarketing })
-								}
-							>
-								<BsFillMegaphoneFill className="w-4 h-4" />
-							</button>
-							<button
-								onClick={() =>
-									updateOpportunitiesQueryDefinitionsMutationPartial({ viaIndicacao: !opportunityViewPreferences.filterSelections.isFromIndication })
-								}
-								type="button"
-								className={cn("flex items-center justify-center p-2 max-h-[36px] min-h-[36px] border border-[#06b6d4] rounded-md transition-colors", {
-									"bg-[#06b6d4] text-primary-foreground": opportunityViewPreferences.filterSelections.isFromIndication,
-									"text-[#06b6d4]": !opportunityViewPreferences.filterSelections.isFromIndication,
-								})}
-							>
-								<Share2 className="w-4 h-4" />
-							</button>
-							<PeriodByFieldFilter
-								value={opportunityViewPreferences.filterSelections.period}
-								handleChange={(v) =>
-									updateOpportunitiesQueryDefinitionsMutationPartial({
-										periodo: {
-											depois: v?.after ?? undefined,
-											antes: v?.before ?? undefined,
-											parametro: v?.field as "dataInsercao" | "dataGanho" | "dataPerda" | "ultimaInteracao.data",
-										},
-									})
-								}
-								holderClassName="text-xs p-2 max-h-[36px] min-h-[36px]"
-								fieldOptions={[
-									{ id: 1, label: "DATA DE INSERÇÃO", value: "dataInsercao" },
-									{ id: 2, label: "DATA DE GANHO", value: "dataGanho" },
-									{ id: 3, label: "DATA DE PERDA", value: "dataPerda" },
-									{ id: 4, label: "DATA DA ÚLTIMA INTERAÇÃO", value: "ultimaInteracao.data" },
-								]}
-							/>
-							<div className="w-full lg:w-[250px]">
-								<SelectInput
-									showLabel={false}
-									label="STATUS"
-									labelClassName="text-[0.6rem]"
-									holderClassName="text-xs p-2 min-h-[34px]"
-									resetOptionLabel="EM ANDAMENTO"
-									value={opportunityViewPreferences.filterSelections.status}
-									options={[
-										{ id: 1, label: "EM ANDAMENTO", value: "ongoing" },
-										{ id: 2, label: "GANHOS", value: "won" },
-										{ id: 3, label: "PERDIDOS", value: "lost" },
-									]}
-									handleChange={(selected) => {
-										updateOpportunitiesQueryDefinitionsMutationPartial({ status: selected });
-									}}
-									onReset={() => updateOpportunitiesQueryDefinitionsMutationPartial({ status: undefined })}
-									width="100%"
+					<div className="w-full flex flex-col lg:flex-row justify-end gap-2 items-center flex-wrap">
+						<FilterChipMenu
+							label="PERÍODO"
+							icon={<CalendarDays className="h-4 w-4" />}
+							summary={periodSummary}
+							isActive={isPeriodFilterActive}
+							onClear={() =>
+								updateOpportunitiesQueryDefinitionsMutationPartial({
+									periodo: {
+										parametro: undefined,
+										depois: undefined,
+										antes: undefined,
+									},
+								})
+							}
+							menuTitle="PERÍODO"
+							menuDescription="Selecione um parâmetro e intervalo de datas."
+							contentClassName="w-[360px]"
+						>
+							{() => (
+								<PeriodByFieldFilter
+									value={opportunityViewPreferences.filterSelections.period}
+									renderTrigger={false}
+									numberOfMonths={1}
+									handleChange={(v) =>
+										updateOpportunitiesQueryDefinitionsMutationPartial({
+											periodo: {
+												depois: v?.after ?? undefined,
+												antes: v?.before ?? undefined,
+												parametro: v?.field as "dataInsercao" | "dataGanho" | "dataPerda" | "ultimaInteracao.data",
+											},
+										})
+									}
+									holderClassName="text-xs p-2 max-h-[36px] min-h-[36px]"
+									fieldOptions={[...PERIOD_FIELD_OPTIONS]}
 								/>
-							</div>
-							<div className="w-full lg:w-[250px]">
-								<MultipleSelectInput
-									label="PARCEIROS"
-									labelClassName="text-[0.6rem]"
-									holderClassName="text-xs p-2 min-h-[34px]"
-									showLabel={false}
-									resetOptionLabel="TODOS"
-									selected={opportunityViewPreferences.filterSelections.partnerIds}
-									options={opportunityViewPreferences.filterOptions.partners}
-									handleChange={(selected) => {
-										updateOpportunitiesQueryDefinitionsMutationPartial({ parceirosIds: selected as string[] });
-									}}
-									onReset={() => {
-										if (!session.user.permissoes.parceiros.escopo) {
-											updateOpportunitiesQueryDefinitionsMutationPartial({ parceirosIds: [] });
-										} else {
-											updateOpportunitiesQueryDefinitionsMutationPartial({ parceirosIds: session.user.permissoes.parceiros.escopo ?? [] });
-										}
-									}}
-									width="100%"
-								/>
-							</div>
-							<div className="w-full lg:w-[250px]">
-								<MultipleSelectInput
-									label="Usuários"
-									labelClassName="text-[0.6rem]"
-									holderClassName="text-xs p-2 min-h-[34px]"
-									showLabel={false}
-									resetOptionLabel="Todos"
-									selected={opportunityViewPreferences.filterSelections.responsiblesIds}
-									options={opportunityViewPreferences.filterOptions.responsibles}
-									handleChange={(selected) => {
-										updateOpportunitiesQueryDefinitionsMutationPartial({ responsaveisIds: selected as string[] });
-									}}
-									onReset={() => {
-										if (!session.user.permissoes.oportunidades.escopo) {
-											updateOpportunitiesQueryDefinitionsMutationPartial({ responsaveisIds: [] });
-										} else {
-											updateOpportunitiesQueryDefinitionsMutationPartial({ responsaveisIds: session.user.permissoes.oportunidades.escopo ?? [] });
-										}
-									}}
-									width="100%"
-								/>
-							</div>
-							<div className="w-full lg:w-[250px]">
-								<SelectInput
-									label="Funis"
-									labelClassName="text-[0.6rem]"
-									holderClassName="text-xs p-2 min-h-[34px]"
-									showLabel={false}
-									resetOptionLabel="NÃO DEFINIDO"
-									value={selectedFunnelId}
-									options={opportunityViewPreferences.filterOptions.funnels}
-									handleChange={(selected) => {
-										setSelectedFunnelId(selected);
-										// setFunnel(selected.value)
-									}}
-									onReset={() => {
-										setSelectedFunnelId(selectedFunnelId);
-									}}
-									width="100%"
-								/>
-							</div>
-						</div>
+							)}
+						</FilterChipMenu>
+
+						<FilterChipMenu
+							label="STATUS"
+							icon={<Check className="h-4 w-4" />}
+							summary={statusSummary}
+							isActive={isStatusFilterActive}
+							onClear={() => updateOpportunitiesQueryDefinitionsMutationPartial({ status: "ongoing" })}
+							menuTitle="STATUS"
+						>
+							{({ closeMenu }) => (
+								<div className="flex max-h-[280px] flex-col overflow-y-auto scrollbar-thin scrollbar-track-primary/10 scrollbar-thumb-primary/30">
+									{STATUS_OPTIONS.map((status) => (
+										<button
+											type="button"
+											key={status.id}
+											onClick={() => {
+												updateOpportunitiesQueryDefinitionsMutationPartial({ status: status.value });
+												closeMenu();
+											}}
+											className={cn("flex items-center justify-between rounded-md px-2 py-2 text-sm hover:bg-primary/10", {
+												"bg-primary/10": opportunityViewPreferences.filterSelections.status === status.value,
+											})}
+										>
+											<span>{status.label}</span>
+											{opportunityViewPreferences.filterSelections.status === status.value ? <Check className="h-4 w-4" /> : null}
+										</button>
+									))}
+								</div>
+							)}
+						</FilterChipMenu>
+
+						<FilterChipMenu
+							label="FUNIL"
+							icon={<GitBranch className="h-4 w-4" />}
+							summary={funnelSummary ?? undefined}
+							isActive={isFunnelFilterActive}
+							onClear={() => setSelectedFunnelId(defaultFunnelId)}
+							menuTitle="FUNIL"
+						>
+							{({ closeMenu }) => (
+								<div className="flex max-h-[280px] flex-col overflow-y-auto scrollbar-thin scrollbar-track-primary/10 scrollbar-thumb-primary/30">
+									{opportunityViewPreferences.filterOptions.funnels.map((funnel) => (
+										<button
+											type="button"
+											key={funnel.id}
+											onClick={() => {
+												setSelectedFunnelId(funnel.id);
+												closeMenu();
+											}}
+											className={cn("flex items-center justify-between rounded-md px-2 py-2 text-sm hover:bg-primary/10", {
+												"bg-primary/10": selectedFunnelId === funnel.id,
+											})}
+										>
+											<span>{funnel.label}</span>
+											{selectedFunnelId === funnel.id ? <Check className="h-4 w-4" /> : null}
+										</button>
+									))}
+								</div>
+							)}
+						</FilterChipMenu>
+
+						<FilterChipMenu
+							label="PARCEIROS"
+							icon={<Building2 className="h-4 w-4" />}
+							summary={partnersSummary ?? undefined}
+							isActive={isPartnerFilterActive}
+							onClear={resetPartnersFilter}
+							menuTitle="PARCEIROS"
+						>
+							{() => (
+								<div className="flex max-h-[280px] flex-col overflow-y-auto scrollbar-thin scrollbar-track-primary/10 scrollbar-thumb-primary/30">
+									{opportunityViewPreferences.filterOptions.partners.map((partner) => {
+										const isSelected = opportunityViewPreferences.filterSelections.partnerIds.includes(partner.value);
+										const nextValues = isSelected
+											? opportunityViewPreferences.filterSelections.partnerIds.filter((value) => value !== partner.value)
+											: [...opportunityViewPreferences.filterSelections.partnerIds, partner.value];
+										return (
+											<button
+												type="button"
+												key={partner.id}
+												onClick={() => updateOpportunitiesQueryDefinitionsMutationPartial({ parceirosIds: nextValues })}
+												className={cn("flex items-center justify-between rounded-md px-2 py-2 text-sm hover:bg-primary/10", {
+													"bg-primary/10": isSelected,
+												})}
+											>
+												<span className="truncate text-start">{partner.label}</span>
+												{isSelected ? <Check className="h-4 w-4" /> : null}
+											</button>
+										);
+									})}
+								</div>
+							)}
+						</FilterChipMenu>
+
+						<FilterChipMenu
+							label="USUÁRIOS"
+							icon={<Users className="h-4 w-4" />}
+							summary={
+								selectedResponsiblesOptions.length > 0 ? (
+									<span className="inline-flex items-center gap-2">
+										<span className="inline-flex -space-x-2">
+											{selectedResponsiblesOptions.slice(0, 3).map((responsible) => (
+												<Avatar key={responsible.id} className="h-5 w-5">
+													<AvatarImage src={responsible.coverUrl || undefined} alt={responsible.label} />
+													<AvatarFallback className="text-[9px]">{formatNameAsInitials(responsible.label)}</AvatarFallback>
+												</Avatar>
+											))}
+										</span>
+									</span>
+								) : undefined
+							}
+							isActive={isResponsiblesFilterActive}
+							onClear={resetResponsiblesFilter}
+							menuTitle="USUÁRIOS"
+						>
+							{() => (
+								<div className="flex max-h-[280px] flex-col overflow-y-auto scrollbar-thin scrollbar-track-primary/10 scrollbar-thumb-primary/30">
+									{opportunityViewPreferences.filterOptions.responsibles.map((responsible) => {
+										const isSelected = opportunityViewPreferences.filterSelections.responsiblesIds.includes(responsible.value);
+										const nextValues = isSelected
+											? opportunityViewPreferences.filterSelections.responsiblesIds.filter((value) => value !== responsible.value)
+											: [...opportunityViewPreferences.filterSelections.responsiblesIds, responsible.value];
+										return (
+											<button
+												type="button"
+												key={responsible.id}
+												onClick={() => updateOpportunitiesQueryDefinitionsMutationPartial({ responsaveisIds: nextValues })}
+												className={cn("flex items-center justify-between rounded-md px-2 py-2 text-sm hover:bg-primary/10", {
+													"bg-primary/10": isSelected,
+												})}
+											>
+												<div className="flex items-center gap-2 min-w-0">
+													<Avatar className="h-5 w-5">
+														<AvatarImage src={responsible.coverUrl || undefined} alt={responsible.label} />
+														<AvatarFallback className="text-[9px]">{formatNameAsInitials(responsible.label)}</AvatarFallback>
+													</Avatar>
+													<span className="truncate text-start">{responsible.label}</span>
+												</div>
+												{isSelected ? <Check className="h-4 w-4" /> : null}
+											</button>
+										);
+									})}
+								</div>
+							)}
+						</FilterChipMenu>
+
+						<FilterChipMenu
+							label="TIPOS DE PROJETO"
+							icon={<Briefcase className="h-4 w-4" />}
+							summary={isProjectTypeFilterActive ? projectTypesSummary : undefined}
+							isActive={isProjectTypeFilterActive}
+							onClear={() => updateOpportunitiesQueryDefinitionsMutationPartial({ tiposOportunidadeIds: [] })}
+							menuTitle="TIPOS DE PROJETO"
+						>
+							{() => (
+								<div className="flex max-h-[280px] flex-col overflow-y-auto scrollbar-thin scrollbar-track-primary/10 scrollbar-thumb-primary/30">
+									{opportunityViewPreferences.filterOptions.projectTypes.map((projectType) => {
+										const isSelected = opportunityViewPreferences.filterSelections.opportunityTypeIds.includes(projectType.value);
+										const nextValues = isSelected
+											? opportunityViewPreferences.filterSelections.opportunityTypeIds.filter((value) => value !== projectType.value)
+											: [...opportunityViewPreferences.filterSelections.opportunityTypeIds, projectType.value];
+										return (
+											<button
+												type="button"
+												key={projectType.id}
+												onClick={() => updateOpportunitiesQueryDefinitionsMutationPartial({ tiposOportunidadeIds: nextValues })}
+												className={cn("flex items-center justify-between rounded-md px-2 py-2 text-sm hover:bg-primary/10", {
+													"bg-primary/10": isSelected,
+												})}
+											>
+												<span className="truncate text-start">{projectType.label}</span>
+												{isSelected ? <Check className="h-4 w-4" /> : null}
+											</button>
+										);
+									})}
+								</div>
+							)}
+						</FilterChipMenu>
+
+						<button
+							type="button"
+							className={cn("inline-flex h-9 items-center gap-2 rounded-lg border px-3 text-sm font-medium transition-colors", {
+								"border-[#3e53b2] bg-[#3e53b2] text-primary-foreground": opportunityViewPreferences.filterSelections.isFromMarketing,
+								"border-[#3e53b2] text-[#3e53b2] hover:bg-[#3e53b2]/10": !opportunityViewPreferences.filterSelections.isFromMarketing,
+							})}
+							onClick={() => updateOpportunitiesQueryDefinitionsMutationPartial({ viaMarketing: !opportunityViewPreferences.filterSelections.isFromMarketing })}
+						>
+							<BsFillMegaphoneFill className="h-4 w-4" />
+							<span>MARKETING</span>
+						</button>
+
+						<button
+							type="button"
+							className={cn("inline-flex h-9 items-center gap-2 rounded-lg border px-3 text-sm font-medium transition-colors", {
+								"border-[#06b6d4] bg-[#06b6d4] text-primary-foreground": opportunityViewPreferences.filterSelections.isFromIndication,
+								"border-[#06b6d4] text-[#06b6d4] hover:bg-[#06b6d4]/10": !opportunityViewPreferences.filterSelections.isFromIndication,
+							})}
+							onClick={() =>
+								updateOpportunitiesQueryDefinitionsMutationPartial({ viaIndicacao: !opportunityViewPreferences.filterSelections.isFromIndication })
+							}
+						>
+							<Share2 className="h-4 w-4" />
+							<span>INDICAÇÃO</span>
+						</button>
 					</div>
 				</div>
 				{selectedFunnel ? (
