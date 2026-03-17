@@ -44,6 +44,7 @@ async function getOpportunitiesQueryDefinitions({ session }: { session: TUserSes
 			identificador: userPreferences?.identificador ?? "opportunity-view-definition-v1",
 			mode: userPreferences?.modo ?? "database",
 			filterSelections: {
+				funilId: userPreferences?.filtrosKanban.funilId ?? undefined,
 				partnerIds: userPreferences?.filtrosKanban.parceirosIds ?? partnerScope ?? [],
 				responsiblesIds: userPreferences?.filtrosKanban.responsaveisIds ?? opportunityScope ?? [],
 				opportunityTypeIds: userPreferences?.filtrosKanban.tiposOportunidadeIds ?? [],
