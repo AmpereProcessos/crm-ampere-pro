@@ -197,6 +197,9 @@ function buildOpportunitiesQuery({
 		throw new createHttpError.Unauthorized("Seu escopo de visibilidade não contempla os responsáveis informados.");
 	}
 
+	const userParnetScope = session.user.permissoes.parceiros.escopo;
+
+	const partnerQuery = userParnetScope ? { idParceiro: { $in: [...userParnetScope, null] } } : {};
 	const periodQuery: Filter<TOpportunity> =
 		periodField && periodAfter && periodBefore
 			? {
@@ -209,6 +212,7 @@ function buildOpportunitiesQuery({
 
 	return {
 		...(responsibles.length > 0 ? { "responsaveis.id": { $in: responsibles } } : {}),
+		...partnerQuery,
 		...periodQuery,
 		...STATUS_QUERY_MAP[status],
 	} as Filter<TOpportunity>;
@@ -234,14 +238,13 @@ async function getExportOpportunities({ input, session }: { input: TGetExportOpp
 		periodBefore: input.periodBefore,
 		status: input.status,
 	});
-
-	console.log("[EXPORT OPPORTUNITIES] Opportunities Query", JSON.stringify(opportunitiesQuery, null, 2));
+	console.log("[GET EXPORT OPPORTUNITIES] Opportunities query", JSON.stringify(opportunitiesQuery, null, 2));
 	let opportunities: TProjectedOpportunity[] = [];
 	let totalItems = 0;
 
 	if (input.funnelsIds.length > 0) {
 		const prefixedQuery = withOpportunityPrefix(opportunitiesQuery);
-		console.log("[EXPORT OPPORTUNITIES] Prefixed Query", JSON.stringify(prefixedQuery, null, 2));
+		console.log("[GET EXPORT OPPORTUNITIES] Prefixed query", JSON.stringify(prefixedQuery, null, 2));
 		const basePipeline = [
 			{ $match: { idFunil: { $in: input.funnelsIds } } },
 			{ $sort: { dataInsercao: -1, _id: -1 } },
@@ -254,7 +257,7 @@ async function getExportOpportunities({ input, session }: { input: TGetExportOpp
 
 		const countResult = await funnelReferencesCollection.aggregate<{ total: number }>([...basePipeline, { $count: "total" }]).toArray();
 		totalItems = countResult[0]?.total ?? 0;
-
+		console.log("[GET EXPORT OPPORTUNITIES] Total funnel references items count", totalItems);
 		opportunities = await funnelReferencesCollection
 			.aggregate<TProjectedOpportunity>([
 				...basePipeline,
@@ -280,6 +283,7 @@ async function getExportOpportunities({ input, session }: { input: TGetExportOpp
 				},
 			])
 			.toArray();
+		console.log("[GET EXPORT OPPORTUNITIES] Opportunities count", opportunities.length);
 	} else {
 		totalItems = await opportunitiesCollection.countDocuments(opportunitiesQuery);
 		opportunities = await opportunitiesCollection

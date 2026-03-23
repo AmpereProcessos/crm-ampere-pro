@@ -5,6 +5,13 @@ export const OpportunityViewPreferencesSchema = z.object({
 	identificador: z.literal("opportunity-view-definition-v1"),
 	modo: z.enum(["database", "kanban"]),
 	filtrosKanban: z.object({
+		funilId: z
+			.string({
+				required_error: "ID do funil selecionado não informado.",
+				invalid_type_error: "Tipo não válido para o ID do funil selecionado.",
+			})
+			.optional()
+			.nullable(),
 		status: z.enum(["ongoing", "won", "lost"]),
 		parceirosIds: z.array(
 			z.string({

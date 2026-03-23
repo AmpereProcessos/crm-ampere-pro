@@ -85,13 +85,13 @@ export default function OpportunitiesKanbanModePageV2({ session, opportunityView
 	const [newProjectModalIsOpen, setNewProjectModalIsOpen] = useState(false);
 	const [cardConfigModalIsOpen, setCardConfigModalIsOpen] = useState(false);
 	const [exportMenuIsOpen, setExportMenuIsOpen] = useState(false);
-	const [selectedFunnelId, setSelectedFunnelId] = useState<string | null>(opportunityViewPreferences.filterOptions.funnels[0]?.id || null);
-
-	const selectedFunnel = opportunityViewPreferences.filterOptions.funnels.find((funnel) => funnel.id === selectedFunnelId);
+	const defaultFunnelId = opportunityViewPreferences.filterOptions.funnels[0]?.id ?? null;
+	const currentFunnelId = opportunityViewPreferences.filterSelections.funilId ?? defaultFunnelId;
+	const selectedFunnel = opportunityViewPreferences.filterOptions.funnels.find((funnel) => funnel.id === currentFunnelId);
 	const exportState = useOpportunitiesExportStateHook({
 		initialInput: {
 			responsibles: opportunityViewPreferences.filterSelections.responsiblesIds ?? [],
-			funnelsIds: selectedFunnelId ? [selectedFunnelId] : [],
+			funnelsIds: currentFunnelId ? [currentFunnelId] : [],
 			periodAfter: opportunityViewPreferences.filterSelections.period.after ?? null,
 			periodBefore: opportunityViewPreferences.filterSelections.period.before ?? null,
 			periodField: opportunityViewPreferences.filterSelections.period.field ?? null,
@@ -109,7 +109,7 @@ export default function OpportunitiesKanbanModePageV2({ session, opportunityView
 	function openExportMenu() {
 		exportState.updateInput({
 			responsibles: opportunityViewPreferences.filterSelections.responsiblesIds ?? [],
-			funnelsIds: selectedFunnelId ? [selectedFunnelId] : [],
+			funnelsIds: currentFunnelId ? [currentFunnelId] : [],
 			periodAfter: opportunityViewPreferences.filterSelections.period.after ?? null,
 			periodBefore: opportunityViewPreferences.filterSelections.period.before ?? null,
 			periodField: opportunityViewPreferences.filterSelections.period.field ?? null,
@@ -147,13 +147,19 @@ export default function OpportunitiesKanbanModePageV2({ session, opportunityView
 			await queryClient.cancelQueries({ queryKey: ["opportunities-query-definitions"] });
 
 			const snapshot = queryClient.getQueryData(["opportunities-query-definitions"]) as TGetOpportunitiesQueryDefinitionsOutput["data"];
-			if (snapshot) return { snapshot };
+			if (!snapshot) return { snapshot };
 
-			await queryClient.setQueryData(["opportunities-query-definitions"], (prev: TGetOpportunitiesQueryDefinitionsOutput["data"]) => ({
+			queryClient.setQueryData(["opportunities-query-definitions"], (prev: TGetOpportunitiesQueryDefinitionsOutput["data"] | undefined) => {
+				if (!prev) return prev;
+				return {
 				identificador: prev.identificador,
 				mode: prev.mode,
 				filterOptions: prev.filterOptions,
 				filterSelections: {
+					funilId:
+						payload.preferences.filtrosKanban.funilId !== undefined
+							? payload.preferences.filtrosKanban.funilId
+							: prev.filterSelections.funilId,
 					partnerIds: payload.preferences.filtrosKanban.parceirosIds ?? prev.filterSelections.partnerIds,
 					responsiblesIds: payload.preferences.filtrosKanban.responsaveisIds ?? prev.filterSelections.responsiblesIds,
 					opportunityTypeIds: payload.preferences.filtrosKanban.tiposOportunidadeIds ?? prev.filterSelections.opportunityTypeIds,
@@ -171,7 +177,8 @@ export default function OpportunitiesKanbanModePageV2({ session, opportunityView
 					isFromMarketing: payload.preferences.filtrosKanban.viaMarketing ?? prev.filterSelections.isFromMarketing,
 					isFromIndication: payload.preferences.filtrosKanban.viaIndicacao ?? prev.filterSelections.isFromIndication,
 				},
-			}));
+			};
+			});
 			return { snapshot };
 		},
 		onSettled: async () => {
@@ -187,6 +194,7 @@ export default function OpportunitiesKanbanModePageV2({ session, opportunityView
 				modo: opportunityViewPreferences.mode,
 				identificador: opportunityViewPreferences.identificador,
 				filtrosKanban: {
+					funilId: opportunityViewPreferences.filterSelections.funilId ?? defaultFunnelId,
 					parceirosIds: opportunityViewPreferences.filterSelections.partnerIds,
 					responsaveisIds: opportunityViewPreferences.filterSelections.responsiblesIds,
 					tiposOportunidadeIds: opportunityViewPreferences.filterSelections.opportunityTypeIds,
@@ -208,7 +216,6 @@ export default function OpportunitiesKanbanModePageV2({ session, opportunityView
 		});
 	}
 
-	const defaultFunnelId = opportunityViewPreferences.filterOptions.funnels[0]?.id ?? null;
 	const defaultPartnerIds = session.user.permissoes.parceiros.escopo ?? [];
 	const defaultResponsiblesIds = session.user.permissoes.oportunidades.escopo ?? [];
 
@@ -236,13 +243,13 @@ export default function OpportunitiesKanbanModePageV2({ session, opportunityView
 	const partnersSummary = summarizeSelectedLabels(selectedPartnerOptions.map((partner) => partner.label));
 	const responsiblesSummary = summarizeSelectedLabels(selectedResponsiblesOptions.map((responsible) => responsible.label));
 	const projectTypesSummary = summarizeSelectedLabels(selectedProjectTypeOptions.map((projectType) => projectType.label));
-	const funnelSummary = opportunityViewPreferences.filterOptions.funnels.find((funnel) => funnel.id === selectedFunnelId)?.label ?? null;
+	const funnelSummary = opportunityViewPreferences.filterOptions.funnels.find((funnel) => funnel.id === currentFunnelId)?.label ?? null;
 
 	const isPartnerFilterActive = !areArraysEqual(opportunityViewPreferences.filterSelections.partnerIds, defaultPartnerIds);
 	const isResponsiblesFilterActive = !areArraysEqual(opportunityViewPreferences.filterSelections.responsiblesIds, defaultResponsiblesIds);
 	const isProjectTypeFilterActive = opportunityViewPreferences.filterSelections.opportunityTypeIds.length > 0;
 	const isStatusFilterActive = opportunityViewPreferences.filterSelections.status !== "ongoing";
-	const isFunnelFilterActive = !!selectedFunnelId && selectedFunnelId !== defaultFunnelId;
+	const isFunnelFilterActive = !!currentFunnelId && currentFunnelId !== defaultFunnelId;
 	const isPeriodFilterActive =
 		!!opportunityViewPreferences.filterSelections.period.field ||
 		!!opportunityViewPreferences.filterSelections.period.after ||
@@ -377,7 +384,7 @@ export default function OpportunitiesKanbanModePageV2({ session, opportunityView
 							icon={<GitBranch className="h-4 w-4" />}
 							summary={funnelSummary ?? undefined}
 							isActive={isFunnelFilterActive}
-							onClear={() => setSelectedFunnelId(defaultFunnelId)}
+							onClear={() => updateOpportunitiesQueryDefinitionsMutationPartial({ funilId: defaultFunnelId })}
 							menuTitle="FUNIL"
 						>
 							{({ closeMenu }) => (
@@ -387,15 +394,15 @@ export default function OpportunitiesKanbanModePageV2({ session, opportunityView
 											type="button"
 											key={funnel.id}
 											onClick={() => {
-												setSelectedFunnelId(funnel.id);
+												updateOpportunitiesQueryDefinitionsMutationPartial({ funilId: funnel.id });
 												closeMenu();
 											}}
 											className={cn("flex items-center justify-between rounded-md px-2 py-2 text-sm hover:bg-primary/10", {
-												"bg-primary/10": selectedFunnelId === funnel.id,
+												"bg-primary/10": currentFunnelId === funnel.id,
 											})}
 										>
 											<span>{funnel.label}</span>
-											{selectedFunnelId === funnel.id ? <Check className="h-4 w-4" /> : null}
+											{currentFunnelId === funnel.id ? <Check className="h-4 w-4" /> : null}
 										</button>
 									))}
 								</div>
