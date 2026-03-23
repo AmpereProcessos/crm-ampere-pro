@@ -60,7 +60,7 @@ export const OpportunityResponsibleSchema = z.object({
 });
 export type TOpportunityResponsible = z.infer<typeof OpportunityResponsibleSchema>;
 export type TSaleCategory = z.infer<typeof SaleCategorySchema>;
-export const OpportunitySegmentsEnumSchema = z.enum(["RESIDENCIAL", "RURAL", "COMERCIAL", "INDUSTRIAL"]);
+export const OpportunitySegmentsEnumSchema = z.enum(["RESIDENCIAL", "RURAL", "COMERCIAL", "INDUSTRIAL", "ORGÃO PÚBLICO"]);
 
 export const EmbeddedOpportunityClientSchema = z.object({
 	nome: z.string({ required_error: "Nome do cliente não informado.", invalid_type_error: "Tipo não válido para nome do cliente." }),
@@ -142,7 +142,7 @@ export const GeneralOpportunitySchema = z.object({
 		.optional()
 		.nullable(),
 	segmento: z
-		.union([z.literal("RESIDENCIAL"), z.literal("RURAL"), z.literal("COMERCIAL"), z.literal("INDUSTRIAL")])
+		.union([z.literal("RESIDENCIAL"), z.literal("RURAL"), z.literal("COMERCIAL"), z.literal("INDUSTRIAL"), z.literal("ORGÃO PÚBLICO")])
 		.optional()
 		.nullable(),
 	idCliente: z.string({
@@ -312,11 +312,8 @@ export const InsertOpportunitySchema = z.object({
 		.datetime({ message: "Formato inválido para data de envio do lead." })
 		.optional()
 		.nullable(),
-	segmento: z
-		.union([z.literal("RESIDENCIAL"), z.literal("RURAL"), z.literal("COMERCIAL"), z.literal("INDUSTRIAL"), z.literal("ORGÃO PÚBLICO")], {
-			required_error: "Segmento da oportunidade não informado.",
-			invalid_type_error: "Tipo não válido para o segmento da oportunidade.",
-		})
+	segmento: 
+		OpportunitySegmentsEnumSchema
 		.optional()
 		.nullable(),
 	idCliente: z.string({ required_error: "Vínculo de cliente não informado.", invalid_type_error: "Tipo não válido para vínculo de cliente." }),
