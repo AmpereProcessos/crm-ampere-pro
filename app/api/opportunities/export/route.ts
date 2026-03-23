@@ -43,8 +43,14 @@ function clamp(value: number, min: number, max: number) {
 }
 
 const GetExportOpportunitiesInputSchema = z.object({
-	page: z.union([z.string(), z.number()]).optional().transform((value) => parsePositiveInt(value, 1)),
-	pageSize: z.union([z.string(), z.number()]).optional().transform((value) => parsePositiveInt(value, DEFAULT_PAGE_SIZE)),
+	page: z
+		.union([z.string(), z.number()])
+		.optional()
+		.transform((value) => parsePositiveInt(value, 1)),
+	pageSize: z
+		.union([z.string(), z.number()])
+		.optional()
+		.transform((value) => parsePositiveInt(value, DEFAULT_PAGE_SIZE)),
 	responsibles: CsvOrArrayStringSchema,
 	funnelsIds: CsvOrArrayStringSchema,
 	periodAfter: z.string().datetime().optional().nullable(),
@@ -249,9 +255,7 @@ async function getExportOpportunities({ input, session }: { input: TGetExportOpp
 			{ $match: prefixedQuery },
 		];
 
-		const countResult = await funnelReferencesCollection
-			.aggregate<{ total: number }>([...basePipeline, { $count: "total" }])
-			.toArray();
+		const countResult = await funnelReferencesCollection.aggregate<{ total: number }>([...basePipeline, { $count: "total" }]).toArray();
 		totalItems = countResult[0]?.total ?? 0;
 		console.log("[GET EXPORT OPPORTUNITIES] Total funnel references items count", totalItems);
 		opportunities = await funnelReferencesCollection
