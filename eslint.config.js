@@ -1,3 +1,6 @@
+import next from "eslint-config-next";
+import nextCoreWebVitals from "eslint-config-next/core-web-vitals";
+import nextTypescript from "eslint-config-next/typescript";
 import js from "@eslint/js";
 import typescript from "@typescript-eslint/eslint-plugin";
 import typescriptParser from "@typescript-eslint/parser";
@@ -7,8 +10,11 @@ import react from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
 
 export default [
-	js.configs.recommended,
-	{
+    ...next,
+    ...nextCoreWebVitals,
+    ...nextTypescript,
+    js.configs.recommended,
+    {
 		files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"],
 		languageOptions: {
 			parser: typescriptParser,
@@ -160,13 +166,13 @@ export default [
 			"operator-assignment": "error",
 		},
 	},
-	{
+    {
 		files: ["**/*.test.{js,ts,jsx,tsx}", "**/*.spec.{js,ts,jsx,tsx}"],
 		rules: {
 			"no-console": "off",
 		},
 	},
-	{
+    {
 		ignores: ["node_modules/**", ".next/**", "out/**", "dist/**", "build/**", ".git/**", "coverage/**", ".nyc_output/**", "public/**"],
-	},
+	}
 ];

@@ -11,12 +11,12 @@ import { AiOutlineSearch } from "react-icons/ai";
 import { BsFillMegaphoneFill } from "react-icons/bs";
 import { FaPhone, FaUser } from "react-icons/fa";
 import { MdDashboard } from "react-icons/md";
-import { useDebounce } from "usehooks-ts";
 import TextInput from "../Inputs/TextInput";
 import Avatar from "../utils/Avatar";
 import ErrorComponent from "../utils/ErrorComponent";
 import GeneralQueryPaginationMenu from "../utils/GeneralQueryPaginationMenu";
 import LoadingComponent from "../utils/LoadingComponent";
+import { useDebounceMemo } from "@/lib/hooks";
 
 function SearchOpportunities() {
 	const [searchMenuIsOpen, setSearchMenuIsOpen] = useState<boolean>(false);
@@ -41,9 +41,9 @@ type FilterMenuProps = {
 };
 function FilterMenu({ closeMenu }: FilterMenuProps) {
 	const [queryParams, setSearchParams] = useState<TOpportunitiesByFastSearchParams>({ searchParam: "", page: 1 });
-	const debouncedSearchParam = useDebounce(queryParams.searchParam, 1000);
+	const debouncedSearchParam = useDebounceMemo({ searchParam: queryParams.searchParam }, 1000);
 	const finalQueryParams = {
-		searchParam: debouncedSearchParam,
+		searchParam: debouncedSearchParam.searchParam,
 		page: queryParams.page,
 	};
 	const { data: opportunitiesResult, isLoading, isError, isSuccess, isFetching, error } = useOpportunitiesBySearch(finalQueryParams);
