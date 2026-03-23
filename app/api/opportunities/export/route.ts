@@ -43,8 +43,14 @@ function clamp(value: number, min: number, max: number) {
 }
 
 const GetExportOpportunitiesInputSchema = z.object({
-	page: z.union([z.string(), z.number()]).optional().transform((value) => parsePositiveInt(value, 1)),
-	pageSize: z.union([z.string(), z.number()]).optional().transform((value) => parsePositiveInt(value, DEFAULT_PAGE_SIZE)),
+	page: z
+		.union([z.string(), z.number()])
+		.optional()
+		.transform((value) => parsePositiveInt(value, 1)),
+	pageSize: z
+		.union([z.string(), z.number()])
+		.optional()
+		.transform((value) => parsePositiveInt(value, DEFAULT_PAGE_SIZE)),
 	responsibles: CsvOrArrayStringSchema,
 	funnelsIds: CsvOrArrayStringSchema,
 	periodAfter: z.string().datetime().optional().nullable(),
@@ -202,7 +208,6 @@ function buildOpportunitiesQuery({
 			: {};
 
 	return {
-		...(session.user.idParceiro ? { idParceiro: session.user.idParceiro } : {}),
 		...(responsibles.length > 0 ? { "responsaveis.id": { $in: responsibles } } : {}),
 		...periodQuery,
 		...STATUS_QUERY_MAP[status],
@@ -230,11 +235,13 @@ async function getExportOpportunities({ input, session }: { input: TGetExportOpp
 		status: input.status,
 	});
 
+	console.log("[EXPORT OPPORTUNITIES] Opportunities Query", JSON.stringify(opportunitiesQuery, null, 2));
 	let opportunities: TProjectedOpportunity[] = [];
 	let totalItems = 0;
 
 	if (input.funnelsIds.length > 0) {
 		const prefixedQuery = withOpportunityPrefix(opportunitiesQuery);
+		console.log("[EXPORT OPPORTUNITIES] Prefixed Query", JSON.stringify(prefixedQuery, null, 2));
 		const basePipeline = [
 			{ $match: { idFunil: { $in: input.funnelsIds } } },
 			{ $sort: { dataInsercao: -1, _id: -1 } },
@@ -245,9 +252,7 @@ async function getExportOpportunities({ input, session }: { input: TGetExportOpp
 			{ $match: prefixedQuery },
 		];
 
-		const countResult = await funnelReferencesCollection
-			.aggregate<{ total: number }>([...basePipeline, { $count: "total" }])
-			.toArray();
+		const countResult = await funnelReferencesCollection.aggregate<{ total: number }>([...basePipeline, { $count: "total" }]).toArray();
 		totalItems = countResult[0]?.total ?? 0;
 
 		opportunities = await funnelReferencesCollection

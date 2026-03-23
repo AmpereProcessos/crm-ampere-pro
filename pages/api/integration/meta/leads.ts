@@ -1,14 +1,15 @@
+import type { Collection } from "mongodb";
+import type { NextApiHandler } from "next";
 import { fetchMetaLeadData } from "@/lib/leads";
-import { parseLeadWithAI, transformToClient, buildOpportunityDescription } from "@/lib/leads/ai-parser";
+import { buildOpportunityDescription, parseLeadWithAI, transformToClient } from "@/lib/leads/ai-parser";
+import { sendMetaLeadConversion } from "@/lib/leads/meta-conversions";
 import connectToDatabase from "@/services/mongodb/crm-db-connection";
 import { apiHandler } from "@/utils/api";
-import type { TClient } from "@/utils/schemas/client.schema";
-import type { TOpportunity } from "@/utils/schemas/opportunity.schema";
-import type { TFunnelReference } from "@/utils/schemas/funnel-reference.schema";
-import type { TUser } from "@/utils/schemas/user.schema";
-import type { NextApiHandler } from "next";
-import { Collection } from "mongodb";
 import { formatPhoneAsBase } from "@/utils/methods";
+import type { TClient } from "@/utils/schemas/client.schema";
+import type { TFunnelReference } from "@/utils/schemas/funnel-reference.schema";
+import type { TOpportunity } from "@/utils/schemas/opportunity.schema";
+import type { TUser } from "@/utils/schemas/user.schema";
 
 type VerifyMetaHandlerResponse = string | { error: string };
 
@@ -175,6 +176,8 @@ const getMetaLeadsHandler: NextApiHandler<TGetMetaLeadsHandlerResponse> = async 
 		const opportunity: TOpportunity = {
 			nome: aiParsed.client.nome,
 			idParceiro: receiver.idParceiro,
+			camposPersonalizados: {},
+			automacoesHabilitadas: true,
 			tipo: {
 				id: "6615785ddcb7a6e66ede9785",
 				titulo: "SISTEMA FOTOVOLTAICO",
@@ -233,6 +236,29 @@ const getMetaLeadsHandler: NextApiHandler<TGetMetaLeadsHandlerResponse> = async 
 			},
 			dataInsercao: new Date().toISOString(),
 		});
+
+		const pixelId = process.env.META_PIXEL_ID;
+		const conversionsToken = process.env.META_CONVERSIONS_API_TOKEN || accessToken;
+
+		if (pixelId && conversionsToken) {
+			console.log("[META_WEBHOOK] Sending conversion event to Meta");
+			try {
+				await sendMetaLeadConversion({
+					pixelId,
+					accessToken: conversionsToken,
+					leadgenId,
+					eventId: opportunityId,
+					email: aiParsed.client.email || undefined,
+					phone: aiParsed.client.telefonePrimario || undefined,
+					clientName: aiParsed.client.nome,
+					testEventCode: process.env.META_TEST_EVENT_CODE,
+				});
+			} catch (error) {
+				console.error("[META_WEBHOOK] Failed to send conversion event:", error);
+			}
+		} else {
+			console.warn("[META_WEBHOOK] Conversion event skipped: missing META_PIXEL_ID or access token");
+		}
 
 		console.log("[META_WEBHOOK] Lead processed successfully:", {
 			opportunityId,
