@@ -36,6 +36,7 @@ type TSendMetaLeadConversionParams = {
   phone?: string | null;
   clientName?: string | null;
   testEventCode?: string | null;
+  eventTime?: Date;
 };
 
 export async function sendMetaLeadConversion({
@@ -47,31 +48,49 @@ export async function sendMetaLeadConversion({
   phone,
   clientName,
   testEventCode,
+  eventTime,
 }: TSendMetaLeadConversionParams) {
   const url = `https://graph.facebook.com/${META_GRAPH_API_VERSION}/${pixelId}/events?access_token=${accessToken}`;
 
   const emailHash = sha256(normalizeEmail(email));
   const phoneHash = sha256(normalizePhone(phone));
   const externalIdHash = sha256(leadgenId);
+  const leadEventId = `${eventId}-lead`;
+  const qualifiedEventId = `${eventId}-qualified`;
 
+  const baseUserData = {
+    em: emailHash ? [emailHash] : undefined,
+    ph: phoneHash ? [phoneHash] : undefined,
+    external_id: externalIdHash ? [externalIdHash] : undefined,
+  };
+
+  const baseCustomData = {
+    currency: "BRL",
+    value: 0,
+    content_name: clientName || "Meta Lead",
+    content_category: "lead",
+  };
+
+  const sendingEventTime = eventTime
+    ? Math.floor(eventTime.getTime() / 1000)
+    : Math.floor(Date.now() / 1000);
   const payload = {
     data: [
       {
         event_name: "Lead",
-        event_time: Math.floor(Date.now() / 1000),
-        event_id: eventId,
+        event_time: sendingEventTime,
+        event_id: leadEventId,
         action_source: "system_generated",
-        user_data: {
-          em: emailHash ? [emailHash] : undefined,
-          ph: phoneHash ? [phoneHash] : undefined,
-          external_id: externalIdHash ? [externalIdHash] : undefined,
-        },
-        custom_data: {
-          currency: "BRL",
-          value: 0,
-          content_name: clientName || "Meta Lead",
-          content_category: "lead",
-        },
+        user_data: baseUserData,
+        custom_data: baseCustomData,
+      },
+      {
+        event_name: "QUALIFIED",
+        event_time: sendingEventTime,
+        event_id: qualifiedEventId,
+        action_source: "system_generated",
+        user_data: baseUserData,
+        custom_data: baseCustomData,
       },
     ],
     test_event_code: testEventCode || undefined,
