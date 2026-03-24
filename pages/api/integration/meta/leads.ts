@@ -47,6 +47,28 @@ type TGetMetaLeadsHandlerResponse = {
   error?: string;
 };
 
+function getFirstNonEmpty(values: Array<string | null | undefined>) {
+  for (const value of values) {
+    if (typeof value === "string" && value.trim()) {
+      return value.trim();
+    }
+  }
+
+  return undefined;
+}
+
+function buildFbcFromFbclid(
+  fbclid?: string,
+  createdTime?: string | number | Date | null,
+) {
+  if (!fbclid) {
+    return undefined;
+  }
+
+  const timestamp = createdTime ? new Date(createdTime).getTime() : Date.now();
+  return `fb.1.${timestamp}.${fbclid}`;
+}
+
 async function getNewLeadReceiver(
   usersCollection: Collection<TUser>,
   opportunitiesCollection: Collection<TOpportunity>,
@@ -131,6 +153,27 @@ const getMetaLeadsHandler: NextApiHandler<TGetMetaLeadsHandlerResponse> = async 
       },
       {},
     );
+
+    const trackingFromWebhook = payload.entry?.at(0)?.changes?.at(0)?.value;
+    const fbp = getFirstNonEmpty([
+      rawAnswers.fbp,
+      rawAnswers._fbp,
+      trackingFromWebhook?.fbp,
+      req.cookies.fbp,
+      req.cookies._fbp,
+    ]);
+    const fbc =
+      getFirstNonEmpty([
+        rawAnswers.fbc,
+        rawAnswers._fbc,
+        trackingFromWebhook?.fbc,
+        req.cookies.fbc,
+        req.cookies._fbc,
+      ]) ??
+      buildFbcFromFbclid(
+        getFirstNonEmpty([rawAnswers.fbclid, trackingFromWebhook?.fbclid]),
+        leadData.created_time,
+      );
 
     // Parse with AI
     console.log("[META_WEBHOOK] Parsing with AI SDK");
@@ -239,6 +282,10 @@ const getMetaLeadsHandler: NextApiHandler<TGetMetaLeadsHandlerResponse> = async 
       idCliente: clientId,
       idOportunidade: opportunityId,
       aiParsed,
+      tracking: {
+        fbc,
+        fbp,
+      },
       processedAt: new Date().toISOString(),
     });
 
@@ -268,6 +315,8 @@ const getMetaLeadsHandler: NextApiHandler<TGetMetaLeadsHandlerResponse> = async 
           email: aiParsed.client.email || undefined,
           phone: aiParsed.client.telefonePrimario || undefined,
           clientName: aiParsed.client.nome,
+          fbc,
+          fbp,
           testEventCode: process.env.META_TEST_EVENT_CODE,
         });
         console.log(`Conversion event sent to Meta for lead ${leadgenId}:`, conversionResponse);
