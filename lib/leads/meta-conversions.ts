@@ -46,6 +46,8 @@ type TSendMetaLeadConversionParams = {
   email?: string | null;
   phone?: string | null;
   clientName?: string | null;
+  fbc?: string | null;
+  fbp?: string | null;
   testEventCode?: string | null;
   eventTime?: Date;
   actionSource?:
@@ -71,6 +73,8 @@ export async function sendMetaLeadConversion({
   email,
   phone,
   clientName,
+  fbc,
+  fbp,
   testEventCode,
   eventTime,
   actionSource = "system_generated",
@@ -92,6 +96,8 @@ export async function sendMetaLeadConversion({
     external_id: externalIdHash ? [externalIdHash] : undefined,
     client_user_agent: clientUserAgent || undefined,
     client_ip_address: clientIpAddress || undefined,
+    fbc: fbc || undefined,
+    fbp: fbp || undefined,
   };
 
   const baseCustomData = {
