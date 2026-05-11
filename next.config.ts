@@ -1,14 +1,10 @@
-import type { NextConfig } from 'next';
-import {withWorkflow} from 'workflow/next';
-
+import type { NextConfig } from "next";
+import { withWorkflow } from "workflow/next";
 
 const nextConfig: NextConfig = {
 	reactStrictMode: false,
 	typescript: {
 		ignoreBuildErrors: true,
-	},
-	eslint: {
-		ignoreDuringBuilds: true,
 	},
 	images: {
 		minimumCacheTTL: 2678400, // 1 minute
@@ -37,4 +33,8 @@ const nextConfig: NextConfig = {
 	},
 };
 
-export default withWorkflow(nextConfig);
+export default withWorkflow(nextConfig, {
+	workflows: {
+		lazyDiscovery: true,
+	},
+});
