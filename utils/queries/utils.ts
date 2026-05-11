@@ -1,6 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import type { TAcquisitionChannelDTO, TCreditorDTO, TEquipment, TEquipmentDTO } from "../schemas/utils";
+import type {
+	TAcquisitionChannelDTO,
+	TCreditorDTO,
+	TEquipment,
+	TEquipmentDTO,
+	TOpportunityLossReasonDTO,
+} from "../schemas/utils";
 
 type UseDistanceDataParams = {
 	originCity: string;
@@ -74,5 +80,22 @@ export function useAcquisitionChannels() {
 	return {
 		...useQuery({ queryKey: ["acquisitionChannels"], queryFn: fetchAcquisitionChannels }),
 		queryKey: ["acquisitionChannels"],
+	};
+}
+
+async function fetchOpportunityLossReasons() {
+	try {
+		const { data } = await axios.get("/api/utils?identifier=OPPORTUNITY_LOSS_REASON");
+		return data.data as TOpportunityLossReasonDTO[];
+	} catch (error) {
+		console.log("Error running fetchOpportunityLossReasons");
+		throw error;
+	}
+}
+
+export function useOpportunityLossReasons() {
+	return {
+		...useQuery({ queryKey: ["opportunityLossReasons"], queryFn: fetchOpportunityLossReasons }),
+		queryKey: ["opportunityLossReasons"],
 	};
 }

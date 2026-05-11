@@ -1,4 +1,10 @@
-import type { TAcquisitionChannel, TCreditor, TEquipment, TUtil } from "@/utils/schemas/utils";
+import type {
+	TAcquisitionChannel,
+	TCreditor,
+	TEquipment,
+	TOpportunityLossReason,
+	TUtil,
+} from "@/utils/schemas/utils";
 import type { Collection, Filter, WithId } from "mongodb";
 
 type GetCreditorsParams = {
@@ -36,6 +42,21 @@ export async function getAcquisitionChannels({ collection }: GetAcquisitionChann
 		return acquisitionChannels as WithId<TAcquisitionChannel>[];
 	} catch (error) {
 		console.log("Error running getAcquisitionChannels", error);
+		throw error;
+	}
+}
+
+type GetOpportunityLossReasonsParams = {
+	collection: Collection<TUtil>;
+};
+export async function getOpportunityLossReasons({ collection }: GetOpportunityLossReasonsParams) {
+	try {
+		const opportunityLossReasons = await collection
+			.find({ identificador: "OPPORTUNITY_LOSS_REASON" })
+			.toArray();
+		return opportunityLossReasons as WithId<TOpportunityLossReason>[];
+	} catch (error) {
+		console.log("Error running getOpportunityLossReasons", error);
 		throw error;
 	}
 }
