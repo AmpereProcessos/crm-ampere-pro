@@ -53,6 +53,7 @@ const NewLeadQueryInputSchema = z.object({
     .string({ invalid_type_error: "Expectativa de fechamento deve ser uma string" })
     .optional()
     .nullable(),
+  decisor: z.string({ invalid_type_error: "Decisor deve ser uma string" }).optional().nullable(),
 });
 
 type TSuccessResponse = {
@@ -126,7 +127,7 @@ async function handleLeadGeneration(newLead: z.infer<typeof NewLeadQueryInputSch
       titulo: "SISTEMA FOTOVOLTAICO",
     },
     categoriaVenda: "KIT",
-    descricao: `Valor da fatura de energia: ${newLead.valorFaturaEnergia} \n Canal de comunicação de preferência: ${newLead.preferenciaMeioContato || "N/A"} \n Expectativa de fechamento: ${newLead.expectativaFechamento || "N/A"}`,
+    descricao: `Valor da fatura de energia: ${newLead.valorFaturaEnergia || "N/A"} \n Canal de comunicação de preferência: ${newLead.preferenciaMeioContato || "N/A"} \n Expectativa de fechamento: ${newLead.expectativaFechamento || "N/A"} \n Decisor da compra: ${newLead.decisor || "N/A"}`,
     identificador: newIdentifier,
     responsaveis: opportunityResponsibles,
     segmento: "RESIDENCIAL" as TOpportunity["segmento"],
