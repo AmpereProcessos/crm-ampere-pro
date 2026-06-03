@@ -199,8 +199,8 @@ export function useTechnicalAnalysisByPersonalizedFilters({
 		type: [],
 		pending: false,
 	});
-	function updateFilters(filters: TPersonalizedTechnicalAnalysisFilter) {
-		setFilters(filters);
+	function updateFilters(changes: Partial<TPersonalizedTechnicalAnalysisFilter>) {
+		setFilters((prev) => ({ ...prev, ...changes }));
 	}
 	return {
 		...useQuery({
@@ -208,5 +208,6 @@ export function useTechnicalAnalysisByPersonalizedFilters({
 			queryFn: async () => await fetchTechnicalAnalysisByPersonalizedFilters({ after, before, page, applicants, analysts, partners, filters }),
 		}),
 		updateFilters,
+		filters,
 	};
 }

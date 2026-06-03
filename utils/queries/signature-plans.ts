@@ -56,6 +56,10 @@ export function useSignaturePlans() {
 		if (!filters.onlyInactive) return true;
 		return !plan.ativo;
 	}
+	function matchIntervalType(plan: TSignaturePlanDTO) {
+		if (!filters.intervalType) return true;
+		return plan.intervalo.tipo === filters.intervalType;
+	}
 	function orderByPrice(plans: TSignaturePlanDTO[]) {
 		var newArr;
 		switch (filters.priceOrder) {
@@ -73,7 +77,7 @@ export function useSignaturePlans() {
 	function handleModelData(data: TSignaturePlanDTO[]) {
 		var modeledData = data;
 		modeledData = orderByPrice(modeledData);
-		return modeledData.filter((plan) => matchSearch(plan) && matchOnlyActive(plan) && matchOnlyInactive(plan));
+		return modeledData.filter((plan) => matchSearch(plan) && matchOnlyActive(plan) && matchOnlyInactive(plan) && matchIntervalType(plan));
 	}
 	return {
 		...useQuery({
