@@ -1,39 +1,35 @@
-import type { Collection } from "mongodb";
-import type { NextApiHandler } from "next";
-import { fetchMetaLeadData } from "@/lib/leads";
-import {
-  buildOpportunityDescription,
-  parseLeadWithAI,
-  transformToClient,
-} from "@/lib/leads/ai-parser";
-import { sendMetaLeadConversion } from "@/lib/leads/meta-conversions";
-import connectToDatabase from "@/services/mongodb/crm-db-connection";
-import { apiHandler } from "@/utils/api";
-import { formatPhoneAsBase } from "@/utils/methods";
-import type { TClient } from "@/utils/schemas/client.schema";
-import type { TFunnelReference } from "@/utils/schemas/funnel-reference.schema";
-import type { TOpportunity } from "@/utils/schemas/opportunity.schema";
-import type { TUser } from "@/utils/schemas/user.schema";
+import type { Collection } from 'mongodb';
+import type { NextApiHandler } from 'next';
+import { fetchMetaLeadData } from '@/lib/leads';
+import { buildOpportunityDescription, parseLeadWithAI, transformToClient } from '@/lib/leads/ai-parser';
+import { sendMetaLeadConversion } from '@/lib/leads/meta-conversions';
+import connectToDatabase from '@/services/mongodb/crm-db-connection';
+import { apiHandler } from '@/utils/api';
+import { formatPhoneAsBase } from '@/utils/methods';
+import type { TClient } from '@/utils/schemas/client.schema';
+import type { TFunnelReference } from '@/utils/schemas/funnel-reference.schema';
+import type { TOpportunity } from '@/utils/schemas/opportunity.schema';
+import type { TUser } from '@/utils/schemas/user.schema';
 
 type VerifyMetaHandlerResponse = string | { error: string };
 
 const verifyMetaHandler: NextApiHandler<VerifyMetaHandlerResponse> = async (req, res) => {
-  console.log("[META_WEBHOOK] [VERIFY] Query received:", req.query);
-  const mode = req.query["hub.mode"];
-  const token = req.query["hub.verify_token"];
-  const challenge = req.query["hub.challenge"];
+  console.log('[META_WEBHOOK] [VERIFY] Query received:', req.query);
+  const mode = req.query['hub.mode'];
+  const token = req.query['hub.verify_token'];
+  const challenge = req.query['hub.challenge'];
 
   if (mode && token) {
-    if (mode === "subscribe" && token === process.env.META_WEBHOOK_VERIFY_TOKEN) {
-      console.log("[META_WEBHOOK] [VERIFY] Webhook verified successfully");
+    if (mode === 'subscribe' && token === process.env.META_WEBHOOK_VERIFY_TOKEN) {
+      console.log('[META_WEBHOOK] [VERIFY] Webhook verified successfully');
       return res.status(200).send(challenge as string);
     }
 
-    console.log("[META_WEBHOOK] [VERIFY] Verification failed");
-    return res.status(403).json({ error: "Verification failed" });
+    console.log('[META_WEBHOOK] [VERIFY] Verification failed');
+    return res.status(403).json({ error: 'Verification failed' });
   }
 
-  return res.status(400).json({ error: "Missing parameters" });
+  return res.status(400).json({ error: 'Missing parameters' });
 };
 
 type TGetMetaLeadsHandlerResponse = {
@@ -49,7 +45,7 @@ type TGetMetaLeadsHandlerResponse = {
 
 function getFirstNonEmpty(values: Array<string | null | undefined>) {
   for (const value of values) {
-    if (typeof value === "string" && value.trim()) {
+    if (typeof value === 'string' && value.trim()) {
       return value.trim();
     }
   }
@@ -57,10 +53,7 @@ function getFirstNonEmpty(values: Array<string | null | undefined>) {
   return undefined;
 }
 
-function buildFbcFromFbclid(
-  fbclid?: string,
-  createdTime?: string | number | Date | null,
-) {
+function buildFbcFromFbclid(fbclid?: string, createdTime?: string | number | Date | null) {
   if (!fbclid) {
     return undefined;
   }
@@ -69,16 +62,11 @@ function buildFbcFromFbclid(
   return `fb.1.${timestamp}.${fbclid}`;
 }
 
-async function getNewLeadReceiver(
-  usersCollection: Collection<TUser>,
-  opportunitiesCollection: Collection<TOpportunity>,
-) {
-  const leadReceivers = await usersCollection
-    .find({ "permissoes.integracoes.receberLeads": true })
-    .toArray();
+async function getNewLeadReceiver(usersCollection: Collection<TUser>, opportunitiesCollection: Collection<TOpportunity>) {
+  const leadReceivers = await usersCollection.find({ 'permissoes.integracoes.receberLeads': true }).toArray();
 
   if (leadReceivers.length === 0) {
-    throw new Error("No lead receivers configured");
+    throw new Error('No lead receivers configured');
   }
 
   const lastLeads = await opportunitiesCollection
@@ -88,9 +76,7 @@ async function getNewLeadReceiver(
     .toArray();
 
   const lastReceiverId = lastLeads[0]?.autor?.id;
-  const lastIndex = lastReceiverId
-    ? leadReceivers.findIndex((r) => r._id.toString() === lastReceiverId)
-    : -1;
+  const lastIndex = lastReceiverId ? leadReceivers.findIndex((r) => r._id.toString() === lastReceiverId) : -1;
 
   const nextIndex = lastIndex + 1 >= leadReceivers.length ? 0 : lastIndex + 1;
   const receiver = leadReceivers[nextIndex];
@@ -107,15 +93,15 @@ async function getNewLeadReceiver(
 const getMetaLeadsHandler: NextApiHandler<TGetMetaLeadsHandlerResponse> = async (req, res) => {
   const payload = req.body;
 
-  console.log("[META_WEBHOOK] [POST] Webhook received");
+  console.log('[META_WEBHOOK] [POST] Webhook received');
 
   const db = await connectToDatabase();
-  const metaLeadsRawCollection = db.collection("meta_leads_raw");
-  const metaLeadsEnrichedCollection = db.collection("meta_leads_enriched");
-  const clientsCollection = db.collection<TClient>("clients");
-  const opportunitiesCollection = db.collection<TOpportunity>("opportunities");
-  const funnelReferencesCollection = db.collection<TFunnelReference>("funnel-references");
-  const usersCollection = db.collection<TUser>("users");
+  const metaLeadsRawCollection = db.collection('meta_leads_raw');
+  const metaLeadsEnrichedCollection = db.collection('meta_leads_enriched');
+  const clientsCollection = db.collection<TClient>('clients');
+  const opportunitiesCollection = db.collection<TOpportunity>('opportunities');
+  const funnelReferencesCollection = db.collection<TFunnelReference>('funnel-references');
+  const usersCollection = db.collection<TUser>('users');
 
   // Store raw webhook
   await metaLeadsRawCollection.insertOne({
@@ -126,61 +112,43 @@ const getMetaLeadsHandler: NextApiHandler<TGetMetaLeadsHandlerResponse> = async 
   const leadgenId = payload.entry?.at(0)?.changes?.at(0)?.value?.leadgen_id;
 
   if (!leadgenId) {
-    console.warn("[META_WEBHOOK] No leadgen_id found");
+    console.warn('[META_WEBHOOK] No leadgen_id found');
     return res.status(200).json({
-      message: "Webhook received but no leadgen_id found",
+      message: 'Webhook received but no leadgen_id found',
     });
   }
 
   const accessToken = process.env.META_SYSTEM_USER_TOKEN;
   if (!accessToken) {
-    console.error("[META_WEBHOOK] Missing META_SYSTEM_USER_TOKEN");
+    console.error('[META_WEBHOOK] Missing META_SYSTEM_USER_TOKEN');
     return res.status(500).json({
-      message: "Server configuration error",
+      message: 'Server configuration error',
     });
   }
 
   try {
     // Fetch from Meta
-    console.log("[META_WEBHOOK] Fetching lead data from Meta:", leadgenId);
+    console.log('[META_WEBHOOK] Fetching lead data from Meta:', leadgenId);
     const leadData = await fetchMetaLeadData(leadgenId, accessToken);
 
     // Extract raw answers
-    const rawAnswers = leadData.field_data.reduce<Record<string, string | undefined>>(
-      (acc, field) => {
-        acc[field.name] = field.values?.at(0);
-        return acc;
-      },
-      {},
-    );
+    const rawAnswers = leadData.field_data.reduce<Record<string, string | undefined>>((acc, field) => {
+      acc[field.name] = field.values?.at(0);
+      return acc;
+    }, {});
 
     const trackingFromWebhook = payload.entry?.at(0)?.changes?.at(0)?.value;
-    const fbp = getFirstNonEmpty([
-      rawAnswers.fbp,
-      rawAnswers._fbp,
-      trackingFromWebhook?.fbp,
-      req.cookies.fbp,
-      req.cookies._fbp,
-    ]);
+    const fbp = getFirstNonEmpty([rawAnswers.fbp, rawAnswers._fbp, trackingFromWebhook?.fbp, req.cookies.fbp, req.cookies._fbp]);
     const fbc =
-      getFirstNonEmpty([
-        rawAnswers.fbc,
-        rawAnswers._fbc,
-        trackingFromWebhook?.fbc,
-        req.cookies.fbc,
-        req.cookies._fbc,
-      ]) ??
-      buildFbcFromFbclid(
-        getFirstNonEmpty([rawAnswers.fbclid, trackingFromWebhook?.fbclid]),
-        leadData.created_time,
-      );
+      getFirstNonEmpty([rawAnswers.fbc, rawAnswers._fbc, trackingFromWebhook?.fbc, req.cookies.fbc, req.cookies._fbc]) ??
+      buildFbcFromFbclid(getFirstNonEmpty([rawAnswers.fbclid, trackingFromWebhook?.fbclid]), leadData.created_time);
 
     // Parse with AI
-    console.log("[META_WEBHOOK] Parsing with AI SDK");
+    console.log('[META_WEBHOOK] Parsing with AI SDK');
     const aiParsed = await parseLeadWithAI(rawAnswers);
 
-    if (aiParsed.confidence === "low") {
-      console.warn("[META_WEBHOOK] Low confidence parsing:", aiParsed.warnings);
+    if (aiParsed.confidence === 'low') {
+      console.warn('[META_WEBHOOK] Low confidence parsing:', aiParsed.warnings);
     }
 
     // Get lead receiver
@@ -194,7 +162,7 @@ const getMetaLeadsHandler: NextApiHandler<TGetMetaLeadsHandlerResponse> = async 
 
     if (existingClient) {
       clientId = existingClient._id.toString();
-      console.log("[META_WEBHOOK] Using existing client:", clientId);
+      console.log('[META_WEBHOOK] Using existing client:', clientId);
     } else {
       // Create new client
       const newClient = transformToClient(aiParsed, {
@@ -204,21 +172,18 @@ const getMetaLeadsHandler: NextApiHandler<TGetMetaLeadsHandlerResponse> = async 
           nome: receiver.nome,
           avatar_url: receiver.avatar_url ?? undefined,
         },
-        canalAquisicao: "META_LEADS",
+        canalAquisicao: 'META_LEADS',
       });
 
       const inserted = await clientsCollection.insertOne(newClient as TClient);
       clientId = inserted.insertedId.toString();
-      console.log("[META_WEBHOOK] New client created:", clientId);
+      console.log('[META_WEBHOOK] New client created:', clientId);
     }
 
     // Generate opportunity identifier
-    const lastOpp = await opportunitiesCollection.findOne(
-      {},
-      { sort: { _id: -1 }, projection: { identificador: 1 } },
-    );
+    const lastOpp = await opportunitiesCollection.findOne({}, { sort: { _id: -1 }, projection: { identificador: 1 } });
 
-    const lastNumber = lastOpp ? Number(lastOpp.identificador.split("-")[1]) : 0;
+    const lastNumber = lastOpp ? Number(lastOpp.identificador.split('-')[1]) : 0;
     const newIdentifier = `CRM-${lastNumber + 1}`;
 
     // Create opportunity
@@ -226,7 +191,7 @@ const getMetaLeadsHandler: NextApiHandler<TGetMetaLeadsHandlerResponse> = async 
       {
         id: receiver.id,
         nome: receiver.nome,
-        papel: "VENDEDOR",
+        papel: 'VENDEDOR',
         avatar_url: receiver.avatar_url,
         telefone: receiver.telefone,
         dataInsercao: new Date().toISOString(),
@@ -239,10 +204,10 @@ const getMetaLeadsHandler: NextApiHandler<TGetMetaLeadsHandlerResponse> = async 
       camposPersonalizados: {},
       automacoesHabilitadas: true,
       tipo: {
-        id: "6615785ddcb7a6e66ede9785",
-        titulo: "SISTEMA FOTOVOLTAICO",
+        id: '6615785ddcb7a6e66ede9785',
+        titulo: 'SISTEMA FOTOVOLTAICO',
       },
-      categoriaVenda: "KIT",
+      categoriaVenda: 'KIT',
       descricao: buildOpportunityDescription(aiParsed),
       identificador: newIdentifier,
       responsaveis: opportunityResponsibles,
@@ -250,14 +215,14 @@ const getMetaLeadsHandler: NextApiHandler<TGetMetaLeadsHandlerResponse> = async 
       idCliente: clientId,
       cliente: {
         nome: aiParsed.client.nome,
-        cpfCnpj: aiParsed.client.cpfCnpj || "",
+        cpfCnpj: aiParsed.client.cpfCnpj || '',
         telefonePrimario: aiParsed.client.telefonePrimario,
-        email: aiParsed.client.email || "",
-        canalAquisicao: "META_LEADS",
+        email: aiParsed.client.email || '',
+        canalAquisicao: 'META_LEADS',
       },
       localizacao: {
-        uf: aiParsed.client.uf || "",
-        cidade: aiParsed.client.cidade || "",
+        uf: aiParsed.client.uf || '',
+        cidade: aiParsed.client.cidade || '',
       },
       ganho: {},
       perda: {},
@@ -293,10 +258,10 @@ const getMetaLeadsHandler: NextApiHandler<TGetMetaLeadsHandlerResponse> = async 
     await funnelReferencesCollection.insertOne({
       idParceiro: receiver.idParceiro,
       idOportunidade: opportunityId,
-      idFunil: "661eaeb6c387dfeddd9a23c9",
-      idEstagioFunil: "1",
+      idFunil: '661eaeb6c387dfeddd9a23c9',
+      idEstagioFunil: '1',
       estagios: {
-        "1": { entrada: new Date().toISOString() },
+        '1': { entrada: new Date().toISOString() },
       },
       dataInsercao: new Date().toISOString(),
     });
@@ -305,7 +270,7 @@ const getMetaLeadsHandler: NextApiHandler<TGetMetaLeadsHandlerResponse> = async 
     const conversionsToken = process.env.META_CONVERSIONS_API_TOKEN || accessToken;
 
     if (pixelId && conversionsToken) {
-      console.log("[META_WEBHOOK] Sending conversion event to Meta");
+      console.log('[META_WEBHOOK] Sending conversion event to Meta');
       try {
         const conversionResponse = await sendMetaLeadConversion({
           pixelId,
@@ -315,28 +280,29 @@ const getMetaLeadsHandler: NextApiHandler<TGetMetaLeadsHandlerResponse> = async 
           email: aiParsed.client.email || undefined,
           phone: aiParsed.client.telefonePrimario || undefined,
           clientName: aiParsed.client.nome,
+          city: aiParsed.client.cidade,
+          state: aiParsed.client.uf,
+          postalCode: aiParsed.client.cep,
           fbc,
           fbp,
           testEventCode: process.env.META_TEST_EVENT_CODE,
         });
         console.log(`Conversion event sent to Meta for lead ${leadgenId}:`, conversionResponse);
       } catch (error) {
-        console.error("[META_WEBHOOK] Failed to send conversion event:", error);
+        console.error('[META_WEBHOOK] Failed to send conversion event:', error);
       }
     } else {
-      console.warn(
-        "[META_WEBHOOK] Conversion event skipped: missing META_PIXEL_ID or access token",
-      );
+      console.warn('[META_WEBHOOK] Conversion event skipped: missing META_PIXEL_ID or access token');
     }
 
-    console.log("[META_WEBHOOK] Lead processed successfully:", {
+    console.log('[META_WEBHOOK] Lead processed successfully:', {
       opportunityId,
       identifier: newIdentifier,
       confidence: aiParsed.confidence,
     });
 
     return res.status(200).json({
-      message: "Lead processed successfully",
+      message: 'Lead processed successfully',
       data: {
         leadId: leadgenId,
         clientId,
@@ -345,23 +311,23 @@ const getMetaLeadsHandler: NextApiHandler<TGetMetaLeadsHandlerResponse> = async 
       },
     });
   } catch (error) {
-    console.error("[META_WEBHOOK] Processing failed:", error);
+    console.error('[META_WEBHOOK] Processing failed:', error);
 
     if (leadgenId) {
       await metaLeadsRawCollection.updateOne(
-        { "entry.0.changes.0.value.leadgen_id": leadgenId },
+        { 'entry.0.changes.0.value.leadgen_id': leadgenId },
         {
           $set: {
             processingError: error instanceof Error ? error.message : String(error),
             erroredAt: new Date().toISOString(),
           },
-        },
+        }
       );
     }
 
     return res.status(200).json({
-      message: "Webhook received but processing failed",
-      error: error instanceof Error ? error.message : "Unknown error",
+      message: 'Webhook received but processing failed',
+      error: error instanceof Error ? error.message : 'Unknown error',
     });
   }
 };
