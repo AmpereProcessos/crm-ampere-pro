@@ -1,11 +1,11 @@
-import { sendMetaLeadConversion } from "@/lib/leads/meta-conversions";
-import connectToDatabase from "@/services/mongodb/crm-db-connection";
-import dayjs from "dayjs";
+import { sendMetaLeadConversion } from '@/lib/leads/meta-conversions';
+import connectToDatabase from '@/services/mongodb/crm-db-connection';
+import dayjs from 'dayjs';
 
 export async function GET(request: Request) {
   const db = await connectToDatabase();
-  const metaLeadsEnrichedCollection = db.collection("meta_leads_enriched");
-  const sixDaysAgo = dayjs().subtract(6, "days").toISOString();
+  const metaLeadsEnrichedCollection = db.collection('meta_leads_enriched');
+  const sixDaysAgo = dayjs().subtract(6, 'days').toISOString();
   const metaLeadsEnriched = await metaLeadsEnrichedCollection
     .find({
       aiParsed: { $ne: null },
@@ -19,15 +19,21 @@ export async function GET(request: Request) {
 
   for (const lead of metaLeadsEnriched) {
     const leadGenId = lead.leadgen_id;
-    const opportunityId = lead.opportunityId;
+    const opportunityId = lead.idOportunidade || lead.opportunityId;
     const email = lead.aiParsed?.client.email;
     const phone = lead.aiParsed?.client.telefonePrimario;
     const clientName = lead.aiParsed?.client.nome;
+    const city = lead.aiParsed?.client.cidade;
+    const state = lead.aiParsed?.client.uf;
+    const postalCode = lead.aiParsed?.client.cep;
     const eventTime = lead.created_time;
     console.log(`[${leadGenId}] Sending conversion event to Meta`, {
       clientName,
       email,
       phone,
+      city,
+      state,
+      postalCode,
       eventTime,
     });
     const conversionResponse = await sendMetaLeadConversion({
@@ -38,11 +44,14 @@ export async function GET(request: Request) {
       email: email || undefined,
       phone: phone || undefined,
       clientName: clientName || undefined,
+      city: city || undefined,
+      state: state || undefined,
+      postalCode: postalCode || undefined,
       testEventCode: process.env.META_TEST_EVENT_CODE,
       eventTime: eventTime ? new Date(eventTime) : undefined,
     });
     console.log(`[${leadGenId}] Conversion event sent to Meta:`, conversionResponse);
   }
 
-  return new Response("Conversion events sent to Meta", { status: 200 });
+  return new Response('Conversion events sent to Meta', { status: 200 });
 }

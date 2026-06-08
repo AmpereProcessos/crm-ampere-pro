@@ -1,6 +1,6 @@
-import { createHash } from "node:crypto";
+import { createHash } from 'node:crypto';
 
-const META_GRAPH_API_VERSION = "v21.0";
+const META_GRAPH_API_VERSION = 'v21.0';
 
 function normalizeEmail(value?: string | null) {
   if (!value) {
@@ -15,8 +15,8 @@ function normalizePhone(value?: string | null) {
     return undefined;
   }
 
-  const digitsOnly = value.replace(/\D/g, "");
-  const normalized = digitsOnly.replace(/^0+/, "");
+  const digitsOnly = value.replace(/\D/g, '');
+  const normalized = digitsOnly.replace(/^0+/, '');
   if (!normalized) {
     return undefined;
   }
@@ -30,12 +30,54 @@ function normalizePhone(value?: string | null) {
   return normalized;
 }
 
+function normalizeText(value?: string | null) {
+  if (!value) {
+    return undefined;
+  }
+
+  const normalized = value
+    .trim()
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^\p{L}\p{N}\s]/gu, '')
+    .replace(/\s+/g, ' ');
+
+  return normalized || undefined;
+}
+
+function normalizeCompactText(value?: string | null) {
+  return normalizeText(value)?.replace(/\s/g, '');
+}
+
+function normalizePostalCode(value?: string | null) {
+  if (!value) {
+    return undefined;
+  }
+
+  const normalized = value.replace(/\D/g, '');
+  return normalized || undefined;
+}
+
+function splitName(value?: string | null) {
+  const normalized = normalizeText(value);
+  if (!normalized) {
+    return {};
+  }
+
+  const parts = normalized.split(' ').filter(Boolean);
+  return {
+    firstName: parts.at(0),
+    lastName: parts.length > 1 ? parts.at(-1) : undefined,
+  };
+}
+
 function sha256(value?: string) {
   if (!value) {
     return undefined;
   }
 
-  return createHash("sha256").update(value).digest("hex");
+  return createHash('sha256').update(value).digest('hex');
 }
 
 type TSendMetaLeadConversionParams = {
@@ -46,20 +88,15 @@ type TSendMetaLeadConversionParams = {
   email?: string | null;
   phone?: string | null;
   clientName?: string | null;
+  city?: string | null;
+  state?: string | null;
+  postalCode?: string | null;
+  country?: string | null;
   fbc?: string | null;
   fbp?: string | null;
   testEventCode?: string | null;
   eventTime?: Date;
-  actionSource?:
-    | "email"
-    | "website"
-    | "app"
-    | "phone_call"
-    | "chat"
-    | "physical_store"
-    | "system_generated"
-    | "business_messaging"
-    | "other";
+  actionSource?: 'email' | 'website' | 'app' | 'phone_call' | 'chat' | 'physical_store' | 'system_generated' | 'business_messaging' | 'other';
   eventSourceUrl?: string | null;
   clientUserAgent?: string | null;
   clientIpAddress?: string | null;
@@ -73,11 +110,15 @@ export async function sendMetaLeadConversion({
   email,
   phone,
   clientName,
+  city,
+  state,
+  postalCode,
+  country = 'br',
   fbc,
   fbp,
   testEventCode,
   eventTime,
-  actionSource = "system_generated",
+  actionSource = 'system_generated',
   eventSourceUrl,
   clientUserAgent,
   clientIpAddress,
@@ -87,13 +128,27 @@ export async function sendMetaLeadConversion({
   const emailHash = sha256(normalizeEmail(email));
   const phoneHash = sha256(normalizePhone(phone));
   const externalIdHash = sha256(leadgenId);
+  const { firstName, lastName } = splitName(clientName);
+  const firstNameHash = sha256(firstName);
+  const lastNameHash = sha256(lastName);
+  const cityHash = sha256(normalizeCompactText(city));
+  const stateHash = sha256(normalizeCompactText(state));
+  const postalCodeHash = sha256(normalizePostalCode(postalCode));
+  const countryHash = sha256(normalizeCompactText(country));
   const leadEventId = `${eventId}-lead`;
   const qualifiedEventId = `${eventId}-qualified`;
 
   const baseUserData = {
     em: emailHash ? [emailHash] : undefined,
     ph: phoneHash ? [phoneHash] : undefined,
+    fn: firstNameHash ? [firstNameHash] : undefined,
+    ln: lastNameHash ? [lastNameHash] : undefined,
+    ct: cityHash ? [cityHash] : undefined,
+    st: stateHash ? [stateHash] : undefined,
+    zp: postalCodeHash ? [postalCodeHash] : undefined,
+    country: countryHash ? [countryHash] : undefined,
     external_id: externalIdHash ? [externalIdHash] : undefined,
+    lead_id: leadgenId || undefined,
     client_user_agent: clientUserAgent || undefined,
     client_ip_address: clientIpAddress || undefined,
     fbc: fbc || undefined,
@@ -101,29 +156,27 @@ export async function sendMetaLeadConversion({
   };
 
   const baseCustomData = {
-    currency: "BRL",
+    currency: 'BRL',
     value: 0,
-    content_name: clientName || "Meta Lead",
-    content_category: "lead",
+    content_name: clientName || 'Meta Lead',
+    content_category: 'lead',
   };
 
-  const sendingEventTime = eventTime
-    ? Math.floor(eventTime.getTime() / 1000)
-    : Math.floor(Date.now() / 1000);
+  const sendingEventTime = eventTime ? Math.floor(eventTime.getTime() / 1000) : Math.floor(Date.now() / 1000);
 
-  if (actionSource === "website") {
+  if (actionSource === 'website') {
     if (!eventSourceUrl) {
-      throw new Error("Meta Conversions API: event_source_url is required for website events");
+      throw new Error('Meta Conversions API: event_source_url is required for website events');
     }
     if (!clientUserAgent) {
-      throw new Error("Meta Conversions API: client_user_agent is required for website events");
+      throw new Error('Meta Conversions API: client_user_agent is required for website events');
     }
   }
 
   const payload = {
     data: [
       {
-        event_name: "Lead",
+        event_name: 'Lead',
         event_time: sendingEventTime,
         event_id: leadEventId,
         action_source: actionSource,
@@ -132,7 +185,7 @@ export async function sendMetaLeadConversion({
         custom_data: baseCustomData,
       },
       {
-        event_name: "QUALIFIED",
+        event_name: 'QUALIFIED',
         event_time: sendingEventTime,
         event_id: qualifiedEventId,
         action_source: actionSource,
@@ -145,9 +198,9 @@ export async function sendMetaLeadConversion({
   };
   console.log(`Sending conversion event to Meta for lead ${leadgenId}:`, payload);
   const response = await fetch(url, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify(payload),
   });
