@@ -1,27 +1,36 @@
 "use server";
 import { redirect } from "next/navigation";
-import { createSession, generateSessionToken } from "./session";
+import { createSession, generateSessionToken, setSetSessionCookie } from "./session";
 import { LoginSchema, type TLoginInput } from "./validators";
 import connectToDatabase from "@/services/mongodb/crm-db-connection";
 import type { TUser } from "@/utils/schemas/user.schema";
 import bcrypt from "bcrypt";
-import { cookies } from "next/headers";
-import { SESSION_COOKIE_NAME } from "@/configs/app-definitions";
 
-export async function login(formData: FormData): Promise<void> {
+type TLoginResult = {
+	formError?: string;
+	fieldError?: {
+		[key in keyof TLoginInput]?: string;
+	};
+};
+
+export async function login(_: TLoginResult, input: FormData): Promise<TLoginResult> {
 	const data = {
-		email: formData.get("email") as string,
-		password: formData.get("password") as string,
+		email: input.get("email") as string,
+		password: input.get("password") as string,
 	};
 
 	const validationParsed = LoginSchema.safeParse(data);
 	if (!validationParsed.success) {
 		const err = validationParsed.error.flatten();
-		const errorMessage = err.fieldErrors.email?.[0] || "Dados inválidos.";
-		return redirect(`/auth/signin?error=${encodeURIComponent(errorMessage)}`);
+		return {
+			fieldError: {
+				email: err.fieldErrors.email?.[0],
+				password: err.fieldErrors.password?.[0],
+			},
+		};
 	}
 
-	const { email, password } = data;
+	const { email, password } = validationParsed.data;
 
 	const db = await connectToDatabase();
 	const usersCollection = db.collection<TUser>("users");
@@ -30,14 +39,17 @@ export async function login(formData: FormData): Promise<void> {
 		email: email,
 	});
 	if (!user) {
-		return redirect(`/auth/signin?error=${encodeURIComponent("Usuário ou senha incorretos.")}`);
+		return {
+			formError: "Usuário ou senha incorretos.",
+		};
 	}
 	const compareResult = bcrypt.compareSync(password, user.senha);
 	if (!compareResult) {
-		return redirect(`/auth/signin?error=${encodeURIComponent("Usuário ou senha incorretos.")}`);
+		return {
+			formError: "Usuário ou senha incorretos.",
+		};
 	}
 
-	// All validations passes, handling the session definition
 	const sessionToken = await generateSessionToken();
 	const session = await createSession({
 		token: sessionToken,
@@ -45,17 +57,15 @@ export async function login(formData: FormData): Promise<void> {
 	});
 
 	try {
-		const cookiesStore = await cookies();
-		cookiesStore.set(SESSION_COOKIE_NAME, sessionToken, {
-			httpOnly: true,
-			path: "/",
-			secure: process.env.NODE_ENV === "production",
-			sameSite: "lax",
-			expires: new Date(session.session.dataExpiracao),
+		await setSetSessionCookie({
+			token: sessionToken,
+			expiresAt: new Date(session.session.dataExpiracao),
 		});
 	} catch (error) {
 		console.log("[ERROR] Error setting session cookie", error);
-		return redirect(`/auth/signin?error=${encodeURIComponent("Erro interno do servidor.")}`);
+		return {
+			formError: "Erro interno do servidor.",
+		};
 	}
 	return redirect("/");
 }
