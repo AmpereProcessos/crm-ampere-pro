@@ -197,6 +197,23 @@ export function formatWithoutDiacritics(string: string, useUpperCase?: boolean) 
 		.replace(/[\u0300-\u036f]/g, "");
 }
 
+export function normalizeCityForGrouping(city: string | null | undefined): string {
+	if (!city?.trim()) {
+		return "SEM CIDADE";
+	}
+
+	return (
+		city
+			.trim()
+			.toUpperCase()
+			.normalize("NFD")
+			.replace(/[\u0300-\u036f]/g, "")
+			.replace(/[^A-Z0-9\s]/g, "")
+			.replace(/\s+/g, " ")
+			.trim() || "SEM CIDADE"
+	);
+}
+
 export function formatToSlug(value: string) {
 	return value
 		.toLowerCase()
