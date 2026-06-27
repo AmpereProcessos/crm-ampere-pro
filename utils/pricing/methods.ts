@@ -1,6 +1,8 @@
+import { getInverterQty, getModulesQty } from "@/lib/methods/extracting";
 import { TElectricalInstallationGroups } from "../schemas/opportunity.schema";
 import { TPricingMethodDTO, TPricingMethodItemResultItem } from "../schemas/pricing-method.schema";
 import { TEletricalPhases, TPricingItem, TProposal } from "../schemas/proposal.schema";
+import { evaluateFormula } from "./formula";
 
 type getSalePriceParams = {
 	cost: number;
@@ -96,7 +98,7 @@ function handleConditionValidation({ resultCondition, conditionData }: HandleCon
 	if (resultCondition.tipo == "MENOR_QUE_NÚMERICO") {
 		// If there's a condition, extracting the conditionns comparators and the condition data to compare
 		const conditionVariable = resultCondition.variavel;
-		const conditionValue = resultCondition.maiorQue || 0;
+		const conditionValue = resultCondition.menorQue || 0;
 		const condition = conditionData[conditionVariable as keyof typeof conditionData];
 		// If condition is matched, then returning true
 		if (Number(condition) < conditionValue) return true;
@@ -169,13 +171,6 @@ export function handlePricingCalculation({ methodology, kit, variableData, condi
 				// If there's a condition, extracting the conditionns comparators and the condition data to compare
 				const conditionValidationResult = handleConditionValidation({ resultCondition, conditionData });
 				return conditionValidationResult;
-				const conditionVariable = r.condicao.variavel;
-				const conditionValue = r.condicao.igual;
-				const condition = conditionData[conditionVariable as keyof typeof conditionData];
-				// If condition is matched, then returning true
-				if (condition == conditionValue) return true;
-				// If not, false
-				return false;
 			});
 			// Theorically impossible
 			if (!activeResult)
@@ -193,23 +188,9 @@ export function handlePricingCalculation({ methodology, kit, variableData, condi
 				// Now, getting the pricing item based on the specified result
 				const faturable = activeResult.faturavel;
 				const profitMargin = activeResult.margemLucro;
-				// Using the formulaArr and the variableData to populate the result's formula
+				// Using the formulaArr and the variableData to populate and safely evaluate the formula
 				const formulaArr = activeResult.formulaArr;
-				const populatedFormula = formulaArr
-					.map((i) => {
-						// Extracting the variable, which is determined by outer brackets
-						const isVariable = i.includes("[") && i.includes("]");
-						// If there is not variable, then returning the original value
-						if (!isVariable) return i;
-						// Else, exchanging the variable key by the variable value itself and returning it
-						const strToReplace = i.replace("[", "").replace("]", "");
-						const variableValue = variables[strToReplace as keyof typeof variables] || 0;
-						// const fixedValue = strToReplace.replace(strToReplace, variableValue.toString())
-						return variableValue;
-					})
-					.join("");
-				// Evaluating the formula as a string now
-				const evaluatedCostValue = eval(populatedFormula);
+				const evaluatedCostValue = evaluateFormula(formulaArr, variables);
 				// Creating and returning the pricing item
 
 				const pricingItem: TPricingItem = {
@@ -293,24 +274,10 @@ export function handlePartialPricingReCalculation({
 				const faturable = item.faturavel;
 				const profitMargin = item.margemLucro;
 
-				// Using the formulaArr and the variableData to populate the result's formula
+				// Using the formulaArr and the variableData to populate and safely evaluate the formula
 				const formulaArr = item.formulaArr;
 				if (!formulaArr) return item;
-				const populatedFormula = formulaArr
-					.map((i) => {
-						// Extracting the variable, which is determined by outer brackets
-						const isVariable = i.includes("[") && i.includes("]");
-						// If there is not variable, then returning the original value
-						if (!isVariable) return i;
-						// Else, exchanging the variable key by the variable value itself and returning it
-						const strToReplace = i.replace("[", "").replace("]", "");
-						const variableValue = variables[strToReplace as keyof typeof variables] || 0;
-						// const fixedValue = strToReplace.replace(strToReplace, variableValue.toString())
-						return variableValue;
-					})
-					.join("");
-				// Evaluating the formula as a string now
-				const evaluatedCostValue = eval(populatedFormula);
+				const evaluatedCostValue = evaluateFormula(formulaArr, variables);
 				// If there is no need to maintain the final values, returning the new pricing item
 				if (!keepFinalValues) {
 					const pricingItem: TPricingItem = {
@@ -399,6 +366,105 @@ export function getPricingSuggestedTotal({ pricing }: { pricing: TPricingItem[] 
 	}, 0);
 	return total;
 }
+export type TPricingVariableSource = "premissa" | "composicao" | "acumulativa";
+
+export type TPricingVariableSnapshot = {
+	values: Record<string, number | undefined | null>;
+	sources: Record<string, TPricingVariableSource>;
+};
+
+function resolvePremissaOrComposition({
+	premissaValue,
+	compositionValue,
+}: {
+	premissaValue: number | null | undefined;
+	compositionValue: number;
+}): { value: number; source: "premissa" | "composicao" } {
+	if (premissaValue !== null && premissaValue !== undefined) {
+		return { value: premissaValue, source: "premissa" };
+	}
+	return { value: compositionValue, source: "composicao" };
+}
+
+/** Monta variáveis de precificação da proposta: premissas têm prioridade sobre composição. */
+export function getProposalPricingVariableSnapshot(proposal: TProposal, pricing: TPricingItem[]): TPricingVariableSnapshot {
+	const { premissas } = proposal;
+	const moduleQtyFromProducts = getModulesQty(proposal.produtos);
+	const inverterQtyFromProducts = getInverterQty(proposal.produtos);
+	const numModulos = resolvePremissaOrComposition({
+		premissaValue: premissas.numModulos,
+		compositionValue: moduleQtyFromProducts,
+	});
+	const numInversores = resolvePremissaOrComposition({
+		premissaValue: premissas.numInversores,
+		compositionValue: inverterQtyFromProducts,
+	});
+	const potenciaPico = resolvePremissaOrComposition({
+		premissaValue: premissas.potenciaPico,
+		compositionValue: proposal.potenciaPico || 0,
+	});
+
+	const values: TPricingVariableData = {
+		kit: proposal.kits.reduce((acc, current) => acc + (current.preco || 0), 0),
+		plan: proposal.planos.reduce((acc, current) => acc + (current.preco || 0), 0),
+		product: proposal.produtos.reduce((acc, current) => acc + (current.valor || 0), 0),
+		service: proposal.servicos.reduce((acc, current) => acc + (current.valor || 0), 0),
+		numModulos: numModulos.value,
+		numInversores: numInversores.value,
+		potenciaPico: potenciaPico.value,
+		distancia: premissas.distancia || 0,
+		valorReferencia: premissas.valorReferencia || 0,
+		consumoEnergiaMensal: premissas.consumoEnergiaMensal || 0,
+		tarifaEnergia: premissas.tarifaEnergia || 0,
+		custosInstalacao: premissas.custosInstalacao || 0,
+		custosPadraoEnergia: premissas.custosPadraoEnergia || 0,
+		custosEstruturaInstalacao: premissas.custosEstruturaInstalacao || 0,
+		custosOutros: premissas.custosOutros || 0,
+	};
+
+	const sources: Record<string, TPricingVariableSource> = {
+		kit: "composicao",
+		plan: "composicao",
+		product: "composicao",
+		service: "composicao",
+		numModulos: numModulos.source,
+		numInversores: numInversores.source,
+		potenciaPico: potenciaPico.source,
+		distancia: "premissa",
+		valorReferencia: "premissa",
+		consumoEnergiaMensal: "premissa",
+		tarifaEnergia: "premissa",
+		custosInstalacao: "premissa",
+		custosPadraoEnergia: "premissa",
+		custosEstruturaInstalacao: "premissa",
+		custosOutros: "premissa",
+	};
+
+	const cumulativeValues = getCumulativeVariableValues(pricing);
+	for (const [key, value] of Object.entries(cumulativeValues)) {
+		values[key as keyof typeof cumulativeValues] = value;
+		sources[key] = "acumulativa";
+	}
+
+	return { values, sources };
+}
+
+export function getProposalPricingVariableData(proposal: TProposal, pricing: TPricingItem[]): TPricingVariableData {
+	return getProposalPricingVariableSnapshot(proposal, pricing).values as TPricingVariableData;
+}
+
+export function getCumulativeVariableValues(pricing: TPricingItem[]) {
+	const faturavelItems = pricing.filter((item) => item.faturavel);
+	const naoFaturavelItems = pricing.filter((item) => !item.faturavel);
+	return {
+		total: pricing.reduce((acc, item) => acc + item.valorFinal, 0),
+		totalFaturavelFinal: faturavelItems.reduce((acc, item) => acc + item.valorFinal, 0),
+		totalNaoFaturavelFinal: naoFaturavelItems.reduce((acc, item) => acc + item.valorFinal, 0),
+		totalFaturavelCustos: faturavelItems.reduce((acc, item) => acc + item.custoFinal, 0),
+		totalNaoFaturavelCustos: naoFaturavelItems.reduce((acc, item) => acc + item.custoFinal, 0),
+	};
+}
+
 export function getPricingTotals(pricing: TPricingItem[]) {
 	const totals = pricing.reduce(
 		(acc, current) => {
