@@ -2,7 +2,29 @@
   "permissions": {
     "allow": [
       "Bash(grep:*)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Read(//c/Users/Lucas/.agents/skills/impeccable/**)",
+      "Bash(node scripts/context.mjs)",
+      "Bash(node \"C:\\\\Users\\\\Lucas\\\\.claude\\\\skills\\\\impeccable\\\\scripts\\\\context.mjs\")",
+      "mcp__visualize__read_me",
+      "Bash(echo \"EXIT_COMPILE=$?\")",
+      "Bash(npm run *)"
     ]
-  }
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PROJECT_DIR}/.claude/skills/impeccable/scripts/hook.mjs\"",
+            "timeout": 5,
+            "statusMessage": "Checking UI changes"
+          }
+        ]
+      }
+    ]
+  },
+  "description": "Impeccable design detector: runs after Edit/Write/MultiEdit on UI files and surfaces findings as system reminders."
 }

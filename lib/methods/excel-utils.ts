@@ -1,4 +1,53 @@
 import * as XLSX from "xlsx";
+
+type ExcelSheet = {
+	name: string;
+	data: Record<string, unknown>[];
+};
+
+const EXCEL_SHEET_NAME_MAX_LENGTH = 31;
+const INVALID_SHEET_NAME_CHARS = /[:\\/?*[\]]/g;
+
+function sanitizeExcelSheetName(name: string): string {
+	const sanitized = (name || "Sem nome").replace(INVALID_SHEET_NAME_CHARS, "").slice(0, EXCEL_SHEET_NAME_MAX_LENGTH).trim();
+	return sanitized || "Aba";
+}
+
+function getUniqueSheetName(baseName: string, usedNames: Set<string>): string {
+	if (!usedNames.has(baseName)) {
+		usedNames.add(baseName);
+		return baseName;
+	}
+
+	let counter = 2;
+	while (counter < 100) {
+		const suffix = ` (${counter})`;
+		const truncated = baseName.slice(0, EXCEL_SHEET_NAME_MAX_LENGTH - suffix.length) + suffix;
+		if (!usedNames.has(truncated)) {
+			usedNames.add(truncated);
+			return truncated;
+		}
+		counter += 1;
+	}
+
+	const fallback = `${baseName.slice(0, 28)}...`;
+	usedNames.add(fallback);
+	return fallback;
+}
+
+export function getExcelBufferFromSheets(sheets: ExcelSheet[]): Buffer {
+	const workbook = XLSX.utils.book_new();
+	const usedNames = new Set<string>();
+
+	for (const sheet of sheets) {
+		const sheetName = getUniqueSheetName(sanitizeExcelSheetName(sheet.name), usedNames);
+		const worksheet = XLSX.utils.json_to_sheet(sheet.data);
+		XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
+	}
+
+	return XLSX.write(workbook, { bookType: "xlsx", type: "buffer" }) as Buffer;
+}
+
 export const getJSONFromExcelFile = (file: File): Promise<any[]> => {
 	return new Promise((resolve, reject) => {
 		const reader = new FileReader();

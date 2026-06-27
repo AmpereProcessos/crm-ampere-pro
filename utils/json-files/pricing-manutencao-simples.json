@@ -1,0 +1,143 @@
+{
+  "_id": {
+    "$oid": "6615842c44e316b3fbd89847"
+  },
+  "nome": "PRECIFICAÇÃO MANUTENÇÃO SIMPLES",
+  "idParceiro": "65454ba15cf3e3ecf534b308",
+  "itens": [
+    {
+      "nome": "VALOR DA MANUTENÇÃO",
+      "resultados": [
+        {
+          "condicao": {
+            "aplicavel": false,
+            "variavel": null,
+            "igual": null
+          },
+          "faturavel": false,
+          "margemLucro": 50,
+          "formulaArr": [
+            "Math.max(",
+            "1",
+            ",",
+            "Math.ceil(",
+            "[numModulos]",
+            "/",
+            "10",
+            ")",
+            ")",
+            "*",
+            "68.75"
+          ]
+        }
+      ]
+    },
+    {
+      "nome": "DESLOCAMENTO",
+      "resultados": [
+        {
+          "condicao": {
+            "tipo": "MAIOR_QUE_NÚMERICO",
+            "aplicavel": true,
+            "variavel": "numModulos",
+            "maiorQue": 24
+          },
+          "faturavel": false,
+          "margemLucro": 0,
+          "formulaArr": [
+            "(",
+            "10",
+            "+",
+            "[distancia]",
+            ")",
+            "*",
+            "3.2",
+            "*",
+            "(",
+            "[numModulos]",
+            "/",
+            "24",
+            ")"
+          ]
+        },
+        {
+          "condicao": {
+            "aplicavel": false,
+            "variavel": null,
+            "igual": null
+          },
+          "faturavel": false,
+          "margemLucro": 0,
+          "formulaArr": [
+            "(",
+            "10",
+            "+",
+            "[distancia]",
+            ")",
+            "*",
+            "3.2"
+          ]
+        }
+      ]
+    },
+    {
+      "nome": "ALIMENTAÇÃO",
+      "resultados": [
+        {
+          "condicao": {
+            "tipo": "IGUAL_TEXTO",
+            "aplicavel": true,
+            "variavel": "cidade",
+            "igual": "ITUIUTABA"
+          },
+          "faturavel": false,
+          "margemLucro": 0,
+          "formulaArr": [
+            "0"
+          ]
+        },
+        {
+          "condicao": {
+            "tipo": "MAIOR_QUE_NÚMERICO",
+            "aplicavel": true,
+            "variavel": "numModulos",
+            "maiorQue": 24
+          },
+          "faturavel": false,
+          "margemLucro": 0,
+          "formulaArr": [
+            "70",
+            "*",
+            "(",
+            "[numModulos]",
+            "/",
+            "24",
+            ")",
+            "*",
+            "2"
+          ]
+        },
+        {
+          "condicao": {
+            "aplicavel": false,
+            "variavel": null,
+            "igual": null
+          },
+          "faturavel": false,
+          "margemLucro": 0,
+          "formulaArr": [
+            "70",
+            "*",
+            "2"
+          ]
+        }
+      ]
+    }
+  ],
+  "autor": {
+    "id": "65453222e345279bdfcac0dc",
+    "nome": "Lucas Fernandes",
+    "avatar_url": "https://avatars.githubusercontent.com/u/60222823?s=400&u=d82dbc3d1d666b315b793f1888fd65c92d8ca0a9&v=4"
+  },
+  "dataInsercao": "2024-03-08T11:01:00.000Z"
+}

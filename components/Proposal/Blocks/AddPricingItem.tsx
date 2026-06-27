@@ -1,9 +1,13 @@
 import CheckboxInput from "@/components/Inputs/CheckboxInput";
 import NumberInput from "@/components/Inputs/NumberInput";
 import TextInput from "@/components/Inputs/TextInput";
-import { getInverterQty, getModulesQty } from "@/lib/methods/extracting";
 import { cumulativeVariablesValues, formatFormulaItem, operators, variablesAlias } from "@/utils/pricing/helpers";
-import { getCalculatedFinalValue, getProfitMargin, handlePartialPricingReCalculation, TPricingVariableData } from "@/utils/pricing/methods";
+import {
+	getCalculatedFinalValue,
+	getProfitMargin,
+	getProposalPricingVariableData,
+	handlePartialPricingReCalculation,
+} from "@/utils/pricing/methods";
 import { TPricingItem, TProposal } from "@/utils/schemas/proposal.schema";
 import React, { useState } from "react";
 import { FiDelete } from "react-icons/fi";
@@ -43,28 +47,7 @@ function AddPricingItem({ pricing, setPricing, proposal, closeModal }: AddPricin
 	function addNewPriceItem(item: TPricingItem) {
 		const pricingItems = [...pricing];
 		pricingItems.push({ ...item, descricao: item.descricao.toUpperCase() });
-		const moduleQty = getModulesQty(proposal.produtos);
-		const inverterQty = getInverterQty(proposal.produtos);
-		const kitPrice = proposal.kits.reduce((acc, current) => acc + (current.preco || 0), 0);
-		const productPrice = proposal.produtos.reduce((acc, current) => acc + (current.valor || 0), 0);
-		const servicePrice = proposal.servicos.reduce((acc, current) => acc + (current.valor || 0), 0);
-		const variableData: TPricingVariableData = {
-			kit: kitPrice,
-			numModulos: moduleQty,
-			product: productPrice,
-			service: servicePrice,
-			potenciaPico: proposal.potenciaPico || 0,
-			distancia: proposal.premissas.distancia || 0,
-			plan: 0,
-			numInversores: inverterQty,
-			valorReferencia: proposal.premissas.valorReferencia || 0,
-			consumoEnergiaMensal: proposal.premissas.consumoEnergiaMensal || 0,
-			tarifaEnergia: proposal.premissas.tarifaEnergia || 0,
-			custosInstalacao: proposal.premissas.custosInstalacao || 0,
-			custosPadraoEnergia: proposal.premissas.custosPadraoEnergia || 0,
-			custosEstruturaInstalacao: proposal.premissas.custosEstruturaInstalacao || 0,
-			custosOutros: proposal.premissas.custosOutros || 0,
-		};
+		const variableData = getProposalPricingVariableData(proposal, pricingItems);
 		const calculableItemsIndexes = pricing
 			.map((item, index) => {
 				if (!item.formulaArr) return null;
