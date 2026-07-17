@@ -2,7 +2,8 @@ import { insertNotification } from "@/repositories/notifications/mutations";
 import { insertTechnicalAnalysis, updateTechnicalAnalysis } from "@/repositories/technical-analysis/mutations";
 import { getTechnicalAnalysis, getTechnicalAnalysisById, getTechnicalAnalysisByOpportunityId } from "@/repositories/technical-analysis/queries";
 import connectToDatabase from "@/services/mongodb/crm-db-connection";
-import { apiHandler, validateAuthentication, validateAuthenticationWithSession } from "@/utils/api";
+import { buildResourceVisibilityFilter } from "@/lib/auth/visibility";
+import { apiHandler, validateAuthenticationWithSession } from "@/utils/api";
 import { TNotification } from "@/utils/schemas/notification.schema";
 import { GeneralTechnicalAnalysisSchema, TTechnicalAnalysis } from "@/utils/schemas/technical-analysis.schema";
 import createHttpError from "http-errors";
@@ -16,9 +17,8 @@ type GetResponse = {
 const getPartnerTechnicalAnalysis: NextApiHandler<GetResponse> = async (req, res) => {
 	const session = await validateAuthenticationWithSession(req, res);
 	const analysisScope = session.user.permissoes.analisesTecnicas.escopo;
-	const partnerId = session.user.idParceiro;
-	const parterScope = session.user.permissoes.parceiros.escopo;
-	const partnerQuery: Filter<TTechnicalAnalysis> = parterScope ? { idParceiro: { $in: [...parterScope] } } : {};
+	const visibilityQuery = buildResourceVisibilityFilter(session, "analisesTecnicas") as Filter<TTechnicalAnalysis> | null;
+	if (!visibilityQuery) throw new createHttpError.Unauthorized("Você não possui permissão para visualizar análises técnicas.");
 
 	const { id, opportunityId, concludedOnly } = req.query;
 
@@ -29,7 +29,7 @@ const getPartnerTechnicalAnalysis: NextApiHandler<GetResponse> = async (req, res
 
 	if (id) {
 		if (typeof id != "string" || !ObjectId.isValid(id)) throw new createHttpError.BadRequest("ID inválido.");
-		const analysis = await getTechnicalAnalysisById({ collection: collection, analysisId: id, query: partnerQuery });
+		const analysis = await getTechnicalAnalysisById({ collection: collection, analysisId: id, query: visibilityQuery });
 		if (!analysis) throw new createHttpError.NotFound("Análise técnica não encontrada.");
 		return res.status(200).json({ data: analysis });
 	}
@@ -38,14 +38,14 @@ const getPartnerTechnicalAnalysis: NextApiHandler<GetResponse> = async (req, res
 
 		const opportunityAnalysis = await getTechnicalAnalysisByOpportunityId({
 			collection: collection,
-			query: concludedQuery,
+			query: { ...visibilityQuery, ...concludedQuery },
 			opportunityId: opportunityId,
 		});
 		return res.status(200).json({ data: opportunityAnalysis });
 	}
 	// Ajusting the query for the user's scope visualization
 	const applicantQuery: Filter<TTechnicalAnalysis> = analysisScope ? { "requerente.id": { $in: [...analysisScope] } } : {};
-	const query = { ...partnerQuery, ...applicantQuery };
+	const query = { ...visibilityQuery, ...applicantQuery };
 	const allAnalysis = await getTechnicalAnalysis({ collection: collection, query: query });
 
 	return res.status(200).json({ data: allAnalysis });

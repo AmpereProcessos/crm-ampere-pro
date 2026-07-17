@@ -4,7 +4,6 @@ import type React from "react";
 import SignaturePlanCard from "@/components/Cards/SignaturePlan";
 import EditPlan from "@/components/Modals/SignaturePlans/EditPlan";
 import NewPlan from "@/components/Modals/SignaturePlans/NewPlan";
-import { Sidebar } from "@/components/Sidebar";
 import { Button } from "@/components/ui/button";
 import { InteractiveFilter, type InteractiveFilterOption, type InteractiveFilterSortValue } from "@/components/ui/interactive-filter";
 import { Input } from "@/components/ui/input";
@@ -27,13 +26,11 @@ function PlansPage({ session }: PlansPageProps) {
 	const [editPlanModal, setEditPlanModal] = useState<{ id: string | null; isOpen: boolean }>({ id: null, isOpen: false });
 
 	return (
-		<div className="flex h-full flex-col md:flex-row">
-			<Sidebar session={session} />
-			<div className="flex w-full max-w-full grow flex-col overflow-x-hidden bg-background p-6">
+		<>
+			<div className="flex w-full min-w-0 flex-col gap-4">
 				<div className="flex flex-col items-center border-b border-black pb-2">
 					<div className="flex w-full flex-col items-center justify-between gap-2 lg:flex-row">
 						<div className="flex flex-col gap-1">
-							<h1 className="text-xl font-black leading-none tracking-tight md:text-2xl">CONTROLE DE PLANOS DE ASSINATURA</h1>
 							<p className="text-sm leading-none tracking-tight text-primary/70">
 								{plans?.length ? (plans.length > 0 ? `${plans.length} planos cadastrados` : `${plans.length} plano cadastrado`) : "..."}
 							</p>
@@ -82,7 +79,7 @@ function PlansPage({ session }: PlansPageProps) {
 				<EditPlan signaturePlanId={editPlanModal.id} session={session} closeModal={() => setEditPlanModal({ id: null, isOpen: false })} />
 			) : null}
 			{newPlanModalIsOpen ? <NewPlan session={session} closeModal={() => setNewPlanModalIsOpen(false)} /> : null}
-		</div>
+		</>
 	);
 }
 

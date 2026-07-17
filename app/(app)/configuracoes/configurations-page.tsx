@@ -13,7 +13,6 @@ import Profile from "@/components/Configuration/Profile";
 import ProjectTypes from "@/components/Configuration/ProjectTypes";
 import UserGroups from "@/components/Configuration/UserGroups";
 import Users from "@/components/Configuration/Users";
-import { Sidebar } from "@/components/Sidebar";
 import type { TUserSession } from "@/lib/auth/session";
 
 type TConfigurationModes =
@@ -38,13 +37,7 @@ type ConfigurationsPageProps = {
 function ConfigurationsPage({ session }: ConfigurationsPageProps) {
 	const [mode, setMode] = useState<TConfigurationModes>("profile");
 	return (
-		<div className="flex h-full flex-col md:flex-row">
-			<Sidebar session={session} />
-			<div className="flex w-full max-w-full grow flex-col overflow-x-hidden bg-background p-6">
-				<div className="flex w-full flex-col border-primary/30 border-b px-6 pb-2">
-					<h1 className="font-bold text-2xl tracking-tight">Configurações</h1>
-					<p className="text-[#71717A]">Gerencie configurações e preferências</p>
-				</div>
+		<div className="flex w-full min-w-0 flex-col">
 				<div className="flex grow flex-col items-start gap-2 py-2 lg:flex-row">
 					<div className="flex h-fit w-full flex-col gap-1 px-2 py-2 lg:h-full lg:w-1/5">
 						<button
@@ -203,7 +196,6 @@ function ConfigurationsPage({ session }: ConfigurationsPageProps) {
 						{mode === "automations" ? <Automations session={session} /> : null}
 					</div>
 				</div>
-			</div>
 		</div>
 	);
 }

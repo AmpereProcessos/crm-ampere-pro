@@ -1,5 +1,6 @@
 import { apiHandler, type UnwrapNextResponse } from "@/lib/api";
 import { getValidCurrentSessionUncached } from "@/lib/auth/session";
+import { buildResourceVisibilityFilter } from "@/lib/auth/visibility";
 import { insertClient, updateClient } from "@/repositories/clients/mutations";
 import { getClientById, getClients, getExistentClientByProperties } from "@/repositories/clients/queries";
 import connectToDatabase from "@/services/mongodb/crm-db-connection";
@@ -12,11 +13,12 @@ import type { z } from "zod";
 import { GetClientsQueryParams } from "./inputs";
 
 async function getPartnerClients(request: NextRequest) {
-	const { user } = await getValidCurrentSessionUncached();
+	const session = await getValidCurrentSessionUncached();
+	const { user } = session;
 	const partnerId = user.idParceiro;
 	const userScope = user.permissoes.clientes.escopo;
-	const parterScope = user.permissoes.parceiros.escopo;
-	const partnerQuery: Filter<TClient> = parterScope ? { idParceiro: { $in: [...parterScope] } } : {};
+	const visibilityQuery = buildResourceVisibilityFilter(session, "clientes") as Filter<TClient> | null;
+	if (!visibilityQuery) throw new createHttpError.Unauthorized("Você não possui permissão para visualizar clientes.");
 
 	const searchParams = request.nextUrl.searchParams;
 	const queryParams = GetClientsQueryParams.parse({
@@ -36,7 +38,7 @@ async function getPartnerClients(request: NextRequest) {
 		const client = await getClientById({
 			collection,
 			id,
-			query: partnerQuery,
+			query: visibilityQuery,
 		});
 
 		if (!client) throw new createHttpError.NotFound("Cliente não encontrado.");
@@ -135,7 +137,6 @@ export const POST = apiHandler({ POST: createClient });
 export type TUpdateClientRouteInput = z.infer<typeof GeneralClientSchema>;
 async function updateClientHandler(request: NextRequest) {
 	const { user } = await getValidCurrentSessionUncached();
-	const partnerId = user.idParceiro;
 	const parterScope = user.permissoes.parceiros.escopo;
 	const partnerQuery: Filter<TClient> = parterScope ? { idParceiro: { $in: [...parterScope] } } : {};
 
@@ -175,7 +176,7 @@ async function updateClientHandler(request: NextRequest) {
 		"cliente.telefonePrimario": changes.telefonePrimario,
 		"cliente.email": changes.email,
 		"cliente.canalAquisicao": changes.canalAquisicao,
-	}).filter(([key, value]) => value !== null && value !== undefined);
+	}).filter(([, value]) => value !== null && value !== undefined);
 
 	const oppportunitiesUpdate = oppportunitiesUpdateArr.reduce((acc: { [key: string]: any }, [key, value]) => {
 		acc[key] = value;

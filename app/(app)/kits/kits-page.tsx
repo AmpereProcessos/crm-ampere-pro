@@ -10,7 +10,6 @@ import FilterMenu from "@/components/Kits/FilterMenu";
 import KitBulkOperation from "@/components/Modals/Kit/BulkOperation";
 import EditKit from "@/components/Modals/Kit/EditKit";
 import NewKit from "@/components/Modals/Kit/NewKit";
-import { Sidebar } from "@/components/Sidebar";
 import ErrorComponent from "@/components/utils/ErrorComponent";
 import LoadingComponent from "@/components/utils/LoadingComponent";
 import LoadingPage from "@/components/utils/LoadingPage";
@@ -48,9 +47,8 @@ export default function KitsPage({ session }: { session: TUserSession }) {
 	if (!session.user.permissoes.kits.visualizar) return <NotAuthorizedPage session={session} />;
 
 	return (
-		<div className="flex h-full flex-col md:flex-row">
-			<Sidebar session={session} />
-			<div className="flex w-full max-w-full grow flex-col overflow-x-hidden bg-background p-6">
+		<>
+			<div className="flex w-full min-w-0 flex-col gap-4">
 				<div className="flex flex-col items-center border-b border-black pb-2">
 					<div className="flex w-full flex-col items-center justify-between gap-2 lg:flex-row">
 						<div className="flex items-center gap-1">
@@ -64,7 +62,6 @@ export default function KitsPage({ session }: { session: TUserSession }) {
 								</div>
 							)}
 							<div className="flex flex-col gap-1">
-								<h1 className="text-xl font-black leading-none tracking-tight md:text-2xl">BANCO DE KITS</h1>
 								<p className="text-sm leading-none tracking-tight text-primary/70">
 									{kits?.length ? (kits.length > 0 ? `${kits.length} kits cadastrados` : `${kits.length} kit cadastrado`) : "..."}
 								</p>
@@ -179,6 +176,6 @@ export default function KitsPage({ session }: { session: TUserSession }) {
 				/>
 			) : null}
 			{bulkOperationModalIsOpen ? <KitBulkOperation session={session} closeModal={() => setBulkOperationModalIsOpen(false)} /> : null}
-		</div>
+		</>
 	);
 }

@@ -2,7 +2,6 @@
 import { useQueryClient } from "@tanstack/react-query";
 import type { TUserSession } from "@/lib/auth/session";
 import { useOpportunityById } from "@/utils/queries/opportunities";
-import { Sidebar } from "../../Sidebar";
 import LoadingComponent from "../../utils/LoadingComponent";
 import OpportunityClient from "./OpportunityClient";
 import OpportunityCustomFieldsBlock from "./OpportunityCustomFieldsBlock";
@@ -37,18 +36,13 @@ function OpportunityPage({ session, opportunityId }: OpportunityPageProps) {
 	if (opportunityLoading) return <LoadingComponent />;
 	if (opportunityError)
 		return (
-			<div className="flex h-full flex-col md:flex-row">
-				<Sidebar session={session} />
-				<div className="flex w-full max-w-full grow flex-col items-center justify-center overflow-x-hidden bg-background p-6">
-					<p className="text-lg italic text-primary/70">Oops, houve um erro no carregamento das informações do projeto em questão.</p>
-				</div>
+			<div className="flex min-h-64 w-full flex-col items-center justify-center">
+				<p className="text-base italic text-muted-foreground">Houve um erro no carregamento das informações desta oportunidade.</p>
 			</div>
 		);
 	if (opportunitySuccess)
 		return (
-			<div className="flex h-full flex-col md:flex-row">
-				<Sidebar session={session} />
-				<div className="flex w-full max-w-full grow flex-col gap-4 overflow-x-hidden bg-background p-6">
+			<div className="flex w-full min-w-0 flex-col gap-4">
 					<OpportunityPageHeader opportunity={opportunity} session={session} handleOnMutate={handleOnMutate} handleOnSettled={handleOnSettled} />
 					<div className="flex w-full flex-col gap-4">
 						{opportunity.ganho.idProjeto ? <OpportunityProject opportunityProjectId={opportunity.ganho.idProjeto} session={session} /> : null}
@@ -106,7 +100,6 @@ function OpportunityPage({ session, opportunityId }: OpportunityPageProps) {
 							</div>
 						</div>
 					</div>
-				</div>
 			</div>
 		);
 	return <></>;

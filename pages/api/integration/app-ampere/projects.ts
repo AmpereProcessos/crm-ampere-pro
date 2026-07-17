@@ -3,6 +3,7 @@ import { type Collection, type Filter, type FindCursor, ObjectId } from "mongodb
 import type { NextApiHandler } from "next";
 import z from "zod";
 import type { TUserSession } from "@/lib/auth/session";
+import { canViewResource, getAllowedPartnerIds } from "@/lib/auth/visibility";
 import { getProjectContractValue } from "@/lib/project";
 import connectToAmpereProjectsDatabase from "@/services/mongodb/ampere/projects-db-connection";
 import connectToDatabase from "@/services/mongodb/crm-db-connection";
@@ -82,7 +83,9 @@ const GetProjectsInputSchema = z.union([GetProjectByIdInputSchema, GetManyProjec
 export type TGetProjectsInput = z.infer<typeof GetProjectsInputSchema>;
 
 async function getProjects({ input, session }: { input: TGetProjectsInput; session: TUserSession }) {
+	if (!canViewResource(session, "projetos")) throw new createHttpError.Unauthorized("Você não possui permissão para visualizar projetos.");
 	const userOpportunityScope = session.user.permissoes.oportunidades.escopo;
+	const allowedPartnerIds = getAllowedPartnerIds(session);
 	const PAGE_SIZE = 50;
 
 	const crmDb = await connectToDatabase();
@@ -103,7 +106,7 @@ async function getProjects({ input, session }: { input: TGetProjectsInput; sessi
 		.toArray();
 
 	if ("id" in input) {
-		const project = await collection.findOne({ _id: new ObjectId(input.id) });
+		const project = await collection.findOne({ _id: new ObjectId(input.id), idParceiro: { $in: allowedPartnerIds } });
 		if (!project) throw new createHttpError.NotFound("Projeto não encontrado.");
 
 		const projectCommercialRepresentatives = [project.vendedor?.nome, project.insider].filter((r) => !!r) as string[];

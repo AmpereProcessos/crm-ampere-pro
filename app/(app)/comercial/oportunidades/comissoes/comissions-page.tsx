@@ -2,7 +2,6 @@
 import type { TBulkUpdateComissionsRouteInput, TGetComissionsRouteOutput } from "@/app/api/opportunities/comissions/route";
 import { LoadingButton } from "@/components/Buttons/loading-button";
 import MultipleSelectInput from "@/components/Inputs/MultipleSelectInput";
-import { Sidebar } from "@/components/Sidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import DateIntervalInput from "@/components/ui/DateIntervalInput";
@@ -112,16 +111,9 @@ function ComissionsPage({ session }: ComissionsPageProps) {
 		: [];
 	const areExistingOpportunitiesMissingValidation = comissions?.some((c) => c.comissao.comissionados.some((c) => !c.dataValidacao));
 	return (
-		<div className="flex h-full flex-col md:flex-row">
-			<Sidebar session={session} />
-			<div className="flex w-full max-w-full grow flex-col overflow-x-hidden bg-background p-6">
+		<div className="flex w-full min-w-0 flex-col gap-4">
 				<div className="flex w-full flex-col gap-2 border-b border-black pb-2">
-					<div className="flex w-full flex-col items-center justify-between gap-4 lg:flex-row">
-						<div className="flex flex-col items-center gap-1 lg:flex-row">
-							<div className="flex flex-col items-center gap-1">
-								<h1 className="text-xl font-black leading-none tracking-tight md:text-2xl">COMISSÕES</h1>
-							</div>
-						</div>
+					<div className="flex w-full flex-col items-center justify-end gap-4 lg:flex-row">
 						<div className="flex items-center gap-2">
 							{userResultsScopeIsBroad ? (
 								<div className="w-full lg:w-[300px]">
@@ -230,7 +222,6 @@ function ComissionsPage({ session }: ComissionsPageProps) {
 						</>
 					) : null}
 				</div>
-			</div>
 		</div>
 	);
 }

@@ -5,6 +5,7 @@ import { start } from "workflow/api";
 import { z } from "zod";
 import { apiHandler } from "@/lib/api";
 import { getValidCurrentSessionUncached, type TUserSession } from "@/lib/auth/session";
+import { buildResourceVisibilityFilter } from "@/lib/auth/visibility";
 import { runOpportunityLossAutomation } from "@/lib/automations";
 import { insertClient } from "@/repositories/clients/mutations";
 import { getExistentClientByProperties } from "@/repositories/clients/queries";
@@ -250,12 +251,14 @@ const GetOpportunitiesInputSchema = z.object({
 	}),
 });
 export type TGetOpportunitiesInput = z.infer<typeof GetOpportunitiesInputSchema>;
-async function getOpportunities({ input }: { input: TGetOpportunitiesInput; session: TUserSession }) {
+async function getOpportunities({ input, session }: { input: TGetOpportunitiesInput; session: TUserSession }) {
 	console.log("[INFO] [GET OPPORTUNITIES] - Getting opportunity by ID", input.id);
 	const { id } = input;
+	const visibilityQuery = buildResourceVisibilityFilter(session, "oportunidades") as Filter<TOpportunity> | null;
+	if (!visibilityQuery) throw new createHttpError.Unauthorized("Você não possui permissão para visualizar oportunidades.");
 	const db = await connectToDatabase();
 	const opportunitiesCollection = db.collection<TOpportunity>("opportunities");
-	const opportunity = await getOpportunityById({ collection: opportunitiesCollection, id, query: {} });
+	const opportunity = await getOpportunityById({ collection: opportunitiesCollection, id, query: visibilityQuery });
 	if (!opportunity) {
 		throw new createHttpError.NotFound("Oportunidade não encontrada.");
 	}

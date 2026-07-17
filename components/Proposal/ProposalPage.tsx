@@ -31,7 +31,6 @@ import EditProposalFile from "../Modals/Proposal/EditFile";
 import EditProposal from "../Modals/Proposal/EditProposal";
 import UFVEnergyEconomyAnalysis from "../Modals/Proposal/UFVEconomicAnalysis";
 import NewProjectRequest from "../ProjectRequest/NewProjectRequest";
-import { Sidebar } from "../Sidebar";
 import { Button } from "../ui/button";
 import { type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "../ui/chart";
 import Avatar from "../utils/Avatar";
@@ -84,27 +83,20 @@ function ProposalPage({ proposalId, session }: ProposalPageProps) {
 	});
 	if (proposalLoading)
 		return (
-			<div className="flex h-full flex-col md:flex-row">
-				<Sidebar session={session} />
-				<div className="flex w-full max-w-full grow flex-col items-center justify-center overflow-x-hidden bg-background p-6">
-					<LoadingComponent />
-				</div>
+			<div className="flex min-h-64 w-full items-center justify-center">
+				<LoadingComponent />
 			</div>
 		);
 	if (proposalError)
 		return (
-			<div className="flex h-full flex-col md:flex-row">
-				<Sidebar session={session} />
-				<div className="flex w-full max-w-full grow flex-col items-center justify-center overflow-x-hidden bg-background p-6">
-					<ErrorComponent msg="Erro ao carregar informações da proposta." />
-				</div>
+			<div className="flex min-h-64 w-full items-center justify-center">
+				<ErrorComponent msg="Erro ao carregar informações da proposta." />
 			</div>
 		);
 	if (proposalSuccess) {
 		return (
-			<div className="flex h-full flex-col md:flex-row">
-				<Sidebar session={session} />
-				<div className="flex w-full max-w-full grow flex-col overflow-x-hidden bg-background p-6">
+			<>
+				<div className="flex w-full min-w-0 flex-col gap-4 overflow-x-hidden">
 					<div className="flex w-full flex-col items-center justify-between gap-4 border-b border-primary/30 pb-2">
 						<div className="flex w-full flex-col items-center justify-center gap-2 lg:flex-row lg:justify-between">
 							<div className="flex items-center gap-2">
@@ -443,7 +435,7 @@ function ProposalPage({ proposalId, session }: ProposalPageProps) {
 						closeModal={() => setEditProposalFileModalIsOpen(false)}
 					/>
 				) : null}
-			</div>
+			</>
 		);
 	}
 	return <></>;

@@ -4,7 +4,6 @@ import type React from "react";
 import Product from "@/components/Cards/Product";
 import EditProduct from "@/components/Modals/Products/EditProduct";
 import NewProduct from "@/components/Modals/Products/NewProduct";
-import { Sidebar } from "@/components/Sidebar";
 import { Button } from "@/components/ui/button";
 import { InteractiveFilter, type InteractiveFilterOption, type InteractiveFilterSortValue } from "@/components/ui/interactive-filter";
 import { Input } from "@/components/ui/input";
@@ -27,13 +26,11 @@ function ProductsPage({ session }: ProductsPageProps) {
 	const [editProductModal, setEditProductModal] = useState<{ id: string | null; isOpen: boolean }>({ id: null, isOpen: false });
 	if (!session.user.permissoes.produtos.visualizar) return <NotAuthorizedPage session={session} />;
 	return (
-		<div className="flex h-full flex-col md:flex-row">
-			<Sidebar session={session} />
-			<div className="flex w-full max-w-full grow flex-col overflow-x-hidden bg-background p-6">
+		<>
+			<div className="flex w-full min-w-0 flex-col gap-4">
 				<div className="flex flex-col items-center border-b border-black pb-2">
 					<div className="flex w-full flex-col items-center justify-between gap-2 lg:flex-row">
 						<div className="flex flex-col gap-1">
-							<h1 className="text-xl font-black leading-none tracking-tight md:text-2xl">BANCO DE PRODUTOS</h1>
 							<p className="text-sm leading-none tracking-tight text-primary/70">
 								{products?.length ? (products.length > 0 ? `${products.length} produtos cadastrados` : `${products.length} produto cadastrado`) : "..."}
 							</p>
@@ -82,7 +79,7 @@ function ProductsPage({ session }: ProductsPageProps) {
 			{editProductModal.id && editProductModal.isOpen ? (
 				<EditProduct session={session} productId={editProductModal.id} closeModal={() => setEditProductModal({ id: null, isOpen: false })} />
 			) : null}
-		</div>
+		</>
 	);
 }
 

@@ -6,7 +6,6 @@ import { BsDownload } from "react-icons/bs";
 import DateInput from "@/components/Inputs/DateInput";
 import MultipleSelectInput from "@/components/Inputs/MultipleSelectInput";
 import EditPromoter from "@/components/Modals/EditPromoter";
-import { Sidebar } from "@/components/Sidebar";
 import InProgressResults from "@/components/Stats/Results/InProgress";
 import OverallResults from "@/components/Stats/Results/Overall";
 
@@ -75,10 +74,8 @@ function ManagementComercialResults({ session }: ComercialResultsProps) {
 	}
 
 	return (
-		<div className="flex h-full flex-col md:flex-row">
-			<Sidebar session={session} />
-			<div className="flex w-full max-w-full grow flex-col overflow-x-hidden bg-background p-6">
-				<h1 className="text-center font-Raleway text-xl font-black text-primary lg:text-start lg:text-2xl">ACOMPANHAMENTO DE RESULTADOS</h1>
+		<>
+			<div className="flex w-full min-w-0 flex-col gap-4">
 				<div className="flex items-center gap-2 flex-col lg:flex-row w-full justify-end">
 					<div className="flex flex-col items-center gap-y-2 gap-4 lg:flex-row w-full lg:w-fit">
 						<h1 className="text-end text-sm font-medium uppercase tracking-tight">PERÍODO</h1>
@@ -249,7 +246,7 @@ function ManagementComercialResults({ session }: ComercialResultsProps) {
 			{editModal.isOpen && editModal.promoter ? (
 				<EditPromoter session={session} promoter={editModal.promoter} closeModal={() => setEditModal({ isOpen: false, promoter: null })} />
 			) : null}
-		</div>
+		</>
 	);
 }
 

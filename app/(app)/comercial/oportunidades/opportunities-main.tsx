@@ -3,14 +3,13 @@ import { useState } from "react";
 import OpportunitiesCardModePage from "@/components/Opportunities/OpportunitiesCardModePage";
 import type { TUserSession } from "@/lib/auth/session";
 import { useOpportunitiesQueryDefinitions, useOpportunitiesQueryOptions } from "@/utils/queries/opportunities";
-import OpportunitiesKanbanModePageV2 from "@/components/Opportunities/OpportunitiesKanbanModePage";
+import OpportunitiesKanbanModePage from "@/components/Opportunities/OpportunitiesKanbanModePage";
 
 export type TOpportunitiesPageModes = "card" | "kanban";
 
 type OpportunitiesMainPageProps = { initialMode: TOpportunitiesPageModes | null | undefined; session: TUserSession };
 
 export default function OpportunitiesMainPage({ initialMode, session }: OpportunitiesMainPageProps) {
-	console.log(initialMode);
 	const { data: queryOptions } = useOpportunitiesQueryOptions();
 	const { data: opportunityViewPreferences } = useOpportunitiesQueryDefinitions();
 	const responsiblesOptions = queryOptions?.responsibles || [];
@@ -36,6 +35,6 @@ export default function OpportunitiesMainPage({ initialMode, session }: Opportun
 			/>
 		);
 	if (mode === "kanban" && opportunityViewPreferences)
-		return <OpportunitiesKanbanModePageV2 session={session} opportunityViewPreferences={opportunityViewPreferences} />;
+		return <OpportunitiesKanbanModePage session={session} opportunityViewPreferences={opportunityViewPreferences} />;
 	return <></>;
 }

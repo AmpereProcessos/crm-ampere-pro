@@ -1,8 +1,9 @@
 import { insertProposal, updateProposal } from "@/repositories/proposals/mutations";
 import { getOpportunityProposals, getProposalById } from "@/repositories/proposals/queries";
 import connectToDatabase from "@/services/mongodb/crm-db-connection";
-import { apiHandler, validateAuthentication, validateAuthorization } from "@/utils/api";
-import { InsertProposalSchema, TProposal, TProposalDTOWithOpportunity, TProposalEntity } from "@/utils/schemas/proposal.schema";
+import { buildResourceVisibilityFilter } from "@/lib/auth/visibility";
+import { apiHandler, validateAuthorization } from "@/utils/api";
+import { InsertProposalSchema, TProposal, TProposalDTOWithOpportunity } from "@/utils/schemas/proposal.schema";
 import createHttpError from "http-errors";
 import { Collection, Filter, ObjectId } from "mongodb";
 import { NextApiHandler } from "next";
@@ -31,9 +32,8 @@ type GetResponse = {
 };
 const getProposals: NextApiHandler<GetResponse> = async (req, res) => {
 	const session = await validateAuthorization(req, res, "propostas", "visualizar", true);
-	const partnerId = session.user.idParceiro;
-	const parterScope = session.user.permissoes.parceiros.escopo;
-	const partnerQuery: Filter<TProposal> = parterScope ? { idParceiro: { $in: [...parterScope] } } : {};
+	const visibilityQuery = buildResourceVisibilityFilter(session, "propostas") as Filter<TProposal> | null;
+	if (!visibilityQuery) throw new createHttpError.Unauthorized("Você não possui permissão para visualizar propostas.");
 
 	const { opportunityId, id } = req.query;
 	if (!opportunityId && !id) throw new createHttpError.BadRequest("ID de referência não fornecido.");
@@ -43,13 +43,13 @@ const getProposals: NextApiHandler<GetResponse> = async (req, res) => {
 	// Query for opportunity proposals
 	if (opportunityId) {
 		if (typeof opportunityId != "string" || !ObjectId.isValid(opportunityId)) throw new createHttpError.BadRequest("ID de oportunidade inválido.");
-		const proposals = await getOpportunityProposals({ collection: proposalsCollection, opportunityId: opportunityId, query: partnerQuery });
+		const proposals = await getOpportunityProposals({ collection: proposalsCollection, opportunityId: opportunityId, query: visibilityQuery });
 		return res.status(200).json({ data: proposals });
 	}
 	// Query for specific proposal based on ID
 	if (id) {
 		if (typeof id != "string" || !ObjectId.isValid(id)) throw new createHttpError.BadRequest("ID de oportunidade inválido.");
-		const proposal = await getProposalById({ collection: proposalsCollection, id: id, query: partnerQuery });
+		const proposal = await getProposalById({ collection: proposalsCollection, id: id, query: visibilityQuery });
 		if (!proposal) throw new createHttpError.NotFound("Proposta não encontrada.");
 		return res.status(200).json({ data: proposal });
 	}
@@ -61,7 +61,6 @@ type PutResponse = {
 
 const editProposal: NextApiHandler<PutResponse> = async (req, res) => {
 	const session = await validateAuthorization(req, res, "propostas", "editar", true);
-	const partnerId = session.user.idParceiro;
 	const parterScope = session.user.permissoes.parceiros.escopo;
 	const partnerQuery: Filter<TProposal> = parterScope ? { idParceiro: { $in: [...parterScope] } } : {};
 

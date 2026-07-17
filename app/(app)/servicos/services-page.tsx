@@ -4,7 +4,6 @@ import type React from "react";
 import Service from "@/components/Cards/Service";
 import EditService from "@/components/Modals/Services/EditService";
 import NewService from "@/components/Modals/Services/NewService";
-import { Sidebar } from "@/components/Sidebar";
 import { Button } from "@/components/ui/button";
 import { InteractiveFilter, type InteractiveFilterOption, type InteractiveFilterSortValue } from "@/components/ui/interactive-filter";
 import { Input } from "@/components/ui/input";
@@ -29,13 +28,11 @@ function ServicesPage({ session }: ServicesPageProps) {
 	if (!session.user.permissoes.servicos.visualizar) return <NotAuthorizedPage session={session} />;
 
 	return (
-		<div className="flex h-full flex-col md:flex-row">
-			<Sidebar session={session} />
-			<div className="flex w-full max-w-full grow flex-col overflow-x-hidden bg-background p-6">
+		<>
+			<div className="flex w-full min-w-0 flex-col gap-4">
 				<div className="flex flex-col items-center border-b border-black pb-2">
 					<div className="flex w-full flex-col items-center justify-between gap-2 lg:flex-row">
 						<div className="flex flex-col gap-1">
-							<h1 className="text-xl font-black leading-none tracking-tight md:text-2xl">BANCO DE SERVIÇOS</h1>
 							<p className="text-sm leading-none tracking-tight text-primary/70">
 								{services?.length ? (services.length > 0 ? `${services.length} serviços cadastrados` : `${services.length} serviço cadastrado`) : "..."}
 							</p>
@@ -83,7 +80,7 @@ function ServicesPage({ session }: ServicesPageProps) {
 			{editServiceModal.id && editServiceModal.isOpen ? (
 				<EditService session={session} serviceId={editServiceModal.id} closeModal={() => setEditServiceModal({ id: null, isOpen: false })} />
 			) : null}
-		</div>
+		</>
 	);
 }
 

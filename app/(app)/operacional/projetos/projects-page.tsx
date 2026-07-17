@@ -1,10 +1,10 @@
 "use client";
 import { CalendarDays, Code, LayoutGrid, ListFilter, MapPin, User, UserRound } from "lucide-react";
 import Image from "next/image";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import type React from "react";
 import { ViewProject } from "@/components/Modals/Projects/ViewProject";
-import { Sidebar } from "@/components/Sidebar";
 import { Button } from "@/components/ui/button";
 import { InteractiveFilter, type InteractiveFilterOption } from "@/components/ui/interactive-filter";
 import { Input } from "@/components/ui/input";
@@ -25,7 +25,12 @@ type OperationalProjectsPageProps = {
 };
 
 export default function OperationalProjectsPage({ session }: OperationalProjectsPageProps) {
+	const pathname = usePathname();
+	const router = useRouter();
+	const searchParams = useSearchParams();
 	const [viewProjectId, setViewProjectId] = useState<string | null>(null);
+	const deepLinkedProjectId = searchParams?.get("projectId") ?? null;
+	const activeProjectId = deepLinkedProjectId ?? viewProjectId;
 	const userOpportunityScope = session.user.permissoes.oportunidades.escopo || null;
 	const { data: opportunityCreators } = useOpportunityCreators();
 	const { data: projectsResult, isLoading, isError, error, isSuccess, filters, updateFilters } = useProjects({
@@ -46,15 +51,21 @@ export default function OperationalProjectsPage({ session }: OperationalProjects
 					.map((c) => ({ id: c._id, label: c.nome, value: c._id, url: c.avatar_url ?? undefined }))
 			: opportunityCreators.map((c) => ({ id: c._id, label: c.nome, value: c._id, url: c.avatar_url ?? undefined }))
 		: [];
+	function closeProject() {
+		if (deepLinkedProjectId) {
+			const nextSearchParams = new URLSearchParams(searchParams?.toString() ?? "");
+			nextSearchParams.delete("projectId");
+			const queryString = nextSearchParams.toString();
+			const currentPathname = pathname || "/operacional/projetos";
+			router.replace(queryString ? `${currentPathname}?${queryString}` : currentPathname);
+		}
+		setViewProjectId(null);
+	}
 
 	return (
-		<div className="flex h-full flex-col md:flex-row">
-			<Sidebar session={session} />
-			<div className="flex w-full grow flex-col gap-6 bg-background p-6">
+		<>
+			<div className="flex w-full min-w-0 flex-col gap-6">
 				<div className="flex w-full flex-col gap-2 border-b border-primary pb-2">
-					<div className="flex w-full flex-col items-center justify-between gap-4 lg:flex-row">
-						<h1 className="text-xl font-black leading-none tracking-tight md:text-2xl">PROJETOS</h1>
-					</div>
 					<Input
 						value={filters.search ?? ""}
 						placeholder="Pesquisar projeto..."
@@ -86,8 +97,8 @@ export default function OperationalProjectsPage({ session }: OperationalProjects
 					)
 				) : null}
 			</div>
-			{viewProjectId ? <ViewProject projectId={viewProjectId} closeModal={() => setViewProjectId(null)} /> : null}
-		</div>
+			{activeProjectId ? <ViewProject projectId={activeProjectId} closeModal={closeProject} /> : null}
+		</>
 	);
 }
 

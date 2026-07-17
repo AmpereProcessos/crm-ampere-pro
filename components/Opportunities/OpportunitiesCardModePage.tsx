@@ -12,7 +12,6 @@ import { FaRotate } from "react-icons/fa6";
 import { MdFilterList } from "react-icons/md";
 import OpportunityCardMode from "../Cards/OpportunityCardMode";
 import NewOpportunity from "../Modals/Opportunity/NewOpportunity";
-import { Sidebar } from "../Sidebar";
 import ErrorComponent from "../utils/ErrorComponent";
 import LoadingComponent from "../utils/LoadingComponent";
 import OpportunitiesFiltersMenu from "./FilterMenu";
@@ -55,15 +54,11 @@ function OpportunitiesCardModePage({
 	const totalPages = data?.totalPages;
 
 	return (
-		<div className="flex h-full flex-col md:flex-row">
-			<Sidebar session={session} />
-			<div className="flex w-full max-w-full grow flex-col overflow-x-hidden bg-background p-6">
+		<>
+			<div className="flex w-full min-w-0 flex-col gap-4">
 				<div className="flex w-full flex-col gap-2 border-b border-primary pb-2">
 					<div className="flex w-full flex-col items-center justify-between gap-4 lg:flex-row">
 						<div className="flex flex-col items-center gap-1 lg:flex-row">
-							<div className="flex flex-col items-center gap-1">
-								<h1 className="text-xl font-black leading-none tracking-tight md:text-2xl">OPORTUNIDADES</h1>
-							</div>
 							<button
 								onClick={() => handleSetMode("kanban")}
 								className="flex items-center gap-1 px-2 text-xs text-primary/70 duration-300 ease-out hover:text-primary/80"
@@ -140,7 +135,7 @@ function OpportunitiesCardModePage({
 					closeModal={() => setNewProjectModalIsOpen(false)}
 				/>
 			) : null}
-		</div>
+		</>
 	);
 }
 

@@ -11,7 +11,6 @@ import NewLead from "@/components/Modals/Leads/NewLead";
 import NewManyLeads from "@/components/Modals/Leads/NewManyLeads";
 import QualifyLead from "@/components/Modals/Leads/QualifyLead";
 import UpgrateLead from "@/components/Modals/Leads/UpgradeLead";
-import { Sidebar } from "@/components/Sidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import ErrorComponent from "@/components/utils/ErrorComponent";
@@ -54,12 +53,10 @@ export default function LeadsPage({ session }: LeadsPageProps) {
 	const leadsMatched = leadsResult?.leadsMatched ?? 0;
 	const totalPages = leadsResult?.totalPages ?? 0;
 	return (
-		<div className="flex h-full flex-col md:flex-row">
-			<Sidebar session={session} />
-			<div className="flex w-full max-w-full grow flex-col overflow-x-hidden bg-background p-6">
+		<>
+			<div className="flex w-full min-w-0 flex-col gap-4">
 				<div className="w-full flex flex-col gap-2 pb-2 border-b border-primary">
-					<div className="flex w-full items-center justify-between gap-2">
-						<h1 className="text-xl font-black leading-none tracking-tight md:text-2xl">LEADS</h1>
+					<div className="flex w-full items-center justify-end gap-2">
 						<div className="flex items-center gap-2">
 							<Button
 								variant={filterMenuIsOpen ? "default" : "ghost"}
@@ -164,7 +161,7 @@ export default function LeadsPage({ session }: LeadsPageProps) {
 					}}
 				/>
 			) : null}
-		</div>
+		</>
 	);
 }
 

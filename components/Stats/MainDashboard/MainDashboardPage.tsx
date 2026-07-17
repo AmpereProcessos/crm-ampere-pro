@@ -25,7 +25,6 @@ import type { TGetStatsRouteOutputData } from "@/app/api/stats/route";
 import UserConectaIndicationCodeFlag from "@/components/Conecta/UserConectaIndicationCodeFlag";
 import DateInput from "@/components/Inputs/DateInput";
 import MultipleSelectInput from "@/components/Inputs/MultipleSelectInput";
-import { Sidebar } from "@/components/Sidebar";
 import UpdateProfileHint from "@/components/Users/UpdateProfileHint";
 import { Button } from "@/components/ui/button";
 import { type ChartConfig, ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
@@ -87,12 +86,9 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
 
 	console.log(data);
 	return (
-		<div className="flex h-full flex-col md:flex-row">
-			<Sidebar session={session} />
-			<div className="flex w-full max-w-full grow flex-col overflow-x-hidden bg-background p-6">
+		<div className="flex w-full min-w-0 flex-col gap-4">
 				<div className="flex w-full flex-col gap-2 items-center justify-between border-b border-black pb-2 lg:flex-row">
 					<div className="flex flex-col items-center gap-2 lg:flex-row">
-						<h1 className="font-Raleway text-2xl font-black text-primary">DASHBOARD</h1>
 						<UserConectaIndicationCodeFlag sellerId={session.user.id} code={session.user.codigoIndicacaoConecta} />
 					</div>
 					<div className="flex flex-col items-center gap-6 lg:flex-row">
@@ -346,7 +342,6 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
 					</div>
 				</div>
 				<UpdateProfileHint session={session} required={!session.user.telefone || !session.user.avatar_url || !session.user.dataNascimento} />
-			</div>
 		</div>
 	);
 }
