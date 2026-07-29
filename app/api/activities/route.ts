@@ -2,11 +2,11 @@ import { apiHandler, type UnwrapNextResponse } from "@/lib/api";
 import { getValidCurrentSessionUncached } from "@/lib/auth/session";
 import connectToDatabase from "@/services/mongodb/crm-db-connection";
 import { NextResponse, type NextRequest } from "next/server";
-import { CreateActivityInput, GetActivitiesQueryParams, UpdateActivityInput } from "./inputs";
+import { GetActivitiesQueryParams, UpdateActivityInput } from "./inputs";
 import type { z } from "zod";
 import createHttpError from "http-errors";
 import { type Collection, type Filter, ObjectId } from "mongodb";
-import { InsertActivitySchema, type TActivityDTO, type TActivity } from "@/utils/schemas/activities.schema";
+import { InsertActivitySchema, normalizeActivityTemporalFields, type TActivityDTO, type TActivity } from "@/utils/schemas/activities.schema";
 import type { TNotification } from "@/utils/schemas/notification.schema";
 import {
 	getActivitiesByHomologationId,
@@ -45,6 +45,7 @@ async function getActivities(request: NextRequest) {
 
 	// Final query
 	const query: Filter<TActivity> = {
+		...partnerQuery,
 		...queryOpenOnly,
 		...queryDueOnly,
 	};
@@ -130,7 +131,17 @@ async function createActivity(request: NextRequest) {
 	const { user } = await getValidCurrentSessionUncached();
 
 	const payload = await request.json();
-	const activity = InsertActivitySchema.parse(payload);
+	const activity = normalizeActivityTemporalFields(
+		InsertActivitySchema.parse({
+			...payload,
+			idParceiro: user.idParceiro ?? "",
+			autor: {
+				id: user.id,
+				nome: user.nome,
+				avatar_url: user.avatar_url,
+			},
+		}),
+	);
 
 	const db = await connectToDatabase();
 	const collection: Collection<TActivity> = db.collection("activities");
@@ -174,11 +185,25 @@ async function updateActivityHandler(request: NextRequest) {
 	const db = await connectToDatabase();
 	const collection: Collection<TActivity> = db.collection("activities");
 	const notificationsCollection: Collection<TNotification> = db.collection("notifications");
+	const currentActivity = await getActivityById({ collection, id, query: partnerQuery });
+	if (!currentActivity) throw new createHttpError.NotFound("Atividade não encontrada.");
+	const validatedActivity = normalizeActivityTemporalFields(InsertActivitySchema.parse({ ...currentActivity, ...changes }));
+	const justConcluded = !currentActivity.dataConclusao && Boolean(validatedActivity.dataConclusao);
+	const normalizedChanges: Partial<TActivity> = {
+		...changes,
+		idParceiro: currentActivity.idParceiro,
+		autor: currentActivity.autor,
+		dataVencimento: validatedActivity.dataVencimento,
+		agendamentoInicio: validatedActivity.agendamentoInicio,
+		agendamentoFim: validatedActivity.agendamentoFim,
+		dataInicio: validatedActivity.dataInicio,
+		dataConclusao: validatedActivity.dataConclusao,
+	};
 
 	const updateResponse = await updateActivity({
 		activityId: id,
 		collection,
-		changes,
+		changes: normalizedChanges,
 		query: partnerQuery,
 	});
 
@@ -191,7 +216,7 @@ async function updateActivityHandler(request: NextRequest) {
 	}
 
 	// Validating need to generate an notification in activity conclusion
-	if (changes.dataConclusao) {
+	if (justConcluded) {
 		const activity = await getActivityById({ collection, id, query: {} });
 		if (!activity) throw new createHttpError.NotFound("Atividade não encontrada.");
 

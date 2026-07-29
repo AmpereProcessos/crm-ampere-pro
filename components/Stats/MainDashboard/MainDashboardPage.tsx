@@ -25,7 +25,6 @@ import type { TGetStatsRouteOutputData } from "@/app/api/stats/route";
 import UserConectaIndicationCodeFlag from "@/components/Conecta/UserConectaIndicationCodeFlag";
 import DateInput from "@/components/Inputs/DateInput";
 import MultipleSelectInput from "@/components/Inputs/MultipleSelectInput";
-import { Sidebar } from "@/components/Sidebar";
 import UpdateProfileHint from "@/components/Users/UpdateProfileHint";
 import { Button } from "@/components/ui/button";
 import { type ChartConfig, ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
@@ -36,7 +35,8 @@ import { formatDateOnInputChange, formatDecimalPlaces, formatToMoney } from "@/l
 import { cn } from "@/lib/utils";
 import { formatDateForInputValue } from "@/utils/methods";
 import { useGraphData, useStats, useStatsQueryOptions } from "@/utils/queries/stats";
-import SellersRanking from "../rankings/Rankings";
+import CommercialOverviewPanel from "./CommercialOverviewPanel";
+import CommercialPipelineBlock from "./CommercialPipelineBlock";
 import OpenActivitiesBlock from "./OpenActivitiesBlock";
 import PendingWinsBlock from "./PendingWinsBlock";
 import PPSOpenCallsBlock from "./PPSOpenCallsBlock";
@@ -85,150 +85,146 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
 			: queryOptions?.partners
 		: [];
 
-	console.log(data);
 	return (
-		<div className="flex h-full flex-col md:flex-row">
-			<Sidebar session={session} />
-			<div className="flex w-full max-w-full grow flex-col overflow-x-hidden bg-background p-6">
-				<div className="flex w-full flex-col gap-2 items-center justify-between border-b border-black pb-2 lg:flex-row">
-					<div className="flex flex-col items-center gap-2 lg:flex-row">
-						<h1 className="font-Raleway text-2xl font-black text-primary">DASHBOARD</h1>
-						<UserConectaIndicationCodeFlag sellerId={session.user.id} code={session.user.codigoIndicacaoConecta} />
-					</div>
-					<div className="flex flex-col items-center gap-6 lg:flex-row">
-						{session?.user.permissoes.resultados?.visualizarComercial ? (
-							<Link href="/comercial/gestao/resultados">
-								<div className="flex items-center gap-1 font-bold tracking-tight text-primary/70 duration-300 ease-in-out hover:text-cyan-500">
-									<p className="text-sm">RESULTADOS COMERCIAIS</p>
-									<AiOutlineTeam />
-								</div>
-							</Link>
-						) : null}
-					</div>
+		<div className="flex w-full min-w-0 flex-col gap-4">
+			<div className="flex w-full flex-col gap-2 items-center justify-between border-b border-black pb-2 lg:flex-row">
+				<div className="flex flex-col items-center gap-2 lg:flex-row">
+					<UserConectaIndicationCodeFlag sellerId={session.user.id} code={session.user.codigoIndicacaoConecta} />
 				</div>
-				<div className="flex grow flex-col py-2 gap-4">
-					<div className="flex w-full flex-col items-end justify-end gap-2 lg:flex-row">
-						<div className="w-full lg:w-[300px]">
-							<MultipleSelectInput
-								labelClassName="text-sm font-medium uppercase tracking-tight"
-								resetOptionLabel="TODOS OS USUÁRIOS"
-								selected={queryFilters.responsibles}
-								options={
-									responsiblesSelectableOptions?.map((resp) => ({
-										id: resp._id || "",
-										label: resp.nome || "",
-										value: resp._id || "",
-									})) || []
-								}
-								handleChange={(value) =>
-									setQueryFilters((prev) => ({
-										...prev,
-										responsibles: value as string[],
-									}))
-								}
-								onReset={() =>
-									setQueryFilters((prev) => ({
-										...prev,
-										responsibles: userOpportunitiesScope,
-									}))
-								}
-								label="USUÁRIOS"
-								width="100%"
-							/>
-						</div>
-						<div className="w-full lg:w-[300px]">
-							<MultipleSelectInput
-								labelClassName="text-sm font-medium uppercase tracking-tight"
-								resetOptionLabel="TODOS OS PARCEIROS"
-								selected={queryFilters.partners}
-								options={
-									partnersSelectableOptions?.map((resp) => ({
-										id: resp._id || "",
-										label: resp.nome || "",
-										value: resp._id || "",
-									})) || []
-								}
-								handleChange={(value) =>
-									setQueryFilters((prev) => ({
-										...prev,
-										partners: value as string[],
-									}))
-								}
-								onReset={() =>
-									setQueryFilters((prev) => ({
-										...prev,
-										partners: userPartnersScope,
-									}))
-								}
-								label="PARCEIROS"
-								width="100%"
-							/>
-						</div>
-						<div className="w-full lg:w-[300px]">
-							<MultipleSelectInput
-								labelClassName="text-sm font-medium uppercase tracking-tight"
-								resetOptionLabel="TODOS OS PROJETOS"
-								selected={queryFilters.projectTypes}
-								options={
-									queryOptions?.projectTypes?.map((resp) => ({
-										id: resp._id || "",
-										label: resp.nome || "",
-										value: resp._id || "",
-									})) || null
-								}
-								handleChange={(value) =>
-									setQueryFilters((prev) => ({
-										...prev,
-										projectTypes: value as string[],
-									}))
-								}
-								onReset={() => setQueryFilters((prev) => ({ ...prev, projectTypes: null }))}
-								label="PROJETOS"
-								width="100%"
-							/>
-						</div>
+				<div className="flex flex-col items-center gap-6 lg:flex-row">
+					{session?.user.permissoes.resultados?.visualizarComercial ? (
+						<Link href="/comercial/gestao/resultados">
+							<div className="flex items-center gap-1 font-bold tracking-tight text-primary/70 duration-300 ease-in-out hover:text-cyan-500">
+								<p className="text-sm">RESULTADOS COMERCIAIS</p>
+								<AiOutlineTeam />
+							</div>
+						</Link>
+					) : null}
+				</div>
+			</div>
+			<div className="flex grow flex-col py-2 gap-4">
+				<div className="flex w-full flex-col items-end justify-end gap-2 lg:flex-row">
+					<div className="w-full lg:w-[300px]">
+						<MultipleSelectInput
+							labelClassName="text-sm font-medium uppercase tracking-tight"
+							resetOptionLabel="TODOS OS USUÁRIOS"
+							selected={queryFilters.responsibles}
+							options={
+								responsiblesSelectableOptions?.map((resp) => ({
+									id: resp._id || "",
+									label: resp.nome || "",
+									value: resp._id || "",
+								})) || []
+							}
+							handleChange={(value) =>
+								setQueryFilters((prev) => ({
+									...prev,
+									responsibles: value as string[],
+								}))
+							}
+							onReset={() =>
+								setQueryFilters((prev) => ({
+									...prev,
+									responsibles: userOpportunitiesScope,
+								}))
+							}
+							label="USUÁRIOS"
+							width="100%"
+						/>
+					</div>
+					<div className="w-full lg:w-[300px]">
+						<MultipleSelectInput
+							labelClassName="text-sm font-medium uppercase tracking-tight"
+							resetOptionLabel="TODOS OS PARCEIROS"
+							selected={queryFilters.partners}
+							options={
+								partnersSelectableOptions?.map((resp) => ({
+									id: resp._id || "",
+									label: resp.nome || "",
+									value: resp._id || "",
+								})) || []
+							}
+							handleChange={(value) =>
+								setQueryFilters((prev) => ({
+									...prev,
+									partners: value as string[],
+								}))
+							}
+							onReset={() =>
+								setQueryFilters((prev) => ({
+									...prev,
+									partners: userPartnersScope,
+								}))
+							}
+							label="PARCEIROS"
+							width="100%"
+						/>
+					</div>
+					<div className="w-full lg:w-[300px]">
+						<MultipleSelectInput
+							labelClassName="text-sm font-medium uppercase tracking-tight"
+							resetOptionLabel="TODOS OS PROJETOS"
+							selected={queryFilters.projectTypes}
+							options={
+								queryOptions?.projectTypes?.map((resp) => ({
+									id: resp._id || "",
+									label: resp.nome || "",
+									value: resp._id || "",
+								})) || null
+							}
+							handleChange={(value) =>
+								setQueryFilters((prev) => ({
+									...prev,
+									projectTypes: value as string[],
+								}))
+							}
+							onReset={() => setQueryFilters((prev) => ({ ...prev, projectTypes: null }))}
+							label="PROJETOS"
+							width="100%"
+						/>
+					</div>
 
-						<div className="flex w-full flex-col lg:w-fit">
-							<h1 className="text-end text-sm font-medium uppercase tracking-tight">PERÍODO</h1>
-							<div className="flex flex-col items-center gap-2 lg:flex-row">
-								<div className="w-full lg:w-[150px]">
-									<DateInput
-										label="PERÍODO"
-										showLabel={false}
-										value={formatDateForInputValue(queryFilters.period.after)}
-										handleChange={(value) =>
-											setQueryFilters((prev) => ({
-												...prev,
-												period: {
-													...prev.period,
-													after: formatDateOnInputChange(value, "string", "start") as string,
-												},
-											}))
-										}
-										width="100%"
-									/>
-								</div>
-								<div className="w-full lg:w-[150px]">
-									<DateInput
-										label="PERÍODO"
-										showLabel={false}
-										value={formatDateForInputValue(queryFilters.period.before)}
-										handleChange={(value) =>
-											setQueryFilters((prev) => ({
-												...prev,
-												period: {
-													...prev.period,
-													before: formatDateOnInputChange(value, "string", "end") as string,
-												},
-											}))
-										}
-										width="100%"
-									/>
-								</div>
+					<div className="flex w-full flex-col lg:w-fit">
+						<h1 className="text-end text-sm font-medium uppercase tracking-tight">PERÍODO</h1>
+						<div className="flex flex-col items-center gap-2 lg:flex-row">
+							<div className="w-full lg:w-[150px]">
+								<DateInput
+									label="PERÍODO"
+									showLabel={false}
+									value={formatDateForInputValue(queryFilters.period.after)}
+									handleChange={(value) =>
+										setQueryFilters((prev) => ({
+											...prev,
+											period: {
+												...prev.period,
+												after: formatDateOnInputChange(value, "string", "start") as string,
+											},
+										}))
+									}
+									width="100%"
+								/>
+							</div>
+							<div className="w-full lg:w-[150px]">
+								<DateInput
+									label="PERÍODO"
+									showLabel={false}
+									value={formatDateForInputValue(queryFilters.period.before)}
+									handleChange={(value) =>
+										setQueryFilters((prev) => ({
+											...prev,
+											period: {
+												...prev.period,
+												before: formatDateOnInputChange(value, "string", "end") as string,
+											},
+										}))
+									}
+									width="100%"
+								/>
 							</div>
 						</div>
 					</div>
-					{/* {data ? (
+				</div>
+				{/* {data ? (
 						<GoalTrackingBar
 							actual={data?.simplificado.ATUAL}
 							goal={data?.simplificado.METAS}
@@ -237,116 +233,116 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
 						/>
 					) : null} */}
 
-					<div className="flex w-full flex-col items-center justify-around gap-2 lg:flex-row">
-						<CardStat
-							title="Projetos Criados"
-							icon={<VscDiffAdded className="h-4 w-4" />}
-							current={data?.simplificado.ATUAL.projetosCriados || 0}
-							previous={data?.simplificado.ANTERIOR.projetosCriados || 0}
-							className="w-full lg:w-1/6"
-						/>
-						<CardStat
-							title="Projetos Ganhos"
-							icon={<BsPatchCheck className="h-4 w-4" />}
-							current={data?.simplificado.ATUAL.projetosGanhos || 0}
-							previous={data?.simplificado.ANTERIOR.projetosGanhos || 0}
-							className="w-full lg:w-1/6"
-						/>
-						<CardStat
-							title="Projetos Perdidos"
-							icon={<AiOutlineCloseCircle className="h-4 w-4" />}
-							current={data?.simplificado.ATUAL.projetosPerdidos || 0}
-							previous={data?.simplificado.ANTERIOR.projetosPerdidos || 0}
-							className="w-full lg:w-1/6"
-							lowerIsBetter={true}
-						/>
-						<CardStat
-							title="Potência Vendida"
-							icon={<FaBolt className="h-4 w-4" />}
-							current={data?.simplificado.ATUAL.potenciaVendida || 0}
-							previous={data?.simplificado.ANTERIOR.potenciaVendida || 0}
-							formatCurrent={(value) => `${formatDecimalPlaces(value)}kWp`}
-							formatPrevious={(value) => `${formatDecimalPlaces(value)}kWp`}
-							className="w-full lg:w-1/6"
-						/>
-						<CardStat
-							title="Total Vendido"
-							icon={<BsFileEarmarkText className="h-4 w-4" />}
-							current={data?.simplificado.ATUAL.totalVendido || 0}
-							previous={data?.simplificado.ANTERIOR.totalVendido || 0}
-							formatCurrent={(value) => `${formatToMoney(value)}`}
-							formatPrevious={(value) => `${formatToMoney(value)}`}
-							className="w-full lg:w-1/6"
-						/>
-						<CardStat
-							title="Ticket Médio"
-							icon={<BsTicketPerforated className="h-4 w-4" />}
-							current={(data?.simplificado.ATUAL.totalVendido || 0) / (data?.simplificado.ATUAL.projetosGanhos || 0)}
-							previous={(data?.simplificado.ANTERIOR.totalVendido || 0) / (data?.simplificado.ANTERIOR.projetosGanhos || 0)}
-							formatCurrent={(value) => `${formatToMoney(value)}`}
-							formatPrevious={(value) => `${formatToMoney(value)}`}
-							className="w-full lg:w-1/6"
-						/>
+				<div className="grid w-full items-stretch gap-2 lg:grid-cols-2">
+					<div className="min-w-0">
+						<OpenActivitiesBlock session={session} period={queryFilters.period} responsibleIds={queryFilters.responsibles} />
 					</div>
+					<CommercialOverviewPanel
+						indicators={
+							<div className="grid min-w-0 grid-cols-1 gap-2 sm:grid-cols-2 lg:h-full lg:grid-cols-1 lg:grid-rows-6">
+								<CardStat
+									title="Projetos Criados"
+									icon={<VscDiffAdded className="h-4 w-4" />}
+									current={data?.simplificado.ATUAL.projetosCriados || 0}
+									previous={data?.simplificado.ANTERIOR.projetosCriados || 0}
+									variant="compact"
+								/>
+								<CardStat
+									title="Projetos Ganhos"
+									icon={<BsPatchCheck className="h-4 w-4" />}
+									current={data?.simplificado.ATUAL.projetosGanhos || 0}
+									previous={data?.simplificado.ANTERIOR.projetosGanhos || 0}
+									variant="compact"
+								/>
+								<CardStat
+									title="Projetos Perdidos"
+									icon={<AiOutlineCloseCircle className="h-4 w-4" />}
+									current={data?.simplificado.ATUAL.projetosPerdidos || 0}
+									previous={data?.simplificado.ANTERIOR.projetosPerdidos || 0}
+									lowerIsBetter
+									variant="compact"
+								/>
+								<CardStat
+									title="Potência Vendida"
+									icon={<FaBolt className="h-4 w-4" />}
+									current={data?.simplificado.ATUAL.potenciaVendida || 0}
+									previous={data?.simplificado.ANTERIOR.potenciaVendida || 0}
+									formatCurrent={(value) => `${formatDecimalPlaces(value)}kWp`}
+									formatPrevious={(value) => `${formatDecimalPlaces(value)}kWp`}
+									variant="compact"
+								/>
+								<CardStat
+									title="Total Vendido"
+									icon={<BsFileEarmarkText className="h-4 w-4" />}
+									current={data?.simplificado.ATUAL.totalVendido || 0}
+									previous={data?.simplificado.ANTERIOR.totalVendido || 0}
+									formatCurrent={(value) => `${formatToMoney(value)}`}
+									formatPrevious={(value) => `${formatToMoney(value)}`}
+									variant="compact"
+								/>
+								<CardStat
+									title="Ticket Médio"
+									icon={<BsTicketPerforated className="h-4 w-4" />}
+									current={(data?.simplificado.ATUAL.totalVendido || 0) / (data?.simplificado.ATUAL.projetosGanhos || 0)}
+									previous={(data?.simplificado.ANTERIOR.totalVendido || 0) / (data?.simplificado.ANTERIOR.projetosGanhos || 0)}
+									formatCurrent={(value) => `${formatToMoney(value)}`}
+									formatPrevious={(value) => `${formatToMoney(value)}`}
+									variant="compact"
+								/>
+							</div>
+						}
+					/>
+				</div>
 
-					<div className="flex w-full flex-col items-stretch justify-around gap-2 lg:flex-row">
-						<div className="w-full lg:w-[60%] h-full">
-							<GraphData
-								after={queryFilters.period.after}
-								before={queryFilters.period.before}
-								responsibles={queryFilters.responsibles}
-								partners={queryFilters.partners}
-								projectTypes={queryFilters.projectTypes}
-							/>
-						</div>
-						<div className="w-full lg:w-[40%] h-full">
-							<SellersRanking />
-						</div>
-					</div>
+				<CommercialPipelineBlock after={queryFilters.period.after} before={queryFilters.period.before} responsibleIds={queryFilters.responsibles} />
 
-					<div className="flex w-full flex-col items-center justify-around gap-2 lg:flex-row">
-						<div className={cn("bg-card border-primary/20 flex w-full flex-col gap-1 rounded-xl border px-3 py-4 shadow-xs lg:w-1/2")}>
-							<div className="flex items-center justify-between">
-								<h1 className="text-xs font-medium tracking-tight uppercase">Visualizações do Conecta Link</h1>
-								<div className="flex items-center gap-2">
-									<MousePointerClick className="h-4 w-4" />
-								</div>
-							</div>
-							<div className="flex w-full flex-col">
-								<div className="text-2xl font-bold text-[#15599a] dark:text-[#fead61]">{data?.conecta.visualizacoes || 0}</div>
+				<div className="w-full">
+					<GraphData
+						after={queryFilters.period.after}
+						before={queryFilters.period.before}
+						responsibles={queryFilters.responsibles}
+						partners={queryFilters.partners}
+						projectTypes={queryFilters.projectTypes}
+					/>
+				</div>
+
+				<div className="flex w-full flex-col items-center justify-around gap-2 lg:flex-row">
+					<div className={cn("bg-card border-primary/20 flex w-full flex-col gap-1 rounded-xl border px-3 py-4 shadow-xs lg:w-1/2")}>
+						<div className="flex items-center justify-between">
+							<h1 className="text-xs font-medium tracking-tight uppercase">Visualizações do Conecta Link</h1>
+							<div className="flex items-center gap-2">
+								<MousePointerClick className="h-4 w-4" />
 							</div>
 						</div>
-						<div className={cn("bg-card border-primary/20 flex w-full flex-col gap-1 rounded-xl border px-3 py-4 shadow-xs lg:w-1/2")}>
-							<div className="flex items-center justify-between">
-								<h1 className="text-xs font-medium tracking-tight uppercase">Oportunidades do Conecta Link</h1>
-								<div className="flex items-center gap-2">
-									<UserRoundPlus className="h-4 w-4" />
-								</div>
-							</div>
-							<div className="flex w-full flex-col">
-								<div className="text-2xl font-bold text-[#15599a] dark:text-[#fead61]">{data?.conecta.oportunidades || 0}</div>
-							</div>
+						<div className="flex w-full flex-col">
+							<div className="text-2xl font-bold text-[#15599a] dark:text-[#fead61]">{data?.conecta.visualizacoes || 0}</div>
 						</div>
 					</div>
-					<div className="flex w-full flex-col items-center justify-around gap-2 lg:flex-row">
-						<div className="w-full lg:w-[40%]">
-							<PendingWinsBlock data={data?.ganhosPendentes || []} session={session} />
+					<div className={cn("bg-card border-primary/20 flex w-full flex-col gap-1 rounded-xl border px-3 py-4 shadow-xs lg:w-1/2")}>
+						<div className="flex items-center justify-between">
+							<h1 className="text-xs font-medium tracking-tight uppercase">Oportunidades do Conecta Link</h1>
+							<div className="flex items-center gap-2">
+								<UserRoundPlus className="h-4 w-4" />
+							</div>
 						</div>
-						<div className="w-full lg:w-[60%]">
-							<WinsBlock data={data?.ganhos || []} session={session} />
-						</div>
-					</div>
-					<div className="flex w-full flex-col items-center gap-2 lg:flex-row">
-						<div className="w-full lg:w-[50%]">
-							<PPSOpenCallsBlock session={session} />
-						</div>
-						<div className="w-full lg:w-[50%]">
-							<OpenActivitiesBlock session={session} />
+						<div className="flex w-full flex-col">
+							<div className="text-2xl font-bold text-[#15599a] dark:text-[#fead61]">{data?.conecta.oportunidades || 0}</div>
 						</div>
 					</div>
 				</div>
-				<UpdateProfileHint session={session} required={!session.user.telefone || !session.user.avatar_url || !session.user.dataNascimento} />
+				<div className="flex w-full flex-col items-center justify-around gap-2 lg:flex-row">
+					<div className="w-full lg:w-[40%]">
+						<PendingWinsBlock data={data?.ganhosPendentes || []} session={session} />
+					</div>
+					<div className="w-full lg:w-[60%]">
+						<WinsBlock data={data?.ganhos || []} session={session} />
+					</div>
+				</div>
+				<div className="w-full">
+					<PPSOpenCallsBlock session={session} />
+				</div>
 			</div>
+			<UpdateProfileHint session={session} required={!session.user.telefone || !session.user.avatar_url || !session.user.dataNascimento} />
 		</div>
 	);
 }
@@ -362,42 +358,77 @@ type CardStatProps = {
 	formatPrevious?: (n: number) => string;
 	lowerIsBetter?: boolean;
 	className?: string;
+	variant?: "default" | "compact";
 };
-function CardStat({ title, icon, current, previous, formatCurrent, formatPrevious, lowerIsBetter, className }: CardStatProps) {
+function CardStat({ title, icon, current, previous, formatCurrent, formatPrevious, lowerIsBetter, className, variant = "default" }: CardStatProps) {
+	const safeCurrent = Number.isFinite(current) ? current : 0;
+	const safePrevious = Number.isFinite(previous) ? previous : 0;
 	const change = (() => {
-		if (previous === 0) {
-			if (current === 0) return 0;
+		if (safePrevious === 0) {
+			if (safeCurrent === 0) return 0;
 			return 100;
 		}
-		return ((current - previous) / Math.abs(previous)) * 100;
+		return ((safeCurrent - safePrevious) / Math.abs(safePrevious)) * 100;
 	})();
 
 	const isGood = lowerIsBetter ? change < 0 : change > 0;
 	const isNeutral = change === 0;
 	const changeAbs = Math.abs(change);
+	const currentLabel = formatCurrent ? formatCurrent(safeCurrent) : String(safeCurrent);
+	const previousLabel = formatPrevious ? formatPrevious(safePrevious) : String(safePrevious);
+	const changeBadge = !isNeutral ? (
+		<div
+			className={cn(
+				"inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[0.65rem] font-bold",
+				isGood ? "bg-green-200 text-green-700" : "bg-red-200 text-red-700",
+			)}
+		>
+			{isGood ? <TrendingUp className="h-3 min-h-3 w-3 min-w-3" /> : <TrendingDown className="h-3 min-h-3 w-3 min-w-3" />}
+			{formatDecimalPlaces(changeAbs)}%
+		</div>
+	) : variant === "compact" ? (
+		<span className="rounded-md bg-primary/5 px-1.5 py-0.5 text-[0.65rem] font-semibold text-primary/50">0%</span>
+	) : null;
+
+	if (variant === "compact") {
+		return (
+			<div
+				className={cn(
+					"grid min-h-[58px] w-full grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-lg bg-primary/[0.04] px-3 py-2 transition-colors hover:bg-primary/[0.07]",
+					className,
+				)}
+			>
+				<div className="min-w-0">
+					<div className="flex items-center gap-1.5 text-primary/75">
+						<span className="shrink-0">{icon}</span>
+						<h1 className="truncate text-[0.7rem] font-medium uppercase tracking-tight">{title}</h1>
+					</div>
+					<div className="mt-0.5 truncate text-xl font-bold leading-tight text-[#15599a] dark:text-[#fead61]" title={currentLabel}>
+						{currentLabel}
+					</div>
+				</div>
+				<div className="flex shrink-0 flex-col items-end gap-1">
+					{changeBadge}
+					<p className="max-w-48 truncate text-[0.65rem] tracking-tight text-primary/55" title={`Mês anterior: ${previousLabel}`}>
+						vs. {previousLabel}
+					</p>
+				</div>
+			</div>
+		);
+	}
 
 	return (
 		<div className={cn("bg-card border-primary/20 flex w-full flex-col gap-1 rounded-xl border px-3 py-4 shadow-xs", className)}>
 			<div className="flex items-center justify-between">
 				<h1 className="text-xs font-medium tracking-tight uppercase">{title}</h1>
 				<div className="flex items-center gap-2">
-					{!isNeutral && (
-						<div
-							className={cn(
-								"inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[0.65rem] font-bold",
-								isGood ? "bg-green-200 text-green-700" : "bg-red-200 text-red-700",
-							)}
-						>
-							{isGood ? <TrendingUp className="h-3 min-h-3 w-3 min-w-3" /> : <TrendingDown className="h-3 min-h-3 w-3 min-w-3" />}
-							{formatDecimalPlaces(changeAbs)}%
-						</div>
-					)}
+					{changeBadge}
 					{icon}
 				</div>
 			</div>
 			<div className="flex w-full flex-col">
-				<div className="text-2xl font-bold text-[#15599a] dark:text-[#fead61]">{formatCurrent ? formatCurrent(current) : String(current)}</div>
-				<p className="text-primary/60 text-xs tracking-tight">NO MÊS ANTERIOR: {formatPrevious ? formatPrevious(previous) : String(previous || 0)}</p>
+				<div className="text-2xl font-bold text-[#15599a] dark:text-[#fead61]">{currentLabel}</div>
+				<p className="text-primary/60 text-xs tracking-tight">NO MÊS ANTERIOR: {previousLabel}</p>
 			</div>
 		</div>
 	);
@@ -618,7 +649,7 @@ type TGoalTrackingBarProps = {
 	barHeigth: string;
 	barBgColor: string;
 };
-function GoalTrackingBar({ actual, goal }: TGoalTrackingBarProps) {
+function _GoalTrackingBar({ actual, goal }: TGoalTrackingBarProps) {
 	const [showingMetrics, setShowingMetrics] = useState<Record<string, boolean>>({
 		"total-sold": true,
 		"opportunities-created": false,
@@ -702,7 +733,7 @@ function GoalTrackingBar({ actual, goal }: TGoalTrackingBarProps) {
 			</div>
 			<AnimatePresence initial={false}>
 				{Object.entries(METRICS)
-					.filter(([k, value]) => showingMetrics[k])
+					.filter(([k]) => showingMetrics[k])
 					.map(([metric, value]) => (
 						<motion.div
 							key={metric}

@@ -1,6 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 
+export function useDebouncedValue<T>(value: T, delay: number): T {
+	const [debouncedValue, setDebouncedValue] = useState(value);
+
+	useEffect(() => {
+		const timeout = window.setTimeout(() => setDebouncedValue(value), delay);
+		return () => window.clearTimeout(timeout);
+	}, [delay, value]);
+
+	return debouncedValue;
+}
+
 export function useKey(key: string, cb: () => void) {
 	const callbackRef = useRef(cb);
 	useEffect(() => {

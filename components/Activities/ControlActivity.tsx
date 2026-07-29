@@ -82,7 +82,7 @@ function ControlActivity({ activityId, session, callbacks, closeModal, vinculati
 	const BUTTON_TEXT = "ATUALIZAR ATIVIDADE";
 	return isDesktop ? (
 		<Dialog open onOpenChange={(v) => (!v ? closeModal() : null)}>
-			<DialogContent className="flex flex-col h-fit min-h-[60vh] max-h-[70vh] dark:bg-background">
+			<DialogContent overlayClassName="z-100" className="z-110 flex flex-col h-fit min-h-[60vh] max-h-[70vh] dark:bg-background">
 				<DialogHeader>
 					<DialogTitle>{MENU_TITLE}</DialogTitle>
 					<DialogDescription>{MENU_DESCRIPTION}</DialogDescription>

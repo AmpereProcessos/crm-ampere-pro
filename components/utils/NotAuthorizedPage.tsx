@@ -1,16 +1,12 @@
 import type { TUserSession } from "@/lib/auth/session";
-import { Sidebar } from "../Sidebar";
 
 type NotAuthorizedPageProps = {
 	session: TUserSession;
 };
-function NotAuthorizedPage({ session }: NotAuthorizedPageProps) {
+function NotAuthorizedPage({ session: _session }: NotAuthorizedPageProps) {
 	return (
-		<div className="flex h-full flex-col md:flex-row">
-			<Sidebar session={session} />
-			<div className="flex w-full max-w-full grow flex-col items-center justify-center overflow-x-hidden bg-background p-6">
-				<p className="text-center text-lg font-medium text-primary/70">Oops, seu usuário não tem permissão para acessar essa área.</p>
-			</div>
+		<div className="flex min-h-64 w-full flex-col items-center justify-center">
+			<p className="max-w-[52ch] text-center text-base font-medium text-muted-foreground">Seu usuário não tem permissão para acessar esta área.</p>
 		</div>
 	);
 }

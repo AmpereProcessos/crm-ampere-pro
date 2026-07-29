@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { FaStepBackward } from "react-icons/fa";
-import { Sidebar } from "@/components/Sidebar";
 import LoadingPage from "@/components/utils/LoadingPage";
 import type { TUserSession } from "@/lib/auth/session";
 import { useOpportunityById } from "@/utils/queries/opportunities";
@@ -75,9 +74,7 @@ function NewProposalPage({ session, opportunityId }: NewProposalPageprops) {
 	if (opportunityError) return <ErrorComponent msg="Erro ao carregar informações sobre a oportunidade." />;
 	if (opportunitySuccess && opportunityProjectType)
 		return (
-			<div className="flex h-full flex-col md:flex-row">
-				<Sidebar session={session} />
-				<div className="flex w-full max-w-full grow flex-col overflow-x-hidden bg-background">
+			<div className="flex w-full min-w-0 flex-col overflow-x-hidden">
 					<div className="flex h-fit w-full flex-col items-center gap-2 bg-primary px-2 py-4 lg:flex-row">
 						<div className="flex w-full items-center justify-center lg:w-1/3">
 							<Link href={`/comercial/oportunidades/id/${opportunityId}`}>
@@ -136,7 +133,6 @@ function NewProposalPage({ session, opportunityId }: NewProposalPageprops) {
 							setInfoHolder={setInfoHolder}
 						/>
 					) : null}
-				</div>
 			</div>
 		);
 	return <ErrorComponent msg="Erro ao carregar informações sobre a oportunidade." />;

@@ -22,7 +22,6 @@ import toast from "react-hot-toast";
 import { AiOutlinePlus } from "react-icons/ai";
 import { BsCalendarPlus, BsDownload, BsFillMegaphoneFill } from "react-icons/bs";
 import { MdDashboard } from "react-icons/md";
-import { Sidebar } from "@/components/Sidebar";
 import { Progress } from "@/components/ui/progress";
 import ResponsiveDialogDrawer from "@/components/utils/ResponsiveDialogDrawer";
 import useOpportunitiesExportStateHook from "@/hooks/use-opportunities-export-state-hook";
@@ -46,7 +45,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import SearchOpportunities from "./SearchOpportunities";
 
-type OpportunitiesKanbanModePageV2Props = {
+type OpportunitiesKanbanModePageProps = {
 	session: TUserSession;
 	opportunityViewPreferences: TGetOpportunitiesQueryDefinitionsOutput["data"];
 };
@@ -80,7 +79,7 @@ function summarizeSelectedLabels(labels: string[]) {
 	return `${labels.length} selecionados`;
 }
 
-export default function OpportunitiesKanbanModePageV2({ session, opportunityViewPreferences }: OpportunitiesKanbanModePageV2Props) {
+export default function OpportunitiesKanbanModePage({ session, opportunityViewPreferences }: OpportunitiesKanbanModePageProps) {
 	const queryClient = useQueryClient();
 	const [newProjectModalIsOpen, setNewProjectModalIsOpen] = useState(false);
 	const [cardConfigModalIsOpen, setCardConfigModalIsOpen] = useState(false);
@@ -272,42 +271,40 @@ export default function OpportunitiesKanbanModePageV2({ session, opportunityView
 	}
 
 	return (
-		<div className="flex h-full flex-col md:flex-row">
-			<Sidebar session={session} />
-			<div className="flex w-full max-w-full grow flex-col overflow-x-hidden bg-background p-6 gap-3">
-				<div className="flex flex-col items-center border-b border-black pb-2 gap-3">
+		<>
+			<div className="flex min-h-0 w-full min-w-0 flex-1 flex-col gap-3 overflow-x-hidden">
+				<div className="flex flex-col items-center border-b border-primary pb-2 gap-3">
 					<div className="w-full flex items-center justify-between gap-2 flex-col lg:flex-row">
-						<div className="flex items-center gap-1">
-							<div className="text-xl font-black leading-none tracking-tight md:text-2xl">OPORTUNIDADES</div>
-						</div>
-
-						<div className="flex grow flex-col items-center justify-end  gap-2 xl:flex-row">
-							<button
+						<div className="flex w-full grow flex-col items-center justify-end gap-2 xl:flex-row">
+              <Button
+                size={'fit'}
 								type="button"
 								onClick={openExportMenu}
-								className="flex h-[46.6px] items-center justify-center gap-2 rounded-md border bg-[#2c6e49] p-2 px-3 text-sm font-medium text-primary-foreground shadow-md duration-300 ease-in-out hover:scale-105"
+								className="flex items-center justify-center gap-2 rounded-lg border bg-[#2c6e49] p-3 text-sm font-medium text-primary-foreground shadow-md duration-300 ease-in-out hover:scale-105"
 							>
-								<BsDownload style={{ fontSize: "18px" }} />
-							</button>
+								<BsDownload className="w-4 h-4 min-w-4 min-h-4"  />
+							</Button>
 
 							<SearchOpportunities />
 							{selectedFunnel ? (
-								<button
+                <Button
+                  size={'fit'}
 									type="button"
 									onClick={() => setCardConfigModalIsOpen(true)}
 									title="Configurar cartão do Kanban"
-									className="flex h-[46.6px] items-center justify-center gap-2 rounded-md border bg-primary/80 p-2 px-3 text-sm font-medium text-primary-foreground shadow-md duration-300 ease-in-out hover:scale-105 hover:bg-primary"
+									className="flex items-center justify-center gap-2 rounded-lg border bg-primary/80 p-3 text-sm font-medium text-primary-foreground shadow-md duration-300 ease-in-out hover:scale-105 hover:bg-primary"
 								>
-									<Settings style={{ fontSize: "18px" }} className="w-[18px] h-[18px]" />
-								</button>
+									<Settings className="w-4 h-4 min-w-4 min-h-4" />
+								</Button>
 							) : null}
-							<button
-								type="button"
+						 <Button
+                  size={'fit'}
+type="button"
 								onClick={() => setNewProjectModalIsOpen(true)}
-								className="flex h-[46.6px] items-center justify-center gap-2 rounded-md border bg-[#15599a] p-2 px-3 text-sm font-medium text-primary-foreground shadow-md duration-300 ease-in-out hover:scale-105"
+								className="flex items-center justify-center gap-2 rounded-lg border bg-[#15599a] p-3 text-sm font-medium text-primary-foreground shadow-md duration-300 ease-in-out hover:scale-105"
 							>
-								<AiOutlinePlus style={{ fontSize: "18px" }} />
-							</button>
+								<AiOutlinePlus className="w-4 h-4 min-w-4 min-h-4" />
+							</Button>
 						</div>
 					</div>
 					<div className="w-full flex flex-col lg:flex-row justify-end gap-2 items-center flex-wrap">
@@ -685,7 +682,7 @@ export default function OpportunitiesKanbanModePageV2({ session, opportunityView
 					</div>
 				</ResponsiveDialogDrawer>
 			) : null}
-		</div>
+		</>
 	);
 }
 

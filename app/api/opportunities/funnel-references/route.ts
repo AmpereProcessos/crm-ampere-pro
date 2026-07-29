@@ -4,11 +4,7 @@ import { type NextRequest, NextResponse } from "next/server";
 import z from "zod";
 import { apiHandler } from "@/lib/api";
 import { getValidCurrentSessionUncached, type TUserSession } from "@/lib/auth/session";
-import {
-	deleteFunnelReference as deleteFunnelReferenceRepository,
-	insertFunnelReference,
-	updateFunnelReference,
-} from "@/repositories/funnel-references/mutations";
+import { deleteFunnelReference as deleteFunnelReferenceRepository, insertFunnelReference, updateFunnelReference } from "@/repositories/funnel-references/mutations";
 import { getFunnelReferenceById } from "@/repositories/funnel-references/queries";
 import connectToDatabase from "@/services/mongodb/crm-db-connection";
 import { InsertFunnelReferenceSchema, type TFunnelReference } from "@/utils/schemas/funnel-reference.schema";
@@ -65,14 +61,19 @@ async function editFunnelReference({ input, session }: { input: TEditFunnelRefer
 
 	const reference = await getFunnelReferenceById({ collection: funnelReferencesCollection, id: input.id, query: {} });
 	if (!reference) throw new createHttpError.NotFound("Referência de funil não encontrada.");
+	const partnerScope = session.user.permissoes.parceiros.escopo;
+	const allowedPartnerIds = partnerScope ?? (partnerId ? [partnerId] : []);
+	if (allowedPartnerIds.length > 0 && !allowedPartnerIds.includes(reference.idParceiro)) {
+		throw new createHttpError.Unauthorized("Você não possui permissão para editar esta referência de funil.");
+	}
 
-	if (reference.idEstagioFunil === newStageId)
+	if (String(reference.idEstagioFunil) === newStageId)
 		// In case there new stage id is equal to the current stage id, there is no need to update the reference
 		return { data: "Atualização feita com sucesso!", message: "Atualização feita com sucesso !" };
 
 	const additionalUpdates = {
 		[`estagios.${reference.idEstagioFunil}.saida`]: new Date().toISOString(),
-		[`estagios.${newStageId}.entrada`]: new Date().toISOString(),
+		...(reference.estagios[newStageId]?.entrada ? {} : { [`estagios.${newStageId}.entrada`]: new Date().toISOString() }),
 	};
 	const updateResponse = await updateFunnelReference({
 		collection: funnelReferencesCollection,

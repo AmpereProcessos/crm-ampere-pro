@@ -4,6 +4,7 @@ import type { TGetSDRRankingInput, TGetSDRRankingOutput } from "@/app/api/stats/
 import type { TGetSellersRankingInput } from "@/app/api/stats/ranking/sellers/route";
 import type { TGetSellersRankingOutput } from "@/app/api/stats/ranking/sellers/route";
 import type { TGetStatsQueryFiltersOptionsRouteOutput, TGetStatsRouteOutput } from "@/app/api/stats/route";
+import type { TCommercialPipelineRouteOutput } from "@/app/api/stats/commercial-pipeline/route";
 import type { TSalesStats } from "@/app/api/stats/sales/route";
 import { useDebounceMemo } from "@/lib/hooks";
 import type { TActivityDTO } from "@/utils/schemas/activities.schema";
@@ -73,6 +74,20 @@ export function useStats({ after, before, responsibles, partners, projectTypes }
 		queryKey: ["stats", after, before, responsibles, partners, projectTypes],
 		queryFn: async () => await fetchStats({ after, before, responsibles, partners, projectTypes }),
 		refetchOnWindowFocus: false,
+	});
+}
+
+export function useCommercialPipeline({ funnelId, after, before, responsibleIds }: { funnelId: string | null; after: string; before: string; responsibleIds: string[] | null }) {
+	return useQuery({
+		queryKey: ["commercial-pipeline", funnelId, after, before, responsibleIds],
+		enabled: Boolean(funnelId),
+		queryFn: async () => {
+			const params = new URLSearchParams({ funnelId: funnelId ?? "", after, before });
+			if (responsibleIds?.length) params.set("responsibleIds", responsibleIds.join(","));
+			const { data } = await axios.get<TCommercialPipelineRouteOutput>(`/api/stats/commercial-pipeline?${params.toString()}`);
+			return data.data;
+		},
+		staleTime: 30_000,
 	});
 }
 async function fetchStatsQueryOptions() {

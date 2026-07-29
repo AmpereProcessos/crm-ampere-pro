@@ -1,4 +1,5 @@
 import type { TGetActivitiesRouteOutput } from "@/app/api/activities/route";
+import type { TActivitiesDashboardRouteOutput } from "@/app/api/activities/dashboard/route";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
@@ -121,5 +122,33 @@ export function useActivities({ responsibleIds, openOnly, dueOnly }: { responsib
 	return useQuery({
 		queryKey: ["activities", responsibleIds, openOnly, dueOnly],
 		queryFn: async () => await fetchActivities({ responsibleIds, openOnly, dueOnly }),
+	});
+}
+
+export type TActivitiesDashboardParams = {
+	after: string;
+	before: string;
+	responsibleIds?: string[] | null;
+	page?: number;
+	search?: string;
+};
+
+async function fetchActivitiesDashboard(params: TActivitiesDashboardParams) {
+	const searchParams = new URLSearchParams({
+		after: params.after,
+		before: params.before,
+		page: String(params.page ?? 1),
+	});
+	if (params.responsibleIds?.length) searchParams.set("responsibleIds", params.responsibleIds.join(","));
+	if (params.search) searchParams.set("search", params.search);
+	const { data } = await axios.get<TActivitiesDashboardRouteOutput>(`/api/activities/dashboard?${searchParams.toString()}`);
+	return data.data;
+}
+
+export function useActivitiesDashboard(params: TActivitiesDashboardParams) {
+	return useQuery({
+		queryKey: ["activities-dashboard", params],
+		queryFn: () => fetchActivitiesDashboard(params),
+		staleTime: 30_000,
 	});
 }

@@ -19,7 +19,6 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useState } from "react";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
-import { Sidebar } from "@/components/Sidebar";
 import { Button } from "@/components/ui/button";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { Progress } from "@/components/ui/progress";
@@ -31,7 +30,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
-import type { TUserSession } from "@/lib/auth/session";
 import { useClientReport } from "@/utils/queries/client-report";
 
 const ClientRegionMap = dynamic(() => import("./client-region-map"), {
@@ -54,7 +52,7 @@ const QUALITY_ICONS = {
 };
 const CHART_CONFIG = { total: { label: "Novos clientes", color: "hsl(var(--chart-3))" } };
 
-export default function ClientReportPage({ session }: { session: TUserSession }) {
+export default function ClientReportPage() {
   const [period, setPeriod] = useState("365");
   const [uf, setUf] = useState("all");
   const report = useClientReport({
@@ -65,26 +63,15 @@ export default function ClientReportPage({ session }: { session: TUserSession })
   const states = data?.byUf ?? [];
 
   return (
-    <div className="flex min-h-screen flex-col md:flex-row">
-      <Sidebar session={session} />
-      <main className="flex min-w-0 grow flex-col gap-6 overflow-x-hidden bg-background p-4 lg:p-6">
-        <header className="flex flex-col gap-4 border-b border-border pb-5 xl:flex-row xl:items-end xl:justify-between">
-          <div className="flex flex-col gap-2">
-            <Link
-              href="/clientes"
-              className="flex w-fit items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              Banco de clientes
-            </Link>
-            <div>
-              <h1 className="text-2xl font-black tracking-tight">Relatório de clientes</h1>
-              <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
-                Cobertura da base, qualidade cadastral e distribuição regional dentro do seu escopo
-                de acesso.
-              </p>
-            </div>
-          </div>
+    <div className="flex min-w-0 grow flex-col gap-6 overflow-x-hidden">
+        <section aria-label="Controles do relatório" className="flex flex-col gap-4 border-b border-border pb-5 xl:flex-row xl:items-end xl:justify-between">
+          <Link
+            href="/clientes"
+            className="flex w-fit items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Banco de clientes
+          </Link>
           <div className="flex flex-col gap-2 sm:flex-row">
             <Select value={period} onValueChange={setPeriod}>
               <SelectTrigger className="min-w-48" aria-label="Período do relatório">
@@ -112,13 +99,12 @@ export default function ClientReportPage({ session }: { session: TUserSession })
               </SelectContent>
             </Select>
           </div>
-        </header>
+        </section>
 
         {report.isLoading ? <ReportSkeleton /> : null}
         {report.isError ? <ReportError retry={() => report.refetch()} /> : null}
         {data && data.kpis.total === 0 ? <EmptyReport /> : null}
         {data && data.kpis.total > 0 ? <ReportContent data={data} /> : null}
-      </main>
     </div>
   );
 }

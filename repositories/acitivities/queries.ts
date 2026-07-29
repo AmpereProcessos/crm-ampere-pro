@@ -9,7 +9,7 @@ type GetActivityByIdParams = {
 
 export async function getActivityById({ id, collection, query }: GetActivityByIdParams) {
 	try {
-		const activity = await collection.findOne({ _id: new ObjectId(id) });
+		const activity = await collection.findOne({ _id: new ObjectId(id), ...query });
 		return activity ? { ...activity, _id: activity._id.toString() } : null;
 	} catch (error) {
 		console.log("[ERROR] - Error getting activity by id", error);

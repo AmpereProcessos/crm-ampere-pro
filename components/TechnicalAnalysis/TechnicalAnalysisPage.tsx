@@ -2,6 +2,7 @@
 import { Activity, ListFilter, MapPin, Search, UserRound } from "lucide-react";
 import { useState } from "react";
 import type React from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { AiOutlineTeam } from "react-icons/ai";
 import { Button } from "@/components/ui/button";
 import { InteractiveFilter, type InteractiveFilterOption } from "@/components/ui/interactive-filter";
@@ -15,7 +16,7 @@ import StatesAndCities from "@/utils/json-files/cities.json";
 import { TechnicalAnalysisComplexity, TechnicalAnalysisSolicitationTypes, TechnicalAnalysisStatus } from "@/utils/select-options";
 import TechnicalAnalysisCard from "../Cards/TechnicalAnalysisCard";
 import ControlTechnicalAnalysis from "../Modals/TechnicalAnalysis/ControlTechnicalAnalysis";
-import { Sidebar } from "../Sidebar";
+import ViewTechnicalAnalysis from "../Modals/TechnicalAnalysis/ViewTechnicalAnalysis";
 import ErrorComponent from "../utils/ErrorComponent";
 import LoadingComponent from "../utils/LoadingComponent";
 import TechnicalAnalysisPagination from "./Pagination";
@@ -29,11 +30,16 @@ type TechnicalAnalysisPageParams = {
 };
 
 function TechnicalAnalysisPage({ session }: TechnicalAnalysisPageParams) {
+	const pathname = usePathname();
+	const router = useRouter();
+	const searchParams = useSearchParams();
 	const userHasOperationalResultsViewPermission = session.user.permissoes.resultados.visualizarOperacional;
 	const userAnalysisScope = session.user.permissoes.analisesTecnicas.escopo || null;
 	const userPartnersScope = session.user.permissoes.parceiros.escopo || null;
 	const [statsBlockIsOpen, setStatsBlockIsOpen] = useState<boolean>(false);
 	const [editModal, setEditModal] = useState<{ id: string | null; isOpen: boolean }>({ id: null, isOpen: false });
+	const deepLinkedAnalysisId = searchParams?.get("analysisId") ?? null;
+	const activeAnalysisId = deepLinkedAnalysisId ?? (editModal.isOpen ? editModal.id : null);
 	const [page, setPage] = useState<number>(1);
 	const [applicants, setApplicants] = useState<string[] | null>(userAnalysisScope);
 	const [analysts, setAnalysts] = useState<string[] | null>(null);
@@ -55,14 +61,22 @@ function TechnicalAnalysisPage({ session }: TechnicalAnalysisPageParams) {
 	function resetPage() {
 		setPage(1);
 	}
+	function closeAnalysis() {
+		if (deepLinkedAnalysisId) {
+			const nextSearchParams = new URLSearchParams(searchParams?.toString() ?? "");
+			nextSearchParams.delete("analysisId");
+			const queryString = nextSearchParams.toString();
+			const currentPathname = pathname || "/operacional/analises-tecnicas";
+			router.replace(queryString ? `${currentPathname}?${queryString}` : currentPathname);
+		}
+		setEditModal({ id: null, isOpen: false });
+	}
 
 	return (
-		<div className="flex h-full flex-col md:flex-row">
-			<Sidebar session={session} />
-			<div className="flex w-full max-w-full grow flex-col overflow-x-hidden bg-background p-6">
+		<>
+			<div className="flex w-full min-w-0 flex-col gap-4">
 				<div className="flex w-full flex-col gap-2 border-b border-black pb-2">
 					<div className="flex w-full flex-col items-center justify-between gap-2 lg:flex-row">
-						<h1 className="text-xl font-black leading-none tracking-tight md:text-2xl">CONTROLE DE ANÁLISES TÉCNICAS</h1>
 						{userHasOperationalResultsViewPermission ? (
 							<Button type="button" variant="ghost" onClick={() => setStatsBlockIsOpen(true)} className="flex items-center gap-2">
 								<AiOutlineTeam />
@@ -124,10 +138,13 @@ function TechnicalAnalysisPage({ session }: TechnicalAnalysisPageParams) {
 						: null}
 				</div>
 			</div>
-			{editModal.id && editModal.isOpen ? (
-				<ControlTechnicalAnalysis analysisId={editModal.id} session={session} closeModal={() => setEditModal({ id: null, isOpen: false })} />
+			{activeAnalysisId && session.user.permissoes.analisesTecnicas.editar ? (
+				<ControlTechnicalAnalysis analysisId={activeAnalysisId} session={session} closeModal={closeAnalysis} />
 			) : null}
-		</div>
+			{activeAnalysisId && !session.user.permissoes.analisesTecnicas.editar ? (
+				<ViewTechnicalAnalysis analysisId={activeAnalysisId} closeModal={closeAnalysis} />
+			) : null}
+		</>
 	);
 }
 

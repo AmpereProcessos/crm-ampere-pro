@@ -3,6 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { MapPin, ListFilter, Plus, UserRound } from "lucide-react";
 import { useState } from "react";
 import type React from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { TGetClientsByFiltersRouteInput } from "@/app/api/clients/search/route";
 import { Button } from "@/components/ui/button";
 import { InteractiveFilter, type InteractiveFilterOption } from "@/components/ui/interactive-filter";
@@ -15,7 +16,7 @@ import type { TUserDTO } from "@/utils/schemas/user.schema";
 import StatesAndCities from "@/utils/json-files/cities.json";
 import EditClient from "../Modals/Client/EditClient";
 import NewClient from "../Modals/Client/NewClient";
-import { Sidebar } from "../Sidebar";
+import ViewClient from "../Modals/Client/ViewClient";
 import ErrorComponent from "../utils/ErrorComponent";
 import LoadingComponent from "../utils/LoadingComponent";
 import ClientCard from "./ClientCard";
@@ -30,8 +31,13 @@ type ClientsPageProps = {
 
 function ClientsPage({ session }: ClientsPageProps) {
 	const queryClient = useQueryClient();
+	const pathname = usePathname();
+	const router = useRouter();
+	const searchParams = useSearchParams();
 	const [newClientModalIsOpen, setNewClientModalIsOpen] = useState(false);
 	const [editClient, setEditClient] = useState<{ isOpen: boolean; id: string | null }>({ isOpen: false, id: null });
+	const deepLinkedClientId = searchParams?.get("clientId") ?? null;
+	const activeClientId = deepLinkedClientId ?? (editClient.isOpen ? editClient.id : null);
 	const { data: authorOptions } = useUsers();
 	const { data, queryKey, isLoading, isError, isSuccess, filters, updateFilters } = useClientsByPersonalizedFilters({});
 	const clients = data?.clients;
@@ -40,14 +46,22 @@ function ClientsPage({ session }: ClientsPageProps) {
 
 	const handleOnMutate = async () => await queryClient.cancelQueries({ queryKey });
 	const handleOnSettle = async () => await queryClient.invalidateQueries({ queryKey });
+	function closeClient() {
+		if (deepLinkedClientId) {
+			const nextSearchParams = new URLSearchParams(searchParams?.toString() ?? "");
+			nextSearchParams.delete("clientId");
+			const queryString = nextSearchParams.toString();
+			const currentPathname = pathname || "/clientes";
+			router.replace(queryString ? `${currentPathname}?${queryString}` : currentPathname);
+		}
+		setEditClient({ isOpen: false, id: null });
+	}
 
 	return (
-		<div className="flex h-full flex-col md:flex-row">
-			<Sidebar session={session} />
-			<div className="flex w-full max-w-full grow flex-col overflow-x-hidden bg-background p-6">
+		<>
+			<div className="flex w-full min-w-0 flex-col gap-4">
 				<div className="flex w-full flex-col gap-2 border-b border-black pb-2">
 					<div className="flex w-full flex-col items-center justify-between gap-2 lg:flex-row">
-						<h1 className="text-xl font-black leading-none tracking-tight md:text-2xl">BANCO DE CLIENTES</h1>
 						{session?.user.permissoes.clientes.criar ? (
 							<Button type="button" onClick={() => setNewClientModalIsOpen(true)} className="flex items-center gap-2">
 								<Plus className="h-4 w-4" />
@@ -98,16 +112,17 @@ function ClientsPage({ session }: ClientsPageProps) {
 					callbacks={{ onMutate: handleOnMutate, onSettled: handleOnSettle }}
 				/>
 			) : null}
-			{editClient.isOpen && editClient.id ? (
+			{activeClientId && session.user.permissoes.clientes.editar ? (
 				<EditClient
-					clientId={editClient.id}
+					clientId={activeClientId}
 					session={session}
 					partnerId={session.user.idParceiro || ""}
-					closeModal={() => setEditClient({ isOpen: false, id: null })}
+					closeModal={closeClient}
 					callbacks={{ onMutate: handleOnMutate, onSettled: handleOnSettle }}
 				/>
 			) : null}
-		</div>
+			{activeClientId && !session.user.permissoes.clientes.editar ? <ViewClient clientId={activeClientId} closeModal={closeClient} /> : null}
+		</>
 	);
 }
 
