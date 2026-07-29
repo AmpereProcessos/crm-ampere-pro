@@ -18,11 +18,9 @@ export default function CommercialOverviewPanel({ indicators }: CommercialOvervi
 	const [mode, setMode] = useState<CommercialOverviewMode>("indicators");
 
 	useEffect(() => {
+		const currentIndex = OVERVIEW_MODES.indexOf(mode);
 		const timeoutId = window.setTimeout(() => {
-			setMode((currentMode) => {
-				const currentIndex = OVERVIEW_MODES.indexOf(currentMode);
-				return OVERVIEW_MODES[(currentIndex + 1) % OVERVIEW_MODES.length] ?? "indicators";
-			});
+			setMode(OVERVIEW_MODES[(currentIndex + 1) % OVERVIEW_MODES.length] ?? "indicators");
 		}, AUTO_ROTATE_MS);
 		return () => window.clearTimeout(timeoutId);
 	}, [mode]);
