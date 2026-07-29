@@ -42,6 +42,8 @@ const GeneralFunnelSchema = z.object({
 		z.object({
 			id: z.union([z.string(), z.number()]),
 			nome: z.string(),
+			estagioInicial: z.boolean().optional(),
+			estagioFinal: z.boolean().optional(),
 		}),
 	),
 	autor: z.object({
@@ -70,6 +72,8 @@ export const InsertFunnelSchema = z.object({
 			z.object({
 				id: z.union([z.string(), z.number()]),
 				nome: z.string(),
+				estagioInicial: z.boolean().optional(),
+				estagioFinal: z.boolean().optional(),
 			}),
 		)
 		.nonempty({ message: "É necessário ao menos duas etapas para criação do funil." })
@@ -92,6 +96,8 @@ const FunnelEntitySchema = z.object({
 		z.object({
 			id: z.union([z.string(), z.number()]),
 			nome: z.string(),
+			estagioInicial: z.boolean().optional(),
+			estagioFinal: z.boolean().optional(),
 		}),
 	),
 	autor: z.object({

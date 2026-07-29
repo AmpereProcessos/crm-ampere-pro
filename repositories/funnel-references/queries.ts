@@ -22,7 +22,7 @@ type GetFunnelReferenceByIdParams = {
 };
 export async function getFunnelReferenceById({ id, collection, query }: GetFunnelReferenceByIdParams) {
 	try {
-		const funnelReference = await collection.findOne({ _id: new ObjectId(id) });
+		const funnelReference = await collection.findOne({ _id: new ObjectId(id), ...query });
 		return funnelReference;
 	} catch (error) {
 		throw error;

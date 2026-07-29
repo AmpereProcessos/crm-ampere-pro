@@ -18,6 +18,7 @@ import ActivityVinculationsBlock from "./Blocks/Vinculations";
 type NewActivityProps = {
 	session: TUserSession;
 	vinculations: TActivityVinculations;
+	initialDeadline?: string | null;
 	callbacks?: {
 		onMutate?: () => void;
 		onSuccess?: () => void;
@@ -25,7 +26,7 @@ type NewActivityProps = {
 	};
 	closeModal: () => void;
 };
-function NewActivity({ session, callbacks, closeModal, vinculations }: NewActivityProps) {
+function NewActivity({ session, callbacks, closeModal, vinculations, initialDeadline }: NewActivityProps) {
 	const isDesktop = useMediaQuery("(min-width: 768px)");
 
 	const reset = useActivityStore((s) => s.reset);
@@ -68,6 +69,9 @@ function NewActivity({ session, callbacks, closeModal, vinculations }: NewActivi
 					},
 			idHomologacao: vinculations.homologation?.blocked ? vinculations.homologation?.id : null,
 			idAnaliseTecnica: vinculations.technicalAnalysis?.blocked ? vinculations.technicalAnalysis?.id : null,
+			dataVencimento: initialDeadline ?? null,
+			agendamentoInicio: null,
+			agendamentoFim: null,
 			autor: {
 				id: session.user.id,
 				nome: session.user.nome,
@@ -78,14 +82,14 @@ function NewActivity({ session, callbacks, closeModal, vinculations }: NewActivi
 		return () => {
 			reset();
 		};
-	}, [session, vinculations, updateActivity, reset]);
+	}, [initialDeadline, session, vinculations, updateActivity, reset]);
 
 	const MENU_TITLE = "NOVA ATIVIDADE";
 	const MENU_DESCRIPTION = "Preencha os campos abaixo para criar uma nova atividade.";
 	const BUTTON_TEXT = "CRIAR ATIVIDADE";
 	return isDesktop ? (
 		<Dialog open onOpenChange={(v) => (!v ? closeModal() : null)}>
-			<DialogContent className="flex flex-col h-fit min-h-[60vh] max-h-[70vh] dark:bg-background">
+			<DialogContent overlayClassName="z-100" className="z-110 flex flex-col h-fit min-h-[60vh] max-h-[70vh] dark:bg-background">
 				<DialogHeader>
 					<DialogTitle>{MENU_TITLE}</DialogTitle>
 					<DialogDescription>{MENU_DESCRIPTION}</DialogDescription>

@@ -23,6 +23,9 @@ const initialActivity: TActivity = {
 	idAnaliseTecnica: undefined,
 	subatividades: [],
 	dataVencimento: null,
+	agendamentoInicio: null,
+	agendamentoFim: null,
+	dataInicio: null,
 	dataConclusao: null,
 	dataInsercao: new Date().toISOString(),
 	autor: {

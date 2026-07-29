@@ -52,6 +52,7 @@ async function createFunnel(request: NextRequest) {
 	const infoParsed = InsertFunnelSchema.parse(body);
 	const funnel = {
 		...infoParsed,
+		etapas: normalizeFunnelStages(infoParsed.etapas),
 		idParceiro: infoParsed.idParceiro || partnerId || "",
 		dataInsercao: new Date().toISOString(),
 	};
@@ -96,7 +97,11 @@ async function editFunnel(request: NextRequest) {
 	}
 
 	const body = await request.json();
-	const changes = InsertFunnelSchema.partial().parse(body);
+	const parsedChanges = InsertFunnelSchema.partial().parse(body);
+	const changes = {
+		...parsedChanges,
+		...(parsedChanges.etapas ? { etapas: normalizeFunnelStages(parsedChanges.etapas) } : {}),
+	};
 
 	const db = await connectToDatabase();
 	const collection: Collection<TFunnel> = db.collection("funnels");
@@ -133,3 +138,13 @@ export type PutFunnelResponse = {
 	data: string;
 	message: string;
 };
+
+function normalizeFunnelStages(stages: TFunnel["etapas"]): TFunnel["etapas"] {
+	const hasExplicitInitial = stages.some((stage) => stage.estagioInicial);
+	const hasExplicitFinal = stages.some((stage) => stage.estagioFinal);
+	return stages.map((stage, index) => ({
+		...stage,
+		estagioInicial: hasExplicitInitial ? Boolean(stage.estagioInicial) : index === 0,
+		estagioFinal: hasExplicitFinal ? Boolean(stage.estagioFinal) : index === stages.length - 1,
+	}));
+}

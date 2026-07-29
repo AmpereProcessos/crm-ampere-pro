@@ -74,6 +74,9 @@ export const CreateActivityInput = z.object({
 		.datetime({ message: "Formato inválido para a data de vencimento da atividade." })
 		.optional()
 		.nullable(),
+	agendamentoInicio: z.string().datetime({ message: "Formato inválido para o início do agendamento da atividade." }).optional().nullable(),
+	agendamentoFim: z.string().datetime({ message: "Formato inválido para o fim do agendamento da atividade." }).optional().nullable(),
+	dataInicio: z.string().datetime({ message: "Formato inválido para a data de início da atividade." }).optional().nullable(),
 	dataConclusao: z
 		.string({ invalid_type_error: "Tipo não válido para a data de conclusão da atividade." })
 		.datetime({ message: "Formato inválido para a data de conclusão da atividade." })
