@@ -4,6 +4,7 @@ import { sha256 } from "@oslojs/crypto/sha2";
 import { encodeBase32LowerCaseNoPadding, encodeHexLowerCase } from "@oslojs/encoding";
 import dayjs from "dayjs";
 import { cookies } from "next/headers";
+import { unstable_rethrow } from "next/navigation";
 import { cache } from "react";
 
 import connectToDatabase from "@/services/mongodb/crm-db-connection";
@@ -157,13 +158,13 @@ export const getCurrentSession = cache(async () => {
 		const cookieStore = await cookies();
 
 		const token = cookieStore.get(SESSION_COOKIE_NAME)?.value ?? null;
-		console.log("Token get from --getCurrentSession--", token);
 		if (token === null) return { session: null, user: null };
 
 		const sessionResult = await validateSession(token);
 		return sessionResult;
 	} catch (error) {
-		console.log("Error accessing cookies in getCurrentSession:", error);
+		unstable_rethrow(error);
+		console.error("Error accessing cookies in getCurrentSession:", error);
 		return { session: null, user: null };
 	}
 });
@@ -178,7 +179,8 @@ export const getCurrentSessionUncached = async () => {
 		const sessionResult = await validateSession(token);
 		return sessionResult;
 	} catch (error) {
-		console.log("Error accessing cookies in getCurrentSessionUncached:", error);
+		unstable_rethrow(error);
+		console.error("Error accessing cookies in getCurrentSessionUncached:", error);
 		return { session: null, user: null };
 	}
 };
