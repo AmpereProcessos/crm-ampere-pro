@@ -113,7 +113,6 @@ const getCurrentSession = cache(async (req: NextApiRequest) => {
 		const cookieStore = req.cookies;
 
 		const token = cookieStore[SESSION_COOKIE_NAME] ?? null;
-		console.log("Token get from --getCurrentSession--", token);
 		if (token === null) return { session: null, user: null };
 
 		const sessionResult = await validateSession(token);
@@ -128,7 +127,6 @@ const getUncachedCurrentSession = async (req: NextApiRequest) => {
 		const cookieStore = req.cookies;
 
 		const token = cookieStore[SESSION_COOKIE_NAME] ?? null;
-		console.log("Token get from --getCurrentSession--", token);
 		if (token === null) return { session: null, user: null };
 
 		const sessionResult = await validateSession(token);
