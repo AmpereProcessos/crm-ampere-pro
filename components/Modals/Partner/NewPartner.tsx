@@ -3,7 +3,7 @@ import ContactInformationBlock from "@/components/Partners/ContactInformationBlo
 import GeneralInformationBlock from "@/components/Partners/GeneralInformationBlock";
 import MediaInformationBlock from "@/components/Partners/MediaInformationBlock";
 import { stateCities } from "@/utils/estados_cidades";
-import { getCEPInfo } from "@/utils/methods";
+import { getCEPInfo } from "@/utils/methods/address";
 import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
 import { createPartner } from "@/utils/mutations/partners";
 import { TPartner } from "@/utils/schemas/partner.schema";

@@ -9,7 +9,7 @@ import type { Collection } from "mongodb";
 import type { NextApiHandler } from "next";
 import { z } from "zod";
 import { createNovuTopicAndSubscribeResponsibles } from "../../opportunities/personalized";
-import { formatPhoneAsBase } from "@/utils/methods";
+import { formatPhoneAsBase } from "@/utils/methods/formatting";
 
 const NewLeadQueryInputSchema = z.object({
   nome: z

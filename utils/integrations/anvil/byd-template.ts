@@ -1,5 +1,7 @@
 import { getExpenseAndEconomyProgression } from "../general";
-import { formatToMoney, getAverageValue, getEstimatedGen, getInverterStr, getModulesStr } from "@/utils/methods";
+import { formatToMoney, getInverterStr, getModulesStr } from "@/utils/methods/formatting";
+import { getAverageValue } from "@/utils/methods/collections";
+import { getEstimatedGen } from "@/utils/methods/solar";
 import { formatDecimalPlaces, formatLocation } from "@/lib/methods/formatting";
 import dayjs from "dayjs";
 import { TOpportunityDTOWithClient } from "@/utils/schemas/opportunity.schema";

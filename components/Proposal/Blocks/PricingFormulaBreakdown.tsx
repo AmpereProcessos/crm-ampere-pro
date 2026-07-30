@@ -1,4 +1,4 @@
-import { formatToMoney } from "@/utils/methods";
+import { formatToMoney } from "@/utils/methods/formatting";
 import {
 	FORMULA_OPERATORS,
 	formulaArrToExpression,

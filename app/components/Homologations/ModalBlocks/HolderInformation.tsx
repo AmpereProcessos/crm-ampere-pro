@@ -1,7 +1,7 @@
 import SelectInput from "@/components/Inputs/SelectInput";
 import TextInput from "@/components/Inputs/TextInput";
 import ResponsiveDialogDrawerSection from "@/components/utils/ResponsiveDialogDrawerSection";
-import { formatToCPForCNPJ, formatToPhone } from "@/utils/methods";
+import { formatToCPForCNPJ, formatToPhone } from "@/utils/methods/formatting";
 import type { THomologation } from "@/utils/schemas/homologation.schema";
 import { SigningForms } from "@/utils/select-options";
 import { IdCard } from "lucide-react";

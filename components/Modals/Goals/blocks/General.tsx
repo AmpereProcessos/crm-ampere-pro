@@ -3,7 +3,7 @@ import { Calendar, LayoutGrid } from "lucide-react";
 import DateInput from "@/components/Inputs/DateInput";
 
 import { useGoalStore } from "@/utils/stores/goal-store";
-import { formatDateForInputValue } from "@/utils/methods";
+import { formatDateForInputValue } from "@/utils/methods/formatting";
 import { formatDateOnInputChange } from "@/lib/methods/formatting";
 
 export function GoalGeneralBlock() {

@@ -2,7 +2,7 @@ import SelectInput from "@/components/Inputs/SelectInput";
 import TextInput from "@/components/Inputs/TextInput";
 import Avatar from "@/components/utils/Avatar";
 import { formatDateAsLocale, formatLocation } from "@/lib/methods/formatting";
-import { formatPhoneAsBase, formatToCPForCNPJ, formatToPhone } from "@/utils/methods";
+import { formatPhoneAsBase, formatToCPForCNPJ, formatToPhone } from "@/utils/methods/formatting";
 import { useAcquisitionChannels } from "@/utils/queries/utils";
 import type { TClient, TSimilarClientSimplifiedDTO } from "@/utils/schemas/client.schema";
 import type { TOpportunity } from "@/utils/schemas/opportunity.schema";

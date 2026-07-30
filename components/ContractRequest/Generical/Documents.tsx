@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { getContractDocumentation, type TContractRequestTypes } from "@/lib/methods/contract-requests";
 import { cn } from "@/lib/utils";
 import { GeneralVisibleHiddenExitMotionVariants } from "@/utils/constants";
-import { formatLongString } from "@/utils/methods";
+import { formatLongString } from "@/utils/methods/formatting";
 import { useFileReferencesByOpportunityId } from "@/utils/queries/file-references";
 import type { TContractRequest } from "@/utils/schemas//contract-request.schema";
 import { AnimatePresence, motion } from "framer-motion";

@@ -1,4 +1,4 @@
-import { formatToMoney } from "@/utils/methods";
+import { formatToMoney } from "@/utils/methods/formatting";
 import { TProposal } from "@/utils/schemas/proposal.schema";
 import { AiFillEdit } from "react-icons/ai";
 import { BsCheckCircleFill } from "react-icons/bs";

@@ -1,5 +1,6 @@
 import { formatDecimalPlaces } from "@/lib/methods/formatting";
-import { formatToMoney, getEstimatedGen } from "@/utils/methods";
+import { formatToMoney } from "@/utils/methods/formatting";
+import { getEstimatedGen } from "@/utils/methods/solar";
 import { TOpportunityDTOWithClient } from "@/utils/schemas/opportunity.schema";
 import { TProposal } from "@/utils/schemas/proposal.schema";
 import dayjs from "dayjs";

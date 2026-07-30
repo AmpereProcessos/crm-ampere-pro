@@ -1,7 +1,7 @@
 import { apiHandler } from "@/lib/api";
 import { getValidCurrentSessionUncached, TUserSession } from "@/lib/auth/session";
 import connectToDatabase from "@/services/mongodb/crm-db-connection";
-import { formatToCPForCNPJ, formatToPhone } from "@/utils/methods";
+import { formatToCPForCNPJ, formatToPhone } from "@/utils/methods/formatting";
 import { TClient } from "@/utils/schemas/client.schema";
 import createHttpError from "http-errors";
 import { Collection, Filter } from "mongodb";

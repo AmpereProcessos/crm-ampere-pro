@@ -1,5 +1,5 @@
 import { formatDecimalPlaces, formatLocation } from "@/lib/methods/formatting";
-import { formatToMoney } from "@/utils/methods";
+import { formatToMoney } from "@/utils/methods/formatting";
 import { TOpportunityDTOWithClient } from "@/utils/schemas/opportunity.schema";
 import { TProposal, TProposalDTO } from "@/utils/schemas/proposal.schema";
 

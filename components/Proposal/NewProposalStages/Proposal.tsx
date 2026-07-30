@@ -12,7 +12,7 @@ import ErrorComponent from "@/components/utils/ErrorComponent";
 import LoadingComponent from "@/components/utils/LoadingComponent";
 import type { TUserSession } from "@/lib/auth/session";
 import { handleDownload } from "@/lib/methods/download";
-import { formatToMoney } from "@/utils/methods";
+import { formatToMoney } from "@/utils/methods/formatting";
 import { createProposalPersonalized } from "@/utils/mutations/proposals";
 import type { TOpportunityDTOWithClient, TOpportunityDTOWithClientAndPartnerAndFunnelReferences } from "@/utils/schemas/opportunity.schema";
 import type { TPartnerSimplifiedDTO } from "@/utils/schemas/partner.schema";

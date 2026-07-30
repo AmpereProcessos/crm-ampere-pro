@@ -2,7 +2,7 @@ import { Phone } from "lucide-react";
 import TextInput from "@/components/Inputs/TextInput";
 import ResponsiveDialogDrawerSection from "@/components/utils/ResponsiveDialogDrawerSection";
 import type { TUseClientStateHook } from "@/hooks/use-client-state-hook";
-import { formatPhoneAsBase, formatToPhone } from "@/utils/methods";
+import { formatPhoneAsBase, formatToPhone } from "@/utils/methods/formatting";
 
 type ClientContactsBlockProps = {
 	infoHolder: TUseClientStateHook["state"]["client"];

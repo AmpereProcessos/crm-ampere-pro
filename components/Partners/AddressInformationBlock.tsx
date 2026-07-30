@@ -1,5 +1,6 @@
 import { stateCities } from "@/utils/estados_cidades";
-import { formatToCEP, getCEPInfo } from "@/utils/methods";
+import { formatToCEP } from "@/utils/methods/formatting";
+import { getCEPInfo } from "@/utils/methods/address";
 import { TPartner } from "@/utils/schemas/partner.schema";
 import React from "react";
 import toast from "react-hot-toast";

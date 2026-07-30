@@ -5,7 +5,7 @@ import { buildOpportunityDescription, parseLeadWithAI, transformToClient } from 
 import { sendMetaLeadConversion } from '@/lib/leads/meta-conversions';
 import connectToDatabase from '@/services/mongodb/crm-db-connection';
 import { apiHandler } from '@/utils/api';
-import { formatPhoneAsBase } from '@/utils/methods';
+import { formatPhoneAsBase } from "@/utils/methods/formatting";
 import type { TClient } from '@/utils/schemas/client.schema';
 import type { TFunnelReference } from '@/utils/schemas/funnel-reference.schema';
 import type { TOpportunity } from '@/utils/schemas/opportunity.schema';

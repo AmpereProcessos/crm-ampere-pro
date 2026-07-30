@@ -4,7 +4,7 @@ import GenericForm from "@/components/ContractRequest/GenericForm";
 import SelectWithImages from "@/components/Inputs/SelectWithImages";
 import TextInput from "@/components/Inputs/TextInput";
 import type { TUserSession } from "@/lib/auth/session";
-import { formatToPhone } from "@/utils/methods";
+import { formatToPhone } from "@/utils/methods/formatting";
 import { useOpportunityCreators } from "@/utils/queries/users";
 import type { TContractRequest } from "@/utils/schemas//contract-request.schema";
 import type { TClientDTO } from "@/utils/schemas/client.schema";

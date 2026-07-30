@@ -17,7 +17,7 @@ import type { TUserSession } from "@/lib/auth/session";
 import { getErrorMessage } from "@/lib/methods/errors";
 import { useMediaQuery } from "@/lib/utils";
 import { storage } from "@/services/firebase/storage-config";
-import { formatToPhone } from "@/utils/methods";
+import { formatToPhone } from "@/utils/methods/formatting";
 import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
 import { editUser } from "@/utils/mutations/users";
 import { usePartnersSimplified } from "@/utils/queries/partners";

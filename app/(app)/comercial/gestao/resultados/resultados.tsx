@@ -17,7 +17,7 @@ import type { TUserSession } from "@/lib/auth/session";
 import { getErrorMessage } from "@/lib/methods/errors";
 import { getExcelFromJSON } from "@/lib/methods/excel-utils";
 import { formatDateOnInputChange } from "@/lib/methods/formatting";
-import { formatDateForInputValue } from "@/utils/methods";
+import { formatDateForInputValue } from "@/utils/methods/formatting";
 import { useComercialResultsQueryOptions } from "@/utils/queries/stats";
 import { fetchResultsExportsAll } from "@/utils/queries/stats/exports";
 import type { TUserDTOWithSaleGoals } from "@/utils/schemas/user.schema";

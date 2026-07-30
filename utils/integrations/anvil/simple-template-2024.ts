@@ -1,4 +1,5 @@
-import { formatToMoney, getEstimatedGen, getInverterStr, getModulesStr, getPeakPotByModules } from "@/utils/methods";
+import { formatToMoney, getInverterStr, getModulesStr } from "@/utils/methods/formatting";
+import { getEstimatedGen, getPeakPotByModules } from "@/utils/methods/solar";
 
 import dayjs from "dayjs";
 import ptBr from "dayjs/locale/pt-br";

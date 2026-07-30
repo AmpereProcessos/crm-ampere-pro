@@ -11,7 +11,8 @@ import { TKitDTOWithPricingMethod } from "@/utils/schemas/kits.schema";
 import { TOpportunityDTO } from "@/utils/schemas/opportunity.schema";
 import { TProposal } from "@/utils/schemas/proposal.schema";
 
-import { formatToMoney, getEstimatedGen } from "@/utils/methods";
+import { formatToMoney } from "@/utils/methods/formatting";
+import { getEstimatedGen } from "@/utils/methods/solar";
 
 import { getInverterQty, getModulesPeakPotByProducts, getModulesQty } from "@/lib/methods/extracting";
 import { formatDateAsLocale, formatDecimalPlaces } from "@/lib/methods/formatting";

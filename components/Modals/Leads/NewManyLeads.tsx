@@ -7,7 +7,7 @@ import { copyToClipboard } from "@/lib/hooks";
 import { getErrorMessage } from "@/lib/methods/errors";
 import { getJSONFromExcelFile } from "@/lib/methods/excel-utils";
 import { formatNameAsInitials, formatWithoutDiacritics } from "@/lib/methods/formatting";
-import { formatToPhone } from "@/utils/methods";
+import { formatToPhone } from "@/utils/methods/formatting";
 import { createManyLeads } from "@/utils/mutations/leads";
 import { useOpportunityCreators } from "@/utils/queries/users";
 import type { TLead } from "@/utils/schemas/leads.schema";

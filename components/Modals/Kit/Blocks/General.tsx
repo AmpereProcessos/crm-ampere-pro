@@ -9,7 +9,7 @@ import TextInput from "@/components/Inputs/TextInput";
 import ResponsiveDialogDrawerSection from "@/components/utils/ResponsiveDialogDrawerSection";
 import type { TUseKitStateHook } from "@/hooks/use-kit-state-hook";
 import { formatDateOnInputChange } from "@/lib/methods/formatting";
-import { formatDateForInputValue } from "@/utils/methods";
+import { formatDateForInputValue } from "@/utils/methods/formatting";
 import { usePricingMethods } from "@/utils/queries/pricing-methods";
 import { usePaymentMethods } from "@/utils/queries/payment-methods";
 import { StructureTypes } from "@/utils/select-options";

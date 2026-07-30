@@ -4,7 +4,7 @@ import TextInput from "@/components/Inputs/TextInput";
 import type { TUserSession } from "@/lib/auth/session";
 import { formatDateOnInputChange } from "@/lib/methods/formatting";
 import { stateCities } from "@/utils/estados_cidades";
-import { formatDateForInputValue, formatToCEP, formatToCPForCNPJ, formatToPhone } from "@/utils/methods";
+import { formatDateForInputValue, formatToCEP, formatToCPForCNPJ, formatToPhone } from "@/utils/methods/formatting";
 import { useClientById } from "@/utils/queries/clients";
 import { TClientDTO } from "@/utils/schemas/client.schema";
 import { CustomersAcquisitionChannels, MaritalStatus } from "@/utils/select-options";

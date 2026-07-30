@@ -2,7 +2,7 @@ import type { TGetStatsRouteOutput } from "@/app/api/stats/route";
 import Avatar from "@/components/utils/Avatar";
 import type { TUserSession } from "@/lib/auth/session";
 import { formatDateAsLocale, formatToMoney } from "@/lib/methods/formatting";
-import { formatLongString } from "@/utils/methods";
+import { formatLongString } from "@/utils/methods/formatting";
 import Link from "next/link";
 import { BsCalendarCheck, BsCode, BsFillMegaphoneFill } from "react-icons/bs";
 import { MdOutlineAttachMoney, MdSell } from "react-icons/md";

@@ -7,7 +7,7 @@ import TextInput from "@/components/Inputs/TextInput";
 import ResponsiveDialogDrawerSection from "@/components/utils/ResponsiveDialogDrawerSection";
 import type { TUseClientStateHook } from "@/hooks/use-client-state-hook";
 import { formatDateOnInputChange } from "@/lib/methods/formatting";
-import { formatDateForInputValue, formatToCPForCNPJ, formatToPhone } from "@/utils/methods";
+import { formatDateForInputValue, formatToCPForCNPJ, formatToPhone } from "@/utils/methods/formatting";
 import { useAcquisitionChannels } from "@/utils/queries/utils";
 import { MaritalStatus } from "@/utils/select-options";
 

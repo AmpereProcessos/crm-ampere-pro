@@ -1,5 +1,5 @@
 import { formatDecimalPlaces } from "@/lib/methods/formatting";
-import { formatToMoney } from "@/utils/methods";
+import { formatToMoney } from "@/utils/methods/formatting";
 import { useOverallSalesResults } from "@/utils/queries/stats/overall";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import { BsFileEarmarkText, BsPatchCheck, BsTicketPerforated } from "react-icons/bs";

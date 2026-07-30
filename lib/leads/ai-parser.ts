@@ -2,7 +2,7 @@ import { anthropic } from "@ai-sdk/anthropic";
 import { createGateway } from "@ai-sdk/gateway";
 import { generateObject } from "ai";
 import { z } from "zod";
-import { formatPhoneAsBase, formatToPhone } from "@/utils/methods";
+import { formatPhoneAsBase, formatToPhone } from "@/utils/methods/formatting";
 import type { TClient } from "@/utils/schemas/client.schema";
 import type { TOpportunity } from "@/utils/schemas/opportunity.schema";
 

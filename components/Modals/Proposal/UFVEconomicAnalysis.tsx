@@ -5,7 +5,7 @@ import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, Di
 import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
 import { formatDecimalPlaces } from "@/lib/methods/formatting";
 import { useMediaQuery } from "@/lib/utils";
-import { formatToMoney } from "@/utils/methods";
+import { formatToMoney } from "@/utils/methods/formatting";
 import type { TProposalDTOWithOpportunityAndClient } from "@/utils/schemas/proposal.schema";
 import { getSalesProposalScenarios, type TSalesProposalScenarios } from "@/utils/solar";
 import { BadgeDollarSign, Calendar, CalendarDays, CalendarRange, ChartArea, ChartBar, PiggyBank, Receipt, Zap } from "lucide-react";

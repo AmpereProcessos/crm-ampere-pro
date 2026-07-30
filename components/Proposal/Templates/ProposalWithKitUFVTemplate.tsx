@@ -5,7 +5,7 @@ import { FaLocationDot, FaRegIdCard, FaUser } from "react-icons/fa6";
 import { MdEmail, MdPayment } from "react-icons/md";
 import { TbWorld } from "react-icons/tb";
 import { formatDecimalPlaces, formatLocation, formatProductStr } from "@/lib/methods/formatting";
-import { formatToMoney } from "@/utils/methods";
+import { formatToMoney } from "@/utils/methods/formatting";
 import { getFractionnementValue } from "@/utils/payment";
 import { getScenariosInfo } from "@/utils/proposal";
 import type { TOpportunityDTOWithClient } from "@/utils/schemas/opportunity.schema";

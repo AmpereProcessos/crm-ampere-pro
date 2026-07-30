@@ -3,7 +3,7 @@ import { toast } from "react-hot-toast";
 import { VscChromeClose } from "react-icons/vsc";
 
 import { uploadFile } from "@/lib/methods/firebase";
-import { formatLongString } from "@/utils/methods";
+import { formatLongString } from "@/utils/methods/formatting";
 import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
 import { editProposal } from "@/utils/mutations/proposals";
 import { useQueryClient } from "@tanstack/react-query";

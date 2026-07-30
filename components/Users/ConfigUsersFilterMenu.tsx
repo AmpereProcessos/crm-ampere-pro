@@ -1,5 +1,5 @@
 import { formatDateOnInputChange } from "@/lib/methods/formatting";
-import { formatDateForInputValue } from "@/utils/methods";
+import { formatDateForInputValue } from "@/utils/methods/formatting";
 import type { TUsersQueryFilters } from "@/utils/schemas/user.schema";
 import { useState } from "react";
 import CheckboxInput from "../Inputs/CheckboxInput";

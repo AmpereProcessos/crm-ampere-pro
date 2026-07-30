@@ -1,4 +1,4 @@
-import { formatToMoney } from "@/utils/methods";
+import { formatToMoney } from "@/utils/methods/formatting";
 import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
 import { deleteSaleGoal } from "@/utils/mutations/sale-goals";
 import { TSaleGoalDTO } from "@/utils/schemas/sale-goal.schema";

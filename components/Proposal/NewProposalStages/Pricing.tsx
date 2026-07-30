@@ -4,7 +4,7 @@ import { useState } from "react";
 import { AiFillEdit } from "react-icons/ai";
 
 import type { TUserSession } from "@/lib/auth/session";
-import { formatToMoney } from "@/utils/methods";
+import { formatToMoney } from "@/utils/methods/formatting";
 import { getPricingTotal } from "@/utils/pricing/methods";
 import type { TOpportunityDTOWithClientAndPartnerAndFunnelReferences } from "@/utils/schemas/opportunity.schema";
 import type { TPricingItem, TProposal } from "@/utils/schemas/proposal.schema";

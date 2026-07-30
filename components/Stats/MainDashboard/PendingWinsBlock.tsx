@@ -1,7 +1,7 @@
 import type { TGetStatsRouteOutput } from "@/app/api/stats/route";
 import type { TUserSession } from "@/lib/auth/session";
 import { formatDateAsLocale } from "@/lib/methods/formatting";
-import { formatLongString, formatToMoney } from "@/utils/methods";
+import { formatLongString, formatToMoney } from "@/utils/methods/formatting";
 import Link from "next/link";
 import { BsCalendarPlus, BsFillMegaphoneFill } from "react-icons/bs";
 import { FaSignature } from "react-icons/fa";

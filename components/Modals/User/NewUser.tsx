@@ -6,7 +6,7 @@ import { toast } from "react-hot-toast";
 
 import type { TUserSession } from "@/lib/auth/session";
 import { storage } from "@/services/firebase/storage-config";
-import { formatToPhone } from "@/utils/methods";
+import { formatToPhone } from "@/utils/methods/formatting";
 import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
 import { createUser } from "@/utils/mutations/users";
 import { usePartnersSimplified } from "@/utils/queries/partners";

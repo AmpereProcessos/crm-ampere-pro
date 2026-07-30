@@ -13,7 +13,7 @@ import type { TUserSession } from "@/lib/auth/session";
 import { formatDateOnInputChange } from "@/lib/methods/formatting";
 import type { TUpdateProfileInput } from "@/pages/api/users/profile";
 import { storage } from "@/services/firebase/storage-config";
-import { formatDateForInputValue, formatToPhone } from "@/utils/methods";
+import { formatDateForInputValue, formatToPhone } from "@/utils/methods/formatting";
 import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
 import { editProfile, editUser } from "@/utils/mutations/users";
 

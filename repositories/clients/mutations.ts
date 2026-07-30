@@ -1,4 +1,4 @@
-import { formatPhoneAsBase } from "@/utils/methods";
+import { formatPhoneAsBase } from "@/utils/methods/formatting";
 import type { TClient } from "@/utils/schemas/client.schema";
 import { type Collection, type Filter, ObjectId } from "mongodb";
 

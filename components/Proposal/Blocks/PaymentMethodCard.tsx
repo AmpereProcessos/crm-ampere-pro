@@ -1,4 +1,4 @@
-import { formatToMoney, isEmpty } from "@/utils/methods";
+import { formatToMoney, isEmpty } from "@/utils/methods/formatting";
 import { getFractionnementValue, getPaymentMethodFinalValue } from "@/utils/payment";
 import { TPaymentMethodDTO } from "@/utils/schemas/payment-methods";
 import { TProposalPaymentMethodItem } from "@/utils/schemas/proposal.schema";

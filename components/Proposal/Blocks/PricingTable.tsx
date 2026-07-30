@@ -1,4 +1,4 @@
-import { formatToMoney } from "@/utils/methods";
+import { formatToMoney } from "@/utils/methods/formatting";
 import { TPricingItem, TProposal } from "@/utils/schemas/proposal.schema";
 import React, { useMemo, useState } from "react";
 

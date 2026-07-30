@@ -5,7 +5,8 @@ import TextInput from "@/components/Inputs/TextInput";
 import ResponsiveDialogDrawerSection from "@/components/utils/ResponsiveDialogDrawerSection";
 import type { TUseClientStateHook } from "@/hooks/use-client-state-hook";
 import { BrazilianCitiesOptionsFromUF, BrazilianStatesOptions, type stateCities } from "@/utils/estados_cidades";
-import { formatToCEP, getCEPInfo } from "@/utils/methods";
+import { formatToCEP } from "@/utils/methods/formatting";
+import { getCEPInfo } from "@/utils/methods/address";
 
 type ClientAddressBlockProps = {
 	infoHolder: TUseClientStateHook["state"]["client"];

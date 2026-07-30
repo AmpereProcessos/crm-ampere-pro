@@ -1,5 +1,5 @@
 import { formatDecimalPlaces } from "@/lib/methods/formatting";
-import { getMaxHomologationPowerEstimation } from "@/utils/methods";
+import { getMaxHomologationPowerEstimation } from "@/utils/methods/solar";
 import { TOpportunityDTOWithClientAndPartnerAndFunnelReferences } from "@/utils/schemas/opportunity.schema";
 import { TProposal } from "@/utils/schemas/proposal.schema";
 import { TbAlertTriangleFilled } from "react-icons/tb";

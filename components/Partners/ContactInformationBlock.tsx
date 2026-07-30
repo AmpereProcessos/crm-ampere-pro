@@ -1,4 +1,4 @@
-import { formatToPhone } from "@/utils/methods";
+import { formatToPhone } from "@/utils/methods/formatting";
 import { TPartner } from "@/utils/schemas/partner.schema";
 import React from "react";
 import TextInput from "../Inputs/TextInput";

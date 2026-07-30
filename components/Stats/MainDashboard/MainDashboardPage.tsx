@@ -33,7 +33,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import type { TUserSession } from "@/lib/auth/session";
 import { formatDateOnInputChange, formatDecimalPlaces, formatToMoney } from "@/lib/methods/formatting";
 import { cn } from "@/lib/utils";
-import { formatDateForInputValue } from "@/utils/methods";
+import { formatDateForInputValue } from "@/utils/methods/formatting";
 import { useGraphData, useStats, useStatsQueryOptions } from "@/utils/queries/stats";
 import CommercialOverviewPanel from "./CommercialOverviewPanel";
 import CommercialPipelineBlock from "./CommercialPipelineBlock";

@@ -2,7 +2,7 @@ import { BsCalendarPlus } from "react-icons/bs";
 import { ImPower, ImPriceTag } from "react-icons/im";
 
 import { formatDateAsLocale, formatDecimalPlaces } from "@/lib/methods/formatting";
-import { formatToMoney } from "@/utils/methods";
+import { formatToMoney } from "@/utils/methods/formatting";
 import { TProposalDTO } from "@/utils/schemas/proposal.schema";
 import Link from "next/link";
 import { MdAttachMoney } from "react-icons/md";

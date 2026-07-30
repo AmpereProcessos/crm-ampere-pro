@@ -9,7 +9,7 @@ import LoadingPage from "@/components/utils/LoadingPage";
 import type { TUserSession } from "@/lib/auth/session";
 import { formatNameAsInitials } from "@/lib/methods/formatting";
 import { stateCities } from "@/utils/estados_cidades";
-import { getCEPInfo } from "@/utils/methods";
+import { getCEPInfo } from "@/utils/methods/address";
 import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
 import { editPartner } from "@/utils/mutations/partners";
 import { usePartnerById } from "@/utils/queries/partners";

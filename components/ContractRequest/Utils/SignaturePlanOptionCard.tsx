@@ -1,4 +1,4 @@
-import { formatToMoney } from "@/utils/methods";
+import { formatToMoney } from "@/utils/methods/formatting";
 import { getPricingTotal, handlePricingCalculation, TPricingConditionData, TPricingVariableData } from "@/utils/pricing/methods";
 import { TOpportunityDTO } from "@/utils/schemas/opportunity.schema";
 import { TProposalDTO } from "@/utils/schemas/proposal.schema";
