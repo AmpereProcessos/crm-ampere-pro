@@ -1,7 +1,7 @@
 import SelectInput from "@/components/Inputs/SelectInput";
 import TextareaInput from "@/components/Inputs/TextareaInput";
 import TextInput from "@/components/Inputs/TextInput";
-import { formatToPhone } from "@/utils/methods";
+import { formatToPhone } from "@/utils/methods/formatting";
 import { useCreditors } from "@/utils/queries/utils";
 import { TChangesControl, TProject } from "@/utils/schemas/project.schema";
 import React from "react";

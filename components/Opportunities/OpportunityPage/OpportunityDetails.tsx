@@ -8,7 +8,7 @@ import type { TUserSession } from "@/lib/auth/session";
 import { getErrorMessage } from "@/lib/methods/errors";
 import { formatDateOnInputChange } from "@/lib/methods/formatting";
 import { stateCities } from "@/utils/estados_cidades";
-import { formatDateForInputValue, formatToCPForCNPJ } from "@/utils/methods";
+import { formatDateForInputValue, formatToCPForCNPJ } from "@/utils/methods/formatting";
 import { updateClient } from "@/utils/mutations/clients";
 import { updateOpportunity } from "@/utils/mutations/opportunities";
 import { usePartnersSimplified } from "@/utils/queries/partners";

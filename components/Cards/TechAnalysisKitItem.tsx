@@ -4,7 +4,7 @@ import { ImPower } from "react-icons/im";
 import { MdAttachMoney, MdOutlineMiscellaneousServices } from "react-icons/md";
 import { TbTopologyFull } from "react-icons/tb";
 
-import { formatToMoney } from "@/utils/methods";
+import { formatToMoney } from "@/utils/methods/formatting";
 import { TKitDTO, TProductItem } from "@/utils/schemas/kits.schema";
 import { BsCart } from "react-icons/bs";
 

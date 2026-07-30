@@ -1,5 +1,6 @@
 import { formatDecimalPlaces, formatLocation } from "@/lib/methods/formatting";
-import { formatToMoney, getEstimatedGen, getInverterStr, getModulesStr } from "@/utils/methods";
+import { formatToMoney, getInverterStr, getModulesStr } from "@/utils/methods/formatting";
+import { getEstimatedGen } from "@/utils/methods/solar";
 
 import dayjs from "dayjs";
 import { getExpenseAndEconomyProgression } from "../general";

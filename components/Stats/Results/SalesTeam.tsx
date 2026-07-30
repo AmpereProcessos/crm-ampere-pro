@@ -7,7 +7,7 @@ import type { TSellerSalesResults } from "@/app/api/stats/comercial-results/sale
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { TableSortingControl } from "@/components/ui/table-sorting-control";
 import { formatDecimalPlaces, formatNameAsInitials } from "@/lib/methods/formatting";
-import { formatToMoney } from "@/utils/methods";
+import { formatToMoney } from "@/utils/methods/formatting";
 import { useSalesTeamResults } from "@/utils/queries/stats/sellers";
 import type { TUserDTOWithSaleGoals } from "@/utils/schemas/user.schema";
 import { BadgeDollarSign, CircleDollarSign, CirclePlus, Percent, Ticket } from "lucide-react";

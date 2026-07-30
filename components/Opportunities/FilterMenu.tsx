@@ -2,7 +2,7 @@ import type { TUserSession } from "@/lib/auth/session";
 import { formatDateOnInputChange } from "@/lib/methods/formatting";
 import { GeneralVisibleHiddenExitMotionVariants } from "@/utils/constants";
 import StatesAndCities from "@/utils/json-files/cities.json";
-import { formatDateForInputValue } from "@/utils/methods";
+import { formatDateForInputValue } from "@/utils/methods/formatting";
 import { TPersonalizedOpportunitiesFilter } from "@/utils/schemas/opportunity.schema";
 import { TPartnerSimplifiedDTO } from "@/utils/schemas/partner.schema";
 import { TProjectTypeDTOSimplified } from "@/utils/schemas/project-types.schema";

@@ -2,7 +2,8 @@ import connectToDatabase from "@/services/mongodb/crm-db-connection";
 import { apiHandler } from "@/utils/api";
 
 import { stateCities } from "@/utils/estados_cidades";
-import { calculateStringSimilarity, formatToPhone } from "@/utils/methods";
+import { calculateStringSimilarity } from "@/utils/methods/collections";
+import { formatToPhone } from "@/utils/methods/formatting";
 import { IClient } from "@/utils/models";
 import { TClient } from "@/utils/schemas/client.schema";
 import { TUser } from "@/utils/schemas/user.schema";

@@ -1,6 +1,6 @@
 import type { TByFunnelResults } from "@/app/api/stats/comercial-results/sales-funnels/route";
 import { getFormattedTextFromHoursAmount } from "@/lib/methods/dates";
-import { formatToMoney } from "@/utils/methods";
+import { formatToMoney } from "@/utils/methods/formatting";
 import { BsFillBookmarkFill } from "react-icons/bs";
 import { MdTimer } from "react-icons/md";
 import { TbDownload, TbUpload } from "react-icons/tb";

@@ -1,5 +1,5 @@
 import { renderCategoryIcon } from "@/lib/methods/rendering";
-import { formatToMoney } from "@/utils/methods";
+import { formatToMoney } from "@/utils/methods/formatting";
 import { TPricingConditionData, TPricingVariableData, getPricingTotal, handlePricingCalculation } from "@/utils/pricing/methods";
 import { TOpportunityDTO } from "@/utils/schemas/opportunity.schema";
 import { TProductDTOWithPricingMethod } from "@/utils/schemas/products.schema";

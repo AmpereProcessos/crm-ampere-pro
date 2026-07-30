@@ -1,5 +1,5 @@
 import { renderCategoryIcon } from "@/lib/methods/rendering";
-import { formatToMoney } from "@/utils/methods";
+import { formatToMoney } from "@/utils/methods/formatting";
 import { TKit } from "@/utils/schemas/kits.schema";
 import { useState } from "react";
 import { AiOutlineSafety } from "react-icons/ai";

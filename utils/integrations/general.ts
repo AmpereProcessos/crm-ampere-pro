@@ -1,4 +1,4 @@
-import { getEstimatedGen } from "../methods";
+import { getEstimatedGen } from "../methods/solar";
 
 import type { TOpportunityDTOWithClient } from "../schemas/opportunity.schema";
 

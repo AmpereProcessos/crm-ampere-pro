@@ -2,7 +2,7 @@ import { FaIndustry, FaTag } from "react-icons/fa";
 import { TbTopologyFull } from "react-icons/tb";
 
 import { formatDateAsLocale, formatNameAsInitials } from "@/lib/methods/formatting";
-import { formatToMoney } from "@/utils/methods";
+import { formatToMoney } from "@/utils/methods/formatting";
 import { TKitDTO } from "@/utils/schemas/kits.schema";
 import dayjs from "dayjs";
 import { BsCalendarEvent, BsCalendarPlus } from "react-icons/bs";

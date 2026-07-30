@@ -1,5 +1,5 @@
 import { formatToMoney } from "@/lib/methods/formatting";
-import { isEmpty } from "@/utils/methods";
+import { isEmpty } from "@/utils/methods/formatting";
 import { getFractionnementValue, getPaymentMethodFinalValue } from "@/utils/payment";
 import { TProposalPaymentMethodItem } from "@/utils/schemas/proposal.schema";
 import { useState } from "react";

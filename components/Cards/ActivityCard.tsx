@@ -18,7 +18,7 @@ import { getErrorMessage } from "@/lib/methods/errors";
 import { formatNameAsInitials } from "@/lib/methods/formatting";
 import { renderDateDiffText } from "@/lib/methods/rendering";
 import { cn } from "@/lib/utils";
-import { formatLongString } from "@/utils/methods";
+import { formatLongString } from "@/utils/methods/formatting";
 import { editActivity } from "@/utils/mutations/activities";
 import { getActivityDateMode, getActivityStatus, type TActivityDTO, type TActivityStatus } from "@/utils/schemas/activities.schema";
 import Avatar from "../utils/Avatar";

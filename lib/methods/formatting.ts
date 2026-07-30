@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { formatToPhone } from "@/utils/methods";
+import { formatToPhone } from "@/utils/methods/formatting";
 import type { TInverter, TModule, TProductItem } from "@/utils/schemas/kits.schema";
 import type { TOpportunity } from "@/utils/schemas/opportunity.schema";
 import { isValidNumber } from "./validation";

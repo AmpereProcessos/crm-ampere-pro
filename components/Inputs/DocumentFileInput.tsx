@@ -1,7 +1,7 @@
 import { useClickOutside } from "@/lib/hooks";
 import { handleRenderIcon } from "@/lib/methods/rendering";
 
-import { formatLongString } from "@/utils/methods";
+import { formatLongString } from "@/utils/methods/formatting";
 import { TFileReferenceDTO } from "@/utils/schemas/file-reference.schema";
 import { useRef, useState } from "react";
 

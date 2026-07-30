@@ -1,5 +1,5 @@
 import { formatDateAsLocale } from "@/lib/methods/formatting";
-import { formatToMoney } from "@/utils/methods";
+import { formatToMoney } from "@/utils/methods/formatting";
 import { TSignaturePlanDTO } from "@/utils/schemas/signature-plans.schema";
 import { BsBookmarksFill, BsCalendarPlus, BsCheckCircleFill } from "react-icons/bs";
 import { MdAttachMoney, MdOutlineTimer, MdRepeat } from "react-icons/md";

@@ -1,5 +1,5 @@
 import { formatDateAsLocale } from "@/lib/methods/formatting";
-import { formatToMoney } from "@/utils/methods";
+import { formatToMoney } from "@/utils/methods/formatting";
 import { TProposalUpdateRecordDTO } from "@/utils/schemas/proposal-update-records.schema";
 import { TPricingItem } from "@/utils/schemas/proposal.schema";
 import { BsCalendarPlus } from "react-icons/bs";

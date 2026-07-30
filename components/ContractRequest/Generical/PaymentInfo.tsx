@@ -8,7 +8,8 @@ import TextareaInput from "@/components/Inputs/TextareaInput";
 import TextInput from "@/components/Inputs/TextInput";
 import { Button } from "@/components/ui/button";
 import { BrazilianCitiesOptionsFromUF, BrazilianStatesOptions } from "@/utils/estados_cidades";
-import { formatToCEP, formatToCPForCNPJ, formatToPhone, getCEPInfo } from "@/utils/methods";
+import { formatToCEP, formatToCPForCNPJ, formatToPhone } from "@/utils/methods/formatting";
+import { getCEPInfo } from "@/utils/methods/address";
 import { useCreditors } from "@/utils/queries/utils";
 import type { TContractRequest } from "@/utils/schemas//contract-request.schema";
 

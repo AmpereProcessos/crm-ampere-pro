@@ -6,7 +6,8 @@ import SelectInput from "@/components/Inputs/SelectInput";
 import TextInput from "@/components/Inputs/TextInput";
 import { Button } from "@/components/ui/button";
 import { BrazilianCitiesOptionsFromUF, BrazilianStatesOptions } from "@/utils/estados_cidades";
-import { formatToCEP, getCEPInfo } from "@/utils/methods";
+import { formatToCEP } from "@/utils/methods/formatting";
+import { getCEPInfo } from "@/utils/methods/address";
 import { ChevronRight, Truck } from "lucide-react";
 import toast from "react-hot-toast";
 type DeliveryInfoProps = {

@@ -7,7 +7,7 @@ import { getErrorMessage } from "@/lib/methods/errors";
 import { renderIconWithClassNames } from "@/lib/methods/rendering";
 import { cn } from "@/lib/utils";
 import { BrazilianCitiesOptionsFromUF, BrazilianStatesOptions } from "@/utils/estados_cidades";
-import { formatToPhone } from "@/utils/methods";
+import { formatToPhone } from "@/utils/methods/formatting";
 import { useVinculationClient } from "@/utils/queries/clients";
 import { useOpportunityCreators } from "@/utils/queries/users";
 import { TLead } from "@/utils/schemas/leads.schema";

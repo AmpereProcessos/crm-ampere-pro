@@ -1,6 +1,6 @@
 import { formatDateOnInputChange, formatDecimalPlaces, formatNameAsInitials } from "@/lib/methods/formatting";
 import { GeneralVisibleHiddenExitMotionVariants } from "@/utils/constants";
-import { formatDateForInputValue, getFirstDayOfYear, getLastDayOfYear } from "@/utils/methods";
+import { formatDateForInputValue, getFirstDayOfYear, getLastDayOfYear } from "@/utils/methods/formatting";
 import { useTechnicalAnalysisStats } from "@/utils/queries/stats/technical-analysis";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";

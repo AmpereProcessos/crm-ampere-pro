@@ -1,5 +1,5 @@
 import { formatDateOnInputChange } from "@/lib/methods/formatting";
-import { formatDateForInputValue } from "@/utils/methods";
+import { formatDateForInputValue } from "@/utils/methods/formatting";
 import { usePartnersSimplified } from "@/utils/queries/partners";
 import { usePaymentMethods } from "@/utils/queries/payment-methods";
 import { TKit } from "@/utils/schemas/kits.schema";

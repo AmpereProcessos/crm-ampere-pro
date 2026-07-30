@@ -1,7 +1,8 @@
 import CheckboxInput from "@/components/Inputs/CheckboxInput";
 import DocumentFileInput from "@/components/Inputs/DocumentFileInput";
 import { stateCities } from "@/utils/estados_cidades";
-import { formatToCEP, getCEPInfo } from "@/utils/methods";
+import { formatToCEP } from "@/utils/methods/formatting";
+import { getCEPInfo } from "@/utils/methods/address";
 import { TFileHolder } from "@/utils/schemas/file-reference.schema";
 import { TTechnicalAnalysis } from "@/utils/schemas/technical-analysis.schema";
 import React, { useState } from "react";

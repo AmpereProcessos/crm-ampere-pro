@@ -4,7 +4,7 @@ import SelectInput from "@/components/Inputs/SelectInput";
 import TextInput from "@/components/Inputs/TextInput";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { formatToCPForCNPJ } from "@/utils/methods";
+import { formatToCPForCNPJ } from "@/utils/methods/formatting";
 import type { TContractRequest } from "@/utils/schemas//contract-request.schema";
 import { ChevronRight, Share2 } from "lucide-react";
 import { useState, type Dispatch, type SetStateAction } from "react";

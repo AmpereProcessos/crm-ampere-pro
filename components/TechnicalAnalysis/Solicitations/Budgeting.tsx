@@ -1,7 +1,8 @@
 import SelectInput from "@/components/Inputs/SelectInput";
 import TextInput from "@/components/Inputs/TextInput";
 import { stateCities } from "@/utils/estados_cidades";
-import { formatToCEP, getCEPInfo } from "@/utils/methods";
+import { formatToCEP } from "@/utils/methods/formatting";
+import { getCEPInfo } from "@/utils/methods/address";
 import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 

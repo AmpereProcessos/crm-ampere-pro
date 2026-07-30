@@ -3,7 +3,7 @@ import TextInput from "@/components/Inputs/TextInput";
 import ErrorComponent from "@/components/utils/ErrorComponent";
 import LoadingComponent from "@/components/utils/LoadingComponent";
 import type { TUserSession } from "@/lib/auth/session";
-import { formatToCPForCNPJ, formatToPhone } from "@/utils/methods";
+import { formatToCPForCNPJ, formatToPhone } from "@/utils/methods/formatting";
 import { usePaymentMethods } from "@/utils/queries/payment-methods";
 import { TClientDTO } from "@/utils/schemas/client.schema";
 import { TProject } from "@/utils/schemas/project.schema";
