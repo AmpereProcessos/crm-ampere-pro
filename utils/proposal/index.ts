@@ -1,7 +1,7 @@
 import { TOpportunityDTOWithClient } from "../schemas/opportunity.schema";
 import { TProposal, TProposalPremisses } from "../schemas/proposal.schema";
 import GenerationFactors from "../json-files/generationFactors.json";
-import { getEstimatedGen } from "../methods";
+import { getEstimatedGen } from "../methods/solar";
 import dayjs from "dayjs";
 import { formatDecimalPlaces, formatToMoney } from "@/lib/methods/formatting";
 type GetScenariosInfoParams = {
