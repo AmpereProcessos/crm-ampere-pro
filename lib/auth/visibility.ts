@@ -1,5 +1,8 @@
 import type { TUserSession } from "@/lib/auth/session";
+import type { TOpportunity } from "@/utils/schemas/opportunity.schema";
+import type { TProposal } from "@/utils/schemas/proposal.schema";
 import type { TUser } from "@/utils/schemas/user.schema";
+import type { Collection, Filter } from "mongodb";
 
 export type TVisibilityResource =
   | "clientes"
@@ -51,11 +54,44 @@ export function buildResourceVisibilityFilter(
         idParceiro: { $in: partnerIds },
       }
     : {};
-  console.log("RESOURCE VISIBILITY FILTER 1", filter, scope);
   if (scope !== null) filter[RESOURCE_SCOPE_FIELDS[resource]] = { $in: scope };
-  console.log("RESOURCE VISIBILITY FILTER 2", filter, scope);
 
   return filter;
+}
+
+export async function buildProposalVisibilityFilter(
+  session: TUserSession,
+  opportunitiesCollection: Collection<TOpportunity>,
+): Promise<Filter<TProposal> | null> {
+  const proposalVisibility = buildResourceVisibilityFilter(session, "propostas") as Filter<TProposal> | null;
+  if (!proposalVisibility) return null;
+
+  const proposalScope = getResourceScope(session, "propostas");
+  if (proposalScope === null) return proposalVisibility;
+
+  const partnerIds = getAllowedPartnerIds(session);
+  const opportunityQuery: Filter<TOpportunity> = {
+    "responsaveis.id": session.user.id,
+    ...(partnerIds ? { idParceiro: { $in: partnerIds } } : {}),
+  };
+  const responsibleOpportunityIds = await opportunitiesCollection
+    .find(opportunityQuery, { projection: { _id: 1 } })
+    .map(({ _id }) => _id.toString())
+    .toArray();
+
+  const authorVisibility = { "autor.id": { $in: proposalScope } } as Filter<TProposal>;
+  const proposalBaseFilter = { ...proposalVisibility };
+  delete proposalBaseFilter["autor.id"];
+
+  const visibilityConditions: Filter<TProposal>[] = [authorVisibility];
+  if (responsibleOpportunityIds.length > 0) {
+    visibilityConditions.push({ "oportunidade.id": { $in: responsibleOpportunityIds } });
+  }
+
+  return {
+    ...proposalBaseFilter,
+    $or: visibilityConditions,
+  };
 }
 
 export function getProjectResponsibleScope(
