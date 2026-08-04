@@ -1,4 +1,3 @@
-import ProposalPage from "@/components/Proposal/ProposalPage";
 import ErrorComponent from "@/components/utils/ErrorComponent";
 import { getCurrentSession } from "@/lib/auth/session";
 import { getProposalDocumentById } from "@/repositories/proposals/queries";
@@ -19,7 +18,7 @@ export default async function ProposalDocumentById({ params }: { params: { id: s
 	const proposalId = awaitedParams.id;
 	if (!proposalId) return <ErrorComponent msg="ID da proposta não encontrado" />;
 
-	const { proposal, partner, opportunity } = await getProposalDocumentById({ id: proposalId });
+	const { proposal, partner, opportunity } = await getProposalDocumentById({ id: proposalId, session });
 	if (!proposal || !partner || !opportunity) return <ErrorComponent msg="Proposta não encontrada" />;
 	return (
 		<ProposalDocumentPage

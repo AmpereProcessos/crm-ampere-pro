@@ -1,9 +1,10 @@
 import { insertProposal, updateProposal } from "@/repositories/proposals/mutations";
 import { getOpportunityProposals, getProposalById } from "@/repositories/proposals/queries";
 import connectToDatabase from "@/services/mongodb/crm-db-connection";
-import { buildResourceVisibilityFilter } from "@/lib/auth/visibility";
+import { buildProposalVisibilityFilter } from "@/lib/auth/visibility";
 import { apiHandler, validateAuthorization } from "@/utils/api";
 import { InsertProposalSchema, TProposal, TProposalDTOWithOpportunity } from "@/utils/schemas/proposal.schema";
+import type { TOpportunity } from "@/utils/schemas/opportunity.schema";
 import createHttpError from "http-errors";
 import { Collection, Filter, ObjectId } from "mongodb";
 import { NextApiHandler } from "next";
@@ -20,7 +21,7 @@ const createProposal: NextApiHandler<PostResponse> = async (req, res) => {
 	const partnerId = session.user.idParceiro;
 
 	const proposal = InsertProposalSchema.parse(req.body);
-	const db = await connectToDatabase(process.env.MONGODB_URI, "crm");
+	const db = await connectToDatabase();
 	const proposalsCollection: Collection<TProposal> = db.collection("proposals");
 	const insertResponse = await insertProposal({ collection: proposalsCollection, info: proposal, partnerId: partnerId || "" });
 	if (!insertResponse.acknowledged) throw new createHttpError.InternalServerError("Oops, houve um erro desconhecido na criação da proposta.");
@@ -32,13 +33,14 @@ type GetResponse = {
 };
 const getProposals: NextApiHandler<GetResponse> = async (req, res) => {
 	const session = await validateAuthorization(req, res, "propostas", "visualizar", true);
-	const visibilityQuery = buildResourceVisibilityFilter(session, "propostas") as Filter<TProposal> | null;
+	const db = await connectToDatabase();
+	const proposalsCollection: Collection<TProposal> = db.collection("proposals");
+	const opportunitiesCollection: Collection<TOpportunity> = db.collection("opportunities");
+	const visibilityQuery = await buildProposalVisibilityFilter(session, opportunitiesCollection);
 	if (!visibilityQuery) throw new createHttpError.Unauthorized("Você não possui permissão para visualizar propostas.");
 
 	const { opportunityId, id } = req.query;
 	if (!opportunityId && !id) throw new createHttpError.BadRequest("ID de referência não fornecido.");
-	const db = await connectToDatabase(process.env.MONGODB_URI, "crm");
-	const proposalsCollection: Collection<TProposal> = db.collection("proposals");
 	console.log("ID", id);
 	// Query for opportunity proposals
 	if (opportunityId) {
@@ -68,7 +70,7 @@ const editProposal: NextApiHandler<PutResponse> = async (req, res) => {
 	if (!id || typeof id != "string" || !ObjectId.isValid(id)) throw new createHttpError.BadRequest("ID inválido.");
 	const changes = InsertProposalSchema.partial().parse(req.body);
 
-	const db = await connectToDatabase(process.env.MONGODB_URI, "crm");
+	const db = await connectToDatabase();
 	const collection: Collection<TProposal> = db.collection("proposals");
 
 	const updateResponse = await updateProposal({ id: id, collection: collection, changes: changes, query: partnerQuery });

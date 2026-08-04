@@ -1,5 +1,6 @@
 import type { TUserSession } from "@/lib/auth/session";
 import {
+  buildProposalVisibilityFilter,
   buildResourceVisibilityFilter,
   canViewResource,
   getAllowedPartnerIds,
@@ -205,10 +206,9 @@ export async function globalSearch(
     );
   }
 
-  const proposalVisibility = buildResourceVisibilityFilter(
-    session,
-    "propostas",
-  ) as Filter<TProposal> | null;
+  const proposalVisibility = includesEntity(activeEntities, "proposals")
+    ? await buildProposalVisibilityFilter(session, crmDb.collection<TOpportunity>("opportunities"))
+    : null;
   console.log("[GLOBAL_SEARCH] Proposal visibility", proposalVisibility);
 
   if (proposalVisibility && includesEntity(activeEntities, "proposals")) {

@@ -1,4 +1,6 @@
 import connectToDatabase from "@/services/mongodb/crm-db-connection";
+import { buildProposalVisibilityFilter } from "@/lib/auth/visibility";
+import type { TUserSession } from "@/lib/auth/session";
 import type { TOpportunity } from "@/utils/schemas/opportunity.schema";
 import type { TPartner } from "@/utils/schemas/partner.schema";
 import type { TProposal, TProposalDTOWithOpportunity, TProposalDTOWithOpportunityAndClient } from "@/utils/schemas/proposal.schema";
@@ -70,14 +72,16 @@ export async function getProposalById({ id, collection, query }: GetProposalById
 
 type GetProposalDocumentByIdParams = {
 	id: string;
+	session: TUserSession;
 };
-export async function getProposalDocumentById({ id }: GetProposalDocumentByIdParams) {
+export async function getProposalDocumentById({ id, session }: GetProposalDocumentByIdParams) {
 	const db = await connectToDatabase();
 	const proposalsCollection: Collection<TProposal> = db.collection("proposals");
 	const opportunitiesCollection: Collection<TOpportunity> = db.collection("opportunities");
 	const partnersCollection: Collection<TPartner> = db.collection("partners");
 
-	const proposal = await proposalsCollection.findOne({ _id: new ObjectId(id) });
+	const visibilityQuery = await buildProposalVisibilityFilter(session, opportunitiesCollection);
+	const proposal = visibilityQuery ? await proposalsCollection.findOne({ _id: new ObjectId(id), ...visibilityQuery }) : null;
 
 	if (!proposal)
 		return {
