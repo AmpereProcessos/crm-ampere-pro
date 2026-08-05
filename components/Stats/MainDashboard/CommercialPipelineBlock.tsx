@@ -31,7 +31,7 @@ export default function CommercialPipelineBlock({
 
   const pipeline = useCommercialPipeline({ funnelId, after, before, responsibleIds });
   const funnelOptions = useMemo(() => funnels?.map((funnel) => ({ value: funnel._id, label: funnel.nome })) ?? [], [funnels]);
-  const hasData = pipeline.data?.funnel.some((stage) => stage.count > 0) ?? false;
+  const hasData = pipeline.data?.funnel.some((stage) => stage.inStageCount > 0 || stage.passedThroughCount > 0) ?? false;
 
   return (
     <section className='flex w-full flex-col gap-3 rounded-lg border border-primary/20 bg-card p-4 shadow-xs'>
@@ -97,7 +97,7 @@ function PipelineChart({ stages, variant }: { stages: Stage[]; variant: Exclude<
     const finalIndex = stages.findIndex((stage) => stage.isFinal);
     return finalIndex >= 0 ? stages.slice(0, finalIndex + 1) : stages;
   }, [stages, variant]);
-  const valueOf = (stage: Stage) => (variant === 'funnel' ? stage.cumulativeCount : stage.count);
+  const valueOf = (stage: Stage) => (variant === 'funnel' ? stage.cumulativeCount : stage.inStageCount);
   const geometry = useMemo(() => buildFlowGeometry(funnel.map(valueOf)), [funnel, variant]);
   const conversions = useMemo(() => {
     const firstValue = funnel[0] ? valueOf(funnel[0]) : 0;
@@ -235,11 +235,11 @@ function PipelineChart({ stages, variant }: { stages: Stage[]; variant: Exclude<
               {variant === 'funnel' ? (
                 <>
                   <Metric label='Alcançaram (acum.)' value={hovered.cumulativeCount.toLocaleString('pt-BR')} />
-                  <Metric label='Passaram na etapa' value={hovered.count.toLocaleString('pt-BR')} />
+                  <Metric label='Passaram na etapa' value={hovered.passedThroughCount.toLocaleString('pt-BR')} />
                 </>
               ) : (
                 <>
-                  <Metric label='Oportunidades' value={hovered.count.toLocaleString('pt-BR')} />
+                  <Metric label='Na etapa' value={hovered.inStageCount.toLocaleString('pt-BR')} />
                   <Metric label='Perda na etapa' value={hoveredIndex === 0 ? '—' : `-${loss.toLocaleString('pt-BR')}`} danger={loss > 0} />
                 </>
               )}
@@ -255,18 +255,18 @@ function PipelineChart({ stages, variant }: { stages: Stage[]; variant: Exclude<
 }
 
 function PipelineBars({ stages }: { stages: Stage[] }) {
-  const max = Math.max(...stages.map((stage) => stage.count), 1);
+  const max = Math.max(...stages.map((stage) => stage.inStageCount), 1);
   return (
     <div className='w-full overflow-x-auto pb-1'>
       <div className='flex min-h-[230px] items-end gap-3' style={{ minWidth: 'max-content' }}>
         {stages.map((stage, index) => {
-          const heightPercent = (stage.count / max) * 100;
+          const heightPercent = (stage.inStageCount / max) * 100;
           return (
             <div key={stage.stageId} className='flex w-[180px] shrink-0 flex-col items-center gap-2'>
               <div className='relative flex w-full flex-col items-center'>
                 <div className='mb-1 flex flex-col items-center rounded-md border border-primary/15 bg-card px-2 py-1 shadow-xs'>
                   <strong className='text-sm leading-none'>{formatPercent(stage.absoluteConversion)}</strong>
-                  <span className='text-xs leading-tight text-primary/55'>{stage.count.toLocaleString('pt-BR')}</span>
+                  <span className='text-xs leading-tight text-primary/55'>{stage.inStageCount.toLocaleString('pt-BR')}</span>
                 </div>
                 <div
                   className='flex w-full rounded-t-md transition-[height,opacity] duration-200 ease-out'
