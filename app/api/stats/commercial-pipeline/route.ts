@@ -50,7 +50,7 @@ async function getCommercialPipeline(request: NextRequest) {
 	});
 	if (!ObjectId.isValid(input.funnelId)) throw new createHttpError.BadRequest("Funil inválido.");
 
-	const allowedResponsibleIds = user.permissoes.resultados.escopo;
+	const allowedResponsibleIds = user.permissoes.oportunidades.escopo;
 	if (allowedResponsibleIds && input.responsibleIds.some((id) => !allowedResponsibleIds.includes(id))) {
 		throw new createHttpError.Unauthorized("Você não possui acesso ao escopo comercial solicitado.");
 	}

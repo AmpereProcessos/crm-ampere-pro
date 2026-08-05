@@ -16,7 +16,8 @@
     "format:check": "prettier --check .",
     "type-check": "tsc --noEmit",
     "check": "knip",
-    "prepare:activity-funnel-port": "node --env-file=.env.local scripts/prepare-activity-and-funnel-port.mjs"
+    "prepare:activity-funnel-port": "node --env-file=.env.local scripts/prepare-activity-and-funnel-port.mjs",
+    "migrate:users-clients-scope-global": "node --env-file=.env scripts/set-all-users-clients-scope-global.mjs"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^2.0.37",
