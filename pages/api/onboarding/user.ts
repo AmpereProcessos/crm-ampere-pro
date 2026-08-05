@@ -5,6 +5,7 @@ import { hashSync } from "bcrypt";
 import createHttpError from "http-errors";
 import { Collection } from "mongodb";
 import { NextApiHandler } from "next";
+import { normalizePermissionScopes } from "@/lib/auth/scope";
 
 type PostResponse = {
 	data: {
@@ -14,7 +15,7 @@ type PostResponse = {
 };
 
 const createUser: NextApiHandler<PostResponse> = async (req, res) => {
-	const user = GeneralUserSchema.parse(req.body);
+	const user = GeneralUserSchema.parse({ ...req.body, permissoes: normalizePermissionScopes(req.body.permissoes) });
 	const { senha: password } = user;
 	let hashedPassword = hashSync(password, 10);
 

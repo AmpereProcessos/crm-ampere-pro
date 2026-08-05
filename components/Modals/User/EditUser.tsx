@@ -14,6 +14,7 @@ import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, Di
 import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
 import ComissionPannel from "@/components/Users/ComissionPannel";
 import type { TUserSession } from "@/lib/auth/session";
+import { normalizePermissionScopes } from "@/lib/auth/scope";
 import { getErrorMessage } from "@/lib/methods/errors";
 import { useMediaQuery } from "@/lib/utils";
 import { storage } from "@/services/firebase/storage-config";
@@ -156,7 +157,10 @@ function EditUser({ closeModal, userId, partnerId, session }: EditUserProps) {
 		dataInsercao: new Date().toISOString(),
 	});
 	function updateUserInfo(info: Partial<TUserDTO>) {
-		setUserInfo((prev) => ({ ...prev, ...info }));
+		const normalizedInfo = info.permissoes
+			? { ...info, permissoes: normalizePermissionScopes(info.permissoes) }
+			: info;
+		setUserInfo((prev) => ({ ...prev, ...normalizedInfo }));
 	}
 
 	async function handleUserUpdate({ userInfo, avatarFile }: { userInfo: TUserDTO; avatarFile: File | null }) {

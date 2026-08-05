@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 
 import type { TUserSession } from "@/lib/auth/session";
+import { normalizePermissionScopes } from "@/lib/auth/scope";
 import { storage } from "@/services/firebase/storage-config";
 import { formatToPhone } from "@/utils/methods/formatting";
 import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
@@ -270,7 +271,10 @@ function NewUserModal({ closeModal, userId, partnerId, session }: NewUserModalPr
 		dataInsercao: new Date().toISOString(),
 	});
 	function updateUserInfo(info: Partial<TUser>) {
-		setUserInfo((prev) => ({ ...prev, ...info }));
+		const normalizedInfo = info.permissoes
+			? { ...info, permissoes: normalizePermissionScopes(info.permissoes) }
+			: info;
+		setUserInfo((prev) => ({ ...prev, ...normalizedInfo }));
 	}
 	function resetUserInfo() {
 		setUserInfo({
