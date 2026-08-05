@@ -8,6 +8,7 @@ import { type Collection, type Filter, ObjectId } from "mongodb";
 import { GeneralUserSchema, type TUser, type TUserEntity } from "@/utils/schemas/user.schema";
 import { getAllUsers, getPartnerUsers, getUserById } from "@/repositories/users/queries";
 import { novu } from "@/services/novu";
+import { normalizePermissionScopes } from "@/lib/auth/scope";
 
 // POST RESPONSE
 type PostResponse = {
@@ -20,7 +21,7 @@ type PostResponse = {
 const createUser: NextApiHandler<PostResponse> = async (req, res) => {
 	const session = await validateAuthorization(req, res, "usuarios", "criar", true);
 	const partnerId = session.user.idParceiro;
-	const user = GeneralUserSchema.parse(req.body);
+	const user = GeneralUserSchema.parse({ ...req.body, permissoes: normalizePermissionScopes(req.body.permissoes) });
 	const { senha: password } = user;
 	const hashedPassword = hashSync(password, 10);
 
@@ -110,6 +111,7 @@ const editUser: NextApiHandler<PutResponse> = async (req, res) => {
 	if (!req.body.changes) throw new createHttpError.BadRequest("Mudanças não especificadas na requisição.");
 
 	let user = req.body.changes;
+	if (user.permissoes) user = { ...user, permissoes: normalizePermissionScopes(user.permissoes) };
 
 	if (user.senha && user.senha.trim().length > 0) {
 		const hashedPassword = hashSync(user.senha, 10);

@@ -1,11 +1,15 @@
 import type { TUpdateProfileInput } from "@/pages/api/users/profile";
 import { type QueryClient, useMutation } from "@tanstack/react-query";
 import axios from "axios";
+import { normalizePermissionScopes } from "@/lib/auth/scope";
 import type { TUser } from "../schemas/user.schema";
 
 export async function editUser({ userId, changes }: { userId: string; changes: any }) {
 	try {
-		const { data } = await axios.put(`/api/users?id=${userId}`, { changes });
+		const normalizedChanges = changes.permissoes
+			? { ...changes, permissoes: normalizePermissionScopes(changes.permissoes) }
+			: changes;
+		const { data } = await axios.put(`/api/users?id=${userId}`, { changes: normalizedChanges });
 		return data.message;
 	} catch (error) {
 		throw error;
@@ -37,7 +41,8 @@ type CreateUserParams = {
 };
 export async function createUser({ info }: CreateUserParams) {
 	try {
-		const { data } = await axios.post("/api/users", info);
+		const normalizedInfo = { ...info, permissoes: normalizePermissionScopes(info.permissoes) };
+		const { data } = await axios.post("/api/users", normalizedInfo);
 		if (typeof data.data != "string") return "Usuário criado com sucesso !";
 		return data.data as string;
 	} catch (error) {

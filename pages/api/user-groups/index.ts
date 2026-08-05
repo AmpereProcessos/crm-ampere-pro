@@ -6,6 +6,7 @@ import { InsertUserGroupSchema, TUserGroup, TUserGroupWithUsers } from "@/utils/
 import createHttpError from "http-errors";
 import { Collection, ObjectId } from "mongodb";
 import { NextApiHandler } from "next";
+import { normalizePermissionScopes } from "@/lib/auth/scope";
 
 type GetResponse = {
 	data: TUserGroupWithUsers | TUserGroupWithUsers[];
@@ -38,7 +39,7 @@ type PostResponse = {
 const createUserGroup: NextApiHandler<PostResponse> = async (req, res) => {
 	const session = await validateAuthorization(req, res, "configuracoes", "gruposUsuarios", true);
 
-	const group = InsertUserGroupSchema.parse(req.body);
+	const group = InsertUserGroupSchema.parse({ ...req.body, permissoes: normalizePermissionScopes(req.body.permissoes) });
 
 	const db = await connectToDatabase(process.env.MONGODB_URI, "crm");
 	const collection: Collection<TUserGroup> = db.collection("user-groups");
@@ -61,7 +62,9 @@ const editUserGroup: NextApiHandler<PutResponse> = async (req, res) => {
 
 	const { id } = req.query;
 	if (!id || typeof id != "string" || !ObjectId.isValid(id)) throw new createHttpError.BadRequest("ID inválido.");
-	const changes = InsertUserGroupSchema.partial().parse(req.body);
+	const changes = InsertUserGroupSchema.partial().parse(
+		req.body.permissoes ? { ...req.body, permissoes: normalizePermissionScopes(req.body.permissoes) } : req.body,
+	);
 
 	const db = await connectToDatabase(process.env.MONGODB_URI, "crm");
 	const collection: Collection<TUserGroup> = db.collection("user-groups");

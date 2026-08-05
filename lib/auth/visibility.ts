@@ -3,6 +3,9 @@ import type { TOpportunity } from "@/utils/schemas/opportunity.schema";
 import type { TProposal } from "@/utils/schemas/proposal.schema";
 import type { TUser } from "@/utils/schemas/user.schema";
 import type { Collection, Filter } from "mongodb";
+import { normalizeScope } from "./scope";
+
+export { normalizeScope } from "./scope";
 
 export type TVisibilityResource =
   | "clientes"
@@ -25,20 +28,14 @@ export function canViewResource(session: TUserSession, resource: TVisibilityReso
 }
 
 export function getAllowedPartnerIds(session: TUserSession): string[] | null {
-  const partnerScope = session.user.permissoes.parceiros.escopo;
-
-  if (partnerScope === null || (Array.isArray(partnerScope) && partnerScope.length === 0)) {
-    return null;
-  }
-  return session.user.idParceiro ? [session.user.idParceiro] : [];
+	return normalizeScope(session.user.permissoes.parceiros.escopo);
 }
 
 export function getResourceScope(
   session: TUserSession,
   resource: TVisibilityResource,
 ): string[] | null {
-  const scope = session.user.permissoes[resource].escopo;
-  return scope === undefined ? null : scope;
+	return normalizeScope(session.user.permissoes[resource].escopo);
 }
 
 export function buildResourceVisibilityFilter(
@@ -97,5 +94,5 @@ export async function buildProposalVisibilityFilter(
 export function getProjectResponsibleScope(
   session: TUserSession,
 ): TUser["permissoes"]["oportunidades"]["escopo"] {
-  return session.user.permissoes.oportunidades.escopo;
+	return normalizeScope(session.user.permissoes.oportunidades.escopo);
 }
