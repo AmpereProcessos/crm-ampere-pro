@@ -27,7 +27,8 @@ export type TCommercialPipelineStage = {
 	stageOrder: number;
 	isInitial: boolean;
 	isFinal: boolean;
-	count: number;
+	inStageCount: number;
+	passedThroughCount: number;
 	cumulativeCount: number;
 	absoluteConversion: number;
 	stageToStageConversion: number;
@@ -69,13 +70,27 @@ async function getCommercialPipeline(request: NextRequest) {
 		...(effectiveResponsibleIds.length > 0 ? { "responsaveis.id": { $in: effectiveResponsibleIds } } : {}),
 		$or: [{ dataExclusao: null }, { dataExclusao: { $exists: false } }],
 	};
+	const opportunityProjection = {
+		_id: 1,
+		"ganho.data": 1,
+		"perda.data": 1,
+	};
 	const [funnel, opportunities] = await Promise.all([
 		funnelsCollection.findOne({ _id: new ObjectId(input.funnelId), ...partnerFilter }),
-		opportunitiesCollection.find(opportunityFilter, { projection: { _id: 1 } }).toArray(),
+		opportunitiesCollection.find(opportunityFilter, { projection: opportunityProjection }).toArray(),
 	]);
 	if (!funnel) throw new createHttpError.NotFound("Funil não encontrado.");
 
 	const opportunityIds = opportunities.map((opportunity) => opportunity._id.toString());
+	const opportunityStatuses = new Map(
+		opportunities.map((opportunity) => [
+			opportunity._id.toString(),
+			{
+				wonAt: opportunity.ganho?.data ?? null,
+				lostAt: opportunity.perda?.data ?? null,
+			},
+		]),
+	);
 	const references =
 		opportunityIds.length > 0
 			? await referencesCollection
@@ -96,7 +111,8 @@ async function getCommercialPipeline(request: NextRequest) {
 	}));
 	const finalStageIndex = stages.findIndex((stage) => stage.isFinal);
 	const lastFunnelIndex = finalStageIndex >= 0 ? finalStageIndex : Math.max(stages.length - 1, 0);
-	const counts = new Map(stages.map((stage) => [stage.id, new Set<string>()]));
+	const inStageCounts = new Map(stages.map((stage) => [stage.id, new Set<string>()]));
+	const passedThroughCounts = new Map(stages.map((stage) => [stage.id, new Set<string>()]));
 	const durations = new Map(stages.map((stage) => [stage.id, [] as number[]]));
 	const maxReachedByOpportunity = new Map<string, number>();
 	const opportunitiesInPeriod = new Set<string>();
@@ -105,8 +121,11 @@ async function getCommercialPipeline(request: NextRequest) {
 		for (const [stageId, interval] of Object.entries(reference.estagios)) {
 			const stage = stages.find((candidate) => candidate.id === String(stageId));
 			if (!stage || !interval?.entrada || !overlapsPeriod(interval.entrada, interval.saida, input.after, input.before)) continue;
-			counts.get(stage.id)?.add(reference.idOportunidade);
+			passedThroughCounts.get(stage.id)?.add(reference.idOportunidade);
 			opportunitiesInPeriod.add(reference.idOportunidade);
+			if (isStageActiveAt(interval.entrada, interval.saida, input.before) && isOpportunityOpenAt(opportunityStatuses.get(reference.idOportunidade), input.before)) {
+				inStageCounts.get(stage.id)?.add(reference.idOportunidade);
+			}
 			if (stage.order <= lastFunnelIndex) {
 				const previousMax = maxReachedByOpportunity.get(reference.idOportunidade) ?? -1;
 				maxReachedByOpportunity.set(reference.idOportunidade, Math.max(previousMax, stage.order));
@@ -116,11 +135,12 @@ async function getCommercialPipeline(request: NextRequest) {
 		}
 	}
 
-	const firstStageCount = stages[0] ? (counts.get(stages[0].id)?.size ?? 0) : 0;
+	const firstStageCount = stages[0] ? (inStageCounts.get(stages[0].id)?.size ?? 0) : 0;
 	const reachedOrders = [...maxReachedByOpportunity.values()];
 	const result: TCommercialPipelineStage[] = stages.map((stage, index) => {
-		const count = counts.get(stage.id)?.size ?? 0;
-		const previousCount = index > 0 ? (counts.get(stages[index - 1]?.id ?? "")?.size ?? 0) : count;
+		const inStageCount = inStageCounts.get(stage.id)?.size ?? 0;
+		const passedThroughCount = passedThroughCounts.get(stage.id)?.size ?? 0;
+		const previousCount = index > 0 ? (inStageCounts.get(stages[index - 1]?.id ?? "")?.size ?? 0) : inStageCount;
 		const stageDurations = durations.get(stage.id) ?? [];
 		return {
 			stageId: stage.id,
@@ -128,10 +148,11 @@ async function getCommercialPipeline(request: NextRequest) {
 			stageOrder: stage.order,
 			isInitial: stage.isInitial,
 			isFinal: stage.isFinal,
-			count,
+			inStageCount,
+			passedThroughCount,
 			cumulativeCount: stage.order <= lastFunnelIndex ? reachedOrders.filter((order) => order >= stage.order).length : 0,
-			absoluteConversion: roundPercent(firstStageCount > 0 ? (count / firstStageCount) * 100 : 0),
-			stageToStageConversion: roundPercent(previousCount > 0 ? (count / previousCount) * 100 : 0),
+			absoluteConversion: roundPercent(firstStageCount > 0 ? (inStageCount / firstStageCount) * 100 : 0),
+			stageToStageConversion: roundPercent(previousCount > 0 ? (inStageCount / previousCount) * 100 : 0),
 			averageHours: stageDurations.length > 0 ? stageDurations.reduce((total, value) => total + value, 0) / stageDurations.length : null,
 		};
 	});
@@ -146,6 +167,19 @@ async function getCommercialPipeline(request: NextRequest) {
 
 function overlapsPeriod(entry: string, exit: string | null | undefined, after: string, before: string) {
 	return entry <= before && (!exit || exit >= after);
+}
+
+function isStageActiveAt(entry: string, exit: string | null | undefined, at: string) {
+	return !dayjs(entry).isAfter(dayjs(at)) && (!exit || dayjs(exit).isAfter(dayjs(at)));
+}
+
+function isOpportunityOpenAt(status: { wonAt: string | null; lostAt: string | null } | undefined, at: string) {
+	if (!status) return false;
+	return !hasStatusAt(status.wonAt, at) && !hasStatusAt(status.lostAt, at);
+}
+
+function hasStatusAt(statusDate: string | null, at: string) {
+	return Boolean(statusDate) && !dayjs(statusDate).isAfter(dayjs(at));
 }
 
 function overlapHours(entry: string, exit: string | null | undefined, after: string, before: string) {
