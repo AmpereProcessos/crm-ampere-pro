@@ -35,8 +35,7 @@ import { formatDateOnInputChange, formatDecimalPlaces, formatToMoney } from "@/l
 import { cn } from "@/lib/utils";
 import { formatDateForInputValue } from "@/utils/methods/formatting";
 import { useGraphData, useStats, useStatsQueryOptions } from "@/utils/queries/stats";
-import CommercialOverviewPanel from "./CommercialOverviewPanel";
-import CommercialPipelineBlock from "./CommercialPipelineBlock";
+import SellersRanking from "../rankings/Rankings";
 import OpenActivitiesBlock from "./OpenActivitiesBlock";
 import PendingWinsBlock from "./PendingWinsBlock";
 import PPSOpenCallsBlock from "./PPSOpenCallsBlock";
@@ -233,77 +232,71 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
 						/>
 					) : null} */}
 
-				<div className="grid w-full items-stretch gap-2 lg:grid-cols-2">
-					<div className="min-w-0">
-						<OpenActivitiesBlock session={session} period={queryFilters.period} responsibleIds={queryFilters.responsibles} />
-					</div>
-					<CommercialOverviewPanel
-						indicators={
-							<div className="grid min-w-0 grid-cols-1 gap-2 sm:grid-cols-2 lg:h-full lg:grid-cols-1 lg:grid-rows-6">
-								<CardStat
-									title="Projetos Criados"
-									icon={<VscDiffAdded className="h-4 w-4" />}
-									current={data?.simplificado.ATUAL.projetosCriados || 0}
-									previous={data?.simplificado.ANTERIOR.projetosCriados || 0}
-									variant="compact"
-								/>
-								<CardStat
-									title="Projetos Ganhos"
-									icon={<BsPatchCheck className="h-4 w-4" />}
-									current={data?.simplificado.ATUAL.projetosGanhos || 0}
-									previous={data?.simplificado.ANTERIOR.projetosGanhos || 0}
-									variant="compact"
-								/>
-								<CardStat
-									title="Projetos Perdidos"
-									icon={<AiOutlineCloseCircle className="h-4 w-4" />}
-									current={data?.simplificado.ATUAL.projetosPerdidos || 0}
-									previous={data?.simplificado.ANTERIOR.projetosPerdidos || 0}
-									lowerIsBetter
-									variant="compact"
-								/>
-								<CardStat
-									title="Potência Vendida"
-									icon={<FaBolt className="h-4 w-4" />}
-									current={data?.simplificado.ATUAL.potenciaVendida || 0}
-									previous={data?.simplificado.ANTERIOR.potenciaVendida || 0}
-									formatCurrent={(value) => `${formatDecimalPlaces(value)}kWp`}
-									formatPrevious={(value) => `${formatDecimalPlaces(value)}kWp`}
-									variant="compact"
-								/>
-								<CardStat
-									title="Total Vendido"
-									icon={<BsFileEarmarkText className="h-4 w-4" />}
-									current={data?.simplificado.ATUAL.totalVendido || 0}
-									previous={data?.simplificado.ANTERIOR.totalVendido || 0}
-									formatCurrent={(value) => `${formatToMoney(value)}`}
-									formatPrevious={(value) => `${formatToMoney(value)}`}
-									variant="compact"
-								/>
-								<CardStat
-									title="Ticket Médio"
-									icon={<BsTicketPerforated className="h-4 w-4" />}
-									current={(data?.simplificado.ATUAL.totalVendido || 0) / (data?.simplificado.ATUAL.projetosGanhos || 0)}
-									previous={(data?.simplificado.ANTERIOR.totalVendido || 0) / (data?.simplificado.ANTERIOR.projetosGanhos || 0)}
-									formatCurrent={(value) => `${formatToMoney(value)}`}
-									formatPrevious={(value) => `${formatToMoney(value)}`}
-									variant="compact"
-								/>
-							</div>
-						}
+				<div className="flex w-full flex-col items-center justify-around gap-2 lg:flex-row">
+					<CardStat
+						title="Projetos Criados"
+						icon={<VscDiffAdded className="h-4 w-4" />}
+						current={data?.simplificado.ATUAL.projetosCriados || 0}
+						previous={data?.simplificado.ANTERIOR.projetosCriados || 0}
+						className="w-full lg:w-1/6"
+					/>
+					<CardStat
+						title="Projetos Ganhos"
+						icon={<BsPatchCheck className="h-4 w-4" />}
+						current={data?.simplificado.ATUAL.projetosGanhos || 0}
+						previous={data?.simplificado.ANTERIOR.projetosGanhos || 0}
+						className="w-full lg:w-1/6"
+					/>
+					<CardStat
+						title="Projetos Perdidos"
+						icon={<AiOutlineCloseCircle className="h-4 w-4" />}
+						current={data?.simplificado.ATUAL.projetosPerdidos || 0}
+						previous={data?.simplificado.ANTERIOR.projetosPerdidos || 0}
+						className="w-full lg:w-1/6"
+						lowerIsBetter={true}
+					/>
+					<CardStat
+						title="Potência Vendida"
+						icon={<FaBolt className="h-4 w-4" />}
+						current={data?.simplificado.ATUAL.potenciaVendida || 0}
+						previous={data?.simplificado.ANTERIOR.potenciaVendida || 0}
+						formatCurrent={(value) => `${formatDecimalPlaces(value)}kWp`}
+						formatPrevious={(value) => `${formatDecimalPlaces(value)}kWp`}
+						className="w-full lg:w-1/6"
+					/>
+					<CardStat
+						title="Total Vendido"
+						icon={<BsFileEarmarkText className="h-4 w-4" />}
+						current={data?.simplificado.ATUAL.totalVendido || 0}
+						previous={data?.simplificado.ANTERIOR.totalVendido || 0}
+						formatCurrent={(value) => `${formatToMoney(value)}`}
+						formatPrevious={(value) => `${formatToMoney(value)}`}
+						className="w-full lg:w-1/6"
+					/>
+					<CardStat
+						title="Ticket Médio"
+						icon={<BsTicketPerforated className="h-4 w-4" />}
+						current={(data?.simplificado.ATUAL.totalVendido || 0) / (data?.simplificado.ATUAL.projetosGanhos || 0)}
+						previous={(data?.simplificado.ANTERIOR.totalVendido || 0) / (data?.simplificado.ANTERIOR.projetosGanhos || 0)}
+						formatCurrent={(value) => `${formatToMoney(value)}`}
+						formatPrevious={(value) => `${formatToMoney(value)}`}
+						className="w-full lg:w-1/6"
 					/>
 				</div>
 
-				<CommercialPipelineBlock after={queryFilters.period.after} before={queryFilters.period.before} responsibleIds={queryFilters.responsibles} />
-
-				<div className="w-full">
-					<GraphData
-						after={queryFilters.period.after}
-						before={queryFilters.period.before}
-						responsibles={queryFilters.responsibles}
-						partners={queryFilters.partners}
-						projectTypes={queryFilters.projectTypes}
-					/>
+				<div className="flex w-full flex-col items-stretch justify-around gap-2 lg:flex-row">
+					<div className="w-full lg:w-[60%] h-full">
+						<GraphData
+							after={queryFilters.period.after}
+							before={queryFilters.period.before}
+							responsibles={queryFilters.responsibles}
+							partners={queryFilters.partners}
+							projectTypes={queryFilters.projectTypes}
+						/>
+					</div>
+					<div className="w-full lg:w-[40%] h-full">
+						<SellersRanking />
+					</div>
 				</div>
 
 				<div className="flex w-full flex-col items-center justify-around gap-2 lg:flex-row">
@@ -338,8 +331,13 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
 						<WinsBlock data={data?.ganhos || []} session={session} />
 					</div>
 				</div>
-				<div className="w-full">
-					<PPSOpenCallsBlock session={session} />
+				<div className="flex w-full flex-col items-stretch gap-2 lg:flex-row">
+					<div className="w-full min-w-0 lg:w-[50%]">
+						<PPSOpenCallsBlock session={session} />
+					</div>
+					<div className="w-full min-w-0 lg:w-[50%]">
+						<OpenActivitiesBlock session={session} period={queryFilters.period} responsibleIds={queryFilters.responsibles} />
+					</div>
 				</div>
 			</div>
 			<UpdateProfileHint session={session} required={!session.user.telefone || !session.user.avatar_url || !session.user.dataNascimento} />
@@ -358,9 +356,8 @@ type CardStatProps = {
 	formatPrevious?: (n: number) => string;
 	lowerIsBetter?: boolean;
 	className?: string;
-	variant?: "default" | "compact";
 };
-function CardStat({ title, icon, current, previous, formatCurrent, formatPrevious, lowerIsBetter, className, variant = "default" }: CardStatProps) {
+function CardStat({ title, icon, current, previous, formatCurrent, formatPrevious, lowerIsBetter, className }: CardStatProps) {
 	const safeCurrent = Number.isFinite(current) ? current : 0;
 	const safePrevious = Number.isFinite(previous) ? previous : 0;
 	const change = (() => {
@@ -386,36 +383,7 @@ function CardStat({ title, icon, current, previous, formatCurrent, formatPreviou
 			{isGood ? <TrendingUp className="h-3 min-h-3 w-3 min-w-3" /> : <TrendingDown className="h-3 min-h-3 w-3 min-w-3" />}
 			{formatDecimalPlaces(changeAbs)}%
 		</div>
-	) : variant === "compact" ? (
-		<span className="rounded-md bg-primary/5 px-1.5 py-0.5 text-[0.65rem] font-semibold text-primary/50">0%</span>
 	) : null;
-
-	if (variant === "compact") {
-		return (
-			<div
-				className={cn(
-					"grid min-h-[58px] w-full grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-lg bg-primary/[0.04] px-3 py-2 transition-colors hover:bg-primary/[0.07]",
-					className,
-				)}
-			>
-				<div className="min-w-0">
-					<div className="flex items-center gap-1.5 text-primary/75">
-						<span className="shrink-0">{icon}</span>
-						<h1 className="truncate text-[0.7rem] font-medium uppercase tracking-tight">{title}</h1>
-					</div>
-					<div className="mt-0.5 truncate text-xl font-bold leading-tight text-[#15599a] dark:text-[#fead61]" title={currentLabel}>
-						{currentLabel}
-					</div>
-				</div>
-				<div className="flex shrink-0 flex-col items-end gap-1">
-					{changeBadge}
-					<p className="max-w-48 truncate text-[0.65rem] tracking-tight text-primary/55" title={`Mês anterior: ${previousLabel}`}>
-						vs. {previousLabel}
-					</p>
-				</div>
-			</div>
-		);
-	}
 
 	return (
 		<div className={cn("bg-card border-primary/20 flex w-full flex-col gap-1 rounded-xl border px-3 py-4 shadow-xs", className)}>

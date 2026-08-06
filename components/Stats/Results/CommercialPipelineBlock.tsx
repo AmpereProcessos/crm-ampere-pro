@@ -10,6 +10,7 @@ type ViewMode = 'flow' | 'funnel' | 'bars';
 type Stage = NonNullable<ReturnType<typeof useCommercialPipeline>['data']>['funnel'][number];
 
 const STAGE_WIDTH = 180;
+const BAR_COLUMN_WIDTH = 192; // 180px de coluna + 12px do gap
 
 export default function CommercialPipelineBlock({
   after,
@@ -247,6 +248,7 @@ function PipelineChart({ stages, variant }: { stages: Stage[]; variant: Exclude<
               <Metric label='Da etapa anterior' value={hoveredIndex === 0 ? '100%' : formatPercent(hoveredConversion?.fromPrevious ?? 0)} />
               {hovered.averageHours !== null ? <Metric label='Tempo médio' value={formatHours(hovered.averageHours)} /> : null}
             </div>
+            <LossReasons stage={hovered} />
           </div>
         ) : null}
       </div>
@@ -256,13 +258,25 @@ function PipelineChart({ stages, variant }: { stages: Stage[]; variant: Exclude<
 
 function PipelineBars({ stages }: { stages: Stage[] }) {
   const max = Math.max(...stages.map((stage) => stage.inStageCount), 1);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const hovered = hoveredIndex === null ? null : stages[hoveredIndex];
+  const barsWidth = stages.length * BAR_COLUMN_WIDTH;
   return (
     <div className='w-full overflow-x-auto pb-1'>
-      <div className='flex min-h-[230px] items-end gap-3' style={{ minWidth: 'max-content' }}>
+      <div className='relative flex min-h-[230px] items-end gap-3' style={{ minWidth: 'max-content' }}>
         {stages.map((stage, index) => {
           const heightPercent = (stage.inStageCount / max) * 100;
           return (
-            <div key={stage.stageId} className='flex w-[180px] shrink-0 flex-col items-center gap-2'>
+            <button
+              type='button'
+              key={stage.stageId}
+              onMouseEnter={() => setHoveredIndex(index)}
+              onMouseLeave={() => setHoveredIndex(null)}
+              onFocus={() => setHoveredIndex(index)}
+              onBlur={() => setHoveredIndex(null)}
+              aria-label={`Inspecionar estágio ${stage.stageName}`}
+              className='flex w-[180px] shrink-0 flex-col items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset'
+            >
               <div className='relative flex w-full flex-col items-center'>
                 <div className='mb-1 flex flex-col items-center rounded-md border border-primary/15 bg-card px-2 py-1 shadow-xs'>
                   <strong className='text-sm leading-none'>{formatPercent(stage.absoluteConversion)}</strong>
@@ -281,10 +295,45 @@ function PipelineBars({ stages }: { stages: Stage[] }) {
               </div>
               <span className='w-full text-center text-[0.65rem] font-semibold uppercase leading-tight'>{stage.stageName}</span>
               {index > 0 ? <span className='text-[0.6rem] text-primary/50'>{formatPercent(stage.stageToStageConversion)} do anterior</span> : null}
-            </div>
+            </button>
           );
         })}
+        {hovered && hoveredIndex !== null && hovered.lostCount > 0 ? (
+          <div
+            className='pointer-events-none absolute top-0 z-10 w-64 rounded-xl bg-foreground p-3.5 text-background shadow-xl'
+            style={{ left: Math.min(hoveredIndex * BAR_COLUMN_WIDTH, Math.max(barsWidth - 256, 0)) }}
+          >
+            <p className='truncate text-xs font-semibold'>{hovered.stageName}</p>
+            <LossReasons stage={hovered} />
+          </div>
+        ) : null}
       </div>
+    </div>
+  );
+}
+
+function LossReasons({ stage }: { stage: Stage }) {
+  if (stage.lostCount === 0) {
+    return (
+      <p className='mt-3 border-t border-background/15 pt-3 text-[0.65rem] text-background/55'>Nenhuma perda registrada nesta etapa no período.</p>
+    );
+  }
+  return (
+    <div className='mt-3 border-t border-background/15 pt-3'>
+      <div className='flex items-baseline justify-between gap-2'>
+        <span className='text-[0.6rem] uppercase tracking-wide text-background/55'>Motivos de perda</span>
+        <strong className='text-[0.65rem] text-rose-300'>{stage.lostCount.toLocaleString('pt-BR')} perdidas</strong>
+      </div>
+      <ul className='mt-1.5 flex flex-col gap-1'>
+        {stage.lossReasons.map((lossReason) => (
+          <li key={lossReason.reason} className='flex items-baseline justify-between gap-2 text-[0.65rem]'>
+            <span className='truncate'>{lossReason.reason}</span>
+            <span className='shrink-0 tabular-nums text-background/60'>
+              {lossReason.count.toLocaleString('pt-BR')} · {formatPercent(lossReason.percentage)}
+            </span>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
