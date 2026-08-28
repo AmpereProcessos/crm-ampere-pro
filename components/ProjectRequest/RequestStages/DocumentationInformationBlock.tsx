@@ -2,7 +2,7 @@ import DocumentationInput from "@/components/Inputs/DocumentationInput";
 import { handleDocumentationDefinition } from "@/utils/project-documentation/methods";
 import { useFileReferencesByOpportunityId } from "@/utils/queries/file-references";
 import { useProjectTypeById } from "@/utils/queries/project-types";
-import { TProject } from "@/utils/schemas/project.schema";
+import { TProject } from "@/utils/schemas/crm-project.schema";
 import React from "react";
 import { TDocumentationHolder } from "../NewProjectRequest";
 

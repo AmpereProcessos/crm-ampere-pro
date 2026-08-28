@@ -124,7 +124,7 @@ function Stats({ closeMenu }: StatsProps) {
 								<h1 className="text-sm font-medium uppercase tracking-tight">SOLICITAÇÕES POR STATUS</h1>
 							</div>
 							<div className="mt-2 flex grow flex-wrap items-center justify-around gap-2">
-								{stats.byStatus.map((byStatus, index) => (
+								{stats.byStatus.map((byStatus: { status: string; value: number }, index: number) => (
 									<p
 										key={index}
 										className={`rounded-md px-2 py-1 text-[0.8rem] text-primary-foreground ${StatusColors[byStatus.status as keyof typeof StatusColors]}`}
@@ -140,7 +140,7 @@ function Stats({ closeMenu }: StatsProps) {
 								<h1 className="text-sm font-medium uppercase tracking-tight">SOLICITAÇÕES POR TIPO</h1>
 							</div>
 							<div className="mt-2 flex grow flex-wrap items-center justify-around gap-2">
-								{stats.byType.map((byType, index) => (
+								{stats.byType.map((byType: { type: string; created: number; concluded: number; avgTimeTillConclusion: number }, index: number) => (
 									<div key={index} className="flex flex-col rounded-md border border-primary/50 px-2 py-1">
 										<h1 className="text-[0.8rem] text-primary/80">{byType.type}</h1>
 										<div className="flex w-full items-center justify-around gap-2">
@@ -167,7 +167,7 @@ function Stats({ closeMenu }: StatsProps) {
 								<h1 className="text-sm font-medium uppercase tracking-tight">SOLICITAÇÕES POR REQUERENTE</h1>
 							</div>
 							<div className="mt-2 flex grow flex-wrap items-center justify-around gap-2">
-								{stats.byApplicant.map((byApplicant, index) => (
+								{stats.byApplicant.map((byApplicant: { applicant: string; applicantAvatarUrl?: string | null; analysis: number }, index: number) => (
 									<div key={index} className="flex items-center gap-2 rounded-sm border border-cyan-500 px-2 py-1">
 										<div className="flex items-center gap-1">
 											<Avatar width={20} height={20} url={byApplicant.applicantAvatarUrl || undefined} fallback={formatNameAsInitials(byApplicant.applicant)} />

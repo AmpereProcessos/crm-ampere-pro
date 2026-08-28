@@ -7,7 +7,6 @@ import { TUser } from "@/utils/schemas/user.schema";
 import createHttpError from "http-errors";
 import type { Collection, Filter } from "mongodb";
 import type { NextApiHandler } from "next";
-import type { TResultsExportsItem } from "./stats/comercial-results/results-export";
 import type { TProposal } from "@/utils/schemas/proposal.schema";
 
 type TResultsExportsOpportunity = {
@@ -27,6 +26,8 @@ type TResultsExportsOpportunity = {
 	motivoPerda: TOpportunity["perda"]["descricaoMotivo"];
 	dataInsercao: TOpportunity["dataInsercao"];
 };
+
+type TResultsExportsItem = Record<string, string | number | null | undefined>;
 
 type GetResponse = any;
 const getManualExportDataRoute: NextApiHandler<GetResponse> = async (req, res) => {

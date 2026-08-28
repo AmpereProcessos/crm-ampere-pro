@@ -65,7 +65,12 @@ const createProposalPersonalized: NextApiHandler<PostResponse> = async (req, res
 		const tag = opportunityWithClient?.nome.replaceAll("/", "").replaceAll("?", "").replaceAll("&", "");
 		const template = ProposalTemplates.find((t) => t.idAnvil === idAnvil) || ProposalTemplates[0];
 		const anvilTemplateData = getTemplateData({
-			opportunity: opportunityWithClient,
+				opportunity: {
+					...opportunityWithClient,
+					cliente: { ...opportunityWithClient.cliente, _id: opportunityWithClient.idCliente },
+					camposPersonalizados: {},
+				automacoesHabilitadas: true,
+			},
 			proposal: { _id: insertedId, ...proposal },
 			template: template.value as (typeof ProposeTemplateOptions)[number],
 		});
@@ -244,7 +249,12 @@ const updateProposalPersonalized: NextApiHandler<PutResponse> = async (req, res)
 		if (idAnvil) {
 			const template = ProposalTemplates.find((t) => t.idAnvil === idAnvil) || ProposalTemplates[0];
 			const anvilTemplateData = getTemplateData({
-				opportunity: { ...opportunity, cliente: client },
+				opportunity: {
+					...opportunity,
+					cliente: client,
+					camposPersonalizados: {},
+					automacoesHabilitadas: true,
+				},
 				proposal: { _id: id, ...proposal },
 				template: template.value as (typeof ProposeTemplateOptions)[number],
 			});

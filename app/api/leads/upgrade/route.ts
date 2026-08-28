@@ -70,6 +70,7 @@ async function upgrateLead({ input, session }: { input: TUpgrateLeadInput; sessi
 				},
 				dataInsercao: new Date().toISOString(),
 				idParceiro: session.user.idParceiro,
+				camposPersonalizados: {},
 			},
 			partnerId: session.user.idParceiro,
 		});
@@ -135,6 +136,8 @@ async function upgrateLead({ input, session }: { input: TUpgrateLeadInput; sessi
 		ganho: {},
 		perda: {},
 		instalacao: {},
+		camposPersonalizados: {},
+		automacoesHabilitadas: true,
 	};
 	const insertedOpportunityResponse = await insertOpportunity({
 		collection: opportunitiesCollection,

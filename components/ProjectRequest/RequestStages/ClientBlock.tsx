@@ -12,7 +12,7 @@ import { getCEPInfo } from "@/utils/methods/address";
 import { updateClient } from "@/utils/mutations/clients";
 import { useClientById } from "@/utils/queries/clients";
 import { TClientDTO } from "@/utils/schemas/client.schema";
-import { TProject } from "@/utils/schemas/project.schema";
+import { TProject } from "@/utils/schemas/crm-project.schema";
 import { CustomersAcquisitionChannels, MaritalStatus } from "@/utils/select-options";
 import { useQueryClient } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
@@ -49,6 +49,7 @@ function ClientBlock({ infoHolder, setInfoHolder, moveToNextStage, moveToPreviou
 		ondeTrabalha: null,
 		estadoCivil: null,
 		canalAquisicao: "",
+		camposPersonalizados: {},
 		idMarketing: null,
 		indicador: {
 			nome: "",

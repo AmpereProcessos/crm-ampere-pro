@@ -958,6 +958,7 @@ export const ProjectSchema = z.object({
     valorProjeto: z.number(),
   }),
 
+  identificador: z.string().optional().nullable(),
   tipoDeServico: z.string(),
   visitaTecnica: z.object({
     amperagem: z.string().optional().nullable(),

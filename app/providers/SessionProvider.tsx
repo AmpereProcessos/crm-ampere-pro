@@ -5,22 +5,11 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from "
 
 type SessionStatus = "loading" | "authenticated" | "unauthenticated";
 
-type SessionContextType =
-	| {
-			session: TUserSession;
-			status: "authenticated";
-			refresh: () => Promise<void>;
-	  }
-	| {
-			session: null;
-			status: "loading";
-			refresh: () => Promise<void>;
-	  }
-	| {
-			session: null;
-			status: "unauthenticated";
-			refresh: () => Promise<void>;
-	  };
+type SessionContextType = {
+	session: TUserSession | null;
+	status: SessionStatus;
+	refresh: () => Promise<void>;
+};
 
 const SessionContext = createContext<SessionContextType | undefined>(undefined);
 

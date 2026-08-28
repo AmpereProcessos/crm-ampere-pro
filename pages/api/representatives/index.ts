@@ -3,6 +3,7 @@ import { IRepresentative } from "../../../utils/models";
 import { apiHandler, validateAuthentication } from "@/utils/api";
 import connectToDatabase from "@/services/mongodb/crm-db-connection";
 import createHttpError from "http-errors";
+import { ObjectId } from "mongodb";
 
 type GetResponse = {
 	data: IRepresentative[] | IRepresentative;
@@ -18,16 +19,16 @@ const getRepresentatives: NextApiHandler<GetResponse> = async (req, res) => {
 			.aggregate([
 				{
 					$match: {
-						_id: new Object(id),
+						_id: new ObjectId(id),
 						"permissoes.clientes.serRepresentante": true,
 					},
 				},
 				{ $project: { _id: 1, nome: 1 } },
 			])
-			.toArray();
+			.toArray() as Array<{ _id: ObjectId; nome: string }>;
 		if (!dbResponse[0]) throw new createHttpError.NotFound("Nenhum representante encontrado com esse ID.");
 		const representative = {
-			id: dbResponse[0]._id,
+			id: dbResponse[0]._id.toString(),
 			nome: dbResponse[0].nome,
 		};
 		res.status(200).json({ data: representative });
@@ -41,10 +42,10 @@ const getRepresentatives: NextApiHandler<GetResponse> = async (req, res) => {
 				},
 				{ $project: { _id: 1, nome: 1 } },
 			])
-			.toArray();
-		const representatives = dbResponse.map((rep: IRepresentative) => {
+			.toArray() as Array<{ _id: ObjectId; nome: string }>;
+		const representatives = dbResponse.map((rep) => {
 			return {
-				id: rep._id,
+				id: rep._id.toString(),
 				nome: rep.nome,
 			};
 		});

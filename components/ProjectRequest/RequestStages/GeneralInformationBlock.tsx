@@ -5,7 +5,7 @@ import type { TUserSession } from "@/lib/auth/session";
 import { stateCities } from "@/utils/estados_cidades";
 import { formatToCEP, formatToPhone } from "@/utils/methods/formatting";
 import { getCEPInfo } from "@/utils/methods/address";
-import { TProject } from "@/utils/schemas/project.schema";
+import { TProject } from "@/utils/schemas/crm-project.schema";
 import { ComercialSegments, SigningForms } from "@/utils/select-options";
 import React from "react";
 import toast from "react-hot-toast";

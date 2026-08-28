@@ -2,7 +2,7 @@ import TextareaInput from "@/components/Inputs/TextareaInput";
 import Avatar from "@/components/utils/Avatar";
 import type { TUserSession } from "@/lib/auth/session";
 import { formatDateAsLocale, formatNameAsInitials } from "@/lib/methods/formatting";
-import { TChangesControl, TProject } from "@/utils/schemas/project.schema";
+import { TChangesControl, TProject } from "@/utils/schemas/crm-project.schema";
 import { ProjectObservationTopics } from "@/utils/select-options";
 import React, { useState } from "react";
 import toast from "react-hot-toast";

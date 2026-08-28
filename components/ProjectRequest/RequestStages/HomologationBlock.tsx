@@ -2,7 +2,7 @@ import ErrorComponent from "@/components/utils/ErrorComponent";
 import LoadingComponent from "@/components/utils/LoadingComponent";
 import type { TUserSession } from "@/lib/auth/session";
 import { useOpportunityHomologations } from "@/utils/queries/homologations";
-import { TProject } from "@/utils/schemas/project.schema";
+import { TProject } from "@/utils/schemas/crm-project.schema";
 import React from "react";
 import { TDocumentationHolder } from "../NewProjectRequest";
 import ActiveHomologation from "./Utils/ActiveHomologation";

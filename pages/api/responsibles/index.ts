@@ -33,10 +33,10 @@ const getResponsibles: NextApiHandler<GetResponse> = async (req, res) => {
 					},
 				},
 			])
-			.toArray();
+			.toArray() as Array<{ _id: ObjectId; nome: string; avatar_url?: string; telefone?: string; email?: string }>;
 		if (!dbResponse[0]) throw new createHttpError.NotFound("Nenhum responsável encontrado com esse ID.");
 		const responsible = {
-			id: dbResponse[0]._id,
+			id: dbResponse[0]._id.toString(),
 			nome: dbResponse[0].nome,
 			avatar_url: dbResponse[0].avatar_url,
 			telefone: dbResponse[0].telefone,
@@ -56,10 +56,10 @@ const getResponsibles: NextApiHandler<GetResponse> = async (req, res) => {
 					$project: { _id: 1, nome: 1, avatar_url: 1, telefone: 1, email: 1 },
 				},
 			])
-			.toArray();
-		const responsibles = dbResponse.map((resp: IResponsible) => {
+			.toArray() as Array<{ _id: ObjectId; nome: string; avatar_url?: string; telefone?: string; email?: string }>;
+		const responsibles = dbResponse.map((resp) => {
 			return {
-				id: resp._id,
+				id: resp._id.toString(),
 				nome: resp.nome,
 				avatar_url: resp.avatar_url,
 				telefone: resp.telefone,

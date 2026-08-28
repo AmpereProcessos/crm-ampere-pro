@@ -48,6 +48,7 @@ function NewClient({ session, partnerId, closeModal, callbacks }: NewClientModal
 				profissao: null,
 				estadoCivil: null,
 				canalAquisicao: "",
+				camposPersonalizados: {},
 				idMarketing: null,
 				indicador: {
 					nome: "",

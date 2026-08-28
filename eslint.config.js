@@ -1,16 +1,9 @@
-import next from "eslint-config-next";
 import nextCoreWebVitals from "eslint-config-next/core-web-vitals";
 import nextTypescript from "eslint-config-next/typescript";
 import js from "@eslint/js";
-import typescript from "@typescript-eslint/eslint-plugin";
 import typescriptParser from "@typescript-eslint/parser";
-import jsxA11y from "eslint-plugin-jsx-a11y";
-import prettier from "eslint-plugin-prettier";
-import react from "eslint-plugin-react";
-import reactHooks from "eslint-plugin-react-hooks";
 
 export default [
-    ...next,
     ...nextCoreWebVitals,
     ...nextTypescript,
     js.configs.recommended,
@@ -41,11 +34,6 @@ export default [
 			},
 		},
 		plugins: {
-			"@typescript-eslint": typescript,
-			react: react,
-			"react-hooks": reactHooks,
-			"jsx-a11y": jsxA11y,
-			prettier: prettier,
 		},
 		settings: {
 			react: {
@@ -53,15 +41,12 @@ export default [
 			},
 		},
 		rules: {
-			// Prettier integration
-			"prettier/prettier": "error",
-
 			// TypeScript specific rules
 			"@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
 			"@typescript-eslint/no-explicit-any": "warn",
 			"@typescript-eslint/no-non-null-assertion": "warn",
 			"@typescript-eslint/prefer-nullish-coalescing": "error",
-			"@typescript-eslint/prefer-optional-chaining": "error",
+			"@typescript-eslint/prefer-optional-chain": "error",
 			"@typescript-eslint/no-unnecessary-type-assertion": "error",
 			"@typescript-eslint/prefer-as-const": "error",
 			"@typescript-eslint/consistent-type-imports": ["error", { prefer: "type-imports" }],
@@ -173,6 +158,6 @@ export default [
 		},
 	},
     {
-		ignores: ["node_modules/**", ".next/**", "out/**", "dist/**", "build/**", ".git/**", "coverage/**", ".nyc_output/**", "public/**"],
+		ignores: ["node_modules/**", ".next/**", ".claude/**", "out/**", "dist/**", "build/**", ".git/**", "coverage/**", ".nyc_output/**", "public/**"],
 	}
 ];

@@ -13,13 +13,13 @@ type SelectOption<T> = {
 	url?: string;
 };
 
-type MultipleSelectWithImagesProps<T> = {
+type MultipleSelectWithImagesProps<T extends string | number> = {
 	width?: string;
 	label: string;
 	labelClassName?: string;
 	holderClassName?: string;
 	showLabel?: boolean;
-	selected: (string | number)[] | null;
+	selected: T[] | null;
 	editable?: boolean;
 	resetOptionLabel: string;
 	options: SelectOption<T>[] | null;
@@ -27,7 +27,7 @@ type MultipleSelectWithImagesProps<T> = {
 	onReset: () => void;
 };
 
-function MultipleSelectWithImages<T>({
+function MultipleSelectWithImages<T extends string | number>({
 	width,
 	label,
 	labelClassName,
@@ -40,7 +40,7 @@ function MultipleSelectWithImages<T>({
 	handleChange,
 	onReset,
 }: MultipleSelectWithImagesProps<T>) {
-	function getValueID(selected: (string | number)[] | null) {
+	function getValueID(selected: T[] | null) {
 		if (options && selected) {
 			const filteredOptions = options?.filter((option) => selected.includes(option.value));
 			if (filteredOptions) {
@@ -63,17 +63,15 @@ function MultipleSelectWithImages<T>({
 	const inputIdentifier = label.toLowerCase().replace(" ", "_");
 
 	function handleSelect(id: string | number, item: T) {
-		let itemsSelected: SelectOption<T>[] | undefined;
+		let itemsSelected: T[] | undefined;
 		const ids = selectedIds ? [...selectedIds] : [];
 		if (!ids?.includes(id)) {
 			ids.push(id);
-			itemsSelected = options?.filter((option) => ids?.includes(option.id));
-			itemsSelected = itemsSelected?.map((item) => item.value);
+			itemsSelected = options?.filter((option) => ids?.includes(option.id)).map((item) => item.value);
 		} else {
 			const index = ids.indexOf(id);
 			ids.splice(index, 1);
-			itemsSelected = options?.filter((option) => ids?.includes(option.id));
-			itemsSelected = itemsSelected?.map((item) => item.value);
+			itemsSelected = options?.filter((option) => ids?.includes(option.id)).map((item) => item.value);
 		}
 		handleChange(itemsSelected as T[]);
 		setSelectedIds(ids);

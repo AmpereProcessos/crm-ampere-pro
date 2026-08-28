@@ -52,6 +52,7 @@ function EditAutomation({ automationId, session, closeModal, callbacks }: EditAu
 				execucoesContagemTotal: 0,
 				execucoesContagemTotalSucessos: 0,
 				execucoesContagemTotalFalhas: 0,
+				conversoesContagemTotalInteracaoMensagem: 0,
 				autor: {
 					id: session.user.id,
 					nome: session.user.nome,

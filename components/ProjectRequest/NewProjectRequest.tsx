@@ -2,7 +2,7 @@ import type { TUserSession } from "@/lib/auth/session";
 import { useMutationWithFeedback } from "@/utils/mutations/general-hook";
 import { TDocumentationConditionData } from "@/utils/project-documentation/helpers";
 import { TOpportunityDTOWithClient } from "@/utils/schemas/opportunity.schema";
-import { TProject } from "@/utils/schemas/project.schema";
+import { TProject } from "@/utils/schemas/crm-project.schema";
 import { TProposalDTO } from "@/utils/schemas/proposal.schema";
 import { useQueryClient } from "@tanstack/react-query";
 import axios from "axios";

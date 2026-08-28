@@ -6,7 +6,7 @@ import type { TUserSession } from "@/lib/auth/session";
 import { formatToCPForCNPJ, formatToPhone } from "@/utils/methods/formatting";
 import { usePaymentMethods } from "@/utils/queries/payment-methods";
 import { TClientDTO } from "@/utils/schemas/client.schema";
-import { TProject } from "@/utils/schemas/project.schema";
+import { TProject } from "@/utils/schemas/crm-project.schema";
 import React from "react";
 import toast from "react-hot-toast";
 import ActivePaymentMethod from "./Utils/ActivePaymentMethod";

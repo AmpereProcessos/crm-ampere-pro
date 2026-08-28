@@ -51,14 +51,14 @@ function renderProposalPreview({
 			</div>
 		);
 	if (opportunity.categoriaVenda === "KIT" && isSolarSystemSale)
-		return <ProposalWithKitUFVTemplate proposal={proposal} opportunity={opportunity} partner={partner} />;
+		return <ProposalWithKitUFVTemplate proposalDocumentRef={undefined} proposal={proposal} opportunity={opportunity} partner={partner} />;
 
 	if (opportunity.categoriaVenda === "KIT" && isGeneralKitSale)
-		return <ProposalWithKitTemplate proposal={proposal} opportunity={opportunity} partner={partner} />;
+		return <ProposalWithKitTemplate proposalDocumentRef={undefined} proposal={proposal} opportunity={opportunity} partner={partner} />;
 
-	if (opportunity.categoriaVenda === "PLANO") return <ProposalWithPlanTemplate proposal={proposal} opportunity={opportunity} partner={partner} />;
-	if (opportunity.categoriaVenda === "PRODUTOS") return <ProposalWithProductsTemplate proposal={proposal} opportunity={opportunity} partner={partner} />;
-	if (opportunity.categoriaVenda === "SERVIÇOS") return <ProposalWithServicesTemplate proposal={proposal} opportunity={opportunity} partner={partner} />;
+	if (opportunity.categoriaVenda === "PLANO") return <ProposalWithPlanTemplate proposalDocumentRef={undefined} proposal={proposal} opportunity={opportunity} partner={partner} />;
+	if (opportunity.categoriaVenda === "PRODUTOS") return <ProposalWithProductsTemplate proposalDocumentRef={undefined} proposal={proposal} opportunity={opportunity} partner={partner} />;
+	if (opportunity.categoriaVenda === "SERVIÇOS") return <ProposalWithServicesTemplate proposalDocumentRef={undefined} proposal={proposal} opportunity={opportunity} partner={partner} />;
 }
 
 type ProposalProps = {

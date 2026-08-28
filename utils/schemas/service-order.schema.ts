@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { AuthorSchema } from "./user.schema";
-import { TProjectDTO } from "./project.schema";
+import { TProjectDTO } from "./crm-project.schema";
 import { PricingMethodConditionTypes } from "./pricing-method.schema";
 import { TTechnicalAnalysisDTO } from "./technical-analysis.schema";
 

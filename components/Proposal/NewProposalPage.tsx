@@ -35,6 +35,7 @@ function NewProposalPage({ session, opportunityId }: NewProposalPageprops) {
 		idCliente: "",
 		idMetodologiaPrecificacao: "",
 		valor: 0,
+		camposPersonalizados: {},
 		premissas: {
 			consumoEnergiaMensal: null,
 			fatorSimultaneidade: null,

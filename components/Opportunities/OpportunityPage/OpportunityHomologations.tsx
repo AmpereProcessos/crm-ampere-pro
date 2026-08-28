@@ -46,7 +46,12 @@ function OpportunityHomologations({ opportunity, session }: OpportunityHomologat
 			) : null}
 
 			{newHomologationModalIsOpen ? (
-				<NewHomologation opportunity={opportunity} session={session} closeModal={() => setNewHomologationModalIsOpen(false)} />
+				<NewHomologation
+					opportunity={opportunity}
+					session={session}
+					affectedQueryKey={["opportunity-homologations", opportunity._id]}
+					closeModal={() => setNewHomologationModalIsOpen(false)}
+				/>
 			) : null}
 		</div>
 	);

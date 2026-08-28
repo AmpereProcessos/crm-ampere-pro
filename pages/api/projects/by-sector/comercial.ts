@@ -2,7 +2,7 @@ import { getProductById } from "@/repositories/products/queries";
 import { getProjectByIdWithReferences, getProjects } from "@/repositories/projects/queries";
 import connectToDatabase from "@/services/mongodb/crm-db-connection";
 import { apiHandler, validateAuthorization } from "@/utils/api";
-import { TProject } from "@/utils/schemas/project.schema";
+import { TProject } from "@/utils/schemas/crm-project.schema";
 import createHttpError from "http-errors";
 import { Collection, Filter, ObjectId } from "mongodb";
 import { NextApiHandler } from "next";
