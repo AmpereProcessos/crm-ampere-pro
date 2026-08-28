@@ -21,6 +21,12 @@ const CommercialPipelineQuerySchema = z.object({
 		.transform((value) => value?.split(",").filter(Boolean) ?? []),
 });
 
+export type TCommercialPipelineLossReason = {
+	reason: string;
+	count: number;
+	percentage: number;
+};
+
 export type TCommercialPipelineStage = {
 	stageId: string;
 	stageName: string;
@@ -33,7 +39,12 @@ export type TCommercialPipelineStage = {
 	absoluteConversion: number;
 	stageToStageConversion: number;
 	averageHours: number | null;
+	lostCount: number;
+	lossReasons: TCommercialPipelineLossReason[];
 };
+
+const UNDEFINED_LOSS_REASON = "NÃO DEFINIDO";
+const MAX_LOSS_REASONS_PER_STAGE = 5;
 
 async function getCommercialPipeline(request: NextRequest) {
 	const { user } = await getValidCurrentSessionUncached();
@@ -74,6 +85,7 @@ async function getCommercialPipeline(request: NextRequest) {
 		_id: 1,
 		"ganho.data": 1,
 		"perda.data": 1,
+		"perda.descricaoMotivo": 1,
 	};
 	const [funnel, opportunities] = await Promise.all([
 		funnelsCollection.findOne({ _id: new ObjectId(input.funnelId), ...partnerFilter }),
@@ -88,6 +100,7 @@ async function getCommercialPipeline(request: NextRequest) {
 			{
 				wonAt: opportunity.ganho?.data ?? null,
 				lostAt: opportunity.perda?.data ?? null,
+				lossReason: opportunity.perda?.descricaoMotivo?.trim() || UNDEFINED_LOSS_REASON,
 			},
 		]),
 	);
@@ -135,6 +148,28 @@ async function getCommercialPipeline(request: NextRequest) {
 		}
 	}
 
+	const lostOpportunitiesByStage = new Map(stages.map((stage) => [stage.id, new Set<string>()]));
+	const lossReasonsByStage = new Map(stages.map((stage) => [stage.id, new Map<string, number>()]));
+	const attributedLosses = new Set<string>();
+
+	for (const reference of references) {
+		if (attributedLosses.has(reference.idOportunidade)) continue;
+		const status = opportunityStatuses.get(reference.idOportunidade);
+		if (!status?.lostAt || !isWithinPeriod(status.lostAt, input.after, input.before)) continue;
+		// A oportunidade é atribuída à última etapa em que entrou até o momento da perda.
+		let stageAtLoss: { id: string; entry: string } | null = null;
+		for (const [stageId, interval] of Object.entries(reference.estagios)) {
+			const stage = stages.find((candidate) => candidate.id === String(stageId));
+			if (!stage || !interval?.entrada || dayjs(interval.entrada).isAfter(dayjs(status.lostAt))) continue;
+			if (!stageAtLoss || dayjs(interval.entrada).isAfter(dayjs(stageAtLoss.entry))) stageAtLoss = { id: stage.id, entry: interval.entrada };
+		}
+		if (!stageAtLoss) continue;
+		attributedLosses.add(reference.idOportunidade);
+		lostOpportunitiesByStage.get(stageAtLoss.id)?.add(reference.idOportunidade);
+		const reasons = lossReasonsByStage.get(stageAtLoss.id);
+		if (reasons) reasons.set(status.lossReason, (reasons.get(status.lossReason) ?? 0) + 1);
+	}
+
 	const firstStageCount = stages[0] ? (inStageCounts.get(stages[0].id)?.size ?? 0) : 0;
 	const reachedOrders = [...maxReachedByOpportunity.values()];
 	const result: TCommercialPipelineStage[] = stages.map((stage, index) => {
@@ -142,6 +177,11 @@ async function getCommercialPipeline(request: NextRequest) {
 		const passedThroughCount = passedThroughCounts.get(stage.id)?.size ?? 0;
 		const previousCount = index > 0 ? (inStageCounts.get(stages[index - 1]?.id ?? "")?.size ?? 0) : inStageCount;
 		const stageDurations = durations.get(stage.id) ?? [];
+		const lostCount = lostOpportunitiesByStage.get(stage.id)?.size ?? 0;
+		const lossReasons = [...(lossReasonsByStage.get(stage.id)?.entries() ?? [])]
+			.map(([reason, count]) => ({ reason, count, percentage: roundPercent(lostCount > 0 ? (count / lostCount) * 100 : 0) }))
+			.sort((first, second) => second.count - first.count || first.reason.localeCompare(second.reason))
+			.slice(0, MAX_LOSS_REASONS_PER_STAGE);
 		return {
 			stageId: stage.id,
 			stageName: stage.name,
@@ -154,6 +194,8 @@ async function getCommercialPipeline(request: NextRequest) {
 			absoluteConversion: roundPercent(firstStageCount > 0 ? (inStageCount / firstStageCount) * 100 : 0),
 			stageToStageConversion: roundPercent(previousCount > 0 ? (inStageCount / previousCount) * 100 : 0),
 			averageHours: stageDurations.length > 0 ? stageDurations.reduce((total, value) => total + value, 0) / stageDurations.length : null,
+			lostCount,
+			lossReasons,
 		};
 	});
 
@@ -167,6 +209,11 @@ async function getCommercialPipeline(request: NextRequest) {
 
 function overlapsPeriod(entry: string, exit: string | null | undefined, after: string, before: string) {
 	return entry <= before && (!exit || exit >= after);
+}
+
+function isWithinPeriod(date: string, after: string, before: string) {
+	const reference = dayjs(date);
+	return !reference.isBefore(dayjs(after)) && !reference.isAfter(dayjs(before));
 }
 
 function isStageActiveAt(entry: string, exit: string | null | undefined, at: string) {

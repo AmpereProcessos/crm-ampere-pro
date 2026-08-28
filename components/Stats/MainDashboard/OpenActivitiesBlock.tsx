@@ -126,7 +126,7 @@ function OpenActivitiesBlock({ session, period, responsibleIds: parentResponsibl
 	];
 
 	return (
-		<div className="flex h-[650px] w-full flex-col gap-3 rounded-xl border border-primary/20 bg-card px-3 py-4 shadow-xs lg:h-[500px]">
+		<div className="flex h-full min-h-[650px] w-full flex-col gap-3 rounded-xl border border-primary/20 bg-card px-3 py-4 shadow-xs lg:min-h-[500px]">
 			<div className="flex flex-wrap items-center justify-between gap-2">
 				<div>
 					<h1 className="text-xs font-semibold uppercase tracking-tight">Atividades em aberto</h1>

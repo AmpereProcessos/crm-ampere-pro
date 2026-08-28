@@ -6,7 +6,7 @@ import { BsDownload } from "react-icons/bs";
 import DateInput from "@/components/Inputs/DateInput";
 import MultipleSelectInput from "@/components/Inputs/MultipleSelectInput";
 import EditPromoter from "@/components/Modals/EditPromoter";
-import InProgressResults from "@/components/Stats/Results/InProgress";
+import CommercialPipelineBlock from "@/components/Stats/Results/CommercialPipelineBlock";
 import OverallResults from "@/components/Stats/Results/Overall";
 
 import RegionResults from "@/components/Stats/Results/Region";
@@ -210,12 +210,10 @@ function ManagementComercialResults({ session }: ComercialResultsProps) {
 					partners={queryFilters.partners}
 					projectTypes={queryFilters.projectTypes}
 				/>
-				<InProgressResults
+				<CommercialPipelineBlock
 					after={queryFilters.period.after}
 					before={queryFilters.period.before}
-					responsibles={queryFilters.responsibles}
-					partners={queryFilters.partners}
-					projectTypes={queryFilters.projectTypes}
+					responsibleIds={queryFilters.responsibles}
 				/>
 				<SalesTeamResults
 					after={queryFilters.period.after}
