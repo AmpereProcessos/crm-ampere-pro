@@ -11,7 +11,41 @@ import connectToDatabase from "@/services/mongodb/crm-db-connection";
 import type { TPartner } from "@/utils/schemas/partner.schema";
 import type { TSession } from "@/utils/schemas/session.schema";
 import type { TUser } from "@/utils/schemas/user.schema";
-import { ObjectId } from "mongodb";
+import { MongoError, MongoNetworkError, MongoServerSelectionError, ObjectId } from "mongodb";
+
+const SESSION_LOOKUP_RETRY_ATTEMPTS = 2;
+
+function isRetryableMongoError(error: unknown) {
+	return (
+		error instanceof MongoNetworkError ||
+		error instanceof MongoServerSelectionError ||
+		(error instanceof MongoError && (error.hasErrorLabel("RetryableError") || error.hasErrorLabel("SystemOverloadedError")))
+	);
+}
+
+async function retryTransientMongoOperation<T>(operation: () => Promise<T>): Promise<T> {
+	for (let attempt = 1; attempt <= SESSION_LOOKUP_RETRY_ATTEMPTS; attempt += 1) {
+		try {
+			return await operation();
+		} catch (error) {
+			if (!isRetryableMongoError(error) || attempt === SESSION_LOOKUP_RETRY_ATTEMPTS) throw error;
+
+			const retryDelayMs = 100 + Math.floor(Math.random() * 201);
+			console.warn(`[SESSION] Transient MongoDB failure. Retrying session lookup in ${retryDelayMs}ms.`);
+			await new Promise((resolve) => setTimeout(resolve, retryDelayMs));
+		}
+	}
+
+	throw new Error("Session lookup retry loop ended unexpectedly.");
+}
+
+class SessionServiceUnavailableError extends Error {
+	constructor(cause: unknown) {
+		super("The session service is temporarily unavailable.");
+		this.name = "SessionServiceUnavailableError";
+		this.cause = cause;
+	}
+}
 
 export type TUserSession = {
 	session: TSession;
@@ -160,11 +194,12 @@ export const getCurrentSession = cache(async () => {
 		const token = cookieStore.get(SESSION_COOKIE_NAME)?.value ?? null;
 		if (token === null) return { session: null, user: null };
 
-		const sessionResult = await validateSession(token);
+		const sessionResult = await retryTransientMongoOperation(() => validateSession(token));
 		return sessionResult;
 	} catch (error) {
 		unstable_rethrow(error);
-		console.error("Error accessing cookies in getCurrentSession:", error);
+		console.error("Error resolving the current session:", error);
+		if (isRetryableMongoError(error)) throw new SessionServiceUnavailableError(error);
 		return { session: null, user: null };
 	}
 });
@@ -176,11 +211,12 @@ export const getCurrentSessionUncached = async () => {
 		const token = cookieStore.get(SESSION_COOKIE_NAME)?.value ?? null;
 		if (token === null) return { session: null, user: null };
 
-		const sessionResult = await validateSession(token);
+		const sessionResult = await retryTransientMongoOperation(() => validateSession(token));
 		return sessionResult;
 	} catch (error) {
 		unstable_rethrow(error);
-		console.error("Error accessing cookies in getCurrentSessionUncached:", error);
+		console.error("Error resolving the current uncached session:", error);
+		if (isRetryableMongoError(error)) throw new SessionServiceUnavailableError(error);
 		return { session: null, user: null };
 	}
 };
@@ -192,13 +228,15 @@ export const getValidCurrentSessionUncached = async () => {
 		const token = cookieStore.get(SESSION_COOKIE_NAME)?.value ?? null;
 		if (token === null) throw new Error("Você não está autenticado.");
 
-		const sessionResult = await validateSession(token);
+		const sessionResult = await retryTransientMongoOperation(() => validateSession(token));
 
 		if (!sessionResult.session || !sessionResult.user) throw new Error("Você não está autenticado.");
 
 		return sessionResult;
 	} catch (error) {
-		console.log("Error accessing cookies in getValidCurrentSessionUncached:", error);
+		unstable_rethrow(error);
+		console.error("Error resolving the required current session:", error);
+		if (isRetryableMongoError(error)) throw new SessionServiceUnavailableError(error);
 		throw new Error("Você não está autenticado.");
 	}
 };

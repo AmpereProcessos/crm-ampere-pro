@@ -1,17 +1,25 @@
 // This approach is taken from https://github.com/vercel/next.js/tree/canary/examples/with-mongodb
-import { MongoClient, ServerApiVersion } from "mongodb";
+import { MongoClient, type MongoClientOptions, ServerApiVersion } from "mongodb";
 
 if (!process.env.MONGODB_URI) {
 	throw new Error('Invalid/Missing environment variable: "MONGODB_URI"');
 }
 
 const uri = process.env.MONGODB_URI;
-const options = {
+const options: MongoClientOptions = {
 	serverApi: {
 		version: ServerApiVersion.v1,
 		strict: true,
 		deprecationErrors: true,
 	},
+	maxPoolSize: 10,
+	minPoolSize: 0,
+	maxIdleTimeMS: 60_000,
+	waitQueueTimeoutMS: 10_000,
+	serverSelectionTimeoutMS: 10_000,
+	connectTimeoutMS: 10_000,
+	retryReads: true,
+	retryWrites: true,
 };
 
 let client;
