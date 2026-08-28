@@ -1,7 +1,7 @@
 import { getProjectsUltraSimplified } from "@/repositories/projects/queries";
 import connectToDatabase from "@/services/mongodb/crm-db-connection";
 import { apiHandler, validateAuthenticationWithSession } from "@/utils/api";
-import { TProject, TProjectUltraSimplified } from "@/utils/schemas/project.schema";
+import { TProject, TProjectUltraSimplified } from "@/utils/schemas/crm-project.schema";
 import { Collection, Filter } from "mongodb";
 import { NextApiHandler } from "next";
 

@@ -15,6 +15,7 @@ type SelectInputProps<T> = {
 	label: string;
 	labelClassName?: string;
 	holderClassName?: string;
+	inputClassName?: string;
 	showLabel?: boolean;
 	value: T | null;
 	editable?: boolean;
@@ -29,6 +30,7 @@ function SelectInput<T>({
 	label,
 	labelClassName,
 	holderClassName,
+	inputClassName,
 	showLabel = true,
 	value,
 	editable = true,
@@ -129,6 +131,7 @@ function SelectInput<T>({
 						"flex h-full min-h-[46.6px] w-full items-center justify-between rounded-md border bg-background p-3 text-sm shadow-md duration-500 ease-in-out",
 						selectMenuIsOpen ? "border-primary" : "border-primary/20",
 						holderClassName,
+						inputClassName,
 					)}
 				>
 					{selectMenuIsOpen ? (
@@ -217,6 +220,7 @@ function SelectInput<T>({
 						"flex h-full min-h-[46.6px] w-full items-center justify-between rounded-md border bg-background p-3 text-sm shadow-md duration-500 ease-in-out",
 						selectMenuIsOpen ? "border-primary" : "border-primary/20",
 						holderClassName,
+						inputClassName,
 					)}
 				>
 					<p

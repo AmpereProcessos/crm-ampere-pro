@@ -20,6 +20,7 @@ type NewProcessSettingMenuProps = {
 };
 function NewProcessSettingMenu({ projectTypeId, dependencySettingId, dependencySettingEntity, closeMenu }: NewProcessSettingMenuProps) {
 	const [infoHolder, setInfoHolder] = useState<TProjectTypeProcessSetting>({
+		id: crypto.randomUUID(),
 		idTipoProjeto: projectTypeId,
 		idConfiguracaoDependencia: dependencySettingId,
 		referencia: {

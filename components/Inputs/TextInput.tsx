@@ -10,6 +10,7 @@ type TextInputProps = {
 	labelIconClassName?: string;
 	labelClassName?: string;
 	holderClassName?: string;
+	inputClassName?: string;
 	showLabel?: boolean;
 	value: string;
 	placeholder: string;
@@ -24,6 +25,7 @@ function TextInput({
 	labelIconClassName,
 	labelClassName,
 	holderClassName,
+	inputClassName,
 	showLabel = true,
 	value,
 	placeholder,
@@ -51,6 +53,7 @@ function TextInput({
 				className={cn(
 					"w-full rounded-md border border-primary/20 p-3 text-sm shadow-md outline-hidden duration-500 ease-in-out placeholder:italic focus:border-primary",
 					holderClassName,
+					inputClassName,
 				)}
 				id={inputIdentifier}
 				onBlur={() => {

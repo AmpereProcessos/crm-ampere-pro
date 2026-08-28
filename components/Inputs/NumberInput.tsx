@@ -11,6 +11,7 @@ type NumberInputProps = {
 	labelIconClassName?: string;
 	labelClassName?: string;
 	holderClassName?: string;
+	inputClassName?: string;
 	showLabel?: boolean;
 	value: number | null | undefined;
 	editable?: boolean;
@@ -24,6 +25,7 @@ function NumberInput({
 	labelIconClassName,
 	labelClassName,
 	holderClassName,
+	inputClassName,
 	showLabel = true,
 	value,
 	editable = true,
@@ -50,6 +52,7 @@ function NumberInput({
 				className={cn(
 					"w-full rounded-md border border-primary/20 p-3 text-sm shadow-md outline-hidden duration-500 ease-in-out placeholder:italic focus:border-primary",
 					holderClassName,
+					inputClassName,
 				)}
 				id={inputIdentifier}
 				onChange={(e) => handleChange(Number(e.target.value))}

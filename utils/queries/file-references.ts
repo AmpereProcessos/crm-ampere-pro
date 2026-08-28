@@ -4,9 +4,13 @@ import type { TFileReferenceDTO, TFileReferencesQueryParams } from "../schemas/f
 import type { TGetFileReferencesRouteOutput } from "@/app/api/file-references/route";
 import type { TGetMultipleSourcesFileReferencesRouteOutput } from "@/app/api/file-references/many/route";
 
+function serializeFileReference(file: TGetFileReferencesRouteOutput["data"]["byId"] extends infer T ? NonNullable<T> : never): TFileReferenceDTO {
+	return { ...file, _id: file._id.toString() };
+}
+
 async function fetchFileReferenceById({ id }: { id: string }) {
 	const { data }: { data: TGetFileReferencesRouteOutput } = await axios.get(`/api/file-references?id=${id}`);
-	return data.data.byId;
+	return data.data.byId ? serializeFileReference(data.data.byId) : null;
 }
 export function useFileReferenceById({ id }: { id: string }) {
 	return useQuery({
@@ -20,7 +24,7 @@ type UseFileReferencesByOpportunityIdParams = {
 };
 async function fetchFileReferencesByOpportunityId({ opportunityId }: UseFileReferencesByOpportunityIdParams) {
 	const { data }: { data: TGetFileReferencesRouteOutput } = await axios.get(`/api/file-references?opportunityId=${opportunityId}`);
-	return data.data.byOpportunityId;
+	return (data.data.byOpportunityId ?? []).map(serializeFileReference);
 }
 
 export function useFileReferencesByOpportunityId({ opportunityId }: UseFileReferencesByOpportunityIdParams) {
@@ -32,7 +36,7 @@ export function useFileReferencesByOpportunityId({ opportunityId }: UseFileRefer
 
 async function fetchFileReferencesByAnalysisId({ analysisId }: { analysisId: string }) {
 	const { data }: { data: TGetFileReferencesRouteOutput } = await axios.get(`/api/file-references?analysisId=${analysisId}`);
-	return data.data.byAnalysisId;
+	return (data.data.byAnalysisId ?? []).map(serializeFileReference);
 }
 
 export function useFileReferencesByAnalysisId({ analysisId }: { analysisId: string }) {
@@ -44,7 +48,7 @@ export function useFileReferencesByAnalysisId({ analysisId }: { analysisId: stri
 
 async function fetchFileReferencesByClientId({ clientId }: { clientId: string }) {
 	const { data }: { data: TGetFileReferencesRouteOutput } = await axios.get(`/api/file-references?clientId=${clientId}`);
-	return data.data.byClientId;
+	return (data.data.byClientId ?? []).map(serializeFileReference);
 }
 
 export function useFileReferencesByClientId({ clientId }: { clientId: string }) {
@@ -56,7 +60,7 @@ export function useFileReferencesByClientId({ clientId }: { clientId: string }) 
 
 async function fetchFileReferencesByHomologationId({ homologationId }: { homologationId: string }) {
 	const { data }: { data: TGetFileReferencesRouteOutput } = await axios.get(`/api/file-references?homologationId=${homologationId}`);
-	return data.data.byHomologationId;
+	return (data.data.byHomologationId ?? []).map(serializeFileReference);
 }
 
 export function useFileReferencesByHomologationId({ homologationId }: { homologationId: string }) {
@@ -93,7 +97,7 @@ async function fetchFileReferencesByQuery({
 	if (!param) return [];
 
 	const { data }: { data: TGetMultipleSourcesFileReferencesRouteOutput } = await axios.get(`/api/file-references/many?${param}`);
-	return data.data.fileReferences;
+	return data.data.fileReferences.map((file) => ({ ...file, _id: file._id.toString() }));
 }
 
 export function useFileReferences({

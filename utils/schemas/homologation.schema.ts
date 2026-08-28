@@ -372,6 +372,12 @@ export const HomologationSchema = z.object({
 	acesso: HomologationAccessControlSchema,
 	atualizacoes: z.array(HomologationUpdatesSchema),
 	vistoria: HomologationVistorySchema,
+	dataLiberacao: z
+		.string({
+			invalid_type_error: "Tipo não válido para data de liberação.",
+		})
+		.optional()
+		.nullable(),
 	dataEfetivacao: z
 		.string({
 			required_error: "Data de efetivação não informada.",

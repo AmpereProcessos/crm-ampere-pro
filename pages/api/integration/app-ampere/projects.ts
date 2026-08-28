@@ -106,7 +106,10 @@ async function getProjects({ input, session }: { input: TGetProjectsInput; sessi
 		.toArray();
 
 	if ("id" in input) {
-		const project = await collection.findOne({ _id: new ObjectId(input.id), idParceiro: { $in: allowedPartnerIds } });
+		const project = await collection.findOne({
+			_id: new ObjectId(input.id),
+			...(allowedPartnerIds ? { idParceiro: { $in: allowedPartnerIds } } : {}),
+		});
 		if (!project) throw new createHttpError.NotFound("Projeto não encontrado.");
 
 		const projectCommercialRepresentatives = [project.vendedor?.nome, project.insider].filter((r) => !!r) as string[];

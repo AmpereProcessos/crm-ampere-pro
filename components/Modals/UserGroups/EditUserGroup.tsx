@@ -25,6 +25,11 @@ function EditUserGroup({ id, session, closeModal }: EditUserGroupProps) {
 		titulo: "",
 		descricao: "",
 		permissoes: {
+			projetos: {
+				visualizar: false,
+				criar: false,
+				editar: false,
+			},
 			usuarios: {
 				visualizar: false,
 				criar: false,

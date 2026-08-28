@@ -6,6 +6,8 @@ import createHttpError from "http-errors";
 import { Collection, Filter, ObjectId } from "mongodb";
 import { NextApiHandler } from "next";
 
+type PutResponse = { data: string; message: string };
+
 const editRevenuePersonalizedRoute: NextApiHandler<PutResponse> = async (req, res) => {
 	const session = await validateAuthenticationWithSession(req, res);
 	const partnerScope = session.user.permissoes.parceiros.escopo;

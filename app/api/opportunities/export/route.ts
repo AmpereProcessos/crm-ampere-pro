@@ -2,7 +2,7 @@ import createHttpError from "http-errors";
 import type { Collection, Filter } from "mongodb";
 import { type NextRequest, NextResponse } from "next/server";
 import z from "zod";
-import { apiHandler, type UnwrapNextResponse } from "@/lib/api";
+import { apiHandler } from "@/lib/api";
 import { getValidCurrentSessionUncached, type TUserSession } from "@/lib/auth/session";
 import { formatDateAsLocale } from "@/lib/methods/formatting";
 import connectToDatabase from "@/services/mongodb/crm-db-connection";
@@ -370,6 +370,6 @@ async function postExportOpportunitiesHandler(request: NextRequest) {
 	return NextResponse.json(result);
 }
 
-export type TExportOpportunitiesRouteOutput = UnwrapNextResponse<Awaited<ReturnType<typeof getExportOpportunities>>>;
+export type TExportOpportunitiesRouteOutput = Awaited<ReturnType<typeof getExportOpportunities>>;
 export const GET = apiHandler({ GET: getExportOpportunitiesHandler });
 export const POST = apiHandler({ POST: postExportOpportunitiesHandler });

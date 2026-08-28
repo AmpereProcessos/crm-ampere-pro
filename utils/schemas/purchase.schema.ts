@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { AuthorSchema } from "./user.schema";
-import { TProject, TProjectDTO } from "./project.schema";
+import { TProject, TProjectDTO } from "./crm-project.schema";
 
 export const UnitSchema = z.enum(["UN", "PC", "KG", "CX", "M", "M²", "M³", "L", "MESA"], {
 	required_error: "Unidade não informado.",

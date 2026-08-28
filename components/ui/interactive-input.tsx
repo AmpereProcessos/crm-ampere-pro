@@ -242,7 +242,7 @@ function InteractiveInputDateContent({
         defaultMonth={value}
         onSelect={handleSelect}
         classNames={{
-          weekdays: "flex items-center gap-1.5",
+          head_row: "flex items-center gap-1.5",
         }}
       />
     </div>

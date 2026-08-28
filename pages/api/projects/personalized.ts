@@ -2,7 +2,7 @@ import { updateClient } from "@/repositories/clients/mutations";
 import connectToDatabase from "@/services/mongodb/crm-db-connection";
 import { apiHandler, validateAuthenticationWithSession } from "@/utils/api";
 import type { TClient } from "@/utils/schemas/client.schema";
-import type { TProject } from "@/utils/schemas/project.schema";
+import type { TProject } from "@/utils/schemas/crm-project.schema";
 import createHttpError from "http-errors";
 import { type Collection, ObjectId } from "mongodb";
 import type { NextApiHandler } from "next";

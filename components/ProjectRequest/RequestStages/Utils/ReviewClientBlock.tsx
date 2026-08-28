@@ -36,6 +36,7 @@ function ReviewClientBlock({ clientId, session }: ReviewClientBlockProps) {
 		ondeTrabalha: null,
 		estadoCivil: null,
 		canalAquisicao: "",
+		camposPersonalizados: {},
 		idMarketing: null,
 		indicador: {
 			nome: "",

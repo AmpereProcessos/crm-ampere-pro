@@ -2,7 +2,7 @@ import TextareaInput from "@/components/Inputs/TextareaInput";
 import TextInput from "@/components/Inputs/TextInput";
 import { formatToCPForCNPJ, formatToPhone } from "@/utils/methods/formatting";
 import { TClientDTO } from "@/utils/schemas/client.schema";
-import { TProject } from "@/utils/schemas/project.schema";
+import { TProject } from "@/utils/schemas/crm-project.schema";
 import React from "react";
 import ActivePaymentMethod from "./ActivePaymentMethod";
 import CreditorBlock from "./CreditorBlock";

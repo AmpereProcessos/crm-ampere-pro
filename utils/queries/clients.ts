@@ -37,7 +37,8 @@ export function useSearchClients({ enabled, cpfCnpj, phoneNumber, email }: UseSe
 
 async function fetchClientById({ id }: { id: string }) {
 	const { data }: { data: TGetClientsRouteOutput } = await axios.get(`/api/clients?id=${id}`);
-	return data.data.byId;
+	const client = data.data.byId;
+	return client ? { ...client, _id: id } : null;
 }
 
 export function useClientById({ id }: { id: string }) {

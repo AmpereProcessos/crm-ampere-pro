@@ -24,9 +24,5 @@ const enableWorkflow =
 	process.env.WORKFLOW_DEV === "1";
 
 export default enableWorkflow
-	? withWorkflow(nextConfig, {
-			workflows: {
-				lazyDiscovery: true,
-			},
-		})
+	? withWorkflow(nextConfig)
 	: nextConfig;
