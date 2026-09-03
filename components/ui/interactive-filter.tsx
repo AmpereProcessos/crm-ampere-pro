@@ -1,6 +1,16 @@
 "use client";
 
-import type { Locale } from "date-fns";
+import {
+  endOfDay,
+  endOfMonth,
+  isSameDay,
+  type Locale,
+  startOfDay,
+  startOfMonth,
+  subDays,
+  subMonths,
+  subYears,
+} from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { ArrowDownNarrowWide, ArrowUpNarrowWide, Check, ChevronLeft, X } from "lucide-react";
 import * as React from "react";
@@ -44,7 +54,7 @@ type InteractiveAddFilterContextValue = InteractiveFilterContextValue & {
 
 const InteractiveFilterContext = React.createContext<InteractiveFilterContextValue | null>(null);
 const InteractiveAddFilterContext = React.createContext<InteractiveAddFilterContextValue | null>(
-  null,
+  null
 );
 
 function useInteractiveFilterContext() {
@@ -59,7 +69,7 @@ function useInteractiveAddFilterContext() {
   const context = React.useContext(InteractiveAddFilterContext);
   if (!context) {
     throw new Error(
-      "InteractiveFilter add filter components must be used inside InteractiveFilter.AddFilterRoot",
+      "InteractiveFilter add filter components must be used inside InteractiveFilter.AddFilterRoot"
     );
   }
   return context;
@@ -77,7 +87,7 @@ type InteractiveFilterRootProps = {
 
 function resolveInteractiveFilterMode(
   mode: InteractiveFilterMode,
-  isDesktop: boolean,
+  isDesktop: boolean
 ): Exclude<InteractiveFilterMode, "auto"> {
   return mode === "auto" ? (isDesktop ? "popover" : "drawer") : mode;
 }
@@ -278,7 +288,7 @@ function InteractiveFilterClear({
       className={cn(
         "inline-flex h-5 w-5 items-center justify-center rounded-sm text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary",
         disabled && "pointer-events-none opacity-40",
-        className,
+        className
       )}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
@@ -630,11 +640,70 @@ export type InteractiveFilterDateRange = {
   to?: Date;
 };
 
+export type InteractiveFilterDateRangePreset = {
+  id: string;
+  label: string;
+  getValue: (referenceDate: Date) => Required<InteractiveFilterDateRange>;
+};
+
+export const defaultInteractiveFilterDateRangePresets: readonly InteractiveFilterDateRangePreset[] =
+  [
+    {
+      id: "today",
+      label: "HOJE",
+      getValue: (referenceDate) => ({
+        from: startOfDay(referenceDate),
+        to: endOfDay(referenceDate),
+      }),
+    },
+    {
+      id: "last-7-days",
+      label: "ÚLTIMOS 7 DIAS",
+      getValue: (referenceDate) => ({
+        from: startOfDay(subDays(referenceDate, 6)),
+        to: endOfDay(referenceDate),
+      }),
+    },
+    {
+      id: "this-month",
+      label: "ESTE MÊS",
+      getValue: (referenceDate) => ({
+        from: startOfMonth(referenceDate),
+        to: endOfMonth(referenceDate),
+      }),
+    },
+    {
+      id: "last-month",
+      label: "ÚLTIMO MÊS",
+      getValue: (referenceDate) => ({
+        from: startOfDay(subMonths(referenceDate, 1)),
+        to: endOfDay(referenceDate),
+      }),
+    },
+    {
+      id: "last-semester",
+      label: "ÚLTIMO SEMESTRE",
+      getValue: (referenceDate) => ({
+        from: startOfDay(subMonths(referenceDate, 6)),
+        to: endOfDay(referenceDate),
+      }),
+    },
+    {
+      id: "last-year",
+      label: "ÚLTIMO ANO",
+      getValue: (referenceDate) => ({
+        from: startOfDay(subYears(referenceDate, 1)),
+        to: endOfDay(referenceDate),
+      }),
+    },
+  ];
+
 type InteractiveFilterDateRangeContentProps = {
   value: InteractiveFilterDateRange;
   onChange: (nextValue: InteractiveFilterDateRange) => void;
   locale?: Locale;
   numberOfMonths?: number;
+  presets?: readonly InteractiveFilterDateRangePreset[];
   className?: string;
 };
 
@@ -643,10 +712,55 @@ function InteractiveFilterDateRangeContent({
   onChange,
   locale = ptBR,
   numberOfMonths = 2,
+  presets = defaultInteractiveFilterDateRangePresets,
   className,
 }: InteractiveFilterDateRangeContentProps) {
+  const { setOpen } = useInteractiveFilterContext();
+  const referenceDate = new Date();
+
+  function isPresetSelected(preset: InteractiveFilterDateRangePreset) {
+    if (!value.from || !value.to) return false;
+
+    const presetValue = preset.getValue(referenceDate);
+    return isSameDay(value.from, presetValue.from) && isSameDay(value.to, presetValue.to);
+  }
+
+  function handlePresetSelect(preset: InteractiveFilterDateRangePreset) {
+    onChange(preset.getValue(referenceDate));
+    setOpen(false);
+  }
+
   return (
-    <div className={cn("w-auto p-0", className)}>
+    <div className={cn("w-auto overflow-hidden p-0", className)}>
+      {presets.length > 0 ? (
+        <div className="border-b border-border px-3 py-3">
+          <p className="mb-2 text-[0.65rem] font-bold tracking-[0.08em] text-muted-foreground">
+            PERÍODOS RÁPIDOS
+          </p>
+          <div className="flex flex-wrap gap-1.5">
+            {presets.map((preset) => {
+              const isSelected = isPresetSelected(preset);
+
+              return (
+                <button
+                  key={preset.id}
+                  type="button"
+                  aria-pressed={isSelected}
+                  className={cn(
+                    "rounded-full px-3 py-1.5 text-[0.7rem] font-bold tracking-tight transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+                    isSelected
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-muted text-muted-foreground hover:bg-muted/70 hover:text-foreground"
+                  )}
+                  onClick={() => handlePresetSelect(preset)}
+                >
+                  {preset.label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      ) : null}
       <Calendar
         initialFocus
         mode="range"
@@ -895,7 +1009,7 @@ function InteractiveFilterSortDirectionToggle({
       className={cn(
         "inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-sm text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary",
         disabled && "pointer-events-none opacity-40",
-        className,
+        className
       )}
       onClick={handleToggle}
     >
@@ -955,7 +1069,7 @@ function InteractiveFilterSortContent<TField extends string = string>({
               "flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-medium tracking-tight transition-colors",
               value.direction === "asc"
                 ? "bg-primary/50 text-foreground hover:bg-primary/40"
-                : "bg-transparent text-foreground hover:bg-primary/20",
+                : "bg-transparent text-foreground hover:bg-primary/20"
             )}
             onClick={() => handleDirectionChange("asc")}
           >
@@ -968,7 +1082,7 @@ function InteractiveFilterSortContent<TField extends string = string>({
               "flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-medium tracking-tight transition-colors",
               value.direction === "desc"
                 ? "bg-primary/50 text-foreground hover:bg-primary/40"
-                : "bg-transparent text-foreground hover:bg-primary/20",
+                : "bg-transparent text-foreground hover:bg-primary/20"
             )}
             onClick={() => handleDirectionChange("desc")}
           >

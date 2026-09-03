@@ -1,9 +1,9 @@
 "use client";
 import dayjs from "dayjs";
+import { Calendar } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { BsDownload } from "react-icons/bs";
-import DateInput from "@/components/Inputs/DateInput";
 import MultipleSelectInput from "@/components/Inputs/MultipleSelectInput";
 import EditPromoter from "@/components/Modals/EditPromoter";
 import CommercialPipelineBlock from "@/components/Stats/Results/CommercialPipelineBlock";
@@ -13,11 +13,11 @@ import RegionResults from "@/components/Stats/Results/Region";
 import SalesTeamResults from "@/components/Stats/Results/SalesTeam";
 import SDRTeamResults from "@/components/Stats/Results/SDRTeam";
 import Sellers from "@/components/Stats/Results/Sellers";
+import { InteractiveFilter } from "@/components/ui/interactive-filter";
 import type { TUserSession } from "@/lib/auth/session";
+import { formatInteractiveDateRangeSummary } from "@/lib/interactive-filter-formatting";
 import { getErrorMessage } from "@/lib/methods/errors";
 import { getExcelFromJSON } from "@/lib/methods/excel-utils";
-import { formatDateOnInputChange } from "@/lib/methods/formatting";
-import { formatDateForInputValue } from "@/utils/methods/formatting";
 import { useComercialResultsQueryOptions } from "@/utils/queries/stats";
 import { fetchResultsExportsAll } from "@/utils/queries/stats/exports";
 import type { TUserDTOWithSaleGoals } from "@/utils/schemas/user.schema";
@@ -77,49 +77,32 @@ function ManagementComercialResults({ session }: ComercialResultsProps) {
 		<>
 			<div className="flex w-full min-w-0 flex-col gap-4">
 				<div className="flex items-center gap-2 flex-col lg:flex-row w-full justify-end">
-					<div className="flex flex-col items-center gap-y-2 gap-4 lg:flex-row w-full lg:w-fit">
-						<h1 className="text-end text-sm font-medium uppercase tracking-tight">PERÍODO</h1>
-						<div className="flex w-full flex-col items-center gap-2 md:flex-row lg:w-fit">
-							<div className="w-full md:w-[150px]">
-								<DateInput
-									showLabel={false}
-									label="PERÍODO"
-									labelClassName="text-[0.6rem]"
-									holderClassName="text-xs p-2 min-h-[34px]"
-									value={formatDateForInputValue(queryFilters.period.after)}
-									handleChange={(value) =>
-										setQueryFilters((prev) => ({
-											...prev,
-											period: {
-												...prev.period,
-												after: formatDateOnInputChange(value, "string", "start") as string,
-											},
-										}))
-									}
-									width="100%"
-								/>
-							</div>
-							<div className="w-full md:w-[150px]">
-								<DateInput
-									showLabel={false}
-									label="PERÍODO"
-									labelClassName="text-[0.6rem]"
-									holderClassName="text-xs p-2 min-h-[34px]"
-									value={formatDateForInputValue(queryFilters.period.before)}
-									handleChange={(value) =>
-										setQueryFilters((prev) => ({
-											...prev,
-											period: {
-												...prev.period,
-												before: formatDateOnInputChange(value, "string", "end") as string,
-											},
-										}))
-									}
-									width="100%"
-								/>
-							</div>
-						</div>
-					</div>
+					<InteractiveFilter.Root className="w-full lg:w-fit">
+						<InteractiveFilter.Trigger className="h-[34px] w-full justify-start border border-input bg-background hover:bg-accent lg:w-auto">
+							<InteractiveFilter.Icon>
+								<Calendar className="h-4 w-4" />
+								<InteractiveFilter.Label>PERÍODO</InteractiveFilter.Label>
+							</InteractiveFilter.Icon>
+							<InteractiveFilter.Value>{formatInteractiveDateRangeSummary(queryFilters.period.after, queryFilters.period.before)}</InteractiveFilter.Value>
+						</InteractiveFilter.Trigger>
+						<InteractiveFilter.Content className="w-auto p-0" align="end">
+							<InteractiveFilter.DateRangeContent
+								value={{
+									from: new Date(queryFilters.period.after),
+									to: new Date(queryFilters.period.before),
+								}}
+								onChange={(period) =>
+									setQueryFilters((prev) => ({
+										...prev,
+										period: {
+											after: period.from ? dayjs(period.from).startOf("day").toISOString() : prev.period.after,
+											before: period.to ? dayjs(period.to).endOf("day").toISOString() : prev.period.before,
+										},
+									}))
+								}
+							/>
+						</InteractiveFilter.Content>
+					</InteractiveFilter.Root>
 					<div className="w-full md:w-[250px]">
 						<MultipleSelectInput
 							label="USUÁRIOS"
