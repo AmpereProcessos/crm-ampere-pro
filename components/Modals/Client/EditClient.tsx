@@ -50,6 +50,7 @@ function EditClient({ clientId, session, partnerId, closeModal, callbacks }: Edi
 				profissao: null,
 				estadoCivil: null,
 				canalAquisicao: "",
+				camposPersonalizados: {},
 				idMarketing: null,
 				indicador: {
 					nome: "",

@@ -155,6 +155,7 @@ const collectLead: NextApiHandler<PostResponse> = async (req, res) => {
 		profissao: null,
 		estadoCivil: null,
 		canalAquisicao: "MARKETING (GERAL)",
+		camposPersonalizados: {},
 		dataInsercao: new Date().toISOString(),
 		idMarketing: lead.id,
 		indicador: {
@@ -169,16 +170,29 @@ const collectLead: NextApiHandler<PostResponse> = async (req, res) => {
 	// Getting the friendly identificator for new opportunity
 	const identifier = await getNewOpportunityIdentifier({ collection: opportunitiesCollection, partnerId: partnerId });
 
-	const responsibles: TOpportunity["responsaveis"] = [{ ...newReceiver, papel: "VENDEDOR" }];
+	const responsibles: TOpportunity["responsaveis"] = [{ ...newReceiver, papel: "VENDEDOR", dataInsercao: new Date().toISOString() }];
 	// Formulating new opportunity document and inserting on db
 	const newOpportunity: TOpportunity = {
 		nome: newClient.nome,
 		idParceiro: partnerId,
-		tipo: "SISTEMA FOTOVOLTAICO",
+		tipo: {
+			id: "6615785ddcb7a6e66ede9785",
+			titulo: "SISTEMA FOTOVOLTAICO",
+		},
+		categoriaVenda: "KIT",
 		descricao: "",
 		identificador: identifier,
 		responsaveis: responsibles,
 		idCliente: clientInsertedId.toString(),
+		cliente: {
+			nome: newClient.nome,
+			cpfCnpj: newClient.cpfCnpj,
+			telefonePrimario: newClient.telefonePrimario,
+			email: newClient.email,
+			canalAquisicao: newClient.canalAquisicao,
+		},
+		camposPersonalizados: {},
+		automacoesHabilitadas: true,
 		localizacao: {
 			cep: newClient.cep,
 			uf: newClient.uf,

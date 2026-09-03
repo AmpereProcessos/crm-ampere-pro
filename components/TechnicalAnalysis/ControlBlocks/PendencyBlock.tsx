@@ -37,7 +37,7 @@ function PendencyBlock({ session, technicalAnalysisId, opportunity, infoHolder, 
 				{isLoading ? <LoadingComponent /> : null}
 				{isError ? <ErrorComponent msg="Houve um erro ao buscar atividades da análise técnica." /> : null}
 				{isSuccess ? (
-					activities.length > 0 ? (
+					activities && activities.length > 0 ? (
 						activities.map((activity, index) => <TechnicalAnalysisActivity key={activity._id} activity={activity} technicalAnalysisId={technicalAnalysisId} />)
 					) : (
 						<p className="flex w-full grow items-center justify-center py-2 text-center font-medium italic tracking-tight text-primary/70">

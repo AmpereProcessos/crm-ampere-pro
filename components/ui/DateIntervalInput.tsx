@@ -20,7 +20,7 @@ function DateIntervalInput({ label, labelClassName, className, value, handleChan
 				<PopoverTrigger asChild>
 					<Button
 						id="date"
-						variant={"outline-solid"}
+						variant={"outline"}
 						className={cn(
 							"w-full justify-start rounded-md border border-black/20 bg-background dark:bg-background text-left text-sm font-normal ease-in-out focus:border-black",
 							!value.after && !value.before && "text-muted-foreground",

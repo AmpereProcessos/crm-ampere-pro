@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { AuthorSchema } from "./user.schema";
-import { TProjectDTO } from "./project.schema";
+import { TProjectDTO } from "./crm-project.schema";
 
 const ExpenseProjectReference = z.object({
 	id: z.string({ required_error: "ID do projeto não informado.", invalid_type_error: "Tipo não válido para o ID do projeto." }).optional().nullable(),

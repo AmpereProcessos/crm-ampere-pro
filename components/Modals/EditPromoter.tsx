@@ -76,8 +76,13 @@ function EditPromoter({ session, closeModal, promoter }: EditPromoterProps) {
 	}
 
 	function getInsertionObject({ goals }: { goals: TSaleGoal["metas"] }): TSaleGoal {
+		const [month, year] = period.split("/").map(Number);
+		const periodStart = dayjs(new Date(year, month - 1, 1));
 		return {
 			periodo: period,
+			periodoInicio: periodStart.startOf("month").toISOString(),
+			periodoFim: periodStart.endOf("month").toISOString(),
+			periodoDias: periodStart.daysInMonth(),
 			idParceiro: session.user.idParceiro || "",
 			usuario: {
 				id: promoter._id || "",

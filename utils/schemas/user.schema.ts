@@ -573,7 +573,10 @@ export type TUserDTOWithSaleGoals = TUserDTO & { metas: TSaleGoalDTO[] };
 
 export type TUserEntity = TUser;
 
-export type TUserSimplified = Pick<TUser, "nome" | "email" | "telefone" | "avatar_url">;
+export type TUserSimplified = Pick<
+	TUser,
+	"ativo" | "nome" | "email" | "telefone" | "avatar_url" | "dataInsercao" | "dataAlteracao" | "dataExclusao"
+>;
 export type TUserDTOSimplified = Pick<
 	TUserDTO,
 	"_id" | "ativo" | "nome" | "email" | "telefone" | "avatar_url" | "dataInsercao" | "dataAlteracao" | "dataExclusao"

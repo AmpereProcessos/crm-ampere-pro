@@ -1,5 +1,7 @@
 import * as React from "react";
 import * as RechartsPrimitive from "recharts";
+import type { TooltipContentProps } from "recharts";
+import type { NameType, ValueType } from "recharts/types/component/DefaultTooltipContent";
 
 import { cn } from "@/lib/utils";
 
@@ -79,7 +81,7 @@ ${colorConfig
 	.join("\n")}
 }
 `,
-				),
+				).join("\n"),
 			}}
 		/>
 	);
@@ -89,7 +91,7 @@ const ChartTooltip = RechartsPrimitive.Tooltip;
 
 const ChartTooltipContent = React.forwardRef<
 	HTMLDivElement,
-	React.ComponentProps<typeof RechartsPrimitive.Tooltip> &
+	Partial<TooltipContentProps<ValueType, NameType>> &
 		React.ComponentProps<"div"> & {
 			hideLabel?: boolean;
 			hideIndicator?: boolean;
@@ -216,7 +218,9 @@ const ChartLegend = RechartsPrimitive.Legend;
 const ChartLegendContent = React.forwardRef<
 	HTMLDivElement,
 	React.ComponentProps<"div"> &
-		Pick<RechartsPrimitive.LegendProps, "payload" | "verticalAlign"> & {
+		{
+			payload?: ReadonlyArray<Record<string, unknown>>;
+			verticalAlign?: "top" | "middle" | "bottom";
 			hideIcon?: boolean;
 			nameKey?: string;
 		}
@@ -234,7 +238,7 @@ const ChartLegendContent = React.forwardRef<
 				const itemConfig = getPayloadConfigFromPayload(config, item, key);
 				return (
 					<div
-						key={item.value}
+						key={String(item.value)}
 						className={cn("flex min-w-fit items-center gap-1.5 [&>svg]:h-3 [&>svg]:w-3 [&>svg]:text-primary/70 dark:[&>svg]:text-primary/40")}
 					>
 						{itemConfig?.icon && !hideIcon ? (
@@ -243,11 +247,11 @@ const ChartLegendContent = React.forwardRef<
 							<div
 								className="h-2 w-2 shrink-0 rounded-[2px] text-[0.55rem]"
 								style={{
-									backgroundColor: item.color,
+									backgroundColor: typeof item.color === "string" ? item.color : undefined,
 								}}
 							/>
 						)}
-						<p className="text-[0.55rem]">{itemConfig?.label || item.value}</p>
+						<p className="text-[0.55rem]">{itemConfig?.label || String(item.value ?? "")}</p>
 					</div>
 				);
 			})}

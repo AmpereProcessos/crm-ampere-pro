@@ -67,6 +67,7 @@ function NewOpportunity({ session, closeModal, opportunityCreators, funnels, cal
 		dataNascimento: undefined,
 		profissao: undefined,
 		canalAquisicao: CustomersAcquisitionChannels[0].value,
+		camposPersonalizados: {},
 		dataInsercao: new Date().toISOString(),
 		idMarketing: undefined,
 		indicador: {
@@ -286,7 +287,6 @@ function NewOpportunity({ session, closeModal, opportunityCreators, funnels, cal
 									<LoadingButton
 										loading={isPending}
 										onClick={() =>
-											// @ts-expect-error
 											mutate()
 										}
 									>
@@ -386,7 +386,6 @@ function NewOpportunity({ session, closeModal, opportunityCreators, funnels, cal
 									<LoadingButton
 										loading={isPending}
 										onClick={() =>
-											// @ts-expect-error
 											mutate()
 										}
 									>

@@ -1,6 +1,6 @@
 import type { TUserSession } from "@/lib/auth/session";
 import { cn } from "@/lib/utils";
-import { TOpportunitiesPageModes } from "@/pages/comercial/oportunidades";
+import type { TOpportunitiesPageModes } from "@/app/(app)/comercial/oportunidades/opportunities-main";
 import { useOpportunitiesByPersonalizedFilters } from "@/utils/queries/opportunities";
 import { TFunnelDTO } from "@/utils/schemas/funnel.schema";
 import { TPartnerSimplifiedDTO } from "@/utils/schemas/partner.schema";
@@ -130,8 +130,20 @@ function OpportunitiesCardModePage({
 			{newProjectModalIsOpen ? (
 				<NewOpportunity
 					session={session}
-					opportunityCreators={responsiblesOptions || []}
-					funnels={funnelsOptions || []}
+					opportunityCreators={responsiblesOptions.map((responsible) => ({
+						id: responsible._id,
+						label: responsible.nome,
+						value: responsible._id,
+						phone: responsible.telefone ?? undefined,
+						coverUrl: responsible.avatar_url ?? undefined,
+					}))}
+					funnels={funnelsOptions.map((funnel) => ({
+						id: funnel._id,
+						label: funnel.nome,
+						value: funnel._id,
+						stages: funnel.etapas.map((stage) => ({ id: String(stage.id), label: stage.nome, value: String(stage.id) })),
+						configuracaoCartao: funnel.configuracaoCartao ?? null,
+					}))}
 					closeModal={() => setNewProjectModalIsOpen(false)}
 				/>
 			) : null}

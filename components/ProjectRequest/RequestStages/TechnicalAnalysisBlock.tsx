@@ -3,7 +3,7 @@ import LoadingComponent from "@/components/utils/LoadingComponent";
 
 import type { TUserSession } from "@/lib/auth/session";
 import { useOpportunityTechnicalAnalysis } from "@/utils/queries/technical-analysis";
-import { TProject } from "@/utils/schemas/project.schema";
+import { TProject } from "@/utils/schemas/crm-project.schema";
 import React from "react";
 import ActiveTechnicalAnalysis from "./Utils/ActiveTechnicalAnalysis";
 import SelectableTechnicalAnalysis from "./Utils/SelectableTechnicalAnalysis";

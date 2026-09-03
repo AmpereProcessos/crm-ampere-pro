@@ -19,6 +19,11 @@ function NewUserGroup({ session, closeModal }: NewUserGroupProps) {
 		titulo: "",
 		descricao: "",
 		permissoes: {
+			projetos: {
+				visualizar: false,
+				criar: false,
+				editar: false,
+			},
 			usuarios: {
 				visualizar: false,
 				criar: false,

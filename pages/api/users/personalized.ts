@@ -2,13 +2,13 @@ import { getTechnicalAnalysis } from "@/repositories/technical-analysis/queries"
 import { getLeadReceivers, getOpportunityCreators, getTechnicalAnalysts } from "@/repositories/users/queries";
 import connectToDatabase from "@/services/mongodb/crm-db-connection";
 import { apiHandler, validateAuthenticationWithSession, validateAuthorization } from "@/utils/api";
-import { simplifiedProjection, TUserDTOSimplified, UsersQueryFiltersSchema, type TUser } from "@/utils/schemas/user.schema";
+import { simplifiedProjection, TUserDTOSimplified, UsersQueryFiltersSchema, type TUser, type TUserSimplified } from "@/utils/schemas/user.schema";
 import type { Collection, Filter, WithId } from "mongodb";
 import type { NextApiHandler } from "next";
 import { z } from "zod";
 
 type GetResponse = {
-	data: WithId<TUser>[];
+	data: WithId<TUserSimplified>[];
 };
 const PersonalizedQueryTypes = [
 	"user-creators",

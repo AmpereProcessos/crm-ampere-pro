@@ -78,9 +78,11 @@ async function validateSession(token: string) {
 			telefone: user.telefone,
 			avatar_url: user.avatar_url,
 			email: user.email,
+			dataNascimento: user.dataNascimento,
 			administrador: user.administrador,
 			idParceiro: user.idParceiro,
 			idGrupo: user.idGrupo,
+			codigoIndicacaoConecta: user.codigoIndicacaoConecta,
 			permissoes: user.permissoes,
 			parceiro: {
 				nome: partner.nome,

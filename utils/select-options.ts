@@ -679,7 +679,7 @@ export const PaymentMethods = [
 	{ id: 7, label: "FINANCIAMENTO", value: "FINANCIAMENTO", apportionment: true, modality: "COMPOSTOS" },
 ];
 
-export const ProjectObservationTopics = ["SERVIÇOS", "PRODUTOS", "NEGOCIAÇÃO", "SUPRIMENTAÇÃO", "EXECUÇÃO"];
+export const ProjectObservationTopics = ["SERVIÇOS", "PRODUTOS", "NEGOCIAÇÃO", "SUPRIMENTAÇÃO", "EXECUÇÃO"] as const;
 
 export const OpportunityLossReasons = [
 	{ id: 1, label: "CLIENTE NÃO RESPONDE", value: "CLIENTE NÃO RESPONDE" },

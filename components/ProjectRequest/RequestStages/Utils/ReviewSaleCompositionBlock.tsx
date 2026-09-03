@@ -1,5 +1,5 @@
 import type { TUserSession } from "@/lib/auth/session";
-import { TProject } from "@/utils/schemas/project.schema";
+import { TProject } from "@/utils/schemas/crm-project.schema";
 import React from "react";
 import { MdOutlineTimer, MdRepeat } from "react-icons/md";
 import ProductCard from "./ProductCard";

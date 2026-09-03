@@ -59,7 +59,7 @@ function EditGoalContent({ goalId, session, closeMenu, callbacks }: EditGoalCont
 		onSuccess(data) {
 			if (callbacks?.onSuccess) callbacks.onSuccess();
 			reset();
-			toast.success(data);
+			toast.success(data.message);
 			closeMenu();
 			return;
 		},

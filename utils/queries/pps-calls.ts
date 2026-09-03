@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import type { TPPSCallDTO } from "../schemas/integrations/app-ampere/pps-calls.schema";
+import type { TPPSCallDTO } from "../schemas/pps-calls.schema";
 
 async function fetchAllPPSCalls({ openOnly }: { openOnly: boolean }) {
 	try {

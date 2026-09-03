@@ -56,7 +56,7 @@ export async function getOpportunityById({ collection, id, query }: GetOpportuni
 			referenciasFunil: op.referenciasFunil ? op.referenciasFunil.map((ref: any) => ({ ...ref, _id: ref._id.toString() })) : null,
 		}));
 
-		return opportunity[0] as TOpportunityDTOWithClientAndPartnerAndFunnelReferences;
+		return opportunity[0] as unknown as TOpportunityDTOWithClientAndPartnerAndFunnelReferences;
 	} catch (error) {
 		throw error;
 	}
