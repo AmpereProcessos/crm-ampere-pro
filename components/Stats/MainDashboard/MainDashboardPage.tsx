@@ -185,12 +185,12 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
 					</div>
 
 					<InteractiveFilter.Root className="w-full lg:w-fit">
-						<InteractiveFilter.Trigger className="h-10 w-full justify-start border border-input bg-background hover:bg-accent lg:w-auto">
-							<InteractiveFilter.Icon>
+						<InteractiveFilter.Trigger className="min-h-[46.6px] w-full justify-start gap-2 rounded-md border border-primary/20 bg-background p-3 text-sm font-normal text-primary shadow-md hover:bg-background hover:text-primary data-[state=open]:border-primary lg:w-auto">
+							<InteractiveFilter.Icon className="gap-1.5">
 								<Calendar className="h-4 w-4" />
-								<InteractiveFilter.Label>PERÍODO</InteractiveFilter.Label>
+								<InteractiveFilter.Label className="text-sm font-normal text-primary">PERÍODO</InteractiveFilter.Label>
 							</InteractiveFilter.Icon>
-							<InteractiveFilter.Value>{formatInteractiveDateRangeSummary(queryFilters.period.after, queryFilters.period.before)}</InteractiveFilter.Value>
+							<InteractiveFilter.Value className="text-sm text-primary">{formatInteractiveDateRangeSummary(queryFilters.period.after, queryFilters.period.before)}</InteractiveFilter.Value>
 						</InteractiveFilter.Trigger>
 						<InteractiveFilter.Content className="w-auto p-0" align="end">
 							<InteractiveFilter.DateRangeContent
