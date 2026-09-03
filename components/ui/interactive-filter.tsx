@@ -675,10 +675,14 @@ export const defaultInteractiveFilterDateRangePresets: readonly InteractiveFilte
     {
       id: "last-month",
       label: "ÚLTIMO MÊS",
-      getValue: (referenceDate) => ({
-        from: startOfDay(subMonths(referenceDate, 1)),
-        to: endOfDay(referenceDate),
-      }),
+      getValue: (referenceDate) => {
+        const previousMonth = subMonths(referenceDate, 1);
+
+        return {
+          from: startOfMonth(previousMonth),
+          to: endOfMonth(previousMonth),
+        };
+      },
     },
     {
       id: "last-semester",
