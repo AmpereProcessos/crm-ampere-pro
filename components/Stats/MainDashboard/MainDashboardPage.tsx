@@ -3,6 +3,7 @@ import dayjs from "dayjs";
 import { AnimatePresence, motion } from "framer-motion";
 import {
 	BadgeDollarSign,
+	Calendar,
 	ChevronDown,
 	ChevronUp,
 	CircleCheck,
@@ -23,17 +24,17 @@ import { Area, CartesianGrid, ComposedChart, XAxis, YAxis } from "recharts";
 import type { TGetGraphDataRouteInput } from "@/app/api/stats/graph/route";
 import type { TGetStatsRouteOutputData } from "@/app/api/stats/route";
 import UserConectaIndicationCodeFlag from "@/components/Conecta/UserConectaIndicationCodeFlag";
-import DateInput from "@/components/Inputs/DateInput";
 import MultipleSelectInput from "@/components/Inputs/MultipleSelectInput";
 import UpdateProfileHint from "@/components/Users/UpdateProfileHint";
 import { Button } from "@/components/ui/button";
 import { type ChartConfig, ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import { InteractiveFilter } from "@/components/ui/interactive-filter";
 import { Progress } from "@/components/ui/progress";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import type { TUserSession } from "@/lib/auth/session";
-import { formatDateOnInputChange, formatDecimalPlaces, formatToMoney } from "@/lib/methods/formatting";
+import { formatInteractiveDateRangeSummary } from "@/lib/interactive-filter-formatting";
+import { formatDecimalPlaces, formatToMoney } from "@/lib/methods/formatting";
 import { cn } from "@/lib/utils";
-import { formatDateForInputValue } from "@/utils/methods/formatting";
 import { useGraphData, useStats, useStatsQueryOptions } from "@/utils/queries/stats";
 import SellersRanking from "../rankings/Rankings";
 import OpenActivitiesBlock from "./OpenActivitiesBlock";
@@ -183,45 +184,32 @@ function MainDashboardPage({ session }: MainDashboardPageProps) {
 						/>
 					</div>
 
-					<div className="flex w-full flex-col lg:w-fit">
-						<h1 className="text-end text-sm font-medium uppercase tracking-tight">PERÍODO</h1>
-						<div className="flex flex-col items-center gap-2 lg:flex-row">
-							<div className="w-full lg:w-[150px]">
-								<DateInput
-									label="PERÍODO"
-									showLabel={false}
-									value={formatDateForInputValue(queryFilters.period.after)}
-									handleChange={(value) =>
-										setQueryFilters((prev) => ({
-											...prev,
-											period: {
-												...prev.period,
-												after: formatDateOnInputChange(value, "string", "start") as string,
-											},
-										}))
-									}
-									width="100%"
-								/>
-							</div>
-							<div className="w-full lg:w-[150px]">
-								<DateInput
-									label="PERÍODO"
-									showLabel={false}
-									value={formatDateForInputValue(queryFilters.period.before)}
-									handleChange={(value) =>
-										setQueryFilters((prev) => ({
-											...prev,
-											period: {
-												...prev.period,
-												before: formatDateOnInputChange(value, "string", "end") as string,
-											},
-										}))
-									}
-									width="100%"
-								/>
-							</div>
-						</div>
-					</div>
+					<InteractiveFilter.Root className="w-full lg:w-fit">
+						<InteractiveFilter.Trigger className="h-10 w-full justify-start border border-input bg-background hover:bg-accent lg:w-auto">
+							<InteractiveFilter.Icon>
+								<Calendar className="h-4 w-4" />
+								<InteractiveFilter.Label>PERÍODO</InteractiveFilter.Label>
+							</InteractiveFilter.Icon>
+							<InteractiveFilter.Value>{formatInteractiveDateRangeSummary(queryFilters.period.after, queryFilters.period.before)}</InteractiveFilter.Value>
+						</InteractiveFilter.Trigger>
+						<InteractiveFilter.Content className="w-auto p-0" align="end">
+							<InteractiveFilter.DateRangeContent
+								value={{
+									from: new Date(queryFilters.period.after),
+									to: new Date(queryFilters.period.before),
+								}}
+								onChange={(period) =>
+									setQueryFilters((prev) => ({
+										...prev,
+										period: {
+											after: period.from ? dayjs(period.from).startOf("day").toISOString() : prev.period.after,
+											before: period.to ? dayjs(period.to).endOf("day").toISOString() : prev.period.before,
+										},
+									}))
+								}
+							/>
+						</InteractiveFilter.Content>
+					</InteractiveFilter.Root>
 				</div>
 				{/* {data ? (
 						<GoalTrackingBar
